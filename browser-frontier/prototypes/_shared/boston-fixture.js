@@ -22,6 +22,7 @@
   };
   var FX = 'BOW Economics Live fixture (world.ts), via W2 fixture';
   var PUB = 'public reporting, via W2 fixture';
+  var R = 'web search by research agent D, 29 Sep 2026 (search snippets; verify)';
 
   window.BOW_FIXTURE = {
     meta: {
@@ -131,6 +132,9 @@
       deadline2026: {
         date: '2026-02-05',
         label: 'Trade deadline · 5 Feb 2026',
+        firstReport: F('2026-02-03', 'OBSERVED', 'Boston.com, 3 Feb 2026, citing Shams Charania — ' + R, '2026-02-03', true, 'the Simons trade was reported two days before the deadline, so a cut “on 5 Feb” already knows it'),
+        beforeFirstReport: { date: '2026-02-02', label: 'Deadline week · 2 Feb 2026, before the first report' },
+        taxAfter: F('≈ $17.7M after the Simons trade (Yossi Gozlan via Boston.com); a 5 Feb report says further moves left Boston ≈ $0.84M UNDER the tax line', 'OBSERVED', R, '2026-02-05', true, 'the fixture’s ≈$17M may be an intermediate state'),
         question: '5 Feb 2026 · Trade deadline day — the tax bill is the problem',
         seasonLines: 'season2526',
         state: [
@@ -152,8 +156,8 @@
           { what: 'The Simons-for-Vučević trade', date: '2026-02-05', value: F('Simons to Chicago for Vučević; projected tax ≈$39.5M → ≈$17M', 'OBSERVED', 'ESPN / NBC Sports Boston via W2 fixture', '2026-02-05'), note: 'the act the seat takes or does not take' },
           { what: 'Tatum’s return', date: '2026-03-06', value: F('Returns vs Dallas', 'OBSERVED', 'NBA.com via W2 fixture', '2026-03-06') },
           { what: 'The rest of the regular season', date: null, value: F('Finishes 56–26', 'OBSERVED', 'BOW Economics Live (franchise.realRecord)', '2026-09-28'), note: '[verify: season end date]' },
-          { what: 'The 2026 playoffs', date: null, value: F(null, 'UNKNOWN', null, null, true, '[verify: playoff result — not in any BOW source]') },
-          { what: 'Jaylen Brown traded to Philadelphia for Paul George', date: null, value: F('Reported', 'OBSERVED', 'hoopsrumors via W2 fixture', null, true, '[verify: date]') }
+          { what: 'The 2026 playoffs', date: null, value: F('Lost in the first round to Philadelphia, 3–4, after leading 3–1', 'OBSERVED', R, null, true, 'not in any BOW source; verify') },
+          { what: 'Jaylen Brown traded to Philadelphia for Paul George', date: '2026-07-01', value: F('Reported 1 Jul 2026 (official ≈ 6 Jul)', 'OBSERVED', 'hoopsrumors via W2 fixture; date ' + R, '2026-07-01', true, '[verify: date]') }
         ]
       }
     },
@@ -181,11 +185,32 @@
         { when: 'Year Two · Week 9', what: 'Lost to Denver 112–115 at home; Jokić scored on the last possession after a switch left a big on a guard', k: 'RECORDED' }
       ],
       departments: [
-        { id: 'analytics', name: 'Analytics', side: 'basketball', funded: false, why: 'cut in Year One (Business funded instead)', k: 'RECORDED' },
-        { id: 'scouting', name: 'Scouting', side: 'basketball', funded: true, why: 'illustrative, authored', k: 'AUTHORED' },
-        { id: 'ticketing', name: 'Ticketing', side: 'business', funded: true, why: 'Business funded in Year One', k: 'RECORDED' },
+        { id: 'analytics', name: 'Analytics', side: 'basketball', funded: false, opensFor: 2500000, why: 'not funded since Year One (Business funded instead)', k: 'RECORDED', note: 'price read from the spatial evidence; verify against the save' },
+        { id: 'scouting', name: 'Scouting', side: 'basketball', funded: false, opensFor: 2000000, why: 'not funded since Year One (Business funded instead)', k: 'RECORDED', note: 'price read from the spatial evidence; verify against the save' },
+        { id: 'ticketing', name: 'Ticketing', side: 'business', funded: true, why: 'Business funded in Year One', k: 'RECORDED', note: 'a funded ticketing room is what produces the next night’s seat forecast' },
         { id: 'partnerships', name: 'Partnerships', side: 'business', funded: true, why: 'Business funded in Year One', k: 'RECORDED' }
       ],
+      hardLimit: F(250000000, 'AUTHORED', 'World rule (spatial evidence: payrollLimitK)', null, false, 'the World’s hard limit'),
+      tradeFile: {
+        with: 'Golden State', week: 'Year Two · Week 6', status: 'Signed by both owners',
+        send: [{ player: 'Derrick White', salary: F(30300000, 'RECORDED', 'World trade file (spatial evidence)', null, false) }],
+        get: [{ player: 'Jimmy Butler', salary: F(56800000, 'RECORDED', 'World trade file (spatial evidence)', null, false) }],
+        payrollBefore: F(196300000, 'COMPUTED', '222.8 − (56.8 − 30.3)', null, false, '$3.7M under the World’s line before the trade (verify against the save)')
+      },
+      /* A longer record for prototypes that need one (lifting acts, many worlds). Acts marked
+         AUTHORED are illustrative, written for the prototypes — not in any save. Money deltas are
+         authored too, except the Week 6 trade (the World record). */
+      record: [
+        { id: 'y1-business', when: 'Year One', what: 'Funded Business over Basketball Ops', k: 'RECORDED', effects: { analytics: 'dark', scouting: 'dark', cash: 3000000 }, cashNote: 'authored' },
+        { id: 'w1-minimum', when: 'Year Two · Week 1', what: 'Signed a guard to a minimum deal', k: 'AUTHORED', effects: { payroll: 2449000 } },
+        { id: 'w2-partner', when: 'Year Two · Week 2', what: 'Booked a partner night at the arena', k: 'AUTHORED', effects: { cash: 600000 } },
+        { id: 'w3-denver', when: 'Year Two · Week 3', what: 'Declined Denver’s call about a future second-round pick', k: 'AUTHORED', effects: {} },
+        { id: 'w4-prices', when: 'Year Two · Week 4', what: 'Raised premium seat prices by 5%', k: 'AUTHORED', effects: { cashPerNight: 120000, premiumDemand: -0.04 } },
+        { id: 'w6-trade', when: 'Year Two · Week 6', what: 'Traded Derrick White to Golden State for Jimmy Butler', k: 'RECORDED', effects: { payroll: 26500000 } },
+        { id: 'w7-rotation', when: 'Year Two · Week 7', what: 'Moved Butler into the starting five', k: 'AUTHORED', needs: 'w6-trade', effects: {} },
+        { id: 'w8-extension', when: 'Year Two · Week 8', what: 'Offered Butler’s camp an extension meeting', k: 'AUTHORED', needs: 'w6-trade', effects: {} }
+      ],
+      payrollStartYearTwo: F(193851000, 'AUTHORED', 'illustrative: 196.3 − 2.449', null, false, 'chosen so the record sums to the World’s $222.8M'),
       arena: {
         lastNight: F('Won 135–115 · 16,440 in the seats of 18,624', 'RECORDED', 'World record (spatial evidence)', null, false),
         nextNight: F('About 18,454 expected, of 18,624', 'MODELED', 'Ticketing room forecast (World model)', null, false, 'an estimate, not a played night'),
