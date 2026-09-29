@@ -2,3 +2,5 @@ node_modules/
 tools/render/shots/
 tools/render/support.js
 *.bak
+browser-frontier/harness/node_modules/
+browser-frontier/harness/shots/
