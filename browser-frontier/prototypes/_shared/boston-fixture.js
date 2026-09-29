@@ -142,7 +142,7 @@
           { what: 'Jayson Tatum', value: F('Out — right Achilles rupture (12 May 2025); no return yet', 'OBSERVED', PUB, '2026-02-05') },
           { what: 'Anfernee Simons', value: F('On Boston’s roster (arrived from Portland, summer 2025)', 'OBSERVED', PUB, '2026-02-05') },
           { what: 'Nikola Vučević', value: F('On Chicago’s roster', 'OBSERVED', PUB, '2026-02-05') },
-          { what: 'Projected luxury tax (before any deadline move)', value: F(39500000, 'OBSERVED', 'ESPN / NBC Sports Boston via W2 fixture', '2026-02-05', true, 'approx., reported') },
+          { what: 'Projected luxury tax (before any deadline move)', value: F(39500000, 'COMPUTED', 'computable at the cut from the books under the 2025–26 rules; the ≈$39.5M figure itself was REPORTED on 3–5 Feb (ESPN / NBC Sports Boston / Boston.com), after a 2 Feb cut', '2026-02-05', true, 'approx.; at a 2 Feb cut show it as computed from the books, and cite the later report only in SINCE') },
           { what: 'Boston record on the morning of 5 Feb', value: F(null, 'UNKNOWN', null, null, true, '[verify: record at the deadline]') },
           { what: 'Boston payroll vs 2025–26 lines', value: F(null, 'UNKNOWN', null, null, true, '[verify: payroll at the deadline]') }
         ],

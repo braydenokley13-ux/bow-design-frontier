@@ -155,6 +155,10 @@ button.idx:hover{background:var(--sheet2)}
 .rtl:hover{background:var(--ink);color:var(--sheet)}
 .unkmk{position:absolute;top:4px;right:6px;border:1.5px dashed var(--pencil);color:var(--pencil);font:400 10.5px var(--mono);padding:1px 6px;background:var(--sheet)}
 .rulemk{position:absolute;top:14px;bottom:22px;width:10px;border:1.5px solid var(--ink);background:transparent;z-index:1}
+.rulemk.fresh{transform-origin:bottom;animation:draw .55s ease-out both}
+.rulemk.fresh span{animation:fadein .5s .35s both}
+@keyframes draw{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
 .rulemk span{position:absolute;top:-13px;left:14px;font:600 11px var(--mono);white-space:nowrap;background:var(--sheet);border:1.5px solid var(--ink);padding:1px 6px}
 .pilebtn{position:absolute;min-height:26px;padding:3px 8px 0;border:1.5px solid var(--pencil);border-bottom:0;font:600 10.5px/1.2 var(--mono);text-align:center;background:var(--sheet);z-index:5;white-space:nowrap}
 .pilebtn[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
@@ -596,6 +600,7 @@ var QUIET = { know:1, real:1, pickmove:1, name:1, dec:1 };
 function act(kind, p){
   p = p || {};
   var who = 'Your pair', what = '', sh = S.sheet, i, extra = null;
+  sh.fresh = false;
   switch(kind){
     case 'view': S.view = p.v; who='You'; what = 'Went to ' + (p.v==='door' ? 'Doors' : 'Forks'); break;
     case 'know': S.know = !S.know; break;
@@ -609,7 +614,7 @@ function act(kind, p){
       break;
     case 'runweeks': who='You'; what='Ran the weeks again, 6 to 9'; startRun(); break;
     case 'week': clearTimeout(S.timer); sh.week = +p.v; who='You'; what='Read the sheet as of Week '+p.v; break;
-    case 'pile': sh.pile = true; sh.mode='pile'; who='You'; { var pl=findPile(sh.week); what='Tapped a pile of '+(pl?pl.ids.length:0)+' worlds; the rule under it: '+(pl&&pl.kink?pl.kink.rule:'none found'); } break;
+    case 'pile': sh.pile = true; sh.fresh = true; sh.mode='pile'; who='You'; { var pl=findPile(sh.week); what='Tapped a pile of '+(pl?pl.ids.length:0)+' worlds; the rule under it: '+(pl&&pl.kink?pl.kink.rule:'none found'); } break;
     case 'part': clearTimeout(S.timer); sh.part=p.v; sh.mode='part'; { var L=LINES.filter(function(l){return l.id===p.v;})[0]; sh.week=firstPartWeek(L)||sh.week; who='You'; what='Went to where '+L.name.toLowerCase()+' first parts: Week '+sh.week; } break;
     case 'pick':
       who='You';
@@ -757,7 +762,7 @@ function fillPlots(){
     if(sh.part===L.id){ var pw=firstPartWeek(L); if(pw===wk) html += '<div class="parting">FIRST PARTING · WEEK '+pw+'</div>'; }
     if(L.rec){ var rv=L.rec(); html += '<div class="rectick" style="left:'+px(rv)+'px"></div><button type="button" class="rtl" data-a="record" style="left:'+(px(rv)+8+92>w ? px(rv)-8-92 : px(rv)+8)+'px" aria-label="Go to the record, from the '+esc(L.name.toLowerCase())+' line">the record ▸</button>'; }
     else { html += '<div class="unkmk">the record: wins not in the fixture · UNKNOWN</div>'; }
-    if(L.id==='payroll' && sh.pile && pile && pile.kink){ html += '<div class="rulemk" style="left:'+(px(pile.kink.at)-5)+'px"><span>'+esc(pile.kink.rule)+'</span></div>'; }
+    if(L.id==='payroll' && sh.pile && pile && pile.kink){ html += '<div class="rulemk'+(sh.fresh?' fresh':'')+'" style="left:'+(px(pile.kink.at)-5)+'px"><span>'+esc(pile.kink.rule)+'</span></div>'; }
     items.forEach(function(it){ html += '<i class="vt" style="left:'+px(it.v)+'px"></i>'; });
     var pickIx = sh.picks;
     W.forEach(function(x){

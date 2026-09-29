@@ -6,13 +6,40 @@
   "shot": "sealed-door"
  },
  {
-  "click": "Take Butler"
+  "press": "Tab"
  },
  {
-  "shot": "your-act-chosen"
+  "press": "Tab"
  },
  {
-  "click": "Commit: Take Butler"
+  "press": "Tab"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Enter"
+ },
+ {
+  "shot": "your-act-chosen-by-keyboard"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Enter"
  },
  {
   "wait": 1600
