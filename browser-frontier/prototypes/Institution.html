@@ -756,7 +756,7 @@ document.addEventListener('keydown', e => {
       oak: S_({ map: T.oak, roughness: 0.5, metalness: 0 }), deck: S_({ map: T.oak, color: 0xe6d3ae, roughness: 0.55, metalness: 0 }),
       brick: L({ map: T.brick }), plaster: L({ map: T.plaster }), timber: S_({ map: T.timber, roughness: 0.72, metalness: 0 }),
       steel: S_({ color: 0x25231f, roughness: 0.5, metalness: 0.55 }), brass: S_({ color: 0xb8912e, roughness: 0.34, metalness: 0.85 }),
-      glass: new THREE.MeshStandardMaterial({ color: 0xdcecee, roughness: 0.04, metalness: 0, transparent: true, opacity: 0.13, depthWrite: false, side: THREE.DoubleSide }),
+      glass: new THREE.MeshBasicMaterial({ color: 0xd6e8ea, transparent: true, opacity: 0.1, depthWrite: false, side: THREE.DoubleSide }),
       conc: L({ map: T.conc }), water: S_({ map: T.water, roughness: 0.22, metalness: 0.05 }),
       vc: L({ vertexColors: true }), vc2: L({ vertexColors: true, side: THREE.DoubleSide }), emis: new THREE.MeshBasicMaterial({ vertexColors: true }),
       sheet: L({ map: T.sheet }), infill: L({ map: T.brick, color: 0xf6e2d2 }), tape: L({ map: T.tape, vertexColors: true }),
@@ -893,7 +893,7 @@ document.addEventListener('keydown', e => {
       beam('steel', [.4, .56, 6.46], [RX, DECK + .56, 6.46], .03, .03); }
     /* the four department rooms behind glass, along the west wall (sides, back and floors are baked with lit/dark colours) */
     const RANGE = {}, ROOMKEYS = Object.keys(RZ);
-    const SHC = { lit: { floor: [.93, .8, .58], wall: [.97, .93, .84], ceil: [.99, .96, .88] }, dark: { floor: [.36, .31, .24], wall: [.40, .385, .35], ceil: [.27, .265, .25] } };
+    const SHC = { lit: { floor: [1, .86, .62], wall: [1, .96, .86], ceil: [1, .98, .9] }, dark: { floor: [.15, .13, .10], wall: [.19, .18, .165], ceil: [.11, .108, .10] } };
     function roomShell(id, cz) {
       const g = acc('shell'), e = acc('emis'), s0 = g.p.length / 3, e0 = e.p.length / 3, x0 = X0 + .04, x1 = RXF - .04, z0 = cz - RW + .075, z1 = cz + RW - .075, C = SHC.lit;
       face('shell', '+y', x0, .012, z0, x1, .012, z1, { col: C.floor }); face('shell', '-y', x0, RH - .03, z0, x1, RH - .03, z1, { col: C.ceil }); face('shell', '+x', x0, 0, z0, x0, RH - .03, z1, { col: C.wall });
@@ -911,7 +911,7 @@ document.addEventListener('keydown', e => {
       quadTo(acc('glass'), [[RXF, .15, zr], [RXF, .15, zl], [RXF, RH - .16, zl], [RXF, RH - .16, zr]], [1, 0, 0], [[0, 0], [1, 0], [1, 1], [0, 1]], [1, 1, 1]);
     }
     /* furniture: one lit variant and one dark variant per room, swapped alone */
-    const C_OAK = [.8, .62, .4], C_ST = [.2, .22, .21], C_CREAM = [.96, .93, .84], C_SHEET = [.86, .84, .77];
+    const C_OAK = [.8, .62, .4], C_ST = [.2, .22, .21], C_CREAM = [.96, .93, .84], C_SHEET = [.56, .55, .5];
     for (const id of ROOMKEYS) {
       const cz = RZ[id], L_ = 'furn:' + id + ':lit', D_ = 'furn:' + id + ':dark';
       for (const dz of [-.75, .75]) {
@@ -919,7 +919,7 @@ document.addEventListener('keydown', e => {
         box(L_, -12.55, .72, zc - .5, -11.7, .77, zc + .5, { col: C_OAK }); for (const [ax, az] of [[-12.5, -.46], [-11.75, -.46], [-12.5, .46], [-11.75, .46]]) box(L_, ax - .025, 0, zc + az - .025, ax + .025, .72, zc + az + .025, { col: C_ST });
         box(L_, -12.1, .77, zc - .18, -11.85, .775, zc + .12, { col: C_CREAM }); box(L_, -12.3, .77, zc + .2, -12.1, .8, zc + .4, { col: [.95, .9, .78] });
         box(L_, -11.3, .43, zc - .21, -10.85, .47, zc + .21, { col: [.24, .27, .25] }); box(L_, -10.9, .47, zc - .21, -10.85, .98, zc + .21, { col: [.24, .27, .25] }); for (const [a, b] of [[-11.3, -.19], [-11.3, .19], [-10.85, -.19], [-10.85, .19]]) box(L_, a - .015, 0, zc + b - .015, a + .015, .43, zc + b + .015, { col: C_ST });
-        box(D_, -12.65, 0, zc - .55, -11.6, .9, zc + .55, { col: C_SHEET, ao: .28 }); box(D_, -12.5, .9, zc - .4, -11.75, 1.02, zc + .4, { col: [.88, .86, .8] });
+        box(D_, -12.65, 0, zc - .55, -11.6, .9, zc + .55, { col: C_SHEET, ao: .28 }); box(D_, -12.5, .9, zc - .4, -11.75, 1.02, zc + .4, { col: [.6, .59, .54] });
       }
       if (id !== 'scouting') { box(L_, -12.9, 1.5, cz - .9, -12.86, 2.5, cz + .9, { col: [.74, .58, .36] }); for (const q of [-.6, -.1, .4]) box(L_, -12.86, 1.8 + q * .2, cz + q - .1, -12.83, 2.05 + q * .2, cz + q + .12, { col: C_CREAM }); box(D_, -12.9, 1.5, cz - .9, -12.82, 2.5, cz + .9, { col: [.82, .8, .74] }); }
       for (const dz of [-1.05, 1.05]) {
@@ -1049,8 +1049,8 @@ document.addEventListener('keydown', e => {
     box('conc', -220, -1.7, Z0 - 3.2, 220, -.02, Z0 - 2.9, { tile: 6 }); box('conc', -220, -1.7, -260, 220, -.02, -22.6, { tile: 6, skip: '-y' });
     face('water', '+y', -220, -1.0, -22.6, 220, -1.0, Z0 - 3.2, { tile: 24 });
     /* League office: one lit counter window (a neighbouring system: observed, never actionable here) */
-    box('brickOut', -25, -.02, -31, -14, 7.2, -22.6, { tile: .9, skip: '-y' }); box('conc', -25.3, 7.1, -31.3, -13.7, 7.5, -22.3, { tile: 2 });
-    for (const x of [-22.1, -19.5, -16.9]) box('steel', x - .05, 1.3, -22.66, x + .05, 3.8, -22.56); for (const y of [1.3, 3.75]) box('steel', -22.1, y - .05, -22.66, -16.9, y + .05, -22.56); box('conc', -22.3, 1.2, -22.75, -16.7, 1.3, -22.4, { tile: 1 });
+    box('brickOut', -25, -.02, -31, -14, 7.2, -22.6, { tile: .9, skip: '-y' }); box('steelOut', -25.3, 7.1, -31.3, -13.7, 7.5, -22.3);
+    for (const x of [-22.1, -19.5, -16.9]) box('steelOut', x - .05, 1.3, -22.66, x + .05, 3.8, -22.56); for (const y of [1.3, 3.75]) box('steelOut', -22.1, y - .05, -22.66, -16.9, y + .05, -22.56); box('steelOut', -22.3, 1.2, -22.75, -16.7, 1.3, -22.4);
     BRD.league = panelMesh(1024, 450, 5.0, 2.2, [-19.5, 2.55, -22.585], FZP, { basic: true, id: 'win.league', parent: GRP.roomOnly });
     pl('league.sign', 3.4, .5, 240, [-19.5, 4.8, -22.57], FZP, 'atlasS'); hit('win.league', -22.3, 1.2, -22.9, -16.7, 5.1, -22.3);
     /* the record building (or your branch), across the slip */
@@ -1099,7 +1099,7 @@ document.addEventListener('keydown', e => {
     const mergeAcc = (into, names) => { const t = acc(into); for (const n of names) { const a = ACC[n]; if (!a) continue; const off = t.p.length / 3; for (const v of a.p) t.p.push(v); for (const v of a.n) t.n.push(v); for (const v of a.u) t.u.push(v); for (const v of a.c) t.c.push(v); for (const v of a.i) t.i.push(v + off); delete ACC[n]; } };
     mergeAcc('props', ['furn:film', 'furn:desk', 'furn:df', 'furn:pen', 'hall', 'furn:mini']);
     bk('oak', MAT.oak, { cast: true, recv: true }); bk('deck', MAT.deck, { cast: true, recv: true }); bk('brick', MAT.brick, { cast: true, recv: true }); bk('plaster', MAT.plaster, { cast: true, recv: true }); bk('timber', MAT.timber, { cast: true, recv: true });
-    bk('steel', MAT.steel, { cast: true }); bk('brass', MAT.brass); bk('conc', MAT.conc, { recv: true, parent: GRP.roomOnly }); bk('water', MAT.water, { parent: GRP.roomOnly }); bk('sky', MAT.vc, { parent: GRP.roomOnly });
+    bk('steel', MAT.steel, { cast: true }); bk('steelOut', MAT.steel, { parent: GRP.roomOnly }); bk('brass', MAT.brass); bk('conc', MAT.conc, { recv: true, parent: GRP.roomOnly }); bk('water', MAT.water, { parent: GRP.roomOnly }); bk('sky', MAT.vc, { parent: GRP.roomOnly });
     bk('shell', MAT.vc); bk('emis', MAT.emis); bk('atlas', MAT.atlas); bk('props', MAT.vc, { cast: true }); bk('brickOut', MAT.brick, { recv: true, parent: GRP.roomOnly }); bk('vcOut', MAT.vc, { recv: true, parent: GRP.roomOnly });
     bk('brickCut', MAT.brick, { parent: GRP.cut, cast: true, recv: true }); bk('plasterCut', MAT.plaster, { parent: GRP.cut, recv: true }); bk('truss', MAT.timber, { parent: GRP.cut }); bk('roof', MAT.roofM, { parent: GRP.cut }); bk('roomRoof', MAT.plaster, { parent: GRP.cut }); bk('oakCut', MAT.oak, { parent: GRP.cut }); bk('atlasS', MAT.atlas, { parent: GRP.cut });
     bk('paper', MAT.paper, { parent: GRP.maqOnly, recv: true }); bk('maqWater', MAT.maqWater, { parent: GRP.maqOnly });
@@ -1121,7 +1121,7 @@ document.addEventListener('keydown', e => {
     const fill = new THREE.PointLight(0xffe4c0, .55, 46, 1.2); fill.position.set(-1, 6.6, 0); scene.add(fill);
     const door = new THREE.PointLight(0xffe0b8, .7, 9, 1.6); door.position.set(10, 2.6, 1.2); scene.add(door);
     const pm = new THREE.PMREMGenerator(renderer); const ENV = pm.fromEquirectangular(T.sky).texture;
-    for (const k of ['oak', 'deck', 'timber', 'steel', 'brass', 'water', 'glass', 'roofM', 'scaf', 'brassD']) { MAT[k].envMap = ENV; MAT[k].envMapIntensity = k === 'glass' || k === 'water' ? 1 : .5; }
+    if (!SOFT) for (const k of ['oak', 'deck', 'timber', 'steel', 'brass', 'water', 'roofM', 'scaf', 'brassD']) { MAT[k].envMap = ENV; MAT[k].envMapIntensity = k === 'water' ? 1 : .5; }
     scene.background = T.sky; scene.fog = new THREE.Fog(0xe8e0cf, 110, 470);
     const PAPERBG = new THREE.Color(0xf4f1e8);
     /* recolour helpers for the four rooms (baked lit/dark colours swap alone) */
