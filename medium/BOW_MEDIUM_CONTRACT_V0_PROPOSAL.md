@@ -52,15 +52,15 @@ Each law gives its label, the strongest evidence and the strongest counter-evide
 
 | # | Law | Label | Evidence | Counter-evidence / limit |
 |---|---|---|---|---|
-| **M1** | **Definition vs instance.** A SYSTEM is a versioned executable definition. An INSTANCE (World, Challenge or Branch) is one history-bearing execution of a SYSTEM version under **one authority**. | RECURRING | DC frozen package vs attempt; W rules version plus `LessonModule`/Foundry vs `WorldState`/chapter chain | W holds three unrelated instance models (02); the unified form is HYPOTHESIS |
+| **M1** | **Definition vs instance.** A SYSTEM is a versioned executable definition. An INSTANCE (World, Challenge or Branch) is one history-bearing execution of a SYSTEM version under **one authority**. The medium standardizes what an instance can **show and prove** (an exported record envelope), **not how it computes**: event-sourced folds and stored state with invariants are both allowed, provided the instance declares which. | RECURRING (split); the interchange-not-storage stance is HYPOTHESIS | DC frozen package vs attempt; W rules version plus `LessonModule`/Foundry vs `WorldState`/chapter chain. **NBA World One keeps no act log** (W2-A), so mandating event sourcing would exclude BOW's most developed World. | W holds three unrelated instance models (02) |
 | **M2** | **Order is position; time moves only by recorded acts.** Order is the authority-assigned position. Wall time is metadata that may *trigger* a time change but is never its coordinate. | **EARNED ×4** for act-advanced time; HYPOTHESIS as a universal law | W NBA `advance(expectStop)`; Harbor `advance_day`; Foundry `advance`; DC learner `advance`; DC `sequence` | DF Live World violates it and breaks (K1). Real-time domains need TICKED/FEED clocks (W2-B). |
 | **M3** | **Every act names its basis:** the cut it was decided against, what was available, and what was opened. Stale acts are refused. | RECURRING in halves; unified HYPOTHESIS | DC read side (available, opened with ref, knowable per input); W write side (`expectRevision` ×4); DC v5 `expectedRevision` | Nobody has unified the halves; comprehension is always UNKNOWN |
 | **M4** | **Nondeterminism is recorded, never regenerated.** Dice reveals, model outputs, feed values and ticks are recorded inputs. | CANON-CANDIDATE (correctness) | W HMAC commit-reveal dice released one shot at a time | Model outputs never tested in BOW; temperature-0 LLMs are not deterministic (W2-D) |
 | **M5** | **Pinned versions.** Every entry is read under its epoch's SYSTEM digest. Old records are refused or withheld, **never silently migrated**. `null` never means "current". | RECURRING | DC `version:null` explicit legacy; W save keeps birth rules; unsupported versions refused | Rules are pinned by *label*, not digest, in both products (W2-D) |
 | **M6** | **Reads are pure projections for an audience.** The public audience structurally never receives a seat. | RECURRING | W `hqView`/`boardView`; DC teacher exact reader; E-main contract | Guards display, **not inference**: derived secrets and timing leak (04, 08 P9) |
-| **M7** | **Fact or typed Unknown, never bare absence.** Every projected value is `Fact{value, status, source, cut}` or `Unknown{kind, reason}`, and absence is never zero. | RECURRING (shape); kind set UNRESOLVED | DC present/absent/unmodeled and coded unknowns; W `{actual, value, sourcePath}` or `{unknown, reason}` | At least nine incompatible vocabularies across the products (K21) |
+| **M7** | **Fact, typed Unknown or Refused, never bare absence.** Every projected value is one of three things:<br>• `Fact{value, status, source, cut}`, where a *known absence* is a positive fact (`ABSENT`, e.g. "no receipt yet")<br>• `Unknown{kind, reason}`, with kinds including `not-observable` for what the instrument cannot see (comprehension, delivery)<br>• `Refused{kind}` for integrity or version refusals<br>Absence is never zero. | RECURRING (shape); kind set UNRESOLVED | DC present/absent/unmodeled and coded unknowns; W `{actual, value, sourcePath}` or `{unknown, reason}`; W2-A mapping table | At least nine incompatible vocabularies (K21). W's `private` means two opposite things (K28). |
 | **M8** | **Status comes from provenance and is relative to the reading instance.** STATUS is emitted by the engine, never hand-tagged. An event RECORDED in a branch reads as MODELED from its parent. | HYPOTHESIS | W: "'Actual' always means recorded inside the simulation"; DF hand-tagging failed repeatedly (K6) | The seven- or eight-value set is untested for legibility |
-| **M9** | **Verification basis is a second axis.** Every exported claim states how a reader can check it: REPLAYED, SIGNED, ATTESTED or CLAIMED. | CANON-CANDIDATE (trust) | DC: "replay proves consistency, not authenticity"; three independent arrivals (T, 08, 07) | Nothing is signed today |
+| **M9** | **Verification is stated on two axes, separate from status.** Every exported claim says how it can be checked: **consistency** (REPLAYED, INVARIANTS or NONE) and **authenticity** (NONE, SIGNED or ATTESTED). | CANON-CANDIDATE (trust) | DC: "replay proves consistency, not authenticity". The bridge is HMAC-tagged but unreplayable (W2-A), which is why these are two axes, not one scale. Three independent arrivals at the idea (T, 08, 07). | Nothing is signed today |
 | **M10** | **Branches are modeled and never write back.** A branch is MODELED, declares its interventions and **suffix policy**, and can never write its parent, Reality or any other instance. **History never merges**; only rule proposals and cited findings cross back. | EARNED (mechanism); suffix policy UNRESOLVED | DC `decisionBranch`; W Lab ×3 | The products disagree on suffix semantics (replay vs drop) |
 | **M11** | **Refuse outside the envelope.** A modeled answer outside the SYSTEM's validity envelope is refused as `Unknown{out-of-envelope}`, never guessed. | RECURRING (refusal); envelope description HYPOTHESIS | DC branch `null`; W Lab "unsupported rather than guessed" | Neither product *describes* its envelope |
 | **M12** | **Derivation, not causation.** "How do we know?" walks rule-cited lineage. Claims that something *caused* something in Reality are refused unless a declared model makes them, and then they are MODELED. | RECURRING | DC provenance "deliberately no inferred or caused"; W "no saved fact proves the job caused a basket" | Lineage fails on feedback loops and simultaneity (07) |
@@ -91,7 +91,19 @@ With the basis made first-class, several things become **derivations instead of 
 - **Fork honesty**: a replayed suffix act whose basis no longer holds is refused as `redecide-required` (W2-B §3).
 - **Cross-instance acts** name their basis in both instances, forming the bilateral cross-reference of Composition C3.
 
-Label: **HYPOTHESIS**, with each half EARNED in one product. It is the single change that would make the two products' semantics composable. The wave-2 falsifier (W2-A) tested whether both products' real acts can fill it; see §7.
+Label: **HYPOTHESIS**, with each half EARNED in one product. It is the single change that would make the two products' semantics composable.
+
+**Correction from the wave-2 falsifier (W2-A).** The two halves are *not symmetric*, and the primitive is narrower than first drafted:
+
+1. **The write half is a request guard, not a record.** Neither product accepts an act whose basis is not the head, so on every *accepted* entry the cut is simply the previous position; storing it adds nothing. The write half matters for requests that are refused as stale, which never become entries. (NBA owner acts carry no basis at all. Only Commissioner, film, staff-loan and Court acts do.)
+2. **The read half is the substance.** It covers what was *available* to the seat and what the occupant *opened*, at that position.
+   - Under a **fold** (DC), availability is derived on read and openings are recorded acts.
+   - Under **stored state** (NBA), the read half must be **materialized at act time**, because it cannot be re-derived later. NBA's `LeagueMoment.known[]` is exactly such a materialization, but as hand-written prose with no source ids and no "opened" record.
+3. **So the act basis, stated precisely:** *every accepted act is decided against the head, and the record must let a reader recover what was available to that seat and what its occupant opened at that position, either derivable (fold) or materialized (stored state).*
+   - Grain varies (revision, stop, ordinal, round) and must be typed.
+   - Comprehension is always `Unknown{not-observable}`.
+
+This is still the missing unifying primitive (for Moments, capsules, fairness and fork honesty). What it needs from W is not a new mechanism but **materialized, sourced availability and opening at act time**. HYPOTHESIS.
 
 ## 5. The 25 deep questions
 
@@ -209,9 +221,25 @@ Answers are labelled. "Open" means explicitly left unresolved in `BOW_OPEN_QUEST
 
 *(Pending the W2-E report at the time of drafting; see the final section 6 below.)*
 
-## 7. One record for two products (W2-A)
+## 7. One record for two products (W2-A): the cheapest falsifier, run on paper
 
-*(Pending the W2-A report at the time of drafting; see the final section 7 below.)*
+**Test.** Seven real specimens were mapped field by field into the parent's candidate record: DC Market act, DC v5 server act, DC modeled branch, NBA owner act with Commissioner advance, NBA `LeagueMoment` and Court possession, Harbor chapter entry, and a `bow-bridge-1` message.
+
+**Verdict: YES WITH CHANGES.** There is no blocking mismatch. Nine groups of edits produced the revised envelope in `BOW_PROTOCOL_HYPOTHESES_V0.md` §2. HYPOTHESIS: the mapping is on paper; nothing was run.
+
+**What the test established (EARNED facts):**
+- **NBA World One has no act log.** It keeps stored state and row snapshots, and owner choices are last-write-wins slots. So the envelope is an **export and verification format**, not a storage mandate (M1).
+- **Every product already records effect deltas with a cause and a rule** (DC `causalChanges`, Harbor edges, NBA transfers, Foundry `resourceDeltas`). The first candidate had no place for them. Now `effects[{object, before, after, rule, reads}]` does, and `reads` is what knowability-per-input needs.
+- **Continuations are not forks.** Harbor chapters embed predecessors, and NBA Season Two carries from Season One. `origin.kind: continuation` with status `CARRY`.
+- **Refusals come in two kinds.** Request-level refusals (stale, duplicate, sealed, rate-limited) never become entries anywhere. Recorded refusals do become entries (DC Market).
+- **Canonicalization is badly fragmented.** DC has at least **17** canonical-JSON functions (13 using `localeCompare`, which is locale-dependent) and W has **7**. One function plus an algorithm tag is cheap. **Digest scope is not unifiable** and must be declared per SYSTEM (DC pins prose, while W's legacy replay strips it).
+- **Vocabulary defects:**
+  - W's `private` status means two opposite things.
+  - DC's `absent` is a positive fact, not an Unknown.
+  - "What the instrument cannot observe" had no kind, so `not-observable` is added.
+- **Address needs:** named cuts (`before:n`, `after:n`, `sealed`, `at:<label>`), a chain frame (Harbor), authorized audiences, opaque pairwise references (the bridge), and act references by idempotency key.
+
+**What the test did not establish.** That an outside implementer can build a reader from the spec alone. That is the next falsifier (§12, item 9).
 
 ## 8. Conformance: what a BOW-compatible runtime must implement
 
