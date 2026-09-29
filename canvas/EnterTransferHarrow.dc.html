@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Handover at Harrow</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,600&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F4F5F2;color:#111;font-family:'IBM Plex Sans',sans-serif}
+.cond{font-family:'IBM Plex Sans Condensed',sans-serif}
+.mono{font-family:'IBM Plex Mono',monospace}
+.tab{font-variant-numeric:tabular-nums}
+.a{position:absolute}
+.lab{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:#46535E}
+.fx{transition:opacity .5s,top .7s,height .7s,transform .8s cubic-bezier(.2,.7,.2,1),background-color .4s,border-color .4s}
+.btn{font-family:'IBM Plex Sans',sans-serif;font-weight:600;cursor:pointer;border-radius:0;transition:background-color .2s,color .2s,border-color .2s}
+.btn:focus-visible,.ini:focus-visible,.nin:focus-visible{outline:3px solid #111;outline-offset:2px}
+.btn:hover:not(:disabled){filter:brightness(.94)}
+.sheet{background:#FFFFFF;border:1.5px solid #5B6B78}
+.ln{border:1.5px solid #5B6B78}
+.sw{display:inline-block;width:11px;height:11px;box-sizing:border-box;flex:none;vertical-align:-1px;margin-right:5px}
+.t-obs{background:#111}
+.t-rec{background:#111;box-shadow:inset 0 0 0 2px #111,inset 0 0 0 4px #F4F5F2}
+.t-aut{border:1.5px solid #111;background:transparent}
+.t-com{background:#B9C3CB}
+.t-unk{border:1.5px dashed #111;background:transparent}
+.t-lap{border:1.5px solid #111;background:#F4F5F2;box-shadow:inset 0 0 0 1.5px #F4F5F2,inset 0 0 0 3px #111}
+.ini{font-family:'IBM Plex Sans',sans-serif;font-style:italic;font-weight:600;font-size:30px;text-transform:uppercase;background:transparent;border:0;border-bottom:2px solid #111;border-radius:0;padding:0 4px;width:200px;height:50px;box-sizing:border-box;color:#111}
+.ini::placeholder{color:#7B8791}
+.nin{font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;background:#FFFFFF;border:1.5px solid #111;border-radius:0;padding:0 10px;height:36px;box-sizing:border-box;color:#111;width:100%}
+.lg{display:grid;grid-template-columns:16px 20px 84px minmax(0,1fr);gap:8px;align-items:center;padding:4px 0;border-bottom:1px solid #A9B4BC;font-size:13px}
+.hw .sw{margin:2px 0 0}
+.hw{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;line-height:1.3}
+.seal{animation:stamp .5s cubic-bezier(.2,.9,.3,1.2) forwards}
+@keyframes stamp{0%{transform:scale(1.7) rotate(-20deg);opacity:0}100%{transform:scale(1) rotate(-8deg);opacity:.95}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; position: relative; overflow: hidden; background-color: #F4F5F2; background-image: linear-gradient(#E5E8E5 1px, transparent 1px), linear-gradient(90deg, #E5E8E5 1px, transparent 1px); background-size: 20px 20px; color: #111; font-family: 'IBM Plex Sans', sans-serif">
+<svg class="a" width="0" height="0" aria-hidden="true" style="left: 0; top: 0"><defs><symbol id="hmSeal" viewBox="0 0 92 92"><path id="hmArc" d="M 46,14 A 32,32 0 1,1 45.99,14" fill="none"></path><circle cx="46" cy="46" r="44" fill="none" stroke="#1F2A33" stroke-width="2.6"></circle><circle cx="46" cy="46" r="41" fill="none" stroke="#1F2A33" stroke-width="0.9"></circle><circle cx="46" cy="46" r="30" fill="none" stroke="#1F2A33" stroke-width="1"></circle><text fill="#1F2A33" style="font-family: 'IBM Plex Sans Condensed', sans-serif; font-size: 10.5px; font-weight: 600"><textPath href="#hmArc" textLength="196" lengthAdjust="spacing">HARROW MEDICAL · VP PROCUREMENT ·</textPath></text><text x="46" y="47" text-anchor="middle" fill="#1F2A33" style="font-family: 'IBM Plex Sans Condensed', sans-serif; font-size: 17px; font-weight: 700">agent</text><text x="46" y="59" text-anchor="middle" fill="#1F2A33" style="font-family: 'IBM Plex Sans Condensed', sans-serif; font-size: 11px; font-weight: 600">warrant v3</text></symbol></defs></svg>
+
+
+<header style="position: absolute; left: 40px; right: 40px; top: 0; height: 54px; display: flex; align-items: center; gap: 12px">
+<span class="cond" style="font-size: 21px; font-weight: 700; letter-spacing: .12em">BOW</span>
+<span style="width: 1.5px; height: 26px; background: #5B6B78"></span>
+<span style="display: flex; flex-direction: column; line-height: 1.2; white-space: nowrap"><span class="cond" style="font-size: 20px; font-weight: 600">Harrow Medical · VP Procurement</span><span style="font-size: 11.5px; color: #46535E">fictional company · Line 2, Dayton · HM-40 infusion pumps</span></span>
+<span style="width: 1.5px; height: 26px; background: #A9B4BC"></span>
+<span class="tab" style="display: flex; flex-direction: column; line-height: 1.2; white-space: nowrap"><span class="lab">{{hdr.wLabel}}</span><strong class="mono" style="font-size: 14px">{{clockNow}}</strong></span>
+<button type="button" class="btn" onClick="{{toggleFast}}" aria-pressed="{{fastPressed}}" style="height: 38px; padding: 0 12px; border: 1.5px solid #111; background: {{fastBg}}; color: {{fastFg}}; font-size: 13px; white-space: nowrap">×60 speed · AUTHORED</button>
+<sc-if value="{{signed}}" hint-placeholder-val="{{false}}">
+<span class="tab" style="display: flex; flex-direction: column; line-height: 1.2; white-space: nowrap; padding: 4px 12px; background: #F2C200; color: #111; border: 1.5px solid #111"><span class="lab" style="color: #111">Your clock · started {{yc.start}}</span><strong class="mono" style="font-size: 14px">{{yc.run}} running</strong></span>
+</sc-if>
+<span style="flex: 1"></span>
+<sc-if value="{{moving}}" hint-placeholder-val="{{false}}">
+<button type="button" class="btn" onClick="{{skip}}" style="height: 38px; padding: 0 14px; border: 1.5px solid #111; background: #FFFFFF; color: #111; font-size: 14px; white-space: nowrap">Skip transition</button>
+</sc-if>
+<button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="height: 38px; padding: 0 14px; border: 1.5px solid #111; background: {{howBg}}; color: {{howFg}}; font-size: 14px; white-space: nowrap">How do we know?</button>
+</header>
+
+<div class="a" style="left: 40px; top: 56px; width: 1360px; height: 40px">
+<span class="a cond" style="left: 0; top: 0; width: 1360px; height: 40px; border-bottom: 1.5px solid #5B6B78; display: flex; align-items: center; font-size: 14px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; visibility: {{strip.obsVis}}">Observer · outside the seat · read only · none of the clocks below is yours</span>
+<div class="a" style="left: 0; top: 0; width: 1360px; height: 40px; padding: 0 12px 0 16px; background: #F2C200; color: #111; border: 1.5px solid #111; display: flex; align-items: center; gap: 12px; visibility: {{strip.vis}}">
+<span class="cond" style="font-size: 16px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap">Yours · responsible since {{strip.hm}}, day 0</span>
+<span class="tab" style="font-size: 13px; white-space: nowrap; padding: 3px 8px; background: #F4F5F2; color: #111; font-weight: 600; box-shadow: inset 0 0 0 2px #F4F5F2, inset 0 0 0 3.5px #111">{{strip.signed}} as VP Procurement · RECORDED {{strip.hms}}</span>
+<span style="flex: 1"></span>
+<sc-if value="{{canLeave}}" hint-placeholder-val="{{false}}">
+<button type="button" class="btn" onClick="{{openLeave}}" style="height: 36px; padding: 0 14px; border: 1.5px solid #111; background: #111; color: #FFFFFF; font-size: 14px; white-space: nowrap">Leave the seat</button>
+</sc-if>
+</div>
+</div>
+
+<div class="a" style="left: 40px; top: 100px; width: 1360px; height: 34px; display: flex; align-items: center; gap: 12px; font-size: 12.5px; white-space: nowrap">
+<sc-if value="{{signed}}" hint-placeholder-val="{{false}}">
+<span class="t-unk" style="padding: 4px 10px"><strong>You gave up:</strong> the mirror <span style="color: #46535E">(closed: other plants and the CFO’s note are not your seat’s to see)</span></span>
+<span class="t-com" style="padding: 4px 10px"><strong>You got:</strong> {{ledger.got}}</span>
+<span class="t-aut" style="padding: 4px 10px"><strong>Cannot:</strong> commit over $250,000 in one order without the CFO (warrant II.5)</span>
+</sc-if>
+<sc-if value="{{notSigned}}" hint-placeholder-val="{{true}}">
+<span style="font-style: italic; color: #2B343B">{{ledger.obs}}</span>
+</sc-if>
+</div>
+
+<section aria-label="Open matters" class="a ln" style="left: 40px; top: 142px; width: 600px; height: 692px; background: #F4F5F2">
+<span class="lab a" style="left: 20px; top: 10px">Parts list · Harrow Medical · fire day, day 0</span>
+<span class="cond a" style="left: 20px; top: 24px; font-size: 30px; font-weight: 600; line-height: 1.1; visibility: {{led.aVis}}">Open matters</span>
+<span class="cond a" style="left: 20px; top: 24px; font-size: 30px; font-weight: 600; line-height: 1.1; visibility: {{led.bVis}}">Yours</span>
+<span class="a" style="left: 20px; top: 58px; width: 560px; font-size: 13px; line-height: 1.3; color: #2B343B">{{led.own}}</span>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="5">
+<div class="a fx" style="left: 0; top: {{r.top}}px; width: 597px; height: {{r.h}}px; border-top: 1.5px solid #5B6B78">
+<span class="a fx mono" style="left: 14px; top: 10px; width: 30px; height: 30px; border: 1.5px {{r.balBd}} #111; border-radius: 50%; background: {{r.balBg}}; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600">{{r.n}}</span>
+<span class="cond a" style="left: 58px; top: 8px; width: 340px; font-size: 20px; font-weight: 600; line-height: 1.2">{{r.title}}</span>
+<span class="a" style="left: 58px; top: 33px; width: 346px; font-size: 13.5px; line-height: 1.3; color: #2B343B; opacity: {{r.dOp}}">{{r.desc}}</span>
+<span class="a" style="left: 58px; top: 56px; width: 346px; font-size: 12px; line-height: 15px; color: #111; opacity: {{r.sOp}}"><span style="display: block"><span class="sw {{r.c1}}"></span>{{r.t1}}</span><sc-if value="{{r.has2}}" hint-placeholder-val="{{false}}"><span style="display: block"><span class="sw {{r.c2}}"></span>{{r.t2}}</span></sc-if></span>
+<div class="a" style="left: 58px; top: {{r.btnTop}}px; display: flex; gap: 8px; visibility: {{r.bVis}}">
+<sc-for list="{{r.btns}}" as="b" hint-placeholder-count="2">
+<button type="button" class="btn" onClick="{{b.pick}}" style="height: 36px; padding: 0 12px; border: 1.5px solid #111; background: #FFFFFF; color: #111; font-size: 13.5px; white-space: nowrap">{{b.t}}</button>
+</sc-for>
+</div>
+<span class="a lab" style="right: 14px; top: {{r.ownTop}}px; width: {{r.ownW}}px; text-align: right">{{r.own}}</span>
+<span class="a tab mono fx" style="right: 14px; top: 8px; padding: {{r.ckPad}}; border: {{r.ckBd}}; background: {{r.ckBg}}; color: {{r.ckFg}}; font-size: {{r.ckFs}}px; font-weight: 600; line-height: 1.1; white-space: nowrap">{{r.clock}}</span>
+<span class="a" style="right: 14px; top: 44px; width: 170px; text-align: right; font-size: 12px; font-weight: 500; line-height: 15px; opacity: {{r.dlOp}}">{{r.dlText}}</span>
+</div>
+</sc-for>
+<span class="lab a" style="left: 20px; top: {{led.backTop}}px; visibility: {{led.backVis}}">Handed back · still held by the night-shift planner</span>
+</section>
+
+<section aria-label="The seat" class="a" style="left: 672px; top: 142px; width: 728px; height: 692px">
+
+<div class="a ln" style="left: 0; top: 0; width: 728px; height: 100px; background: #F4F5F2; display: flex">
+<div style="width: 250px; padding: 8px 14px; border-right: 1.5px solid #5B6B78"><span class="lab" style="display: block">Seat</span><span class="cond" style="display: block; font-size: 27px; font-weight: 600; line-height: 1.15">VP Procurement</span><span style="display: block; font-size: 12.5px; color: #2B343B">answers to the CFO · Mara Quinn (human)</span></div>
+<div style="width: 210px; padding: 8px 14px; border-right: 1.5px solid #5B6B78"><span class="lab" style="display: block">Warrant</span><span class="mono" style="display: block; font-size: 15px; font-weight: 600; margin-top: 3px">HM-W-014 · v3</span><span style="display: block; font-size: 12.5px; color: #2B343B; line-height: 1.3">established 3 Apr 2023 (authored)</span></div>
+<div class="fx" style="width: 268px; padding: 8px 14px; position: relative; background: {{tb.bg}}"><span class="lab" style="display: block; color: #111">{{tb.lab}}</span>
+<sc-if value="{{tb.vacant}}" hint-placeholder-val="{{true}}"><span class="tab" style="display: block; font-size: 13px; line-height: 1.35; margin-top: 2px"><strong class="cond" style="font-size: 17px; letter-spacing: .08em">VACANT</strong><br>since {{tb.since}} · {{tb.ago}} ago<br>interim: night-shift planner [fictional]</span></sc-if>
+<sc-if value="{{tb.person}}" hint-placeholder-val="{{false}}"><span style="display: block; margin-top: 0"><span style="display: inline-block; font-size: 36px; font-style: italic; font-weight: 600; text-transform: uppercase; line-height: 1.05; transform: rotate(-4deg); border-bottom: 3px solid #111; padding: 0 6px">{{tb.ini}}</span><span class="tab" style="display: block; font-size: 12.5px; margin-top: 3px">handwritten · signed {{tb.hms}}</span></span></sc-if>
+<sc-if value="{{tb.agent}}" hint-placeholder-val="{{false}}"><span style="display: block"><svg class="a seal" width="88" height="88" viewBox="0 0 92 92" role="img" aria-label="Seal: agent, warrant v3" style="right: 10px; top: 4px"><use href="#hmSeal"></use></svg><span class="tab a" style="left: 14px; top: 34px; font-size: 12.5px; line-height: 1.35">stamped seal<br>signed {{tb.hms}}</span></span></sc-if>
+</div>
+</div>
+
+<div class="a" style="left: 0; top: 108px; width: 728px; height: 248px">
+<svg class="a" width="240" height="240" viewBox="0 0 240 240" aria-label="The MCU reel: {{reel.onHand}} MCUs left" role="img" style="left: 4px; top: 4px">
+<circle cx="120" cy="120" r="112" fill="#F4F5F2" stroke="#5B6B78" stroke-width="2"></circle>
+<circle cx="120" cy="120" r="104" fill="none" stroke="#5B6B78" stroke-width="1"></circle>
+<circle cx="120" cy="120" r="{{reel.r}}" fill="#B9C3CB" stroke="#111" stroke-width="1.5"></circle>
+<path d="{{reel.wind}}" fill="none" stroke="#46535E" stroke-width="0.8"></path>
+<line x1="120" y1="{{reel.legY}}" x2="238" y2="{{reel.legY}}" stroke="#111" stroke-width="1.5"></line>
+<line x1="120" y1="{{reel.legY2}}" x2="238" y2="{{reel.legY2}}" stroke="#111" stroke-width="1.5"></line>
+<line x1="120" y1="{{reel.legM}}" x2="238" y2="{{reel.legM}}" stroke="#46535E" stroke-width="5" stroke-dasharray="2 5"></line>
+<path d="{{reel.spokes}}" fill="none" stroke="#5B6B78" stroke-width="1.6"></path>
+<circle cx="120" cy="120" r="26" fill="#F4F5F2" stroke="#111" stroke-width="2"></circle>
+<circle cx="120" cy="120" r="7" fill="#111"></circle>
+<path d="{{reel.notch}}" fill="#111"></path>
+</svg>
+<div class="a fx" style="left: 8px; top: 156px; width: 196px; padding: 6px 10px; background: {{reel.tagBg}}; border: 1.5px solid #111; color: #111">
+<span class="lab" style="display: block; color: #111">on the reel · {{reel.tagLab}}</span>
+<strong class="mono tab" style="display: block; font-size: 24px; line-height: 1.15">{{reel.onHand}} MCUs</strong>
+<span class="tab" style="display: block; font-size: 12px; line-height: 1.3">out in <strong>{{reel.out}}</strong><br>day 11, 05:01 (computed)</span>
+</div>
+<span class="lab a" style="left: 262px; top: 6px">The same tape, laid flat, in build order · 210 a day (authored)</span>
+<sc-for list="{{tape.segs}}" as="g" hint-placeholder-count="5">
+<span class="a mono" style="left: {{g.x}}px; top: 30px; width: {{g.w}}px; text-align: center; font-size: 11px; line-height: 14px; white-space: nowrap; overflow: hidden">{{g.q}}</span>
+<span class="a mono tab fx" style="left: {{g.x}}px; top: 48px; width: {{g.w}}px; height: 34px; border: 1.5px solid #111; background: #B9C3CB; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; overflow: hidden">{{g.l}}</span>
+</sc-for>
+<div class="a" style="left: {{tape.endX}}px; top: 42px; width: 0; height: 52px; border-left: 2px dashed #111"></div>
+<span class="a mono" style="left: {{tape.endLx}}px; top: 84px; font-size: 11px; line-height: 14px; white-space: nowrap; text-align: right; width: 120px">tape ends</span>
+<span class="a" style="left: 262px; top: 102px; width: 450px; font-size: 11.5px; line-height: 14px; color: #2B343B; white-space: nowrap">{{tape.legend}}</span>
+<div class="a t-unk" style="left: 262px; top: 122px; width: 450px; padding: 4px 10px; font-size: 12px; line-height: 14px;">
+<strong class="mono" style="font-size: 11px; letter-spacing: .04em">{{tape.shHead}}</strong>
+<sc-for list="{{tape.short}}" as="s" hint-placeholder-count="3"><span style="display: block">{{s.t}}</span></sc-for>
+</div>
+<div class="a" style="left: 262px; top: 192px; width: 450px; font-size: 12px; line-height: 14px; opacity: {{tape.lotOp}}">
+<div class="t-unk" style="width: {{tape.lotW}}px; height: 12px; margin-bottom: 3px"></div>
+<span>{{tape.lotT}}</span>
+</div>
+</div>
+
+<div class="a fx" style="left: 0; top: 364px; width: 728px; height: 328px; opacity: {{obs.op}}; visibility: {{obs.vis}}">
+<button type="button" class="btn a" onClick="{{openSheet}}" aria-label="Open the handover sheet from the night-shift planner" style="left: 0; top: 0; width: 500px; height: 106px; padding: 0; border: 0; background: transparent; text-align: left; color: #111">
+<span class="a" style="left: 10px; top: 10px; width: 486px; height: 100px; background: #E9ECEA; border: 1.5px solid #A9B4BC"></span>
+<span class="a" style="left: 5px; top: 5px; width: 486px; height: 100px; background: #F0F2F0; border: 1.5px solid #A9B4BC"></span>
+<span class="sheet a" style="left: 0; top: 0; width: 486px; height: 100px; padding: 10px 16px; display: block">
+<span class="lab" style="display: block">Handover sheet · {{obs.sheetKind}}</span>
+<span class="cond" style="display: block; font-size: 21px; font-weight: 600; line-height: 1.2; margin-top: 2px">{{obs.sheetTitle}}</span>
+<span style="display: block; font-size: 13px; line-height: 1.3; margin-top: 3px; color: #2B343B">{{obs.sheetSub}}</span>
+<span style="display: block; font-size: 13px; font-weight: 600; margin-top: 3px; text-decoration: underline">Open it</span>
+</span>
+</button>
+<div class="a" style="left: 516px; top: 2px; width: 212px; font-size: 13px; line-height: 1.4; color: #2B343B">Taking each line, and then signing, is how you take the seat. It is a promise with a time on it, not a menu choice.</div>
+<div class="a ln" style="left: 0; top: 114px; width: 728px; height: 68px; padding: 8px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; background: #F4F5F2">
+<div style="font-size: 13px; line-height: 1.4"><strong class="lab">From outside you can</strong><br>read every open matter · watch every clock<br>open the handover sheet</div>
+<div style="font-size: 13px; line-height: 1.4"><strong class="lab">From outside you can’t</strong><br>place an order · answer a call<br>sign for the seat</div>
+</div>
+</div>
+
+<div class="a fx" style="left: 0; top: 364px; width: 728px; height: 328px; opacity: {{occ.op}}; visibility: {{occ.vis}}">
+<div class="a" style="left: 0; top: 0; width: 728px; display: flex; gap: 8px; align-items: center">
+<span class="lab" style="white-space: nowrap; color: #111">Warrant v3</span>
+<sc-for list="{{clauses}}" as="k" hint-placeholder-count="3">
+<span class="fx" style="flex: 1; padding: 5px 10px; border: 1.5px solid #111; background: {{k.bg}}; color: {{k.fg}}; font-size: 12px; line-height: 15px"><strong class="mono">{{k.id}}</strong> {{k.t}}</span>
+</sc-for>
+</div>
+</div>
+
+<div class="a fx" style="left: 0; top: {{logTop}}px; width: 728px">
+<span class="lab" style="display: block; margin-bottom: 3px">Revision table · solid observed · outline authored · double rule recorded · hollow no act</span>
+<sc-for list="{{logRows}}" as="g" hint-placeholder-count="8">
+<div class="lg"><span class="sw {{g.cls}}" style="margin: 0"></span><span class="mono">{{g.rev}}</span><span class="tab mono" style="font-weight: 500">{{g.when}}</span><span>{{g.t}}</span></div>
+</sc-for>
+</div>
+
+<div class="a fx sheet" style="left: 0; top: 0; width: 728px; height: 692px; box-shadow: 0 12px 28px rgba(50,60,70,.22); transform-origin: 50% 100%; transform: {{sheet.tf}}; opacity: {{sheet.op}}; visibility: {{sheet.vis}}; transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .6s ease, visibility 0s linear {{sheet.vd}}s">
+<span class="lab a" style="left: 36px; top: 12px">Handover sheet · night shift to day shift</span>
+<span class="cond a" style="left: 36px; top: 26px; font-size: 27px; font-weight: 600; line-height: 1.1">What is in motion at Harrow</span>
+<span class="a" style="left: 36px; top: 60px; width: 660px; font-size: 12.5px; line-height: 16px; color: #2B343B; white-space: nowrap">{{sheet.meta}}</span>
+<span class="a" style="left: 36px; top: 78px; font-size: 14px; font-style: italic; color: #2B343B">Read each line. Take it, or hand it back. Then sign.</span>
+<sc-for list="{{lines}}" as="l" hint-placeholder-count="5">
+<div class="a" style="left: 0; top: {{l.top}}px; width: 725px; height: 94px; border-top: 1.5px solid #5B6B78">
+<span class="a fx mono" style="left: 16px; top: 8px; width: 28px; height: 28px; border: 1.5px {{l.balBd}} #111; border-radius: 50%; background: {{l.balBg}}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">{{l.n}}</span>
+<span class="cond a" style="left: 56px; top: 5px; width: 460px; font-size: 17px; font-weight: 600; line-height: 1.2; white-space: nowrap">{{l.title}}</span>
+<span class="tab mono a" style="left: 56px; top: 25px; width: 460px; font-size: 12px; font-weight: 500; white-space: nowrap">{{l.dline}}</span>
+<span class="a" style="left: 56px; top: 42px; width: 458px; font-size: 12px; line-height: 14.5px; color: #111"><span class="sw {{l.c1}}"></span>{{l.t1}}<sc-if value="{{l.hasT2}}" hint-placeholder-val="{{false}}"> <span class="sw {{l.c2}}"></span>{{l.t2}}</sc-if><sc-if value="{{l.hasNote}}" hint-placeholder-val="{{false}}"><span style="display: block; font-style: italic; border-left: 3px solid #5B6B78; padding-left: 8px; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{l.note}}</span></sc-if></span>
+<button type="button" class="btn" onClick="{{l.take}}" aria-pressed="{{l.tp}}" style="position: absolute; left: 528px; top: 6px; width: 180px; height: 38px; padding: 0 10px; border: 1.5px solid #111; background: {{l.tBg}}; color: #111; font-size: 13.5px; display: flex; align-items: center; gap: 9px; text-align: left">
+<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" style="flex: none"><rect x="1" y="1" width="16" height="16" fill="#FFFFFF" stroke="#111" stroke-width="2"></rect><path d="M4 9l3.5 3.5L14 5" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="square" opacity="{{l.tick}}"></path></svg>Take this one
+</button>
+<button type="button" class="btn" onClick="{{l.back}}" aria-pressed="{{l.bp}}" style="position: absolute; left: 528px; top: 49px; width: 180px; height: 36px; padding: 0 10px; border: 1.5px {{l.bBd}} #111; background: {{l.bBg}}; color: #111; font-size: 13px">Hand back to the planner</button>
+</div>
+</sc-for>
+<div class="a" style="left: 0; top: 576px; width: 725px; height: 114px; border-top: 2px solid #111">
+<span class="lab a" style="left: 36px; top: 5px">Sign as</span>
+<button type="button" class="btn a" onClick="{{setPerson}}" aria-pressed="{{sheet.pPress}}" style="left: 100px; top: 0; width: 100px; height: 36px; margin-top: 0; border: 1.5px solid #111; background: {{sheet.pBg}}; color: #111; font-size: 13px">A person</button>
+<button type="button" class="btn a" onClick="{{setAgent}}" aria-pressed="{{sheet.aPress}}" style="left: 204px; top: 0; width: 100px; height: 36px; border: 1.5px solid #111; background: {{sheet.aBg}}; color: #111; font-size: 13px">An agent</button>
+<span class="tab a" style="left: 400px; top: 9px; font-size: 13px; font-weight: 700">{{sheet.counter}}</span>
+<sc-if value="{{sheet.person}}" hint-placeholder-val="{{true}}">
+<form onSubmit="{{onSign}}" class="a" style="left: 0; top: 40px; width: 725px; height: 74px; margin: 0">
+<input class="ini a" type="text" maxlength="4" placeholder="DO" aria-label="Type your initials to sign. Demo initials: DO" value="{{sheet.ini}}" onChange="{{onIni}}" onInput="{{onIni}}" style="left: 36px; top: 0">
+<button type="submit" class="btn" aria-disabled="{{sheet.ariaDis}}" style="position: absolute; left: 252px; top: 4px; width: 84px; height: 42px; border: 2px solid {{sheet.tbBd}}; background: {{sheet.tbBg}}; color: {{sheet.tbFg}}; font-size: 15px">Sign</button>
+<span class="a" style="left: 352px; top: 0; width: 350px; font-size: 13px; font-weight: 600; line-height: 1.3">Signing makes these clocks yours from {{sheet.from}}.</span>
+<span class="a" style="left: 352px; top: 34px; width: 350px; font-size: 12px; line-height: 1.3; color: #2B343B">Handwritten initials. Warrant v3 for anyone.</span>
+<span class="a" style="left: 36px; top: 54px; width: 660px; font-size: 12.5px; font-weight: 600; line-height: 16px">{{sheet.msg}}</span>
+</form>
+</sc-if>
+<sc-if value="{{sheet.agent}}" hint-placeholder-val="{{false}}">
+<div class="a" style="left: 0; top: 40px; width: 725px; height: 74px">
+<button type="button" class="btn a" onClick="{{onStamp}}" aria-disabled="{{sheet.ariaDis}}" style="left: 36px; top: 0; width: 216px; height: 46px; border: 2px solid {{sheet.tbBd}}; background: {{sheet.tbBg}}; color: {{sheet.tbFg}}; font-size: 15px">Stamp the seat’s seal</button>
+<span class="a" style="left: 352px; top: 0; width: 350px; font-size: 13px; font-weight: 600; line-height: 1.3">Stamping makes these clocks yours from {{sheet.from}}.</span>
+<span class="a" style="left: 352px; top: 34px; width: 350px; font-size: 12px; line-height: 1.3; color: #2B343B">An agent signs with a seal, “agent · warrant v3”. Same limits; only the mark differs.</span>
+<span class="a" style="left: 36px; top: 54px; width: 660px; font-size: 12.5px; font-weight: 600; line-height: 16px">{{sheet.msg}}</span>
+</div>
+</sc-if>
+<sc-if value="{{sheet.sealed}}" hint-placeholder-val="{{false}}">
+<div class="a" style="left: 0; top: 0; width: 725px; height: 114px; background: #FFFFFF">
+<span class="lab a" style="left: 36px; top: 5px">Signature</span>
+<sc-if value="{{sheet.isPerson}}" hint-placeholder-val="{{true}}"><span class="a fx" style="left: 40px; top: 30px; width: 210px; height: 56px; border-bottom: 2px solid #111; font-size: 38px; font-style: italic; font-weight: 600; line-height: 56px; text-transform: uppercase; transform: rotate(-3deg)">{{sheet.ini}}</span></sc-if>
+<sc-if value="{{sheet.isAgent}}" hint-placeholder-val="{{false}}"><svg class="a seal" width="100" height="100" viewBox="0 0 92 92" role="img" aria-label="Seal: agent, warrant v3" style="left: 130px; top: 10px"><use href="#hmSeal"></use></svg></sc-if>
+<span class="tab a fx" style="left: 290px; top: 26px; padding: 10px 14px; background: #111; color: #FFFFFF; box-shadow: inset 0 0 0 3px #111, inset 0 0 0 4.5px #FFFFFF; font-size: 13.5px; line-height: 1.4; transform: scale({{sheet.stampSc}}); opacity: {{sheet.stampOp}}"><strong style="letter-spacing: .1em">RECORDED</strong><br>{{sheet.how}} {{sheet.hms}}<br>{{sheet.counts}}</span>
+</div>
+</sc-if>
+</div>
+</div>
+
+<div class="a fx sheet" style="left: 0; top: 0; width: 728px; height: 692px; border-color: #111; border-width: 2px; box-shadow: 0 12px 28px rgba(50,60,70,.26); transform-origin: 50% 100%; transform: {{lv.tf}}; opacity: {{lv.op}}; visibility: {{lv.vis}}; transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .6s ease, visibility 0s linear {{lv.vd}}s">
+<span class="lab a" style="left: 36px; top: 14px">Leaving the seat</span>
+<span class="cond a" style="left: 36px; top: 28px; font-size: 27px; font-weight: 600; line-height: 1.1">Matters in motion need an owner.</span>
+<span class="a" style="left: 36px; top: 66px; font-size: 14px; font-style: italic; color: #2B343B">You can’t close this and walk away. Hand over, or vacate. Both are recorded with the time.</span>
+<button type="button" class="btn" onClick="{{stay}}" style="position: absolute; right: 24px; top: 14px; height: 38px; padding: 0 14px; border: 1.5px solid #111; background: #FFFFFF; color: #111; font-size: 14px">Stay in the seat</button>
+<span class="lab a" style="left: 36px; top: 102px">Hand over to the next shift · drafted from your matters · edit the one-line notes</span>
+<sc-for list="{{lvLines}}" as="w" hint-placeholder-count="4">
+<div class="a" style="left: 36px; top: {{w.top}}px; width: 660px; height: 58px; border-top: 1px solid #A9B4BC">
+<span class="cond a" style="left: 0; top: 8px; width: 200px; font-size: 16px; font-weight: 600; line-height: 1.2">{{w.n}} · {{w.title}}</span>
+<div class="a" style="left: 210px; top: 10px; width: 450px"><input class="nin" type="text" maxlength="72" aria-label="{{w.label}}" value="{{w.val}}" onChange="{{w.edit}}" onInput="{{w.edit}}"></div>
+</div>
+</sc-for>
+<sc-if value="{{lv.none}}" hint-placeholder-val="{{false}}">
+<span class="a" style="left: 36px; top: 136px; font-size: 14px; color: #2B343B">You hold no open matters. Signing still records that you left.</span>
+</sc-if>
+<form onSubmit="{{onLvSign}}" class="a" style="left: 0; top: 440px; width: 724px; height: 90px; margin: 0">
+<span class="lab a" style="left: 36px; top: 4px">{{lv.signLab}}</span>
+<sc-if value="{{lv.person}}" hint-placeholder-val="{{true}}"><input class="ini a" type="text" maxlength="4" placeholder="DO" aria-label="Type your initials to sign the handover" value="{{lv.ini}}" onChange="{{onLvIni}}" onInput="{{onLvIni}}" style="left: 36px; top: 24px; width: 170px; height: 48px; font-size: 26px"></sc-if>
+<button type="submit" class="btn" aria-disabled="{{lv.ariaDis}}" style="position: absolute; left: {{lv.bx}}px; top: 24px; width: 260px; height: 48px; border: 2px solid {{lv.hbd}}; background: {{lv.hbg}}; color: {{lv.hfg}}; font-size: 16px">{{lv.btn}}</button>
+</form>
+<div class="a" style="left: 36px; top: 548px; width: 654px; height: 130px; border: 1.5px solid #111; padding: 10px 16px">
+<span class="lab" style="display: block">Or vacate</span>
+<span style="display: block; font-size: 13.5px; line-height: 1.4; margin-top: 4px; width: 420px">Matters revert to the COO. Every row reads “Leave with the COO”. Nothing is written for the next shift. Lapses after that log “seat vacant”. Recorded as a vacancy, not a handover.</span>
+<button type="button" class="btn" onClick="{{vacate}}" style="position: absolute; right: 16px; top: 38px; width: 180px; height: 48px; border: 2px solid #111; background: #FFFFFF; color: #111; font-size: 15px">Vacate the seat</button>
+</div>
+</div>
+</section>
+
+<sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+<aside aria-label="How do we know" class="a" style="left: 852px; top: 142px; width: 548px; padding: 12px 16px; background: #FFFFFF; border: 2px solid #111; box-shadow: 8px 8px 0 rgba(50,60,70,.18); display: flex; flex-direction: column; gap: 6px">
+<span class="cond" style="font-size: 17px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase">How do we know?</span>
+<span class="hw"><span class="sw t-obs"></span><span><strong>Solid = OBSERVED.</strong> Kaito’s 06:10 notice. Harrow and Kaito are fictional; the fire is modelled on a real 2021 fab fire (verify).</span></span>
+<span class="hw"><span class="sw t-rec"></span><span><strong>Double rule = RECORDED.</strong> Written into Harrow’s records by an act: a signature, an order, a refusal, a handover.</span></span>
+<span class="hw"><span class="sw t-lap"></span><span><strong>Hollow double rule = NO ACT.</strong> A clock ran out and nobody acted: absence, never a choice, charged to the seat.</span></span>
+<span class="hw"><span class="sw t-aut"></span><span><strong>Outline = AUTHORED.</strong> The promises, PO numbers, 210 a day, the $250,000 limit, ×60, the 14:00 call. No model ran.</span></span>
+<span class="hw"><span class="sw t-com"></span><span><strong>Toned = COMPUTED.</strong> 2,300 ÷ 210 = 10.95 days; at-risk days; shortfalls. Only the stated rules.</span></span>
+<span class="hw"><span class="sw t-unk"></span><span><strong>Dashed = UNKNOWN.</strong> Kaito’s restart date, PO dates, the CFO’s answer, the on-order lot.</span></span>
+<span style="font-size: 12px; line-height: 1.3; padding-top: 6px; border-top: 1.5px solid #5B6B78">Yellow fills only what is yours. A handwritten signature and a seal are different marks; the warrant behind them is the same.</span>
+</aside>
+</sc-if>
+
+<span class="a" style="left: 40px; top: 838px; width: 860px; font-size: 13px; line-height: 17px; font-weight: 500">ENTER, at Harrow, means signing for a fire already burning: matters, clocks and warrant limits become yours, and what lapses is charged to the seat. Boston’s form carried over almost unchanged; only the refusal and the agent’s seal are new, and consequences stop at arithmetic.</span>
+<span class="a" style="left: 920px; top: 838px; width: 480px; font-size: 11.5px; line-height: 15px; color: #2B343B"><strong>Same model as: Boston · E2.</strong> Changed: a fire, a warrant, a reel; no payroll or phone. Same: take or hand back, a signed time, leave by handover or vacate.</span>
+<span class="a" style="left: 40px; top: 876px; font-size: 11px; line-height: 14px; color: #46535E; white-space: nowrap">COMMERCIAL LENS · hypothesis: organizations pay for accountable seats, human or agent, with handovers; the MIRROR is the free trial.</span>
+<span class="a" style="right: 40px; top: 876px; text-align: right; font-size: 11px; line-height: 14px; color: #46535E; white-space: nowrap">PROTOTYPE · PLATFORM HYPOTHESIS (ENTERPRISE) · Harrow is fictional · figures authored or computed</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+componentDidMount() {
+this.last = Date.now();
+this.simf = 0;
+this.tm = setInterval(() => {
+const s = this.state || {};
+const now = Date.now();
+const dt = Math.min(2, (now - this.last) / 1000);
+this.last = now;
+this.simf += dt * (s.fast ? 60 : 1);
+const sim = Math.floor(this.simf);
+const patch = {};
+if (sim !== (s.sim || 0)) patch.sim = sim;
+if (s.stage === 'sealing') {
+const nc = (s.c || 0) + 100;
+if (nc >= 3400) { patch.c = 3400; patch.stage = 'occupy'; } else patch.c = nc;
+} else if (s.stage === 'unsealing') {
+const nc = (s.c || 0) - 175;
+if (nc <= 0) Object.assign(patch, this.outPatch()); else patch.c = nc;
+}
+const nowS = 24000 + sim;
+const acts = s.acts || {}, lp = s.lapses || {};
+const st = s.stage || 'observe';
+const inSeat = st === 'sealing' || st === 'occupy' || st === 'leaving';
+const ini = s.sig ? s.sig.short : '';
+let nlp = null, nlog = null;
+this.lapseDefs().forEach((d) => {
+if (nowS >= d.dl && !(d.any ? (acts[d.id] || []).length : this.closed(d.id, acts)) && !lp[d.id] && !(nlp && nlp[d.id])) {
+const held = inSeat && (s.mine || []).indexOf(d.id) >= 0;
+const backed = inSeat && (s.back || []).indexOf(d.id) >= 0;
+const att = held ? 'against the seat held by ' + ini : backed ? 'against the planner: handed back by ' + ini : 'seat vacant' + (s.hist ? ' · not charged to ' + s.hist.ini : '');
+nlp = nlp || {}; nlp[d.id] = { at: d.dl };
+nlog = nlog || (s.wlog || []).slice();
+nlog.push({ at: d.dl, cls: 't-lap', t: 'NO ACT · ' + d.txt + ' — ' + att });
+}
+});
+if (nlp) { patch.lapses = Object.assign({}, lp, nlp); patch.wlog = nlog; }
+if (Object.keys(patch).length) this.setState(patch);
+}, 100);
+}
+componentWillUnmount() { clearInterval(this.tm); }
+outPatch() { return { stage: 'observe', c: 0, mine: [], back: [], ack: {}, sig: null, initials: '', lvIni: '', lvNotes: {} }; }
+wt() { return 24000 + ((this.state || {}).sim || 0); }
+lapseDefs() {
+return [
+{ id: 5, dl: 39600, txt: 'the 11:00 spot quote lapsed' },
+{ id: 4, dl: 50400, any: true, txt: 'the 14:00 hospital call went with no plan set' }
+];
+}
+actDefs() {
+return {
+p_chase: { id: 2, label: 'Chase Kaito for a date', log: 'asked Kaito’s sales desk for a restart date', short: 'chased Kaito for a date' },
+q_keep: { id: 4, label: 'Keep the build order', log: 'kept the build order as handed over', short: 'kept the build order' },
+q_crit: { id: 4, label: 'Patient-critical first', log: 'set patient-critical first (Lakeshore, St. Brigid, County EMS)', short: 'put patient-critical first' },
+s2: { id: 5, label: 'Order 2,000 · $176,000', log: 'ordered 2,000 MCUs from Broker 1, $176,000 (II.1)', short: 'ordered 2,000 MCUs, $176,000', stops: true, word: 'ORDERED' },
+s4: { id: 5, label: 'Order 4,000 · $352,000', log: 'tried to order 4,000 MCUs from Broker 1, $352,000', short: 'tried 4,000 MCUs, $352,000', note: 'Tried 4,000 ($352,000): refused, II.5.' },
+esc: { id: 5, label: 'Send 4,000 to the CFO (II.5)', log: 'sent the 4,000 order to the CFO (II.5)', short: 'sent 4,000 to the CFO', note: 'Sent 4,000 to the CFO (II.5). No answer yet.' }
+};
+}
+closed(id, acts) { const AC = this.actDefs(); return (acts[id] || []).some((r) => AC[r.k].stops); }
+has(id, k, acts) { return (acts[id] || []).some((r) => r.k === k); }
+avail(id, acts) {
+const cl = this.closed(id, acts);
+if (id === 2) return (acts[2] || []).length ? [] : ['p_chase'];
+if (id === 4) return (acts[4] || []).length ? [] : ['q_keep', 'q_crit'];
+if (id === 5) return cl ? [] : this.has(5, 'esc', acts) ? ['s2'] : this.has(5, 's4', acts) ? ['s2', 'esc'] : ['s2', 's4'];
+return [];
+}
+act(id, k) {
+const cur = this.state || {};
+if (cur.stage !== 'occupy' || (cur.mine || []).indexOf(id) < 0 || !cur.sig) return;
+const acts = cur.acts || {};
+if ((cur.lapses || {})[id] || this.avail(id, acts).indexOf(k) < 0) return;
+const AC = this.actDefs();
+const t = this.wt();
+const REF = 'Refused by the warrant: orders over $250,000 need the CFO (II.5)';
+const who = cur.sig.short;
+const log = (cur.wlog || []).concat([{ at: t, cls: 't-rec', t: who + ' as VP Procurement · ' + AC[k].log }]);
+if (k === 's4') log.push({ at: t, cls: 't-rec', t: REF });
+this.setState({ acts: Object.assign({}, acts, { [id]: (acts[id] || []).concat([{ k: k, at: t, who: who }]) }), wlog: log });
+}
+renderVals() {
+const s = this.state || {};
+const stage = s.stage || 'observe';
+const c = s.c || 0;
+const ack = s.ack || {};
+const initials = (s.initials || '').toUpperCase();
+const kind = s.kind || 'person';
+const sig = s.sig || null;
+const mine = s.mine || [];
+const back = s.back || [];
+const hist = s.hist || null;
+const acts = s.acts || {};
+const lapses = s.lapses || {};
+const how = !!s.how;
+const fast = !!s.fast;
+const nowS = 24000 + (s.sim || 0);
+const pad = (n) => (n < 10 ? '0' : '') + n;
+const hms = (n) => { n = Math.max(0, Math.floor(n)); return pad(Math.floor(n / 3600) % 24) + ':' + pad(Math.floor(n / 60) % 60) + ':' + pad(n % 60); };
+const hm = (n) => hms(n).slice(0, 5);
+const cd = (n) => { n = Math.max(0, n); const d = Math.floor(n / 86400); return (d ? d + 'd ' : '') + hms(n % 86400); };
+const fmt = (n) => Math.round(n).toLocaleString('en-US');
+const AC = this.actDefs();
+const REF = 'Refused by the warrant: orders over $250,000 need the CFO (II.5)';
+
+const RATE = 210, STOCK = 2300, T0 = 22200;
+const STOCKOUT = T0 + (STOCK / RATE) * 86400;
+const onHand = Math.max(0, STOCK - RATE * (nowS - T0) / 86400);
+const P = [
+{ id: 'L', short: 'Lakeshore', qty: 300 }, { id: 'S', short: 'St. Brigid', qty: 1200 }, { id: 'M', short: 'MedSupply', qty: 2500 },
+{ id: 'E', short: 'County EMS', qty: 150 }, { id: 'X', short: 'Export ON', qty: 900 }
+];
+const byId = {}; P.forEach((p) => { byId[p.id] = p; });
+const sim = (ids, stock) => { let cum = 0; return ids.map((id) => { const p = byId[id]; const c0 = cum; cum += p.qty; const built = Math.max(0, Math.min(p.qty, stock - c0)); return { p: p, c0: c0, built: built, short: p.qty - built, fray: c0 + p.qty > stock ? Math.round((c0 < stock ? stock : c0) / RATE) : null }; }); };
+const crit = this.has(4, 'q_crit', acts);
+const order = crit ? ['L', 'S', 'E', 'M', 'X'] : ['L', 'S', 'M', 'E', 'X'];
+const plan = sim(order, STOCK);
+const lot = this.has(5, 's2', acts) ? 2000 : 0;
+const planLot = sim(order, STOCK + lot);
+const risk = plan.filter((r) => r.fray !== null);
+const riskTxt = 'At risk: ' + risk.map((r) => r.p.short + ' day ' + r.fray).join(' · ') + (crit ? '; County EMS kept' : '') + ' (computed).';
+
+const signed = stage === 'sealing' || stage === 'occupy' || stage === 'leaving';
+const moving = stage === 'sealing' || stage === 'unsealing';
+const sheetOpen = stage === 'sheet' || (stage === 'sealing' && c < 1300);
+const occShow = c >= 2200 && signed;
+const lvOpen = stage === 'leaving' || (stage === 'unsealing' && c >= 2550);
+const obsShow = !signed && stage !== 'sheet';
+const occupied = stage === 'occupy';
+
+const MAT = [
+{ id: 1, short: 'Kaito fire', title: 'Kaito fab fire · 06:10', full: 'Kaito’s fab caught fire at 06:10', descO: 'Kaito Semiconductor, the only qualified MCU source, has stopped shipping. Restart date unknown.', descM: 'Kaito, our sole MCU source, has stopped shipping.', ck: 'up', dlText: 'since the fire · 06:10' },
+{ id: 2, short: 'Two POs', title: 'Two open POs with Kaito', full: 'Two open purchase orders with Kaito', descO: 'PO-4471 and PO-4472, 1,050 MCUs each, due W2 and W3. Neither ships while the fab is down.', descM: 'PO-4471 and PO-4472: 1,050 MCUs each.', ck: 'unk', dlText: 'delivery date · not known' },
+{ id: 3, short: 'Stockout', title: 'Day-11 stockout', full: 'The day-11 stockout', descO: 'At 210 MCUs a day, the 2,300 on hand run out in about 11 days.', descM: '2,300 MCUs on hand, 210 a day.', ck: 'cd', dl: STOCKOUT, dlText: 'out · day 11, 05:01 (computed)' },
+{ id: 4, short: 'Promises', title: 'Five customer promises', full: 'Five customer promises, 5,050 pumps', descO: '5,050 pumps promised through W7. Three are patient-critical.', descM: '5,050 pumps promised through W7.', ck: 'cd', dl: 50400, dlText: 'hospital call · 14:00 [authored]' },
+{ id: 5, short: 'Spot quote', title: 'Spot quote · ends 11:00', full: 'The 11:00 spot-market quote', descO: 'Broker 1 will sell 2,000 MCUs at $88 each until 11:00. After that the quote is gone.', descM: 'Broker 1: 2,000 MCUs at $88, until 11:00.', ck: 'cd', dl: 39600, dlText: 'quote ends 11:00 [authored]' }
+];
+const lastRec = (id) => { const a = acts[id] || []; return a.length ? a[a.length - 1] : null; };
+const eff = (id, r) => {
+const k = r.k;
+if (k === 'p_chase') return ['t-unk', 'Kaito’s answer is not modeled.'];
+if (k === 'q_keep' || k === 'q_crit') return ['t-com', riskTxt];
+if (k === 's2') return ['t-com', 'On order: +2,000, lands in 1–2 wks after QA (authored). Not on the reel yet.'];
+if (k === 's4') return ['t-aut', REF + '.'];
+return ['t-unk', 'The CFO’s answer is not modeled. The quote still ends at 11:00.'];
+};
+const segs = (m, mode) => {
+const lp = lapses[m.id], r = lastRec(m.id), row = mode === 'row';
+if (lp) return [['t-lap', 'No act by ' + hm(lp.at) + '. Recorded NO ACT.']];
+if (r) return [['t-rec', r.who + ' ' + AC[r.k].short + ', ' + hm(r.at) + '. Recorded.'], eff(m.id, r)];
+if (m.id === 1) return [['t-obs', 'Kaito’s 06:10 notice: shipments stop (fictional).'], ['t-unk', 'Restart date: UNKNOWN.']];
+if (m.id === 2) return [['t-aut', 'PO numbers and quantities: authored.'], ['t-unk', 'Delivery dates: UNKNOWN until Kaito restarts.']];
+if (m.id === 3) return [['t-com', '2,300 ÷ 210 = 10.95 days, so out on day 11, 05:01.'], ['t-aut', '210 a day is the authored build rate.']];
+if (m.id === 4) return row ? [['t-com', riskTxt]] : [['t-com', riskTxt], ['t-aut', '5,050 pumps through W7 (authored).']];
+return row ? [['t-aut', 'Broker 1: $88 an MCU, good until 11:00 (authored).'], ['t-com', '2,000 × $88 = $176,000: inside the limit (II.1).']] : [['t-aut', 'Broker 1: 2,000 MCUs at $88, good until 11:00 (authored).'], ['t-aut', 'Over $250,000 in one order needs the CFO (II.5).']];
+};
+
+const strip = { obsVis: signed ? 'hidden' : 'visible', vis: signed ? 'visible' : 'hidden', hm: sig ? sig.hm : '', hms: sig ? sig.hms : '', signed: sig ? (sig.kind === 'agent' ? 'stamped agent · warrant v3' : 'signed ' + sig.short) : '' };
+const hdr = { wLabel: signed ? 'Plant clock' : 'Plant clock · runs on its own' };
+const yc = { start: sig ? sig.hms : '', run: sig ? hms(nowS - sig.t) : '' };
+const nGot = mine.length;
+const ledger = { got: nGot + (nGot === 1 ? ' matter, ' : ' matters, ') + nGot + (nGot === 1 ? ' clock' : ' clocks') + ', the pen.',
+obs: hist ? hist.ini + ' left the seat at ' + hist.hm + (hist.kind === 'vacate' ? ' by vacating' : ' by handover') + '. Lapses since then are charged to the seat, not to ' + hist.ini + '.' : 'Before you sign, the mirror is yours. What signing costs, and what it gives, is written when you sign.' };
+
+const ownA = hist && hist.kind === 'vacate' ? 'Left with the COO. Vacated at ' + hist.hm + '; no handover was written.'
+: hist && hist.kind === 'handover' ? 'Vacant since ' + hist.hm + '. The planner holds ' + hist.ini + '’s handover.'
+: 'Vacant since 05:45. Night-shift planner [fictional] covers it.';
+const led = { aVis: signed ? 'hidden' : 'visible', bVis: signed ? 'visible' : 'hidden', own: signed ? 'Signed ' + (sig ? sig.short : '') + ' at ' + (sig ? sig.hms : '') + '. These matters and these clocks are yours from then.' : ownA };
+const ord = signed ? mine.map((id) => MAT[id - 1]).concat(back.map((id) => MAT[id - 1])) : MAT;
+let y = 84, seenBack = false, backTop = 0;
+const rows = ord.map((m) => {
+const isMine = signed && mine.indexOf(m.id) >= 0;
+const compact = signed && !isMine;
+const lp = lapses[m.id];
+const cl = this.closed(m.id, acts);
+const a = lastRec(m.id);
+const av = isMine && occupied && !lp ? this.avail(m.id, acts) : [];
+const tall = m.id === 5 && this.has(5, 's4', acts) && !cl;
+if (compact && !seenBack) { backTop = y + 4; y += 28; seenBack = true; }
+const h = !signed ? 112 : compact ? 58 : (m.id === 2 || m.id === 4 || m.id === 5 ? (tall ? 150 : 132) : 92);
+const top = y; y += h;
+const sg = compact ? [['t-aut', '']] : segs(m, signed ? 'row' : 'sheet');
+const yel = isMine ? '#F2C200' : 'transparent';
+let clock = '', ck = { fs: compact ? 16 : 20, pad: '2px 6px', bd: '2px solid ' + (isMine ? '#111' : 'transparent'), bg: yel, fg: '#111' };
+if (lp) { clock = 'LAPSED'; ck = { fs: compact ? 15 : 18, pad: '1px 8px', bd: '2px dashed #111', bg: 'transparent', fg: '#111' }; }
+else if (cl) { clock = AC[a.k].word; ck = { fs: 15, pad: '3px 10px', bd: '2px solid #111', bg: '#111', fg: '#FFFFFF' }; }
+else if (m.ck === 'unk') { clock = 'UNKNOWN'; ck = { fs: compact ? 15 : 18, pad: '1px 8px', bd: '2px dashed #111', bg: 'transparent', fg: '#111' }; }
+else if (m.ck === 'up') clock = '+' + hms(nowS - T0);
+else clock = cd(m.dl - nowS);
+const dlText = lp ? 'no act recorded · ' + hm(lp.at) : cl ? 'act recorded ' + hm(a.at) + ' · ' + a.who : m.dlText;
+const own = compact ? 'handed back' : isMine ? 'yours · signed ' + (sig ? sig.hm : '')
+: hist && hist.kind === 'vacate' ? 'Leave with the COO · vacated ' + hist.hm
+: hist && hist.kind === 'handover' && hist.ids.indexOf(m.id) >= 0 ? 'seat vacant · ' + hist.ini + ' note on file' : 'owner: the seat (vacant)';
+return {
+n: m.id, title: m.title, desc: signed ? m.descM : m.descO, top: top, h: h,
+balBd: compact ? 'dashed' : 'solid', balBg: isMine ? '#F2C200' : 'transparent',
+dOp: compact ? 0 : 1, sOp: signed && !compact ? 1 : 0, c1: sg[0][0], t1: sg[0][1], has2: sg.length > 1, c2: sg.length > 1 ? sg[1][0] : '', t2: sg.length > 1 ? sg[1][1] : '',
+btns: av.map((k) => ({ t: AC[k].label, pick: () => this.act(m.id, k) })), bVis: av.length ? 'visible' : 'hidden', btnTop: tall ? 108 : 92,
+own: own, ownTop: compact ? 36 : signed ? 74 : 90, ownW: signed ? 170 : 300,
+clock: clock, ckFs: ck.fs, ckPad: ck.pad, ckBd: ck.bd, ckBg: ck.bg, ckFg: ck.fg,
+dlText: dlText, dlOp: compact ? 0 : 1
+};
+});
+led.backTop = backTop;
+led.backVis = signed && back.length ? 'visible' : 'hidden';
+
+const vacS = hist ? hist.at : 20700;
+const isP = sig ? sig.kind === 'person' : true;
+const tb = { bg: signed ? '#F2C200' : 'transparent', lab: signed ? 'Responsible · you' : 'Responsible', vacant: !signed, person: signed && isP, agent: signed && !isP, ini: sig ? sig.short : '', hms: sig ? sig.hms : '', since: hist ? hist.hm : '05:45', ago: hms(nowS - vacS) };
+const rot = (STOCK - onHand) * 9;
+const rTape = Math.sqrt(26 * 26 + (98 * 98 - 26 * 26) * (onHand / STOCK));
+let wind = '';
+for (let r = 32; r < rTape - 2; r += 5) wind += 'M' + (120 - r) + ' 120 a' + r + ' ' + r + ' 0 1 0 ' + (2 * r) + ' 0 a' + r + ' ' + r + ' 0 1 0 ' + (-2 * r) + ' 0 ';
+let spokes = '';
+for (let i = 0; i < 6; i++) { const t = (rot + i * 60) * Math.PI / 180; spokes += 'M' + (120 + 27 * Math.cos(t)).toFixed(1) + ' ' + (120 + 27 * Math.sin(t)).toFixed(1) + ' L' + (120 + 103 * Math.cos(t)).toFixed(1) + ' ' + (120 + 103 * Math.sin(t)).toFixed(1) + ' '; }
+const tn = rot * Math.PI / 180;
+const notch = 'M' + (120 + 112 * Math.cos(tn)).toFixed(1) + ' ' + (120 + 112 * Math.sin(tn)).toFixed(1) + ' L' + (120 + 100 * Math.cos(tn - 0.09)).toFixed(1) + ' ' + (120 + 100 * Math.sin(tn - 0.09)).toFixed(1) + ' L' + (120 + 100 * Math.cos(tn + 0.09)).toFixed(1) + ' ' + (120 + 100 * Math.sin(tn + 0.09)).toFixed(1) + ' Z';
+const reel = { r: rTape.toFixed(1), wind: wind, spokes: spokes, notch: notch, legY: (120 - rTape).toFixed(1), legY2: (127 - rTape).toFixed(1), legM: (123.5 - rTape).toFixed(1),
+onHand: fmt(onHand), out: cd(STOCKOUT - nowS), tagBg: signed ? '#F2C200' : '#F4F5F2', tagLab: signed ? 'yours' : 'not yours' };
+
+const K = 0.19, X0 = 262;
+const segsT = plan.filter((r) => r.built > 0).map((r) => ({ x: X0 + Math.round(r.c0 * K) - 262, w: Math.max(2, Math.round(r.built * K)), l: r.built * K >= 22 ? r.p.id : '', q: r.built * K >= 34 ? (r.built === r.p.qty ? fmt(r.built) : fmt(r.built) + '/' + fmt(r.p.qty)) : '' }));
+segsT.forEach((g) => { g.x += X0; });
+const endX = X0 + Math.round(STOCK * K);
+const shortL = plan.filter((r) => r.short > 0);
+const shortLot = planLot.filter((r) => r.short > 0);
+const tape = { segs: segsT, endX: endX, endLx: endX - 124, legend: 'L Lakeshore · S St. Brigid · M MedSupply · E County EMS · X Export ON',
+shHead: 'SHORT IF NOTHING CHANGES (COMPUTED)',
+short: shortL.map((r) => ({ t: r.p.id + ' ' + r.p.short + ': short ' + fmt(r.short) + (r.fray ? ' · from day ' + r.fray : '') })),
+lotOp: lot ? 1 : 0, lotW: Math.round(lot * K), lotT: lot ? '+2,000 on order (authored). If it lands in time, short only: ' + (shortLot.length ? shortLot.map((r) => r.p.short + ' ' + fmt(r.short)).join(', ') : 'nothing') + ' (computed).' : '' };
+
+const obsSheet = hist && hist.kind === 'handover' ? { kind: 'written by ' + hist.ini, title: 'A handover on file, from ' + hist.ini, sub: 'Written ' + hist.hm + ' · ' + hist.ids.length + ' lines with notes · unread.' }
+: hist && hist.kind === 'vacate' ? { kind: 'vacancy notice', title: 'No handover was written', sub: 'Vacated ' + hist.hm + '. Matters left with the COO; no notes.' }
+: { kind: 'from the night shift', title: 'What is in motion, in the planner’s hand', sub: 'Written by the night-shift planner [fictional] · 5 lines · unread.' };
+const obs = { op: obsShow ? 1 : 0, vis: obsShow ? 'visible' : 'hidden', sheetKind: obsSheet.kind, sheetTitle: obsSheet.title, sheetSub: obsSheet.sub };
+const base = [
+{ at: 20700, when: '05:45', t: 'seat vacant; night-shift planner covers [authored]', cls: 't-aut' },
+{ at: 22200, when: '06:10', t: 'Kaito fab fire: supplier notice received (fictional)', cls: 't-obs' },
+{ at: 22320, when: '06:12', t: 'night-shift planner opens the desk [authored]', cls: 't-aut' },
+{ at: 23880, when: '06:38', t: 'handover sheet written by the planner [authored]', cls: 't-aut' }
+];
+const recs = (s.wlog || []).map((e) => ({ at: e.at, cls: e.cls, when: e.sec ? hms(e.at) : hm(e.at), t: e.t }));
+const allLog = base.concat(recs).sort((p, q) => p.at - q.at).map((e, i) => Object.assign({ rev: String.fromCharCode(65 + (i % 26)) }, e));
+const logRows = allLog.slice(signed ? -8 : -4);
+const hasRef = this.has(5, 's4', acts);
+const clauses = [
+{ id: 'II.1', t: 'up to $250,000 an order', bg: '#F4F5F2', fg: '#111' },
+{ id: 'II.5', t: 'above that, the CFO', bg: hasRef ? '#111' : '#F4F5F2', fg: hasRef ? '#FFFFFF' : '#111' },
+{ id: 'II.8', t: '$250,000 a supplier a day', bg: '#F4F5F2', fg: '#111' }
+];
+const occ = { op: occShow ? 1 : 0, vis: occShow ? 'visible' : 'hidden' };
+
+const src = hist && hist.kind === 'handover' ? hist : null;
+const metaFrom = hist && hist.kind === 'handover' ? 'From ' + hist.ini + ' · to the next shift · written ' + hist.hm + ' · the notes are the writer’s own'
+: hist && hist.kind === 'vacate' ? 'From nobody · vacated ' + hist.hm + ' · no handover written'
+: 'From the night-shift planner (fictional) · written 06:38 [authored]';
+const lines = MAT.map((m, i) => {
+const t = ack[m.id] || '';
+const isTake = t === 'take', isBack = t === 'back';
+const lp = lapses[m.id], cl = this.closed(m.id, acts), a = lastRec(m.id);
+const sg = segs(m, 'sheet');
+const note = src && src.notes && src.notes[m.id] ? 'Note from ' + src.ini + ': “' + src.notes[m.id] + '”' : '';
+const dline = lp ? 'Lapsed ' + hm(lp.at) + ' · NO ACT recorded' : cl ? 'Act recorded ' + hm(a.at) + ' by ' + a.who + ' · ' + AC[a.k].word.toLowerCase()
+: m.ck === 'up' ? 'Since the fire: ' + hms(nowS - T0) + ' · restart date UNKNOWN' : m.ck === 'unk' ? 'Deadline: none · delivery date UNKNOWN' : 'Deadline: ' + m.dlText.replace(' (computed)', '') + ' · in ' + cd(m.dl - nowS);
+return {
+n: m.id, title: m.full, top: 104 + i * 94, dline: dline,
+c1: sg[0][0], t1: sg[0][1], c2: sg.length > 1 ? sg[1][0] : '', t2: sg.length > 1 ? sg[1][1] : '', hasT2: sg.length > 1 && !note, note: note, hasNote: !!note,
+balBd: isBack ? 'dashed' : 'solid', balBg: isTake ? '#F2C200' : '#F4F5F2',
+tp: isTake ? 'true' : 'false', bp: isBack ? 'true' : 'false', tBg: isTake ? '#F2C200' : '#FFFFFF', tick: isTake ? 1 : 0,
+bBg: isBack ? '#E3E7EA' : '#FFFFFF', bBd: isBack ? 'dashed' : 'solid',
+take: () => { if ((this.state || {}).stage !== 'sheet') return; const cur = (this.state && this.state.ack) || {}; this.setState({ ack: Object.assign({}, cur, { [m.id]: cur[m.id] === 'take' ? '' : 'take' }) }); },
+back: () => { if ((this.state || {}).stage !== 'sheet') return; const cur = (this.state && this.state.ack) || {}; this.setState({ ack: Object.assign({}, cur, { [m.id]: cur[m.id] === 'back' ? '' : 'back' }) }); }
+};
+});
+const nTake = MAT.filter((m) => ack[m.id] === 'take').length;
+const nBk = MAT.filter((m) => ack[m.id] === 'back').length;
+const nOpen = 5 - nTake - nBk;
+const agent = kind === 'agent';
+const ready = nOpen === 0 && (agent || initials.length >= 2) && stage === 'sheet';
+const msg = nOpen > 0 ? nOpen + (nOpen === 1 ? ' line is' : ' lines are') + ' still open. Take it, or hand it back.' : (!agent && initials.length < 2) ? 'Type your initials (demo: DO), then press Return or Sign.' : agent ? 'Press Stamp. The time is written with it.' : 'Press Return or Sign. The time is written with it.';
+const sheet = {
+tf: sheetOpen ? 'translateX(0px)' : (signed ? 'translate(-40px, 0px) scale(.5)' : 'translateX(820px)'),
+op: sheetOpen ? 1 : 0, vis: sheetOpen ? 'visible' : 'hidden', vd: sheetOpen ? 0 : 0.9,
+meta: metaFrom, ini: initials, sealed: stage === 'sealing', person: !agent && stage === 'sheet', agent: agent && stage === 'sheet',
+pPress: agent ? 'false' : 'true', aPress: agent ? 'true' : 'false', pBg: agent ? '#FFFFFF' : '#E3E7EA', aBg: agent ? '#E3E7EA' : '#FFFFFF',
+counter: nTake + ' taken · ' + nBk + ' handed back · ' + nOpen + ' open', from: hms(nowS), msg: msg,
+ariaDis: ready ? 'false' : 'true', tbBg: ready ? '#111111' : '#D3D9DD', tbFg: ready ? '#FFFFFF' : '#46535E', tbBd: ready ? '#111111' : '#A9B4BC',
+stampSc: c >= 200 ? 1 : 1.5, stampOp: c >= 200 ? 1 : 0,
+isPerson: sig ? sig.kind === 'person' : true, isAgent: sig ? sig.kind === 'agent' : false,
+how: sig && sig.kind === 'agent' ? 'stamped' : 'signed', hms: sig ? sig.hms : '', counts: mine.length + ' taken · ' + back.length + ' handed back'
+};
+if (stage === 'sealing' && sig) sheet.ini = sig.short;
+
+const OPEN = { 1: 'Open: Kaito silent. Restart date UNKNOWN.', 2: 'Open: both POs unchanged; no dates.', 3: 'Open: out on day 11, 05:01, unless a lot lands.', 4: 'Open: hospital call 14:00; order unchanged.', 5: 'Open: quote ends 11:00; nothing ordered.' };
+const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1) + '.';
+const draftFor = (id) => lapses[id] ? 'Lapsed ' + hm(lapses[id].at) + ' with no act. Nothing to take back.' : lastRec(id) ? (AC[lastRec(id).k].note || cap(AC[lastRec(id).k].short)) : OPEN[id];
+const lvNotes = s.lvNotes || {};
+const lvIni = (s.lvIni || '').toUpperCase();
+const lvLines = mine.map((id, i) => ({ n: id, title: MAT[id - 1].short, top: 128 + i * 60, label: 'Note for matter ' + id + ', ' + MAT[id - 1].short, val: lvNotes[id] !== undefined ? lvNotes[id] : draftFor(id),
+edit: (e) => { const cur = (this.state && this.state.lvNotes) || {}; this.setState({ lvNotes: Object.assign({}, cur, { [id]: e.target.value }) }); } }));
+const sAgent = sig ? sig.kind === 'agent' : false;
+const lvReady = (sAgent || lvIni.length >= 2) && stage === 'leaving';
+const lv = { tf: lvOpen ? 'translateX(0px)' : (stage === 'unsealing' ? 'translate(-40px, 0px) scale(.5)' : 'translateX(820px)'), op: lvOpen ? 1 : 0, vis: lvOpen ? 'visible' : 'hidden', vd: lvOpen ? 0 : 0.9,
+none: mine.length === 0, ini: lvIni, person: !sAgent, signLab: sAgent ? 'Stamp the handover' : 'Sign the handover', btn: sAgent ? 'Stamp and hand over' : 'Sign and hand over', bx: sAgent ? 36 : 240,
+ariaDis: lvReady ? 'false' : 'true', hbg: lvReady ? '#111111' : '#D3D9DD', hfg: lvReady ? '#FFFFFF' : '#46535E', hbd: lvReady ? '#111111' : '#A9B4BC' };
+
+const doSign = () => {
+const cur = this.state || {};
+const a = cur.ack || {};
+const ag = (cur.kind || 'person') === 'agent';
+const ini = String(cur.initials || '').toUpperCase();
+if (cur.stage !== 'sheet' || (!ag && ini.length < 2) || [1, 2, 3, 4, 5].some((id) => !a[id])) return;
+const t = this.wt();
+const short = ag ? 'agent v3' : ini;
+const m = [1, 2, 3, 4, 5].filter((id) => a[id] === 'take'), b = [1, 2, 3, 4, 5].filter((id) => a[id] === 'back');
+this.setState({ stage: 'sealing', c: 0, sig: { kind: ag ? 'agent' : 'person', short: short, hms: hms(t), hm: hm(t), t: t }, mine: m, back: b,
+wlog: (cur.wlog || []).concat([{ at: t, sec: true, cls: 't-rec', t: (ag ? 'seat taken by agent · warrant v3, by seal' : 'seat taken by ' + ini + ' as VP Procurement, by hand') + ' · ' + m.length + ' taken, ' + b.length + ' handed back' }]) });
+};
+const doLeave = (how) => {
+const cur = this.state || {};
+if (cur.stage !== 'leaving' || !cur.sig) return;
+const ag = cur.sig.kind === 'agent';
+const ini = cur.sig.short;
+if (how === 'handover' && !ag && String(cur.lvIni || '').length < 2) return;
+const t = this.wt();
+const notes = {};
+(cur.mine || []).forEach((id) => { const v = (cur.lvNotes || {})[id]; notes[id] = v !== undefined ? v : draftFor(id); });
+const ids = how === 'handover' ? (cur.mine || []).slice() : [];
+const text = how === 'handover' ? 'seat handed over by ' + ini + ' to the next shift · ' + ids.length + ' notes on file' : 'seat vacated by ' + ini + ' · ' + (cur.mine || []).length + ' matters left with the COO';
+this.setState({ stage: 'unsealing', c: 3400, hist: { kind: how, ini: ini, hm: hm(t), hms: hms(t), at: t, ids: ids, notes: how === 'handover' ? notes : {} },
+wlog: (cur.wlog || []).concat([{ at: t, sec: true, cls: 't-rec', t: text }]) });
+};
+
+return {
+clockNow: 'Day 0 · ' + hms(nowS), moving: moving, signed: signed, notSigned: !signed, strip: strip, hdr: hdr, yc: yc, ledger: ledger, led: led, rows: rows, tb: tb, reel: reel, tape: tape,
+obs: obs, logTop: signed ? 430 : 556, logRows: logRows, clauses: clauses, occ: occ, sheet: sheet, lines: lines, lv: lv, lvLines: lvLines, how: how, howPressed: how ? 'true' : 'false', howBg: how ? '#111111' : 'transparent', howFg: how ? '#FFFFFF' : '#111111',
+fastPressed: fast ? 'true' : 'false', fastBg: fast ? '#111111' : '#FFFFFF', fastFg: fast ? '#FFFFFF' : '#111111',
+canLeave: stage === 'occupy',
+toggleFast: () => this.setState({ fast: !(this.state && this.state.fast) }),
+toggleHow: () => this.setState({ how: !(this.state && this.state.how) }),
+setPerson: () => { if ((this.state || {}).stage === 'sheet') this.setState({ kind: 'person' }); },
+setAgent: () => { if ((this.state || {}).stage === 'sheet') this.setState({ kind: 'agent' }); },
+openSheet: () => { const cur = this.state || {}; if ((cur.stage || 'observe') === 'observe') this.setState({ stage: 'sheet', ack: {}, initials: '' }); },
+onIni: (e) => this.setState({ initials: String(e.target.value || '').replace(/[^A-Za-z]/g, '').slice(0, 4) }),
+onLvIni: (e) => this.setState({ lvIni: String(e.target.value || '').replace(/[^A-Za-z]/g, '').slice(0, 4) }),
+onSign: (e) => { if (e && e.preventDefault) e.preventDefault(); doSign(); },
+onStamp: () => doSign(),
+onLvSign: (e) => { if (e && e.preventDefault) e.preventDefault(); doLeave('handover'); },
+skip: () => {
+const cur = this.state || {};
+if (cur.stage === 'sealing') this.setState({ stage: 'occupy', c: 3400 });
+else if (cur.stage === 'unsealing') this.setState(this.outPatch());
+},
+openLeave: () => { const cur = this.state || {}; if (cur.stage === 'occupy') this.setState({ stage: 'leaving', lvIni: '', lvNotes: {} }); },
+stay: () => this.setState({ stage: 'occupy' }),
+vacate: () => doLeave('vacate')
+};
+}
+}
+</script>
+</body>
+</html>

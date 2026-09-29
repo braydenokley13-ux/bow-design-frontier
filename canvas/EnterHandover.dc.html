@@ -13,7 +13,9 @@
 body{margin:0;background:#DDD9D1;color:#111;font-family:'IBM Plex Sans',sans-serif}
 .serif{font-family:'IBM Plex Serif',serif}
 .tab{font-variant-numeric:tabular-nums}
-.fx{transition:opacity .5s ease,top .7s ease,left .6s ease,height .7s ease,width .6s ease,transform .8s cubic-bezier(.2,.7,.2,1),background-color .5s ease,color .5s ease,font-size .6s ease,border-color .5s ease,box-shadow .6s ease}
+.a{position:absolute}
+.lab{font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#4B4841}
+.fx{transition:opacity .5s ease,top .7s ease,left .6s ease,height .7s ease,width .6s ease,transform .8s cubic-bezier(.2,.7,.2,1),background-color .5s ease,color .5s ease,border-color .5s ease,box-shadow .6s ease}
 .btn{font-family:'IBM Plex Sans',sans-serif;font-weight:600;cursor:pointer;border-radius:0;transition:background-color .2s,color .2s,border-color .2s}
 .btn:focus-visible,.ini:focus-visible,.nin:focus-visible{outline:3px solid #111;outline-offset:2px}
 .btn:disabled{cursor:not-allowed}
@@ -24,30 +26,40 @@ body{margin:0;background:#DDD9D1;color:#111;font-family:'IBM Plex Sans',sans-ser
 .t-aut{border:1.5px solid #111;background:transparent}
 .t-com{background:#B4AFA3}
 .t-unk{border:1.5px dashed #111;background:transparent}
-.ini{font-family:'IBM Plex Serif',serif;font-style:italic;font-size:30px;text-transform:uppercase;background:transparent;border:0;border-bottom:2px solid #111;border-radius:0;padding:0 4px;width:210px;height:52px;box-sizing:border-box;color:#111}
+.t-lap{border:1.5px solid #111;background:#FFFFFF;box-shadow:inset 0 0 0 1.5px #FFFFFF,inset 0 0 0 3px #111}
+.ini{font-family:'IBM Plex Serif',serif;font-style:italic;font-size:30px;text-transform:uppercase;background:transparent;border:0;border-bottom:2px solid #111;border-radius:0;padding:0 4px;width:200px;height:50px;box-sizing:border-box;color:#111}
+.ini::placeholder{color:#8A857A}
 .nin{font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;background:#FFFFFF;border:1px solid #111;border-radius:0;padding:0 10px;height:36px;box-sizing:border-box;color:#111;width:100%}
+.lg{display:grid;grid-template-columns:16px 118px minmax(0,1fr);gap:8px;align-items:center;padding:5px 0;border-bottom:1px solid #C4BFB3;font-size:13.5px}
 </style>
 </helmet>
 <div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #DDD9D1; color: #111; font-family: 'IBM Plex Sans', sans-serif">
 
-  <header style="position: absolute; left: 40px; right: 40px; top: 0; height: 54px; display: flex; align-items: center; gap: 14px">
+  <header style="position: absolute; left: 40px; right: 40px; top: 0; height: 54px; display: flex; align-items: center; gap: 12px">
     <span style="font-size: 20px; font-weight: 700; letter-spacing: .12em">BOW</span>
-    <span style="width: 1px; height: 22px; background: #111"></span>
-    <span class="serif" style="font-size: 17px; font-weight: 500; white-space: nowrap">Boston · Year Two · Week 9 · Tuesday</span>
-    <span class="tab" style="font-size: 13px; color: #4B4841; white-space: nowrap; padding-left: 8px">World clock <strong style="color: #111; font-size: 15px">Tue {{clockNow}}</strong> · runs whether or not anyone holds the seat</span>
+    <span style="width: 1px; height: 26px; background: #111"></span>
+    <span style="display: flex; flex-direction: column; line-height: 1.2; white-space: nowrap"><span class="serif" style="font-size: 16px; font-weight: 500">Boston · Year Two · Week 9 · Tuesday</span><span style="font-size: 11.5px; color: #4B4841">your BOW World — not NBA history</span></span>
+    <span style="width: 1px; height: 26px; background: #BDB8AC"></span>
+    <span class="tab" style="display: flex; flex-direction: column; line-height: 1.2; white-space: nowrap"><span class="lab" style="letter-spacing: .06em">{{hdr.wLabel}}</span><strong style="font-size: 15px">Tue {{clockNow}}</strong></span>
+    <button type="button" class="btn" onClick="{{toggleFast}}" aria-pressed="{{fastPressed}}" style="height: 38px; padding: 0 12px; border: 1.5px solid #111; background: {{fastBg}}; color: {{fastFg}}; font-size: 13px; white-space: nowrap">×60 speed · AUTHORED</button>
+    <sc-if value="{{signed}}" hint-placeholder-val="{{false}}">
+      <span class="tab" style="display: flex; flex-direction: column; line-height: 1.2; white-space: nowrap; padding: 4px 12px; background: #111; color: #FFFFFF; box-shadow: inset 0 0 0 2px #111, inset 0 0 0 3.5px #FFFFFF"><span class="lab" style="letter-spacing: .06em; color: #FFFFFF">Your clock · started {{yc.start}}</span><strong style="font-size: 15px">{{yc.run}} running</strong></span>
+    </sc-if>
     <span style="flex: 1"></span>
     <sc-if value="{{moving}}" hint-placeholder-val="{{false}}">
-      <button type="button" class="btn" onClick="{{skip}}" style="height: 38px; padding: 0 14px; border: 1.5px solid #111; background: #FFFFFF; color: #111; font-size: 14px">Skip transition</button>
+      <button type="button" class="btn" onClick="{{skip}}" style="height: 38px; padding: 0 14px; border: 1.5px solid #111; background: #FFFFFF; color: #111; font-size: 14px; white-space: nowrap">Skip transition</button>
     </sc-if>
-    <span class="fx" style="height: 32px; box-sizing: border-box; display: inline-flex; align-items: center; padding: 0 12px; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; border: 1.5px solid #111; background: {{role.bg}}; color: {{role.fg}}">{{role.t}}</span>
+    <sc-if value="{{notMoving}}" hint-placeholder-val="{{true}}">
+      <span style="height: 32px; box-sizing: border-box; display: inline-flex; align-items: center; padding: 0 12px; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; border: 1.5px solid #111; background: {{role.bg}}; color: {{role.fg}}">{{role.t}}</span>
+    </sc-if>
     <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="height: 38px; padding: 0 14px; border: 1.5px solid #111; background: {{howBg}}; color: {{howFg}}; font-size: 14px; white-space: nowrap">How do we know?</button>
   </header>
 
-  <div style="position: absolute; left: 40px; top: 56px; width: 1360px; height: 40px">
-    <span class="fx" style="position: absolute; left: 0; top: 0; width: 1360px; height: 40px; box-sizing: border-box; border-bottom: 1px solid #111; display: flex; align-items: center; font-size: 12.5px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; opacity: {{strip.obsOp}}">Observer · outside the office · read only · none of the clocks below is yours</span>
-    <div class="fx" style="position: absolute; left: 0; top: 0; width: 1360px; height: 40px; box-sizing: border-box; padding: 0 12px 0 16px; background: #111; color: #FFFFFF; display: flex; align-items: center; gap: 12px; transform: translateY({{strip.ty}}px); opacity: {{strip.op}}">
-      <span style="font-size: 15px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; white-space: nowrap">Responsible since {{strip.hm}}, Week 9</span>
-      <span style="font-size: 13px; white-space: nowrap; padding: 3px 8px; background: #FFFFFF; color: #111; font-weight: 600; box-shadow: inset 0 0 0 2px #FFFFFF, inset 0 0 0 3.5px #111">signed {{strip.ini}} · RECORDED {{strip.hms}}</span>
+  <div class="a" style="left: 40px; top: 56px; width: 1360px; height: 40px">
+    <span class="a" style="left: 0; top: 0; width: 1360px; height: 40px; box-sizing: border-box; border-bottom: 1px solid #111; display: flex; align-items: center; font-size: 12.5px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; visibility: {{strip.obsVis}}">Observer · outside the office · read only · none of the clocks below is yours</span>
+    <div class="a" style="left: 0; top: 0; width: 1360px; height: 40px; box-sizing: border-box; padding: 0 12px 0 16px; background: #111; color: #FFFFFF; display: flex; align-items: center; gap: 12px; visibility: {{strip.vis}}">
+      <span style="font-size: 15px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; white-space: nowrap">Yours · responsible since {{strip.hm}}, Week 9</span>
+      <span class="tab" style="font-size: 13px; white-space: nowrap; padding: 3px 8px; background: #FFFFFF; color: #111; font-weight: 600; box-shadow: inset 0 0 0 2px #FFFFFF, inset 0 0 0 3.5px #111">signed {{strip.ini}} as GM · RECORDED {{strip.hms}}</span>
       <span style="flex: 1"></span>
       <sc-if value="{{canLeave}}" hint-placeholder-val="{{false}}">
         <button type="button" class="btn" onClick="{{openLeave}}" style="height: 36px; padding: 0 14px; border: 1.5px solid #FFFFFF; background: transparent; color: #FFFFFF; font-size: 14px; white-space: nowrap">Leave the seat</button>
@@ -55,185 +67,202 @@ body{margin:0;background:#DDD9D1;color:#111;font-family:'IBM Plex Sans',sans-ser
     </div>
   </div>
 
-  <section aria-label="Open matters" class="paper" style="position: absolute; left: 40px; top: 104px; width: 600px; height: 730px; box-sizing: border-box">
-    <span style="position: absolute; left: 22px; top: 12px; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">Boston front office · Week 9 · Tuesday</span>
-    <span class="serif" style="position: absolute; left: 22px; top: 28px; font-size: 30px; font-weight: 700; line-height: 1.1; opacity: {{led.aOp}}; transition: {{led.aTr}}">Open matters</span>
-    <span class="serif" style="position: absolute; left: 22px; top: 28px; font-size: 30px; font-weight: 700; line-height: 1.1; opacity: {{led.bOp}}; transition: {{led.bTr}}">Yours</span>
-    <span style="position: absolute; left: 22px; top: 68px; width: 560px; font-size: 13px; line-height: 1.3; color: #333; opacity: {{led.aOp}}; transition: {{led.aTr}}">{{led.ownA}}</span>
-    <span style="position: absolute; left: 22px; top: 68px; width: 560px; font-size: 13px; line-height: 1.3; color: #333; opacity: {{led.bOp}}; transition: {{led.bTr}}">{{led.ownB}}</span>
+  <div class="a" style="left: 40px; top: 100px; width: 1360px; height: 34px; display: flex; align-items: center; gap: 12px; font-size: 12.5px; white-space: nowrap">
+    <sc-if value="{{signed}}" hint-placeholder-val="{{false}}">
+      <span class="t-unk" style="padding: 4px 10px"><strong>You gave up:</strong> the outside view <span style="color: #4B4841">(closed: you are inside the office)</span></span>
+      <span class="t-com" style="padding: 4px 10px"><strong>You got:</strong> {{ledger.got}}</span>
+      <span class="t-aut" style="padding: 4px 10px"><strong>Cannot:</strong> exceed the second apron without the owner (owner’s rule)</span>
+    </sc-if>
+    <sc-if value="{{notSigned}}" hint-placeholder-val="{{true}}">
+      <span style="font-style: italic; color: #3A3832">{{ledger.obs}}</span>
+    </sc-if>
+  </div>
+
+  <section aria-label="Open matters" class="paper a" style="left: 40px; top: 142px; width: 600px; height: 692px; box-sizing: border-box">
+    <span class="lab a" style="left: 22px; top: 10px">Boston front office · Week 9 · Tuesday</span>
+    <span class="serif a" style="left: 22px; top: 24px; font-size: 28px; font-weight: 700; line-height: 1.1; visibility: {{led.aVis}}">Open matters</span>
+    <span class="serif a" style="left: 22px; top: 24px; font-size: 28px; font-weight: 700; line-height: 1.1; visibility: {{led.bVis}}">Yours</span>
+    <span class="a" style="left: 22px; top: 58px; width: 560px; font-size: 13px; line-height: 1.3; color: #333">{{led.own}}</span>
     <sc-for list="{{rows}}" as="r" hint-placeholder-count="5">
-      <div class="fx" style="position: absolute; left: 0; top: {{r.top}}px; width: 598px; height: {{r.h}}px; box-sizing: border-box; border-top: 1px solid #D0CBBF">
-        <div class="fx" style="position: absolute; left: 14px; top: 14px; width: 10px; height: {{r.barH}}px; box-sizing: border-box; border: 1.5px solid #111; background: {{r.barBg}}; box-shadow: {{r.barSh}}; transition-delay: {{r.delay}}ms"></div>
-        <span class="serif" style="position: absolute; left: 38px; top: 10px; font-size: 28px; font-weight: 700; line-height: 1">{{r.n}}</span>
-        <span class="serif fx" style="position: absolute; left: 74px; top: 12px; width: 300px; font-size: 18px; font-weight: 600; line-height: 1.2">{{r.title}}</span>
-        <span class="fx" style="position: absolute; left: 74px; top: 40px; width: 300px; font-size: 13.5px; line-height: 1.3; color: #3A3832; opacity: {{r.dOp}}">{{r.desc}}</span>
-        <span class="fx" style="position: absolute; left: 74px; top: 80px; width: 300px; font-size: 12px; line-height: 1.25; color: #222; opacity: {{r.cOp}}">{{r.ign}}</span>
-        <span class="fx" style="position: absolute; left: 380px; top: {{r.ownTop}}px; width: 204px; text-align: right; font-size: 11.5px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: #4B4841">{{r.own}}</span>
-        <span class="fx tab" style="position: absolute; left: 380px; top: 12px; width: 204px; text-align: right; font-size: {{r.ckFs}}px; font-weight: 700; line-height: 1.1; color: #B3261E">{{r.clock}}</span>
-        <span class="fx" style="position: absolute; left: 380px; top: 50px; width: 204px; text-align: right; font-size: 12.5px; font-weight: 600; line-height: 1.3; color: #B3261E; opacity: {{r.dlOp}}">{{r.dlText}}</span>
+      <div class="a fx" style="left: 0; top: {{r.top}}px; width: 598px; height: {{r.h}}px; box-sizing: border-box; border-top: 1px solid #D0CBBF">
+        <div class="a fx" style="left: 14px; top: 12px; width: 10px; height: {{r.barH}}px; box-sizing: border-box; border: 1.5px solid #111; background: {{r.barBg}}; box-shadow: {{r.barSh}}"></div>
+        <span class="serif a" style="left: 38px; top: 8px; font-size: 28px; font-weight: 700; line-height: 1">{{r.n}}</span>
+        <span class="serif a" style="left: 74px; top: 9px; width: 324px; font-size: 18px; font-weight: 600; line-height: 1.2">{{r.title}}</span>
+        <span class="a" style="left: 74px; top: 32px; width: 324px; font-size: 13.5px; line-height: 1.3; color: #3A3832; opacity: {{r.dOp}}">{{r.desc}}</span>
+        <span class="a" style="left: 74px; top: 56px; width: 330px; font-size: 12px; line-height: 15px; color: #222; opacity: {{r.sOp}}"><span style="display: block"><span class="sw {{r.c1}}"></span>{{r.t1}}</span><sc-if value="{{r.has2}}" hint-placeholder-val="{{false}}"><span style="display: block"><span class="sw {{r.c2}}"></span>{{r.t2}}</span></sc-if></span>
+        <div class="a" style="left: 74px; top: 90px; display: flex; gap: 8px; visibility: {{r.bVis}}">
+          <sc-for list="{{r.btns}}" as="b" hint-placeholder-count="3">
+            <button type="button" class="btn" onClick="{{b.pick}}" style="height: 36px; padding: 0 14px; border: 1.5px solid #111; background: #FFFFFF; color: #111; font-size: 13.5px; white-space: nowrap">{{b.t}}</button>
+          </sc-for>
+        </div>
+        <span class="a" style="right: 14px; top: {{r.ownTop}}px; width: {{r.ownW}}px; text-align: right; font-size: 11.5px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: #4B4841">{{r.own}}</span>
+        <span class="a tab" style="right: 14px; top: 8px; box-sizing: border-box; padding: {{r.ckPad}}; border: {{r.ckBd}}; background: {{r.ckBg}}; color: {{r.ckFg}}; box-shadow: {{r.ckSh}}; font-size: {{r.ckFs}}px; font-weight: 700; line-height: 1.1; white-space: nowrap">{{r.clock}}</span>
+        <span class="a" style="right: 14px; top: 44px; width: 180px; text-align: right; font-size: 12px; font-weight: 600; line-height: 15px; color: {{r.dlFg}}; opacity: {{r.dlOp}}">{{r.dlText}}</span>
       </div>
     </sc-for>
-    <span class="fx" style="position: absolute; left: 22px; top: {{led.backTop}}px; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841; opacity: {{led.backOp}}">Handed back · still held by the interim</span>
+    <span class="lab a" style="left: 22px; top: {{led.backTop}}px; visibility: {{led.backVis}}">Handed back · still held by the interim</span>
   </section>
 
-  <section aria-label="The seat" style="position: absolute; left: 672px; top: 104px; width: 728px; height: 730px">
+  <section aria-label="The seat" class="a" style="left: 672px; top: 142px; width: 728px; height: 692px">
 
-    <div class="fx" style="position: absolute; left: 0; top: 0; width: 728px; height: 730px; opacity: {{obs.op}}; visibility: {{obs.vis}}">
-      <div class="paper" style="position: absolute; left: 0; top: 0; width: 728px; height: 104px; box-sizing: border-box; padding: 12px 20px">
-        <span style="display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">The seat</span>
+    <div class="a fx" style="left: 0; top: 0; width: 728px; height: 692px; opacity: {{obs.op}}; visibility: {{obs.vis}}">
+      <div class="paper a" style="left: 0; top: 0; width: 728px; height: 100px; box-sizing: border-box; padding: 12px 20px">
+        <span class="lab" style="display: block">The seat</span>
         <span class="serif" style="display: block; font-size: 28px; font-weight: 700; line-height: 1.15">General Manager · Boston</span>
         <span style="display: block; font-size: 13px; color: #333">President of Basketball Operations</span>
-        <span class="tab" style="position: absolute; right: 20px; top: 14px; text-align: right; font-size: 13px; line-height: 1.35"><strong style="letter-spacing: .1em">VACANT</strong><br>since {{obs.vacSince}} · {{obs.vacFor}} ago<br>interim: Assistant GM [fictional]</span>
+        <span class="tab a" style="right: 20px; top: 14px; text-align: right; font-size: 13px; line-height: 1.35"><strong style="letter-spacing: .1em">VACANT</strong><br>since {{obs.vacSince}} · {{obs.vacFor}} ago<br>interim: Assistant GM [fictional]</span>
       </div>
-      <button type="button" class="btn" onClick="{{openSheet}}" aria-label="Open the handover sheet from the interim" style="position: absolute; left: 0; top: 126px; width: 500px; height: 176px; padding: 0; border: 0; background: transparent; text-align: left; color: #111">
-        <span style="position: absolute; left: 12px; top: 12px; width: 484px; height: 160px; background: #F4F1EA; border: 1px solid #BDB8AC"></span>
-        <span style="position: absolute; left: 6px; top: 6px; width: 484px; height: 160px; background: #F9F7F2; border: 1px solid #BDB8AC"></span>
-        <span class="paper" style="position: absolute; left: 0; top: 0; width: 484px; height: 160px; box-sizing: border-box; padding: 14px 18px; display: block">
-          <span style="display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">Handover sheet · {{obs.sheetKind}}</span>
+      <button type="button" class="btn a" onClick="{{openSheet}}" aria-label="Open the handover sheet from the interim" style="left: 0; top: 120px; width: 500px; height: 176px; padding: 0; border: 0; background: transparent; text-align: left; color: #111">
+        <span class="a" style="left: 12px; top: 12px; width: 484px; height: 160px; background: #F4F1EA; border: 1px solid #BDB8AC"></span>
+        <span class="a" style="left: 6px; top: 6px; width: 484px; height: 160px; background: #F9F7F2; border: 1px solid #BDB8AC"></span>
+        <span class="paper a" style="left: 0; top: 0; width: 484px; height: 160px; box-sizing: border-box; padding: 14px 18px; display: block">
+          <span class="lab" style="display: block">Handover sheet · {{obs.sheetKind}}</span>
           <span class="serif" style="display: block; font-size: 21px; font-weight: 600; line-height: 1.2; margin-top: 4px">{{obs.sheetTitle}}</span>
           <span style="display: block; font-size: 13.5px; line-height: 1.35; margin-top: 6px; color: #333">{{obs.sheetSub}}</span>
           <span style="display: block; font-size: 13px; font-weight: 600; margin-top: 8px; text-decoration: underline">Open it</span>
         </span>
       </button>
-      <div style="position: absolute; left: 520px; top: 130px; width: 208px; font-size: 13px; line-height: 1.4; color: #333">Reading it, and signing it, is how you take the seat. It is not a menu choice. It is a promise with a time on it.</div>
-      <div class="paper" style="position: absolute; left: 0; top: 328px; width: 728px; height: 150px; box-sizing: border-box; padding: 12px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px">
-        <div style="font-size: 13.5px; line-height: 1.45"><strong style="font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">From outside you can</strong><br>read every open matter<br>watch every clock run<br>open the handover sheet</div>
-        <div style="font-size: 13.5px; line-height: 1.45"><strong style="font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">From outside you can’t</strong><br>answer a call<br>move a deadline<br>sign for anything</div>
+      <div class="a" style="left: 520px; top: 124px; width: 208px; font-size: 13px; line-height: 1.4; color: #333">Taking each line, and then signing, is how you take the seat. It is not a menu choice. It is a promise with a time on it.</div>
+      <div class="paper a" style="left: 0; top: 314px; width: 728px; height: 132px; box-sizing: border-box; padding: 12px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px">
+        <div style="font-size: 13.5px; line-height: 1.45"><strong class="lab">From outside you can</strong><br>read every open matter<br>watch every clock run<br>open the handover sheet</div>
+        <div style="font-size: 13.5px; line-height: 1.45"><strong class="lab">From outside you can’t</strong><br>answer a call<br>move a deadline<br>sign for anything</div>
       </div>
-      <div style="position: absolute; left: 0; top: 500px; width: 728px; padding: 0 2px">
-        <span style="display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841; margin-bottom: 8px">Seat log · outline = authored · double rule = recorded</span>
-        <sc-for list="{{seatLog}}" as="g" hint-placeholder-count="3">
-          <div style="display: grid; grid-template-columns: 16px 118px minmax(0, 1fr); gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid #C4BFB3; font-size: 13.5px">
-            <span class="sw {{g.cls}}" style="margin: 0"></span><span class="tab" style="font-weight: 600">{{g.when}}</span><span>{{g.t}}</span>
-          </div>
+      <div class="a" style="left: 0; top: 464px; width: 728px; padding: 0 2px">
+        <span class="lab" style="display: block; margin-bottom: 4px">Seat log · outline = authored · double rule = recorded · hollow double rule = no act</span>
+        <sc-for list="{{logObs}}" as="g" hint-placeholder-count="6">
+          <div class="lg"><span class="sw {{g.cls}}" style="margin: 0"></span><span class="tab" style="font-weight: 600">{{g.when}}</span><span>{{g.t}}</span></div>
         </sc-for>
       </div>
     </div>
 
-    <div class="fx" style="position: absolute; left: 0; top: 0; width: 728px; height: 730px; opacity: {{occ.op}}; visibility: {{occ.vis}}">
-      <div class="paper" style="position: absolute; left: 0; top: 0; width: 728px; height: 104px; box-sizing: border-box; padding: 12px 20px; border: 2px solid #111">
-        <span style="display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">The seat · occupied</span>
+    <div class="a fx" style="left: 0; top: 0; width: 728px; height: 692px; opacity: {{occ.op}}; visibility: {{occ.vis}}">
+      <div class="paper a" style="left: 0; top: 0; width: 728px; height: 100px; box-sizing: border-box; padding: 12px 20px; border: 2px solid #111">
+        <span class="lab" style="display: block">The seat · occupied</span>
         <span class="serif" style="display: block; font-size: 28px; font-weight: 700; line-height: 1.15">General Manager · Boston</span>
         <span style="display: block; font-size: 13.5px; color: #333">You · {{occ.ini}} · responsible since {{occ.hm}}, Week 9 · signature recorded</span>
       </div>
-      <div class="paper" style="position: absolute; left: 0; top: 120px; width: 728px; height: 84px; box-sizing: border-box; padding: 10px 20px">
-        <span style="display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">Assistant GM · interim [fictional] · now advising</span>
-        <span style="display: block; font-size: 13.5px; line-height: 1.4; margin-top: 3px">Held the seat from 06:00 to {{occ.hm}}. A seat you can consult, not a chat window: it answers in one written memo per matter.</span>
+      <div class="paper a" style="left: 0; top: 116px; width: 728px; height: 78px; box-sizing: border-box; padding: 10px 20px">
+        <span class="lab" style="display: block">Assistant GM · interim [fictional] · now advising</span>
+        <span style="display: block; font-size: 13.5px; line-height: 1.4; margin-top: 3px">Held the seat from 06:00 to {{occ.hm}}. Consult it, not chat: one written memo per matter.</span>
       </div>
-      <span style="position: absolute; left: 0; top: 222px; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">Consult the interim on</span>
-      <div style="position: absolute; left: 0; top: 242px; width: 728px; display: flex; gap: 8px">
+      <div class="a" style="left: 0; top: 208px; display: flex; gap: 8px; width: 728px">
         <sc-for list="{{consult}}" as="q" hint-placeholder-count="5">
-          <button type="button" class="btn" onClick="{{q.pick}}" aria-pressed="{{q.pressed}}" style="flex: 1; height: 42px; padding: 0 6px; border: 1.5px solid #111; background: {{q.bg}}; color: {{q.fg}}; font-size: 13.5px; white-space: nowrap">{{q.t}}</button>
+          <button type="button" class="btn" onClick="{{q.pick}}" aria-pressed="{{q.pressed}}" style="flex: 1; height: 40px; padding: 0 6px; border: 1.5px solid #111; background: {{q.bg}}; color: {{q.fg}}; font-size: 13.5px; white-space: nowrap">{{q.t}}</button>
         </sc-for>
       </div>
-      <div style="position: absolute; left: 0; top: 296px; width: 728px; height: 240px; box-sizing: border-box; border: 1.5px solid #111; background: #FFFFFF; padding: 14px 20px">
-        <span style="display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">Memo · authored for this prototype, not a model</span>
-        <span class="serif" style="display: block; font-size: 20px; font-weight: 600; margin-top: 4px">{{memo.head}}</span>
-        <span class="serif" style="display: block; font-size: 16.5px; font-style: italic; line-height: 1.45; margin-top: 8px">{{memo.body}}</span>
-        <div class="t-unk" style="position: absolute; left: 20px; right: 20px; bottom: 14px; padding: 8px 12px; font-size: 13.5px; line-height: 1.3">{{memo.unk}}</div>
+      <div class="a" style="left: 0; top: 260px; width: 728px; height: 176px; box-sizing: border-box; border: 1.5px solid #111; background: #FFFFFF; padding: 12px 20px">
+        <span class="lab" style="display: block">Memo · authored for this prototype, not a model</span>
+        <span class="serif" style="display: block; font-size: 19px; font-weight: 600; margin-top: 2px">{{memo.head}}</span>
+        <span class="serif" style="display: block; font-size: 15.5px; font-style: italic; line-height: 1.4; margin-top: 4px">{{memo.body}}</span>
+        <div class="t-unk a" style="left: 20px; right: 20px; bottom: 10px; padding: 6px 12px; font-size: 13px; line-height: 1.3">{{memo.unk}}</div>
       </div>
-      <div style="position: absolute; left: 0; top: 558px; width: 728px; padding: 0 2px">
-        <span style="display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841; margin-bottom: 6px">Seat log · outline = authored · double rule = recorded</span>
-        <sc-for list="{{seatLogOcc}}" as="h" hint-placeholder-count="4">
-          <div style="display: grid; grid-template-columns: 16px 118px minmax(0, 1fr); gap: 8px; align-items: center; padding: 5px 0; border-bottom: 1px solid #C4BFB3; font-size: 13.5px">
-            <span class="sw {{h.cls}}" style="margin: 0"></span><span class="tab" style="font-weight: 600">{{h.when}}</span><span>{{h.t}}</span>
-          </div>
+      <div class="a" style="left: 0; top: 450px; width: 728px; padding: 0 2px">
+        <span class="lab" style="display: block; margin-bottom: 4px">Seat log · outline = authored · double rule = recorded · hollow double rule = no act</span>
+        <sc-for list="{{logOcc}}" as="h" hint-placeholder-count="7">
+          <div class="lg"><span class="sw {{h.cls}}" style="margin: 0"></span><span class="tab" style="font-weight: 600">{{h.when}}</span><span>{{h.t}}</span></div>
         </sc-for>
       </div>
     </div>
 
-    <div class="fx" style="position: absolute; left: 0; top: 0; width: 728px; height: 730px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #BDB8AC; box-shadow: 0 1px 0 #BDB8AC, 0 14px 30px rgba(70,58,36,.2); transform-origin: 50% 100%; transform: {{sheet.tf}}; opacity: {{sheet.op}}; visibility: {{sheet.vis}}; transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .6s ease, visibility 0s linear {{sheet.vd}}s">
-      <span style="position: absolute; left: 36px; top: 16px; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">Handover sheet</span>
-      <span class="serif" style="position: absolute; left: 36px; top: 32px; font-size: 26px; font-weight: 700; line-height: 1.1">What is in motion at Boston</span>
-      <span style="position: absolute; left: 36px; top: 66px; width: 660px; font-size: 12.5px; line-height: 1.35; color: #333">{{sheet.meta}}</span>
-      <span class="serif" style="position: absolute; left: 36px; top: 88px; font-size: 14.5px; font-style: italic; color: #333">Read each line. Take it, or hand it back. Then sign.</span>
+    <div class="a fx" style="left: 0; top: 0; width: 728px; height: 692px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #BDB8AC; box-shadow: 0 1px 0 #BDB8AC, 0 14px 30px rgba(70,58,36,.2); transform-origin: 50% 100%; transform: {{sheet.tf}}; opacity: {{sheet.op}}; visibility: {{sheet.vis}}; transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .6s ease, visibility 0s linear {{sheet.vd}}s">
+      <span class="lab a" style="left: 36px; top: 12px">Handover sheet</span>
+      <span class="serif a" style="left: 36px; top: 28px; font-size: 26px; font-weight: 700; line-height: 1.1">What is in motion at Boston</span>
+      <span class="a" style="left: 36px; top: 60px; width: 660px; font-size: 12.5px; line-height: 16px; color: #333; white-space: nowrap">{{sheet.meta}}</span>
+      <span class="serif a" style="left: 36px; top: 78px; font-size: 14.5px; font-style: italic; color: #333">Read each line. Take it, or hand it back. Then sign.</span>
       <sc-for list="{{lines}}" as="l" hint-placeholder-count="5">
-        <div style="position: absolute; left: 0; top: {{l.top}}px; width: 726px; height: 90px; box-sizing: border-box; border-top: 1px solid #D0CBBF">
-          <div class="fx" style="position: absolute; left: 18px; top: 10px; width: 10px; height: 68px; box-sizing: border-box; border: 1.5px solid #111; background: {{l.barBg}}; box-shadow: {{l.barSh}}"></div>
-          <span class="serif" style="position: absolute; left: 40px; top: 6px; width: 470px; font-size: 15px; font-weight: 600; line-height: 1.2; white-space: nowrap">{{l.n}} · {{l.title}}</span>
-          <span class="tab" style="position: absolute; left: 40px; top: 25px; width: 460px; font-size: 12.5px; font-weight: 600; color: #B3261E; white-space: nowrap">Deadline: {{l.dl}} · in {{l.clock}}</span>
-          <span style="position: absolute; left: 40px; top: 41px; width: 462px; font-size: 12.5px; line-height: 15.5px; color: #222"><span class="sw {{l.c1}}"></span>{{l.t1}}<sc-if value="{{l.hasT2}}" hint-placeholder-val="{{false}}"> <span class="sw {{l.c2}}"></span>{{l.t2}}</sc-if><sc-if value="{{l.hasNote}}" hint-placeholder-val="{{false}}"><span style="display: block; font-style: italic; border-left: 3px solid #111; padding-left: 8px; margin-top: 1px">{{l.note}}</span></sc-if></span>
-          <button type="button" class="btn" onClick="{{l.read}}" aria-pressed="{{l.rp}}" style="position: absolute; left: 520px; top: 6px; width: 186px; height: 38px; padding: 0 10px; border: 1.5px solid #111; background: {{l.rBg}}; color: {{l.rFg}}; font-size: 13.5px; display: flex; align-items: center; gap: 9px; text-align: left">
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" style="flex: none"><rect x="1" y="1" width="16" height="16" fill="#FFFFFF" stroke="{{l.rFg}}" stroke-width="2"></rect><path d="M4 9l3.5 3.5L14 5" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="square" opacity="{{l.tick}}"></path></svg>I have read this
+        <div class="a" style="left: 0; top: {{l.top}}px; width: 726px; height: 94px; box-sizing: border-box; border-top: 1px solid #D0CBBF">
+          <div class="a fx" style="left: 18px; top: 10px; width: 10px; height: 72px; box-sizing: border-box; border: 1.5px solid #111; background: {{l.barBg}}; box-shadow: {{l.barSh}}"></div>
+          <span class="serif a" style="left: 40px; top: 5px; width: 470px; font-size: 15px; font-weight: 600; line-height: 1.2; white-space: nowrap">{{l.n}} · {{l.title}}</span>
+          <span class="tab a" style="left: 40px; top: 24px; width: 470px; font-size: 12.5px; font-weight: 600; color: {{l.dlFg}}; white-space: nowrap">{{l.dline}}</span>
+          <span class="a" style="left: 40px; top: 40px; width: 470px; font-size: 12px; line-height: 14.5px; color: #222"><span class="sw {{l.c1}}"></span>{{l.t1}}<sc-if value="{{l.hasT2}}" hint-placeholder-val="{{false}}"> <span class="sw {{l.c2}}"></span>{{l.t2}}</sc-if><sc-if value="{{l.hasNote}}" hint-placeholder-val="{{false}}"><span style="display: block; font-style: italic; border-left: 3px solid #111; padding-left: 8px; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{l.note}}</span></sc-if></span>
+          <button type="button" class="btn" onClick="{{l.take}}" aria-pressed="{{l.tp}}" style="position: absolute; left: 526px; top: 6px; width: 180px; height: 38px; padding: 0 10px; border: 1.5px solid #111; background: {{l.tBg}}; color: {{l.tFg}}; font-size: 13.5px; display: flex; align-items: center; gap: 9px; text-align: left">
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" style="flex: none"><rect x="1" y="1" width="16" height="16" fill="#FFFFFF" stroke="{{l.tFg}}" stroke-width="2"></rect><path d="M4 9l3.5 3.5L14 5" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="square" opacity="{{l.tick}}"></path></svg>Take this one
           </button>
-          <button type="button" class="btn" onClick="{{l.back}}" aria-pressed="{{l.bp}}" style="position: absolute; left: 520px; top: 48px; width: 186px; height: 36px; padding: 0 10px; border: 1.5px solid #111; background: {{l.bBg}}; color: {{l.bFg}}; font-size: 13px">Hand back to the interim</button>
+          <button type="button" class="btn" onClick="{{l.back}}" aria-pressed="{{l.bp}}" style="position: absolute; left: 526px; top: 49px; width: 180px; height: 36px; padding: 0 10px; border: 1.5px solid #111; background: {{l.bBg}}; color: {{l.bFg}}; font-size: 13px">Hand back to the interim</button>
         </div>
       </sc-for>
-      <div style="position: absolute; left: 0; top: 558px; width: 726px; height: 170px; border-top: 2px solid #111">
+      <div class="a" style="left: 0; top: 576px; width: 726px; height: 116px; border-top: 2px solid #111">
         <sc-if value="{{sheet.open}}" hint-placeholder-val="{{true}}">
-          <div>
-            <span style="position: absolute; left: 36px; top: 8px; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">Signature</span>
-            <input class="ini" type="text" maxlength="4" placeholder="initials" aria-label="Type your initials to sign" value="{{sheet.ini}}" onChange="{{onIni}}" onInput="{{onIni}}" style="position: absolute; left: 36px; top: 28px">
-            <span style="position: absolute; left: 36px; top: 84px; width: 230px; font-size: 12.5px; line-height: 1.3; color: #333">Type your initials. That is your signature, and it will carry the time.</span>
-            <span style="position: absolute; left: 290px; top: 28px; width: 200px; font-size: 14px; font-weight: 700; line-height: 1.3">{{sheet.resolved}}</span>
-            <span style="position: absolute; left: 290px; top: 50px; width: 210px; font-size: 12.5px; line-height: 1.35; color: #333">Lines you read become yours. Lines you hand back stay with the interim.</span>
-            <button type="button" class="btn" onClick="{{sign}}" disabled="{{sheet.locked}}" style="position: absolute; left: 520px; top: 26px; width: 186px; height: 58px; border: 2px solid {{sheet.tbBd}}; background: {{sheet.tbBg}}; color: {{sheet.tbFg}}; font-size: 17px">Take the seat</button>
-            <span style="position: absolute; left: 36px; top: 128px; width: 660px; font-size: 12.5px; line-height: 1.35; color: #333">You will not be able to close this seat and walk away. Leaving means handing over, or vacating. Both are recorded.</span>
-          </div>
+          <form onSubmit="{{onSign}}" class="a" style="left: 0; top: 0; width: 726px; height: 114px; margin: 0">
+            <span class="lab a" style="left: 36px; top: 6px">Signature</span>
+            <span class="tab a" style="left: 352px; top: 5px; font-size: 13.5px; font-weight: 700">{{sheet.counter}}</span>
+            <input class="ini a" type="text" maxlength="4" placeholder="KM" aria-label="Type your initials to sign. Demo initials: KM" value="{{sheet.ini}}" onChange="{{onIni}}" onInput="{{onIni}}" style="left: 36px; top: 20px">
+            <button type="submit" class="btn" aria-disabled="{{sheet.ariaDis}}" style="position: absolute; left: 252px; top: 24px; width: 84px; height: 42px; border: 2px solid {{sheet.tbBd}}; background: {{sheet.tbBg}}; color: {{sheet.tbFg}}; font-size: 15px">Sign</button>
+            <span class="a" style="left: 352px; top: 26px; width: 340px; font-size: 13.5px; font-weight: 600; line-height: 1.3">Signing makes these clocks yours from {{sheet.from}}.</span>
+            <span class="a" style="left: 352px; top: 46px; width: 340px; font-size: 12.5px; line-height: 1.3; color: #333">Lines you take become yours. Lines you hand back stay with the interim.</span>
+            <span class="a" style="left: 36px; top: 78px; width: 660px; font-size: 12.5px; font-weight: 600; line-height: 16px">{{sheet.msg}}</span>
+            <span class="a" style="left: 36px; top: 95px; width: 660px; font-size: 12.5px; line-height: 16px; color: #333">Leaving later means handing over, or vacating. Both are recorded.</span>
+          </form>
         </sc-if>
         <sc-if value="{{sheet.sealed}}" hint-placeholder-val="{{false}}">
           <div>
-            <span style="position: absolute; left: 36px; top: 8px; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">Signature</span>
-            <span class="serif fx" style="position: absolute; left: 40px; top: 28px; width: 210px; height: 52px; box-sizing: border-box; border-bottom: 2px solid #111; font-size: 34px; font-style: italic; font-weight: 500; line-height: 52px; text-transform: uppercase; opacity: {{sheet.inkOp}}">{{sheet.ini}}</span>
-            <span class="tab fx" style="position: absolute; left: 290px; top: 26px; padding: 10px 14px; background: #111; color: #FFFFFF; box-shadow: inset 0 0 0 3px #111, inset 0 0 0 4.5px #FFFFFF; font-size: 13.5px; line-height: 1.4; transform: scale({{sheet.stampSc}}); opacity: {{sheet.stampOp}}"><strong style="letter-spacing: .1em">RECORDED</strong><br>signed Tue {{sheet.hms}}<br>{{sheet.counts}}</span>
+            <span class="lab a" style="left: 36px; top: 8px">Signature</span>
+            <span class="serif a fx" style="left: 40px; top: 28px; width: 210px; height: 52px; box-sizing: border-box; border-bottom: 2px solid #111; font-size: 34px; font-style: italic; font-weight: 500; line-height: 52px; text-transform: uppercase; opacity: {{sheet.inkOp}}">{{sheet.ini}}</span>
+            <span class="tab a fx" style="left: 290px; top: 26px; padding: 10px 14px; background: #111; color: #FFFFFF; box-shadow: inset 0 0 0 3px #111, inset 0 0 0 4.5px #FFFFFF; font-size: 13.5px; line-height: 1.4; transform: scale({{sheet.stampSc}}); opacity: {{sheet.stampOp}}"><strong style="letter-spacing: .1em">RECORDED</strong><br>signed Tue {{sheet.hms}}<br>{{sheet.counts}}</span>
           </div>
         </sc-if>
       </div>
     </div>
 
-    <div class="fx" style="position: absolute; left: 0; top: 0; width: 728px; height: 730px; box-sizing: border-box; background: #FFFFFF; border: 2px solid #111; box-shadow: 0 14px 30px rgba(70,58,36,.24); transform-origin: 50% 100%; transform: {{lv.tf}}; opacity: {{lv.op}}; visibility: {{lv.vis}}; transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .6s ease, visibility 0s linear {{lv.vd}}s">
-      <span style="position: absolute; left: 36px; top: 16px; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">Leaving the seat</span>
-      <span class="serif" style="position: absolute; left: 36px; top: 32px; font-size: 26px; font-weight: 700; line-height: 1.1">Matters in motion need an owner.</span>
-      <span class="serif" style="position: absolute; left: 36px; top: 68px; font-size: 14.5px; font-style: italic; color: #333">You can’t close this and walk away. Hand over, or vacate. Both are recorded with the time.</span>
-      <button type="button" class="btn" onClick="{{stay}}" style="position: absolute; right: 24px; top: 16px; height: 38px; padding: 0 14px; border: 1.5px solid #111; background: #FFFFFF; color: #111; font-size: 14px">Stay in the seat</button>
-      <span style="position: absolute; left: 36px; top: 106px; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">Hand over · the sheet is drafted from your open matters · edit the one-line notes</span>
+    <div class="a fx" style="left: 0; top: 0; width: 728px; height: 692px; box-sizing: border-box; background: #FFFFFF; border: 2px solid #111; box-shadow: 0 14px 30px rgba(70,58,36,.24); transform-origin: 50% 100%; transform: {{lv.tf}}; opacity: {{lv.op}}; visibility: {{lv.vis}}; transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .6s ease, visibility 0s linear {{lv.vd}}s">
+      <span class="lab a" style="left: 36px; top: 14px">Leaving the seat</span>
+      <span class="serif a" style="left: 36px; top: 30px; font-size: 26px; font-weight: 700; line-height: 1.1">Matters in motion need an owner.</span>
+      <span class="serif a" style="left: 36px; top: 66px; font-size: 14.5px; font-style: italic; color: #333">You can’t close this and walk away. Hand over, or vacate. Both are recorded with the time.</span>
+      <button type="button" class="btn" onClick="{{stay}}" style="position: absolute; right: 24px; top: 14px; height: 38px; padding: 0 14px; border: 1.5px solid #111; background: #FFFFFF; color: #111; font-size: 14px">Stay in the seat</button>
+      <span class="lab a" style="left: 36px; top: 102px">Hand over · the sheet is drafted from your matters · edit the one-line notes</span>
       <sc-for list="{{lvLines}}" as="w" hint-placeholder-count="4">
-        <div style="position: absolute; left: 36px; top: {{w.top}}px; width: 660px; height: 58px; border-top: 1px solid #D0CBBF">
-          <span class="serif" style="position: absolute; left: 0; top: 8px; width: 210px; font-size: 15px; font-weight: 600; line-height: 1.2">{{w.n}} · {{w.title}}</span>
-          <div style="position: absolute; left: 220px; top: 10px; width: 440px"><input class="nin" type="text" maxlength="60" aria-label="{{w.label}}" value="{{w.val}}" onChange="{{w.edit}}" onInput="{{w.edit}}"></div>
+        <div class="a" style="left: 36px; top: {{w.top}}px; width: 660px; height: 58px; border-top: 1px solid #D0CBBF">
+          <span class="serif a" style="left: 0; top: 8px; width: 210px; font-size: 15px; font-weight: 600; line-height: 1.2">{{w.n}} · {{w.title}}</span>
+          <div class="a" style="left: 220px; top: 10px; width: 440px"><input class="nin" type="text" maxlength="72" aria-label="{{w.label}}" value="{{w.val}}" onChange="{{w.edit}}" onInput="{{w.edit}}"></div>
         </div>
       </sc-for>
       <sc-if value="{{lv.none}}" hint-placeholder-val="{{false}}">
-        <span style="position: absolute; left: 36px; top: 136px; font-size: 14px; color: #333">You hold no open matters. Signing still records that you left.</span>
+        <span class="a" style="left: 36px; top: 136px; font-size: 14px; color: #333">You hold no open matters. Signing still records that you left.</span>
       </sc-if>
-      <div style="position: absolute; left: 0; top: 440px; width: 724px; height: 90px">
-        <span style="position: absolute; left: 36px; top: 4px; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">Sign the handover</span>
-        <input class="ini" type="text" maxlength="4" placeholder="initials" aria-label="Type your initials to sign the handover" value="{{lv.ini}}" onChange="{{onLvIni}}" onInput="{{onLvIni}}" style="position: absolute; left: 36px; top: 24px; width: 170px; height: 48px; font-size: 26px">
-        <button type="button" class="btn" onClick="{{handOver}}" disabled="{{lv.locked}}" style="position: absolute; left: 240px; top: 24px; width: 260px; height: 48px; border: 2px solid {{lv.hbd}}; background: {{lv.hbg}}; color: {{lv.hfg}}; font-size: 16px">Sign and hand over</button>
-      </div>
-      <div style="position: absolute; left: 36px; top: 552px; width: 654px; height: 132px; box-sizing: border-box; border: 1.5px solid #111; padding: 12px 16px">
-        <span style="display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4B4841">Or vacate</span>
-        <span style="display: block; font-size: 14px; line-height: 1.4; margin-top: 4px; width: 400px">Open matters revert to the owner. Nothing is written for whoever sits next. This is recorded as a vacancy, not as a handover.</span>
-        <button type="button" class="btn" onClick="{{vacate}}" style="position: absolute; right: 16px; top: 40px; width: 190px; height: 48px; border: 2px solid #111; background: #FFFFFF; color: #111; font-size: 15px">Vacate the seat</button>
+      <form onSubmit="{{onLvSign}}" class="a" style="left: 0; top: 440px; width: 724px; height: 90px; margin: 0">
+        <span class="lab a" style="left: 36px; top: 4px">Sign the handover</span>
+        <input class="ini a" type="text" maxlength="4" placeholder="KM" aria-label="Type your initials to sign the handover" value="{{lv.ini}}" onChange="{{onLvIni}}" onInput="{{onLvIni}}" style="left: 36px; top: 24px; width: 170px; height: 48px; font-size: 26px">
+        <button type="submit" class="btn" aria-disabled="{{lv.ariaDis}}" style="position: absolute; left: 240px; top: 24px; width: 260px; height: 48px; border: 2px solid {{lv.hbd}}; background: {{lv.hbg}}; color: {{lv.hfg}}; font-size: 16px">Sign and hand over</button>
+      </form>
+      <div class="a" style="left: 36px; top: 548px; width: 654px; height: 130px; box-sizing: border-box; border: 1.5px solid #111; padding: 10px 16px">
+        <span class="lab" style="display: block">Or vacate</span>
+        <span style="display: block; font-size: 13.5px; line-height: 1.4; margin-top: 4px; width: 420px">Every matter reads “Leave with the owner”. Nothing is written for whoever sits next. Lapses after that log “seat vacant”. Recorded as a vacancy, not a handover.</span>
+        <button type="button" class="btn" onClick="{{vacate}}" style="position: absolute; right: 16px; top: 38px; width: 180px; height: 48px; border: 2px solid #111; background: #FFFFFF; color: #111; font-size: 15px">Vacate the seat</button>
       </div>
     </div>
   </section>
 
   <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
-    <aside aria-label="How do we know" style="position: absolute; left: 852px; top: 104px; width: 548px; box-sizing: border-box; padding: 12px 16px; background: #FFFFFF; border: 2px solid #111; box-shadow: 8px 8px 0 rgba(0,0,0,.16); display: flex; flex-direction: column; gap: 7px">
+    <aside aria-label="How do we know" class="a" style="left: 852px; top: 142px; width: 548px; box-sizing: border-box; padding: 12px 16px; background: #FFFFFF; border: 2px solid #111; box-shadow: 8px 8px 0 rgba(0,0,0,.16); display: flex; flex-direction: column; gap: 7px">
       <span style="font-size: 15px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase">How do we know?</span>
-      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.3"><span class="sw t-rec" style="margin: 2px 0 0"></span><span><strong>Double rule = RECORDED.</strong> Written into Boston’s World records by an act: your signature, a handover, a vacancy. Deadlines and rules are not acts.</span></span>
-      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.3"><span class="sw t-aut" style="margin: 2px 0 0"></span><span><strong>Outline = AUTHORED.</strong> A rule or number someone chose: every deadline marked [authored], the second-apron rule, the interim’s memos. No model ran.</span></span>
-      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.3"><span class="sw t-com" style="margin: 2px 0 0"></span><span><strong>Toned = COMPUTED.</strong> Follows from stated rules and state: 15 + 1 = 16 on the roster; $222.8M − $221.7M = $1.1M over; an offer that ends at 11:00.</span></span>
-      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.3"><span class="sw t-unk" style="margin: 2px 0 0"></span><span><strong>Dashed = UNKNOWN.</strong> The World does not compute it: how an agent reacts to silence, what an empty analytics room costs.</span></span>
+      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.3"><span class="sw t-rec" style="margin: 2px 0 0"></span><span><strong>Double rule = RECORDED.</strong> Written into Boston’s World records by an act: a signature, an act on a matter, a handover, a vacancy. Deadlines and rules are not acts.</span></span>
+      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.3"><span class="sw t-lap" style="margin: 2px 0 0"></span><span><strong>Hollow double rule = NO ACT.</strong> A deadline passed and nobody acted. Recorded as absence, never as a choice, and charged to the seat that held the matter.</span></span>
+      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.3"><span class="sw t-aut" style="margin: 2px 0 0"></span><span><strong>Outline = AUTHORED.</strong> A rule or number someone chose: every deadline marked [authored], the ×60 speed, the $2.7M second, the second-apron rule, the interim’s memos. No model ran.</span></span>
+      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.3"><span class="sw t-com" style="margin: 2px 0 0"></span><span><strong>Toned = COMPUTED.</strong> Follows from stated rules and state: $222.8M − $2.7M = $220.1M; 15 + 1 = 16 on the roster; an offer that ends at 11:00.</span></span>
+      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.3"><span class="sw t-unk" style="margin: 2px 0 0"></span><span><strong>Dashed = UNKNOWN.</strong> The World does not compute it: how Denver answers, how an agent takes silence, what an empty analytics room costs. Also the outside view you give up on signing.</span></span>
       <span style="font-size: 12.5px; line-height: 1.3; padding-top: 6px; border-top: 1px solid #111">Red is used only for deadlines and their clocks. The interim is a seat with a role, not a person and not a chatbot: its memos are authored text.</span>
     </aside>
   </sc-if>
 
-  <span style="position: absolute; left: 40px; top: 843px; font-size: 13px; font-weight: 500; white-space: nowrap">ENTER, in this model, means accepting responsibility for what is already in motion: you read it, you sign it, and the signature has a time on it.</span>
-  <span style="position: absolute; left: 40px; top: 866px; width: 860px; font-size: 11px; line-height: 14px; letter-spacing: .02em; color: #4B4841">COMMERCIAL LENS · hypothesis: handovers are the enterprise-grade feature — the same act lets a human or an agent take a seat with accountability; organisations pay for accountable seats.</span>
-  <span style="position: absolute; right: 40px; top: 880px; width: 620px; text-align: right; font-size: 11px; line-height: 14px; letter-spacing: .02em; color: #4B4841; white-space: nowrap">PROTOTYPE · DESIGN PROPOSAL · Boston: BOW Worlds fixtures · deadlines, rules, interim: authored</span>
+  <span class="a" style="left: 40px; top: 846px; font-size: 13px; font-weight: 500; white-space: nowrap">ENTER, in this model, means accepting responsibility for what is already in motion: you take each matter or hand it back, you sign, and the signature has a time on it.</span>
+  <span class="a" style="left: 40px; top: 874px; font-size: 11px; line-height: 14px; letter-spacing: .02em; color: #4B4841; white-space: nowrap">COMMERCIAL LENS · hypothesis: handovers are the enterprise-grade feature; organisations pay for accountable seats, human or agent.</span>
+  <span class="a" style="right: 40px; top: 874px; text-align: right; font-size: 11px; line-height: 14px; letter-spacing: .02em; color: #4B4841; white-space: nowrap">PROTOTYPE · DESIGN PROPOSAL · Boston: BOW Worlds fixtures · deadlines, rules, interim: authored</span>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   componentDidMount() {
-    this.t0 = Date.now();
+    this.last = Date.now();
+    this.simf = 0;
     this.tm = setInterval(() => {
       const s = this.state || {};
-      const sec = Math.floor((Date.now() - this.t0) / 1000);
+      const now = Date.now();
+      const dt = Math.min(2, (now - this.last) / 1000);
+      this.last = now;
+      this.simf += dt * (s.fast ? 60 : 1);
+      const sim = Math.floor(this.simf);
       const patch = {};
-      if (sec !== (s.sec || 0)) patch.sec = sec;
+      if (sim !== (s.sim || 0)) patch.sim = sim;
       if (s.stage === 'sealing') {
         const nc = (s.c || 0) + 100;
         if (nc >= 3400) { patch.c = 3400; patch.stage = 'occupy'; } else patch.c = nc;
@@ -241,12 +270,62 @@ class Component extends DCLogic {
         const nc = (s.c || 0) - 175;
         if (nc <= 0) Object.assign(patch, this.outPatch()); else patch.c = nc;
       }
+      const nowS = 33180 + sim;
+      const acts = s.acts || {}, lp = s.lapses || {};
+      const st = s.stage || 'observe';
+      const inSeat = st === 'sealing' || st === 'occupy' || st === 'leaving';
+      const ini = s.sig ? s.sig.ini : '';
+      let nlp = null, nlog = null;
+      this.lapseDefs().forEach((d) => {
+        if (nowS >= d.dl && !acts[d.id] && !lp[d.id] && !(nlp && nlp[d.id])) {
+          const held = inSeat && (s.mine || []).indexOf(d.id) >= 0;
+          const backed = inSeat && (s.back || []).indexOf(d.id) >= 0;
+          const att = held ? 'against the seat held by ' + ini : backed ? 'against the interim: handed back by ' + ini : 'seat vacant' + (s.hist ? ' · not charged to ' + s.hist.ini : '');
+          nlp = nlp || {}; nlp[d.id] = { at: d.dl, attr: held ? 'held' : backed ? 'back' : 'vacant' };
+          nlog = nlog || (s.wlog || []).slice();
+          nlog.push({ at: d.dl, cls: 't-lap', t: 'NO ACT · ' + d.txt + ' — ' + att });
+        }
+      });
+      if (nlp) { patch.lapses = Object.assign({}, lp, nlp); patch.wlog = nlog; }
       if (Object.keys(patch).length) this.setState(patch);
     }, 100);
   }
   componentWillUnmount() { clearInterval(this.tm); }
-  outPatch() { return { stage: 'observe', c: 0, mine: [], back: [], ack: {}, sig: null, memo: 0, initials: '', lvIni: '' }; }
-  nowSec() { return 9 * 3600 + 13 * 60 + Math.floor((Date.now() - (this.t0 || Date.now())) / 1000); }
+  outPatch() { return { stage: 'observe', c: 0, mine: [], back: [], ack: {}, sig: null, memo: 0, initials: '', lvIni: '', lvNotes: {} }; }
+  wt() { return 33180 + ((this.state || {}).sim || 0); }
+  lapseDefs() {
+    return [
+      { id: 1, dl: 39600, txt: 'Denver’s offer lapsed' },
+      { id: 2, dl: 156600, txt: 'the call-up was not decided by tip-off' },
+      { id: 3, dl: 50400, txt: 'Butler’s 14:00 meeting passed with no reply' }
+    ];
+  }
+  actDefs() {
+    return {
+      d_take: { id: 1, label: 'Take their second', log: 'took Denver’s 2029 second for the backup guard', short: 'took Denver’s second', stops: true, word: 'TAKEN' },
+      d_ask: { id: 1, label: 'Ask for two', log: 'asked Denver for two seconds', short: 'asked Denver for two seconds', stops: true, word: 'ASKED' },
+      d_no: { id: 1, label: 'Decline', log: 'declined Denver’s second', short: 'declined Denver’s second', stops: true, word: 'DECLINED' },
+      r_call: { id: 2, label: 'Call up', log: 'called up the two-way player', short: 'called up the two-way player', stops: false },
+      r_hold: { id: 2, label: 'Hold', log: 'held the call-up', short: 'held the call-up', stops: false },
+      b_meet: { id: 3, label: 'Take the meeting', log: 'took the meeting with Butler’s agent (14:00)', short: 'took the 14:00 meeting', stops: false },
+      b_no: { id: 3, label: 'Not today', log: 'told Butler’s agent not today', short: 'told Butler’s agent not today', stops: true, word: 'NOT TODAY' }
+    };
+  }
+  calc(acts) {
+    const tk = acts[1] && acts[1].k === 'd_take';
+    const cu = acts[2] && acts[2].k === 'r_call';
+    return { pay: 222.8 - (tk ? 2.7 : 0), ros: 15 - (tk ? 1 : 0) + (cu ? 1 : 0) };
+  }
+  act(id, k) {
+    const cur = this.state || {};
+    if (cur.stage !== 'occupy' || (cur.mine || []).indexOf(id) < 0) return;
+    const acts = cur.acts || {};
+    if (acts[id] || (cur.lapses || {})[id]) return;
+    const AC = this.actDefs();
+    const t = this.wt();
+    const ini = cur.sig ? cur.sig.ini : '';
+    this.setState({ acts: Object.assign({}, acts, { [id]: { k: k, at: t, ini: ini } }), wlog: (cur.wlog || []).concat([{ at: t, cls: 't-rec', t: ini + ' as GM · ' + AC[k].log }]) });
+  }
   renderVals() {
     const s = this.state || {};
     const stage = s.stage || 'observe';
@@ -257,93 +336,134 @@ class Component extends DCLogic {
     const mine = s.mine || [];
     const back = s.back || [];
     const hist = s.hist || null;
+    const acts = s.acts || {};
+    const lapses = s.lapses || {};
     const memoId = s.memo || 0;
     const how = !!s.how;
-    const nowS = 9 * 3600 + 13 * 60 + (s.sec || 0);
+    const fast = !!s.fast;
+    const nowS = 33180 + (s.sim || 0);
     const pad = (n) => (n < 10 ? '0' : '') + n;
     const hms = (n) => { n = Math.max(0, Math.floor(n)); return pad(Math.floor(n / 3600) % 24) + ':' + pad(Math.floor(n / 60) % 60) + ':' + pad(n % 60); };
     const hm = (n) => hms(n).slice(0, 5);
     const cd = (n) => { n = Math.max(0, n); const d = Math.floor(n / 86400); return (d ? d + 'd ' : '') + hms(n % 86400); };
+    const DAYS = ['Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon'];
+    const dow = (n) => DAYS[Math.floor(n / 86400) % 7];
+    const AC = this.actDefs();
+    const cc = this.calc(acts);
+    const ros = cc.ros;
+    const over = cc.pay - 221.686;
+    const payTxt = '$' + cc.pay.toFixed(1) + 'M';
+    const ovTxt = over > 0 ? '$' + over.toFixed(1) + 'M over' : '$' + (-over).toFixed(1) + 'M under';
+
+    const signed = stage === 'sealing' || stage === 'occupy' || stage === 'leaving';
+    const moving = stage === 'sealing' || stage === 'unsealing';
+    const sheetOpen = stage === 'sheet' || (stage === 'sealing' && c < 1300);
+    const occShow = c >= 2200 && signed;
+    const lvOpen = stage === 'leaving' || (stage === 'unsealing' && c >= 2550);
+    const obsShow = !signed && !(stage === 'sheet');
 
     const MAT = [
-      { id: 1, short: 'Denver call', title: 'Denver call', full: 'Denver’s GM called about your backup guard', desc: 'Denver’s GM has called about your backup guard. Nobody has called back.', ign: 'If ignored: the offer lapses at 11:00, recorded as no decision.', dl: 39600, dlText: 'offer lapses 11:00 today', k1: 't-com', t1: 'If nobody answers by 11:00 the offer lapses, recorded as no decision.', k2: '', t2: '',
-        memo: 'Denver has called twice. I did not commit your backup guard without you. I have not seen their board, and nobody outside Denver has. Before you call back, decide what you would take.', unk: 'Unknown to the interim too: what Denver would really pay.', draft: 'Open: no reply sent. Offer lapses 11:00.' },
-      { id: 2, short: 'Roster', title: 'Roster: 15, call-up pending', full: 'Roster is at 15, a two-way call-up is pending', desc: 'The roster must be at 15 or fewer before Week 10 games. A two-way call-up is pending.', ign: 'If ignored: 16 at tip-off, and the league refuses the lineup.', dl: 156600, dlText: 'Week 10 tip-off · Wed 19:30 [authored]', k1: 't-com', t1: '15 + 1 call-up = 16. At 16 at tip-off, the league refuses the lineup.', k2: '', t2: '',
-        memo: 'You are at 15 and a call-up makes 16. Either someone is waived or the call-up waits. I have told nobody. The affiliate is expecting an answer.', unk: 'Unknown to the interim too: whether another team would take a waived player.', draft: 'Open: roster 15, call-up not made.' },
-      { id: 3, short: 'Butler', title: 'Butler’s agent wants a meeting', full: 'Butler’s agent wants a meeting on his fourth quarter', desc: 'About Jimmy Butler’s role in the fourth quarter.', ign: 'If ignored: not modeled. The World records that no reply was sent.', dl: 43200, dlText: 'reply by 12:00 today [authored]', k1: 't-unk', t1: 'Not modeled: how an agent responds to silence. The World records no reply.', k2: '', t2: '',
-        memo: 'He wants to know his role in the fourth quarter. I promised nothing and set no time. A meeting costs little; what you say in it is yours to own.', unk: 'Unknown to the interim too: how the agent will take a delay.', draft: 'Open: no reply to the agent yet. I promised nothing.' },
-      { id: 4, short: 'Owner', title: 'Owner’s note: second apron', full: 'Owner: stay under the second apron by the deadline', desc: '“Stay under the second apron by the deadline.” Payroll ≈ $222.8M against $221.7M.', ign: 'If ignored: no salary aggregation in trades this season.', dl: 2134800, dlText: 'trade deadline · Week 12 Fri [authored]', k1: 't-aut', t1: 'Over the second apron at the deadline: you can’t aggregate salaries in trades this season (CBA rule, authored).', k2: 't-com', t2: 'You are $1.1M over now.',
-        memo: 'The owner’s note came Monday. You are $1.1M over. Getting under means moving about $1.1M of salary out. I did not start, because every route runs through a matter that is yours.', unk: 'Unknown to the interim too: what the owner does if the deadline passes.', draft: 'Open: $1.1M over the second apron. Owner wants it fixed.' },
-      { id: 5, short: 'Analytics', title: 'Analytics room: unfunded', full: 'The analytics room has been unfunded since Year One', desc: 'Unfunded since Year One, when Business was funded over Basketball Ops.', ign: 'If ignored: the room stays dark. The cost is not computed.', dl: 2134800, dlText: 'budget lines lock at the deadline [authored]', k1: 't-unk', t1: 'Not modeled: what the empty room costs Boston. Year One’s cut is recorded; its effect is not computed.', k2: '', t2: '',
-        memo: 'Unfunded since Year One. I can’t fund it: that line is yours. I can tell you the room has been dark all year.', unk: 'Unknown to the interim too: what the empty room has cost.', draft: 'Open: analytics room still unfunded.' }
+      { id: 1, short: 'Denver call', title: 'Denver call', full: 'Denver’s GM called about your backup guard', descO: 'Denver’s GM has called about your backup guard. Nobody has called back.', descM: 'Denver’s GM called about your backup guard.', descA: 'Denver’s GM called about your backup guard.', dl: 39600, dlText: 'offer lapses 11:00 today', acts: ['d_take', 'd_ask', 'd_no'],
+        memo: 'Denver has called twice. I did not commit your backup guard without you. I have not seen their board, and nobody outside Denver has. Before you call back, decide what you would take.', unk: 'Unknown to the interim too: what Denver would really pay.' },
+      { id: 2, short: 'Roster', title: 'Roster: 15, call-up pending', full: 'Roster is at 15, a two-way call-up is pending', descO: 'The roster must be at 15 or fewer at Week 10 tip-off. A two-way call-up is pending.', descM: 'A two-way call-up is pending.', descA: 'The roster limit is 15 at Week 10 tip-off.', dl: 156600, dlText: 'Week 10 tip-off · Wed 19:30 [authored]', acts: ['r_call', 'r_hold'],
+        memo: 'You are at 15 and a call-up makes 16. Either someone is waived or the call-up waits. I have told nobody. The affiliate is expecting an answer.', unk: 'Unknown to the interim too: whether another team would take a waived player.' },
+      { id: 3, short: 'Butler', title: 'Butler’s agent wants a meeting', full: 'Butler’s agent wants a meeting on his fourth quarter', descO: 'About Jimmy Butler’s role in the fourth quarter. The meeting is asked for 14:00.', descM: 'About Butler’s fourth-quarter role.', descA: 'About Butler’s fourth-quarter role.', dl: 50400, dlText: 'meeting requested for 14:00 today [authored]', acts: ['b_meet', 'b_no'],
+        memo: 'His agent asked for a meeting at 14:00. I promised nothing and confirmed no time. A meeting costs little; what you say in it is yours to own.', unk: 'Unknown to the interim too: how the agent will take a delay.' },
+      { id: 4, short: 'Owner', title: 'Owner’s note: second apron', full: 'Owner: stay under the second apron by the deadline', descO: '“Stay under the second apron by the deadline.” Payroll ≈ $222.8M against $221.7M.', descM: '“Stay under the second apron.”', dl: 3250800, dlText: 'trade deadline · Week 14 · Thu 15:00 [authored]', acts: [],
+        memo: 'The owner’s note came Monday. You are $1.1M over. Getting under means moving about $1.1M of salary out. I did not start, because every route runs through a matter that is yours.', unk: 'Unknown to the interim too: what the owner does if the deadline passes.' },
+      { id: 5, short: 'Analytics', title: 'Analytics room: unfunded', full: 'The analytics room has been unfunded since Year One', descO: 'Unfunded since Year One, when Business was funded over Basketball Ops.', descM: 'Unfunded since Year One.', dl: 3250800, dlText: 'budget lines lock at the deadline [authored]', acts: [],
+        memo: 'Unfunded since Year One. I can’t fund it: that line is yours. I can tell you the room has been dark all year.', unk: 'Unknown to the interim too: what the empty room has cost.' }
     ];
+    const RULE = 'Over the second apron at the deadline: no salary aggregation in trades (World rule modelled on the 2023 CBA’s second-apron limits; authored).';
+    const eff = (m, a) => {
+      const k = a.k;
+      if (k === 'd_take') return ['t-com', 'Payroll now $220.1M · one fewer on the roster (computed).'];
+      if (k === 'd_ask') return ['t-unk', 'Denver’s answer is not modeled.'];
+      if (k === 'd_no') return ['t-com', 'Payroll stays ' + payTxt + ' · roster unchanged (computed).'];
+      if (k === 'r_call') return ['t-com', ros > 15 ? ros + ' at tip-off: lineup refused (computed).' : 'Roster ' + ros + ', within the limit (computed).'];
+      if (k === 'r_hold') return ['t-com', 'Roster stays ' + ros + ' (computed).'];
+      if (k === 'b_meet') return ['t-unk', 'What is said in it is yours; not modeled.'];
+      return ['t-unk', 'How his agent takes it: not modeled.'];
+    };
+    const segs = (m, mode) => {
+      const a = acts[m.id], lp = lapses[m.id];
+      if (lp) return [['t-lap', 'No act by ' + hm(lp.at) + '. Recorded NO ACT.']];
+      if (a) return [['t-rec', a.ini + ' ' + AC[a.k].short + ', ' + hm(a.at) + '. Recorded.'], eff(m, a)];
+      const row = mode === 'row';
+      if (m.id === 1) return row ? [['t-aut', '2029 second for your backup guard ($2.7M, authored).'], ['t-com', 'If he goes: payroll $' + (cc.pay - 2.7).toFixed(1) + 'M · roster ' + (ros - 1) + ' (computed).']] : [['t-com', 'No answer by 11:00 and the offer lapses, recorded as NO ACT.'], ['t-aut', '2029 second, $2.7M (authored).']];
+      if (m.id === 2) return row ? [['t-aut', 'Limit 15 at Wed 19:30 tip-off (authored).'], ['t-com', 'Call up makes ' + (ros + 1) + (ros + 1 > 15 ? ': over the limit' : ': within the limit') + ' (computed).']] : [['t-com', ros + ' + 1 call-up = ' + (ros + 1) + '. ' + (ros + 1 > 15 ? 'At 16 at tip-off, the league refuses the lineup.' : 'Within the limit of 15.')]];
+      if (m.id === 3) return [['t-aut', 'Meeting requested for 14:00 today (authored).'], ['t-unk', 'How he takes silence or a no: not modeled.']];
+      if (m.id === 4) return row ? [['t-com', payTxt + ' against $221.7M: ' + ovTxt + ' (computed).'], over > 0 ? ['t-aut', 'Over at the deadline: no aggregation (authored).'] : ['t-com', 'Under the line, so the aggregation rule does not bite.']] : [['t-aut', RULE], ['t-com', 'You are ' + ovTxt + ' now.']];
+      return [['t-unk', row ? 'What a dark room costs is not computed.' : 'Not modeled: what the empty room costs Boston. Year One’s cut is recorded; its effect is not computed.']];
+    };
 
-    // phase flags (virtual clock c)
-    const mineMode = c >= 1600;
-    const obsShow = c < 600;
-    const occShow = c >= 2200;
-    const stripDown = c >= 2700;
-    const sheetOpen = stage === 'sheet' || (stage === 'sealing' && c < 1300);
-    const lvOpen = stage === 'leaving' || (stage === 'unsealing' && c >= 2550);
-    const moving = stage === 'sealing' || stage === 'unsealing';
+    // role tag, strip, header
+    const role = signed ? { t: 'GM · responsible', bg: '#111111', fg: '#FFFFFF' } : { t: 'Observer · outside', bg: 'transparent', fg: '#111111' };
+    const strip = { obsVis: signed ? 'hidden' : 'visible', vis: signed ? 'visible' : 'hidden', hm: sig ? sig.hm : '', ini: sig ? sig.ini : '', hms: sig ? sig.hms : '' };
+    const hdr = { wLabel: signed ? 'World clock' : 'World clock · runs on its own' };
+    const yc = { start: sig ? sig.hms : '', run: sig ? hms(nowS - sig.t) : '' };
+    const nGot = mine.length;
+    const ledger = { got: nGot + (nGot === 1 ? ' matter, ' : ' matters, ') + nGot + (nGot === 1 ? ' clock' : ' clocks') + ', the pen.',
+      obs: hist ? hist.ini + ' left the seat at ' + hist.hm + (hist.kind === 'vacate' ? ' by vacating' : ' by handover') + '. Lapses since then are charged to the seat, not to ' + hist.ini + '.' : 'Before you sign, the outside view is yours. What signing costs, and what it gives, is written when you sign.' };
 
-    // role tag
-    const role = stage === 'occupy' || stage === 'leaving' || (stage === 'sealing' && c >= 2700) ? { t: 'GM · responsible', bg: '#111111', fg: '#FFFFFF' }
-      : stage === 'sealing' ? { t: 'Signing…', bg: '#FFFFFF', fg: '#111111' }
-      : stage === 'unsealing' ? { t: 'Handing over…', bg: '#FFFFFF', fg: '#111111' }
-      : { t: 'Observer · outside', bg: 'transparent', fg: '#111111' };
-
-    // strip
-    const strip = { obsOp: stripDown ? 0 : 1, ty: stripDown ? 0 : -10, op: stripDown ? 1 : 0, hm: sig ? sig.hm : '09:14', ini: sig ? sig.ini : '', hms: sig ? sig.hms : '' };
-
-    // ledger
-    const ownA = hist && hist.kind === 'vacate' ? 'Owned by the owner. Vacated at ' + hist.hm + '; no handover was written.'
+    // left panel
+    const ownA = hist && hist.kind === 'vacate' ? 'Left with the owner. Vacated at ' + hist.hm + '; no handover was written.'
       : hist && hist.kind === 'handover' ? 'Owned by the seat, vacant since ' + hist.hm + '. Interim holds ' + hist.ini + '’s handover.'
       : 'Owned by the seat, vacant since 06:00. Interim: Assistant GM [fictional].';
-    const led = { aOp: mineMode ? 0 : 1, bOp: mineMode ? 1 : 0, aTr: mineMode ? 'opacity .25s ease' : 'opacity .3s ease .3s', bTr: mineMode ? 'opacity .3s ease .3s' : 'opacity .25s ease', ownA: ownA, ownB: 'Signed ' + (sig ? sig.ini : '') + ' at ' + (sig ? sig.hm : '') + '. These matters and these clocks are yours.' };
-    const order = mineMode ? mine.map((id) => MAT[id - 1]).concat(back.map((id) => MAT[id - 1])) : MAT;
-    const mineEnd = 96 + mine.length * 122;
-    const rows = order.map((m, i) => {
-      const isMine = mineMode && mine.indexOf(m.id) >= 0;
-      const isBack = mineMode && back.indexOf(m.id) >= 0;
-      const top = mineMode ? (isMine ? 96 + i * 122 : mineEnd + 30 + (i - mine.length) * 62) : 96 + i * 122;
-      const compact = isBack;
-      const left = m.dl - nowS;
-      const mi = mine.indexOf(m.id);
+    const led = { aVis: signed ? 'hidden' : 'visible', bVis: signed ? 'visible' : 'hidden', own: signed ? 'Signed ' + (sig ? sig.ini : '') + ' at ' + (sig ? sig.hms : '') + '. These matters and these clocks are yours from then.' : ownA };
+    const order = signed ? mine.map((id) => MAT[id - 1]).concat(back.map((id) => MAT[id - 1])) : MAT;
+    let y = 84, seenBack = false, backTop = 0;
+    const occupied = stage === 'occupy';
+    const rows = order.map((m) => {
+      const isMine = signed && mine.indexOf(m.id) >= 0;
+      const compact = signed && !isMine;
+      const a = acts[m.id], lp = lapses[m.id];
+      const stop = a && AC[a.k].stops;
+      if (compact && !seenBack) { backTop = y + 4; y += 28; seenBack = true; }
+      const h = !signed ? 112 : compact ? 58 : (m.acts.length ? 132 : 92);
+      const top = y; y += h;
+      const sg = compact ? [['t-aut', '']] : segs(m, signed ? 'row' : 'sheet');
+      let clock = cd(m.dl - nowS), ck = { fs: compact ? 18 : (signed ? 22 : 24), pad: '2px 0', bd: '2px solid transparent', bg: 'transparent', fg: '#B3261E', sh: 'none' };
+      if (lp) { clock = 'LAPSED'; ck = { fs: compact ? 15 : 20, pad: '1px 8px', bd: '2px dashed #111', bg: 'transparent', fg: '#111', sh: 'none' }; }
+      else if (stop) { clock = AC[a.k].word; ck = { fs: 15, pad: '3px 10px', bd: '2px solid #111', bg: '#111', fg: '#FFFFFF', sh: 'inset 0 0 0 2px #111, inset 0 0 0 3.5px #FFFFFF' }; }
+      const dlText = lp ? 'no act recorded · ' + dow(lp.at) + ' ' + hm(lp.at) : stop ? 'act recorded ' + hm(a.at) + ' · ' + a.ini : m.dlText;
+      const own = compact ? 'handed back' : isMine ? 'yours · signed ' + (sig ? sig.hm : '')
+        : hist && hist.kind === 'vacate' ? 'Leave with the owner · vacated ' + hist.hm
+        : hist && hist.kind === 'handover' && hist.ids.indexOf(m.id) >= 0 ? 'seat vacant · ' + hist.ini + ' note on file' : 'owner: the seat (vacant)';
+      const canBtn = isMine && occupied && !a && !lp && m.acts.length > 0;
       return {
-        n: m.id, title: m.title, desc: m.desc, top: top, h: compact ? 58 : 118,
-        barH: compact ? 30 : 90, barBg: isMine ? '#111111' : 'transparent', barSh: isMine ? 'inset 0 0 0 2px #111111, inset 0 0 0 3.5px #FFFFFF' : 'none', delay: isMine ? 150 * mi : 0,
-        dOp: compact ? 0 : 1, dlOp: compact ? 0 : 1, ownTop: compact ? 38 : 94, ign: m.ign, cOp: isMine ? 1 : 0,
-        own: isMine ? 'yours · signed ' + (sig ? sig.hm : '') : isBack ? 'handed back' : (hist && hist.kind === 'vacate' ? 'owner: the owner (vacated)' : (hist && hist.kind === 'handover' && hist.ids.indexOf(m.id) >= 0 ? 'seat vacant · ' + hist.ini + ' note on file' : 'owner: the seat (vacant)')),
-        clock: cd(left), ckFs: compact ? 18 : (isMine ? 26 : 24), dlText: m.dlText
+        n: m.id, title: m.title, desc: a ? m.descA : (signed ? m.descM : m.descO), top: top, h: h,
+        barH: h - 24, barBg: isMine ? '#111111' : 'transparent', barSh: isMine ? 'inset 0 0 0 2px #111111, inset 0 0 0 3.5px #FFFFFF' : 'none',
+        dOp: compact ? 0 : 1, sOp: signed && !compact ? 1 : 0, c1: sg[0][0], t1: sg[0][1], has2: sg.length > 1, c2: sg.length > 1 ? sg[1][0] : '', t2: sg.length > 1 ? sg[1][1] : '',
+        btns: canBtn ? m.acts.map((k) => ({ t: AC[k].label, pick: () => this.act(m.id, k) })) : [], bVis: canBtn ? 'visible' : 'hidden',
+        own: own, ownTop: compact ? 36 : signed ? 74 : 90, ownW: signed ? 180 : 300,
+        clock: clock, ckFs: ck.fs, ckPad: ck.pad, ckBd: ck.bd, ckBg: ck.bg, ckFg: ck.fg, ckSh: ck.sh,
+        dlText: dlText, dlOp: compact ? 0 : 1, dlFg: lp || stop ? '#111' : '#B3261E'
       };
     });
-    led.backTop = mineEnd + 6;
-    led.backOp = mineMode && back.length ? 1 : 0;
+    led.backTop = backTop;
+    led.backVis = signed && back.length ? 'visible' : 'hidden';
 
     // right surface: observer layer
     const vacSince = hist ? hist.hm : '06:00';
     const vacS = hist ? hist.at : 6 * 3600;
     const obsSheet = hist && hist.kind === 'handover' ? { kind: 'written by ' + hist.ini, title: 'A handover on file, from ' + hist.ini, sub: 'Written Tue ' + hist.hm + ' · ' + hist.ids.length + ' lines with notes · unread by anyone new.' }
-      : hist && hist.kind === 'vacate' ? { kind: 'vacancy notice', title: 'No handover was written', sub: 'The seat was vacated Tue ' + hist.hm + '. Matters reverted to the owner. The sheet lists them without notes.' }
+      : hist && hist.kind === 'vacate' ? { kind: 'vacancy notice', title: 'No handover was written', sub: 'The seat was vacated Tue ' + hist.hm + '. Matters were left with the owner. The sheet lists them without notes.' }
       : { kind: 'from the interim', title: 'What is in motion, in the interim’s hand', sub: 'Written by Assistant GM [fictional] · 5 lines · unread.' };
     const obs = { op: obsShow ? 1 : 0, vis: obsShow ? 'visible' : 'hidden', vacSince: vacSince, vacFor: hms(nowS - vacS), sheetKind: obsSheet.kind, sheetTitle: obsSheet.title, sheetSub: obsSheet.sub };
-    const baseLog = [
-      { when: 'Tue 06:00', t: 'seat vacated [authored]', cls: 't-aut' },
-      { when: 'Tue 06:02', t: 'Assistant GM named interim [fictional, authored]', cls: 't-aut' },
-      { when: 'Tue 08:55', t: 'handover sheet written by the interim [authored]', cls: 't-aut' }
+    const base = [
+      { at: 21600, when: 'Tue 06:00', t: 'seat vacated [authored]', cls: 't-aut' },
+      { at: 21720, when: 'Tue 06:02', t: 'Assistant GM named interim [fictional, authored]', cls: 't-aut' },
+      { at: 32100, when: 'Tue 08:55', t: 'handover sheet written by the interim [authored]', cls: 't-aut' }
     ];
-    const seatLog = hist ? [
-      { when: 'Tue ' + hist.hm, t: hist.kind === 'vacate' ? 'seat vacated by ' + hist.ini + '; matters reverted to the owner' : 'seat handed over by ' + hist.ini + ' to the interim', cls: 't-rec' },
-      { when: 'Tue ' + hist.signHm, t: 'seat taken by ' + hist.ini + ' (signature)', cls: 't-rec' },
-      baseLog[2]
-    ] : baseLog;
-    const seatLogOcc = sig ? [{ when: 'Tue ' + sig.hm, t: 'seat taken by ' + sig.ini + ' · signature · ' + mine.length + ' read, ' + back.length + ' handed back', cls: 't-rec' }].concat(baseLog.slice().reverse()) : [];
+    const recs = (s.wlog || []).map((e) => ({ at: e.at, cls: e.cls, when: dow(e.at) + ' ' + (e.sec ? hms(e.at) : hm(e.at)), t: e.t }));
+    const allLog = base.concat(recs).sort((p, q) => p.at - q.at);
+    const logObs = allLog.slice(-6);
+    const logOcc = allLog.slice(-7);
 
     // occupant layer
     const nHeld = mine.length, nBack = back.length;
-    const occ = { op: occShow ? 1 : 0, vis: occShow ? 'visible' : 'hidden', ini: sig ? sig.ini : '', hm: sig ? sig.hm : '', hms: sig ? sig.hms : '',
-      counts: nHeld + (nHeld === 1 ? ' line read' : ' lines read') + ', ' + nBack + ' handed back.' };
+    const occ = { op: occShow ? 1 : 0, vis: occShow ? 'visible' : 'hidden', ini: sig ? sig.ini : '', hm: sig ? sig.hm : '' };
     const consult = MAT.map((m) => ({ t: m.id + ' · ' + m.short, pressed: memoId === m.id ? 'true' : 'false', bg: memoId === m.id ? '#111111' : '#FFFFFF', fg: memoId === m.id ? '#FFFFFF' : '#111111',
       pick: () => this.setState({ memo: m.id }) }));
     const mm = memoId ? MAT[memoId - 1] : null;
@@ -352,64 +472,91 @@ class Component extends DCLogic {
 
     // handover sheet
     const src = hist && hist.kind === 'handover' ? hist : null;
-    const metaFrom = hist && hist.kind === 'handover' ? 'From: ' + hist.ini + ', outgoing GM · To: the next occupant of the seat · Written Tue ' + hist.hm + ' · notes are the writer’s own words'
-      : hist && hist.kind === 'vacate' ? 'From: nobody · vacated Tue ' + hist.hm + ', no handover written · the World still holds these lines open'
-      : 'From: Assistant GM, interim [fictional] · To: the next occupant of the seat · Written Tue 08:55 [authored]';
+    const metaFrom = hist && hist.kind === 'handover' ? 'From ' + hist.ini + ', outgoing GM · to the next occupant · written Tue ' + hist.hm + ' · notes are the writer’s own words'
+      : hist && hist.kind === 'vacate' ? 'From nobody · vacated Tue ' + hist.hm + ', no handover written · the World still holds these lines open'
+      : 'From Assistant GM (interim, fictional) · to the next occupant · written Tue 08:55 [authored]';
     const lines = MAT.map((m, i) => {
-      const a = ack[m.id] || '';
-      const isRead = a === 'read', isBack = a === 'back';
+      const t = ack[m.id] || '';
+      const isTake = t === 'take', isBack = t === 'back';
+      const a = acts[m.id], lp = lapses[m.id];
+      const sg = segs(m, 'sheet');
       const note = src && src.notes && src.notes[m.id] ? 'Note from ' + src.ini + ': “' + src.notes[m.id] + '”' : '';
+      const dline = lp ? 'Lapsed ' + hm(lp.at) + ' · NO ACT recorded' : a && AC[a.k].stops ? 'Act recorded ' + hm(a.at) + ' by ' + a.ini + ' · ' + AC[a.k].word.toLowerCase() : 'Deadline: ' + m.dlText + ' · in ' + cd(m.dl - nowS);
       return {
-        n: m.id, title: m.full, top: 104 + i * 90, dl: m.dlText, clock: cd(m.dl - nowS),
-        c1: m.k1, t1: m.t1, c2: m.k2, t2: m.t2, hasT2: !!m.t2, note: note, hasNote: !!note,
-        barBg: isRead ? '#111111' : 'transparent', barSh: isRead ? 'inset 0 0 0 2px #111111, inset 0 0 0 3.5px #FFFFFF' : 'none',
-        rp: isRead ? 'true' : 'false', bp: isBack ? 'true' : 'false',
-        rBg: isRead ? '#111111' : '#FFFFFF', rFg: isRead ? '#FFFFFF' : '#111111', tick: isRead ? 1 : 0,
+        n: m.id, title: m.full, top: 104 + i * 94, dline: dline, dlFg: lp || (a && AC[a.k].stops) ? '#111' : '#B3261E',
+        c1: sg[0][0], t1: sg[0][1], c2: sg.length > 1 ? sg[1][0] : '', t2: sg.length > 1 ? sg[1][1] : '', hasT2: sg.length > 1 && !note, note: note, hasNote: !!note,
+        barBg: isTake ? '#111111' : 'transparent', barSh: isTake ? 'inset 0 0 0 2px #111111, inset 0 0 0 3.5px #FFFFFF' : 'none',
+        tp: isTake ? 'true' : 'false', bp: isBack ? 'true' : 'false',
+        tBg: isTake ? '#111111' : '#FFFFFF', tFg: isTake ? '#FFFFFF' : '#111111', tick: isTake ? 1 : 0,
         bBg: isBack ? '#111111' : '#FFFFFF', bFg: isBack ? '#FFFFFF' : '#111111',
-        read: () => { if (stage !== 'sheet') return; const cur = (this.state && this.state.ack) || {}; this.setState({ ack: { ...cur, [m.id]: cur[m.id] === 'read' ? '' : 'read' } }); },
-        back: () => { if (stage !== 'sheet') return; const cur = (this.state && this.state.ack) || {}; this.setState({ ack: { ...cur, [m.id]: cur[m.id] === 'back' ? '' : 'back' } }); }
+        take: () => { if ((this.state || {}).stage !== 'sheet') return; const cur = (this.state && this.state.ack) || {}; this.setState({ ack: Object.assign({}, cur, { [m.id]: cur[m.id] === 'take' ? '' : 'take' }) }); },
+        back: () => { if ((this.state || {}).stage !== 'sheet') return; const cur = (this.state && this.state.ack) || {}; this.setState({ ack: Object.assign({}, cur, { [m.id]: cur[m.id] === 'back' ? '' : 'back' }) }); }
       };
     });
-    const nRes = MAT.filter((m) => ack[m.id]).length;
-    const ready = nRes === 5 && initials.length >= 2 && stage === 'sheet';
-    const shown = stage === 'sealing' || stage === 'occupy' || stage === 'leaving' || stage === 'unsealing';
+    const nTake = MAT.filter((m) => ack[m.id] === 'take').length;
+    const nBk = MAT.filter((m) => ack[m.id] === 'back').length;
+    const nOpen = 5 - nTake - nBk;
+    const ready = nOpen === 0 && initials.length >= 2 && stage === 'sheet';
+    const msg = nOpen > 0 ? nOpen + (nOpen === 1 ? ' line is' : ' lines are') + ' still open. Take it, or hand it back.' : initials.length < 2 ? 'Type your initials (demo: KM), then press Return or Sign.' : 'Press Return or Sign. The time is written with it.';
     const sheet = {
-      tf: sheetOpen ? 'translateX(0px)' : (shown ? 'translate(-40px, 0px) scale(.5)' : 'translateX(820px)'),
+      tf: sheetOpen ? 'translateX(0px)' : (signed ? 'translate(-40px, 0px) scale(.5)' : 'translateX(820px)'),
       op: sheetOpen ? 1 : 0, vis: sheetOpen ? 'visible' : 'hidden', vd: sheetOpen ? 0 : 0.9,
       meta: metaFrom, ini: initials, open: stage === 'sheet', sealed: stage === 'sealing',
-      resolved: nRes + ' of 5 lines resolved',
-      locked: ready ? false : true,
-      tbBg: ready ? '#111111' : '#CFCAC0', tbFg: ready ? '#FFFFFF' : '#5B574F', tbBd: ready ? '#111111' : '#A9A497',
+      counter: nTake + ' taken · ' + nBk + ' handed back · ' + nOpen + ' open', from: hms(nowS), msg: msg,
+      ariaDis: ready ? 'false' : 'true', tbBg: ready ? '#111111' : '#CFCAC0', tbFg: ready ? '#FFFFFF' : '#5B574F', tbBd: ready ? '#111111' : '#A9A497',
       inkOp: 1, stampSc: c >= 200 ? 1 : 1.5, stampOp: c >= 200 ? 1 : 0,
-      hms: sig ? sig.hms : '', counts: nHeld + ' read · ' + nBack + ' handed back'
+      hms: sig ? sig.hms : '', counts: nHeld + ' taken · ' + nBack + ' handed back'
     };
     if (stage === 'sealing') sheet.ini = sig ? sig.ini : initials;
 
     // leave sheet
+    const OPEN = { 1: 'Open: no reply sent. Offer lapses 11:00.', 2: 'Open: roster ' + ros + ', call-up not made.', 3: 'Open: no reply to his agent; meeting asked for 14:00.', 4: 'Open: ' + ovTxt + ' the second apron. ' + (over > 0 ? 'Owner wants it fixed.' : 'Owner’s note is met.'), 5: 'Open: analytics room still unfunded.' };
+    const DR = { d_take: 'Closed: took their 2029 second. Payroll ' + payTxt + '.', d_ask: 'Open: asked for two seconds, no answer yet.', d_no: 'Closed: declined their second.', r_call: 'Called up. Roster ' + ros + ', limit 15.', r_hold: 'Call-up held. Roster ' + ros + '.', b_meet: 'Meeting with his agent set for 14:00.', b_no: 'Told his agent not today. Promised nothing.' };
+    const draftFor = (id) => lapses[id] ? 'Lapsed ' + hm(lapses[id].at) + ' with no act. Nothing to take back.' : acts[id] ? DR[acts[id].k] : OPEN[id];
     const lvNotes = s.lvNotes || {};
     const lvIni = (s.lvIni || '').toUpperCase();
-    const lvLines = mine.map((id, i) => ({ n: id, title: MAT[id - 1].short, top: 132 + i * 60, label: 'Note for matter ' + id + ', ' + MAT[id - 1].short, val: lvNotes[id] !== undefined ? lvNotes[id] : MAT[id - 1].draft,
-      edit: (e) => { const cur = (this.state && this.state.lvNotes) || {}; this.setState({ lvNotes: { ...cur, [id]: e.target.value } }); } }));
+    const lvLines = mine.map((id, i) => ({ n: id, title: MAT[id - 1].short, top: 128 + i * 60, label: 'Note for matter ' + id + ', ' + MAT[id - 1].short, val: lvNotes[id] !== undefined ? lvNotes[id] : draftFor(id),
+      edit: (e) => { const cur = (this.state && this.state.lvNotes) || {}; this.setState({ lvNotes: Object.assign({}, cur, { [id]: e.target.value }) }); } }));
     const lvReady = lvIni.length >= 2 && stage === 'leaving';
     const lv = { tf: lvOpen ? 'translateX(0px)' : (stage === 'unsealing' ? 'translate(-40px, 0px) scale(.5)' : 'translateX(820px)'), op: lvOpen ? 1 : 0, vis: lvOpen ? 'visible' : 'hidden', vd: lvOpen ? 0 : 0.9,
-      none: mine.length === 0, ini: lvIni, locked: !lvReady, hbg: lvReady ? '#111111' : '#CFCAC0', hfg: lvReady ? '#FFFFFF' : '#5B574F', hbd: lvReady ? '#111111' : '#A9A497' };
+      none: mine.length === 0, ini: lvIni, ariaDis: lvReady ? 'false' : 'true', hbg: lvReady ? '#111111' : '#CFCAC0', hfg: lvReady ? '#FFFFFF' : '#5B574F', hbd: lvReady ? '#111111' : '#A9A497' };
+
+    const doSign = () => {
+      const cur = this.state || {};
+      const a = cur.ack || {};
+      const ini = String(cur.initials || '').toUpperCase();
+      if (cur.stage !== 'sheet' || ini.length < 2 || [1, 2, 3, 4, 5].some((id) => !a[id])) return;
+      const t = this.wt();
+      const m = [1, 2, 3, 4, 5].filter((id) => a[id] === 'take'), b = [1, 2, 3, 4, 5].filter((id) => a[id] === 'back');
+      this.setState({ stage: 'sealing', c: 0, sig: { ini: ini, hms: hms(t), hm: hm(t), t: t }, mine: m, back: b,
+        wlog: (cur.wlog || []).concat([{ at: t, sec: true, cls: 't-rec', t: 'seat taken by ' + ini + ' as GM · signature · ' + m.length + ' taken, ' + b.length + ' handed back' }]) });
+    };
+    const doLeave = (kind) => {
+      const cur = this.state || {};
+      if (cur.stage !== 'leaving') return;
+      const ini = kind === 'handover' ? String(cur.lvIni || '').toUpperCase() : (cur.sig ? cur.sig.ini : '');
+      if (kind === 'handover' && ini.length < 2) return;
+      const t = this.wt();
+      const notes = {};
+      (cur.mine || []).forEach((id) => { const v = (cur.lvNotes || {})[id]; notes[id] = v !== undefined ? v : draftFor(id); });
+      const ids = kind === 'handover' ? (cur.mine || []).slice() : [];
+      const text = kind === 'handover' ? 'seat handed over by ' + ini + ' to the interim · ' + ids.length + ' notes on file' : 'seat vacated by ' + ini + ' · ' + (cur.mine || []).length + ' matters left with the owner';
+      this.setState({ stage: 'unsealing', c: 3400, hist: { kind: kind, ini: ini, hm: hm(t), hms: hms(t), at: t, ids: ids, notes: kind === 'handover' ? notes : {} },
+        wlog: (cur.wlog || []).concat([{ at: t, sec: true, cls: 't-rec', t: text }]) });
+    };
 
     return {
-      clockNow: hms(nowS), role: role, moving: moving, strip: strip, led: led, rows: rows, obs: obs, seatLog: seatLog, occ: occ, consult: consult, memo: memo,
-      seatLogOcc: seatLogOcc, sheet: sheet, lines: lines, lv: lv, lvLines: lvLines, how: how, howPressed: how ? 'true' : 'false', howBg: how ? '#111111' : 'transparent', howFg: how ? '#FFFFFF' : '#111111',
+      clockNow: hms(nowS), role: role, moving: moving, notMoving: !moving, signed: signed, notSigned: !signed, strip: strip, hdr: hdr, yc: yc, ledger: ledger, led: led, rows: rows, obs: obs, logObs: logObs, logOcc: logOcc, occ: occ, consult: consult, memo: memo,
+      sheet: sheet, lines: lines, lv: lv, lvLines: lvLines, how: how, howPressed: how ? 'true' : 'false', howBg: how ? '#111111' : 'transparent', howFg: how ? '#FFFFFF' : '#111111',
+      fastPressed: fast ? 'true' : 'false', fastBg: fast ? '#111111' : '#FFFFFF', fastFg: fast ? '#FFFFFF' : '#111111',
       canLeave: stage === 'occupy',
+      toggleFast: () => this.setState({ fast: !(this.state && this.state.fast) }),
       toggleHow: () => this.setState({ how: !(this.state && this.state.how) }),
       openSheet: () => { const cur = this.state || {}; if ((cur.stage || 'observe') === 'observe') this.setState({ stage: 'sheet', ack: {}, initials: '' }); },
       onIni: (e) => this.setState({ initials: String(e.target.value || '').replace(/[^A-Za-z]/g, '').slice(0, 4) }),
       onLvIni: (e) => this.setState({ lvIni: String(e.target.value || '').replace(/[^A-Za-z]/g, '').slice(0, 4) }),
-      sign: () => {
-        const cur = this.state || {};
-        const a = cur.ack || {};
-        const ini = String(cur.initials || '').toUpperCase();
-        if (cur.stage !== 'sheet' || ini.length < 2 || [1, 2, 3, 4, 5].some((id) => !a[id])) return;
-        const t = this.nowSec();
-        this.setState({ stage: 'sealing', c: 0, sig: { ini: ini, hms: hms(t), hm: hm(t) }, mine: [1, 2, 3, 4, 5].filter((id) => a[id] === 'read'), back: [1, 2, 3, 4, 5].filter((id) => a[id] === 'back') });
-      },
+      onSign: (e) => { if (e && e.preventDefault) e.preventDefault(); doSign(); },
+      onLvSign: (e) => { if (e && e.preventDefault) e.preventDefault(); doLeave('handover'); },
       skip: () => {
         const cur = this.state || {};
         if (cur.stage === 'sealing') this.setState({ stage: 'occupy', c: 3400 });
@@ -417,21 +564,7 @@ class Component extends DCLogic {
       },
       openLeave: () => { const cur = this.state || {}; if (cur.stage === 'occupy') this.setState({ stage: 'leaving', lvIni: '', lvNotes: {} }); },
       stay: () => this.setState({ stage: 'occupy' }),
-      handOver: () => {
-        const cur = this.state || {};
-        const ini = String(cur.lvIni || '').toUpperCase();
-        if (cur.stage !== 'leaving' || ini.length < 2) return;
-        const t = this.nowSec();
-        const notes = {};
-        (cur.mine || []).forEach((id) => { const v = (cur.lvNotes || {})[id]; notes[id] = v !== undefined ? v : MAT[id - 1].draft; });
-        this.setState({ stage: 'unsealing', c: 3400, hist: { kind: 'handover', ini: ini, hm: hm(t), hms: hms(t), at: t, ids: (cur.mine || []).slice(), notes: notes, signHm: cur.sig ? cur.sig.hm : '' } });
-      },
-      vacate: () => {
-        const cur = this.state || {};
-        if (cur.stage !== 'leaving') return;
-        const t = this.nowSec();
-        this.setState({ stage: 'unsealing', c: 3400, hist: { kind: 'vacate', ini: cur.sig ? cur.sig.ini : '', hm: hm(t), hms: hms(t), at: t, ids: [], notes: {}, signHm: cur.sig ? cur.sig.hm : '' } });
-      }
+      vacate: () => doLeave('vacate')
     };
   }
 }

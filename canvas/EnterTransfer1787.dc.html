@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Roll Call, 1787</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&amp;family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F2EEE4;color:#2A211B;font-family:'Crimson Pro',serif}
+.fell{font-family:'IM Fell English',serif}
+.mono{font-family:'IBM Plex Mono',monospace}
+.lab{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.btn{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.05em;text-transform:uppercase;min-height:38px;padding:0 14px;border:2px solid #2A211B;border-radius:0;background:#F2EEE4;color:#2A211B;cursor:pointer;transition:background-color .25s,color .25s,opacity .25s}
+.btn:hover{background:#2A211B;color:#F2EEE4}
+.btn:focus-visible{outline:3px solid #2A211B;outline-offset:2px}
+.btn.verm{background:#B8321F;border-color:#B8321F;color:#F2EEE4}
+.btn.verm:hover{background:#2A211B;border-color:#2A211B}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.scrub{-webkit-appearance:none;appearance:none;background:transparent;margin:0;padding:0;border:0;outline:none}
+.scrub::-webkit-slider-runnable-track{height:164px;background:transparent}
+.scrub::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:2px;height:164px;background:transparent;border:0}
+.scrub::-moz-range-track{height:164px;background:transparent}
+.scrub::-moz-range-thumb{width:2px;height:164px;background:transparent;border:0;border-radius:0}
+.scrub:focus-visible ~ .pill{outline:3px solid #2A211B;outline-offset:3px}
+.k-obs{background:#2A211B;color:#F2EEE4}
+.k-rec{background:#2A211B;color:#F2EEE4;box-shadow:inset 0 0 0 2px #2A211B,inset 0 0 0 4px #F2EEE4}
+.k-recv{background:#B8321F;color:#F2EEE4;box-shadow:inset 0 0 0 2px #B8321F,inset 0 0 0 4px #F2EEE4}
+.k-abs{background:transparent;color:#2A211B;border:2px solid #2A211B;box-sizing:border-box;box-shadow:inset 0 0 0 2px #F2EEE4,inset 0 0 0 3.5px #2A211B}
+.k-absv{background:transparent;color:#B8321F;border:2px solid #B8321F;box-sizing:border-box;box-shadow:inset 0 0 0 2px #F2EEE4,inset 0 0 0 3.5px #B8321F}
+.k-aut{background:transparent;color:#2A211B;border:2px solid #2A211B;box-sizing:border-box}
+.k-com{background:#A89C8A;color:#2A211B}
+.k-unk{background:transparent;color:#6B5F55;border:2px dashed #2A211B;box-sizing:border-box}
+.k-open{background:transparent;color:#B8321F;border:3px solid #B8321F;box-sizing:border-box}
+.k-mod{background:repeating-linear-gradient(135deg,#2A211B 0 1.5px,transparent 1.5px 6px);border:1px solid #2A211B;box-sizing:border-box}
+.sw{display:inline-block;width:16px;height:16px;flex:none}
+.sr{position:absolute;left:0;top:0;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@keyframes rcblink{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}
+@keyframes rcin{0%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:translateY(0)}}
+.rise{animation:rcin .45s ease both}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background-color: #F2EEE4; background-image: repeating-linear-gradient(90deg, rgba(42,33,27,.05) 0 1px, transparent 1px 26px), repeating-linear-gradient(0deg, rgba(42,33,27,.03) 0 1px, transparent 1px 5px); color: #2A211B; font-family: 'Crimson Pro', serif">
+
+  <div class="sr" role="status" aria-live="polite" aria-atomic="true">{{ann.t}}</div>
+
+  <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 52px; box-sizing: border-box; padding: 0 40px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid #C9BFAE; z-index: 6; background: #F2EEE4">
+    <span class="fell" style="font-size: 28px; letter-spacing: .04em">BOW</span>
+    <span class="lab">Philadelphia · State House · a recorded Moment</span>
+    <span style="flex: 1"></span>
+    <span class="lab" style="display: inline-flex; align-items: center; height: 30px; padding: 0 12px; font-weight: 700; border: 2px {{mode.bd}} {{mode.bc}}; background: {{mode.bg}}; color: {{mode.fg}}">{{mode.t}}</span>
+    <sc-if value="{{skipOn}}" hint-placeholder-val="{{false}}">
+      <button type="button" class="btn verm" onClick="{{skip}}">Skip the transition</button>
+    </sc-if>
+    <sc-if value="{{inSeat}}" hint-placeholder-val="{{false}}">
+      <button type="button" class="btn" onClick="{{leave}}">Leave the seat</button>
+    </sc-if>
+    <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+  </header>
+
+  <!-- HERO -->
+  <div style="position: absolute; left: 40px; top: 62px; width: 1040px; height: 140px; display: flex; align-items: flex-start; gap: 24px">
+    <div style="width: 124px">
+      <span class="lab" style="display: block; color: #6B5F55; height: 16px">DAY</span>
+      <span class="fell" style="display: block; font-size: 100px; line-height: 100px; height: 96px; margin-top: 4px">{{hero.d}}</span>
+    </div>
+    <div style="width: 210px">
+      <span class="lab" style="display: block; color: #6B5F55; height: 16px">{{hero.dow}} · 1787</span>
+      <span class="fell" style="display: block; font-size: 100px; line-height: 100px; height: 96px; margin-top: 4px">{{hero.m}}</span>
+    </div>
+    <div style="flex: 1; padding-top: 2px; min-width: 0">
+      <span class="lab" style="display: block; color: #6B5F55; height: 16px">{{hero.kind}}</span>
+      <span class="rise fell" style="display: block; font-size: 22px; line-height: 1.2; max-width: 640px; margin-top: 4px">{{hero.caption}}</span>
+      <sc-if value="{{hero.ledgerOn}}" hint-placeholder-val="{{false}}">
+        <div class="rise" style="display: block; max-width: 640px; margin-top: 10px; padding: 6px 12px; background: #2A211B; color: #F2EEE4; font-size: 15px; line-height: 1.3"><strong>You gave up:</strong> the outcome, Madison’s notes (published 1840), historians’ readings. <strong>You got:</strong> Caleb Strong’s vote.</div>
+      </sc-if>
+      <sc-if value="{{hero.helpOn}}" hint-placeholder-val="{{true}}">
+        <span style="display: block; font-size: 15px; line-height: 1.35; color: #6B5F55; max-width: 640px; margin-top: 8px">{{hero.help}}</span>
+      </sc-if>
+    </div>
+  </div>
+
+  <!-- CORNER CLOCK: yours; the roll's own clock joins it after LEAVE -->
+  <div style="position: absolute; left: 1092px; top: 60px; width: 320px; height: {{clk.h}}px; box-sizing: border-box; padding: 8px 14px; background: {{clk.bg}}; color: {{clk.fg}}; border: 2px {{clk.bd}} #2A211B; transition: height .8s ease, background-color .6s ease, color .6s ease">
+    <span class="lab" style="display: block; height: 16px">{{clk.label}}</span>
+    <span class="mono" style="display: block; font-size: {{clk.fs}}px; font-weight: 700; line-height: 1.1; margin-top: 6px; opacity: {{clk.op}}; transition: font-size .8s ease">{{clk.txt}}</span>
+  </div>
+  <div style="position: absolute; left: 1092px; top: 130px; width: 320px; height: 38px; box-sizing: border-box; padding: 4px 14px; background: #2A211B; color: #F2EEE4; opacity: {{wclk.op}}; transition: opacity .6s ease; display: flex; align-items: center; justify-content: space-between">
+    <span class="lab" style="line-height: 1.3">THE ROLL CLOCK<br>{{wclk.state}}</span>
+    <span class="mono" style="font-size: 24px; font-weight: 700">{{wclk.txt}}</span>
+  </div>
+  <sc-if value="{{speedOn}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 1092px; top: 168px; width: 320px; height: 38px; display: flex; align-items: center; gap: 8px; justify-content: flex-end">
+      <span class="lab" style="color: #6B5F55; white-space: nowrap">prototype toggle</span>
+      <button type="button" class="btn" onClick="{{toggleSpeed}}" aria-pressed="{{fastPressed}}" style="min-height: 36px; padding: 0 10px; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; background: {{fastBg}}; color: {{fastFg}}">×3 pace <span style="font-size: 11px; padding: 1px 5px; border: 1.5px solid currentColor">AUTHORED</span></button>
+    </div>
+  </sc-if>
+
+  <!-- TIMELINE: 25 May to 17 September 1787 -->
+  <svg width="1440" height="164" viewBox="0 0 1440 164" style="position: absolute; left: 0; top: 208px" aria-hidden="true">
+    <path d="{{tl.ticks}}" style="stroke: #2A211B; stroke-width: 1; fill: none"></path>
+    <rect x="40" y="61" width="{{tl.pastW}}" height="30" style="fill: #2A211B"></rect>
+    <rect x="{{tl.nowX}}" y="61" width="{{tl.futW}}" height="30" style="fill: #2A211B; opacity: {{tl.obsOp}}; transition: opacity .8s"></rect>
+    <rect x="{{tl.nowX}}" y="62" width="{{tl.futW}}" height="28" style="fill: none; stroke: #2A211B; stroke-width: 2; stroke-dasharray: 7 5; opacity: {{tl.sealOp}}; transition: opacity .8s"></rect>
+    <rect x="{{tl.m1}}" y="72" width="8" height="8" style="fill: #F2EEE4"></rect>
+    <rect x="{{tl.m2}}" y="72" width="8" height="8" style="fill: #F2EEE4"></rect>
+    <rect x="{{tl.m3}}" y="72" width="8" height="8" style="fill: #F2EEE4"></rect>
+    <rect x="1392" y="72" width="8" height="8" style="fill: #F2EEE4; opacity: {{tl.obsOp}}; transition: opacity .8s"></rect>
+    <line x1="{{tl.nowX}}" y1="92" x2="{{tl.nowX}}" y2="112" style="stroke: #2A211B; stroke-width: 2"></line>
+    <rect x="{{tl.voteX}}" y="54" width="8" height="44" style="fill: #F2EEE4; stroke: #2A211B; stroke-width: 2"></rect>
+  </svg>
+
+  <sc-for list="{{tl.months}}" as="w" hint-placeholder-count="5">
+    <span class="fell" style="position: absolute; left: {{w.x}}px; top: 236px; height: 22px; font-size: 17px; line-height: 22px; letter-spacing: .06em; padding-left: 4px; border-left: 2px solid #2A211B">{{w.n}}</span>
+  </sc-for>
+
+  <sc-if value="{{tl.hasPastTag}}" hint-placeholder-val="{{false}}"><span class="lab" style="position: absolute; left: 50px; top: 276px; height: 16px; padding: 0 5px; background: #F2EEE4; font-size: 11px; line-height: 16px; white-space: nowrap; z-index: 2">{{tl.pastTag}}</span></sc-if>
+  <sc-if value="{{tl.hasFutTag}}" hint-placeholder-val="{{false}}"><span class="lab" style="position: absolute; left: {{tl.futTagX}}px; top: 276px; height: 16px; padding: 0 6px; background: #F2EEE4; border: 2px solid #2A211B; font-size: 11px; line-height: 12px; white-space: nowrap; z-index: 2">{{tl.futTag}}</span></sc-if>
+
+  <div style="position: absolute; left: 93px; top: 304px; width: 190px; z-index: 2; font-size: 14px; line-height: 1.2"><span class="lab" style="display: block; color: #6B5F55">29 MAY</span>Virginia Plan; the secrecy rule [verify]</div>
+  <div style="position: absolute; left: 294px; top: 304px; width: 130px; z-index: 2; font-size: 14px; line-height: 1.2"><span class="lab" style="display: block; color: #6B5F55">15 JUN</span>New Jersey Plan [verify]</div>
+  <div style="position: absolute; left: 430px; top: 304px; width: 148px; z-index: 2; text-align: right; font-size: 14px; line-height: 1.2"><span class="lab" style="display: block; color: #6B5F55">10 JUL</span>New York can no longer vote [verify]</div>
+  <div style="position: absolute; left: 1240px; top: 304px; width: 160px; z-index: 2; text-align: right; font-size: 14px; line-height: 1.2"><span class="lab" style="display: block; color: #6B5F55">17 SEP</span>{{tl.sepTxt}}</div>
+
+  <div style="position: absolute; left: 990px; top: 304px; width: 270px; opacity: {{tl.msgOp}}; transition: opacity .8s; pointer-events: none">
+    <span class="fell" style="display: block; font-size: 19px">Sealed: it hasn’t happened.</span>
+    <span style="display: block; font-size: 14px; line-height: 1.25; color: #6B5F55; margin-top: 2px">Madison’s notes were published in 1840. You only hear what is said aloud.</span>
+  </div>
+
+  <!-- NOW: the handle is dragged here; the button is the fallback -->
+  <sc-if value="{{nowBtnOn}}" hint-placeholder-val="{{true}}">
+    <button type="button" class="btn" onClick="{{enter}}" style="position: absolute; left: {{tl.nowBtnX}}px; top: 302px; height: 38px; z-index: 4; padding: 0 12px; white-space: nowrap">{{nowBtnLabel}}</button>
+  </sc-if>
+  <span style="position: absolute; left: {{tl.noteX}}px; top: 304px; width: 270px; font-size: 14px; line-height: 1.25; color: #6B5F55; background: #F2EEE4; z-index: 2">{{nowNote}}</span>
+
+  <sc-if value="{{ghost.on}}" hint-placeholder-val="{{true}}">
+    <div class="mono" style="position: absolute; left: {{ghost.x}}px; top: 208px; width: 150px; height: 28px; box-sizing: border-box; border: 2px dashed #2A211B; background: #F2EEE4; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; letter-spacing: .05em; z-index: 2; pointer-events: none">NOW · DROP HERE</div>
+  </sc-if>
+
+  <!-- playhead, pill, and the scrubber input -->
+  <input class="scrub" type="range" min="0" max="115" step="0.125" value="{{scrubVal}}" onChange="{{onScrub}}" onPointerDown="{{onGrab}}" onPointerUp="{{onRelease}}" onPointerCancel="{{onRelease}}" onKeyDown="{{onScrubKey}}" disabled="{{scrubOff}}" aria-label="Scrub 25 May to 17 September 1787. Drag the handle into NOW to start your clock." aria-valuetext="{{hd.aria}}" style="position: absolute; left: 40px; top: 208px; width: 1360px; height: 164px; opacity: 0; cursor: ew-resize; z-index: 3; pointer-events: {{scrubPe}}">
+  <div style="position: absolute; left: {{hd.x}}px; top: 236px; width: 2px; height: 132px; margin-left: -1px; background: {{hd.bg}}; transition: left .9s cubic-bezier(.6,0,.2,1)"></div>
+  <div class="pill mono" style="position: absolute; left: {{hd.pillX}}px; top: 208px; width: {{hd.pillW}}px; height: 28px; box-sizing: border-box; background: {{hd.bg}}; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12.5px; font-weight: 700; letter-spacing: .04em; transition: left .9s cubic-bezier(.6,0,.2,1), width .6s ease, background-color .5s ease; pointer-events: none; color: #F2EEE4; z-index: 2">
+    <sc-if value="{{hd.lock}}" hint-placeholder-val="{{false}}"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="6" width="10" height="7" style="fill: none; stroke: #F2EEE4; stroke-width: 1.8"></rect><path d="M4.5 6 V4 A2.5 2.5 0 0 1 9.5 4 V6" style="fill: none; stroke: #F2EEE4; stroke-width: 1.8"></path></svg></sc-if>
+    <span>{{hd.text}}</span>
+  </div>
+
+  <!-- THE ROLL: thirteen states, north to south -->
+  <div style="position: absolute; left: 40px; top: 376px; width: 1360px; height: 124px">
+    <div style="display: flex; justify-content: space-between; align-items: center; height: 20px">
+      <span class="lab">THE ROLL CALL · north to south · order authored [verify]</span>
+      <span class="lab" style="display: inline-flex; align-items: center; gap: 8px"><span class="sw k-com"></span>{{roll.tally}}</span>
+    </div>
+    <div style="display: flex; margin-top: 4px">
+      <sc-for list="{{roll.cols}}" as="c" hint-placeholder-count="13">
+        <div style="position: relative; flex: 1; height: 98px; box-sizing: border-box; border-left: 1px solid #C9BFAE; border-top: {{c.top}}; background: {{c.tint}}; padding: 5px 7px 0">
+          <span class="fell" style="display: block; font-size: 24px; line-height: 26px; color: {{c.ink}}">{{c.ab}}</span>
+          <span style="display: block; font-size: 13px; line-height: 14px; color: #6B5F55; white-space: nowrap; overflow: hidden">{{c.name}}</span>
+          <div class="mono {{c.cls}}" style="height: 28px; margin-top: 6px; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700; letter-spacing: .03em; transition: background-color .5s ease">{{c.box}}</div>
+          <span style="display: block; font-size: 13px; line-height: 14px; color: #6B5F55; margin-top: 4px; white-space: nowrap; overflow: hidden">{{c.sub}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- LOWER LEFT: the observer's readout, then the record tape -->
+  <div style="position: absolute; left: 660px; top: 506px; width: 1px; height: 312px; background: #C9BFAE"></div>
+  <div style="position: absolute; left: 40px; top: 506px; width: 600px; height: 314px">
+    <div style="position: absolute; left: 0; top: 0; width: 600px; height: 314px; opacity: {{ro.op}}; transition: opacity .5s ease; pointer-events: {{ro.pe}}">
+      <span class="lab" style="display: flex; align-items: center; gap: 10px; height: 22px"><span class="sw k-obs"></span>AS OF · {{rd.title}}</span>
+      <sc-for list="{{rd.rows}}" as="r" hint-placeholder-count="3">
+        <div style="display: flex; align-items: baseline; gap: 14px; padding: {{rd.pad}}px 0; border-top: 1px solid #C9BFAE; margin-top: 2px">
+          <span class="lab" style="width: 128px; flex: none; color: #6B5F55">{{r.k}}</span>
+          <span class="fell" style="font-size: 23px; line-height: 1; flex: none; max-width: 270px">{{r.v}}</span>
+          <span style="font-size: 14px; color: #6B5F55; line-height: 1.2">{{r.n}}</span>
+        </div>
+      </sc-for>
+      <sc-if value="{{rd.hasCalc}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; gap: 10px; align-items: flex-start; border-top: 1px solid #C9BFAE; padding-top: 8px; margin-top: 2px">
+          <span class="sw k-com" style="margin-top: 3px"></span>
+          <span style="font-size: 14.5px; line-height: 1.3">{{rd.calc}}</span>
+        </div>
+      </sc-if>
+      <sc-if value="{{rd.hasText}}" hint-placeholder-val="{{true}}"><div style="border-top: 1px solid #C9BFAE; padding-top: 8px; margin-top: 6px; font-size: 16px; line-height: 1.3; max-width: 580px">{{rd.text}}</div></sc-if>
+      <sc-if value="{{awayOn}}" hint-placeholder-val="{{false}}">
+        <div style="margin-top: 8px; box-sizing: border-box; padding: 7px 0 0; border-top: 2px solid #2A211B">
+          <span class="lab" style="display: flex; align-items: center; gap: 10px"><span class="sw k-rec"></span>THE RECORD · since you left · clock stopped at {{away.stopped}}</span>
+          <span style="display: block; font-size: 14px; line-height: 1.25; color: #6B5F55; margin: 2px 0 2px 26px">The roll clock reads {{away.now}}. Anything the roll records while the seat is empty is recorded against the seat.</span>
+          <sc-for list="{{away.items}}" as="e" hint-placeholder-count="2">
+            <div style="display: flex; gap: 10px; padding: 3px 0; border-top: 1px solid #C9BFAE; margin-top: 3px">
+              <span class="sw {{e.cls}}" style="margin-top: 3px"></span>
+              <span style="flex: 1; min-width: 0"><span class="lab" style="display: block; color: #6B5F55">{{e.head}}</span><span style="display: block; font-size: 15px; line-height: 1.2; font-weight: {{e.fw}}">{{e.text}}</span></span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+    <div style="position: absolute; left: 0; top: 0; width: 600px; height: 314px; opacity: {{tp.op}}; transition: opacity .5s ease; pointer-events: none">
+      <span class="lab" style="display: flex; align-items: center; gap: 10px; height: 22px"><span class="sw k-rec"></span>THE RECORD · your acts, and your absences</span>
+      <sc-if value="{{tp.more}}" hint-placeholder-val="{{false}}"><span class="lab" style="display: block; color: #6B5F55; padding: 2px 0">+ {{tp.moreN}} earlier lines</span></sc-if>
+      <sc-for list="{{tp.items}}" as="e" hint-placeholder-count="4">
+        <div class="rise" style="display: flex; gap: 12px; padding: 5px 0; border-top: 1px solid #C9BFAE; margin-top: 2px">
+          <span class="sw {{e.cls}}" style="margin-top: 3px"></span>
+          <span style="flex: 1; min-width: 0"><span class="lab" style="display: block; color: #6B5F55">{{e.head}}</span><span style="display: block; font-size: 15.5px; line-height: 1.2; font-weight: {{e.fw}}; color: {{e.ink}}">{{e.text}}</span></span>
+        </div>
+      </sc-for>
+      <div style="position: absolute; left: 0; top: 268px; width: 600px; height: 46px; box-sizing: border-box; border: 2px dashed #2A211B; padding: 4px 12px; background: #F2EEE4">
+        <span class="lab" style="display: block; color: #6B5F55">MADISON’S NOTES · sealed</span>
+        <span style="display: block; font-size: 15px; line-height: 1.2">Published 1840. You can’t read them; you only heard what was said aloud.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOWER RIGHT: the open matter (Massachusetts), then the delegation or hindsight -->
+  <div style="position: absolute; left: 680px; top: 506px; width: 720px; height: 314px">
+    <span class="lab" style="display: flex; justify-content: space-between; align-items: center; height: 20px"><span>OPEN MATTER · MASSACHUSETTS · 16 JULY</span><span style="letter-spacing: .04em; color: #6B5F55">{{mx.note}}</span></span>
+    <div style="position: relative; height: {{ma.h}}px; border-top: 1px solid #C9BFAE; margin-top: 2px">
+      <span style="position: absolute; left: 0; top: 8px; width: 286px; font-size: 17px; font-weight: 700; line-height: 1.15">{{ma.title}}</span>
+      <span style="position: absolute; left: 0; top: 28px; width: 286px; font-size: 14px; line-height: 1.2; color: #6B5F55">{{ma.sub}}</span>
+      <div role="timer" aria-label="{{ma.aria}}" class="mono {{ma.cls}}" style="position: absolute; left: 300px; top: 7px; width: 196px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; letter-spacing: .02em; animation: {{ma.anim}}">{{ma.box}}</div>
+      <div style="position: absolute; left: 300px; top: 52px; width: 196px; height: 6px; box-sizing: border-box; border: 1px solid #2A211B; opacity: {{ma.barOp}}"><div style="height: 4px; width: {{ma.bar}}%; background: #B8321F; transition: width .9s ease"></div></div>
+      <sc-if value="{{ma.hasActs}}" hint-placeholder-val="{{false}}">
+        <div style="position: absolute; left: 512px; top: 6px; width: 208px; display: flex; gap: 6px">
+          <button type="button" class="btn verm" onClick="{{ma.aye}}" style="flex: 1; min-height: 42px; padding: 0 4px">Vote aye</button>
+          <button type="button" class="btn verm" onClick="{{ma.no}}" style="flex: 1; min-height: 42px; padding: 0 4px">Vote no</button>
+        </div>
+      </sc-if>
+      <span style="position: absolute; left: 512px; top: {{ma.stTop}}px; width: 208px; font-size: 14px; line-height: 1.2; color: {{ma.stInk}}">{{ma.status}}</span>
+    </div>
+
+    <sc-if value="{{dl.on}}" hint-placeholder-val="{{true}}">
+      <div style="position: absolute; left: 0; top: {{dl.top}}px; width: 720px">
+        <div style="display: flex; gap: 22px; border-top: 1px solid #C9BFAE; padding-top: 6px">
+          <div style="width: 300px">
+            <span class="lab" style="display: block; height: 18px">YOUR DELEGATION · authored</span>
+            <sc-for list="{{dl.people}}" as="p" hint-placeholder-count="4">
+              <div style="display: flex; align-items: center; gap: 8px; height: 26px; border-top: 1px solid #DDD5C6">
+                <span style="flex: 1; font-size: 16px; font-weight: {{p.fw}}; color: {{p.ink}}">{{p.n}}</span>
+                <span class="mono" style="font-size: 12px; font-weight: 700; padding: 1px 6px; color: {{p.ink}}; border: 2px {{p.bd}} {{p.ink}}">{{p.v}}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="flex: 1">
+            <span class="lab" style="display: block; height: 18px">THE ARITHMETIC · computed</span>
+            <sc-for list="{{dl.sums}}" as="q" hint-placeholder-count="3">
+              <div style="display: flex; gap: 8px; align-items: flex-start; padding: 4px 6px; margin-bottom: 4px; border: 2px {{q.bd}} {{q.ink}}; color: {{q.ink}}">
+                <span class="sw k-com" style="margin-top: 3px"></span>
+                <span style="font-size: 15px; line-height: 1.2"><strong>{{q.k}}</strong> {{q.t}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="font-size: 13.5px; line-height: 1.25; color: #6B5F55; margin-top: 2px">Rule (authored): a state’s vote is what most of its delegates present say; an even split is “divided” and counts for nothing; a tie in the house fails. [verify the Convention’s rule]</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{hs.on}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: 0; top: {{hs.top}}px; width: 720px; display: flex; gap: 18px; border-top: 1px solid #C9BFAE; padding-top: 6px">
+        <div style="width: 290px">
+          <span class="lab" style="display: flex; align-items: center; gap: 8px; height: 18px"><span class="sw k-obs"></span>RECORDED, 16 JULY · hindsight</span>
+          <span class="fell" style="display: block; font-size: 30px; line-height: 1.1; margin-top: 2px">{{hs.recHead}}</span>
+          <span style="display: block; font-size: 15px; line-height: 1.25; margin-top: 2px">{{hs.recText}}</span>
+          <span style="display: block; font-size: 13px; line-height: 1.2; color: #6B5F55; margin-top: 4px">{{hs.others}}</span>
+        </div>
+        <div style="flex: 1; box-sizing: border-box; border: 3px double #B8321F; color: #B8321F; padding: 6px 12px 6px; position: relative">
+          <span class="mono" style="position: absolute; left: 10px; top: -10px; padding: 0 6px; background: #F2EEE4; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase">{{hs.stamp}}</span>
+          <span class="fell" style="display: block; font-size: 24px; line-height: 1.1; margin-top: 4px">{{hs.brHead}}</span>
+          <span style="display: block; font-size: 15px; line-height: 1.25; margin-top: 2px">{{hs.brText}}</span>
+          <span style="display: block; font-size: 15px; line-height: 1.25; margin-top: 3px; font-weight: 700">{{hs.decided}}</span>
+          <span style="display: block; font-size: 13px; line-height: 1.2; margin-top: 4px">{{hs.assume}}</span>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- HOW DO WE KNOW -->
+  <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 32px; top: 506px; width: 616px; height: 314px; box-sizing: border-box; padding: 8px 18px; background: #F2EEE4; border: 2px solid #2A211B; z-index: 7">
+      <span class="lab" style="display: block; margin-bottom: 2px">HOW DO WE KNOW?</span>
+      <sc-for list="{{legend}}" as="l" hint-placeholder-count="7">
+        <div style="display: flex; gap: 12px; padding: 4px 0; border-top: 1px solid #C9BFAE">
+          <span class="sw {{l.cls}}" style="margin-top: 3px; width: 22px; opacity: {{l.op}}"></span>
+          <span style="font-size: 14px; line-height: 1.2"><strong>{{l.k}}</strong> {{l.t}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <!-- bottom: thesis, the transfer tag, then the two quiet lines -->
+  <div style="position: absolute; left: 40px; top: 823px; width: 1360px; font-size: 15px; line-height: 1.25; font-weight: 600; white-space: nowrap">ENTER, in 1787, means one vote with the clock running: your silence is recorded as absence, and the arithmetic still runs without you.</div>
+  <div style="position: absolute; left: 40px; top: 843px; width: 1360px; display: flex; align-items: center; gap: 12px; white-space: nowrap">
+    <span class="lab" style="padding: 1px 8px; border: 2px solid #2A211B; font-weight: 700">Same model as: Boston · E3</span>
+    <span style="font-size: 14px; line-height: 1.2; color: #6B5F55">Changed: payroll became a vote, five matters became one roll call, the World clock became the clerk’s. Unchanged: the seized handle, the sealed future, the ledger, NO ACT. Lost: persistence.</span>
+  </div>
+  <div class="lab" style="position: absolute; left: 40px; top: 866px; width: 700px; font-size: 11px; line-height: 1.35; color: #6B5F55; text-transform: none; letter-spacing: .02em">COMMERCIAL LENS · Hypothesis: history courses pay for sealed seats (the vote before you know how it came out); observing the record stays free.</div>
+  <div class="lab" style="position: absolute; left: 780px; top: 866px; width: 620px; text-align: right; font-size: 11px; line-height: 1.35; color: #6B5F55; text-transform: none; letter-spacing: .02em">PROTOTYPE · DESIGN PROPOSAL · data: the 16 July vote as given [verify]; roll order, 10:00 start, pacing, colleagues’ stances and the delegation rule are authored</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+const H = 3600000, DAY = 86400000;
+const X0 = 40, XW = 1360, ND = 115;
+const X = (d) => X0 + d * XW / ND;
+const NOW_D = 52 + 10 / 24;
+const SNAP = 1.2;
+const MON = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const DOWN = ['FRI', 'SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU'];
+const BASE = Date.UTC(1787, 4, 25);
+const dateOf = (d) => { const t = new Date(BASE + Math.floor(d) * DAY); return { n: t.getUTCDate(), m: MON[t.getUTCMonth()], w: DOWN[Math.floor(d) % 7] }; };
+const T = { seal: 700, ro: 900, rows: 1500, clock: 1900, line: 2600, end: 3200 };
+const LEAD = 8000, SLOT = 5000, WIN = 25000, POLL = 4000, MA_CALL = LEAD + SLOT;
+const p2 = (n) => (n < 10 ? '0' : '') + n;
+const clockStr = (ms) => { const a = 10 * H + ms; return p2(Math.floor(a / H) % 24) + ':' + p2(Math.floor(a / 60000) % 60) + ':' + p2(Math.floor(a / 1000) % 60); };
+const mmss = (ms) => { const S = Math.max(0, Math.ceil(ms / 1000)); return p2(Math.floor(S / 60)) + ':' + p2(S % 60); };
+const VERM = '#B8321F', INK = '#2A211B';
+const ORDER = [
+  { id: 'NH', name: 'New Hampshire', rec: 'absent', sub: 'not yet arrived' },
+  { id: 'MA', name: 'Massachusetts', rec: 'you' },
+  { id: 'RI', name: 'Rhode Island', rec: 'absent', sub: 'no delegation' },
+  { id: 'CT', name: 'Connecticut', rec: 'aye' },
+  { id: 'NY', name: 'New York', rec: 'absent', sub: 'left 10 Jul' },
+  { id: 'NJ', name: 'New Jersey', rec: 'aye' },
+  { id: 'PA', name: 'Pennsylvania', rec: 'no' },
+  { id: 'DE', name: 'Delaware', rec: 'aye' },
+  { id: 'MD', name: 'Maryland', rec: 'aye' },
+  { id: 'VA', name: 'Virginia', rec: 'no' },
+  { id: 'NC', name: 'North Carolina', rec: 'aye' },
+  { id: 'SC', name: 'South Carolina', rec: 'no' },
+  { id: 'GA', name: 'Georgia', rec: 'no' }
+];
+const maCalc = (strong) => {
+  const d = [['Gerry', 'aye'], ['King', 'no'], ['Gorham', 'no']];
+  if (strong) d.push(['Strong', strong]);
+  const a = d.filter((x) => x[1] === 'aye').length, n = d.filter((x) => x[1] === 'no').length;
+  return { a, n, present: d.length, res: a > n ? 'aye' : n > a ? 'no' : 'divided' };
+};
+const tallyOf = (res) => { let ayes = 0, noes = 0, div = 0; Object.keys(res).forEach((k) => { if (res[k] === 'aye') ayes++; else if (res[k] === 'no') noes++; else if (res[k] === 'divided') div++; }); return { ayes, noes, div, carried: ayes > noes, tie: ayes === noes }; };
+const recordedResults = (strong) => { const r = {}; ORDER.forEach((o) => { r[o.id] = o.id === 'MA' ? maCalc(strong).res : o.rec; }); return r; };
+const verdict = (t) => (t.carried ? 'carried' : t.tie ? 'fails: a tie' : 'fails');
+const tallyTxt = (t) => 'AYE ' + t.ayes + ' · NO ' + t.noes + ' · DIVIDED ' + t.div;
+const sumLine = (strong) => { const c = maCalc(strong); return (strong ? c.a + '–' + c.n : c.a + '–' + c.n + ' without Strong') + ' → ' + (c.res === 'divided' ? 'divided: counts for nothing' : 'Massachusetts votes ' + c.res); };
+const KEYD = {
+  0: ['The Convention opens', 'A quorum of states is present and Washington is chosen to preside. [verify]'],
+  4: ['A plan and a rule', 'Randolph lays out the Virginia Plan; the secrecy rule is adopted: nothing said here leaves the room. [verify]'],
+  21: ['A rival plan', 'Paterson presents the New Jersey Plan, which keeps one vote for each state. [verify]'],
+  46: ['New York can no longer vote', 'Yates and Lansing have left; one delegate cannot cast a state’s vote. [verify]'],
+  52: ['Equal votes in the Senate', 'The question is put to the states, north to south.'],
+  115: ['The Constitution is signed', 'Monday 17 September. The Convention’s work is done.']
+};
+const mkItem = (e) => ({
+  head: clockStr(e.at) + (e.k === 'lapse' ? ' · NO ACT' + (e.away ? ' · against the seat, while away' : '') : e.k === 'consq' ? ' · COMPUTED FROM A RULE' : e.k === 'room' ? ' · THE CLERK' : ''),
+  text: e.text,
+  cls: e.k === 'lapse' ? (e.away ? 'k-absv' : 'k-abs') : e.k === 'consq' ? 'k-com' : e.k === 'room' ? 'k-obs' : e.k === 'act' ? 'k-recv' : 'k-rec',
+  fw: e.k === 'lapse' ? 400 : 600,
+  ink: e.k === 'act' || (e.k === 'lapse' && e.away) ? VERM : INK
+});
+class Component extends DCLogic {
+  componentDidMount() { this.last = Date.now(); this.timer = setInterval(() => this.tick(), 100); }
+  componentWillUnmount() { clearInterval(this.timer); }
+  tick() {
+    const s = this.state || {};
+    const now = Date.now();
+    const dt = Math.min(500, now - (this.last || now));
+    this.last = now;
+    const phase = s.phase || 'observe';
+    const patch = {};
+    let enterMs = s.enterMs || 0;
+    let ph = phase;
+    if (phase === 'entering') {
+      enterMs += dt; patch.enterMs = enterMs;
+      if (enterMs >= T.end) { ph = 'occupy'; patch.phase = 'occupy'; patch.enterMs = T.end; }
+    }
+    const running = (ph === 'occupy' || ph === 'left' || (ph === 'entering' && enterMs >= T.clock)) && !s.ended;
+    if (!running) { if (Object.keys(patch).length) this.setState(patch); return; }
+    const rollMs = (s.rollMs || 0) + dt * (s.speed || 1);
+    let idx = s.idx == null ? -1 : s.idx;
+    let slot = s.slotStart || 0;
+    const results = { ...(s.results || {}) };
+    const log = (s.log || []).slice();
+    const flags = { ...(s.flags || {}) };
+    const notes = [];
+    const away = ph === 'left';
+    const vote = s.vote || null;
+    const enter = (k, at) => {
+      const st = ORDER[k];
+      if (st.id === 'MA') { log.push({ at: at, k: 'room', text: 'Massachusetts is called: Gerry, King, Gorham, Strong present. The clerk waits.' }); notes.push('Massachusetts is called. You have twenty-five seconds to answer.'); }
+      else results[st.id] = st.rec;
+    };
+    let guard = 0;
+    while (guard++ < 40) {
+      if (idx === -1) { if (rollMs < LEAD) break; idx = 0; slot = LEAD; enter(0, slot); continue; }
+      if (idx >= 13) break;
+      const st = ORDER[idx];
+      const isMA = st.id === 'MA';
+      const end = isMA ? (vote ? (s.voteAt || 0) + POLL : slot + WIN) : slot + SLOT;
+      if (isMA && !vote && !flags.ten && rollMs >= slot + WIN - 10000) { flags.ten = true; notes.push('Ten seconds left to answer for Massachusetts.'); }
+      if (rollMs < end) break;
+      if (isMA) {
+        const c = maCalc(vote);
+        results.MA = c.res;
+        if (!vote) {
+          log.push({ at: end, k: 'lapse', away: away, text: away ? 'The seat was empty when Massachusetts was called; no vote.' : 'Strong did not vote when Massachusetts was called.' });
+          notes.push('No vote. No act recorded for Massachusetts.');
+        }
+        log.push({ at: end, k: 'consq', text: 'Massachusetts: ' + sumLine(vote) + '.' });
+      }
+      idx++; slot = end;
+      if (idx < 13) enter(idx, slot);
+    }
+    patch.rollMs = rollMs; patch.idx = idx; patch.slotStart = slot; patch.results = results; patch.flags = flags;
+    if (idx >= 13) {
+      const t = tallyOf(results);
+      log.push({ at: slot, k: 'consq', text: 'Roll call ended: aye ' + t.ayes + ', no ' + t.noes + (t.div ? ', divided ' + t.div : '') + ' → ' + (t.carried ? 'the motion carries.' : t.tie ? 'a tie fails.' : 'the motion fails.') });
+      patch.ended = true; patch.rollMs = slot;
+      patch.history = (s.history || []).concat([{ vote: vote || 'silent', ma: results.MA, t: t }]);
+      notes.push('The roll call has ended. The motion ' + (t.carried ? 'carries' : 'fails') + '.');
+    }
+    patch.log = log;
+    if (notes.length) patch.ann = { n: ((s.ann && s.ann.n) || 0) + 1, t: notes.join(' ') };
+    this.setState(patch);
+  }
+  act(code) {
+    const s = this.state || {};
+    if ((s.phase || 'observe') !== 'occupy' || s.ended || s.vote || s.idx !== 1) return;
+    const w = s.rollMs || 0;
+    const log = (s.log || []).slice();
+    log.push({ at: w, k: 'act', text: 'Strong: ' + code + '.' });
+    this.setState({ vote: code, voteAt: w, log: log });
+  }
+  startClock() {
+    const st = this.state || {};
+    const ph = st.phase || 'observe';
+    if ((ph !== 'observe' && ph !== 'left') || (ph === 'left' && !st.ended)) return;
+    this.last = Date.now();
+    this.setState({ phase: 'entering', enterMs: 0, rollMs: 0, idx: -1, slotStart: 0, results: {}, vote: null, voteAt: 0, ended: false, flags: {}, leftAt: 0, drag: false,
+      log: [{ at: 0, k: 'seat', text: 'Took the seat of Caleb Strong, Massachusetts. The clock started at 10:00 [authored].' }] });
+  }
+  renderVals() {
+    const s = this.state || {};
+    const phase = s.phase || 'observe';
+    const enterMs = s.enterMs || 0;
+    const rollMs = s.rollMs || 0;
+    const speed = s.speed || 1;
+    const how = !!s.how;
+    const scrub = s.scrub == null ? 115 : s.scrub;
+    const log = s.log || [];
+    const idx = s.idx == null ? -1 : s.idx;
+    const results = s.results || {};
+    const vote = s.vote || null;
+    const ended = !!s.ended;
+    const history = s.history || [];
+    const leftAt = s.leftAt || 0;
+    const ann = s.ann || { t: '' };
+    const entering = phase === 'entering', inSeat = phase === 'occupy', away = phase === 'left';
+    const taken = entering || inSeat;
+    const sealed = inSeat || away || (entering && enterMs >= T.seal);
+    const live = inSeat || away || (entering && enterMs >= T.rows);
+    const clockOn = inSeat || (entering && enterMs >= T.clock);
+    const lineOn = inSeat || (entering && enterMs >= T.line);
+    const nowD = NOW_D + rollMs / DAY;
+    const nowX = X(nowD);
+    const canRetake = away && ended;
+    const near = (!taken && !(away && !ended)) && Math.abs(scrub - nowD) <= SNAP;
+    const armed = near && !!s.drag;
+    const dNow = dateOf(NOW_D);
+
+    // ---- mode pill, hero
+    const mode = inSeat ? { t: 'In the seat · Massachusetts delegate', bg: VERM, fg: '#F2EEE4', bd: 'solid', bc: VERM }
+      : entering ? { t: 'Taking the seat…', bg: VERM, fg: '#F2EEE4', bd: 'solid', bc: VERM }
+      : away ? { t: 'Left the seat · the Convention goes on', bg: 'transparent', fg: INK, bd: 'dashed', bc: INK }
+      : { t: 'Observer', bg: 'transparent', fg: INK, bd: 'solid', bc: INK };
+    const k = entering ? Math.min(1, enterMs / 900) : 0;
+    const dView = entering ? scrub + (nowD - scrub) * k : taken ? nowD : scrub;
+    const dt = dateOf(inSeat ? nowD : dView);
+    let caption, help, kind;
+    const ledgerOn = inSeat || (entering && enterMs >= T.seal);
+    if (inSeat || (entering && lineOn)) { caption = 'Occupant time: one direction, one speed, and it doesn’t wait.'; kind = 'OCCUPANT TIME · LOCKED AT NOW'; help = ''; }
+    else if (entering) { caption = enterMs < T.seal ? 'The handle is taken from you.' : enterMs < T.rows ? 'What comes after seals. The past locks.' : 'The clerk is about to call the roll.'; kind = 'TAKING THE SEAT'; help = 'Monday 16 July, the morning. You are Caleb Strong, delegate for Massachusetts.'; }
+    else if (away) { caption = 'The Convention goes on without you: 17 July …'; kind = 'OBSERVER TIME · SEAT LEFT'; help = ended ? 'Your clock stopped at ' + clockStr(leftAt) + '. Hindsight is open for one thing only: the vote you were in.' : 'The roll is still being called. What it records while the seat is empty is recorded against the seat.'; }
+    else { caption = 'Observer time: free, reversible, weightless.'; kind = 'OBSERVER TIME'; help = 'Drag anywhere from 25 May to 17 September. The whole record is open, including how it came out.'; }
+    const hero = { d: String(dt.n), m: dt.m, dow: dt.w, caption, help, kind, helpOn: !!help && !ledgerOn, ledgerOn };
+
+    // ---- corner clocks
+    const showClock = clockOn || away;
+    const clkMs = away ? leftAt : rollMs;
+    const clk = {
+      h: away ? 64 : 104,
+      bg: clockOn && !away ? INK : 'transparent',
+      fg: clockOn && !away ? '#F2EEE4' : '#6B5F55',
+      bd: clockOn && !away ? 'solid' : 'dashed',
+      label: away ? 'YOUR CLOCK · STOPPED' : clockOn ? (ended ? 'YOUR CLOCK · ROLL ENDED' : 'YOUR CLOCK · MON 16 JUL') : 'NO CLOCK FOR OBSERVERS',
+      fs: away ? 27 : 50,
+      op: showClock ? 1 : 0.5,
+      txt: showClock ? clockStr(clkMs) : '––:––:––'
+    };
+    const wclk = { op: away ? 1 : 0, state: ended ? 'ended' : 'running', txt: clockStr(rollMs) };
+
+    // ---- timeline
+    const ticks = [];
+    for (let i = 0; i <= ND; i++) { const x = X(i).toFixed(1); ticks.push('M ' + x + ' 58 L ' + x + ' ' + (i === 0 || i === 7 || i === 37 || i === 68 || i === 99 ? 48 : 54)); }
+    const months = [['MAY', 0], ['JUN', 7], ['JUL', 37], ['AUG', 68], ['SEP', 99]].map((m) => ({ n: m[0], x: Math.round(X(m[1])) }));
+    const pastTag = [how ? 'OBSERVED' : '', (live || away) ? 'READ-ONLY · said aloud so far' : ''].filter(Boolean).join(' · ');
+    const futTag = sealed ? (how ? 'SEALED · not modeled, not simulated' : 'SEALED') : '';
+    const hx = taken ? nowD : scrub;
+    const tl = {
+      ticks: ticks.join(' '), months,
+      pastW: (nowX - 40).toFixed(1), nowX: nowX.toFixed(1), futW: (1400 - nowX).toFixed(1),
+      obsOp: sealed ? 0 : 1, sealOp: sealed ? 1 : 0, msgOp: sealed && !(away && ended) ? 1 : 0,
+      m1: (X(4) - 4).toFixed(1), m2: (X(21) - 4).toFixed(1), m3: (X(46) - 4).toFixed(1), voteX: (nowX - 4).toFixed(1),
+      pastTag, hasPastTag: !!pastTag, futTag, hasFutTag: !!futTag, futTagX: Math.round(nowX + 12),
+      nowBtnX: Math.round(nowX + 8), noteX: Math.round(nowX + 8 + ((!taken && !(away && !ended)) ? 296 : 0)),
+      sepTxt: sealed ? 'sealed' : 'The Constitution is signed'
+    };
+    const pillW = taken ? 232 : armed ? 250 : 130;
+    const nowLbl = 'NOW · 16 JUL · ' + clockStr(rollMs);
+    const scrubTxt = dateOf(scrub).w + ' ' + dateOf(scrub).n + ' ' + dateOf(scrub).m;
+    const hd = {
+      x: X(hx).toFixed(1), pillW,
+      pillX: Math.round(Math.max(40, Math.min(1400 - pillW, X(hx) - pillW / 2))),
+      bg: taken || armed ? VERM : INK, lock: taken,
+      text: taken ? nowLbl : armed ? 'RELEASE: START MY CLOCK' : scrubTxt,
+      aria: taken ? nowLbl : near ? scrubTxt + '. At NOW. Release, or press Enter, to start your clock.' : scrubTxt
+    };
+    const ghost = { on: !taken && !near && !(away && !ended), x: Math.round(nowX - 75) };
+
+    // ---- the roll strip
+    const held = entering || away || inSeat ? true : Math.floor(scrub) >= 52;
+    const asRecorded = !live && !away && !inSeat;
+    const recAll = recordedResults('aye');
+    const tRes = tallyOf(live ? results : recAll);
+    const cols = ORDER.map((o, i) => {
+      const mine = o.id === 'MA';
+      const c = { ab: o.id, name: o.name, box: '—', cls: 'k-unk', sub: 'sealed', top: '3px solid transparent', tint: 'transparent', ink: mine && (live || taken) ? VERM : INK };
+      let r = null;
+      if (asRecorded) { if (held) r = recAll[o.id]; else { c.sub = 'not yet held'; } }
+      else if (results[o.id]) r = results[o.id];
+      if (r) {
+        if (r === 'absent') { c.box = 'ABSENT'; c.cls = 'k-abs'; c.sub = o.sub; }
+        else {
+          c.box = r === 'divided' ? 'DIVIDED' : r.toUpperCase();
+          c.cls = mine && !asRecorded ? (vote ? 'k-recv' : 'k-absv') : 'k-obs';
+          c.sub = mine ? (asRecorded ? 'Strong aye · 2–2' : 'Strong ' + (vote || 'silent') + ' · ' + maCalc(vote).a + '–' + maCalc(vote).n) : 'recorded';
+        }
+      } else if (!asRecorded) {
+        if (i === idx && mine && !vote) { c.box = 'CALLED'; c.cls = 'k-open'; c.sub = 'awaiting Strong'; }
+        else if (i === idx && mine && vote) { c.box = vote.toUpperCase(); c.cls = 'k-open'; c.sub = 'polling the delegation'; }
+        else if (i === idx + 1) c.sub = idx === -1 && i === 0 ? 'calls in ' + mmss(LEAD - rollMs) : (i === 1 && idx === 0 ? 'calls in ' + mmss(MA_CALL - rollMs) : 'next');
+      }
+      if (i === idx && !ended && !asRecorded) { c.top = '3px solid ' + (mine ? VERM : INK); c.tint = 'rgba(42,33,27,.07)'; }
+      return c;
+    });
+    const roll = { cols, tally: !held && asRecorded ? 'NOT YET HELD' : (asRecorded ? 'AS RECORDED · ' : ended ? 'FINAL · ' : 'SO FAR · ') + tallyTxt(tRes) + (asRecorded || ended ? ' → ' + verdict(tRes).toUpperCase() : '') };
+
+    // ---- observer readout
+    const dR = entering ? scrub + (nowD - scrub) * k : scrub;
+    const iR = Math.floor(dR), dtR = dateOf(dR);
+    const sun = dtR.w === 'SUN';
+    const key = KEYD[iR];
+    let rows = [{ k: 'IN THE ROOM', v: key ? key[0] : sun ? 'No session' : 'In session', n: key ? key[1] : sun ? '[verify]' : 'Doors closed. This day’s record is not reproduced here.' }];
+    if (!sun) rows.push({ k: 'MADISON’S NOTES', v: '1840', n: 'kept each day; published 53 years later' });
+    let calc = '', text;
+    if (away && iR > 52) { rows = [{ k: 'IN THE ROOM', v: 'Sealed', n: 'The Convention goes on without you. Hindsight covers only the vote you were in.' }]; text = ''; }
+    else if (iR >= 52) {
+      const rt = tallyOf(recAll), c = maCalc('aye');
+      if (away && !ended) rows.push({ k: 'THE 16 JULY VOTE', v: 'SEALED', n: 'the roll is still being called' });
+      else rows.push({ k: 'THE 16 JULY VOTE', v: verdict(rt).toUpperCase() + ' ' + rt.ayes + '–' + rt.noes, n: 'Massachusetts divided · New York absent' });
+      if (iR === 52 && !away) rows.push({ k: 'HISTORIANS’ READINGS', v: '[attributed]', n: 'Read as the hinge of the Great Compromise. Excerpts not reproduced [authored, verify].' });
+      calc = 'Computed from the delegation: Massachusetts, Gerry aye, King no, Gorham no, Strong aye → ' + c.a + '–' + c.n + ', ' + c.res + '. Aye 5 (CT NJ DE MD NC), no 4 (PA VA SC GA) → ' + rt.ayes + ' > ' + rt.noes + ', carried.';
+      text = iR === 52 ? 'The morning of the vote. The seat is open: Massachusetts is called second.' : 'This is how it came out. Delegates on 16 July did not know.';
+    } else text = 'Delegates knew only what had been said in the room so far. Nothing here is a forecast; this part is behind them.';
+    const rd = { title: dtR.w + ' ' + dtR.n + ' ' + dtR.m + ' 1787', rows: away ? rows.filter((r) => r.k !== 'MADISON’S NOTES') : rows, hasCalc: !!calc && !away, calc, text: away ? '' : text, hasText: !away, pad: away ? 4 : 8 };
+    const roOp = live && !away ? 0 : 1;
+    const ro = { op: roOp, pe: roOp ? 'auto' : 'none' };
+
+    // ---- record tape, away record
+    const shown = log.filter((e) => !(away && e.away)).slice(-5);
+    const tp = { op: live && !away ? 1 : 0, items: shown.map(mkItem), more: log.length > 5, moreN: log.length - 5 };
+    let leaveLine = null;
+    for (let i = log.length - 1; i >= 0; i--) { if (log[i].k === 'left') { leaveLine = log[i]; break; } }
+    const awayLines = log.filter((e) => e.at >= leftAt && e.k !== 'left' && (e.away || e.k === 'consq' || e.k === 'room'));
+    const awayView = { stopped: clockStr(leftAt), now: clockStr(rollMs), items: (leaveLine ? [leaveLine] : []).concat(awayLines.filter((e) => e.k === 'lapse'), awayLines.filter((e) => e.k !== 'lapse').slice(-1)).map(mkItem) };
+
+    // ---- the open matter: Massachusetts
+    const maC = maCalc(vote);
+    const ma = { h: ended ? 62 : 96, title: 'Massachusetts is called', sub: 'Four delegates present: Gerry, King, Gorham, and you.', box: '', cls: 'k-unk', anim: 'none', bar: 0, barOp: 0, hasActs: false, aye: () => this.act('aye'), no: () => this.act('no'), status: '', stTop: 12, stInk: '#6B5F55', aria: 'Massachusetts' };
+    const inWin = idx === 1 && !vote && !ended;
+    const remain = WIN - (rollMs - (s.slotStart || 0));
+    if (asRecorded) {
+      if (held) { ma.box = 'DIVIDED'; ma.cls = 'k-obs'; ma.status = 'Recorded: Strong voted aye. ' + maCalc('aye').a + '–' + maCalc('aye').n + ', divided (computed).'; ma.sub = 'Four delegates present: Gerry, King, Gorham, Strong.'; ma.aria = 'Massachusetts: recorded divided'; }
+      else { ma.box = 'NOT YET HELD'; ma.cls = 'k-unk'; ma.status = 'read only · the vote has not happened on this date'; ma.aria = 'Massachusetts: not yet held'; }
+      ma.h = 62;
+    } else if (idx < 1) {
+      ma.box = 'CALL IN ' + mmss(MA_CALL - rollMs); ma.cls = 'k-aut'; ma.status = away ? 'running · sealed until you return' : 'The clerk reaches Massachusetts in ' + mmss(MA_CALL - rollMs) + '. Sealed until then.'; ma.aria = 'Massachusetts is called in ' + mmss(MA_CALL - rollMs);
+      if (away) { ma.cls = 'k-unk'; ma.box = 'SEALED'; }
+    } else if (inWin) {
+      if (away) { ma.box = 'SEALED'; ma.cls = 'k-unk'; ma.status = 'running · sealed until you return'; ma.aria = 'Massachusetts: running, sealed until you return'; }
+      else {
+        ma.box = 'ANSWER ' + mmss(remain); ma.cls = 'k-recv'; ma.bar = Math.max(0, Math.round(remain / WIN * 100)); ma.barOp = 1; ma.hasActs = inSeat; ma.aria = 'Massachusetts: ' + mmss(remain) + ' left to answer';
+        if (remain < 10000) ma.anim = 'rcblink 1s ease-in-out infinite';
+        ma.status = '';
+      }
+    } else if (vote && idx === 1) {
+      ma.box = vote.toUpperCase(); ma.cls = 'k-recv'; ma.status = 'Strong said ' + vote + ' at ' + clockStr(s.voteAt || 0) + '. The clerk polls the delegation.'; ma.aria = 'Massachusetts: Strong said ' + vote;
+    } else {
+      const res = results.MA;
+      if (vote) { ma.box = res === 'divided' ? 'DIVIDED' : res.toUpperCase(); ma.cls = 'k-recv'; ma.status = 'Strong said ' + vote + '. ' + maC.a + '–' + maC.n + ' → ' + (res === 'divided' ? 'divided; counts for nothing.' : 'Massachusetts votes ' + res + '.'); }
+      else { ma.box = 'NO ACT'; ma.cls = away ? 'k-absv' : 'k-abs'; ma.status = (away ? 'Recorded against the seat. ' : 'Recorded as absence, not as a choice. ') + maC.a + '–' + maC.n + ' without Strong → Massachusetts votes no.'; ma.stInk = away ? VERM : INK; }
+      ma.aria = 'Massachusetts: ' + (vote ? 'voted, ' + ma.box.toLowerCase() : 'no act recorded');
+      if (ended) ma.sub = 'Roll ended at ' + clockStr(rollMs) + '.';
+    }
+    if (!ma.hasActs && ma.status.length > 70) ma.stTop = 8;
+
+    // ---- delegation arithmetic, then hindsight
+    const SEAT = taken || away ? VERM : INK;
+    const people = [{ n: 'Gerry', v: 'aye', fw: 400, ink: INK, bd: 'solid' }, { n: 'King', v: 'no', fw: 400, ink: INK, bd: 'solid' }, { n: 'Gorham', v: 'no', fw: 400, ink: INK, bd: 'solid' },
+      { n: asRecorded ? 'Strong' : 'Strong · you', v: asRecorded ? (held ? 'aye' : '—') : (vote || (idx > 1 ? 'silent' : '—')), fw: 700, ink: SEAT, bd: vote || (asRecorded && held) ? 'solid' : 'dashed' }];
+    const chosen = asRecorded ? (held ? 'aye' : null) : (vote || (idx > 1 ? 'none' : null));
+    const sums = [['Aye', 'aye'], ['No', 'no'], ['Silent', null]].map((q) => {
+      const on = chosen === (q[1] || 'none');
+      return { k: q[0] + ':', t: sumLine(q[1]) + '.', ink: on ? SEAT : INK, bd: on ? 'solid' : 'dotted' };
+    });
+    const dl = { on: !ended && !away && (live || asRecorded) && !(asRecorded && !held), top: ma.h + 28, people, sums };
+    // hindsight
+    const rec = tallyOf(recAll);
+    const alt = (v) => tallyOf(recordedResults(v));
+    const br = tallyOf(results);
+    const last = history[history.length - 1];
+    const bv = vote || 'silent';
+    const bc = maCalc(vote);
+    const same = bv === 'aye';
+    const decidedTxt = bv === 'silent'
+      ? 'Your absence decided it. Had Strong voted aye, Massachusetts would have divided 2–2 and the motion carried ' + alt('aye').ayes + '–' + alt('aye').noes + '. Silence left it 1–2: Massachusetts voted no, and the motion ' + verdict(br) + '.'
+      : bv === 'no'
+        ? 'Your no decided it. An aye divides Massachusetts 2–2 and carries ' + alt('aye').ayes + '–' + alt('aye').noes + '; your no made it 1–3, and the motion ' + verdict(br) + '.'
+        : 'Your aye decided it. Without it Massachusetts is 1–2 and votes no: ' + alt(null).ayes + '–' + alt(null).noes + ', a tie, and the motion fails.';
+    const hs = {
+      on: ended && last != null, top: ma.h + 28,
+      recHead: verdict(rec).charAt(0).toUpperCase() + verdict(rec).slice(1) + ' ' + rec.ayes + '–' + rec.noes,
+      recText: 'Massachusetts divided (Gerry, Strong aye; King, Gorham no). Aye: CT NJ DE MD NC. No: PA VA SC GA. New York absent.',
+      others: history.length > 1 ? 'Your other branches: ' + history.slice(0, -1).map((h, i) => (i + 1) + ') ' + h.vote + ' → ' + verdict(h.t)).join(' · ') : 'Hindsight is open for this vote only. 17 July onward stays sealed.',
+      stamp: 'Your branch ' + history.length + ' · ' + (same ? 'same as the record' : 'diverged when MA was called'),
+      brHead: verdict(br).charAt(0).toUpperCase() + verdict(br).slice(1) + ' ' + br.ayes + '–' + br.noes,
+      brText: bv === 'silent' ? 'NO ACT: Strong did not vote when Massachusetts was called. It stood ' + bc.a + '\u2060–\u2060' + bc.n + ' → Massachusetts voted no.' : 'Strong voted ' + bv + '. ' + bc.a + '\u2060–\u2060' + bc.n + ' → ' + (bc.res === 'divided' ? 'divided, counts for nothing.' : 'Massachusetts voted no.'),
+      decided: decidedTxt,
+      assume: 'Assumes the other nine delegations vote as recorded. Nothing after this vote is simulated.'
+    };
+    const mx = { note: inSeat ? (ended ? 'roll ended' : 'clock running · ' + (speed === 3 ? '×3 (authored)' : '×1')) : away ? (ended ? 'roll ended' : 'running · sealed until you return') : entering ? 'clock arming…' : 'observers can read every vote; none run on a clock' };
+
+    // ---- legend
+    const legend = [
+      { cls: 'k-obs', op: 1, k: 'OBSERVED', t: 'Reported from outside BOW: the dates and the other delegations’ recorded votes. Source: Madison’s notes, published 1840 [verify against a primary edition].' },
+      { cls: 'k-rec', op: 1, k: 'RECORDED', t: 'Your acts, written into BOW’s own history of this run, in the double rule. Yours only is vermilion.' },
+      { cls: 'k-com', op: 1, k: 'COMPUTED', t: 'Follows from the rules and the state: 1–2, 2–2, 1–3, the running tally, whether the motion carries.' },
+      { cls: 'k-aut', op: 1, k: 'AUTHORED', t: 'Outlined: the roll order, 10:00 start, 5 s per call, 25 s to answer, the delegation rule, colleagues’ stances. [verify the Convention’s rule]' },
+      { cls: 'k-mod', op: 0.35, k: 'MODELED', t: 'Nothing here. What would follow your branch is sealed, not simulated.' },
+      { cls: 'k-unk', op: 1, k: 'SEALED', t: 'Votes not yet called, and everything after 16 July. You find out by living it.' },
+      { cls: 'k-abs', op: 1, k: 'NO ACT', t: 'A recorded absence: Massachusetts was called and nobody answered. It is not logged as a choice.' }
+    ];
+
+    const nowBtnOn = !taken && !(away && !ended);
+    const nowNote = taken ? (inSeat ? 'This mark moves only with the clock.' : 'You are here.') : away ? (ended ? 'The Convention goes on without you. Drag the handle into NOW for a new branch.' : 'The roll is still being called. The seat can be taken again when it ends.') : 'Drag the handle into NOW. Your clock starts when you let go.';
+    const mmM = clockStr(0).slice(0, 5);
+    return {
+      mode, hero, clk, wclk, tl, hd, ghost, rd, ma, dl, hs, mx, tp, legend, how, ro, roll, away: awayView, ann,
+      awayOn: away, skipOn: entering, inSeat, speedOn: clockOn || away,
+      skip: () => { this.setState({ phase: 'occupy', enterMs: T.end }); },
+      leave: () => {
+        const st = this.state || {};
+        const w = st.rollMs || 0;
+        const open = [];
+        if (!st.vote && !(st.results || {}).MA) open.push('Massachusetts’s vote');
+        if (!st.ended) open.push('the roll (' + (13 - Math.max(0, (st.idx == null ? -1 : st.idx) + 1)) + ' states still to call)');
+        const lg = (st.log || []).slice();
+        lg.push({ at: w, k: 'left', text: 'Left the seat · open: ' + (open.length ? open.join(', ') : 'nothing; your vote is already in the roll') });
+        this.setState({ phase: 'left', leftAt: w, scrub: NOW_D + w / DAY, log: lg });
+      },
+      enter: () => this.startClock(),
+      nowBtnOn, nowBtnLabel: away ? 'Take the seat again · new branch' : 'Start my clock at Mon 16 Jul ' + mmM, nowNote,
+      toggleHow: () => this.setState({ how: !((this.state || {}).how) }),
+      howPressed: how ? 'true' : 'false', howBg: how ? INK : '#F2EEE4', howFg: how ? '#F2EEE4' : INK,
+      toggleSpeed: () => this.setState({ speed: ((this.state || {}).speed === 3 ? 1 : 3) }),
+      fastPressed: speed === 3 ? 'true' : 'false', fastBg: speed === 3 ? INK : '#F2EEE4', fastFg: speed === 3 ? '#F2EEE4' : INK,
+      scrubVal: String(hx), scrubOff: taken, scrubPe: taken ? 'none' : 'auto',
+      onScrub: (e) => { const v = parseFloat(e.target.value); const ph = (this.state || {}).phase; if (!isNaN(v) && ph !== 'entering' && ph !== 'occupy') this.setState({ scrub: v }); },
+      onGrab: () => { const ph = (this.state || {}).phase; if (ph !== 'entering' && ph !== 'occupy') this.setState({ drag: true }); },
+      onRelease: () => { const st = this.state || {}; const nd = NOW_D + (st.rollMs || 0) / DAY; const sc = st.scrub == null ? 115 : st.scrub; if (st.drag) this.setState({ drag: false }); if (Math.abs(sc - nd) <= SNAP) this.startClock(); },
+      onScrubKey: (e) => { if (e.key === 'Enter') { const st = this.state || {}; const nd = NOW_D + (st.rollMs || 0) / DAY; const sc = st.scrub == null ? 115 : st.scrub; if (Math.abs(sc - nd) <= SNAP) this.startClock(); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Handshake</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#D3D6D8;color:#111;font-family:'IBM Plex Sans',sans-serif}
+.dom-nba,.dom-sup,.dom-cre{--ink:#111;--bg:#D3D6D8;--acc:#111;--mid:#9AA0A4}
+.dom-nba{--bgA:#FFFFFF;--inkA:#1B2A22;--accA:#007A33;--midA:#C3D3C8;--bgB:#F4E8C8;--inkB:#23303B;--accB:#A9832B;--midB:#D2C297;--bgC:#EEEEEC;--inkC:#111111;--accC:#111111;--midC:#BEBEB9}
+.dom-sup{--bgA:#F3F8F8;--inkA:#12343B;--accA:#0F766E;--midA:#BCD3D3;--bgB:#EAE4D8;--inkB:#2B2A26;--accB:#B45309;--midB:#CFC5B0;--bgC:#E4E8EC;--inkC:#0F1720;--accC:#0F1720;--midC:#B9C0C7}
+.dom-cre{--bgA:#F1F6EE;--inkA:#173B26;--accA:#3F8F4F;--midA:#C2D6C0;--bgB:#F1E3DC;--inkB:#3A2420;--accB:#A4483A;--midB:#D8C0B5;--bgC:#E6ECEA;--inkC:#0E1B19;--accC:#0E1B19;--midC:#B7C4C1}
+.pa{--bg:var(--bgA);--ink:var(--inkA);--acc:var(--accA);--mid:var(--midA)}
+.pb{--bg:var(--bgB);--ink:var(--inkB);--acc:var(--accB);--mid:var(--midB)}
+.pc{--bg:var(--bgC);--ink:var(--inkC);--acc:var(--accC);--mid:var(--midC)}
+.pane{position:absolute;top:112px;height:746px;box-sizing:border-box;overflow:hidden;background:var(--bg);color:var(--ink);border:1px solid var(--ink)}
+.hd{font-size:15px;font-weight:700;letter-spacing:.09em}
+.sb{font-size:12px;line-height:15px;opacity:.85}
+.lab{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+.zone{position:absolute;left:14px;right:14px}
+.desk{position:absolute;left:12px;right:12px;top:56px;height:266px;background:rgba(0,0,0,.055);box-shadow:inset 0 0 0 1px var(--mid)}
+.chip{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border:1.5px solid var(--ink)}
+.sw{display:inline-block;width:12px;height:12px;box-sizing:border-box;flex:none;margin-top:2px}
+.t-obs{background:var(--ink)}
+.t-rec{background:var(--ink);box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 4px var(--bg)}
+.t-aut{border:1.5px solid var(--ink);background:transparent}
+.t-com{background:var(--mid);border:1px solid var(--mid)}
+.t-unk{border:1.5px dashed var(--ink);background:transparent}
+.t-ref{border:2px solid #B3261E;background:transparent}
+.t-non{border:1px solid transparent}
+.ln{display:flex;gap:8px;align-items:flex-start;padding:2px 0;font-size:12.5px;line-height:17px}
+.ln .lt{flex:1;min-width:0}
+.wd{font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+.btn{font-family:'IBM Plex Sans',sans-serif;cursor:pointer;border-radius:0;min-height:44px;padding:0 14px;font-size:13px;font-weight:600;text-align:left;transition:background .2s,color .2s}
+.btn:focus-visible,.tab:focus-visible,.lensb:focus-visible{outline:3px solid #111;outline-offset:2px}
+.btn .bs{display:block;font-size:11px;font-weight:400;letter-spacing:.01em}
+.tab{font-family:'IBM Plex Sans',sans-serif;cursor:pointer;border-radius:0;min-height:36px;padding:0 12px;font-size:13px;font-weight:600;border:1.5px solid #111}
+.lensb{font-family:'IBM Plex Sans',sans-serif;cursor:pointer;border-radius:0;min-height:36px;padding:0 12px;font-size:13px;font-weight:600;border:1.5px solid #111;display:inline-flex;align-items:center;gap:8px}
+.sn{font-family:'IBM Plex Sans',sans-serif}
+.xf{transition:left .75s cubic-bezier(.4,0,.2,1),top .75s cubic-bezier(.4,0,.2,1),width .75s cubic-bezier(.4,0,.2,1),height .75s cubic-bezier(.4,0,.2,1)}
+.sig{transition:stroke-dashoffset .8s ease}
+@keyframes fresh{0%{background:rgba(255,220,120,.8)}100%{background:transparent}}
+.fr{animation:fresh 1.6s ease-out}
+</style>
+</helmet>
+<div class="dom-{{dom}}" style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #D3D6D8; color: #111; font-family: 'IBM Plex Sans', sans-serif">
+
+  <header style="position: absolute; left: 28px; right: 28px; top: 8px; height: 44px; display: flex; align-items: center; justify-content: space-between">
+    <div style="display: flex; flex-direction: column; gap: 2px">
+      <div style="display: flex; align-items: baseline; gap: 12px"><span style="font-size: 22px; font-weight: 700; letter-spacing: .08em">THE HANDSHAKE</span><span style="font-size: 14px; color: #33383C">a decision in one World becomes real state in another</span></div>
+      <sc-if value="{{how}}" hint-placeholder-val="{{false}}"><div style="display: flex; gap: 12px; height: 16px; align-items: center"><sc-for list="{{legend}}" as="lg" hint-placeholder-count="6"><span style="display: inline-flex; gap: 5px; align-items: center; font-size: 11px"><span class="sw {{lg.sw}}" style="margin: 0"></span>{{lg.w}}</span></sc-for></div></sc-if>
+      <sc-if value="{{notHow}}" hint-placeholder-val="{{true}}"><div style="font-size: 11px; height: 16px; color: #33383C">{{tagLine}}</div></sc-if>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px">
+      <span style="font-size: 11px; font-weight: 700; letter-spacing: .08em; margin-right: 4px; text-align: right; line-height: 13px">SAME INTERACTION,<br>OTHER DOMAINS</span>
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="3"><button type="button" class="tab" onClick="{{t.go}}" aria-pressed="{{t.pressed}}" style="background: {{t.bg}}; color: {{t.fg}}">{{t.label}}</button></sc-for>
+      <button type="button" class="tab" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="margin-left: 8px; background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+    </div>
+  </header>
+
+  <nav aria-label="Protocol steps" style="position: absolute; left: 28px; top: 58px; width: 940px; height: 44px; display: flex; gap: 6px">
+    <sc-for list="{{rail}}" as="r" hint-placeholder-count="7">
+      <div aria-current="{{r.cur}}" style="flex: 1; min-width: 0; padding: 3px 8px; box-sizing: border-box; border: 1.5px solid {{r.bd}}; background: {{r.bg}}; color: {{r.fg}}; display: flex; flex-direction: column; justify-content: center; transition: background .3s, color .3s">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .07em; white-space: nowrap">{{r.n}} {{r.label}}</span>
+        <span style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.noun}}</span>
+      </div>
+    </sc-for>
+  </nav>
+  <div style="position: absolute; left: 990px; top: 57px; width: 422px; display: flex; gap: 6px; align-items: center">
+    <span style="font-size: 11px; font-weight: 700; letter-spacing: .08em; width: 62px; line-height: 13px">SEAT<br>LENS</span>
+    <sc-for list="{{lensBtns}}" as="b" hint-placeholder-count="3"><button type="button" class="lensb" onClick="{{b.go}}" aria-pressed="{{b.pressed}}" style="background: {{b.bg}}; color: {{b.fg}}"><span style="width: 10px; height: 10px; background: {{b.acc}}; border: 1.5px solid {{b.fg}}"></span>{{b.label}}</button></sc-for>
+  </div>
+  <div style="position: absolute; left: 990px; top: 96px; width: 422px; font-size: 11px; line-height: 14px; color: #33383C">Prototype aid. In the network you hold one seat and never see the others' inside.</div>
+
+  <!-- DENVER · seat B -->
+  <section class="pane pb" aria-label="{{B.nm}} pane" style="left: 28px; width: 380px">
+    <div style="height: 6px; background: var(--acc)"></div>
+    <div style="height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; border-bottom: 1px solid var(--mid)">
+      <div><div class="hd">{{B.nm}}</div><div class="sb">{{B.sub}}</div></div>
+      <span class="chip" style="background: {{chipB.bg}}; color: {{chipB.fg}}">{{chipB.t}}</span>
+    </div>
+    <div class="desk"></div>
+    <div class="zone" style="top: 328px; font-size: 12px; line-height: 15px; height: 20px">{{capB}}</div>
+    <div class="zone" style="top: 352px; height: 236px; overflow: hidden">
+      <div class="lab" style="margin-bottom: 4px">{{headB}}</div>
+      <sc-for list="{{linesB}}" as="l" hint-placeholder-count="5"><div class="ln" style="color: {{l.c}}; border: {{l.bd}}; padding-left: {{l.pl}}px; margin: {{l.mg}}; min-height: {{l.mh}}; box-sizing: border-box"><span class="sw {{l.sw}}"></span><span class="lt">{{l.t}}</span><span class="wd">{{l.w}}</span></div></sc-for>
+    </div>
+    <div class="zone" style="top: 614px; height: 126px; overflow: hidden; border-top: 1px solid var(--mid); padding-top: 6px">
+      <div class="lab" style="margin-bottom: 3px">{{bookHeadB}}</div>
+      <sc-for list="{{bookB}}" as="l" hint-placeholder-count="4"><div class="ln {{l.fr}}" style="color: {{l.c}}"><span class="sw {{l.sw}}"></span><span class="lt">{{l.t}}</span><span class="wd">{{l.w}}</span></div></sc-for>
+    </div>
+  </section>
+
+  <!-- BOSTON · seat A -->
+  <section class="pane pa" aria-label="{{A.nm}} pane" style="left: 436px; width: 560px">
+    <div style="height: 6px; background: var(--acc)"></div>
+    <div style="height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; border-bottom: 1px solid var(--mid)">
+      <div><div class="hd">{{A.nm}}</div><div class="sb">{{A.sub}}</div></div>
+      <div style="text-align: right"><span class="chip" style="background: {{chipA.bg}}; color: {{chipA.fg}}">{{chipA.t}}</span><div class="sb" style="margin-top: 2px">{{clock}}</div></div>
+    </div>
+    <div class="desk"></div>
+    <div class="zone" style="top: 328px; font-size: 12px; line-height: 15px; height: 20px">{{capA}}</div>
+    <div class="zone" style="top: 352px; height: 96px; left: 12px; right: 12px; padding: 6px 8px; box-sizing: border-box; border: {{mv.bd}}; background: {{mv.bg}}">
+      <div style="font-size: 13px; line-height: 17px; color: {{mv.c}}; font-weight: {{mv.fw}}">{{mv.text}}</div>
+      <div style="display: flex; gap: 8px; margin-top: 5px">
+        <sc-for list="{{mv.btns}}" as="b" hint-placeholder-count="3"><button type="button" class="btn" onClick="{{b.go}}" aria-pressed="{{b.pressed}}" style="border: 2px solid {{b.bd}}; background: {{b.bg}}; color: {{b.fg}}; width: {{b.w}}px">{{b.label}}<span class="bs">{{b.sub}}</span></button></sc-for>
+      </div>
+    </div>
+    <div class="zone" style="top: 454px; height: 136px; overflow: hidden">
+      <div class="lab" style="margin-bottom: 3px">{{headA}}</div>
+      <sc-if value="{{isA}}" hint-placeholder-val="{{true}}">
+        <sc-for list="{{rowsA}}" as="r" hint-placeholder-count="2">
+          <div class="{{r.fr}}" style="display: grid; grid-template-columns: 74px minmax(0, 1.3fr) 14px minmax(0, 0.8fr); gap: 6px; align-items: start; padding: 3px 0; font-size: 12.5px; line-height: 16px; border-bottom: 1px solid var(--mid)">
+            <span class="lab" style="padding-top: 1px">{{r.lab}}</span>
+            <span style="display: flex; gap: 6px"><span class="sw {{r.sw}}"></span><span>{{r.b}}</span></span>
+            <span>{{r.arrow}}</span>
+            <span style="display: flex; gap: 6px"><span class="sw {{r.sw2}}" style="opacity: {{r.op}}"></span><span>{{r.a}}</span></span>
+          </div>
+        </sc-for>
+        <sc-if value="{{g.on}}" hint-placeholder-val="{{true}}">
+          <div style="padding: 5px 0 0; display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 6px; align-items: start">
+            <span class="lab" style="padding-top: 4px">{{g.lab}}</span>
+            <div>
+              <div style="position: relative; height: 22px">
+                <div style="position: absolute; left: 0; top: 5px; width: {{g.trackW}}px; height: 12px; box-sizing: border-box; border: 1px solid var(--ink)"></div>
+                <div class="t-com" style="position: absolute; left: 1px; top: 6px; height: 10px; width: {{g.fillW}}px; transition: width .8s ease; border: 0"></div>
+                <div style="position: absolute; left: {{g.mx}}px; top: 1px; width: 0; height: 20px; border-left: 2px solid {{g.mc}}"></div>
+                <span style="position: absolute; left: {{g.tx}}px; top: 3px; font-size: 12.5px; white-space: nowrap; line-height: 16px">{{g.txt}}</span>
+              </div>
+              <div style="font-size: 11px; line-height: 14px; opacity: .85">{{g.cap}}</div>
+            </div>
+          </div>
+        </sc-if>
+      </sc-if>
+      <sc-if value="{{notA}}" hint-placeholder-val="{{false}}">
+        <sc-for list="{{discA}}" as="l" hint-placeholder-count="4"><div class="ln" style="color: {{l.c}}; border: {{l.bd}}; padding-left: {{l.pl}}px; margin: {{l.mg}}; min-height: {{l.mh}}; box-sizing: border-box"><span class="sw {{l.sw}}"></span><span class="lt">{{l.t}}</span></div></sc-for>
+      </sc-if>
+    </div>
+    <div class="zone" style="top: 614px; height: 126px; overflow: hidden; border-top: 1px solid var(--mid); padding-top: 6px">
+      <div class="lab" style="margin-bottom: 3px">{{bookHeadA}}</div>
+      <sc-for list="{{bookA}}" as="l" hint-placeholder-count="5"><div class="ln {{l.fr}}" style="color: {{l.c}}"><span class="sw {{l.sw}}"></span><span class="lt">{{l.t}}</span><span class="wd">{{l.w}}</span></div></sc-for>
+    </div>
+  </section>
+
+  <!-- LEAGUE · seat C -->
+  <section class="pane pc" aria-label="{{C.nm}} pane" style="left: 1024px; width: 388px">
+    <div style="height: 6px; background: var(--acc)"></div>
+    <div style="height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; border-bottom: 1px solid var(--mid)">
+      <div><div class="hd">{{C.nm}}</div><div class="sb">{{C.sub}}</div></div>
+      <span class="chip" style="background: {{chipC.bg}}; color: {{chipC.fg}}">{{chipC.t}}</span>
+    </div>
+    <div class="desk"></div>
+    <div class="zone" style="top: 328px; font-size: 12px; line-height: 15px; height: 20px">{{capC}}</div>
+    <div class="zone" style="top: 350px; height: 240px; overflow: hidden">
+      <div class="lab" style="margin-bottom: 2px">RULEBOOK · public · authored</div>
+      <sc-for list="{{checks}}" as="k" hint-placeholder-count="4">
+        <div style="padding: 3px 0 4px; border-bottom: 1px solid var(--mid)">
+          <div style="display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; line-height: 16px"><span class="sw {{k.sw}}"></span><span style="flex: 1; min-width: 0"><b>{{k.id}}</b> · {{k.nm}}</span><span class="lab" style="color: {{k.sc}}; white-space: nowrap">{{k.status}}</span></div>
+          <sc-for list="{{k.det}}" as="d" hint-placeholder-count="2"><div style="display: flex; gap: 6px; padding: 1px 0 0 20px; font-size: 11.5px; line-height: 14px; color: {{d.c}}"><span class="sw {{d.sw}}" style="width: 9px; height: 9px; margin-top: 3px"></span><span>{{d.t}}</span></div></sc-for>
+        </div>
+      </sc-for>
+    </div>
+    <div class="zone" style="top: 614px; height: 126px; overflow: hidden; border-top: 1px solid var(--mid); padding-top: 6px">
+      <div class="lab" style="margin-bottom: 3px">{{bookHeadC}}</div>
+      <sc-for list="{{bookC}}" as="l" hint-placeholder-count="4"><div class="ln {{l.fr}}" style="color: {{l.c}}"><span class="sw {{l.sw}}"></span><span class="lt">{{l.t}}</span><span class="wd">{{l.w}}</span></div></sc-for>
+    </div>
+  </section>
+
+  <!-- borders -->
+  <div class="lab" style="position: absolute; left: 408px; top: 118px; width: 28px; height: 736px; writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; color: #4A5054; border-left: 1px dotted #7C8388; border-right: 1px dotted #7C8388; box-sizing: border-box; line-height: 26px">border · signed messages only</div>
+  <div class="lab" style="position: absolute; left: 996px; top: 118px; width: 28px; height: 736px; writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; color: #4A5054; border-left: 1px dotted #7C8388; border-right: 1px dotted #7C8388; box-sizing: border-box; line-height: 26px">border · filings only</div>
+
+  <!-- one event, three histories -->
+  <div style="position: absolute; left: 28px; top: 704px; width: 1384px; height: 20px; display: flex; align-items: center; gap: 10px; opacity: {{commitOp}}; transition: opacity .5s; pointer-events: none; z-index: 12">
+    <span style="flex: 1; height: 0; border-top: 2px solid #111"></span>
+    <span class="lab" style="background: #111; color: #fff; padding: 2px 10px; white-space: nowrap">{{commitLabel}}</span>
+    <span style="flex: 1; height: 0; border-top: 2px solid #111"></span>
+  </div>
+
+  <!-- the contract object -->
+  <div class="xf" style="position: absolute; left: {{ob.x}}px; top: {{ob.y}}px; width: {{ob.w}}px; height: {{ob.h}}px; z-index: 30; opacity: {{ob.op}}; transition: opacity .3s, left .75s cubic-bezier(.4,0,.2,1), top .75s cubic-bezier(.4,0,.2,1), width .75s cubic-bezier(.4,0,.2,1), height .75s cubic-bezier(.4,0,.2,1); pointer-events: none">
+    <sc-if value="{{ob.open}}" hint-placeholder-val="{{true}}">
+      <div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: #FFFFFF; box-shadow: 0 16px 26px rgba(15,20,25,.30), 0 2px 0 rgba(0,0,0,.10); color: #1A1A1A; font-family: 'IBM Plex Serif', serif; overflow: hidden; transform: rotate(-0.5deg)">
+        <div style="position: absolute; left: 0; right: 0; top: 54px; height: 14px; background: linear-gradient(to bottom, rgba(0,0,0,.11), rgba(0,0,0,0))"></div>
+        <div style="position: absolute; left: 0; right: 0; top: 54px; height: 1px; background: rgba(0,0,0,.22)"></div>
+        <div style="position: absolute; left: 0; right: 0; top: 184px; height: 14px; background: linear-gradient(to bottom, rgba(0,0,0,.11), rgba(0,0,0,0))"></div>
+        <div style="position: absolute; left: 0; right: 0; top: 184px; height: 1px; background: rgba(0,0,0,.22)"></div>
+        <div style="padding: 12px 16px 0">
+          <div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 14px; font-weight: 600; letter-spacing: .14em">{{ob.title}}</span><span class="sn" style="font-size: 11px; color: #4A4A4A">No. {{ob.no}}</span></div>
+          <div class="sn" style="font-size: 11px; color: #4A4A4A; margin-top: 1px; white-space: nowrap">{{ob.stag}}</div>
+          <div style="margin-top: 14px"><div class="sn lab" style="color: var(--inkA)">{{ob.aLab}}</div><div style="font-size: 13px; line-height: 17px">{{ob.aTxt}}</div></div>
+          <div style="margin-top: 8px"><div class="sn lab" style="color: var(--inkB)">{{ob.bLab}}</div>
+            <div style="font-size: 13px; line-height: 17px; text-decoration: {{ob.strike}}; text-decoration-color: var(--inkB)">{{ob.bOld}}</div>
+            <sc-if value="{{ob.marked}}" hint-placeholder-val="{{false}}"><div style="font-size: 13px; line-height: 17px; font-style: italic; color: var(--inkB)">{{ob.bNew}} <span class="sn" style="font-style: normal; font-size: 11px">· {{ob.bBy}}</span></div></sc-if>
+          </div>
+        </div>
+        <div style="position: absolute; left: 16px; right: 16px; bottom: 10px; display: flex; gap: 8px; align-items: flex-end">
+          <div style="width: 100px; opacity: {{ob.sigOp}}; transition: opacity .5s"><svg width="100" height="28" viewBox="0 0 100 28" aria-hidden="true"><path class="sig" d="M4 20 C 12 2, 20 30, 30 12 S 50 26, 62 8 S 82 24, 96 10" fill="none" stroke="var(--inkA)" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="200" style="stroke-dashoffset: {{ob.sigA}}"></path></svg><div style="border-top: 1px solid #1A1A1A"></div><div class="sn" style="font-size: 11px; line-height: 14px; text-decoration: {{ob.voidTd}}">{{ob.nameA}}</div></div>
+          <div style="width: 100px; opacity: {{ob.sigOp}}; transition: opacity .5s"><svg width="100" height="28" viewBox="0 0 100 28" aria-hidden="true"><path class="sig" d="M6 16 C 16 26, 22 4, 34 16 S 52 6, 64 18 S 84 8, 96 20" fill="none" stroke="var(--inkB)" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="200" style="stroke-dashoffset: {{ob.sigB}}"></path></svg><div style="border-top: 1px solid #1A1A1A"></div><div class="sn" style="font-size: 11px; line-height: 14px; text-decoration: {{ob.voidTd}}">{{ob.nameB}}</div></div>
+          <div style="position: relative; width: 64px; height: 50px; border: 1px solid #1A1A1A"><span class="sn" style="position: absolute; left: 4px; top: 2px; font-size: 11px; color: #4A4A4A">stamp</span>
+            <sc-if value="{{ob.stamp}}" hint-placeholder-val="{{false}}"><div class="sn" style="position: absolute; left: -16px; top: 6px; width: 98px; padding: 2px 4px; box-sizing: border-box; text-align: center; transform: rotate(-7deg); border: 3px double {{ob.stC}}; color: {{ob.stC}}; background: rgba(255,255,255,.88); font-size: 11px; font-weight: 700; line-height: 13px; letter-spacing: .05em">{{ob.stT}}<br>{{ob.stS}}</div></sc-if>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ob.fold}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: #FFFFFF; box-shadow: 0 10px 18px rgba(15,20,25,.26), 0 2px 0 rgba(0,0,0,.10); font-family: 'IBM Plex Serif', serif; color: #1A1A1A; overflow: hidden">
+        <div style="position: absolute; left: 0; right: 0; top: 44px; height: 12px; background: linear-gradient(to bottom, rgba(0,0,0,.12), rgba(0,0,0,0))"></div>
+        <div style="position: absolute; left: 0; right: 0; top: 44px; height: 1px; background: rgba(0,0,0,.25)"></div>
+        <div style="padding: 10px 16px 0"><div style="font-size: 13px; font-weight: 600; letter-spacing: .12em">{{ob.title}}</div><div class="sn" style="font-size: 11px; color: #4A4A4A">{{ob.foldLine}}</div></div>
+        <div class="sn" style="position: absolute; left: 16px; right: 16px; top: 60px; padding: 4px 8px; border: 1.5px dashed #1A1A1A; font-size: 11.5px; line-height: 15px">{{ob.foldNote}}</div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ob.env}}" hint-placeholder-val="{{false}}">
+      <svg width="100%" height="100%" viewBox="0 0 46 32" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; left: 0; top: 0; filter: drop-shadow(0 4px 5px rgba(15,20,25,.35))"><rect x="1" y="1" width="44" height="30" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="1.5"></rect><path d="M1 1 L23 18 L45 1" fill="none" stroke="#1A1A1A" stroke-width="1.5"></path></svg>
+    </sc-if>
+  </div>
+
+  <span style="position: absolute; left: 28px; bottom: 6px; width: 860px; font-size: 11px; line-height: 15px; color: #33383C">COMMERCIAL LENS · hypothesis: the network is where transaction fees become possible (per committed cross-World contract); leagues and platforms pay to host the rulebook node; it only works if the protocol is open.</span>
+  <span style="position: absolute; right: 28px; bottom: 6px; width: 470px; text-align: right; font-size: 11px; line-height: 15px; color: #33383C">PLATFORM HYPOTHESIS · SPECULATIVE FRONTIER · deals and figures are World events, authored; real facts approx., verify</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.t = setInterval(() => {
+      const s = this.state || {};
+      const st = s.stage || 'draft';
+      const sub = (s.sub || 0) + 1;
+      const go = (stage) => this.setState({ stage: stage, sub: 0 });
+      const tick = () => this.setState({ sub: sub });
+      const fail = (s.opt || 0) === 1;
+      if (st === 'send') { if (sub >= 2) go('read'); else tick(); }
+      else if (st === 'read') { if (sub >= 8) go('back'); else tick(); }
+      else if (st === 'back') { if (sub >= 2) go('counter'); else tick(); }
+      else if (st === 'sign' && s.sA && !s.sB) { if (sub >= 4) this.setState({ sB: true, sub: 0 }); else tick(); }
+      else if (st === 'sign' && s.sA && s.sB) { if (sub >= 3) go('file'); else tick(); }
+      else if (st === 'file') { if (sub >= 2) go('check'); else tick(); }
+      else if (st === 'check') { if (sub >= (fail ? 7 : 9)) go(fail ? 'refused' : 'done'); else tick(); }
+    }, 400);
+  }
+  componentWillUnmount() { clearInterval(this.t); }
+  renderVals() {
+    const s = this.state || {};
+    const dom = s.dom || 'nba', lens = s.lens || 'A', how = !!s.how;
+    const stage = s.stage || 'draft', sub = s.sub || 0, opt = s.opt || 0, sA = !!s.sA, sB = !!s.sB, ref = s.ref || 0, fo = !!s.fo, note = s.note || '';
+    const set = (o) => this.setState(o);
+    const pad = (n) => (n < 10 ? '0' : '') + n;
+    const RED = '#B3261E', DIM = '#4A5054';
+    const SEQ = ['draft', 'send', 'read', 'back', 'counter', 'sign', 'file', 'check', 'done', 'refused'];
+    const at = (n) => SEQ.indexOf(stage) >= SEQ.indexOf(n);
+    const T = (m) => { const t = 600 + m + ref * 12; return pad(Math.floor(t / 60)) + ':' + pad(t % 60); };
+    const tSend = T(0), tDel = T(2), tCnt = T(6), tAcc = T(8), tSA = T(9), tSB = T(11), tFile = T(12), tOk = T(14);
+    const fail = opt === 1;
+
+    const DOMS = {
+      nba: { tab: 'Basketball', clk: 'Year Two · Wk 9 · Tue ', tag: 'World event · a fictional deal inside real team identities · sports first',
+        A: { nm: 'BOSTON', sub: 'Celtics · your World', short: 'Boston', role: 'GM', sh: ['the offers it sends you', 'its signature on a shared act', 'its record line, after a commit'], hid: 'payroll, roster, scouting notes, the owner’s instructions' },
+        B: { nm: 'DENVER', sub: 'Nuggets · another player’s World', short: 'Denver', sh: ['receipts: delivered, reading', 'counters and its signature on a shared act', 'its record line, after a commit'], hid: 'roster, payroll, how it values the guard, its plans' },
+        C: { nm: 'LEAGUE OFFICE', sub: 'rulebook node · authored', short: 'League', sh: ['the rulebook', 'a verdict on each filing', 'the transaction log'], hid: 'each team’s books: it reads them, it does not publish them' },
+        stag: 'World event · fictional deal, real team names', title: 'TRADE AGREEMENT', aLab: 'Boston sends', bLab: 'Denver sends', aTxt: 'Baylor Scheierman · backup guard · $2.1M (authored)',
+        ask: 'Boston sends the backup guard. Ask Denver for:', sendTo: 'Send to Denver', warrant: 'Your GM warrant covers accepting trades.',
+        opts: [{ t: 'a 2029 second-round pick', c: 'a 2028 second-round pick', s: 'as first drafted' }, { t: 'a 2029 second + a wing, $4.5M (authored)', c: 'a 2028 second + a wing, $4.5M', s: 'and takes salary back' }],
+        rail: ['offer', 'delivered', 'marked up', 'both lines', '4 checks', 'atomic', '3 books'], idf: (n) => '#' + (2210 + n), pastC: ['#2209 · [another filing, from the league feed]', '#2210 · [another filing, from the league feed]'],
+        checks: [{ id: 'R-SIGN', nm: 'Both signatures present', a: 'Boston GM {sa} ✓', b: 'Denver GM {sb} ✓' },
+          { id: 'R-ROSTER', nm: 'Roster at most 15 after the move', a: 'Boston 15 → 14 ✓', b: 'Denver 14 → 15 ✓ [authored]' },
+          { id: 'R-APRON-2', nm: 'Over 2nd apron: back ≤ sent', a: ['Boston $222.8M > $221.686M · back $0, sent $2.1M: PASSES', 'Boston $222.8M > $221.686M · back $4.5M, sent $2.1M: REFUSED'], b: 'Denver: room to absorb $2.1M ✓ [authored]', why: 'Boston is over the second apron ($221.686M), so it may not take back more salary than it sends: $4.5M is more than $2.1M.' },
+          { id: 'R-PICK', nm: 'The sender owns the pick, within 7 drafts', a: 'Boston sends no pick ✓', b: 'Denver owns its 2028 second ✓' }],
+        pastA: ['Year One · funded Business over Basketball Ops', 'Wk 6 · traded White + backup big for Butler'], recA: 'traded backup guard for a 2028 second', recB: 'acquired backup guard', recC: 'approved · Boston ↔ Denver',
+        bDo: 'marked the pick line: 2029 → 2028',
+        rowsA: [{ lab: 'Roster', b: '15 players', a: '14 players', t1: 'rec', t2: 'rec' }, { lab: 'Picks', b: '2031 second via Atlanta with Niang (Reality, Jun 2025; verify)', src: 'NBA.com; same deal sent out Boston’s 2026 second', a: '+ 2028 second from Denver, ' + '{id}', t1: 'obs', t2: 'rec' }],
+        g: { lab: 'Payroll', min: 195, max: 225, v0: 222.8, v1: 220.7, m: 221.686, ml: '2nd apron $221.7M', s0: 'over by $1.1M', s1: 'under by $1.0M' },
+        rowsB: [{ lab: 'Roster', b: '14 players [authored]', a: '15 players', t1: 'aut', t2: 'rec' }, { lab: 'Picks', b: 'own 2028 second', a: 'sent to Boston', t1: 'rec', t2: 'rec' }],
+        bNoteRead: 'Reading Boston’s offer for the backup guard. Roster 14 of 15 [authored]. Deciding what to send.', bNoteCnt: 'Marked the pick line: a 2028 second, not a 2029. Reason: [Denver’s own note, authored placeholder].',
+        fo: 'Boston’s roster is now 14: the two-way call-up can be converted.', fo2: 'This option exists in Boston’s pane only. Denver and the League see nothing. It would be a new contract object, drafted the same way.' },
+      sup: { tab: 'Supply chain', clk: 'Harrow World · Day 1 · ', tag: 'World event · fictional companies · same seven steps, other rules',
+        A: { nm: 'HARROW MEDICAL', sub: 'infusion pumps · buyer · fictional', short: 'Harrow', role: 'buyer', sh: ['the orders it sends you', 'its signature on a shared act', 'its record line, after a commit'], hid: 'stock levels, customer promises, cash position' },
+        B: { nm: 'KAITO SEMICONDUCTOR', sub: 'MCU supplier · their World · fictional', short: 'Kaito', sh: ['receipts: delivered, reading', 'allocation counters and its signature', 'its record line, after a commit'], hid: 'how much output survived, other customers’ orders, its rationing policy' },
+        C: { nm: 'NORTHLINE FREIGHT', sub: 'carrier + customs rules · fictional', short: 'Carrier', sh: ['the customs and lot rules', 'a verdict on each booking', 'the booking log'], hid: 'each party’s books: it reads them, it does not publish them' },
+        stag: 'World event · fictional companies', title: 'PURCHASE ORDER', aLab: 'Harrow pays', bLab: 'Kaito allocates', aTxt: 'on delivery · [price: authored]',
+        ask: 'Harrow pays on delivery. Ask Kaito for:', sendTo: 'Send to Kaito', warrant: 'Your buyer warrant covers purchase orders.',
+        opts: [{ t: '1,000 MCUs in two lots', c: '800 MCUs in two lots', s: 'as first drafted' }, { t: '1,500 MCUs in one lot', c: '1,200 MCUs in one lot', s: 'in a single lot' }],
+        rail: ['PO', 'delivered', 'allocation', 'both lines', 'customs', 'atomic', '3 books'], idf: (n) => 'PO-' + pad(416 + n),
+        pastC: ['PO-0415 · [another booking, from the carrier feed]', 'PO-0416 · [another booking, from the carrier feed]'],
+        checks: [{ id: 'R-SIGN', nm: 'Both signatures present', a: 'Harrow buyer {sa} ✓', b: 'Kaito sales {sb} ✓' },
+          { id: 'R-CUSTOMS', nm: 'Customs class declared on both sides', a: 'Harrow: import class declared ✓', b: 'Kaito: export class matches ✓ [authored]' },
+          { id: 'R-LICENCE', nm: 'A lot over 1,000 needs a licence', a: ['2 lots of 400: none over 1,000 → PASSES', '1 lot of 1,200: over 1,000, no licence attached → REFUSED'], b: 'Kaito: no licence on file, none needed up to 1,000 [authored]', why: 'A single lot over 1,000 units needs an export licence. This order is one lot of 1,200 and carries none.' },
+          { id: 'R-CARRIER', nm: 'The carrier can take the lots', c: 'Northline: two slots free this week ✓ [authored]' }],
+        pastA: ['06:10 · Kaito reports a fab fire', '08:30 · on hand 2,300 MCUs, about 11 days at 210 a day'], recA: 'ordered 800 MCUs from Kaito in two lots', recB: 'allocated 800 MCUs to Harrow', recC: 'approved · 2 lots, Northline',
+        bDo: 'marked the quantity: 1,000 → 800',
+        rowsA: [{ lab: 'Stock', b: '2,300 MCUs on hand', a: '+ 800 allocated in two lots', t1: 'rec', t2: 'rec' }, { lab: 'Promises', b: 'five, over eight weeks', a: 'unchanged, but can be re-dated', t1: 'aut', t2: 'aut' }],
+        g: { lab: 'Cover', min: 0, max: 21, v0: 10.95, v1: 14.76, m: null, ml: '', s0: '11.0 days at 210 a day', s1: '14.8 days incl. allocation' },
+        rowsB: [{ lab: 'Allocated', b: '0 MCUs to Harrow', a: '800 MCUs, two lots', t1: 'rec', t2: 'rec' }, { lab: 'Output', b: 'rationed after the fire [authored policy]', a: 'unchanged', t1: 'aut', t2: 'aut' }],
+        bNoteRead: 'Reading Harrow’s order. Output is rationed across customers after the fire [Kaito’s policy: authored placeholder].', bNoteCnt: 'Marked the quantity down: an allocation, not the full ask. Reason: [Kaito’s own note, authored placeholder].',
+        fo: 'Harrow’s cover is now 14.8 days: the five promises can be re-dated.', fo2: 'This option exists in Harrow’s pane only. Kaito and the carrier see nothing. Re-dating a promise would be a new contract object.' },
+      cre: { tab: 'Creator ecosystem', clk: 'Marketplace · Wk 9 · ', tag: 'World event · creator-built system, unreviewed · same seven steps, other rules',
+        A: { nm: 'GARDEN NIGHTS', sub: 'arena economics · by [creator]', short: 'Creator', role: 'creator', sh: ['the licence asks it sends you', 'its signature on a shared act', 'its record line, after a commit'], hid: 'its full World, its drafts, its earnings' },
+        B: { nm: 'PUBLISHER', sub: '[publisher] · their World', short: 'Publisher', sh: ['receipts: delivered, reading', 'counters and its signature', 'its record line, after a commit'], hid: 'audience data, other licences, its margins' },
+        C: { nm: 'BOW MARKETPLACE', sub: 'rulebook node · authored', short: 'Marketplace', sh: ['the licensing rules', 'a verdict on each filing', 'the licence registry'], hid: 'each party’s books: it reads them, it does not publish them' },
+        stag: 'World event · creator-built, unreviewed', title: 'EMBED LICENCE', aLab: 'Creator grants', bLab: 'Publisher pays', aTxt: 'embed of the Moment “Garden nights · Wk 9 Tue”, 90 days [authored]',
+        ask: 'You grant the embed. Ask the publisher for:', sendTo: 'Send to the publisher', warrant: 'Your creator warrant covers licensing your Moment.',
+        opts: [{ t: 'revenue share 70 / 30 to the creator', c: 'share 65 / 35 to the creator', s: 'as first drafted' }, { t: 'revenue share 50 / 50', c: 'share 45 / 55 to the creator', s: 'a larger cut for the publisher' }],
+        rail: ['licence', 'delivered', 'rev. share', 'both lines', 'marketplace', 'atomic', '3 books'], idf: (n) => 'L-' + pad(92 + n),
+        pastC: ['L-0091 · [another licence, from the registry]', 'L-0092 · [another licence, from the registry]'],
+        checks: [{ id: 'R-SIGN', nm: 'Both signatures present', a: 'Creator {sa} ✓', b: 'Publisher {sb} ✓' },
+          { id: 'R-LABEL', nm: 'Creator-built stays labelled “unreviewed”', a: 'label attached to the Moment ✓', b: 'Publisher: label shown in the embed frame ✓ [authored]' },
+          { id: 'R-SHARE', nm: 'The creator’s share is at least 60%', a: ['agreed share 65% → PASSES', 'agreed share 45% → REFUSED'], b: ['Publisher keeps 35%', 'Publisher keeps 55%'], why: 'The marketplace requires the creator’s share to be at least 60%. This licence gives the creator 45%.' },
+          { id: 'R-MOMENT', nm: 'Public; forks credit the creator', a: 'public ✓ · fork credit stays on' }],
+        pastA: ['Wk 9 · published the Moment “Garden nights”', 'Wk 9 · marked it public and forkable'], recA: 'licensed the Moment to [publisher], 65% share', recB: 'embedded “Garden nights”, unreviewed label on', recC: 'registered · Creator ↔ Publisher',
+        bDo: 'marked the share: 70 / 30 → 65 / 35',
+        rowsA: [{ lab: 'Licences', b: 'none out', a: '1 out, to [publisher]', t1: 'rec', t2: 'rec' }, { lab: 'Share', b: 'not agreed', a: '65% of embed revenue', t1: 'unk', t2: 'aut' }],
+        g: null,
+        rowsB: [{ lab: 'Embeds', b: 'none', a: '1: “Garden nights”', t1: 'rec', t2: 'rec' }, { lab: 'Label', b: '—', a: 'unreviewed, shown in frame', t1: 'aut', t2: 'aut' }],
+        bNoteRead: 'Reading the licence ask. Weighing the share [publisher’s own model: authored placeholder].', bNoteCnt: 'Marked the share: 65 / 35, not 70 / 30. Reason: [publisher’s own note, authored placeholder].',
+        fo: 'The Moment now shows “embedded by [publisher]” in your World: forks made there credit you.', fo2: 'This option exists in the creator’s pane only. The publisher and the marketplace see nothing. A second licence would be a new contract object.' }
+    };
+    const D = DOMS[dom];
+    const A = D.A, B = D.B, C = D.C;
+    const no = D.idf(1 + ref);
+    const fmt = (t) => (t || '').replace('{sa}', tSA).replace('{sb}', tSB).replace('{id}', no);
+    const pk = (x) => (Array.isArray(x) ? x[opt] : x);
+    const O = D.opts[opt];
+    const counterOn = at('counter');
+    const W = (w) => (how ? w : '');
+
+    // ---------- rail ----------
+    const railCur = { draft: 0, send: 1, read: 1, back: 2, counter: 2, sign: 3, file: 4, check: 4, done: 6, refused: 4 }[stage];
+    const LAB = ['DRAFT', 'SEND', 'COUNTER', 'SIGN', 'RULE CHECK', 'COMMIT', 'RECORD'];
+    const rail = LAB.map((l, i) => {
+      const cur = i === railCur, dn = i < railCur;
+      const bad = stage === 'refused' && cur;
+      return { n: dn ? '✓' : String(i + 1), label: l, noun: D.rail[i], cur: cur ? 'step' : 'false', bd: bad ? RED : '#111', bg: bad ? RED : cur ? '#111' : dn ? '#B7BCBF' : 'transparent', fg: cur ? '#FFF' : '#111' };
+    });
+    const tabs = ['nba', 'sup', 'cre'].map((k) => ({ label: DOMS[k].tab, pressed: dom === k ? 'true' : 'false', bg: dom === k ? '#111' : 'transparent', fg: dom === k ? '#FFF' : '#111',
+      go: () => set({ dom: k, lens: 'A', stage: 'draft', sub: 0, opt: 0, sA: false, sB: false, ref: 0, fo: false, note: '' }) }));
+    const lensBtns = [['A', A], ['B', B], ['C', C]].map((x) => ({ label: x[1].short, pressed: lens === x[0] ? 'true' : 'false', bg: lens === x[0] ? '#111' : 'transparent', fg: lens === x[0] ? '#FFF' : '#111', acc: 'var(--acc' + x[0] + ')', go: () => set({ lens: x[0] }) }));
+
+    // ---------- the object ----------
+    const loc = { draft: 'A', send: 'x1', read: 'B', back: 'x1', counter: 'A', sign: 'A', file: 'x2', check: 'C', done: 'C', refused: 'C' }[stage];
+    const seen = lens === 'A' ? true : lens === 'B' ? stage !== 'draft' : at('file');
+    let face = 'open';
+    if (loc === 'x1' || loc === 'x2') face = 'env';
+    else if (loc === 'A') face = lens === 'A' ? 'open' : 'fold';
+    else if (loc === 'B') face = lens === 'B' ? 'open' : 'fold';
+    const POS = { A: [556, 172], B: [58, 172], C: [1058, 172], x1: [399, 268], x2: [987, 268] };
+    let ox = POS[loc][0], oy = POS[loc][1], ow = 320, oh = 262;
+    if (face === 'fold') { oh = 108; oy = 200; }
+    if (face === 'env') { ow = 46; oh = 32; }
+    const bOld = O.t, bNew = O.c;
+    const fdone = stage === 'done', fref = stage === 'refused';
+    const ob = { x: ox, y: oy, w: ow, h: oh, op: seen ? 1 : 0, open: seen && face === 'open', fold: seen && face === 'fold', env: seen && face === 'env',
+      title: D.title, no: at('file') ? no : 'unnumbered', stag: D.stag, aLab: D.aLab, aTxt: D.aTxt, bLab: D.bLab, bOld: bOld, bNew: bNew, marked: counterOn, strike: counterOn ? 'line-through' : 'none', bBy: B.short + ' ' + tCnt,
+      sigOp: fref ? 0.35 : 1, voidTd: fref ? 'line-through' : 'none', sigA: sA ? 0 : 200, sigB: sB ? 0 : 200, nameA: sA ? A.short + ' · ' + tSA : (A.role.toLowerCase() === A.short.toLowerCase() ? A.short : A.short + ' · ' + A.role), nameB: sB ? B.short + ' · ' + tSB : B.short,
+      stamp: fdone || fref, stC: fref ? RED : '#111', stT: fref ? 'REFUSED' : 'APPROVED', stS: fref ? D.checks[2].id : no + ' · ' + tOk,
+      foldLine: lens === 'B' ? 'returned to ' + A.short + ' ' + tCnt : 'as ' + B.short + ' holds it', foldNote: lens === 'A' ? 'sealed to your seat: how ' + B.short + ' reads it is not shown' : lens === 'B' ? A.short + '’s desk: not shown to your seat' : 'not shown to your seat' };
+
+    // ---------- shared line helpers ----------
+    const ln = (t, sw, w, x) => Object.assign({ t: t, sw: sw || 't-non', w: W(w || ''), c: 'inherit', bd: '0', pl: 0, mg: '0', fr: '', mh: '0' }, x || {});
+    const dots = '.'.repeat(1 + (sub % 3));
+
+    // ---------- chips ----------
+    const chip = (me) => (lens === me ? { t: 'YOU ARE HERE', bg: 'var(--ink)', fg: 'var(--bg)' } : { t: 'SHOWS YOU LESS', bg: 'transparent', fg: 'var(--ink)' });
+    const chipA = chip('A'), chipB = chip('B'), chipC = chip('C');
+
+    // ---------- BOSTON pane ----------
+    const isA = lens === 'A';
+    const clock = D.clk + (stage === 'draft' ? T(-2) : stage === 'send' ? tSend : stage === 'read' ? tDel : stage === 'back' || stage === 'counter' ? tCnt : stage === 'sign' ? (sB ? tSB : tSA) : stage === 'file' ? tFile : tOk);
+    const capA = !isA ? A.short + '’s desk is not shown to your seat.' : { draft: 'On your desk. Nothing has left ' + A.short + ' yet.', send: 'In the post.', read: 'At ' + B.short + '’s desk. You cannot see it from here.', back: 'On its way back.', counter: 'Back on your desk with one line marked up.', sign: 'On your desk for signing.', file: 'Filed with the ' + C.short + '.', check: 'With the ' + C.short + ' for rule checks.', done: 'Stamped. Recorded three ways.', refused: 'Refused. Both signatures are void.' }[stage];
+    const btn = (label, sub2, go, kind, w, pressed) => ({ label: label, sub: sub2 || '', go: go, w: w || 150, pressed: pressed || 'false', bd: '#111', bg: kind === 'p' ? 'var(--ink)' : kind === 'sel' ? 'var(--mid)' : 'transparent', fg: kind === 'p' ? 'var(--bg)' : 'var(--ink)' });
+    let mv = { text: '', btns: [], bd: '1px solid var(--mid)', bg: 'transparent', c: 'var(--ink)', fw: 400 };
+    if (!isA) {
+      mv = { text: 'Not your warrant. R-WARRANT: ' + A.short + '’s moves are signed by ' + A.short + '’s seat only. You are looking from ' + (lens === 'B' ? B.short : C.short) + '’s chair.', btns: [btn('Return to ' + A.short + '’s seat', '', () => set({ lens: 'A' }), 'p', 220)], bd: '2px solid ' + RED, bg: 'transparent', c: RED, fw: 600 };
+    } else if (stage === 'draft') {
+      mv.text = (note ? note + ' ' : '') + D.ask;
+      mv.btns = D.opts.map((o, i) => btn(o.t, o.s, () => set({ opt: i }), opt === i ? 'sel' : 'n', 178, opt === i ? 'true' : 'false')).concat([btn(D.sendTo, 'across the border', () => set({ stage: 'send', sub: 0, note: '' }), 'p', 146)]);
+    } else if (stage === 'send' || stage === 'back') {
+      mv.text = stage === 'send' ? 'In the post to ' + B.short + '…' : 'The reply is on its way back…';
+    } else if (stage === 'read') {
+      mv.text = 'Delivered ' + tDel + '. ' + B.short + ' is reading. You cannot see their desk.';
+      mv.btns = [btn('Skip the wait', B.short + '’s reply is scripted', () => set({ stage: 'back', sub: 0 }), 'n', 170)];
+    } else if (stage === 'counter') {
+      mv.text = B.short + ' marked up one line: “' + bOld + '” → “' + bNew + '”. Scripted in this prototype.';
+      mv.btns = [btn('Accept the change', '', () => set({ stage: 'sign', sub: 0, sA: false, sB: false }), 'p', 170), btn('Decline and withdraw', 'nothing changes anywhere', () => set({ stage: 'draft', sub: 0, note: 'You declined the change; the offer was withdrawn.' }), 'n', 210)];
+    } else if (stage === 'sign') {
+      mv.text = !sA ? 'Both lines must be signed. ' + D.warrant : sB ? 'Both lines signed. Filing with the ' + C.short + '…' : 'You signed at ' + tSA + '. Waiting for ' + B.short + '’s line…';
+      mv.btns = !sA ? [btn('Sign as ' + A.role, 'one line of two', () => set({ sA: true, sub: 0 }), 'p', 180)] : [];
+    } else if (stage === 'file' || stage === 'check') {
+      mv.text = 'With the ' + C.short + ' since ' + tFile + '. Rule checks run against each side’s own state.';
+      mv.btns = [btn('Show all checks', '', () => set(fail ? { stage: 'refused', sub: 0 } : { stage: 'done', sub: 0 }), 'n', 160)];
+    } else if (stage === 'refused') {
+      mv = { text: 'Refused by ' + D.checks[2].id + ': ' + D.checks[2].why, btns: [btn('Redraft', 'signatures are void', () => set({ stage: 'draft', sub: 0, sA: false, sB: false, opt: 0, ref: ref + 1, note: '' }), 'p', 170)], bd: '2px solid ' + RED, bg: 'transparent', c: RED, fw: 600 };
+    } else {
+      mv.bd = '2px solid var(--acc)';
+      mv.text = fo ? D.fo2 : 'New in your pane only: ' + D.fo;
+      mv.btns = [btn(fo ? 'Hide the option' : 'Look at the option', '', () => set({ fo: !fo }), 'n', 170), btn('Start over', 'same protocol, new run', () => set({ stage: 'draft', sub: 0, sA: false, sB: false, opt: 0, ref: 0, fo: false, note: '' }), 'p', 178)];
+    }
+    if (mv.text.length > 128) mv.fw = 500;
+
+    const committed = fdone;
+    const g = D.g, gOn = !!g;
+    const gw = 230;
+    const gx = (v) => Math.round((v - g.min) / (g.max - g.min) * gw);
+    const rowsA = D.rowsA.map((r) => ({ lab: r.lab, b: fmt(r.b) + (how && r.src ? ' [' + r.src + ']' : ''), a: committed ? fmt(r.a) : '', arrow: committed ? '→' : '', sw: 't-' + r.t1, sw2: committed ? 't-' + r.t2 : 't-non', op: 1, fr: committed ? 'fr' : '' }));
+    const gv = committed ? g && g.v1 : g && g.v0;
+    const gg = !gOn ? { on: false } : { on: true, lab: g.lab, trackW: gw + 2, fillW: gx(gv), mx: g.m ? gx(g.m) + 1 : 0, mc: g.m ? 'var(--ink)' : 'transparent', txt: committed ? g.s1 : g.s0, cap: g.m ? 'line = ' + g.ml + ' · computed from the ' + A.short + ' book' : 'computed from the ' + A.short + ' book: (2,300 + 800) ÷ 210 a day', tx: gw + 14 };
+    const headA = isA ? 'YOUR BOOKS · private to this seat' : A.short.toUpperCase() + ' SHOWS OTHER SEATS';
+    const discA = isA ? [] : A.sh.map((t) => ln('✓ ' + t, 't-non')).concat([ln(A.short + ' does not show: ' + A.hid, 't-unk', '', { bd: '1.5px dashed var(--ink)', pl: 6, mg: '6px 0 0', mh: '58px' })]);
+    if (!isA) discA.forEach((l) => { l.c = 'inherit'; });
+
+    // ---------- books (records) ----------
+    const stripHist = (arr) => arr.slice(-5);
+    const wk = (t) => t + ' · ';
+    let entA = D.pastA.map((t) => ln(t, 't-rec', 'recorded'));
+    if (at('send') && stage !== 'draft') entA.push(ln(wk(tSend) + 'sent the offer to ' + B.short, 't-rec', 'recorded'));
+    if (at('sign')) entA.push(ln(wk(tAcc) + 'accepted ' + B.short + '’s change', 't-rec', 'recorded'));
+    if (sA && at('sign')) entA.push(ln(wk(tSA) + 'signed as ' + A.role, 't-rec', 'recorded'));
+    if (fdone) entA.push(ln(wk(tOk) + D.recA, 't-rec', 'recorded', { fr: 'fr', c: 'inherit' }));
+    if (fref) entA.push(ln(wk(tOk) + 'filing ' + no + ' refused: ' + D.checks[2].id + '. State unchanged.', 't-ref', 'refused', { c: RED }));
+    const bookA = stripHist(entA);
+    const bookHeadA = isA ? A.nm + ' BOOK · in its own words' : A.nm + ' BOOK · not shown to your seat';
+    const bookAv = isA ? bookA : [ln('earlier entries: not shown to your seat', 't-unk', 'unknown')].concat(fdone ? [ln(wk(tOk) + D.recA, 't-rec', 'recorded')] : []);
+
+    // ---------- DENVER pane ----------
+    const isB = lens === 'B';
+    const capB = isB ? { draft: 'Nothing has reached this desk.', send: 'Something is arriving.', read: 'On your desk. Read it, then mark it up.', back: 'You sent it back.', counter: 'Sent back with one line marked.', sign: 'Waiting for signatures.', file: 'Filed by ' + A.short + '.', check: 'With the ' + C.short + '.', done: 'Recorded.', refused: 'Filing refused.' }[stage]
+      : lens === 'C' ? B.short + '’s desk is not shown to your seat.' : { draft: 'Nothing sent yet.', send: 'In the post.', read: 'The offer is here. You see only the receipt.', back: 'Reply on its way.', counter: 'Sent back with one line marked.', sign: 'Signing.', file: 'Filed with the ' + C.short + '.', check: 'With the ' + C.short + '.', done: 'Recorded on both sides.', refused: 'Filing refused.' }[stage];
+    let linesB = [], headB;
+    if (isB) {
+      headB = 'YOUR NOTES · private to this seat';
+      const nb = !at('read') ? 'Nothing received yet.' : stage === 'read' ? D.bNoteRead : at('back') ? D.bNoteCnt : '';
+      linesB.push(ln(nb, 't-non', 'authored placeholder', { mg: '0 0 4px' }));
+      if (sB) linesB.push(ln('Signed ' + tSB + '.', 't-rec', 'recorded'));
+      D.rowsB.forEach((r) => linesB.push(ln(r.lab + ': ' + r.b + (committed ? ' → ' + r.a : ''), committed ? 't-' + r.t2 : 't-' + r.t1, committed ? '' : '')));
+      linesB.push(ln(A.short + ' does not show: ' + A.hid, 't-unk', '', { bd: '1.5px dashed var(--ink)', pl: 6, mg: '6px 0 0', mh: '58px' }));
+    } else {
+      headB = lens === 'A' ? 'WHAT ' + B.short.toUpperCase() + ' SHOWS YOU' : B.short.toUpperCase() + ' SHOWS OTHER SEATS';
+      if (lens === 'A') {
+        if (stage === 'draft' && note) linesB.push(ln('offer withdrawn · ' + B.short + '’s copy is void', 't-rec', 'recorded'));
+        if (at('read') && stage !== 'draft') linesB.push(ln('delivered ' + tDel, 't-rec', 'recorded'));
+        if (stage === 'read') linesB.push(ln('reading' + dots, 't-rec', 'recorded'));
+        if (at('back')) linesB.push(ln('countered ' + tCnt + ' · one line marked up', 't-rec', 'recorded'));
+        if (sB && at('sign')) linesB.push(ln('signed ' + tSB, 't-rec', 'recorded'));
+        if (at('read')) linesB.push(ln(B.short + '’s evaluation: unknown to you', 't-unk', 'unknown', { bd: '1.5px dashed var(--ink)', pl: 6, mg: '4px 0 6px' }));
+      } else if (at('file')) linesB.push(ln('signed the filing ' + tSB, 't-rec', 'recorded'));
+      B.sh.forEach((t) => linesB.push(ln('✓ ' + t, 't-non', 'authored policy')));
+      linesB.push(ln(B.short + ' does not show: ' + B.hid, 't-unk', '', { bd: '1.5px dashed var(--ink)', pl: 6, mg: '6px 0 0', mh: '84px' }));
+    }
+    const chipBk = chipB;
+    let entB;
+    if (isB) {
+      entB = [ln('earlier entries [authored placeholder]', 't-aut', '')];
+      if (at('read')) entB.push(ln(wk(tDel) + 'received ' + A.short + '’s offer', 't-rec', 'recorded'));
+      if (at('back')) entB.push(ln(wk(tCnt) + D.bDo, 't-rec', 'recorded'));
+      if (sB) entB.push(ln(wk(tSB) + 'signed', 't-rec', 'recorded'));
+      if (fdone) entB.push(ln(wk(tOk) + D.recB, 't-rec', 'recorded', { fr: 'fr' }));
+      if (fref) entB.push(ln(wk(tOk) + 'filing ' + no + ' refused (' + D.checks[2].id + ')', 't-ref', 'refused', { c: RED }));
+    } else {
+      entB = [ln('earlier entries: not shown to your seat', 't-unk', 'unknown')];
+      if (fdone) entB.push(ln(wk(tOk) + D.recB, 't-rec', 'recorded', { fr: 'fr' }));
+      if (fref) entB.push(ln(wk(tOk) + 'filing ' + no + ' refused (' + D.checks[2].id + ')', 't-ref', 'refused', { c: RED }));
+    }
+    const bookHeadB = isB ? B.nm + ' BOOK · in its own words' : B.nm + ' BOOK · what it publishes';
+
+    // ---------- LEAGUE pane ----------
+    const isC = lens === 'C';
+    const capC = { draft: 'No filing on the desk.', send: 'No filing on the desk.', read: 'No filing on the desk.', back: 'No filing on the desk.', counter: 'No filing on the desk.', sign: 'No filing on the desk.', file: 'Filing arriving.', check: 'Filing ' + no + ' received ' + tFile + '. Checks running.', done: 'Filing ' + no + ' approved ' + tOk + '.', refused: 'Filing ' + no + ' refused ' + tOk + '.' }[stage];
+    const nDone = stage === 'check' ? Math.min(fail ? 3 : 4, Math.floor(sub / 2)) : stage === 'done' ? 4 : stage === 'refused' ? 3 : 0;
+    const showA = isA || isC, showB = isB || isC;
+    const checks = D.checks.map((c, i) => {
+      const ran = i < nDone;
+      const running = stage === 'check' && i === nDone && !(fail && nDone > 2);
+      const isF = ran && fail && i === 2;
+      const notRun = stage === 'refused' && i > 2;
+      let det = [];
+      if (isF) det.push({ t: showA ? c.why : 'Reason goes to the team it concerns. The rule is public: ' + c.id + '.', sw: 't-ref', c: RED });
+      else if (ran) {
+        const a = fmt(pk(c.a)), b = fmt(pk(c.b)), cc = c.c || '';
+        if (a) det.push(showA ? { t: a, sw: 't-com', c: 'inherit' } : { t: A.short + '’s side: read by the ' + C.short + ', not shown to you', sw: 't-unk', c: DIM });
+        if (b) det.push(showB ? { t: b, sw: 't-com', c: 'inherit' } : { t: B.short + '’s side: read by the ' + C.short + ', not shown to you', sw: 't-unk', c: DIM });
+        if (cc) det.push({ t: cc, sw: 't-com', c: 'inherit' });
+      }
+      return { id: c.id, nm: c.nm, det: det, sw: isF ? 't-ref' : ran ? 't-com' : 't-aut', sc: isF ? RED : 'inherit',
+        status: isF ? 'REFUSED' : ran ? 'PASS' : running ? 'checking…' : notRun ? 'not run' : 'waiting' };
+    });
+    let entC = D.pastC.map((t) => ln(t, 't-rec', 'recorded', { c: DIM }));
+    if (at('file')) entC.push(ln(wk(tFile) + 'filing ' + no + ' received', 't-rec', 'recorded'));
+    if (fdone) entC.push(ln(wk(tOk) + no + ' ' + D.recC, 't-rec', 'recorded', { fr: 'fr' }));
+    if (fref) entC.push(ln(wk(tOk) + no + ' refused · ' + D.checks[2].id, 't-ref', 'refused', { c: RED }));
+    const bookC = entC.slice(-4);
+
+    return {
+      dom: dom, how: how, notHow: !how, howPressed: how ? 'true' : 'false', howBg: how ? '#111' : 'transparent', howFg: how ? '#FFF' : '#111',
+      toggleHow: () => set({ how: !(this.state && this.state.how) }),
+      legend: [['t-obs', 'observed'], ['t-rec', 'recorded'], ['t-aut', 'authored'], ['t-com', 'computed'], ['t-unk', 'unknown to this seat']].map((x) => ({ sw: x[0], w: x[1] })),
+      tagLine: D.tag, tabs: tabs, rail: rail, lensBtns: lensBtns, A: A, B: B, C: C, chipA: chipA, chipB: chipB, chipC: chipC, clock: clock,
+      ob: ob, capA: capA, capB: capB, capC: capC, mv: mv, isA: isA, notA: !isA, headA: headA, rowsA: rowsA, g: gg, discA: discA,
+      bookA: isA ? bookA : bookAv, bookHeadA: bookHeadA, linesB: linesB, headB: headB, bookB: entB, bookHeadB: bookHeadB,
+      checks: checks, bookC: bookC, bookHeadC: 'TRANSACTION LOG · public',
+      commitOp: fdone ? 1 : 0, commitLabel: fdone ? no + ' · one atomic event · three histories, each in its own words' : ''
+    };
+  }
+}
+</script>
+</body>
+</html>

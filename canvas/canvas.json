@@ -305,6 +305,177 @@
       "title": "A1 \u00b7 Mechanism",
       "page": "w2atlas",
       "is_interactive": true
+    },
+    "Browser2Specimen.dc.html": {
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "B2-2 \u00b7 The Specimen",
+      "page": "w2browser",
+      "is_interactive": true
+    },
+    "Browser2Tracks.dc.html": {
+      "x": 4560,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "B2-4 \u00b7 Tracks",
+      "page": "w2browser",
+      "is_interactive": true
+    },
+    "Browser2Borders.dc.html": {
+      "x": 7600,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "B2-6 \u00b7 Borders",
+      "page": "w2browser",
+      "is_interactive": true
+    },
+    "WhatIfLiving.dc.html": {
+      "x": 4560,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "W4 \u00b7 The Living Fork",
+      "page": "w2whatif",
+      "is_interactive": true
+    },
+    "AtlasDynamics.dc.html": {
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "A2 \u00b7 Field guide of dynamics",
+      "page": "w2atlas",
+      "is_interactive": true
+    },
+    "TextbookChapter.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "J1 \u00b7 The chapter is a route",
+      "page": "w2textbook",
+      "is_interactive": true
+    },
+    "TextbookReveal.dc.html": {
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "J2 \u00b7 The class reveal",
+      "page": "w2textbook",
+      "is_interactive": true
+    },
+    "TextbookTransfer.dc.html": {
+      "x": 3040,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "J3 \u00b7 The exercise is a door",
+      "page": "w2textbook",
+      "is_interactive": true
+    },
+    "EnterTransfer1787.dc.html": {
+      "x": 0,
+      "y": 1020,
+      "w": 1440,
+      "h": 900,
+      "title": "ENTER transfer \u00b7 Philadelphia 1787",
+      "page": "w2enter",
+      "is_interactive": true
+    },
+    "EnterTransferHarrow.dc.html": {
+      "x": 1520,
+      "y": 1020,
+      "w": 1440,
+      "h": 900,
+      "title": "ENTER transfer \u00b7 Harrow Medical",
+      "page": "w2enter",
+      "is_interactive": true
+    },
+    "PubStoryDoor.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "PB1 \u00b7 Story with a door",
+      "page": "w2publisher",
+      "is_interactive": true
+    },
+    "PubExplainer.dc.html": {
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "PB2 \u00b7 Explainer instrument",
+      "page": "w2publisher",
+      "is_interactive": true
+    },
+    "PubMomentCard.dc.html": {
+      "x": 3040,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "PB4 \u00b7 Moment card",
+      "page": "w2publisher",
+      "is_interactive": true
+    },
+    "DevWorldtools.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "H \u00b7 World tools (developer)",
+      "page": "w2platform",
+      "is_interactive": true
+    },
+    "NetworkHandshake.dc.html": {
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "I \u00b7 The Handshake",
+      "page": "w2platform",
+      "is_interactive": true
+    },
+    "BrowserProposed.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "The BOW Browser, proposed after Wave 2",
+      "page": "w2proposed",
+      "is_interactive": true
+    },
+    "AtlasExcavation.dc.html": {
+      "x": 3040,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "A3 \u00b7 Excavation",
+      "page": "w2atlas",
+      "is_interactive": true
+    },
+    "AtlasModels.dc.html": {
+      "x": 4560,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "A4 \u00b7 Model landscape",
+      "page": "w2atlas",
+      "is_interactive": true
+    },
+    "Packet2.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 5720,
+      "title": "Founder packet \u00b7 Wave 2 (M\u2013Q)",
+      "page": "w2packet",
+      "is_interactive": true
     }
   },
   "createdOnFiles": {
@@ -433,6 +604,51 @@
       "maxW": 6000,
       "page": "w2atlas",
       "w": 240
+    },
+    "t_w2textbook": {
+      "x": 0,
+      "y": -300,
+      "text": "Wave 2 \u00b7 Native textbook \u2014 a chapter you live in, a class that is the dataset, an exercise that is a door",
+      "kind": "title1",
+      "maxW": 4480,
+      "page": "w2textbook",
+      "w": 240
+    },
+    "t_w2publisher": {
+      "x": 0,
+      "y": -300,
+      "text": "Wave 2 \u00b7 Publisher \u2014 executable media forms and how they travel",
+      "kind": "title1",
+      "maxW": 4480,
+      "page": "w2publisher",
+      "w": 240
+    },
+    "t_w2platform": {
+      "x": 0,
+      "y": -300,
+      "text": "Wave 2 \u00b7 Cloud primitives for developers, and one real cross-institution interaction",
+      "kind": "title1",
+      "maxW": 2960,
+      "page": "w2platform",
+      "w": 240
+    },
+    "t_w2proposed": {
+      "x": 0,
+      "y": -300,
+      "text": "Wave 2 \u00b7 The Browser, proposed \u2014 one path composed from the critics\u2019 picks: home keeps time, a question places you, a seat is signed for, leaving is an act, following is keeping",
+      "kind": "title1",
+      "maxW": 1440,
+      "page": "w2proposed",
+      "w": 240
+    },
+    "t_w2packet": {
+      "x": 0,
+      "y": -300,
+      "text": "Wave 2 founder packet \u2014 the answer, the tournaments, grammar matrix, canon candidates, kill list, open questions, Wave 3",
+      "kind": "title1",
+      "maxW": 1440,
+      "page": "w2packet",
+      "w": 240
     }
   },
   "order": [
@@ -469,7 +685,26 @@
     "EnterClock.dc.html",
     "EnterDescent.dc.html",
     "WhatIfFan.dc.html",
-    "AtlasMechanism.dc.html"
+    "AtlasMechanism.dc.html",
+    "Browser2Specimen.dc.html",
+    "Browser2Tracks.dc.html",
+    "Browser2Borders.dc.html",
+    "WhatIfLiving.dc.html",
+    "AtlasDynamics.dc.html",
+    "TextbookChapter.dc.html",
+    "TextbookReveal.dc.html",
+    "TextbookTransfer.dc.html",
+    "EnterTransfer1787.dc.html",
+    "EnterTransferHarrow.dc.html",
+    "PubStoryDoor.dc.html",
+    "PubExplainer.dc.html",
+    "PubMomentCard.dc.html",
+    "DevWorldtools.dc.html",
+    "NetworkHandshake.dc.html",
+    "BrowserProposed.dc.html",
+    "AtlasExcavation.dc.html",
+    "AtlasModels.dc.html",
+    "Packet2.dc.html"
   ],
   "pages": [
     {
@@ -523,6 +758,26 @@
     {
       "id": "w2atlas",
       "name": "W2 F \u00b7 Search / Atlas"
+    },
+    {
+      "id": "w2textbook",
+      "name": "W2 J \u00b7 Native textbook"
+    },
+    {
+      "id": "w2publisher",
+      "name": "W2 G \u00b7 Publisher"
+    },
+    {
+      "id": "w2platform",
+      "name": "W2 H/I \u00b7 Cloud and Network"
+    },
+    {
+      "id": "w2proposed",
+      "name": "W2 \u00b7 The Browser, proposed"
+    },
+    {
+      "id": "w2packet",
+      "name": "W2 \u00b7 Founder packet (M\u2013Q)"
     }
   ],
   "title": "BOW Design Frontier"

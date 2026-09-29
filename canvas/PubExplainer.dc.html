@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Explainer instrument</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&amp;family=Merriweather:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F3EF;color:#111111;font-family:'Libre Franklin',sans-serif}
+.fr{font-family:'Libre Franklin',sans-serif;font-variant-numeric:tabular-nums}
+.mw{font-family:'Merriweather',serif}
+.cap{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+.btn{font-family:'Libre Franklin',sans-serif;font-weight:600;font-size:14px;min-height:44px;padding:0 16px;border-radius:0;cursor:pointer;background:#F4F3EF;color:#111111;border:2px solid #111111;transition:background .2s,color .2s,border-color .2s}
+.btn:hover{background:#E8E7E1}
+.btn:focus-visible,.mk:focus-visible{outline:3px solid #0F5FA8;outline-offset:2px}
+.mk{background:transparent;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;width:96px;height:54px;font-family:'Libre Franklin',sans-serif;font-size:12px;font-weight:600;color:#111111}
+.t-obs{background:#111111}
+.t-aut{background:transparent;border:2px solid #111111;box-sizing:border-box}
+.t-com{background:#6F9BC9}
+.t-bra{background:#B9770E}
+.t-unk{background:transparent;border:2px dashed #111111;box-sizing:border-box}
+.sw{display:inline-block;width:12px;height:12px;box-sizing:border-box;flex:none}
+.fill{transition:width .8s ease,background-color .5s ease}
+.fade{transition:opacity .5s ease}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F4F3EF; color: #111111; font-family: 'Libre Franklin', sans-serif">
+
+  <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 40px; box-sizing: border-box; padding: 0 40px; display: flex; align-items: center; gap: 16px; border-bottom: 2px solid #111111">
+    <span class="fr cap" style="white-space: nowrap">[publisher] &middot; Business &middot; Graphics desk</span>
+    <span class="fr" style="font-size: 12px; color: #55554F; white-space: nowrap">By [reporter] &middot; [date]</span>
+    <span class="fr" style="flex: 1; min-width: 0; font-size: 12px; padding: 5px 10px; border: 1px solid #111111; background: #FBFBF9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{address}}</span>
+    <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="min-height: 34px; font-size: 13px; padding: 0 12px; background: {{howBg}}; color: {{howFg}}; white-space: nowrap">How do we know?</button>
+  </header>
+
+  <section style="position: absolute; left: 40px; top: 46px; width: 1360px; height: 92px">
+    <h1 class="fr" style="margin: 0; font-size: 44px; font-weight: 800; line-height: 1.08; letter-spacing: -.01em">How one fire emptied the shelves</h1>
+    <div style="display: flex; justify-content: space-between; gap: 40px; margin-top: 6px">
+      <p class="mw" style="margin: 0; max-width: 860px; font-size: 13px; line-height: 1.5; color: #333330">Harrow Medical (fictional) buys one chip from one supplier. When the supplier&rsquo;s plant burned, five promises went on the clock. Modelled on the March 2021 Renesas Naka fire [verify].</p>
+      <span class="fr" style="max-width: 420px; text-align: right; font-size: 11px; line-height: 1.45; font-weight: 500">PUBLISHING, in this form, means the graphic is the running system: the reader can take the controls, and the story never loses its line.</span>
+    </div>
+  </section>
+
+  <!-- TIMELINE: the story's line and the reader's branch lane -->
+  <nav aria-label="Story steps" style="position: absolute; left: 40px; top: 144px; width: 920px; height: 58px">
+    <div style="position: absolute; left: 60px; top: 24px; width: 840px; height: 3px; background: #111111"></div>
+    <sc-if value="{{branchOn}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: {{lane.x}}px; top: 8px; width: {{lane.w}}px; height: 3px; background: #B9770E"></div>
+      <div style="position: absolute; left: {{lane.x}}px; top: 8px; width: 3px; height: 18px; background: #B9770E"></div>
+      <span class="fr cap" style="position: absolute; left: {{lane.tx}}px; top: -4px; padding: 0 6px; background: #F4F3EF; color: #7A4A00; white-space: nowrap">Your branch &middot; diverged at step {{lane.n}} &middot; {{lane.day}}</span>
+    </sc-if>
+    <sc-for list="{{marks}}" as="mk" hint-placeholder-count="6">
+      <button type="button" class="mk" onClick="{{mk.go}}" aria-label="{{mk.aria}}" aria-current="{{mk.cur}}" style="position: absolute; left: {{mk.x}}px; top: 0">
+        <span style="margin-top: 8px; height: 34px; display: flex; align-items: center; flex: none"><span style="width: {{mk.sz}}px; height: {{mk.sz}}px; box-sizing: border-box; border-radius: {{mk.sz}}px; border: 2px solid #111111; background: {{mk.bg}}; flex: none"></span></span>
+        <span style="margin-top: 0; white-space: nowrap; color: {{mk.fg}}">{{mk.lab}}</span>
+      </button>
+    </sc-for>
+  </nav>
+
+  <!-- THE RUNNING SYSTEM -->
+  <section aria-label="Harrow Medical: the running system" style="position: absolute; left: 40px; top: 208px; width: 920px; height: 432px">
+    <svg width="920" height="432" viewBox="0 0 920 432" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+      <line x1="140" y1="100" x2="186" y2="100" stroke="#111111" stroke-width="3" opacity="{{sv.on}}"></line>
+      <line x1="140" y1="100" x2="160" y2="100" stroke="#111111" stroke-width="3" opacity="{{sv.cut}}"></line>
+      <line x1="170" y1="92" x2="178" y2="108" stroke="#111111" stroke-width="3" opacity="{{sv.cut}}"></line>
+      <line x1="300" y1="150" x2="376" y2="150" stroke="#111111" stroke-width="3"></line>
+      <path d="{{t0.d}}" pathLength="100" fill="none" stroke="#111111" stroke-width="{{t0.ow}}"></path>
+      <path d="{{t0.d}}" pathLength="100" fill="none" stroke="#F4F3EF" stroke-width="{{t0.iw}}"></path>
+      <path d="{{t0.d}}" pathLength="100" fill="none" stroke="{{live}}" stroke-width="{{t0.iw}}" stroke-dasharray="{{t0.dash}} 100" style="transition: stroke-dasharray .9s ease"></path>
+      <path d="{{t1.d}}" pathLength="100" fill="none" stroke="#111111" stroke-width="{{t1.ow}}"></path>
+      <path d="{{t1.d}}" pathLength="100" fill="none" stroke="#F4F3EF" stroke-width="{{t1.iw}}"></path>
+      <path d="{{t1.d}}" pathLength="100" fill="none" stroke="{{live}}" stroke-width="{{t1.iw}}" stroke-dasharray="{{t1.dash}} 100" style="transition: stroke-dasharray .9s ease"></path>
+      <path d="{{t2.d}}" pathLength="100" fill="none" stroke="#111111" stroke-width="{{t2.ow}}"></path>
+      <path d="{{t2.d}}" pathLength="100" fill="none" stroke="#F4F3EF" stroke-width="{{t2.iw}}"></path>
+      <path d="{{t2.d}}" pathLength="100" fill="none" stroke="{{live}}" stroke-width="{{t2.iw}}" stroke-dasharray="{{t2.dash}} 100" style="transition: stroke-dasharray .9s ease"></path>
+      <path d="{{t3.d}}" pathLength="100" fill="none" stroke="#111111" stroke-width="{{t3.ow}}"></path>
+      <path d="{{t3.d}}" pathLength="100" fill="none" stroke="#F4F3EF" stroke-width="{{t3.iw}}"></path>
+      <path d="{{t3.d}}" pathLength="100" fill="none" stroke="{{live}}" stroke-width="{{t3.iw}}" stroke-dasharray="{{t3.dash}} 100" style="transition: stroke-dasharray .9s ease"></path>
+      <path d="{{t4.d}}" pathLength="100" fill="none" stroke="#111111" stroke-width="{{t4.ow}}"></path>
+      <path d="{{t4.d}}" pathLength="100" fill="none" stroke="#F4F3EF" stroke-width="{{t4.iw}}"></path>
+      <path d="{{t4.d}}" pathLength="100" fill="none" stroke="{{live}}" stroke-width="{{t4.iw}}" stroke-dasharray="{{t4.dash}} 100" style="transition: stroke-dasharray .9s ease"></path>
+      <path d="M18 2 C18 10 8 14 8 24 C8 31 13 36 19 36 C26 36 30 31 30 25 C30 20 27 17 26 12 C23 15 22 17 21 20 C19 15 21 8 18 2 Z" fill="none" stroke="#111111" stroke-width="2.5" stroke-linejoin="round" opacity="{{sv.cut}}" transform="translate(142,36)"></path>
+    </svg>
+
+    <sc-if value="{{branchOn}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: -6px; top: 2px; width: 932px; height: 432px; box-sizing: border-box; border: 2px solid #7A4A00; pointer-events: none"></div>
+      <div style="position: absolute; left: 0; top: 318px; width: 170px; padding: 8px 10px; box-sizing: border-box; border: 3px solid #7A4A00; background: #FBF6EC; box-shadow: inset 0 0 0 2px #FBF6EC, inset 0 0 0 3px #7A4A00">
+        <span class="fr cap" style="display: block; color: #7A4A00">Your branch</span>
+        <span class="fr" style="display: block; margin-top: 2px; font-size: 12px; line-height: 1.35">Diverged at step {{lane.n}}, {{lane.day}}. Blue is still the story&rsquo;s line.</span>
+      </div>
+    </sc-if>
+    <div class="t-aut" style="position: absolute; left: 0; top: 52px; width: 140px; height: 96px; padding: 10px; background: #F4F3EF; display: flex; flex-direction: column; justify-content: space-between">
+      <span class="fr cap">Kaito Semiconductor</span>
+      <span class="fr" style="font-size: 12px; line-height: 1.3">the only maker of Harrow&rsquo;s chip<br><strong>{{kaito}}</strong></span>
+    </div>
+    <sc-if value="{{fire}}" hint-placeholder-val="{{false}}">
+      <div class="t-unk" style="position: absolute; left: 0; top: 160px; width: 140px; height: 74px; padding: 8px 10px; box-sizing: border-box"><span class="fr cap" style="display: block">Restart date</span><span class="fr" style="font-size: 12px; line-height: 1.3">not known to Harrow &middot; sealed</span></div>
+    </sc-if>
+    <sc-if value="{{how}}" hint-placeholder-val="{{false}}"><span class="fr" style="position: absolute; left: 0; top: 32px; font-size: 11px; color: #55554F">AUTHORED &middot; fictional</span></sc-if>
+
+    <span class="fr cap" style="position: absolute; left: 190px; top: 8px">On the shelf</span>
+    <div style="position: absolute; left: 190px; top: 28px; width: 110px; display: flex; flex-direction: column-reverse; gap: 3px">
+      <sc-for list="{{slots}}" as="sl" hint-placeholder-count="11">
+        <div style="position: relative; height: 18px; border: 1.5px solid #111111; box-sizing: border-box; background: #FBFBF9"><div class="fill" style="position: absolute; left: 0; top: 0; height: 100%; width: {{sl.w}}%; background: {{live}}"></div></div>
+      </sc-for>
+    </div>
+    <div style="position: absolute; left: 190px; top: 266px; width: 190px">
+      <span class="fr" style="display: block; font-size: 22px; font-weight: 800; line-height: 1.1">{{stockTxt}} chips</span>
+      <span class="fr" style="display: block; font-size: 12px; line-height: 1.35">{{coverTxt}}</span>
+      <sc-if value="{{branchOn}}" hint-placeholder-val="{{false}}"><span class="fr" style="display: block; margin-top: 3px; font-size: 12px; line-height: 1.35; color: #55554F">story&rsquo;s line: {{storyStock}} chips</span></sc-if>
+      <sc-if value="{{how}}" hint-placeholder-val="{{false}}"><span class="fr" style="display: block; margin-top: 3px; font-size: 11px; color: #55554F">COMPUTED (tone) &middot; 2,300 is an authored fixture</span></sc-if>
+    </div>
+    <sc-if value="{{brokerOn}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: 308px; top: 8px; width: 72px">
+        <span class="fr cap" style="display: block; margin-bottom: 4px; color: #7A4A00">Broker lot</span>
+        <div style="display: flex; flex-direction: column; gap: 3px">
+          <sc-for list="{{lot}}" as="lt" hint-placeholder-count="3">
+            <div style="position: relative; width: 62px; height: 18px; border: 2px solid #7A4A00; box-sizing: border-box; background: #FBFBF9"><div class="fill" style="position: absolute; left: 0; top: 0; height: 100%; width: {{lt.w}}%; background: #B9770E"></div></div>
+          </sc-for>
+        </div>
+        <span class="fr" style="display: block; margin-top: 4px; font-size: 11px; line-height: 1.3">{{lotTxt}}</span>
+      </div>
+    </sc-if>
+
+    <div class="t-aut" style="position: absolute; left: 380px; top: 100px; width: 140px; height: 100px; padding: 10px; box-sizing: border-box; background: #F4F3EF; display: flex; flex-direction: column; justify-content: space-between">
+      <span class="fr cap">Line 2</span>
+      <span class="fr" style="font-size: 13px; line-height: 1.3; font-weight: 600">{{lineTxt}}</span>
+      <sc-if value="{{branchOn}}" hint-placeholder-val="{{false}}"><span class="fr" style="font-size: 11px; line-height: 1.25; color: #55554F">story&rsquo;s line: {{storyLine}}</span></sc-if>
+    </div>
+
+    <sc-for list="{{custs}}" as="cu" hint-placeholder-count="5">
+      <div style="position: absolute; left: 630px; top: {{cu.top}}px; width: 290px">
+        <div style="display: flex; align-items: baseline; gap: 6px; justify-content: space-between">
+          <span class="fr" style="font-size: 14px; font-weight: 700; white-space: nowrap">{{cu.name}}</span>
+          <span class="fr" style="font-size: 11px; font-weight: 600; padding: 1px 5px; border: 1.5px solid #111111; white-space: nowrap">{{cu.due}}</span>
+        </div>
+        <div class="fr" style="font-size: 11px; color: #55554F; margin: 1px 0 3px">{{cu.kind}} &middot; promised {{cu.n}} pumps</div>
+        <div style="display: flex; align-items: center; gap: 8px">
+          <div style="position: relative; width: 100px; height: 10px; border: 1.5px solid #111111; box-sizing: border-box; background: #FBFBF9; flex: none"><div class="fill" style="position: absolute; left: 0; top: 0; height: 100%; width: {{cu.sPct}}%; background: #6F9BC9"></div></div>
+          <span class="fr" style="font-size: 12px; white-space: nowrap"><strong>{{cu.sTxt}}</strong> &middot; {{cu.sSt}}</span>
+        </div>
+        <sc-if value="{{branchOn}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px">
+            <div style="position: relative; width: 100px; height: 10px; border: 1.5px solid #7A4A00; box-sizing: border-box; background: #FBFBF9; flex: none"><div class="fill" style="position: absolute; left: 0; top: 0; height: 100%; width: {{cu.bPct}}%; background: #B9770E"></div></div>
+            <span class="fr" style="font-size: 12px; white-space: nowrap; color: #7A4A00"><strong>{{cu.bTxt}}</strong> &middot; {{cu.bSt}}</span>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+    <span class="fr" style="position: absolute; left: 630px; top: 402px; font-size: 11px; color: #55554F; width: 290px; line-height: 1.3">{{keyTxt}}</span>
+
+    <sc-if value="{{sealedEnd}}" hint-placeholder-val="{{false}}">
+      <div class="t-unk" style="position: absolute; left: 0; top: 386px; width: 610px; height: 40px; padding: 0 12px; display: flex; align-items: center; background: #F4F3EF"><span class="fr" style="font-size: 12px; line-height: 1.3"><strong>Beyond day 56: sealed.</strong> Kaito&rsquo;s restart, what the hospitals did without pumps, what each miss cost. Not modeled; you find out by living it.</span></div>
+    </sc-if>
+  </section>
+
+  <!-- RIGHT COLUMN -->
+  <section aria-label="Story and controls" style="position: absolute; left: 1000px; top: 148px; width: 400px; height: 492px">
+    <sc-if value="{{storyMode}}" hint-placeholder-val="{{true}}">
+      <span class="fr cap" style="color: #0F5FA8">Step {{stepN}} of 6 &middot; {{dayLab}}</span>
+      <h2 class="fr" style="margin: 6px 0 8px; font-size: 24px; font-weight: 800; line-height: 1.15">{{cap.head}}</h2>
+      <p class="mw" style="margin: 0; font-size: 14px; line-height: 1.62; min-height: 132px">{{cap.body}}</p>
+      <div style="display: flex; gap: 10px; margin-top: 14px">
+        <button type="button" class="btn" onClick="{{prev}}" aria-label="Previous step" style="width: 64px; padding: 0; opacity: {{prevOp}}">&larr;</button>
+        <button type="button" class="btn" onClick="{{next}}" aria-label="Next step" style="flex: 1; background: #111111; color: #F4F3EF; opacity: {{nextOp}}">{{nextLab}} &rarr;</button>
+      </div>
+      <div style="margin-top: 26px; padding-top: 14px; border-top: 2px solid #111111">
+        <button type="button" class="btn" onClick="{{take}}" style="width: 100%; min-height: 52px; font-size: 16px; font-weight: 700; border-color: #7A4A00; color: #7A4A00">Take the controls</button>
+        <p class="fr" style="margin: 8px 0 0; font-size: 12px; line-height: 1.45; color: #333330">Pauses the story at step {{stepN}} and hands you the system in exactly this state. You can try things. Nothing you do changes the story&rsquo;s line.</p>
+      </div>
+    </sc-if>
+    <sc-if value="{{branchOn}}" hint-placeholder-val="{{false}}">
+      <div style="border: 3px solid #7A4A00; padding: 10px 12px; background: #FBF6EC; box-shadow: inset 0 0 0 2px #FBF6EC, inset 0 0 0 3px #7A4A00">
+        <span class="fr" style="display: block; font-size: 17px; font-weight: 800; color: #7A4A00; line-height: 1.2">You are off the story&rsquo;s line &middot; your branch</span>
+        <span class="fr cap" style="display: block; margin-top: 3px; color: #7A4A00">Diverged at step {{lane.n}} &middot; {{lane.day}} &middot; {{savedTag}}</span>
+      </div>
+      <span class="fr cap" style="display: block; margin: 12px 0 5px">Who gets the chips from here</span>
+      <div style="display: flex; gap: 0">
+        <button type="button" class="btn" onClick="{{setQueue}}" aria-pressed="{{qPress}}" style="flex: 1; padding: 0 8px; background: {{qBg}}; color: {{qFg}}; border-color: #7A4A00">Contract order<br><span style="font-weight: 500; font-size: 11px">the story&rsquo;s rule</span></button>
+        <button type="button" class="btn" onClick="{{setHosp}}" aria-pressed="{{hPress}}" style="flex: 1; padding: 0 8px; margin-left: -2px; background: {{hBg}}; color: {{hFg}}; border-color: #7A4A00">Hospitals first<br><span style="font-weight: 500; font-size: 11px">then contract order</span></button>
+      </div>
+      <button type="button" class="btn" onClick="{{toggleBroker}}" aria-pressed="{{bPress}}" style="width: 100%; margin-top: 8px; text-align: left; background: {{bBg}}; color: {{bFg}}; border-color: #7A4A00">Broker buy: 600 chips<br><span style="font-weight: 500; font-size: 11px">arrive 5 days after the order &middot; illustrative, authored</span></button>
+      <sc-if value="{{hasMsg}}" hint-placeholder-val="{{false}}"><p class="fr" style="margin: 8px 0 0; padding: 7px 10px; border: 2px solid #111111; font-size: 12px; line-height: 1.4; background: #FFFFFF"><strong>REFUSED &middot; </strong>{{msg}}</p></sc-if>
+      <sc-if value="{{hasNote}}" hint-placeholder-val="{{false}}"><p class="fr" style="margin: 8px 0 0; font-size: 12px; line-height: 1.4; color: #333330">{{note}}</p></sc-if>
+      <div style="margin-top: 10px; padding: 8px 10px; border-left: 4px solid #B9770E; background: #FFFFFF; font-size: 13px; line-height: 1.45" class="fr">
+        <span class="cap" style="display: block; color: #7A4A00; margin-bottom: 2px">By day 56 (computed)</span>{{endLine}}
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 10px">
+        <button type="button" class="btn" onClick="{{ret}}" style="flex: 1; background: #111111; color: #F4F3EF">Return to the story</button>
+        <button type="button" class="btn" onClick="{{attach}}" style="flex: 1; border-color: #7A4A00; color: #7A4A00">{{attachLab}}</button>
+      </div>
+    </sc-if>
+  </section>
+
+  <!-- PROVENANCE -->
+  <section aria-label="Provenance" style="position: absolute; left: 40px; top: 650px; width: 920px; height: 200px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #111111; padding-bottom: 3px">
+      <span class="fr" style="font-size: 16px; font-weight: 800">Claimed &middot; computed &middot; sourced <span style="font-weight: 500; font-size: 12px; color: #55554F">&nbsp;at step {{stepN}}</span></span>
+      <span class="fr" style="font-size: 11px; color: #55554F">{{provNote}}</span>
+    </div>
+    <div class="fr cap" style="display: flex; gap: 14px; height: 24px; align-items: center; color: #55554F"><span style="width: 250px">The story claims</span><span style="width: 340px; display: flex; align-items: center; gap: 6px"><span class="sw t-com"></span>The model computes</span><span style="flex: 1; display: flex; align-items: center; gap: 6px"><span class="sw t-aut"></span>The reporter&rsquo;s sources</span></div>
+    <sc-for list="{{prov}}" as="pr" hint-placeholder-count="3">
+      <div style="display: flex; gap: 14px; padding: 5px 6px; margin-bottom: 3px; box-sizing: border-box; border-top: 1px solid #C9C8C0; border-left: {{pr.bl}}; background: {{pr.bg}}">
+        <span class="mw" style="width: 244px; flex: none; font-size: 12px; line-height: 1.4">{{pr.a}}</span>
+        <span class="fr" style="width: 340px; flex: none; font-size: 12px; line-height: 1.4">{{pr.b}}</span>
+        <span class="fr" style="flex: 1; font-size: 12px; line-height: 1.4; display: flex; gap: 6px"><span class="sw {{pr.sw}}" style="margin-top: 3px"></span><span>{{pr.c}}</span></span>
+      </div>
+    </sc-for>
+  </section>
+
+  <!-- DISTRIBUTION -->
+  <section aria-label="How this travels" style="position: absolute; left: 1000px; top: 650px; width: 400px; height: 200px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #111111; padding-bottom: 3px">
+      <span class="fr" style="font-size: 16px; font-weight: 800; white-space: nowrap">How it travels</span>
+      <span class="fr" style="font-size: 12px; color: #55554F; white-space: nowrap">Readers tried: [count from the publisher]{{yoursTag}}</span>
+    </div>
+    <div style="display: flex; gap: 8px; margin-top: 8px">
+      <button type="button" class="btn" onClick="{{dEmbed}}" aria-pressed="{{pEmbed}}" style="flex: 1; min-height: 40px; font-size: 13px; padding: 0 6px; background: {{bEmbed}}; color: {{fEmbed}}">Embed this step</button>
+      <button type="button" class="btn" onClick="{{dShare}}" aria-pressed="{{pShare}}" style="flex: 1; min-height: 40px; font-size: 13px; padding: 0 6px; background: {{bShare}}; color: {{fShare}}">{{shareLab}}</button>
+    </div>
+    <div style="margin-top: 8px; box-sizing: border-box; height: 116px; padding: 7px 10px; border: {{dist.bd}}; background: #FBFBF9; overflow: hidden">
+      <span class="fr cap" style="display: block; color: {{dist.tc}}; margin-bottom: 3px">{{dist.tag}}</span>
+      <span class="fr" style="display: block; font-size: 12px; line-height: 1.4; word-break: break-word; font-weight: 600">{{dist.code}}</span>
+      <span class="fr" style="display: block; margin-top: 4px; font-size: 12px; line-height: 1.4; color: #333330">{{dist.text}}</span>
+    </div>
+  </section>
+
+  <div class="fr" style="position: absolute; left: 40px; bottom: 9px; width: 660px; font-size: 11px; line-height: 1.4; color: #55554F">COMMERCIAL LENS &middot; Hypothesis: business publishers pay per executable graphic; the same system is resold to enterprises as a training/scenario asset (a second revenue line from one build).</div>
+  <div class="fr" style="position: absolute; right: 40px; bottom: 9px; width: 660px; text-align: right; font-size: 11px; line-height: 1.4; color: #55554F">PROTOTYPE &middot; DESIGN PROPOSAL &middot; Harrow, Kaito and all customers are fictional; numbers are authored or computed from authored inputs &middot; real anchor (Renesas Naka, March 2021): verify</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const step = s.step || 0;
+    const br = s.br || null;
+    const how = !!s.how;
+    const dist = s.dist || null;
+    const msg = s.msg || '';
+    const saved = !!s.saved;
+    const BRI = '#B9770E', ACM = '#6F9BC9';
+    const fmt = (n) => Math.round(n).toLocaleString('en-US');
+
+    const DAYS = [0, 0, 3, 11, 14, 56];
+    const TIMES = ['06:09', '06:10', 'Day 3', 'Day 11', 'Day 14', 'Day 56'];
+    const CUST = [
+      { name: 'Ridgeway Distributors', kind: 'distributor', n: 1400, due: 28 },
+      { name: 'Marlow Clinics', kind: 'clinic', n: 900, due: 35 },
+      { name: 'Cedar Home Care', kind: 'home care', n: 800, due: 56 },
+      { name: 'Brightwater Hospitals', kind: 'hospital', n: 1200, due: 14 },
+      { name: 'Northgate Health', kind: 'hospital', n: 1050, due: 21 }
+    ];
+    const ORDER = { queue: [0, 1, 2, 3, 4], hosp: [3, 4, 0, 1, 2] };
+    const sim = (day, cfg) => {
+      const dt = 0.05, rate = 210;
+      let stock = 2300, idle = 0, arrived = false;
+      const cover = [0, 0, 0, 0, 0];
+      const arr = cfg && cfg.broker ? DAYS[cfg.from] + 5 : 1e9;
+      const n = Math.round(day / dt);
+      for (let i = 0; i < n; i++) {
+        const t = i * dt;
+        if (!arrived && t >= arr - 1e-9) { stock += 600; arrived = true; }
+        const c = Math.min(rate * dt, stock);
+        if (c <= 1e-9) { idle += dt; continue; }
+        stock -= c;
+        const ord = (cfg && t >= DAYS[cfg.from] - 1e-9) ? ORDER[cfg.alloc] : ORDER.queue;
+        let left = c;
+        for (let j = 0; j < 5 && left > 1e-9; j++) { const k = ord[j]; const g = Math.min(CUST[k].n - cover[k], left); cover[k] += g; left -= g; }
+      }
+      return { stock: stock, cover: cover, idle: idle, arrived: arrived, arr: arr };
+    };
+    const day = DAYS[step];
+    const cfg = br ? { from: br.from, alloc: br.alloc, broker: br.broker } : null;
+    const S = sim(day, null);
+    const B = cfg ? sim(day, cfg) : null;
+    const L = B || S;
+    const SE = sim(56, null), BE = cfg ? sim(56, cfg) : null;
+    const keptOf = (r) => CUST.map((c, i) => (r.cover[i] >= c.n - 0.5 ? c.name.split(' ')[0] : null)).filter(Boolean);
+    const stat = (r, i) => {
+      const c = CUST[i], cv = r.cover[i];
+      if (cv >= c.n - 0.5) return 'kept';
+      if (day >= c.due) return 'missed';
+      const pending = cfg && cfg.broker && !r.arrived && day >= DAYS[cfg.from];
+      if (r.stock < 1 && !pending) return 'at risk';
+      return 'open';
+    };
+    const pend = B && cfg.broker && !B.arrived && day >= DAYS[cfg.from];
+
+    /* threads */
+    const th = (i) => {
+      const cy = 44 + i * 80, w = CUST[i].n / 1400 * 26;
+      return { d: 'M 520 150 C 575 150 575 ' + cy + ' 626 ' + cy, ow: (w + 3).toFixed(1), iw: (w - 1).toFixed(1), dash: Math.round(L.cover[i] / CUST[i].n * 1000) / 10 };
+    };
+    const custs = CUST.map((c, i) => ({
+      name: c.name, kind: c.kind, n: fmt(c.n), due: 'due day ' + c.due, top: 44 + i * 80 - 34,
+      sPct: Math.round(S.cover[i] / c.n * 100), sTxt: fmt(S.cover[i]) + ' of ' + fmt(c.n), sSt: stat(S, i),
+      bPct: B ? Math.round(B.cover[i] / c.n * 100) : 0, bTxt: B ? fmt(B.cover[i]) + ' of ' + fmt(c.n) : '', bSt: B ? stat(B, i) : ''
+    }));
+
+    /* rack */
+    const dc = L.stock / 210;
+    const slots = []; for (let i = 0; i < 11; i++) slots.push({ w: Math.round(Math.max(0, Math.min(1, dc - i)) * 100) });
+    const lotOn = !!(cfg && cfg.broker);
+    const lotFill = lotOn && B.arrived ? Math.min(600, L.stock) : 0;
+    const lot = [0, 1, 2].map((i) => ({ w: Math.round(Math.max(0, Math.min(1, lotFill / 200 - i)) * 100) }));
+    const lotTxt = lotOn ? (B.arrived ? 'landed day ' + (DAYS[cfg.from] + 5) : (day >= DAYS[cfg.from] ? 'lands day ' + (DAYS[cfg.from] + 5) : 'not ordered yet')) + ' · illustrative' : '';
+
+    /* steps text */
+    const CAP = [
+      { head: 'Before the fire', body: 'Harrow Medical makes infusion pumps. Every pump needs one microcontroller, and one company, Kaito Semiconductor, makes it. On the shelf: 2,300 chips. Line 2 uses 210 a day.' },
+      { head: '06:10. A fire at Kaito.', body: 'The fire stops Kaito’s fab. Nothing Harrow can see says when it reopens. The chips on the shelf are all there is, and the promises to five customers have not changed.' },
+      { head: 'Nothing looks wrong yet', body: 'Line 2 keeps running. Three days in, 630 chips are gone and 1,670 remain: about eight more days. Every chip so far has gone to the earliest contract, Ridgeway.' },
+      { head: 'The shelf is empty', body: 'The 2,300 chips are gone and Line 2 stops. Ridgeway (1,400) and Marlow (900) got every chip because their contracts were signed first. No hospital got a pump.' },
+      { head: 'The first hospital promise comes due', body: 'Brightwater Hospitals was promised 1,200 pumps by today. Harrow has none, and cannot say when it will.' },
+      { head: 'Eight weeks on', body: 'Two promises kept, three missed. Which miss cost the most is not something this graphic can say.' }
+    ];
+    const PROV = [
+      [['Harrow depends on one chip supplier.', '2,300 ÷ 210 = 10.95 days of cover.', 'Stock and rate: Harrow operations [fictional fixture, authored].', 'aut'], ['Five customers have been promised pumps.', 'Promised: 1,400 + 900 + 800 + 1,200 + 1,050 = 5,350 pumps.', 'Promises and due days: authored, illustrative.', 'aut']],
+      [['A fire stopped Kaito’s output at 06:10.', 'Supply into the shelf is set to 0 from this moment.', 'Modelled on the Renesas Naka fire, March 2021 [verify: date, output lost, restart].', 'obs'], ['Nobody knows when Kaito reopens.', 'Not computed. The restart is sealed, not guessed.', 'Harrow’s view: [reporter’s source, placeholder].', 'aut']],
+      [['Nothing looks wrong on the floor yet.', '3 × 210 = 630 used; 2,300 − 630 = 1,670 left, 7.95 days.', '[Harrow operations lead, placeholder].', 'aut'], ['Ridgeway’s contract is first in line.', 'Chips are assigned by the story’s rule: contract order.', 'Contract order: authored. The branch tests it.', 'aut']],
+      [['The shelf is empty on day 11.', '2,300 ÷ 210 = 10.95: the last chip is used during day 11.', 'Same fixture: 2,300 chips, 210 a day [authored].', 'aut'], ['No hospital got a pump.', '1,400 + 900 = 2,300: Ridgeway and Marlow take every chip.', 'Contract order is the story’s assumption, not a fact about Harrow.', 'aut']],
+      [['Brightwater’s promise is missed.', '0 of 1,200 delivered; due day 14 reached.', '[Brightwater statement, placeholder].', 'aut'], ['Harrow can’t say when there will be more.', 'No supply modelled; the restart stays sealed.', 'Assumption: no Kaito chips within eight weeks [authored].', 'aut']],
+      [['Two of five promises were kept.', 'Ridgeway 1,400 of 1,400 and Marlow 900 of 900; the other three got 0.', 'Promises: authored. Nothing here is a measurement.', 'aut'], ['Which miss cost most can’t be said here.', 'Not computed: penalties and harm to patients are not modelled.', 'Sealed: [contract penalty terms, not in this prototype].', 'unk']]
+    ];
+    const prov = PROV[step].map((r) => ({ a: r[0], b: r[1], c: r[2], sw: 't-' + r[3], bl: '0', bg: 'transparent' }));
+    const endKept = BE ? keptOf(BE) : [];
+    const endLine = BE ? ('Your branch keeps ' + endKept.length + ' of 5 promises' + (endKept.length ? ' (' + endKept.join(', ') + ')' : '') + '; Line 2 idles ' + Math.round(BE.idle) + ' days. The story’s line keeps ' + keptOf(SE).length + ' (' + keptOf(SE).join(', ') + '). Which set matters more is not modelled.') : '';
+    if (B) {
+      const summary = 'From day ' + DAYS[br.from] + ': ' + (br.alloc === 'hosp' ? 'hospitals first' : 'contract order') + (br.broker ? ', broker lot of 600 (authored)' : ', no broker') + '. Day ' + day + ': ' + custs.map((c, i) => CUST[i].name.split(' ')[0] + ' ' + fmt(B.cover[i])).join(', ') + '.';
+      prov.unshift({ a: 'The story makes no claim about your branch.', b: summary, c: 'Your settings: allocation and broker order (illustrative, authored).', sw: 't-bra', bl: '4px solid #B9770E', bg: '#FBF6EC' });
+    }
+
+    /* controls */
+    const setStep = (i) => () => this.setState({ step: i, msg: '' });
+    const from = br ? br.from : 0;
+    const refuseLate = br && from === 5;
+    const setAlloc = (a) => () => {
+      if (!br) return;
+      if (refuseLate) { this.setState({ msg: 'rule: allocation steers chips still on the shelf or still to come. At day 56 the eight weeks are over and none remain.' }); return; }
+      this.setState({ br: { from: br.from, alloc: a, broker: br.broker }, msg: '' });
+    };
+    const toggleBroker = () => {
+      if (!br) return;
+      if (refuseLate) { this.setState({ msg: 'rule: an order placed on day 56 lands on day 61, outside the eight-week window (arrival = order + 5 days, authored).' }); return; }
+      this.setState({ br: { from: br.from, alloc: br.alloc, broker: !br.broker }, msg: '' });
+    };
+    let note = '';
+    if (br && br.alloc === 'hosp' && !br.broker && from >= 3) note = 'Nothing left on the shelf to steer: hospitals-first only matters for chips that arrive later. Try it at step 2 or with a broker lot.';
+    else if (br && br.alloc === 'hosp' && from === 2) note = 'By step 3, 630 chips have already gone to Ridgeway. Allocation only steers what is still on the shelf.';
+    else if (br && step < from) note = 'You are looking at a step before your branch diverged: it is identical to the story’s line.';
+    const lane = br ? { x: 60 + br.from * 168, w: 840 - br.from * 168, n: br.from + 1, day: br.from === 0 ? '06:09' : TIMES[br.from].toLowerCase(), tx: Math.min(60 + br.from * 168 + 24, 540) } : { x: 0, w: 0, n: 0, day: '', tx: 0 };
+    const marks = TIMES.map((t, i) => {
+      const cur = i === step;
+      return { x: 12 + i * 168, lab: (i + 1) + ' · ' + t, aria: 'Step ' + (i + 1) + ': ' + t, cur: cur ? 'step' : 'false', go: setStep(i), sz: cur ? 16 : 12, bg: cur ? '#111111' : (br && i >= br.from ? '#B9770E' : '#F4F3EF'), fg: cur ? '#111111' : '#55554F' };
+    });
+
+    /* distribution */
+    const addrBase = 'bow://explainers/harrow-fire#step=' + (step + 1);
+    const brQ = br ? '&alloc=' + br.alloc + '&broker=' + (br.broker ? 1 : 0) + '&from=' + (br.from + 1) : '';
+    let dTag = 'NOTHING IS SENT FROM HERE', dCode = 'Pick one to see what would travel.', dText = 'The graphic leaves this page as a running system with its byline, sources and rules. Reading and taking the controls are free.', dBd = '1px solid #111111', dTc = '#55554F';
+    if (dist === 'embed') {
+      dTag = 'EMBED · PINNED TO STEP ' + (step + 1);
+      dCode = '<bow-explainer src="bow://explainers/harrow-fire" step="' + (step + 1) + '" by="[reporter]" pub="[publisher]" sources="[list]" fictional>';
+      dText = 'The embed carries provenance and the story’s line. A reader who takes the controls there leaves a branch on this article. The same system also runs as a Harrow scenario in BOW Enterprise [hypothesis].';
+    } else if (dist === 'share') {
+      if (br && !saved) {
+        dTag = 'REFUSED · rule: a branch travels only once attached'; dTc = '#7A4A00'; dBd = '2px solid #7A4A00';
+        dCode = 'No address for your branch yet.';
+        dText = 'The address carries your settings and where you diverged, so it is made when you attach the branch to the article.';
+      } else if (br) {
+        dTag = 'ADDRESS OF YOUR BRANCH'; dTc = '#7A4A00';
+        dCode = 'bow://explainers/harrow-fire/b/[assigned]' + '?' + brQ.slice(1);
+        dText = 'Opens the system at your settings, in branch ink, beside the story’s line. The story is untouched.';
+      } else {
+        dTag = 'ADDRESS OF THIS STATE';
+        dCode = addrBase;
+        dText = 'Opens the graphic at this step, on the story’s line. Free, no login.';
+      }
+    }
+
+    return {
+      how, howPressed: how ? 'true' : 'false', howBg: how ? '#111111' : '#F4F3EF', howFg: how ? '#F4F3EF' : '#111111',
+      toggleHow: () => this.setState({ how: !how }),
+      address: br ? addrBase + brQ + ' · your branch · ' + (saved ? 'attached' : 'unpublished') : addrBase + ' · on the story’s line',
+      marks, lane, branchOn: !!br, storyMode: !br,
+      sv: { on: step === 0 ? 1 : 0, cut: step === 0 ? 0 : 1 },
+      live: br ? BRI : ACM, kaito: step === 0 ? 'running' : 'fire, 06:10', fire: step >= 1,
+      t0: th(0), t1: th(1), t2: th(2), t3: th(3), t4: th(4),
+      slots, stockTxt: fmt(L.stock), coverTxt: L.stock < 1 ? 'empty · Line 2 has nothing to run on' : (dc.toFixed(2) + ' days at 210 a day'), storyStock: fmt(S.stock),
+      brokerOn: lotOn, lot, lotTxt,
+      lineTxt: L.stock >= 1 ? 'running · 210 a day' : (pend ? 'idle · waiting on the broker lot' : (L.idle < 0.5 ? 'stopped · no chips' : 'idle for ' + (Math.round(L.idle * 10) / 10) + ' days')),
+      storyLine: S.stock >= 1 ? 'running' : (S.idle < 0.5 ? 'stopped · no chips' : 'idle for ' + (Math.round(S.idle * 10) / 10) + ' days'),
+      custs, keyTxt: (br ? 'Blue: the story’s line. Amber: your branch. ' : '') + (how ? 'Outline is the promise (authored); tone is pumps delivered (computed).' : ''), sealedEnd: step === 5 && !br,
+      stepN: step + 1, dayLab: step === 0 ? '06:09, day 0' : (step === 1 ? '06:10, day 0' : 'day ' + day), cap: CAP[step],
+      prev: () => this.setState({ step: Math.max(0, step - 1), msg: '' }),
+      next: () => this.setState({ step: Math.min(5, step + 1), msg: '' }),
+      prevOp: step === 0 ? 0.4 : 1, nextOp: step === 5 ? 0.4 : 1, nextLab: step === 5 ? 'End of the story' : 'Next step',
+      take: () => this.setState({ br: { from: step, alloc: 'queue', broker: false }, msg: '', saved: false }),
+      ret: () => this.setState({ br: null, msg: '' }),
+      attach: () => this.setState({ saved: true }),
+      attachLab: saved ? 'Attached to the article' : 'Attach to the article',
+      savedTag: saved ? 'attached, by you' : 'unpublished',
+      yoursTag: saved ? ' + yours' : '',
+      setQueue: setAlloc('queue'), setHosp: setAlloc('hosp'), toggleBroker,
+      qPress: br && br.alloc === 'queue' ? 'true' : 'false', qBg: br && br.alloc === 'queue' ? '#7A4A00' : '#F4F3EF', qFg: br && br.alloc === 'queue' ? '#FFFFFF' : '#7A4A00',
+      hPress: br && br.alloc === 'hosp' ? 'true' : 'false', hBg: br && br.alloc === 'hosp' ? '#7A4A00' : '#F4F3EF', hFg: br && br.alloc === 'hosp' ? '#FFFFFF' : '#7A4A00',
+      bPress: br && br.broker ? 'true' : 'false', bBg: br && br.broker ? '#7A4A00' : '#F4F3EF', bFg: br && br.broker ? '#FFFFFF' : '#7A4A00',
+      msg, hasMsg: !!msg, note, hasNote: !!note && !msg, endLine,
+      prov, provNote: how ? 'tone = computed · outline = authored placeholder · solid = observed · dashed = sealed' : 'a claim without a computation or a source is only a claim',
+      dEmbed: () => this.setState({ dist: 'embed' }), dShare: () => this.setState({ dist: 'share' }),
+      pEmbed: dist === 'embed' ? 'true' : 'false', pShare: dist === 'share' ? 'true' : 'false',
+      bEmbed: dist === 'embed' ? '#111111' : '#F4F3EF', fEmbed: dist === 'embed' ? '#F4F3EF' : '#111111',
+      bShare: dist === 'share' ? '#111111' : '#F4F3EF', fShare: dist === 'share' ? '#F4F3EF' : '#111111',
+      shareLab: br ? 'Share my branch' : 'Share this state',
+      dist: { tag: dTag, code: dCode, text: dText, bd: dBd, tc: dTc }
+    };
+  }
+}
+</script>
+</body>
+</html>

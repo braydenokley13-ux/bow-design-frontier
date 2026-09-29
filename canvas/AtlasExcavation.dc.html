@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Atlas: the excavation</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400;1,500&amp;family=Alegreya+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E4E6DF;color:#17130E;font-family:'Alegreya',serif;font-variant-numeric:lining-nums}
+.al{font-family:'Alegreya',serif}
+.as{font-family:'Alegreya Sans',sans-serif}
+.btn{font-family:'Alegreya Sans',sans-serif;border-radius:0;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.btn:focus-visible{outline:3px solid #8A3B12;outline-offset:2px}
+.btn:disabled{cursor:not-allowed}
+.fd{transition:opacity .5s ease}
+.mvx{transition:top .9s cubic-bezier(.3,.7,.2,1),height .9s cubic-bezier(.3,.7,.2,1),opacity .5s ease}
+.sw{display:inline-block;flex:none;box-sizing:border-box;width:16px;height:16px}
+/* ground patterns: geology only, tone on tone, never black ink */
+.p1{background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='16'%3E%3Cpath d='M0 4 Q15 1 30 4 T60 4 T90 4 T120 4 M0 12 Q15 9 30 12 T60 12 T90 12 T120 12' stroke='%23CDBE9C' stroke-width='1.3' fill='none'/%3E%3C/svg%3E")}
+.p2{background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='28'%3E%3Cpath d='M0 14 H56 M0 0 H56 M14 0 V14 M42 14 V28' stroke='%23BE9B7B' stroke-width='1.2' fill='none'/%3E%3C/svg%3E")}
+.p3{background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='12'%3E%3Cpath d='M0 3 H22 M30 3 H52 M8 9 H36 M44 9 H60' stroke='%239AA6AC' stroke-width='1.3' fill='none'/%3E%3C/svg%3E")}
+.p4{background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='48'%3E%3Cg stroke='%23A9AA7E' stroke-width='1.3' fill='none'%3E%3Ccircle cx='10' cy='10' r='5'/%3E%3Ccircle cx='40' cy='16' r='3'/%3E%3Ccircle cx='24' cy='36' r='4'/%3E%3Ccircle cx='54' cy='40' r='5'/%3E%3C/g%3E%3C/svg%3E")}
+.p5{background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cpath d='M9 5 V13 M5 9 H13 M27 23 V31 M23 27 H31' stroke='%23A48A70' stroke-width='1.3' fill='none'/%3E%3C/svg%3E")}
+.v1{background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='20'%3E%3Cpath d='M7 2 V11' stroke='%237E8F5E' stroke-width='1.4' fill='none'/%3E%3C/svg%3E")}
+.v2{background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='16'%3E%3Cpath d='M0 8 Q6 2 12 8 T24 8' stroke='%23B4705F' stroke-width='1.4' fill='none'/%3E%3C/svg%3E")}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #E4E6DF; color: #17130E; font-family: 'Alegreya', serif; font-variant-numeric: lining-nums">
+
+  <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 56px; box-sizing: border-box; padding: 0 28px; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #17130E">
+    <div style="display: flex; flex-direction: column; line-height: 1; flex: none">
+      <span class="as" style="font-size: 11px; font-weight: 700; letter-spacing: .16em">BOW ATLAS</span>
+      <span class="al" style="font-size: 22px; font-style: italic; font-weight: 500; margin-top: 3px">Excavation</span>
+    </div>
+    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-left: 4px"><circle cx="8" cy="8" r="5.5" fill="none" stroke="#17130E" stroke-width="2"></circle><line x1="12.5" y1="12.5" x2="18" y2="18" stroke="#17130E" stroke-width="2"></line></svg>
+    <span class="al" style="height: 38px; display: inline-flex; align-items: center; padding: 0 16px; box-sizing: border-box; border: 2px solid #17130E; background: #FBF8EE; font-size: 19px; font-weight: 500">Why was my new car delayed in 2021?</span>
+    <span style="flex: 1"></span>
+    <button type="button" class="btn" onClick="{{toggleMe}}" aria-pressed="{{me}}" style="height: 40px; padding: 0 16px; font-size: 16px; font-weight: 700; border: 2px solid #17130E; background: {{meBg}}; color: {{meFg}}">Why me?</button>
+    <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{how}}" style="height: 40px; padding: 0 16px; font-size: 16px; font-weight: 700; border: 2px solid #17130E; background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+  </header>
+
+  <div style="position: absolute; left: 28px; top: 62px; width: 1384px; height: 38px; box-sizing: border-box; border: 1.5px dotted #17130E; display: flex; align-items: center; gap: 12px; padding: 0 8px 0 10px">
+    <span style="width: 18px; height: 18px; flex: none; display: inline-block; box-sizing: border-box; background: radial-gradient(circle, #17130E 1.1px, transparent 1.4px) 0 0/6px 6px; border: 1px dotted #17130E"></span>
+    <span class="as" style="font-size: 12px; font-weight: 700; letter-spacing: .1em; white-space: nowrap">GENERATED STRUCTURE</span>
+    <span class="al" style="font-size: 16px; white-space: nowrap">assembled for this question from 5 systems and 2 forces · unreviewed</span>
+    <span style="flex: 1"></span>
+    <span class="as" style="font-size: 12px; color: #4A463B; white-space: nowrap">every part names its source in the notebook</span>
+    <button type="button" class="btn" disabled="{{true}}" style="height: 34px; padding: 0 12px; font-size: 13px; font-weight: 700; border: 1.5px solid #6B675A; background: #EEEDE6; color: #4A463B; white-space: nowrap">Make a layer official · for businesses · not built yet</button>
+  </div>
+
+  <!-- depth gauge -->
+  <sc-for list="{{gauge}}" as="g" hint-placeholder-count="6">
+    <button type="button" class="btn" onClick="{{g.pick}}" disabled="{{g.dis}}" aria-label="{{g.aria}}" aria-current="{{g.on}}" style="position: absolute; left: 28px; top: {{g.y}}px; width: 120px; height: 94px; box-sizing: border-box; padding: 0 0 0 26px; text-align: left; border: {{g.bd}}; background: {{g.fill}}; color: #17130E; overflow: hidden">
+      <span style="position: absolute; left: 0; top: 0; bottom: 0; width: 16px; background: {{g.bg}}; border-right: 1px solid #17130E"></span>
+      <span class="as" style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em">{{g.k}}</span>
+      <span class="al" style="display: block; font-size: 17px; font-weight: 700; line-height: 18px">{{g.name}}</span>
+      <span class="as" style="display: block; font-size: 11.5px; line-height: 13px; color: #4A463B">{{g.sub}}</span>
+    </button>
+  </sc-for>
+
+  <!-- the plate: a cross-section that slides as you dig -->
+  <div style="position: absolute; left: 156px; top: 108px; width: 724px; height: 616px; overflow: hidden; background: #F7F7F2" role="img" aria-label="{{plateAria}}">
+    <div style="position: absolute; left: 0; top: {{stripTop}}px; width: 724px; height: 0; transition: top .9s cubic-bezier(.3,.7,.2,1)">
+
+      <div style="position: absolute; left: 0; top: 0; width: 724px; height: 170px; display: {{skyDsp}}">
+      <svg width="724" height="170" viewBox="0 0 724 170" aria-hidden="true" style="position: absolute; left: 0; top: 0"><path d="M0 150 Q120 128 240 142 T480 134 T724 146" fill="none" stroke="#D3D6CB" stroke-width="1.5"></path><path d="M0 128 Q140 100 280 118 T560 108 T724 120" fill="none" stroke="#D3D6CB" stroke-width="1.5"></path><path d="M0 104 Q160 74 300 92 T600 80 T724 94" fill="none" stroke="#D3D6CB" stroke-width="1.5"></path><path d="M0 80 Q180 52 320 68 T640 54 T724 66" fill="none" stroke="#D3D6CB" stroke-width="1.5"></path></svg>
+      <div class="as" style="position: absolute; left: 20px; top: 14px; font-size: 11px; font-weight: 700; letter-spacing: .12em; color: #4A463B">SECTION A–A′ · LOOKING UPSTREAM</div>
+      <div class="as" style="position: absolute; left: 20px; top: 30px; font-size: 11.5px; color: #4A463B">One layer is one system further back. Not to scale.</div>
+      <svg width="64" height="80" viewBox="0 0 64 80" aria-hidden="true" style="position: absolute; left: 330px; top: 91px"><circle cx="32" cy="10" r="9" fill="#17130E"></circle><path d="M32 22 L32 52" stroke="#17130E" stroke-width="8" stroke-linecap="round" fill="none"></path><path d="M32 30 L17 45 M32 30 L47 41" stroke="#17130E" stroke-width="5" stroke-linecap="round" fill="none"></path><path d="M32 52 L22 78 M32 52 L42 78" stroke="#17130E" stroke-width="6" stroke-linecap="round" fill="none"></path></svg>
+      <div style="position: absolute; left: 404px; top: 96px; width: 300px">
+        <div class="al" style="font-size: 30px; font-weight: 700; line-height: 30px">you</div>
+        <div class="al" style="font-size: 17px; font-style: italic; line-height: 20px">waiting for a car, spring 2021</div>
+      </div>
+      </div>
+
+      <sc-for list="{{bands}}" as="b" hint-placeholder-count="5">
+        <div class="{{b.cls}}" style="display: {{b.dsp}}; position: absolute; left: 0; top: {{b.y}}px; width: 724px; height: 240px; box-sizing: border-box; background-color: {{b.bg}}; border-top: 1.5px solid #17130E"></div>
+        <div class="fd" style="display: {{b.dsp}}; position: absolute; left: 0; top: {{b.y}}px; width: 724px; height: 240px; background: #F4F3EC; opacity: {{b.cover}}"></div>
+        <div class="fd" style="display: {{b.dsp}}; position: absolute; left: 6px; top: {{b.y6}}px; width: 712px; height: 228px; box-sizing: border-box; border: 2px dashed #17130E; opacity: {{b.dash}}"></div>
+        <div style="display: {{b.dsp}}; position: absolute; left: 84px; top: {{b.cy}}px; width: 262px; box-sizing: border-box; padding: 4px 9px 5px; background: #FBF8EE; border: 1px solid #17130E; opacity: {{b.cop}}">
+          <div class="as" style="font-size: 11.5px; font-weight: 700; letter-spacing: .1em; line-height: 14px">{{b.t1}}</div>
+          <div class="al" style="font-size: 16px; font-style: italic; line-height: 19px">{{b.t2}}</div>
+        </div>
+      </sc-for>
+
+      <sc-for list="{{veins}}" as="v" hint-placeholder-count="5">
+        <div class="{{v.cls}} fd" style="display: {{v.dsp}}; position: absolute; left: {{v.x}}px; top: {{v.y}}px; width: {{v.w}}px; height: 240px; box-sizing: border-box; background-color: {{v.bg}}; border-left: {{v.bw}}px solid #17130E; border-right: {{v.bw}}px solid #17130E; opacity: {{v.op}}"></div>
+      </sc-for>
+      <sc-for list="{{veinLabels}}" as="vl" hint-placeholder-count="2">
+        <div class="as fd" style="display: {{vl.dsp}}; position: absolute; left: {{vl.x}}px; top: {{vl.y}}px; height: 176px; box-sizing: border-box; padding: 6px 2px; background: #FBF8EE; border: 1px solid #17130E; writing-mode: vertical-rl; transform: rotate(180deg); font-size: 11.5px; font-weight: 700; letter-spacing: .08em; white-space: nowrap; opacity: {{vl.op}}">{{vl.t}}</div>
+      </sc-for>
+
+      <div class="mvx" style="display: {{dr.d1}}; position: absolute; left: 360px; top: {{dr.y1}}px; width: 4px; height: {{dr.h1}}px; background: #17130E"></div>
+      <div class="mvx" style="display: {{dr.d2}}; position: absolute; left: 360px; top: {{dr.y2}}px; width: 0; height: {{dr.h2}}px; border-left: 4px dashed #17130E"></div>
+      <svg class="mvx" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" style="display: {{dr.db}}; position: absolute; left: 354px; top: {{dr.bitY}}px"><polygon points="1,1 15,1 8,15" fill="{{dr.bitFill}}" stroke="#17130E" stroke-width="2"></polygon></svg>
+
+      <sc-for list="{{branches}}" as="br" hint-placeholder-count="3">
+        <div class="fd" style="display: {{br.dsp}}; position: absolute; left: {{br.sx}}px; top: {{br.sy}}px; width: {{br.sw}}px; height: 3px; background: #8C8676; opacity: {{br.op}}; transition-delay: {{br.td}}ms"></div>
+        <div class="fd" style="display: {{br.dspF}}; position: absolute; left: {{br.x}}px; top: {{br.y}}px; width: 208px; justify-content: {{br.just}}; opacity: {{br.op}}; transition-delay: {{br.td}}ms">
+          <span style="display: inline-flex; align-items: center; gap: 6px; height: 30px; box-sizing: border-box; padding: 0 9px 0 6px; background: #FBF8EE; border: 1px solid #17130E; white-space: nowrap"><span class="sw" style="background: #8C8676; border: 2px solid #8C8676"></span><span class="al" style="font-size: 14.5px; font-weight: 500; font-style: italic">{{br.t}}</span></span>
+        </div>
+      </sc-for>
+
+      <sc-for list="{{finds}}" as="f" hint-placeholder-count="12">
+        <div class="fd" style="display: {{f.dsp}}; position: absolute; left: {{f.cx}}px; top: {{f.cy}}px; width: 14px; height: 2px; background: #17130E; opacity: {{f.op}}; transition-delay: {{f.td}}ms"></div>
+        <div class="fd" style="display: {{f.dspF}}; position: absolute; left: {{f.x}}px; top: {{f.y}}px; width: 262px; justify-content: {{f.just}}; opacity: {{f.op}}; transition-delay: {{f.td}}ms">
+          <span style="display: inline-flex; align-items: center; gap: 6px; height: 30px; box-sizing: border-box; padding: 0 9px 0 6px; background: #FBF8EE; border: {{f.cbd}}; white-space: nowrap"><span class="sw" style="background: {{f.bg}}; border: {{f.bd}}"></span><span class="as" style="font-size: 12px; font-weight: 700">{{f.num}}</span><span class="al" style="font-size: 14.5px; font-weight: 500">{{f.chip}}</span><span class="as" style="font-size: 11px; font-weight: 700; letter-spacing: .06em; display: {{f.wordShow}}">{{f.word}}</span></span>
+        </div>
+      </sc-for>
+
+      <sc-for list="{{tags}}" as="tg" hint-placeholder-count="2">
+        <div class="fd" style="display: {{tg.dspF}}; position: absolute; left: {{tg.x}}px; top: {{tg.y}}px; width: 262px; justify-content: {{tg.just}}; opacity: {{tg.op}}; transition-delay: 500ms">
+          <span class="al" style="display: inline-block; box-sizing: border-box; padding: 3px 9px; background: #17130E; color: #FBF8EE; font-size: 14px; font-weight: 500; font-style: italic; white-space: nowrap">{{tg.t}}</span>
+        </div>
+      </sc-for>
+
+      <div style="display: {{bedDsp}}; position: absolute; left: 0; top: 1370px; width: 724px; height: 316px; background: #EBE9DE; border-top: 1.5px solid #17130E"></div>
+      <div class="fd" style="display: {{bedDspF}}; position: absolute; left: 84px; top: 1400px; width: 556px; height: 96px; box-sizing: border-box; border: 2px dashed #17130E; align-items: center; justify-content: center; text-align: center; padding: 0 28px; font-size: 16px; font-style: italic; line-height: 20px; opacity: {{bedOp}}">Not excavated. What the fab waits on, its own suppliers, is not in this plate. The Atlas stops where its components stop.</div>
+    </div>
+  </div>
+  <div style="position: absolute; left: 156px; top: 108px; width: 724px; height: 616px; box-sizing: border-box; border: 2px solid #17130E; pointer-events: none"></div>
+
+  <!-- the notebook -->
+  <div style="position: absolute; left: 908px; top: 108px; width: 504px; height: 616px; box-sizing: border-box; border: 2px solid #17130E; background: #FBF8EE; padding: 10px 20px 0 20px; overflow: hidden">
+    <div style="display: flex; align-items: center; gap: 10px; height: 20px">
+      <span class="as" style="font-size: 11.5px; font-weight: 700; letter-spacing: .1em">{{nb.kick}}</span>
+      <span style="flex: 1"></span>
+      <span class="as" style="font-size: 11px; font-weight: 700; letter-spacing: .1em; padding: 2px 8px; border: 1.5px solid #17130E; background: {{nb.modeBg}}; color: {{nb.modeFg}}">{{nb.mode}}</span>
+    </div>
+    <h1 aria-live="polite" class="al" style="margin: 2px 0 0; font-size: 33px; font-weight: 700; line-height: 34px">{{nb.name}}</h1>
+    <div class="al" style="font-size: 18px; font-style: italic; line-height: 22px">{{nb.q}}</div>
+    <div class="as" style="font-size: 12.5px; line-height: 15px; color: #4A463B; margin-top: 4px">{{nb.src}}</div>
+    <div style="display: flex; align-items: center; gap: 12px; margin-top: 8px; padding-top: 7px; border-top: 1.5px solid #17130E; height: 24px">
+      <span class="as" style="font-size: 11.5px; letter-spacing: .06em; color: #4A463B">FINDINGS SO FAR</span>
+      <sc-for list="{{tally}}" as="ty" hint-placeholder-count="5">
+        <span style="display: inline-flex; align-items: center; gap: 5px"><span class="sw" style="width: 14px; height: 14px; background: {{ty.bg}}; border: {{ty.bd}}"></span><span class="as" style="font-size: 14px; font-weight: 700">{{ty.n}}</span><span class="as" style="font-size: 11px; display: {{ty.wshow}}">{{ty.word}}</span></span>
+      </sc-for>
+    </div>
+
+    <sc-for list="{{entries}}" as="e" hint-placeholder-count="3">
+      <div style="display: flex; gap: 10px; margin-top: 9px">
+        <span class="sw" style="width: 22px; height: 22px; margin-top: 1px; background: {{e.bg}}; border: {{e.bd}}"></span>
+        <div style="flex: 1; min-width: 0">
+          <div class="al" style="font-size: 16px; font-weight: 700; line-height: 19px"><span class="as" style="font-size: 12px; margin-right: 6px">{{e.num}}</span>{{e.title}}</div>
+          <div class="al" style="font-size: 15px; line-height: 18px">{{e.body}}</div>
+          <div class="as" style="font-size: 11.5px; line-height: 14px; color: #4A463B; margin-top: 2px; display: {{e.tagShow}}">{{e.tag}}</div>
+        </div>
+      </div>
+    </sc-for>
+
+    <sc-if value="{{toy.show}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; gap: 10px; margin-top: 9px">
+        <span class="sw" style="width: 22px; height: 22px; margin-top: 1px; background: repeating-linear-gradient(135deg,#17130E 0 1.3px,transparent 1.3px 5px); border: 1.5px solid #17130E"></span>
+        <div style="flex: 1; min-width: 0">
+          <div class="al" style="font-size: 16px; font-weight: 700; line-height: 19px"><span class="as" style="font-size: 12px; margin-right: 6px">2.3</span>Buffer toy v0.1: how much longer might a buyer wait?</div>
+          <div class="as" style="font-size: 11.5px; line-height: 14px; color: #4A463B; display: {{toy.tagShow}}">MODELED · sweep over authored assumptions · extra wait = weeks short × share missing</div>
+          <div style="display: flex; gap: 8px; margin-top: 6px; align-items: center">
+            <span class="as" style="font-size: 12px; color: #4A463B">Chip stock the maker held</span>
+            <sc-for list="{{toy.opts}}" as="o" hint-placeholder-count="3">
+              <button type="button" class="btn" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="height: 36px; padding: 0 12px; font-size: 14px; font-weight: 700; border: 2px solid #17130E; background: {{o.bg}}; color: {{o.fg}}">{{o.t}}</button>
+            </sc-for>
+          </div>
+          <div style="position: relative; height: 46px; margin-top: 4px">
+            <div style="position: absolute; left: 0; top: 14px; width: 404px; height: 22px; box-sizing: border-box; border: 1.5px solid #17130E"></div>
+            <div class="mvx" style="position: absolute; left: {{toy.bx}}px; top: 14px; width: {{toy.bw}}px; height: 22px; box-sizing: border-box; border: 1.5px solid #17130E; background: repeating-linear-gradient(135deg,#17130E 0 1.5px,transparent 1.5px 7px)"></div>
+            <sc-for list="{{toy.ticks}}" as="k" hint-placeholder-count="5">
+              <div style="position: absolute; left: {{k.x}}px; top: 36px; width: 1px; height: 5px; background: #17130E"></div>
+              <span class="as" style="position: absolute; left: {{k.x}}px; top: 36px; transform: translateX(-50%); font-size: 11px; color: #4A463B; margin-top: 4px">{{k.t}}</span>
+            </sc-for>
+            <span class="as" style="position: absolute; left: 0; top: 0; font-size: 11.5px; color: #4A463B">extra weeks of wait</span>
+          </div>
+          <div class="al" style="font-size: 22px; font-weight: 700; line-height: 24px; margin-top: 6px">{{toy.result}}</div>
+          <div class="al" style="font-size: 14px; line-height: 17px; margin-top: 2px"><span class="sw" style="width: 12px; height: 12px; border: 2px solid #17130E; background: transparent; vertical-align: -1px; margin-right: 5px"></span>Assumed (illustrative, authored): shortage of 6–14 weeks; 50–80% of chips keep arriving. Not 2021 data; not your car.</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-for list="{{veinNotes}}" as="vn" hint-placeholder-count="2">
+      <div style="display: flex; gap: 10px; margin-top: 10px; align-items: flex-start">
+        <span class="{{vn.cls}}" style="flex: none; display: inline-block; width: 22px; height: 22px; box-sizing: border-box; background-color: {{vn.bg}}; border-left: {{vn.bw}}px solid #17130E; border-right: {{vn.bw}}px solid #17130E"></span>
+        <div class="al" style="font-size: 14.5px; line-height: 17px"><span class="as" style="font-size: 11.5px; font-weight: 700; letter-spacing: .08em; margin-right: 5px">{{vn.k}}</span>{{vn.t}}<span class="as" style="font-size: 11.5px; color: #4A463B; display: {{vn.tagShow}}"> · {{vn.tag}}</span></div>
+      </div>
+    </sc-for>
+
+    <sc-for list="{{asides}}" as="a" hint-placeholder-count="2">
+      <div style="display: flex; gap: 10px; margin-top: 8px; align-items: flex-start">
+        <span class="sw" style="width: 22px; height: 22px; background: #8C8676; border: 2px solid #8C8676"></span>
+        <div class="al" style="font-size: 14.5px; line-height: 17px"><span class="as" style="font-size: 11.5px; font-weight: 700; letter-spacing: .08em; margin-right: 5px">SET ASIDE</span><b>{{a.t}}.</b> {{a.why}}<span class="as" style="font-size: 11.5px; color: #4A463B; display: {{a.tagShow}}"> · COMPUTED</span></div>
+      </div>
+    </sc-for>
+    <div class="al" style="margin-top: 12px; font-size: 15px; font-style: italic; line-height: 18px">{{nb.hint}}</div>
+  </div>
+
+  <!-- controls -->
+  <button type="button" class="btn" onClick="{{dig}}" disabled="{{digOff}}" style="position: absolute; left: 156px; top: 732px; width: 456px; height: 46px; font-size: 18px; font-weight: 700; border: 2px solid #17130E; background: {{digBg}}; color: {{digFg}}; text-align: left; padding: 0 16px; white-space: nowrap; overflow: hidden">{{digT}}</button>
+  <button type="button" class="btn" onClick="{{reset}}" disabled="{{resetOff}}" style="position: absolute; left: 624px; top: 732px; width: 168px; height: 46px; font-size: 16px; font-weight: 700; border: 2px solid #17130E; background: #FBF8EE; color: #17130E">Fill back in</button>
+  <div class="as" style="position: absolute; left: 802px; top: 738px; width: 78px; font-size: 12px; line-height: 14px; color: #4A463B">{{depthNote}}</div>
+
+  <sc-for list="{{key}}" as="ky" hint-placeholder-count="6">
+    <div class="fd" style="position: absolute; left: {{ky.x}}px; top: {{ky.y}}px; width: 166px; display: flex; gap: 7px; align-items: center; opacity: {{keyOp}}"><span class="sw" style="width: 16px; height: 14px; background: {{ky.bg}}; border: {{ky.bd}}"></span><span class="as" style="font-size: 12px; line-height: 13px">{{ky.t}}</span></div>
+  </sc-for>
+  <div class="al fd" style="position: absolute; left: 908px; top: 736px; width: 504px; font-size: 15px; font-style: italic; opacity: {{hintOp}}">Black marks make claims. Ground patterns are only geology. Tap “How do we know?” for the key.</div>
+
+  <div class="al" style="position: absolute; left: 28px; top: 796px; width: 1384px; font-size: 25px; line-height: 30px; font-weight: 500; white-space: nowrap"><span class="as" style="font-size: 17px; font-weight: 700; letter-spacing: .12em">SEARCH</span>, in this model, is starting where you stand and digging upstream through the systems behind your problem.</div>
+
+  <div class="as" style="position: absolute; left: 28px; bottom: 14px; width: 760px; font-size: 11.5px; line-height: 15px; color: #4A463B">COMMERCIAL LENS · Hypothesis: “why did this happen to me” is a consumer front door; businesses pay to have their part of the strata be official (and to see upstream risk).</div>
+  <div class="as" style="position: absolute; right: 28px; bottom: 14px; width: 600px; text-align: right; font-size: 11.5px; line-height: 15px; color: #4A463B">PROTOTYPE · DESIGN PROPOSAL · data: layers and typical practice authored; Naka fire date and 2021 chip-shortage lines to verify; no delay figures; buffer toy is illustrative</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.t = setInterval(() => {
+      const s = this.state || {};
+      if (s.prevOff != null && Date.now() - (s.navT || 0) > 1200) this.setState({ prevOff: null });
+    }, 300);
+  }
+  componentWillUnmount() { clearInterval(this.t); }
+  offOf(f) { return f === 0 ? 0 : 170 + (f - 1) * 240 - 130; }
+  nav(maxD, foc) {
+    const st = this.state || {};
+    this.setState({ maxD: maxD, foc: foc, prevOff: this.offOf(st.foc || 0), navT: Date.now() });
+  }
+  strata() {
+    return [
+      { n: 1, name: 'Dealer', sub: 'sells, does not build', q: 'Who promised you the date?', dig: 'who promised you the date?', src: 'typical dealership · AUTHORED description', bg: '#E8DCC2', cls: 'p1' },
+      { n: 2, name: 'Automaker', sub: 'builds the car', q: 'What does the dealer wait on?', dig: 'what does the dealer wait on?', src: 'typical automaker (AUTHORED description) · 2021 reporting [verify]', bg: '#D9B99B', cls: 'p2' },
+      { n: 3, name: 'Tier-1 supplier', sub: 'electronics module', q: 'What does the automaker wait on?', dig: 'what does the automaker wait on?', src: 'typical supply chain · AUTHORED description', bg: '#B8C0C4', cls: 'p3' },
+      { n: 4, name: 'Chip designer', sub: 'vendor', q: 'What does the supplier wait on?', dig: 'what does the supplier wait on?', src: 'typical chip business (AUTHORED description) · 2021 reporting [verify]', bg: '#CFCFA9', cls: 'p4' },
+      { n: 5, name: 'Fab', sub: 'makes the chips', q: 'Who makes the chips?', dig: 'who makes the chips?', src: '2021 reporting [verify]', bg: '#C2A98F', cls: 'p5' }
+    ];
+  }
+  finds() {
+    return [
+      { s: 1, side: 'R', y: 44,
+        gen: { t: 'aut', chip: 'Passes the date along', title: 'The dealer passes the date along', body: 'A dealer sells a car it does not build. The date you get is the date the automaker gave it.', src: 'typical practice, described not measured' },
+        me: { t: 'unk', chip: 'Your promised date', title: 'Your promised date', body: 'When the date slipped, and by how much. Atlas has no record of your order.', src: 'not known to Atlas · needs your order [enter it]' } },
+      { s: 1, side: 'L', y: 100,
+        gen: { t: 'unk', chip: 'How many dates slipped', title: 'How many dates slipped', body: 'How many 2021 buyers had a date pushed back: [from an industry feed · not connected].', src: 'no feed connected here' },
+        me: { t: 'aut', chip: 'Your order, as assumed', title: 'Your order, as assumed', body: 'A factory order you did not change; the car was not yet built when the date slipped. Yours may differ.', src: 'persona · illustrative, authored' } },
+      { s: 2, side: 'R', y: 44,
+        gen: { t: 'aut', chip: 'Needs every part on hand', title: 'Every part must be on hand', body: 'A car is built only when every part is there. One missing part holds that car back.', src: 'typical practice, described not measured' },
+        me: { t: 'unk', chip: 'Your car’s build slot', title: 'Your car’s build slot', body: 'Which plant and week your car was scheduled for. Atlas has no way to see it.', src: 'not known to Atlas' } },
+      { s: 2, side: 'L', y: 100,
+        gen: { t: 'obs', chip: 'Chips ran short in 2021', title: 'Chips ran short in 2021', body: 'A shortage of chips slowed new-car production in 2021. General, not about your car. [verify: cite reporting]', src: 'general reporting · [verify]' },
+        me: { t: 'unk', chip: 'Held up by chips?', title: 'Were you held up by chips?', body: 'Whether your car waited on chips or on something else. Atlas cannot tell from outside.', src: 'not disclosed · [verify]' } },
+      { s: 2, side: 'R', y: 148, toy: true,
+        gen: { t: 'mod', chip: 'Buffer toy: wait range', title: '', body: '', src: '' },
+        me: { t: 'unk', chip: 'The toy can’t run on you', title: 'The toy can’t run on your car', body: 'It needs the maker’s chip stock and the shortage length. For your car, both are unknown.', src: 'inputs unknown' } },
+      { s: 3, side: 'R', y: 44,
+        gen: { t: 'aut', chip: 'Builds the electronics module', title: 'Builds the electronics module', body: 'A Tier-1 supplier turns chips and parts into a module and ships it to the plant on the automaker’s schedule.', src: 'typical practice, described not measured' },
+        me: { t: 'unk', chip: 'Your car’s module', title: 'Your car’s module', body: 'Which module your car needed and which Tier-1 built it. Atlas has no record.', src: 'not known to Atlas' } },
+      { s: 3, side: 'L', y: 100,
+        gen: { t: 'aut', chip: 'Keeps little stock', title: 'Keeps little in stock', body: 'Just-in-time: parts arrive close to when they are needed, so little sits on a shelf. A late chip stops the module.', src: 'typical practice, described not measured' },
+        me: { t: 'unk', chip: 'Was the module waiting?', title: 'Was your module waiting on chips?', body: 'Atlas cannot see the supplier’s shelf, or whose chips were on it.', src: 'not known to Atlas' } },
+      { s: 4, side: 'R', y: 44,
+        gen: { t: 'aut', chip: 'Designs; a fab makes', title: 'Designs the chip; a fab makes it', body: 'A chip vendor designs the chip and pays a fab to make it, booking factory time ahead.', src: 'typical practice, described not measured' },
+        me: { t: 'unk', chip: 'The chip your car lacked', title: 'Which chip your car was missing', body: 'Automakers didn’t say. Atlas cannot name the chip, or its vendor.', src: 'not disclosed' } },
+      { s: 4, side: 'L', y: 100,
+        gen: { t: 'obs', chip: 'Electronics demand surged', title: 'Demand for electronics surged', body: 'Pandemic-era demand for electronics surged. Car chips shared factory time with it. General. [verify: cite]', src: 'general reporting · [verify]' },
+        me: { t: 'unk', chip: 'Shared with the surge?', title: 'Did your chip compete with the surge?', body: 'Whether your car’s chip fought electronics demand for factory time. Atlas cannot tell.', src: 'not known to Atlas' } },
+      { s: 4, side: 'R', y: 148,
+        gen: { t: 'aut', chip: 'Small chip buffer', title: 'A small chip buffer', body: 'Little chip stock is kept at the vendor: the same just-in-time policy, one layer down.', src: 'typical practice, described not measured' },
+        me: null },
+      { s: 5, side: 'R', y: 44,
+        gen: { t: 'obs', chip: 'Naka fab fire, 19 Mar 2021', title: 'Renesas Naka fab fire, 19 Mar 2021', body: 'A fire at the Naka fab on 19 Mar 2021. Verify the date and which chips it made.', src: 'reported · [verify]' },
+        me: { t: 'unk', chip: 'Was it your chip?', title: 'Was the fire your car’s chip?', body: 'Atlas can say a fire happened, not that it reached you. Which chip your car lacked: automakers didn’t say.', src: 'not disclosed' } },
+      { s: 5, side: 'L', y: 100,
+        gen: { t: 'obs', chip: 'The surge pulled on fabs', title: 'The surge was already pulling on fabs', body: 'The electronics demand surge was pulling on fab capacity too. General. [verify]', src: 'general reporting · [verify]' },
+        me: { t: 'unk', chip: 'Fire, surge or stock?', title: 'Fire, surge or thin stock?', body: 'How your wait splits between the fire, the surge and small buffers. Atlas cannot split it.', src: 'not separable here' } },
+      { s: 5, side: 'R', y: 148,
+        gen: { t: 'unk', chip: 'How long to switch fabs', title: 'How long to switch fabs', body: 'How long it takes to move a chip to another fab: [verify].', src: '[verify]' },
+        me: null }
+    ];
+  }
+  toy(buf) {
+    let lo = 99, hi = -1;
+    for (let D = 6; D <= 14; D++) {
+      for (let k = 5; k <= 8; k++) {
+        const v = Math.max(0, D - buf) * (1 - k / 10);
+        if (v < lo) lo = v;
+        if (v > hi) hi = v;
+      }
+    }
+    return { lo: Math.round(lo * 10) / 10, hi: Math.round(hi * 10) / 10 };
+  }
+  renderVals() {
+    const s = this.state || {};
+    const maxD = s.maxD || 0;
+    const foc = s.foc || 0;
+    const me = !!s.me;
+    const how = !!s.how;
+    const buf = s.buf || 2;
+    const S0 = 170, H = 240;
+    const top = (i) => S0 + (i - 1) * H;
+    const ST = this.strata();
+    const INK = '#17130E';
+    const SW = {
+      obs: { bg: INK, bd: '2px solid ' + INK, word: 'OBSERVED', label: 'OBSERVED' },
+      aut: { bg: 'transparent', bd: '2px solid ' + INK, word: 'AUTHORED', label: 'AUTHORED' },
+      mod: { bg: 'repeating-linear-gradient(135deg,' + INK + ' 0 1.3px,transparent 1.3px 5px)', bd: '1.5px solid ' + INK, word: 'MODELED', label: 'MODELED' },
+      unk: { bg: 'transparent', bd: '2px dashed ' + INK, word: 'UNKNOWN', label: 'UNKNOWN' },
+      com: { bg: '#8C8676', bd: '2px solid #8C8676', word: 'COMPUTED', label: 'COMPUTED' }
+    };
+    const off = this.offOf(foc);
+    const po = (s.prevOff == null) ? off : s.prevOff;
+    const wT = Math.min(off, po) - 250, wB = Math.max(off, po) + 792;
+    const dsp = (y, h) => ((y + h >= wT && y + h <= wB) ? 'block' : 'none');
+    const dspF = (y, h) => ((y + h >= wT && y + h <= wB) ? 'flex' : 'none');
+
+    // depth gauge (the core log)
+    const gRows = [{ n: 0, k: 'SURFACE', name: 'You', sub: 'waiting', bg: '#F7F7F2' }].concat(ST.map((t) => ({ n: t.n, k: 'LAYER ' + t.n, name: t.name, sub: t.sub, bg: t.bg })));
+    const gauge = gRows.map((r, i) => {
+      const dug = i <= maxD;
+      const nxt = i === maxD + 1;
+      return {
+        y: 108 + i * 102, on: i === foc,
+        dis: !(dug || nxt),
+        bd: i === foc ? '3px solid ' + INK : (dug ? '1.5px solid ' + INK : '1.5px dashed ' + INK),
+        fill: dug ? '#FBF8EE' : 'transparent',
+        bg: dug ? r.bg : '#E4E6DF',
+        k: r.k, name: dug ? r.name : '?', sub: dug ? r.sub : (nxt ? 'dig here' : ''),
+        aria: dug ? ('Look at ' + r.name) : (nxt ? ('Dig to layer ' + i) : ('Layer ' + i + ' not dug yet')),
+        pick: () => {
+          const st = this.state || {};
+          const m = st.maxD || 0;
+          if (i <= m) this.nav(m, i);
+          else if (i === m + 1) this.nav(i, i);
+        }
+      };
+    });
+
+    // bands, veins, drill
+    const bands = ST.map((t) => {
+      const dug = t.n <= maxD;
+      const nxt = t.n === maxD + 1;
+      return {
+        cls: t.cls, bg: t.bg, y: top(t.n), y6: top(t.n) + 6, dsp: dsp(top(t.n), 240),
+        cover: dug ? 0 : 0.55, dash: dug ? 0 : 1,
+        cy: top(t.n) + 8, cop: (dug || nxt) ? 1 : 0.6,
+        t1: t.n + ' · ' + (dug ? t.name.toUpperCase() : '?'),
+        t2: dug ? (t.n === 3 ? t.sub : t.q) : (nxt ? t.q : '')
+      };
+    });
+    const V = [
+      { k: 'pol', x: 14, w: 58, from: 2, to: 4, bg: '#B9C79A', cls: 'v1', bw: 2, lab: 'POLICY · just-in-time stock' },
+      { k: 'dem', x: 650, w: 60, from: 4, to: 5, bg: '#E2A99B', cls: 'v2', bw: 6, lab: 'DEMAND · electronics surge' }
+    ];
+    const veins = [], veinLabels = [];
+    V.forEach((v) => {
+      for (let n = v.from; n <= v.to; n++) veins.push({ x: v.x, w: v.w, y: top(n), bg: v.bg, cls: v.cls, bw: v.bw, op: maxD >= n ? 1 : 0, dsp: dsp(top(n), 240) });
+      veinLabels.push({ x: v.x + (v.w - 26) / 2, y: top(v.from) + 8, t: v.lab, op: maxD >= v.from ? 1 : 0, dsp: dsp(top(v.from) + 8, 176) });
+    });
+    const bitY = maxD === 0 ? S0 - 1 : top(maxD) + 224;
+    const traceEnd = top(3);
+    const solidEnd = me ? Math.min(bitY + 14, traceEnd) : bitY + 14;
+    const lineEnd = bitY + 14;
+    const clip = (a, b) => { const y1 = Math.max(a, wT), y2 = Math.min(b, wB - 4); return { y: y1, h: Math.max(0, y2 - y1), d: y2 > y1 ? 'block' : 'none' }; };
+    const c1 = clip(S0, solidEnd), c2 = clip(solidEnd, lineEnd);
+    const dr = {
+      y1: c1.y, h1: c1.h, d1: c1.d, y2: c2.y, h2: c2.h, d2: (lineEnd > solidEnd) ? c2.d : 'none',
+      bitY: bitY, db: dsp(bitY, 16), bitFill: (me && bitY > traceEnd) ? '#F7F7F2' : INK
+    };
+
+    // side branches (set aside, computed from the persona)
+    const BR = [
+      { s: 1, side: 'L', y: 176, t: 'not in transit', why: 'Not built yet, so not on a truck.' },
+      { s: 1, side: 'R', y: 200, t: 'not off a lot', why: 'Built to order, so not from a lot.' },
+      { s: 2, side: 'L', y: 192, t: 'not changed by you', why: 'Your order stayed the same.' }
+    ];
+    const branches = BR.map((b, i) => {
+      const y = top(b.s) + b.y;
+      const L = b.side === 'L';
+      return {
+        sx: L ? 292 : 364, sw: L ? 68 : 70, sy: y + 14,
+        x: L ? 84 : 440, y: y, w: 208, just: L ? 'flex-end' : 'flex-start',
+        t: b.t, op: maxD >= b.s ? 1 : 0, td: 500 + i * 120, dsp: dsp(y, 30), dspF: dspF(y, 30)
+      };
+    });
+
+    // finds
+    const F = this.finds();
+    const counter = {};
+    const finds = [];
+    const dugFinds = [];
+    F.forEach((f, i) => {
+      const v = me ? f.me : f.gen;
+      if (!v) return;
+      counter[f.s] = (counter[f.s] || 0) + 1;
+      const R = f.side === 'R';
+      const sw = SW[v.t];
+      const item = { f: f, v: v, num: f.s + '.' + counter[f.s], sw: sw };
+      dugFinds.push(item);
+      const y = top(f.s) + f.y;
+      finds.push({
+        x: R ? 378 : 84, y: y, cx: R ? 364 : 346, cy: y + 14, just: R ? 'flex-start' : 'flex-end',
+        num: item.num, chip: v.chip, bg: sw.bg, bd: sw.bd,
+        word: sw.word, wordShow: how ? 'inline' : 'none',
+        cbd: f.s === foc ? '2px solid ' + INK : '1px solid ' + INK,
+        op: maxD >= f.s ? (f.s === foc ? 1 : 0.85) : 0, td: 500 + (counter[f.s] - 1) * 140, dsp: dsp(y, 30), dspF: dspF(y, 30)
+      });
+    });
+
+    // tags near the drill line
+    const tags = [];
+    tags.push({ x: 378, y: top(2) + 196, just: 'flex-start', t: 'your trace goes quiet below', op: (me && maxD >= 3) ? 1 : 0, dspF: dspF(top(2) + 196, 26) });
+    tags.push({ x: 378, y: top(5) + 196, just: 'flex-start', t: me ? 'dashed to here: a guess, not a trace' : 'deepest cause found · not the only one', op: maxD >= 5 ? 1 : 0, dspF: dspF(top(5) + 196, 26) });
+
+    // notebook
+    const cur = foc === 0 ? null : ST[foc - 1];
+    const inFoc = dugFinds.filter((d) => d.f.s === foc);
+    const showToy = !me && foc === 2;
+    const entries = [];
+    if (foc === 0) {
+      entries.push({ num: '0.1', title: 'Persona for this plate', body: 'A factory order you did not change; the car was not yet built when the date slipped. Yours may differ.', tag: 'AUTHORED · illustrative, authored', sw: SW.aut });
+      entries.push({ num: '0.2', title: 'Your real order', body: 'Dealer, make, promised date: [enter them to sharpen “Why me?”].', tag: 'UNKNOWN · not entered', sw: SW.unk });
+    } else {
+      inFoc.forEach((d) => {
+        if (showToy && d.f.toy) return;
+        entries.push({ num: d.num, title: d.v.title, body: d.v.body, tag: d.sw.word + ' · ' + d.v.src, sw: d.sw });
+      });
+    }
+    const entriesOut = entries.map((e) => ({ num: e.num, title: e.title, body: e.body, tag: e.tag, tagShow: how ? 'block' : 'none', bg: e.sw.bg, bd: e.sw.bd }));
+
+    const veinNotes = [];
+    if (foc >= 2 && foc <= 4) veinNotes.push({ k: 'POLICY', t: 'runs through this layer: just-in-time stock and small chip buffers, so a shortage passes straight down the line.', tag: 'AUTHORED', cls: 'v1', bg: '#B9C79A', bw: 2 });
+    if (foc >= 4) veinNotes.push({ k: 'DEMAND', t: 'runs through this layer: the pandemic-era surge in electronics demand.', tag: 'OBSERVED, general · [verify]', cls: 'v2', bg: '#E2A99B', bw: 6 });
+    const veinOut = veinNotes.map((v) => Object.assign({}, v, { t: me ? v.t.replace(/\.$/, '') + ', in general. Whether it reached your car is unknown.' : v.t, tagShow: how ? 'inline' : 'none' }));
+    const asides = BR.filter((b) => b.s === foc).map((b) => ({ t: b.t.charAt(0).toUpperCase() + b.t.slice(1), why: b.why, tagShow: how ? 'inline' : 'none' }));
+
+    // tally of findings so far
+    const cnt = { obs: 0, aut: 0, mod: 0, unk: 0 };
+    dugFinds.forEach((d) => { if (d.f.s <= maxD) cnt[d.v.t] += 1; });
+    const tally = ['obs', 'aut', 'mod', 'unk'].map((k) => ({ bg: SW[k].bg, bd: SW[k].bd, n: cnt[k], word: SW[k].word.toLowerCase(), wshow: how ? 'inline' : 'none' }));
+
+    let hint = '';
+    if (foc === 0 && maxD === 0) hint = 'Press Dig. The section slides down one layer, and you see what that system did to your wait.';
+    else if (foc === 0) hint = 'You are at the surface. The layers below stay dug; pick one in the log.';
+    else if (foc === 5 && !me) hint = 'The drill line ends at the fire. Now press “Why me?”: how much of this can Atlas tie to your car?';
+    else if (foc === 5 && me) hint = 'For your car, the solid line stops at the automaker. Switch back to see the general story.';
+    else if (me && foc >= 2) hint = 'Below the automaker, Atlas is guessing. The holes are the honest answer.';
+    else if (foc === 2 && !me) hint = 'Try 1, 2 and 4 weeks of stock. The policy vein changes the range.';
+    else if (foc < maxD) hint = 'Already dug. Press the layer below in the log, or Dig to go deeper.';
+    else hint = 'Press Dig to go one system further upstream.';
+
+    if (how) hint = '';
+    const nb = {
+      kick: foc === 0 ? 'START · THE SURFACE' : 'LAYER ' + foc + ' OF 5 · UPSTREAM',
+      name: foc === 0 ? 'You' : cur.name,
+      q: foc === 0 ? 'waiting for a car, spring 2021' : (foc === 3 ? cur.sub + ' · ' + cur.q : cur.q),
+      src: foc === 0 ? 'Starting point: your question, plus a persona' : 'Component source: ' + cur.src,
+      mode: me ? 'YOUR CASE' : 'GENERAL STORY', modeBg: me ? INK : '#FBF8EE', modeFg: me ? '#FBF8EE' : INK,
+      hint: hint
+    };
+
+    // toy model (MODELED range from a real sweep)
+    const tv = this.toy(buf);
+    const SCX = 404 / 8;
+    const toy = {
+      show: showToy, tagShow: how ? 'block' : 'none',
+      opts: [1, 2, 4].map((b) => ({ t: b + (b === 1 ? ' week' : ' weeks'), on: b === buf, bg: b === buf ? INK : '#FBF8EE', fg: b === buf ? '#FBF8EE' : INK, pick: () => this.setState({ buf: b }) })),
+      bx: tv.lo * SCX, bw: Math.max(3, (tv.hi - tv.lo) * SCX),
+      ticks: [0, 2, 4, 6, 8].map((v) => ({ x: v * SCX, t: String(v) })),
+      result: tv.lo.toFixed(1) + ' to ' + tv.hi.toFixed(1) + ' extra weeks'
+    };
+
+    // controls
+    const nextSt = maxD < 5 ? ST[maxD] : null;
+    const key = [
+      { k: 'obs', t: 'OBSERVED · solid' }, { k: 'aut', t: 'AUTHORED · outline' }, { k: 'mod', t: 'MODELED · hatch' },
+      { k: 'com', t: 'COMPUTED · toned' }, { k: 'unk', t: 'UNKNOWN · dashed' }, { k: 'gen', t: 'GENERATED · stipple' }
+    ].map((r, i) => ({
+      x: 908 + (i % 3) * 170, y: 736 + Math.floor(i / 3) * 24,
+      bg: r.k === 'gen' ? 'radial-gradient(circle, ' + INK + ' 1.1px, transparent 1.4px) 0 0/5px 5px' : SW[r.k].bg,
+      bd: r.k === 'gen' ? '1px dotted ' + INK : SW[r.k].bd, t: r.t
+    }));
+
+    return {
+      me: me, meBg: me ? INK : '#FBF8EE', meFg: me ? '#FBF8EE' : INK,
+      how: how, howBg: how ? INK : '#FBF8EE', howFg: how ? '#FBF8EE' : INK,
+      toggleMe: () => this.setState({ me: !(this.state && this.state.me) }),
+      toggleHow: () => this.setState({ how: !(this.state && this.state.how) }),
+      gauge: gauge, stripTop: -off, bands: bands, veins: veins, veinLabels: veinLabels, dr: dr, branches: branches,
+      finds: finds, tags: tags, bedOp: maxD >= 5 ? 1 : 0, bedDsp: dsp(1370, 316), bedDspF: dspF(1370, 316), skyDsp: dsp(0, 170),
+      plateAria: 'Cross-section below you, ' + maxD + ' of 5 layers dug. ' + (me ? 'Showing your case.' : 'Showing the general story.'),
+      nb: nb, tally: tally, entries: entriesOut, toy: toy, veinNotes: veinOut, asides: asides,
+      digT: nextSt ? 'Dig: ' + nextSt.dig : 'The plate ends here. Nothing deeper is in it.',
+      digOff: !nextSt, digBg: nextSt ? INK : '#EEEDE6', digFg: nextSt ? '#FBF8EE' : '#4A463B',
+      dig: () => { const st = this.state || {}; const m = st.maxD || 0; if (m < 5) this.nav(m + 1, m + 1); },
+      reset: () => this.nav(0, 0), resetOff: maxD === 0 && foc === 0,
+      depthNote: maxD + ' of 5 layers dug',
+      key: key, keyOp: how ? 1 : 0, hintOp: how ? 0 : 1
+    };
+  }
+}
+</script>
+</body>
+</html>

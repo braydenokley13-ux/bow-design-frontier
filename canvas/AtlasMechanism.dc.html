@@ -115,7 +115,7 @@ a{color:#0B5C73}a:hover{color:#083F50}
   <span class="mo" style="position: absolute; left: {{crew.limTx}}px; top: 380px; width: 200px; text-align: right; font-size: 11px; font-weight: 600; opacity: {{opC}}">{{crew.limT}}</span>
   <div class="mv" style="position: absolute; left: {{crew.dimL}}px; top: 434px; width: {{crew.dimW}}px; height: 6px; box-sizing: border-box; border-left: 1.5px solid #14181F; border-right: 1.5px solid #14181F; border-bottom: 1.5px solid #14181F; opacity: {{crew.dimOp}}"></div>
   <span class="mo mv" style="position: absolute; left: {{crew.dimTx}}px; top: 441px; width: 230px; text-align: center; font-size: 11px; opacity: {{crew.dimOp}}">{{crew.dimT}}</span>
-  <span class="mo fd" style="position: absolute; left: 284px; top: 441px; width: 620px; font-size: 11px; font-weight: 600; opacity: {{crew.overOp}}">{{crew.overT}}</span>
+  <span class="mo fd" style="position: absolute; left: 284px; top: 441px; width: 620px; font-size: 11px; font-weight: 600; opacity: {{crew.overTOp}}">{{crew.overT}}</span>
 
   <!-- lane 3 · the passengers -->
   <div style="position: absolute; left: 28px; top: 458px; width: 1071px; height: 1px; background: #14181F"></div>
@@ -135,7 +135,7 @@ a{color:#0B5C73}a:hover{color:#083F50}
     <div class="mv" style="position: absolute; left: {{p.ambL}}px; top: {{p.yt}}px; width: {{p.ambW}}px; height: 14px; background: #F2B01E; opacity: {{p.ambOp}}"></div>
     <div style="position: absolute; left: {{p.tickX}}px; top: {{p.ytk}}px; width: 2px; height: 22px; margin-left: -1px; background: #14181F; opacity: {{p.tickOp}}"></div>
     <div class="mv" style="position: absolute; left: {{p.markX}}px; top: {{p.ymk}}px; width: 7px; height: 7px; margin-left: -3px; background: #14181F; opacity: {{p.markOp}}"></div>
-    <span class="mo mv" style="position: absolute; left: {{p.noteX}}px; top: {{p.yn}}px; font-size: 11px; white-space: nowrap; opacity: {{p.noteOp}}">{{p.note}}</span>
+    <span class="mo mv" style="position: absolute; left: {{p.noteX}}px; top: {{p.yn}}px; width: 62px; text-align: {{p.noteAl}}; font-size: 11px; white-space: nowrap; opacity: {{p.noteOp}}">{{p.note}}</span>
     <span class="mo fd" style="position: absolute; left: {{p.strandX}}px; top: {{p.yn}}px; width: 170px; text-align: right; font-size: 11px; font-weight: 600; white-space: nowrap; opacity: {{p.strandOp}}">{{p.strandT}}</span>
   </sc-for>
 
@@ -153,11 +153,18 @@ a{color:#0B5C73}a:hover{color:#083F50}
       </div>
     </div>
   </sc-for>
-  <div class="mo fd" style="position: absolute; left: 1124px; top: 446px; font-size: 11px; letter-spacing: .06em; color: #3D4652; opacity: {{opAct}}">RULES · authored for this prototype</div>
+  <div class="mo fd" style="position: absolute; left: 1124px; top: {{rulesY}}px; font-size: 11px; letter-spacing: .06em; color: #3D4652; opacity: {{opAct}}">RULES · authored for this prototype</div>
   <sc-for list="{{rules}}" as="ru" hint-placeholder-count="4">
-    <div class="fd" style="position: absolute; left: 1124px; top: {{ru.y}}px; width: 288px; font-size: 12.5px; line-height: 14px; opacity: {{opAct}}"><span class="mo" style="font-size: 11px; font-weight: 600">{{ru.n}}</span> {{ru.t}}</div>
+    <div class="fd" style="position: absolute; left: 1124px; top: {{ru.y}}px; width: 288px; font-size: 12.5px; line-height: 14px; opacity: {{opAct}}"><span class="mo" style="font-size: 11px; font-weight: 600">{{ru.n}}</span> {{ru.t}}<span style="text-decoration: {{ru.deco}}">{{ru.st}}</span><span style="font-weight: 600; color: #0B5C73">{{ru.add}}</span></div>
   </sc-for>
-  <div class="fd" style="position: absolute; left: 1124px; top: 590px; width: 288px; opacity: {{keyOp}}">
+
+  <!-- your seat: the one lever that removes a rule -->
+  <button type="button" class="btn" onClick="{{toggleRsv}}" aria-pressed="{{rsvPressed}}" disabled="{{ctlOff}}" style="position: absolute; left: 1124px; top: 608px; width: 288px; height: 40px; font-size: 16px; font-weight: 600; border: 2px solid #14181F; background: {{rsvBg}}; color: {{rsvFg}}; opacity: {{rsvOp}}">{{rsvLabel}}</button>
+  <div style="position: absolute; left: 1124px; top: 654px; width: 288px; display: flex; gap: 8px; align-items: flex-start">
+    <span class="mo" style="flex: none; box-sizing: border-box; height: 22px; padding: 0 6px; border: 2px solid #14181F; background: transparent; font-size: 11px; font-weight: 600; line-height: 18px; white-space: nowrap">{{rsvCost}}</span>
+    <span class="mo" style="font-size: 11px; line-height: 13px; color: #3D4652">{{rsvNote}}</span>
+  </div>
+  <div class="fd" style="position: absolute; left: 1124px; top: 698px; width: 288px; opacity: {{keyOp}}">
     <div class="mo" style="font-size: 11px; letter-spacing: .06em; color: #3D4652; margin-bottom: 3px">TEXTURE KEY</div>
     <sc-for list="{{key}}" as="ky" hint-placeholder-count="4">
       <div style="display: flex; gap: 8px; align-items: center; height: 17px"><span style="width: 14px; height: 12px; flex: none; box-sizing: border-box; background: {{ky.bg}}; border: {{ky.bd}}"></span><span style="font-size: 12px; line-height: 14px; white-space: nowrap">{{ky.t}}</span></div>
@@ -171,7 +178,7 @@ a{color:#0B5C73}a:hover{color:#083F50}
   <sc-for list="{{ticks}}" as="tk" hint-placeholder-count="5">
     <span class="mo" style="position: absolute; left: {{tk.x}}px; top: 741px; transform: translateX(-50%); font-size: 11px; color: #3D4652">{{tk.t}}</span>
   </sc-for>
-  <div class="fd" style="position: absolute; left: {{thr.x}}px; top: 696px; width: 3px; height: 14px; margin-left: -1px; background: #14181F; opacity: {{thr.op}}"></div>
+  <div class="fd" style="position: absolute; left: {{thr.x}}px; top: 696px; width: 0; height: 14px; margin-left: -1px; border-left: 3px {{thr.bs}} #14181F; opacity: {{thr.op}}"></div>
   <div style="position: absolute; left: 872px; top: 694px; width: 120px; height: 50px; box-sizing: border-box; background: #14181F; display: flex; align-items: baseline; justify-content: center; gap: 6px; padding-top: 6px" aria-hidden="true"><span class="mo" style="font-size: 30px; font-weight: 600; color: #F2B01E; line-height: 36px">{{hold}}</span><span class="mo" style="font-size: 12px; color: #FFFFFF">min</span></div>
   <button type="button" class="btn" onClick="{{clearHold}}" disabled="{{ctlOff}}" style="position: absolute; left: 1004px; top: 700px; width: 95px; height: 44px; font-size: 16px; font-weight: 600; border: 2px solid #14181F; background: #FFFFFF; color: #14181F">Clear</button>
   <div aria-live="polite" class="fd" style="position: absolute; left: 28px; top: 760px; width: 1071px; height: 18px; font-size: 13.5px; line-height: 18px; font-weight: 500; opacity: {{thr.noteOp}}">{{thr.note}}</div>
@@ -179,7 +186,7 @@ a{color:#0B5C73}a:hover{color:#083F50}
   <div class="cd" style="position: absolute; left: 28px; top: 794px; width: 1384px; font-size: 24px; font-weight: 600; line-height: 30px; letter-spacing: .01em; white-space: nowrap"><span class="mo" style="font-size: 20px; letter-spacing: .04em">SEARCH</span>, in this model, is asking for a mechanism and getting a small running system you can push on.</div>
 
   <div class="mo" style="position: absolute; left: 28px; bottom: 14px; width: 760px; font-size: 11px; line-height: 15px; letter-spacing: .02em; color: #3D4652">COMMERCIAL LENS · Hypothesis: answering-by-system is free at small scale (it is the medium’s front door); reviewed, persistent systems behind popular questions are where publishers and licensors pay.</div>
-  <div class="mo" style="position: absolute; right: 28px; bottom: 14px; width: 560px; text-align: right; font-size: 11px; line-height: 15px; letter-spacing: .02em; color: #3D4652">PROTOTYPE · DESIGN PROPOSAL · PLATFORM HYPOTHESIS (on-the-fly system assembly) · data: rotation, loads and rules authored for this prototype; FAA rule to verify; no real airline data</div>
+  <div class="mo" style="position: absolute; right: 28px; bottom: 14px; width: 560px; text-align: right; font-size: 11px; line-height: 15px; letter-spacing: .02em; color: #3D4652">PROTOTYPE · DESIGN PROPOSAL · PLATFORM HYPOTHESIS (on-the-fly system assembly) · {{foot}}</div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
@@ -198,7 +205,7 @@ class Component extends DCLogic {
       if (typeof tg === 'number' && tg !== h) {
         const nh = h < tg ? Math.min(tg, h + 2) : Math.max(tg, h - 4);
         const patch = { hold: nh, target: nh === tg ? null : tg };
-        if (this.sim(this.nets()[s.net || 'air'], nh).cutFrom !== null) patch.seenCut = true;
+        if (this.sim(this.nets()[s.net || 'air'], nh, !!s.rsv).cutFrom !== null) patch.seenCut = true;
         this.setState(patch);
       }
     }, 50);
@@ -221,25 +228,27 @@ class Component extends DCLogic {
           { l: 'onward from BOS', dep: 1055, n: 9, leg: 3, type: 'c' }
         ],
         w: { v: 'aircraft', aT: '1 · THE AIRCRAFT', aS: 'rotation', cT: '2 · THE CREW', cS: 'duty limit', pT: '3 · THE PASSENGERS', pS: 'connections', unit: 'passengers', limit: '13 h limit', trip: 'leg', dutyTag: 'duty day', lateTag: 'late arrival', missTxt: (s) => 'MISSES · ' + s + ' min short', strandTxt: (k) => 'STRANDED · leg ' + k + ' cancelled', strandShort: (k) => 'leg ' + k + ' cancelled', crewWord: 'crew', mctWord: '30 min after landing' },
+        rsv: { node: 'PHL', legs: [1, 3], btn: 'Call reserve crew at PHL', who: 'reserve crew', cost: '$3,000 [authored]', costV: '$3,000' },
+        foot: 'data: rotation, loads and rules authored for this prototype; FAA rule to verify; no real airline data',
         stamp: 'assembled for this question from 6 components · unreviewed', note: 'the airline day, one clock', rev: 'Open BOW’s reviewed air-network system · not built yet',
         axisTag: 'ONE CLOCK · authored', sliderTag: 'HOLD AT ORD · drag, 0–120 min', btn: 'Hold ORD 40 min',
         comps: [
           ['Rotation', 'BOS→PHL→ORD→PHL→BOS · four legs', 'typical regional schedule (AUTHORED)', 'a'],
           ['Minimum turn', '45 min between legs', 'AUTHORED', 'a'],
-          ['Crew duty', '13 h duty · 15 min post-flight · no reserve', 'simplified from FAA Part 117 (verify)', 'a'],
+          ['Crew duty', '13 h duty · authored simplification (Part 117 Table B allows 12 h for a 05:00 report, 1–4 legs; verify)', 'AUTHORED', 'a', 2],
           ['Passenger connections', '6 groups · loads, connecting flights', 'loads: AUTHORED', 'a'],
           ['Perturbation', 'weather hold at ORD, 0–120 min', 'your input · the slider', 'u'],
           ['Propagation', 'delays, missed connections, cancellation', 'COMPUTED here from the four rules', 'c']
         ],
         rules: [
-          'The aircraft reaches ORD as many minutes late as the hold.',
-          'Scheduled turn − 45 min = slack. Slack absorbs delay; the rest rides into the next leg.',
-          'A leg is cancelled if its landing + 15 min falls after report + 13 h. No spare crew.',
-          'A group connects if the aircraft lands and 30 min later is still before the connecting departure.'
+          ['The aircraft reaches ORD as many minutes late as the hold.', '', ''],
+          ['Scheduled turn − 45 min = slack. Slack absorbs delay; the rest rides into the next leg.', '', ''],
+          ['A leg is cancelled if its landing + 15 min falls after report + 13 h.', 'No spare crew.', 'A reserve crew waits at PHL: it takes any leg that departs PHL.'],
+          ['A group connects if the aircraft lands and 30 min later is still before the connecting departure.', '', '']
         ]
       },
       parcel: {
-        key: 'parcel', q: 'Why did my package take three extra days?',
+        key: 'parcel', q: 'Why did my package arrive a day late?',
         t0: 990, minTurn: 45, reportBefore: 90, dutyLimit: 840, post: 15, mct: 30, holdLeg: 1, holdNode: 'CTR',
         legs: [{ dep: 1080, blk: 100 }, { dep: 1240, blk: 150 }, { dep: 1450, blk: 150 }, { dep: 1650, blk: 100 }],
         names: ['DEP→REG', 'REG→CTR', 'CTR→REG', 'REG→DEP'],
@@ -252,27 +261,29 @@ class Component extends DCLogic {
           { l: 'Morning wave', dep: 1800, n: 210, leg: 3, type: 'c' }
         ],
         w: { v: 'trailer', aT: '1 · THE TRAILER', aS: 'line-haul rotation', cT: '2 · THE DRIVER', cS: 'hours limit', pT: '3 · THE PARCELS', pS: 'sort cutoffs', unit: 'parcels', limit: '14 h window', trip: 'trip', dutyTag: 'driver window', lateTag: 'late arrival', missTxt: (s) => '+1 DAY · ' + s + ' min short', strandTxt: (k) => 'HELD A DAY · trip ' + k + ' cancelled', strandShort: (k) => 'trip ' + k + ' cancelled', crewWord: 'driver', mctWord: '30 min to unload and sort' },
+        rsv: { node: 'REG', legs: [1, 3], btn: 'Call relief driver at REG', who: 'relief driver', cost: '$1,200 [authored]', costV: '$1,200' },
+        foot: 'data: trips, volumes, rules authored; FMCSA rule to verify; no real carrier data',
         stamp: 'same mechanism, re-skinned for parcel hubs · unreviewed', note: 'placeholder skin · your route: [tracking feed]', rev: 'Open BOW’s reviewed parcel-hub system · not built yet',
         axisTag: 'ONE CLOCK · overnight', sliderTag: 'DELAY AT CTR · drag, 0–120 min', btn: 'Delay CTR 40 min',
         comps: [
           ['Rotation', 'DEP→REG→CTR→REG→DEP · four trips', 'typical line-haul shuttle (AUTHORED)', 'a'],
           ['Minimum dwell', '45 min between trips', 'AUTHORED', 'a'],
-          ['Driver hours', '14 h window · 15 min post-trip · no relief', 'simplified from FMCSA rules (verify)', 'a'],
+          ['Driver hours', '14 h window · 15 min post-trip', 'simplified from FMCSA rules (verify)', 'a'],
           ['Sort cutoffs', '6 groups · volumes, cutoffs', 'volumes: AUTHORED', 'a'],
           ['Perturbation', 'delay at CTR hub, 0–120 min', 'your input · the slider', 'u'],
           ['Propagation', 'late trips, missed sorts, cancelled trip', 'COMPUTED here from the four rules', 'c']
         ],
         rules: [
-          'The trailer reaches CTR as many minutes late as the delay.',
-          'Scheduled dwell − 45 min = slack. Slack absorbs delay; the rest rides into the next trip.',
-          'A trip is cancelled if its arrival + 15 min falls after report + 14 h. No relief driver.',
-          'A group makes a sort if arrival + 30 min is before the cutoff. If not, it waits a day.'
+          ['The trailer reaches CTR as many minutes late as the delay.', '', ''],
+          ['Scheduled dwell − 45 min = slack. Slack absorbs delay; the rest rides into the next trip.', '', ''],
+          ['A trip is cancelled if its arrival + 15 min falls after report + 14 h.', 'No relief driver.', 'A relief driver waits at REG: they take any trip that leaves REG.'],
+          ['A group makes a sort if arrival + 30 min is before the cutoff. If not, it waits a day.', '', '']
         ]
       }
     };
   }
 
-  sim(net, H) {
+  sim(net, H, rsv) {
     const L = net.legs, n = L.length;
     const sched = L.map((l) => ({ dep: l.dep, arr: l.dep + l.blk }));
     const slack = [];
@@ -286,12 +297,19 @@ class Component extends DCLogic {
     }
     const report = L[0].dep - net.reportBefore;
     const limit = report + net.dutyLimit;
-    let cutFrom = null;
-    for (let i = 0; i < n; i++) { if (sched[i].arr + arrD[i] + net.post > limit) { cutFrom = i; break; } }
-    const last = cutFrom === null ? n - 1 : cutFrom - 1;
+    let cutFrom = null, swapAt = null;
+    for (let i = 0; i < n; i++) {
+      if (sched[i].arr + arrD[i] + net.post > limit) {
+        // a reserve crew waiting at the node takes any leg that departs that node
+        if (rsv && net.rsv && net.rsv.legs.indexOf(i) >= 0) swapAt = i; else cutFrom = i;
+        break;
+      }
+    }
+    const brk = cutFrom !== null ? cutFrom : swapAt;
+    const last = brk === null ? n - 1 : brk - 1;
     const dutyEnd = last < 0 ? report : sched[last].arr + arrD[last] + net.post;
     const schedEnd = sched[n - 1].arr + net.post;
-    const wouldEnd = cutFrom === null ? null : sched[cutFrom].arr + arrD[cutFrom] + net.post;
+    const wouldEnd = brk === null ? null : sched[brk].arr + arrD[brk] + net.post;
     const rows = net.groups.map((g) => {
       if (cutFrom !== null && g.leg >= cutFrom) return { g: g, stranded: true };
       const arrT = sched[g.leg].arr + arrD[g.leg];
@@ -306,7 +324,7 @@ class Component extends DCLogic {
       else if (r.missed) { missedN += r.g.n; missedG += 1; }
       else if (!r.ride && (tight === null || r.spare < tight.spare)) tight = { spare: r.spare, l: r.g.l };
     });
-    return { sched, slack, depD, arrD, absorb, carry, report, limit, cutFrom, last, dutyEnd, schedEnd, wouldEnd, rows, missedN, strandedN, missedG, tight,
+    return { sched, slack, depD, arrD, absorb, carry, report, limit, cutFrom, swapAt, last, dutyEnd, schedEnd, wouldEnd, rows, missedN, strandedN, missedG, tight,
       margin: limit - dutyEnd, schedMargin: limit - schedEnd, over: wouldEnd === null ? 0 : wouldEnd - limit };
   }
 
@@ -318,8 +336,9 @@ class Component extends DCLogic {
     const asm = s.asm || 0;
     const how = !!s.how;
     const seenCut = !!s.seenCut;
-    const sm = this.sim(net, H);
-    const sm0 = this.sim(net, 0);
+    const rsv = !!s.rsv && !!net.rsv;
+    const sm = this.sim(net, H, rsv);
+    const sm0 = this.sim(net, 0, rsv);
     const w = net.w;
     const nLeg = net.legs.length;
     const pad = (n) => (n < 10 ? '0' : '') + n;
@@ -332,10 +351,11 @@ class Component extends DCLogic {
     const node = net.holdNode;
 
     // threshold the user can find by dragging (computed by scanning the same rules)
-    let thrMin = null;
-    for (let h = 0; h <= 120; h++) { if (this.sim(net, h).cutFrom !== null) { thrMin = h; break; } }
+    let thrMin = null, thr0 = null;
+    for (let h = 0; h <= 120; h++) { if (this.sim(net, h, rsv).cutFrom !== null) { thrMin = h; break; } }
+    for (let h = 0; h <= 120; h++) { if (this.sim(net, h, false).cutFrom !== null) { thr0 = h; break; } }
 
-    const setNet = (k) => () => this.setState({ net: k, hold: 0, target: null, asm: 0, tk: 0, seenCut: false });
+    const setNet = (k) => () => this.setState({ net: k, hold: 0, target: null, asm: 0, tk: 0, seenCut: false, rsv: false });
     const NN = this.nets();
     const queries = ['air', 'parcel'].map((k) => ({
       text: NN[k].q, on: k === key, pick: setNet(k),
@@ -394,6 +414,7 @@ class Component extends DCLogic {
     const lastLand = sm0.sched[nLeg - 1].arr;
     let capC;
     if (H === 0) capC = 'Report ' + fmt(sm.report) + '; the ' + w.limit + ' ends at ' + fmt(sm.limit) + '. Last landing ' + fmt(lastLand) + ' plus 15 min post-' + w.trip + ' leaves ' + sm.schedMargin + ' min of margin.';
+    else if (sm.swapAt !== null) capC = (w.trip === 'leg' ? 'Leg ' : 'Trip ') + (sm.swapAt + 1) + ' would land ' + fmt(sm.wouldEnd - net.post) + ', so the ' + w.crewWord + ' would be on duty until ' + fmt(sm.wouldEnd) + ', ' + sm.over + ' min past the limit. The ' + net.rsv.who + ' called at ' + net.rsv.node + ' flies it instead, so it runs. The call costs ' + net.rsv.cost + ', used or not.';
     else if (cut) capC = (w.trip === 'leg' ? 'Leg ' : 'Trip ') + (sm.cutFrom + 1) + ' would land ' + fmt(sm.wouldEnd - net.post) + '; with 15 min post-' + w.trip + ' the ' + w.crewWord + ' is on duty until ' + fmt(sm.wouldEnd) + ', ' + sm.over + ' min past the limit. No reserve ' + w.crewWord + ', so it is cancelled.';
     else if (sm.margin < sm.schedMargin) capC = 'The last ' + w.trip + ' now lands ' + fmt(sm.dutyEnd - net.post) + '. Duty ends ' + fmt(sm.dutyEnd) + ': margin ' + sm.margin + ' min, down from ' + sm.schedMargin + '. Every late minute here comes out of that margin.';
     else capC = 'Turn slack soaked the hold up before the last ' + w.trip + '. The duty clock has not moved: margin ' + sm.margin + ' min.';
@@ -406,7 +427,7 @@ class Component extends DCLogic {
     }
     const fired = {
       a: H > 0 ? '#F2B01E' : '#FFFFFF',
-      c: (H > 0 && sm.margin < sm.schedMargin) || cut ? '#F2B01E' : '#FFFFFF',
+      c: (H > 0 && sm.margin < sm.schedMargin) || cut || sm.swapAt !== null ? '#F2B01E' : '#FFFFFF',
       p: (sm.missedN + sm.strandedN) > 0 ? '#F2B01E' : '#FFFFFF'
     };
 
@@ -421,15 +442,18 @@ class Component extends DCLogic {
       limX: X(sm.limit), limTx: X(sm.limit) - 205, limT: w.limit + ' · ' + fmt(sm.limit),
       dimL: X(flownEnd), dimW: cut ? 0 : Wd(sm.limit - flownEnd), dimOp: (asm > 5 && !cut) ? 1 : 0,
       dimTx: X(flownEnd) + Wd(sm.limit - flownEnd) / 2 - 115, dimT: 'margin ' + sm.margin + ' min',
-      overT: cut ? 'Cut line: ' + (w.trip === 'leg' ? 'leg ' : 'trip ') + (sm.cutFrom + 1) + ' needs duty until ' + fmt(sm.wouldEnd) + '; the limit is ' + fmt(sm.limit) + '.' : ''
+      overT: cut ? 'Cut line: ' + (w.trip === 'leg' ? 'leg ' : 'trip ') + (sm.cutFrom + 1) + ' needs duty until ' + fmt(sm.wouldEnd) + '; the limit is ' + fmt(sm.limit) + '.' : (sm.swapAt !== null ? 'Handover at ' + net.rsv.node + ': the ' + net.rsv.who + ' flies ' + (w.trip === 'leg' ? 'leg ' : 'trip ') + (sm.swapAt + 1) + '; this ' + w.crewWord + '’s day ends after ' + (w.trip === 'leg' ? 'leg ' : 'trip ') + sm.swapAt + '.' : ''),
+      overTOp: (cut || sm.swapAt !== null) ? 1 : 0
     };
 
     // passenger rows
+    // a row note sits right of its marks; near the right edge of the lane it moves to the left of them instead
+    const nPos = (right, left) => (right + 8 + 62 > 1099) ? { x: left - 8 - 62, al: 'right' } : { x: right + 8, al: 'left' };
     const pax = sm.rows.map((r, i) => {
       const g = r.g;
       const y = 502 + i * 29;
       const o = { y: y, yb: y + 26, yt: y + 6, ytk: y + 2, ymk: y + 9, yn: y + 7 };
-      const hidden = { toneL: 284, toneW: 0, toneOp: 0, outL: 284, outW: 0, outOp: 0, ambL: 284, ambW: 0, ambOp: 0, markX: 284, markOp: 0, noteX: 284, note: '', noteOp: 0, strandX: 284, strandT: '', strandOp: 0 };
+      const hidden = { toneL: 284, toneW: 0, toneOp: 0, outL: 284, outW: 0, outOp: 0, ambL: 284, ambW: 0, ambOp: 0, markX: 284, markOp: 0, noteX: 284, noteAl: 'left', note: '', noteOp: 0, strandX: 284, strandT: '', strandOp: 0 };
       const unit = net.key === 'parcel' ? '' : '';
       if (r.stranded) {
         const tx = g.type === 'r' ? X(sm.sched[g.leg].arr) : X(g.dep);
@@ -443,7 +467,7 @@ class Component extends DCLogic {
           l1: g.l + ' · ' + g.n, res: late > 0 ? 'arrive ' + late + ' min late' : 'arrive on time', resBg: late > 0 ? '#F2B01E' : 'transparent',
           tickX: tx, tickOp: 1, toneL: X(dep), toneW: Wd(sm.sched[g.leg].arr - dep), toneOp: 1,
           ambL: tx, ambW: Wd(late), ambOp: late > 0 ? 1 : 0, markX: X(r.arrT), markOp: 1,
-          noteX: tx + Wd(late) + 8, note: late > 0 ? '+' + late : 'on time', noteOp: 1
+          noteX: nPos(tx + Wd(late), X(dep)).x, noteAl: nPos(tx + Wd(late), X(dep)).al, note: late > 0 ? '+' + late : 'on time', noteOp: 1
         });
       }
       const xA = X(r.arrT), xD = X(g.dep), xR = X(r.ready);
@@ -455,18 +479,31 @@ class Component extends DCLogic {
         toneL: xA, toneW: Math.max(0, Math.min(xR, xD) - xA), toneOp: 1,
         outL: xR, outW: made ? Math.max(0, xD - xR) : 0, outOp: (made && r.spare > 0) ? 1 : 0,
         ambL: xD, ambW: made ? 0 : xR - xD, ambOp: made ? 0 : 1,
-        noteX: (made ? xD : xR) + 8, note: made ? 'spare ' + r.spare : 'short ' + (-r.spare), noteOp: 1
+        noteX: nPos(made ? xD : xR, Math.min(xA, xD)).x, noteAl: nPos(made ? xD : xR, Math.min(xA, xD)).al, note: made ? 'spare ' + r.spare : 'short ' + (-r.spare), noteOp: 1
       });
     });
 
     if (asm <= 3) pax.forEach((p) => { p.toneOp = 0; p.outOp = 0; p.ambOp = 0; p.markOp = 0; p.tickOp = 0; p.noteOp = 0; p.strandOp = 0; });
 
-    const comps = net.comps.map((c, i) => ({
-      y: 128 + i * 51, name: c[0], line: c[1], src: c[2], op: asm > i ? 1 : 0.12,
-      bg: c[3] === 'a' ? '#FFFFFF' : c[3] === 'u' ? '#0B5C73' : '#8E9AA8',
-      bd: c[3] === 'a' ? '2px solid #14181F' : c[3] === 'u' ? '2px solid #14181F' : '0'
-    }));
-    const rules = net.rules.map((t, i) => ({ y: 464 + i * 30, n: 'R' + (i + 1), t: t }));
+    let cy = 128;
+    const comps = net.comps.map((c, i) => {
+      const o = {
+        y: cy, name: c[0], line: c[1], src: c[2], op: asm > i ? 1 : 0.12,
+        bg: c[3] === 'a' ? '#FFFFFF' : c[3] === 'u' ? '#0B5C73' : '#8E9AA8',
+        bd: c[3] === 'a' ? '2px solid #14181F' : c[3] === 'u' ? '2px solid #14181F' : '0'
+      };
+      cy += 16 + 15 * (c[4] || 1) + 14 + 4;
+      return o;
+    });
+    const rulesY = cy + 4;
+    let ry = rulesY + 18;
+    const rules = net.rules.map((r, i) => {
+      const edited = rsv && r[1] !== '';
+      const len = 3 + r[0].length + (r[1] ? r[1].length + 1 : 0) + (edited ? r[2].length + 1 : 0);
+      const o = { y: ry, n: 'R' + (i + 1), t: r[0], st: r[1] ? ' ' + r[1] : '', deco: edited ? 'line-through' : 'none', add: edited ? ' ' + r[2] : '' };
+      ry += 14 * Math.ceil(len / 56) + 2;
+      return o;
+    });
     const keyRows = [
       { bg: '#FFFFFF', bd: '2px solid #14181F', t: 'AUTHORED · outline · a number someone chose' },
       { bg: '#8E9AA8', bd: '0', t: 'COMPUTED · toned solid · follows from R1–R4' },
@@ -475,10 +512,21 @@ class Component extends DCLogic {
     ];
 
     const ticks = [0, 30, 60, 90, 120].map((v) => ({ t: String(v), x: 252 + 13 + (v / 120) * 574 }));
+    const tripW = w.trip === 'leg' ? 'leg' : 'trip';
+    let thrNote = '', thrShow = false;
+    if (!rsv) {
+      if (seenCut && thrMin !== null) { thrShow = true; thrNote = 'Edge found: at ' + thrMin + ' min the ' + w.crewWord + '’s limit runs out and ' + tripW + ' 4 is cut. At ' + (thrMin - 1) + ' it still runs. (Computed by scanning the slider through R1–R4.)'; }
+    } else {
+      const who = net.rsv.who + ' called at ' + net.rsv.node;
+      if (thrMin === null) thrNote = (seenCut && thr0 !== null ? 'Edge gone: it was ' + thr0 + ' min. With the ' : 'No edge: with the ') + who + ', ' + tripW + ' 4 runs at every hold from 0 to 120 min. The call costs ' + net.rsv.cost + ', used or not.';
+      else thrNote = 'Edge moved: it was ' + thr0 + ' min, now ' + thrMin + '. With the ' + who + '. The call costs ' + net.rsv.cost + ', used or not.';
+      thrShow = seenCut && thr0 !== null;
+    }
+    const thrAt = rsv ? thr0 : thrMin;
     const thr = {
-      x: 252 + 13 + ((thrMin === null ? 0 : thrMin) / 120) * 574,
-      op: seenCut ? 1 : 0, noteOp: seenCut ? 1 : 0,
-      note: seenCut && thrMin !== null ? 'Edge found: at ' + thrMin + ' min the ' + w.crewWord + '’s limit runs out and ' + (w.trip === 'leg' ? 'leg' : 'trip') + ' 4 is cut. At ' + (thrMin - 1) + ' it still runs. (Computed by scanning the slider through R1–R4.)' : ''
+      x: 252 + 13 + ((thrAt === null ? 0 : thrAt) / 120) * 574,
+      op: thrShow ? 1 : 0, noteOp: thrNote ? 1 : 0, bs: rsv ? 'dashed' : 'solid',
+      note: thrNote
     };
 
     return {
@@ -487,7 +535,7 @@ class Component extends DCLogic {
       stamp: { line: asm < 6 ? 'assembling for this question… ' + asm + ' of 6 components' : net.stamp, note: net.note, rev: net.rev }, revOff: true,
       pertSub: how ? 'your input · hypothetical' : 'your input', hours: hours, axisTag: net.axisTag, opP: opP, opA: opA, opTurn: opTurn, opC: opC, opX: opX, opAct: opAct, opCAct: opCAct,
       pert: pert, w: w, fired: fired, cap: { a: capA, c: capC, p: capP },
-      tag: { sched: how ? 'scheduled · AUTHORED · outline' : 'scheduled', act: how ? 'actual · COMPUTED · toned' : 'actual', late: how ? w.lateTag + ' · COMPUTED' : w.lateTag, turn: 'turns', duty: how ? w.dutyTag + ' · AUTHORED limit' : w.dutyTag },
+      tag: { sched: how ? 'scheduled · AUTHORED · outline' : 'scheduled', act: how ? 'with your hold · COMPUTED · toned' : 'with your hold', late: how ? w.lateTag + ' · COMPUTED' : w.lateTag, turn: 'turns', duty: how ? w.dutyTag + ' · AUTHORED limit' : w.dutyTag },
       bars: bars, slk: slk, act: act, turns: turns, cut: cutObj, crew: crew, pax: pax, comps: comps, rules: rules,
       compHead: 'ASSEMBLED FROM 6 COMPONENTS', key: keyRows, keyOp: how ? 1 : 0,
       ctlOff: asm < 6, btn40: net.btn, sliderTag: net.sliderTag, sliderAria: net.sliderTag,
@@ -497,10 +545,14 @@ class Component extends DCLogic {
       onSlide: (e) => {
         const v = Math.max(0, Math.min(120, parseInt(e.target.value, 10) || 0));
         const patch = { hold: v, target: null };
-        if (this.sim(net, v).cutFrom !== null) patch.seenCut = true;
+        if (this.sim(net, v, rsv).cutFrom !== null) patch.seenCut = true;
         this.setState(patch);
       },
-      ticks: ticks, thr: thr
+      ticks: ticks, thr: thr, rulesY: rulesY, foot: net.foot,
+      toggleRsv: () => { const st = this.state || {}; if ((st.asm || 0) >= 6) this.setState({ rsv: !st.rsv }); },
+      rsvPressed: rsv ? 'true' : 'false', rsvBg: rsv ? '#14181F' : '#FFFFFF', rsvFg: rsv ? '#FFFFFF' : '#14181F',
+      rsvOp: asm < 6 ? 0.4 : 1, rsvLabel: net.rsv.btn, rsvCost: net.rsv.cost,
+      rsvNote: (rsv ? 'paid, used or not · removed: “' : 'paid, used or not · removes “') + net.rules[2][1] + '”'
     };
   }
 }

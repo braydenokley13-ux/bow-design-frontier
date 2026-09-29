@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Atlas: the model landscape</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;0,7..72,700;1,7..72,400&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F4F0;color:#1C1B18;font-family:'Literata',serif}
+.li{font-family:'Literata',serif}
+.px{font-family:'IBM Plex Sans',sans-serif}
+.btn{font-family:'IBM Plex Sans',sans-serif;border-radius:0;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.btn:focus-visible,.dial:focus-visible{outline:3px solid #B23A1B;outline-offset:2px}
+.btn:disabled{cursor:not-allowed}
+.fd{transition:opacity .35s ease}
+.mvx{transition:top .3s ease,height .3s ease,left .3s ease,width .3s ease,opacity .3s ease}
+.in{animation:fin .35s ease}
+@keyframes fin{from{opacity:0}to{opacity:1}}
+.sw{display:inline-block;flex:none;box-sizing:border-box;width:16px;height:16px}
+.dial{-webkit-appearance:none;appearance:none;background:transparent;margin:0;padding:0;width:360px;height:36px;cursor:ew-resize}
+.dial::-webkit-slider-runnable-track{height:6px;background:#FBFBF7;border:2px solid #1C1B18;border-radius:0}
+.dial::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:32px;margin-top:-13px;background:#1C1B18;border:2px solid #1C1B18;border-radius:0}
+.dial::-moz-range-track{height:5px;background:#FBFBF7;border:2px solid #1C1B18;border-radius:0}
+.dial::-moz-range-thumb{width:18px;height:28px;background:#1C1B18;border:2px solid #1C1B18;border-radius:0}
+.dial.fk::-webkit-slider-thumb{background:#B23A1B;border-color:#B23A1B}
+.dial.fk::-moz-range-thumb{background:#B23A1B;border-color:#B23A1B}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F4F4F0; color: #1C1B18; font-family: 'Literata', serif">
+
+  <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 56px; box-sizing: border-box; padding: 0 28px; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #1C1B18">
+    <div style="display: flex; flex-direction: column; line-height: 1; flex: none">
+      <span class="px" style="font-size: 11px; font-weight: 600; letter-spacing: .16em">BOW ATLAS</span>
+      <span class="li" style="font-size: 21px; font-style: italic; margin-top: 3px">Model landscape</span>
+    </div>
+    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-left: 4px"><circle cx="8" cy="8" r="5.5" fill="none" stroke="#1C1B18" stroke-width="2"></circle><line x1="12.5" y1="12.5" x2="18" y2="18" stroke="#1C1B18" stroke-width="2"></line></svg>
+    <span class="li" style="height: 38px; display: inline-flex; align-items: center; padding: 0 16px; box-sizing: border-box; border: 2px solid #1C1B18; background: #FBFBF7; font-size: 17px; font-weight: 500">Will the US economy go into recession in the next twelve months?</span>
+    <span style="flex: 1"></span>
+    <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{how}}" style="height: 40px; padding: 0 16px; font-size: 15px; font-weight: 600; border: 2px solid #1C1B18; background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+  </header>
+
+  <div style="position: absolute; left: 28px; top: 62px; width: 1384px; height: 38px; box-sizing: border-box; border: 1.5px dotted #1C1B18; display: flex; align-items: center; gap: 12px; padding: 0 10px">
+    <span style="width: 18px; height: 18px; flex: none; display: inline-block; box-sizing: border-box; background: radial-gradient(circle, #1C1B18 1.1px, transparent 1.4px) 0 0/6px 6px; border: 1px dotted #1C1B18"></span>
+    <span class="px" style="font-size: 12px; font-weight: 600; letter-spacing: .1em; white-space: nowrap">GENERATED STRUCTURE</span>
+    <span class="li" style="font-size: 14.5px; white-space: nowrap">assembled for this question from 4 listed models and 1 blank plot · unreviewed</span>
+    <span style="flex: 1"></span>
+    <span class="li" style="font-size: 14.5px; font-style: italic; font-weight: 600; padding: 3px 12px; border: 2px solid #1C1B18; background: #FBFBF7; white-space: nowrap">BOW shows the models; it does not pick one.</span>
+  </div>
+
+  <!-- the plate -->
+  <div style="position: absolute; left: 28px; top: 108px; width: 902px; height: 540px; box-sizing: border-box; border: 2px solid #1C1B18; overflow: hidden; background: #F4F4F0" role="group" aria-label="{{plateAria}}">
+
+    <!-- view 1 · the landscape -->
+    <div class="in" style="display: {{v.land}}; position: absolute; left: 0; top: 0; width: 898px; height: 536px">
+      <svg width="898" height="536" viewBox="0 0 898 536" aria-hidden="true" style="position: absolute; left: 0; top: 0">
+        <defs>
+          <pattern id="pmarket" width="26" height="22" patternUnits="userSpaceOnUse"><rect width="26" height="22" fill="#E5CBC2"></rect><circle cx="7" cy="6" r="3.2" fill="none" stroke="#BB8F82" stroke-width="1.2"></circle><circle cx="20" cy="16" r="3.2" fill="none" stroke="#BB8F82" stroke-width="1.2"></circle></pattern>
+          <pattern id="pdsge" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#CBD5BC"></rect><path d="M12 6 V18 M6 12 H18" stroke="#93A57C" stroke-width="1.2" fill="none"></path></pattern>
+          <pattern id="pyield" width="44" height="14" patternUnits="userSpaceOnUse"><rect width="44" height="14" fill="#C1CCD4"></rect><path d="M0 7 Q11 1 22 7 T44 7" stroke="#8FA0AC" stroke-width="1.3" fill="none"></path></pattern>
+          <pattern id="psahm" width="30" height="12" patternUnits="userSpaceOnUse"><rect width="30" height="12" fill="#EADBB6"></rect><path d="M0 3 H12 M16 3 H26 M6 9 H20" stroke="#C2AC7C" stroke-width="1.4" fill="none"></path></pattern>
+        </defs>
+        <g fill="none" stroke="#DAD9CF" stroke-width="1.4"><path d="M817 109 Q831 120 823 134 Q814 149 795 154 Q777 158 759 161 Q741 163 720 158 Q700 152 703 136 Q705 120 709 107 Q712 94 725 82 Q738 71 759 73 Q780 75 791 86 Q802 98 817 109 Z"></path><path d="M865 99 Q893 120 876 147 Q860 173 826 182 Q792 191 758 196 Q725 200 687 190 Q648 179 654 150 Q659 120 665 96 Q671 72 695 50 Q719 28 758 33 Q797 37 817 58 Q838 79 865 99 Z"></path><path d="M914 90 Q954 120 930 159 Q906 198 856 211 Q806 224 757 231 Q708 237 653 222 Q597 207 604 163 Q612 120 620 85 Q629 50 665 18 Q701 -14 757 -8 Q814 -1 844 29 Q874 59 914 90 Z"></path><path d="M164 459 Q170 470 159 480 Q148 490 129 494 Q110 499 86 505 Q61 511 49 500 Q36 488 28 479 Q20 470 23 459 Q26 448 45 440 Q64 432 86 438 Q108 444 132 446 Q157 447 164 459 Z"></path><path d="M222 450 Q234 470 214 488 Q194 505 160 514 Q126 522 82 533 Q39 544 16 523 Q-8 503 -22 487 Q-36 470 -30 451 Q-24 431 9 417 Q43 402 82 413 Q122 424 166 426 Q211 429 222 450 Z"></path><path d="M252 445 Q266 470 242 492 Q217 513 176 523 Q134 533 81 547 Q27 560 -1 535 Q-29 510 -47 490 Q-64 470 -57 446 Q-50 423 -9 405 Q32 387 81 400 Q129 414 183 417 Q238 420 252 445 Z"></path></g>
+        <path d="{{rg.market}}" fill="url(#pmarket)" stroke="#1C1B18" stroke-width="{{sw.market}}"></path>
+        <path d="{{rg.dsge}}" fill="url(#pdsge)" stroke="#1C1B18" stroke-width="{{sw.dsge}}"></path>
+        <path d="{{rg.yield}}" fill="url(#pyield)" stroke="#1C1B18" stroke-width="{{sw.yield}}"></path>
+        <path d="{{rg.sahm}}" fill="url(#psahm)" stroke="#1C1B18" stroke-width="{{sw.sahm}}"></path>
+        <line x1="44" y1="394" x2="854" y2="394" stroke="#1C1B18" stroke-width="2"></line>
+      </svg>
+      <sc-for list="{{ticks}}" as="k" hint-placeholder-count="5">
+        <div style="position: absolute; left: {{k.x}}px; top: 394px; width: 2px; height: 7px; margin-left: -1px; background: #1C1B18"></div>
+        <span class="px" style="position: absolute; left: {{k.x}}px; top: 403px; transform: translateX(-50%); font-size: 11.5px; color: #4B4A44; white-space: nowrap">{{k.t}}</span>
+      </sc-for>
+
+      <div style="position: absolute; left: 14px; top: 12px; width: 352px; height: 64px; box-sizing: border-box; border: 2px dashed #1C1B18; background: #F4F4F0; padding: 6px 12px">
+        <div class="px" style="font-size: 11.5px; font-weight: 600; letter-spacing: .08em; line-height: 14px">THE ONE NUMBER YOU ASKED FOR: NOT GIVEN</div>
+        <div class="li" style="font-size: 13.5px; line-height: 17px; margin-top: 3px">Rule: on a contested question BOW lists the models and does not pick one.<span class="px" style="font-size: 11.5px; color: #4B4A44; display: {{howShow}}"> (search rule, authored)</span></div>
+      </div>
+
+      <sc-for list="{{labels}}" as="lb" hint-placeholder-count="4">
+        <div style="position: absolute; left: {{lb.x}}px; top: {{lb.pole}}px; width: 2px; height: 10px; margin-left: 98px; background: #1C1B18"></div>
+        <div style="position: absolute; left: {{lb.x}}px; top: {{lb.y}}px; width: 196px">
+          <button type="button" class="btn" onClick="{{lb.pick}}" aria-pressed="{{lb.on}}" style="width: 196px; height: 38px; box-sizing: border-box; padding: 0 8px 0 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px; text-align: left; font-size: 13.5px; font-weight: 600; line-height: 15px; border: {{lb.bd}}; background: #FBFBF7; color: #1C1B18">
+            <span>{{lb.name}}</span><span class="px" style="flex: none; width: 20px; height: 20px; line-height: 20px; text-align: center; font-size: 12px; font-weight: 600; background: #1C1B18; color: #FBFBF7; display: {{lb.badgeShow}}">{{lb.badge}}</span>
+          </button>
+          <div style="margin-top: 3px; height: 40px; box-sizing: border-box; border: 1.5px dashed #1C1B18; background: #F4F4F0; padding: 3px 8px">
+            <div class="px" style="font-size: 12.5px; line-height: 15px">{{lb.feed}}</div>
+            <div class="px" style="font-size: 11px; line-height: 14px; font-weight: 600; letter-spacing: .05em">MODELED · placeholder</div>
+          </div>
+        </div>
+      </sc-for>
+
+      <span class="px" style="position: absolute; left: 44px; top: 424px; font-size: 11.5px; font-weight: 600; letter-spacing: .1em">TIME-TO-RECESSION HORIZON · schematic</span>
+      <span class="px" style="position: absolute; left: 344px; top: 424px; width: 536px; font-size: 11.5px; color: #4B4A44; line-height: 14px; white-space: nowrap">A ridge sits where the model is built to speak (authored; [verify]).</span>
+      <span class="px" style="position: absolute; left: 44px; top: 446px; width: 836px; font-size: 11.5px; color: #4B4A44; line-height: 14px; white-space: nowrap">Ridge height: how much the model must assume before it speaks (authored ordinal, illustrative). Readings are empty slots; no model has run.</span>
+
+      <!-- your plot -->
+      <div style="position: absolute; left: 14px; top: 474px; width: 870px; height: 54px; box-sizing: border-box; border: {{plot.bd}}; background: {{plot.bg}}; padding: 0 14px; display: flex; align-items: center; gap: 12px">
+        <div style="flex: 1; min-width: 0">
+          <div class="px" style="font-size: 11.5px; font-weight: 600; letter-spacing: .08em; line-height: 14px; color: {{plot.ink}}">{{plot.k}}</div>
+          <div class="li" style="font-size: 13.5px; line-height: 17px; color: {{plot.ink}}">{{plot.t}}</div>
+        </div>
+        <button type="button" class="btn" onClick="{{plot.act}}" disabled="{{plot.off}}" style="flex: none; height: 38px; padding: 0 12px; font-size: 13.5px; font-weight: 600; border: 2px solid {{plot.btnBd}}; background: {{plot.btnBg}}; color: {{plot.btnFg}}; white-space: nowrap">{{plot.btn}}</button>
+        <button type="button" class="btn" onClick="{{plot.drop}}" style="flex: none; height: 38px; padding: 0 12px; font-size: 13.5px; font-weight: 600; border: 2px solid #B23A1B; background: #FBFBF7; color: #B23A1B; white-space: nowrap; display: {{plot.dropShow}}">Discard fork</button>
+      </div>
+    </div>
+
+    <!-- view 2 · standing between two models -->
+    <div class="in" style="display: {{v.between}}; position: absolute; left: 0; top: 0; width: 898px; height: 536px">
+      <span class="px" style="position: absolute; left: 0; top: 10px; width: 898px; text-align: center; font-size: 11.5px; font-weight: 600; letter-spacing: .14em">STANDING BETWEEN</span>
+      <div style="position: absolute; left: 449px; top: 30px; width: 2px; height: 372px; background: #1C1B18"></div>
+      <sc-for list="{{sides}}" as="sd" hint-placeholder-count="2">
+        <div style="position: absolute; left: {{sd.x}}px; top: 30px; width: 410px; height: 40px; box-sizing: border-box; border: 2px solid #1C1B18; border-left: 10px solid {{sd.tone}}; background: #FBFBF7; padding: 0 12px; display: flex; align-items: center; gap: 8px"><span class="px" style="width: 20px; height: 20px; line-height: 20px; text-align: center; font-size: 12px; font-weight: 600; background: #1C1B18; color: #FBFBF7">{{sd.badge}}</span><span class="li" style="font-size: 16px; font-weight: 600">{{sd.name}}</span></div>
+        <div style="position: absolute; left: {{sd.x}}px; top: 76px; width: 410px; height: 42px; box-sizing: border-box; border: 1.5px dashed #1C1B18; padding: 3px 12px"><div class="px" style="font-size: 12.5px; line-height: 16px">{{sd.feed}}</div><div class="px" style="font-size: 11px; line-height: 14px; font-weight: 600; letter-spacing: .05em">MODELED · placeholder</div></div>
+      </sc-for>
+      <sc-for list="{{rows}}" as="r" hint-placeholder-count="3">
+        <div style="position: absolute; left: 20px; top: {{r.y}}px; width: 376px; height: 88px; box-sizing: border-box; border: 1.5px solid #1C1B18; border-left: 10px solid {{r.toneA}}; background: #FBFBF7; padding: 6px 12px"><div class="px" style="font-size: 11px; color: #4B4A44; letter-spacing: .06em">{{r.catA}}</div><div class="li" style="font-size: 14px; line-height: 18px">{{r.tA}}</div></div>
+        <div style="position: absolute; left: 502px; top: {{r.y}}px; width: 376px; height: 88px; box-sizing: border-box; border: 1.5px solid #1C1B18; border-left: 10px solid {{r.toneB}}; background: #FBFBF7; padding: 6px 12px"><div class="px" style="font-size: 11px; color: #4B4A44; letter-spacing: .06em">{{r.catB}}</div><div class="li" style="font-size: 14px; line-height: 18px">{{r.tB}}</div></div>
+        <div style="position: absolute; left: 402px; top: {{r.yc}}px; width: 96px; height: 40px; box-sizing: border-box; border: 2px solid #1C1B18; background: {{r.mBg}}; text-align: center; padding-top: 2px"><div class="px" style="font-size: 11.5px; font-weight: 600; letter-spacing: .06em; line-height: 16px">{{r.dim}}</div><div class="px" style="font-size: 11.5px; line-height: 15px; font-weight: 600">{{r.word}}</div></div>
+      </sc-for>
+      <div class="li" style="position: absolute; left: 20px; top: 408px; width: 858px; font-size: 17px; line-height: 23px; font-weight: 500">{{verdict}}</div>
+      <div style="position: absolute; left: 20px; top: 470px; width: 858px; height: 52px; box-sizing: border-box; border: 1.5px dashed #1C1B18; padding: 6px 12px">
+        <div class="px" style="font-size: 11.5px; font-weight: 600; letter-spacing: .08em">TRACK RECORD · one slot each</div>
+        <div class="px" style="font-size: 12.5px; line-height: 16px">[calls since 1990 · from the model registry] · empty until the registry is connected<span style="display: {{howShow}}"> · RECORDED when filled</span></div>
+      </div>
+    </div>
+
+    <!-- view 3 · inside a model -->
+    <div class="in" style="display: {{v.enter}}; position: absolute; left: 0; top: 0; width: 898px; height: 536px">
+      <div style="position: absolute; left: 20px; top: 12px; width: 858px; display: flex; align-items: center; gap: 10px">
+        <span class="sw" style="width: 22px; height: 22px; background: {{en.tone}}; border: 2px solid #1C1B18"></span>
+        <span class="li" style="font-size: 22px; font-weight: 700; white-space: nowrap">{{en.title}}</span>
+        <span class="px" style="font-size: 11px; font-weight: 600; letter-spacing: .08em; padding: 2px 8px; border: 2px solid #B23A1B; color: #B23A1B; white-space: nowrap; display: {{en.forkShow}}">{{en.stamp}}</span>
+      </div>
+      <div style="position: absolute; left: 20px; top: 46px; width: 858px; display: flex; gap: 10px; align-items: flex-start">
+        <span class="sw" style="width: 18px; height: 18px; margin-top: 2px; background: {{en.ruleBg}}; border: {{en.ruleBd}}"></span>
+        <div class="li" style="font-size: 14.5px; line-height: 19px">{{en.rule}}<span class="px" style="font-size: 11.5px; color: #4B4A44; display: {{howShow}}"> · {{en.ruleTag}}</span></div>
+      </div>
+
+      <div style="position: absolute; left: 20px; top: 80px; display: {{en.seriesShow}}">
+        <span class="px" style="position: absolute; left: 0; top: 0; width: 600px; font-size: 11.5px; font-weight: 600; letter-spacing: .06em; white-space: nowrap">{{en.topLab}}</span>
+      </div>
+      <sc-for list="{{cols}}" as="c" hint-placeholder-count="24">
+        <div class="mvx" style="position: absolute; left: {{c.x}}px; top: {{c.by}}px; width: 26px; height: {{c.bh}}px; box-sizing: border-box; border: 2px solid #1C1B18; opacity: {{c.bop}}"></div>
+        <div class="mvx" style="position: absolute; left: {{c.dx}}px; top: {{c.dy}}px; width: 10px; height: 10px; border-radius: 5px; background: #8C8676; border: 1.5px solid #1C1B18; opacity: {{c.dop}}"></div>
+        <div class="mvx" style="position: absolute; left: {{c.x}}px; top: {{c.gy}}px; width: 26px; height: {{c.gh}}px; box-sizing: border-box; background: #8C8676; border: {{c.gbd}}; opacity: {{c.gop}}"></div>
+        <div class="mvx" style="position: absolute; left: {{c.x}}px; top: 292px; width: 26px; height: 22px; box-sizing: border-box; background: #8C8676; border: 1.5px solid #1C1B18; opacity: {{c.fop}}"></div>
+        <span class="px" style="position: absolute; left: {{c.x}}px; top: 336px; width: 26px; text-align: center; font-size: 11px; color: #4B4A44; display: {{c.mshow}}">{{c.m}}</span>
+      </sc-for>
+      <div style="position: absolute; left: 44px; top: {{en.zeroY}}px; width: 808px; height: 1px; background: #1C1B18; opacity: {{en.zeroOp}}"></div>
+      <span class="px" style="position: absolute; left: 20px; top: 262px; font-size: 11.5px; font-weight: 600; letter-spacing: .06em; display: {{en.seriesShow}}">{{en.botLab}}</span>
+      <div class="mvx" style="position: absolute; left: 44px; top: {{en.thrY}}px; width: 808px; height: 0; border-top: 2px dashed #1C1B18; opacity: {{en.thrOp}}"></div>
+      <span class="px" style="position: absolute; left: 856px; top: {{en.thrLy}}px; font-size: 11.5px; font-weight: 600; opacity: {{en.thrOp}}">{{en.thrT}}</span>
+      <div class="mvx" style="position: absolute; left: {{en.tx}}px; top: 92px; width: 2px; height: 246px; background: #1C1B18; opacity: {{en.tOp}}"></div>
+      <span class="px mvx" style="position: absolute; left: {{en.tlx}}px; top: 90px; padding: 1px 6px; background: #1C1B18; color: #FBFBF7; font-size: 11.5px; font-weight: 600; white-space: nowrap; opacity: {{en.tOp}}">{{en.tT}}</span>
+
+      <!-- market meter -->
+      <div style="position: absolute; left: 20px; top: 100px; width: 858px; display: {{en.meterShow}}">
+        <div class="px" style="font-size: 11.5px; font-weight: 600; letter-spacing: .06em">{{en.meterLab}}</div>
+        <div style="position: relative; margin-top: 10px; width: 808px; height: 46px; box-sizing: border-box; border: 2px solid #1C1B18"><div class="mvx" style="position: absolute; left: 0; top: 0; height: 42px; width: {{en.meterW}}px; background: #8C8676"></div></div>
+        <div class="px" style="font-size: 11.5px; color: #4B4A44; margin-top: 3px; display: flex; justify-content: space-between; width: 808px"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+        <div class="li" style="font-size: 14.5px; line-height: 19px; margin-top: 14px; width: 800px">A cent price is read as a percent. The reading ignores fees, and what the bettors are hedging against. <span class="px" style="font-size: 11.5px; color: #4B4A44; display: {{howShow}}">· AUTHORED caveat, [verify]</span></div>
+      </div>
+
+      <div style="position: absolute; left: 20px; top: 352px; width: 858px">
+        <div class="li" style="font-size: 24px; font-weight: 700; line-height: 28px">{{en.res1}}</div>
+        <div class="li" style="font-size: 14.5px; line-height: 19px; margin-top: 2px">{{en.res2}}</div>
+        <div class="px" style="font-size: 11.5px; color: #4B4A44; margin-top: 2px; line-height: 15px">{{en.res3}}</div>
+      </div>
+
+      <div style="position: absolute; left: 20px; top: 446px; width: 420px">
+        <div class="px" style="font-size: 11.5px; font-weight: 600; letter-spacing: .06em">{{en.d1Lab}}</div>
+        <input class="dial" type="range" min="{{en.d1.min}}" max="{{en.d1.max}}" step="{{en.d1.step}}" value="{{en.d1.val}}" onChange="{{en.d1.on}}" aria-label="{{en.d1Lab}}" aria-valuetext="{{en.d1.text}}">
+        <div class="px" style="font-size: 12.5px; font-weight: 600; margin-top: -2px">{{en.d1.text}}</div>
+      </div>
+      <div style="position: absolute; left: 458px; top: 446px; width: 420px">
+        <div class="px" style="font-size: 11.5px; font-weight: 600; letter-spacing: .06em; color: {{en.d2Ink}}">{{en.d2Lab}}</div>
+        <input class="dial fk" type="range" min="{{en.d2.min}}" max="{{en.d2.max}}" step="{{en.d2.step}}" value="{{en.d2.val}}" onChange="{{en.d2.on}}" disabled="{{en.d2.off}}" aria-label="{{en.d2Lab}}" aria-valuetext="{{en.d2.text}}" style="opacity: {{en.d2Op}}">
+        <div class="px" style="font-size: 12.5px; font-weight: 600; margin-top: -2px; color: {{en.d2Ink}}">{{en.d2.text}}</div>
+      </div>
+      <div class="px" style="position: absolute; left: 20px; top: 516px; width: 858px; font-size: 11.5px; color: #4B4A44; white-space: nowrap">{{en.foot}}</div>
+    </div>
+  </div>
+
+  <!-- field notes -->
+  <div style="position: absolute; left: 952px; top: 108px; width: 460px; height: 598px; box-sizing: border-box; border: 2px solid #1C1B18; background: #FBFBF7; padding: 12px 18px 0 18px; overflow: hidden">
+    <div style="display: flex; align-items: center; gap: 8px; height: 18px"><span class="px" style="font-size: 11.5px; font-weight: 600; letter-spacing: .12em">FIELD NOTES</span><span style="flex: 1"></span><span class="px" style="font-size: 11.5px; color: #4B4A44">{{nt.src}}</span></div>
+    <div style="display: {{nt.emptyShow}}">
+      <div class="li" style="font-size: 25px; font-weight: 700; line-height: 30px; margin-top: 12px">Five ways to look at one question</div>
+      <div class="li" style="font-size: 15px; line-height: 21px; margin-top: 10px">BOW will not give you one number, because the models disagree about what a number would mean. Pick a ridge to read its notes. Pick two, and stand between them.</div>
+      <div class="li" style="font-size: 15px; line-height: 21px; margin-top: 10px">The dashed slots are where each model's reading and track record will sit once their feeds are connected. Today they are empty on purpose.</div>
+    </div>
+    <div style="display: {{nt.fullShow}}">
+      <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px">
+        <span class="sw" style="width: 22px; height: 22px; background: {{nt.tone}}; border: 2px solid #1C1B18"></span>
+        <div class="li" style="font-size: 20px; font-weight: 700; line-height: 26px; white-space: nowrap">{{nt.name}}</div>
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 9px">
+        <span class="sw" style="width: 18px; height: 18px; margin-top: 2px; background: {{nt.mBg}}; border: {{nt.mBd}}"></span>
+        <div class="li" style="font-size: 14.5px; line-height: 19px">{{nt.mech}}<span class="px" style="font-size: 11.5px; color: #4B4A44; display: {{howShow}}"> · {{nt.mTag}}</span></div>
+      </div>
+      <div class="px" style="font-size: 11.5px; font-weight: 600; letter-spacing: .1em; margin-top: 12px">ASSUMES</div>
+      <sc-for list="{{nt.asm}}" as="a" hint-placeholder-count="3">
+        <div style="display: flex; gap: 10px; margin-top: 6px">
+          <span class="sw" style="width: 16px; height: 16px; margin-top: 2px; border: 2px solid #1C1B18"></span>
+          <div class="li" style="font-size: 14px; line-height: 18px"><span class="px" style="font-size: 11px; font-weight: 600; letter-spacing: .06em; margin-right: 5px">{{a.d}}</span>{{a.t}}</div>
+        </div>
+      </sc-for>
+      <div class="px" style="font-size: 11.5px; color: #4B4A44; margin-top: 4px; display: {{howShow}}">AUTHORED · written for this prototype; a publisher would supply its own</div>
+      <div style="display: flex; gap: 10px; margin-top: 12px">
+        <div style="flex: 1; min-width: 0; box-sizing: border-box; border: 1.5px dashed #1C1B18; padding: 4px 10px">
+          <div class="px" style="font-size: 11px; font-weight: 600; letter-spacing: .08em">READING</div>
+          <div class="px" style="font-size: 12.5px; line-height: 16px">{{nt.feed}}</div>
+          <div class="px" style="font-size: 11px; font-weight: 600; letter-spacing: .05em">MODELED · placeholder</div>
+        </div>
+        <div style="flex: 1; min-width: 0; box-sizing: border-box; border: 1.5px dashed #1C1B18; padding: 4px 10px">
+          <div class="px" style="font-size: 11px; font-weight: 600; letter-spacing: .08em">TRACK RECORD</div>
+          <div class="px" style="font-size: 12.5px; line-height: 16px">[calls since 1990 · from the model registry]</div>
+          <div class="px" style="font-size: 11px; font-weight: 600; letter-spacing: .05em">RECORDED · when connected</div>
+        </div>
+      </div>
+      <div class="px" style="font-size: 11.5px; font-weight: 600; letter-spacing: .1em; margin-top: 14px">DISAGREES WITH</div>
+      <sc-for list="{{nt.dis}}" as="ds" hint-placeholder-count="3">
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 6px; height: 24px">
+          <span class="li" style="font-size: 14px; width: 190px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ds.name}}</span>
+          <sc-for list="{{ds.dots}}" as="dt" hint-placeholder-count="3">
+            <span class="sw" style="width: 14px; height: 14px; background: {{dt.bg}}; border: 2px solid #8C8676"></span>
+          </sc-for>
+          <span class="px" style="font-size: 12px; white-space: nowrap">{{ds.txt}}</span>
+        </div>
+      </sc-for>
+      <div class="px" style="font-size: 11.5px; color: #4B4A44; margin-top: 5px; line-height: 14px">Dots: EVIDENCE · LINK · BREAKS. Filled means they differ. <span style="display: {{howShow}}">COMPUTED from authored tags.</span></div>
+    </div>
+  </div>
+
+  <!-- controls -->
+  <button type="button" class="btn" onClick="{{between}}" disabled="{{btn.betweenOff}}" style="position: absolute; left: 28px; top: 658px; width: 330px; height: 46px; font-size: 15px; font-weight: 600; border: 2px solid #1C1B18; background: {{btn.betweenBg}}; color: {{btn.betweenFg}}; text-align: left; padding: 0 14px; white-space: nowrap">{{btn.betweenT}}</button>
+  <button type="button" class="btn" onClick="{{enter}}" disabled="{{btn.enterOff}}" style="position: absolute; left: 370px; top: 658px; width: 270px; height: 46px; font-size: 15px; font-weight: 600; border: 2px solid #1C1B18; background: {{btn.enterBg}}; color: {{btn.enterFg}}; text-align: left; padding: 0 14px; white-space: nowrap">{{btn.enterT}}</button>
+  <button type="button" class="btn" onClick="{{clear}}" disabled="{{btn.clearOff}}" style="position: absolute; left: 652px; top: 658px; width: 120px; height: 46px; font-size: 15px; font-weight: 600; border: 2px solid #1C1B18; background: #FBFBF7; color: #1C1B18">Clear picks</button>
+  <button type="button" class="btn" onClick="{{back}}" style="position: absolute; left: 784px; top: 658px; width: 146px; height: 46px; font-size: 15px; font-weight: 600; border: 2px solid #1C1B18; background: #FBFBF7; color: #1C1B18; display: {{btn.backShow}}">Back to ridges</button>
+  <div class="li" style="position: absolute; left: 28px; top: 712px; width: 902px; font-size: 15px; font-style: italic; line-height: 20px">{{hint}}</div>
+  <div class="li" style="position: absolute; left: 952px; top: 712px; width: 460px; font-size: 13.5px; line-height: 17px; color: #4B4A44">{{refuse}}</div>
+
+  <sc-for list="{{key}}" as="ky" hint-placeholder-count="7">
+    <div class="fd" style="position: absolute; left: {{ky.x}}px; top: {{ky.y}}px; width: 222px; display: flex; gap: 7px; align-items: center; opacity: {{keyOp}}"><span class="sw" style="width: 16px; height: 14px; background: {{ky.bg}}; border: {{ky.bd}}"></span><span class="px" style="font-size: 12px; line-height: 13px; white-space: nowrap">{{ky.t}}</span></div>
+  </sc-for>
+
+  <div class="li" style="position: absolute; left: 28px; top: 796px; width: 1384px; font-size: 24px; line-height: 30px; font-weight: 500; white-space: nowrap"><span class="px" style="font-size: 16px; font-weight: 600; letter-spacing: .12em">SEARCH</span>, in this model, is being handed the competing models, not an answer, and finding the assumption they split on.</div>
+
+  <div class="px" style="position: absolute; left: 28px; bottom: 14px; width: 760px; font-size: 11.5px; line-height: 15px; color: #4B4A44">COMMERCIAL LENS · Hypothesis: model publishers (banks, research shops, forecasters) pay to list executable models; readers compare free; BOW earns on premium model access and data feeds.</div>
+  <div class="px" style="position: absolute; right: 28px; bottom: 14px; width: 620px; text-align: right; font-size: 11.5px; line-height: 15px; color: #4B4A44">PROTOTYPE · DESIGN PROPOSAL · data: every model reading and track record is a placeholder; ridge placement and height authored; Sahm rule as stated in the brief (verify); runnables use hypothetical paths, no real data</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  models() {
+    return {
+      sahm: { key: 'sahm', name: 'Sahm rule indicator', sn: 'Sahm rule', tone: '#EADBB6', level: 1, feed: '[from BLS data feed]', run: true, obs: true,
+        mech: 'Triggers when the 3-month average unemployment rate rises 0.5 points above its 12-month low.', mTag: 'a published rule (OBSERVED) [verify]',
+        as: [
+          { d: 'EVIDENCE', c: 'labour data', t: 'Reads one series: the unemployment rate, as a 3-month average.' },
+          { d: 'LINK', c: 'past pattern', t: 'Assumes a fast rise in joblessness marks the start of a recession [verify].' },
+          { d: 'BREAKS', c: 'reads late', t: 'Speaks late: unemployment must already have risen.' }
+        ] },
+      yield: { key: 'yield', name: 'Yield-curve model', sn: 'Yield curve', tone: '#C1CCD4', level: 2, feed: '[from the model feed]', run: true, obs: false,
+        mech: 'Turns the gap between long and short interest rates into a recession probability.', mTag: 'AUTHORED description',
+        as: [
+          { d: 'EVIDENCE', c: 'prices', t: 'Reads one price gap: long-term minus short-term interest rates.' },
+          { d: 'LINK', c: 'past pattern', t: 'Assumes an inverted curve, short rates above long, has come before past recessions [verify].' },
+          { d: 'BREAKS', c: 'link drifts', t: 'Misleads if the link between rates and the economy has changed.' }
+        ] },
+      market: { key: 'market', name: 'Market-implied probability', sn: 'Market prices', tone: '#E5CBC2', level: 3, feed: '[feed]', run: true, obs: false,
+        mech: 'Reads a price as a probability: a contract paying $1 if a recession comes, priced at p, implies p.', mTag: 'AUTHORED description',
+        as: [
+          { d: 'EVIDENCE', c: 'prices', t: 'Reads the price of bets on a recession, from prediction or futures markets.' },
+          { d: 'LINK', c: 'crowd belief', t: 'Assumes traders’ money adds up to a fair probability.' },
+          { d: 'BREAKS', c: 'thin or hedged bets', t: 'Misleads when few people trade, or when bets are hedges, not beliefs.' }
+        ] },
+      dsge: { key: 'dsge', name: 'Structural macro model (DSGE-style)', sn: 'DSGE-style model', tone: '#CBD5BC', level: 4, feed: '[feed]', run: false, obs: false,
+        mech: 'Simulates an economy from written-down rules of behavior and reads a recession chance off the simulated paths.', mTag: 'AUTHORED description',
+        as: [
+          { d: 'EVIDENCE', c: 'many series via theory', t: 'Reads many series at once, filtered through a theory of how the economy fits together.' },
+          { d: 'LINK', c: 'theory', t: 'Assumes households, firms and the central bank behave as its equations say.' },
+          { d: 'BREAKS', c: 'omitted structure', t: 'Misses whatever its equations leave out.' }
+        ] }
+    };
+  }
+  sahm(pace, thr) {
+    const rate = [];
+    for (let m = 1; m <= 24; m++) rate.push(m <= 12 ? 4.0 : Math.min(10, 4.0 + pace * (m - 12)));
+    const ma = rate.map((_, i) => (i < 2 ? null : (rate[i] + rate[i - 1] + rate[i - 2]) / 3));
+    const gap = ma.map((v, i) => {
+      if (v === null) return null;
+      let lo = 99;
+      for (let j = Math.max(2, i - 11); j <= i; j++) lo = Math.min(lo, ma[j]);
+      return v - lo;
+    });
+    let trig = -1;
+    for (let i = 0; i < 24; i++) { if (gap[i] !== null && gap[i] >= thr - 1e-9) { trig = i + 1; break; } }
+    return { rate: rate, ma: ma, gap: gap, trig: trig };
+  }
+  ridge(a, p, b, h) {
+    const X = (m) => 44 + m * 67.5, B = 380;
+    const xa = X(a), xp = X(p), xb = X(b);
+    return 'M' + xa + ' ' + B + ' C' + (xa + (xp - xa) * 0.55) + ' ' + B + ' ' + (xp - (xp - xa) * 0.45) + ' ' + (B - h) + ' ' + xp + ' ' + (B - h) + ' C' + (xp + (xb - xp) * 0.45) + ' ' + (B - h) + ' ' + (xb - (xb - xp) * 0.55) + ' ' + B + ' ' + xb + ' ' + B + ' Z';
+  }
+  renderVals() {
+    const s = this.state || {};
+    const M = this.models();
+    const view = s.view || 'land';
+    const sel = s.sel || [];
+    const how = !!s.how;
+    const fork = s.fork || null;
+    const pace = s.pace === undefined ? 0.10 : s.pace;
+    const yEnd = s.yEnd === undefined ? -0.8 : s.yEnd;
+    const price = s.price === undefined ? 30 : s.price;
+    const run = s.run || null;
+    const INK = '#1C1B18', RED = '#B23A1B';
+    const foc = sel.length ? sel[sel.length - 1] : null;
+    const fm = foc ? M[foc] : null;
+    const set = (o) => this.setState(o);
+
+    // ridges
+    const geo = { market: [0, 4.2, 12, 180], dsge: [2.6, 7.4, 11.6, 230], yield: [7.4, 10.3, 12.4, 130], sahm: [-0.4, 1.2, 3.8, 80] };
+    const rg = {}, sw = {};
+    Object.keys(geo).forEach((k) => { const g = geo[k]; rg[k] = this.ridge(g[0], g[1], g[2], g[3]); sw[k] = sel.indexOf(k) >= 0 ? 4.5 : 2; });
+    const labels = ['sahm', 'market', 'dsge', 'yield'].map((k) => {
+      const g = geo[k], m = M[k];
+      const cx = 44 + g[1] * 67.5;
+      const i = sel.indexOf(k);
+      return {
+        x: Math.max(6, Math.min(692, cx - 98)), y: 380 - g[3] - 90, pole: 380 - g[3] - 10,
+        name: m.name, feed: m.feed, on: i >= 0, bd: i >= 0 ? '4px solid ' + INK : '2px solid ' + INK,
+        badge: i === 0 ? 'A' : 'B', badgeShow: i >= 0 ? 'block' : 'none',
+        pick: () => {
+          const st = this.state || {};
+          let cur = (st.sel || []).slice();
+          const at = cur.indexOf(k);
+          if (at >= 0) cur.splice(at, 1); else { cur.push(k); if (cur.length > 2) cur = cur.slice(cur.length - 2); }
+          set({ sel: cur });
+        }
+      };
+    });
+    const ticks = [0, 3, 6, 9, 12].map((v) => ({ x: 44 + v * 67.5, t: v === 0 ? 'now' : v === 12 ? '12 months' : v + ' mo' }));
+
+    // your plot / fork
+    const canFork = !!(fm && fm.run) && !fork;
+    const plot = fork ? {
+      bd: '3px solid ' + RED, bg: '#FBFBF7', ink: RED, k: 'YOUR BRANCH · forked from ' + M[fork.from].name + ' · 29 Sep 2026',
+      t: this.forkChanged(fork, M) + ' Other assumptions unchanged.', btn: 'Enter your model', btnBd: RED, btnBg: RED, btnFg: '#FBFBF7', off: false, dropShow: 'inline-block',
+      act: () => set({ view: 'enter', run: { key: fork.from, fork: true } }), drop: () => set({ fork: null, run: null, view: 'land' })
+    } : {
+      bd: '2px dashed ' + INK, bg: '#F4F4F0', ink: INK, k: 'YOUR OWN MODEL · fork any of these',
+      t: !fm ? 'Pick a ridge first, then fork it: copy it, change one assumption, see what moves.' : (fm.run ? 'Fork ' + fm.name + ': your copy, stamped as yours, with one dial of your own.' : 'Refused: ' + fm.sn + ' has no runnable connected, so nothing to fork yet. [model feed]'),
+      btn: fm ? 'Fork ' + fm.sn : 'Fork a model', btnBd: INK, btnBg: canFork ? INK : '#EFEFEA', btnFg: canFork ? '#FBFBF7' : '#4B4A44', off: !canFork, dropShow: 'none',
+      act: () => { if (fm && fm.run) set({ fork: { from: fm.key, x: fm.key === 'sahm' ? 0.5 : fm.key === 'yield' ? 0 : 0 } }); }, drop: () => {}
+    };
+
+    // field notes
+    const cats = (a, b) => [0, 1, 2].map((i) => a.as[i].c !== b.as[i].c);
+    const others = fm ? Object.keys(M).filter((k) => k !== fm.key) : [];
+    const dimW = ['what they read', 'how they link it', 'when they mislead'];
+    const nt = {
+      src: fm ? 'source: model registry [placeholder]' : '',
+      emptyShow: fm ? 'none' : 'block', fullShow: fm ? 'block' : 'none',
+      tone: fm ? fm.tone : '#FBFBF7', name: fm ? fm.name : '', mech: fm ? fm.mech : '', mTag: fm ? fm.mTag : '',
+      mBg: fm && fm.obs ? INK : 'transparent', mBd: '2px solid ' + INK, feed: fm ? fm.feed : '',
+      asm: fm ? fm.as.map((a) => ({ d: a.d, t: a.t })) : [],
+      dis: others.map((k) => {
+        const df = cats(fm, M[k]);
+        const n = df.filter((x) => x).length;
+        return { name: M[k].sn, dots: df.map((x) => ({ bg: x ? '#8C8676' : 'transparent' })), txt: n === 0 ? 'agree on all three' : (n === 3 ? 'differ on all three' : 'differ on ' + n + ' of 3') };
+      })
+    };
+
+    // standing between
+    const A = sel.length === 2 ? M[sel[0]] : null, Bm = sel.length === 2 ? M[sel[1]] : null;
+    let rows = [], sides = [], verdict = '';
+    if (A && Bm) {
+      const df = cats(A, Bm);
+      rows = [0, 1, 2].map((i) => ({
+        y: 130 + i * 92, yc: 130 + i * 92 + 24, dim: A.as[i].d, word: df[i] ? 'differ' : 'shared', mBg: df[i] ? '#8C8676' : '#FBFBF7',
+        toneA: A.tone, toneB: Bm.tone, catA: A.as[i].c.toUpperCase(), catB: Bm.as[i].c.toUpperCase(), tA: A.as[i].t, tB: Bm.as[i].t
+      }));
+      sides = [{ x: 20, tone: A.tone, badge: 'A', name: A.name, feed: A.feed }, { x: 468, tone: Bm.tone, badge: 'B', name: Bm.name, feed: Bm.feed }];
+      const dn = df.map((x, i) => (x ? dimW[i] : null)).filter((x) => x);
+      const sh = df.map((x, i) => (!x ? i : -1)).filter((i) => i >= 0);
+      const phr = { 'prices': 'read prices', 'past pattern': 'lean on past patterns' };
+      verdict = 'Where they split: ' + (dn.length ? dn.join(', ') : 'nowhere on these three') + '. ' + (sh.length ? 'What they share: ' + sh.map((i) => 'both ' + (phr[A.as[i].c] || 'agree') + ' (' + A.as[i].d + ')').join('; ') + '.' : 'They share none of the three.') + ' If their readings differ, start with the assumptions where they split.';
+    }
+
+    // inside a model
+    const rk = run ? run.key : null;
+    const isF = !!(run && run.fork && fork);
+    const rm = rk ? M[rk] : null;
+    const en = { title: '', tone: '#FBFBF7', seriesShow: 'none', meterShow: 'none', forkShow: isF ? 'inline-block' : 'none', stamp: isF ? 'YOUR BRANCH · forked 29 Sep 2026' : '' };
+    let cols = [];
+    for (let i = 0; i < 24; i++) cols.push({ x: 44 + i * 34, by: 0, bh: 0, bop: 0, dx: 0, dy: 0, dop: 0, gy: 332, gh: 0, gop: 0, gbd: '0', fop: 0, m: String(i + 1), mshow: 'none' });
+    Object.assign(en, { zeroY: 0, zeroOp: 0, thrY: 0, thrOp: 0, thrLy: 0, thrT: '', tx: 0, tlx: 0, tOp: 0, tT: '', topLab: '', botLab: '', meterLab: '', meterW: 0, res1: '', res2: '', res3: '', d1Lab: '', d2Lab: '', d2Ink: INK, d2Op: 1, foot: '', rule: '', ruleTag: '', ruleBg: 'transparent', ruleBd: '2px solid ' + INK });
+    en.d1 = { min: 0, max: 1, step: 1, val: 0, text: '', on: () => {} };
+    en.d2 = { min: 0, max: 1, step: 1, val: 0, text: '', on: () => {}, off: true };
+    if (rm) {
+      en.title = rm.name; en.tone = rm.tone;
+      const lockedTxt = (t) => 'fixed by the publisher: ' + t;
+      if (rk === 'sahm') {
+        const thrP = 0.5, thr = isF ? fork.x : thrP;
+        const sim = this.sahm(pace, thr), simP = this.sahm(pace, thrP);
+        en.seriesShow = 'block';
+        en.rule = (isF ? 'Your branch: triggers' : 'As stated: triggers') + ' when the 3-month average unemployment rate is ' + thr.toFixed(2).replace(/0$/, '') + ' points above its 12-month low.';
+        en.ruleBg = INK; en.ruleTag = 'OBSERVED rule [verify]'; if (isF) { en.ruleBg = 'transparent'; en.ruleBd = '3px solid ' + RED; en.ruleTag = 'your branch changes one number'; }
+        en.topLab = 'RATE · authored, hypothetical, not BLS data · dots: 3-month average';
+        en.botLab = 'GAP · 3-month average minus its 12-month low · COMPUTED';
+        const yv = (v) => 246 - ((v - 3) / 5) * 150;
+        cols = cols.map((c, i) => {
+          const r = sim.rate[i], y = yv(r), g = sim.gap[i], ma = sim.ma[i];
+          return Object.assign(c, { by: y, bh: 246 - y, bop: 1, dx: c.x + 8, dy: ma === null ? 0 : yv(ma) - 5, dop: ma === null ? 0 : 1, gh: g === null ? 0 : Math.min(70, Math.max(2, g / 1.2 * 70)), gy: 332 - (g === null ? 0 : Math.min(70, Math.max(2, g / 1.2 * 70))), gop: g === null ? 0 : 1, gbd: (sim.trig > 0 && i + 1 >= sim.trig) ? '2px solid ' + INK : '1.5px solid ' + INK, mshow: ([1, 6, 12, 13, 18, 24].indexOf(i + 1) >= 0) ? 'block' : 'none' });
+        });
+        en.thrY = 332 - thr / 1.2 * 70; en.thrOp = 1; en.thrLy = en.thrY - 8; en.thrT = thr.toFixed(2);
+        if (sim.trig > 0) { en.tOp = 1; en.tx = 44 + (sim.trig - 1) * 34 + 12; en.tlx = Math.min(en.tx + 6, 780); en.tT = 'TRIGGER · month ' + sim.trig; }
+        en.res1 = sim.trig > 0 ? 'Triggers in month ' + sim.trig + '.' : 'Does not trigger in 24 months on this path.';
+        en.res2 = sim.trig > 0 ? 'That is ' + (sim.trig - 13) + ' months after unemployment first rose (month 13). The rule reads the past; it cannot fire early.' : 'The rise is too slow for the gap to reach the threshold. Drag the pace up to find the edge.';
+        let edge = -1; for (let p = 0; p <= 30; p++) { if (this.sahm(p / 100, thr).trig > 0) { edge = p; break; } }
+        en.res3 = 'COMPUTED from the stated rule on an authored path. Edge (scanned): ' + (edge >= 0 ? 'slowest rise that still triggers, ' + (edge / 100).toFixed(2) + ' pt a month.' : 'none up to 0.30 pt a month.') + (isF && thr !== thrP ? ' Published rule on this path: ' + (simP.trig > 0 ? 'month ' + simP.trig : 'no trigger') + '.' : '');
+        en.d1Lab = 'PATH · unemployment rises after month 12 by'; en.d1 = { min: 0, max: 0.3, step: 0.01, val: pace, text: pace.toFixed(2) + ' pt a month (hypothetical)', on: (e) => set({ pace: parseFloat(e.target.value) }) };
+        en.d2Lab = isF ? 'YOUR ASSUMPTION · trigger threshold' : 'THE RULE · trigger threshold'; en.d2Ink = isF ? RED : '#4B4A44';
+        en.d2 = { min: 0.3, max: 0.8, step: 0.05, val: thr, text: isF ? thr.toFixed(2) + ' points (published: 0.5)' : '0.5 points · ' + lockedTxt('fork to change it'), on: (e) => set({ fork: Object.assign({}, fork, { x: parseFloat(e.target.value) }) }), off: !isF };
+        en.d2Op = isF ? 1 : 0.4;
+        en.foot = 'Inside the Sahm rule: nothing here is a forecast. It is the stated rule run on a path you drag.';
+      } else if (rk === 'yield') {
+        const cut = isF ? fork.x : 0;
+        en.seriesShow = 'block';
+        en.rule = (isF ? 'Your branch: ' : 'Mechanism: ') + 'long minus short interest rate. Below the cutoff is an inversion; what it implies lives in the model.';
+        en.ruleBg = 'transparent'; en.ruleTag = 'AUTHORED description';
+        en.topLab = 'LONG MINUS SHORT RATE · authored, hypothetical, not market data';
+        en.botLab = 'INVERTED? (gap below ' + cut.toFixed(1) + ' pt) · COMPUTED';
+        const sp = []; for (let i = 0; i < 24; i++) sp.push(1.0 + (yEnd - 1.0) * i / 23);
+        const zy = 171; const yy = (v) => zy - (v / 1.5) * 75;
+        let first = -1, n = 0, mn = 99;
+        sp.forEach((v, i) => { if (v < cut - 1e-9) { n += 1; if (first < 0) first = i + 1; } mn = Math.min(mn, v); });
+        cols = cols.map((c, i) => { const v = sp[i], y = yy(v); return Object.assign(c, { by: Math.min(y, zy), bh: Math.max(2, Math.abs(y - zy)), bop: 1, fop: v < cut - 1e-9 ? 1 : 0, mshow: ([1, 6, 12, 18, 24].indexOf(i + 1) >= 0) ? 'block' : 'none' }); });
+        en.zeroY = zy; en.zeroOp = 1;
+        en.res1 = n > 0 ? 'Inverted from month ' + first + ', for ' + n + ' month' + (n === 1 ? '' : 's') + '.' : 'Never inverted on this path.';
+        en.res2 = n > 0 ? 'Deepest gap: ' + mn.toFixed(1) + ' points. The model would turn this into a probability; that step is not connected.' : 'The gap stays above the cutoff. There is nothing for the model to read as an inversion.';
+        en.res3 = 'COMPUTED from the inversion rule on an authored path. Probability of recession = f(gap): [from the model feed] (empty slot).';
+        en.d1Lab = 'PATH · the gap moves from +1.0 (month 1) to'; en.d1 = { min: -1.5, max: 1.5, step: 0.1, val: yEnd, text: (yEnd >= 0 ? '+' : '') + yEnd.toFixed(1) + ' points at month 24 (hypothetical)', on: (e) => set({ yEnd: parseFloat(e.target.value) }) };
+        en.d2Lab = isF ? 'YOUR ASSUMPTION · inverted when the gap is below' : 'THE RULE · inverted when the gap is below'; en.d2Ink = isF ? RED : '#4B4A44';
+        en.d2 = { min: -0.5, max: 0.5, step: 0.1, val: cut, text: (cut >= 0 ? '+' : '') + cut.toFixed(1) + ' points' + (isF ? ' (usual: 0.0)' : ' · ' + lockedTxt('fork to change it')), on: (e) => set({ fork: Object.assign({}, fork, { x: parseFloat(e.target.value) }) }), off: !isF };
+        en.d2Op = isF ? 1 : 0.4;
+        en.foot = 'Inside the yield-curve model: only the inversion rule runs. The probability step is a hole, on purpose.';
+      } else if (rk === 'market') {
+        const prem = isF ? fork.x : 0;
+        const imp = Math.max(0, price - prem);
+        en.meterShow = 'block';
+        en.rule = (isF ? 'Your branch: ' : 'Mechanism: ') + 'a contract pays $1 if a recession comes. Its price, in cents on the dollar, is the probability.';
+        en.ruleBg = 'transparent'; en.ruleTag = 'AUTHORED description';
+        en.meterLab = 'IMPLIED PROBABILITY = PRICE' + (isF ? ' MINUS YOUR HEDGING PREMIUM' : '') + ' · COMPUTED · from a price you set, not a market quote';
+        en.meterW = imp / 100 * 804;
+        en.res1 = 'Implied probability: ' + imp + '%.';
+        en.res2 = isF && prem > 0 ? 'Price ' + price + ' cents, less ' + prem + ' points you treat as hedging, leaves ' + imp + '%. The unforked reading would be ' + price + '%.' : 'A price of ' + price + ' cents reads as ' + price + '%. What the price leaves out is where two markets can disagree.';
+        en.res3 = 'COMPUTED from the stated reading rule. The real price is a feed: [feed] (empty slot).';
+        en.d1Lab = 'PRICE · you set it'; en.d1 = { min: 0, max: 100, step: 1, val: price, text: price + ' cents (hypothetical, not a quote)', on: (e) => set({ price: parseInt(e.target.value, 10) }) };
+        en.d2Lab = isF ? 'YOUR ASSUMPTION · points of price that are hedging' : 'THE RULE · points of price treated as hedging'; en.d2Ink = isF ? RED : '#4B4A44';
+        en.d2 = { min: 0, max: 20, step: 1, val: prem, text: prem + ' points' + (isF ? '' : ' · ' + lockedTxt('fork to change it')), on: (e) => set({ fork: Object.assign({}, fork, { x: parseInt(e.target.value, 10) }) }), off: !isF };
+        en.d2Op = isF ? 1 : 0.4;
+        en.foot = 'Inside the market reading: one rule, one dial. Fees and hedging are why two markets can disagree.';
+      }
+    }
+
+    const both = sel.length === 2;
+    const btn = {
+      betweenT: both ? 'Stand between ' + M[sel[0]].sn + ' and ' + M[sel[1]].sn : 'Stand between two models: pick two',
+      betweenOff: !both || view === 'between', betweenBg: both && view !== 'between' ? INK : '#EFEFEA', betweenFg: both && view !== 'between' ? '#FBFBF7' : '#4B4A44',
+      enterT: fm ? (fm.run ? 'Enter ' + fm.sn : 'Enter: no runnable connected') : 'Enter a model', enterOff: !(fm && fm.run) || view === 'enter',
+      clearOff: sel.length === 0, backShow: view === 'land' ? 'none' : 'block'
+    };
+    btn.enterBg = btn.enterOff ? '#EFEFEA' : INK; btn.enterFg = btn.enterOff ? '#4B4A44' : '#FBFBF7';
+
+    let hint = '';
+    if (view === 'between') hint = 'Standing between them: the readings are empty slots, so the disagreement you can see is in the assumptions.';
+    else if (view === 'enter') hint = isF ? 'Your branch is stamped as yours and never overwrites the model it came from.' : 'A tiny runnable: it computes only what the stated rule fixes, on a path you drag.';
+    else if (sel.length === 0) hint = 'Pick a ridge. Each one is a way of looking, not an answer.';
+    else if (sel.length === 1) hint = 'Pick a second ridge to stand between them, or enter this one.';
+    else hint = 'Two picked (A, B). Stand between them to see which assumption they split on.';
+    const refuse = view === 'land' ? 'Refusal named: no single number is given. Rule: BOW shows the models; it does not pick one.' : '';
+
+    const keyRows = [
+      { bg: INK, bd: '2px solid ' + INK, t: 'OBSERVED · solid · published rule' },
+      { bg: 'transparent', bd: '2px solid ' + INK, t: 'AUTHORED · outline · chosen' },
+      { bg: '#8C8676', bd: '2px solid #8C8676', t: 'COMPUTED · toned · from a rule' },
+      { bg: 'transparent', bd: '2px dashed ' + INK, t: 'UNKNOWN · dashed · empty slot' },
+      { bg: 'radial-gradient(circle, ' + INK + ' 1.1px, transparent 1.4px) 0 0/5px 5px', bd: '1px dotted ' + INK, t: 'GENERATED · stipple · assembled' },
+      { bg: INK, bd: '2px solid ' + INK, t: 'RECORDED · double rule · none yet' },
+      { bg: 'repeating-linear-gradient(135deg,' + INK + ' 0 1.3px,transparent 1.3px 5px)', bd: '1.5px solid ' + INK, t: 'MODELED · hatch · no model ran' },
+      { bg: '#CBD5BC', bd: '1px solid #8C8676', t: 'RIDGE FILLS · terrain, not truth' }
+    ].map((r, i) => ({ x: 28 + (i % 4) * 226, y: 738 + Math.floor(i / 4) * 24, bg: r.bg, bd: r.bd, t: r.t }));
+    keyRows[5].bg = 'transparent'; keyRows[5].bd = '3px double ' + INK;
+
+    return {
+      how: how, howBg: how ? INK : '#FBFBF7', howFg: how ? '#FBFBF7' : INK, howShow: how ? 'inline' : 'none',
+      toggleHow: () => set({ how: !(this.state && this.state.how) }),
+      v: { land: view === 'land' ? 'block' : 'none', between: view === 'between' ? 'block' : 'none', enter: view === 'enter' ? 'block' : 'none' },
+      plateAria: view === 'land' ? 'Landscape of four models along a time-to-recession horizon' : (view === 'between' ? 'Two models side by side' : 'Inside one model'),
+      rg: rg, sw: sw, labels: labels, ticks: ticks, plot: plot, nt: nt, rows: rows, sides: sides, verdict: verdict, en: en, cols: cols, btn: btn, hint: hint, refuse: refuse,
+      key: keyRows, keyOp: how ? 1 : 0,
+      between: () => { if (both) set({ view: 'between' }); },
+      enter: () => { if (fm && fm.run) set({ view: 'enter', run: { key: fm.key, fork: false } }); },
+      clear: () => set({ sel: [], run: null, view: 'land' }),
+      back: () => set({ view: 'land' })
+    };
+  }
+  forkChanged(fork, M) {
+    const d = { sahm: [0.5, 'trigger threshold'], yield: [0, 'inversion cutoff'], market: [0, 'hedging premium'] }[fork.from];
+    return fork.x === d[0] ? 'Changed so far: nothing. Enter it and turn the dial.' : 'Changed: ' + d[1] + ' ' + d[0] + ' → ' + fork.x + '.';
+  }
+}
+</script>
+</body>
+</html>

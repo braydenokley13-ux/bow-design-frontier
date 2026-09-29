@@ -24,37 +24,20 @@ a{color:#5B3FA0}a:hover{color:#3F2A78}
 .sw-obs{background:#1C1B1F}
 .sw-rec{background:#1C1B1F;box-shadow:inset 0 0 0 2px #1C1B1F,inset 0 0 0 3px #FFFFFF}
 .sw-dec{border:2px solid #5B3FA0}
-.sw-mod{background:repeating-linear-gradient(135deg,#1C1B1F 0 1.4px,#FFFFFF 1.4px 4px);border:1px solid #1C1B1F}
+.sw-aut{border:2px solid #1C1B1F}
 .sw-unk{border:2px dashed #1C1B1F}
 .sw-com{background:#8F8B83}
 .sw-wait{border:1.5px dotted #4E4A42}
-.chair{position:absolute;width:40px;height:40px;box-sizing:border-box;transition:background .3s}
-.cx-none{background:#F7F5F0;border:1.5px dotted #8E8A80;border-bottom:5px solid #8E8A80}
-.cx-rec{background:#1C1B1F;border:2px solid #1C1B1F;box-shadow:inset 0 0 0 2px #1C1B1F,inset 0 0 0 3.5px #EDEBE6}
-.cx-dec{background:#F7F5F0;border:2.5px solid #5B3FA0;border-bottom:6px solid #5B3FA0}
-.cx-mod{background:repeating-linear-gradient(135deg,#1C1B1F 0 1.5px,#F7F5F0 1.5px 6px);border:2px solid #1C1B1F;border-bottom:6px solid #1C1B1F}
-.cx-unk{background:#F7F5F0;border:2px dashed #1C1B1F;border-bottom:6px dashed #1C1B1F}
 .krow{transition:opacity .3s}
+.rcell{box-sizing:border-box;width:150px;height:52px;padding:4px 7px 3px;display:flex;flex-direction:column;justify-content:center;gap:1px;overflow:hidden}
 </style>
 </helmet>
 <div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #EDEBE6; color: #1C1B1F; font-family: 'Libre Franklin', sans-serif">
 
   <svg width="1440" height="900" viewBox="0 0 1440 900" style="position: absolute; left: 0; top: 0" aria-hidden="true">
-    <defs>
-      <pattern id="hatchC" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-        <rect width="7" height="7" fill="#F7F5F0"></rect>
-        <line x1="0" y1="0" x2="0" y2="7" stroke="#1C1B1F" stroke-width="1.6"></line>
-      </pattern>
-    </defs>
     <circle cx="720" cy="491" r="298" fill="none" stroke="#D6D3CA" stroke-width="1.5"></circle>
     <circle cx="720" cy="491" r="290" fill="none" stroke="#DEDBD2" stroke-width="1"></circle>
     <path d="{{floorTicks}}" fill="none" stroke="#CFCBC0" stroke-width="1"></path>
-    <path d="{{ln0}}" fill="none" stroke="#8E8A80" stroke-width="1" stroke-dasharray="2 4"></path>
-    <path d="{{ln1}}" fill="none" stroke="#8E8A80" stroke-width="1" stroke-dasharray="2 4"></path>
-    <path d="{{ln2}}" fill="none" stroke="#8E8A80" stroke-width="1" stroke-dasharray="2 4"></path>
-    <path d="{{ln3}}" fill="none" stroke="#8E8A80" stroke-width="1" stroke-dasharray="2 4"></path>
-    <path d="{{ln4}}" fill="none" stroke="#8E8A80" stroke-width="1" stroke-dasharray="2 4"></path>
-    <path d="{{ln5}}" fill="none" stroke="#8E8A80" stroke-width="1" stroke-dasharray="2 4"></path>
     <circle cx="720" cy="491" r="200" fill="#FFFFFF" stroke="#1C1B1F" stroke-width="2"></circle>
     <circle cx="720" cy="491" r="238" fill="none" stroke="#5B3FA0" stroke-width="2.5" style="opacity: {{sealOp}}; transition: opacity .5s ease"></circle>
     <circle cx="720" cy="491" r="242.5" fill="none" stroke="#5B3FA0" stroke-width="1" style="opacity: {{sealOp}}; transition: opacity .5s ease"></circle>
@@ -70,6 +53,18 @@ a{color:#5B3FA0}a:hover{color:#3F2A78}
     <path d="{{arc4.d2}}" fill="none" stroke="{{arc4.stroke2}}" stroke-width="1.4"></path>
     <path d="{{arc5.d}}" fill="{{arc5.fill}}" stroke="{{arc5.stroke}}" stroke-width="{{arc5.sw}}" stroke-dasharray="{{arc5.dash}}"></path>
     <path d="{{arc5.d2}}" fill="none" stroke="{{arc5.stroke2}}" stroke-width="1.4"></path>
+    <path d="{{hl0.d}}" fill="none" stroke="{{hl0.stroke}}" stroke-width="1.3" stroke-dasharray="{{hl0.dash}}" style="opacity: {{hl0.op}}; transition: opacity .3s"></path>
+    <circle cx="{{hl0.ex}}" cy="{{hl0.ey}}" r="3.4" fill="{{hl0.stroke}}" style="opacity: {{hl0.op}}; transition: opacity .3s"></circle>
+    <path d="{{hl1.d}}" fill="none" stroke="{{hl1.stroke}}" stroke-width="1.3" stroke-dasharray="{{hl1.dash}}" style="opacity: {{hl1.op}}; transition: opacity .3s"></path>
+    <circle cx="{{hl1.ex}}" cy="{{hl1.ey}}" r="3.4" fill="{{hl1.stroke}}" style="opacity: {{hl1.op}}; transition: opacity .3s"></circle>
+    <path d="{{hl2.d}}" fill="none" stroke="{{hl2.stroke}}" stroke-width="1.3" stroke-dasharray="{{hl2.dash}}" style="opacity: {{hl2.op}}; transition: opacity .3s"></path>
+    <circle cx="{{hl2.ex}}" cy="{{hl2.ey}}" r="3.4" fill="{{hl2.stroke}}" style="opacity: {{hl2.op}}; transition: opacity .3s"></circle>
+    <path d="{{hl3.d}}" fill="none" stroke="{{hl3.stroke}}" stroke-width="1.3" stroke-dasharray="{{hl3.dash}}" style="opacity: {{hl3.op}}; transition: opacity .3s"></path>
+    <circle cx="{{hl3.ex}}" cy="{{hl3.ey}}" r="3.4" fill="{{hl3.stroke}}" style="opacity: {{hl3.op}}; transition: opacity .3s"></circle>
+    <path d="{{hl4.d}}" fill="none" stroke="{{hl4.stroke}}" stroke-width="1.3" stroke-dasharray="{{hl4.dash}}" style="opacity: {{hl4.op}}; transition: opacity .3s"></path>
+    <circle cx="{{hl4.ex}}" cy="{{hl4.ey}}" r="3.4" fill="{{hl4.stroke}}" style="opacity: {{hl4.op}}; transition: opacity .3s"></circle>
+    <path d="{{hl5.d}}" fill="none" stroke="{{hl5.stroke}}" stroke-width="1.3" stroke-dasharray="{{hl5.dash}}" style="opacity: {{hl5.op}}; transition: opacity .3s"></path>
+    <circle cx="{{hl5.ex}}" cy="{{hl5.ey}}" r="3.4" fill="{{hl5.stroke}}" style="opacity: {{hl5.op}}; transition: opacity .3s"></circle>
   </svg>
 
   <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 87px; box-sizing: border-box; padding: 12px 40px 0; display: grid; grid-template-columns: 560px minmax(0, 1fr) auto; align-items: start; gap: 24px; border-bottom: 3px solid #1C1B1F; background: #EDEBE6">
@@ -94,59 +89,106 @@ a{color:#5B3FA0}a:hover{color:#3F2A78}
     <span style="flex: none; width: 260px; display: flex; align-items: center; justify-content: flex-end; padding: 0 14px; font-size: 11px; color: #4E4A42; text-align: right; line-height: 1.25">ESPN / NBC Sports Boston, via BOW repo sources · verify</span>
   </div>
 
+  <!-- your own seat: fixed, not a chip -->
+  <div style="position: absolute; left: 470px; top: 146px; width: 500px; height: 34px; box-sizing: border-box; border: 2px solid #5B3FA0; box-shadow: inset 0 0 0 2px #EDEBE6, inset 0 0 0 3px #5B3FA0; background: #F1ECF9; display: flex; align-items: center; justify-content: center; gap: 9px; white-space: nowrap">
+    <span class="serif" style="font-size: 15px; font-weight: 600">Boston’s front office</span>
+    <span style="color: #5B3FA0">·</span>
+    <span class="lab" style="color: #5B3FA0; letter-spacing: .12em">YOU</span>
+    <span style="color: #5B3FA0">·</span>
+    <span style="font-size: 12.5px; font-weight: 500">the cut is your act</span>
+  </div>
+
   <!-- fork plate / legend -->
-  <div style="position: absolute; left: 446px; top: 150px; width: 548px; height: 100px">
+  <div style="position: absolute; left: 446px; top: 186px; width: 548px">
     <sc-if value="{{notHow}}" hint-placeholder-val="{{true}}">
-      <div style="display: flex; flex-direction: column; gap: 5px; align-items: center; text-align: center">
-        <span class="lab" style="display: inline-block; padding: 4px 12px; border: 2px solid #5B3FA0; box-shadow: inset 0 0 0 2px #EDEBE6, inset 0 0 0 3px #5B3FA0; color: #5B3FA0">{{plateTag}}</span>
-        <span style="font-size: 13px; line-height: 1.4; color: #1C1B1F; max-width: 500px">The cut is at the trade. Everyone it touches gets a seat. Each seat is recorded, declared, modeled, or left open on purpose. Nothing is assumed.</span>
+      <div style="display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center">
+        <span class="lab" style="color: #5B3FA0; font-size: 11px">{{plateTag}}</span>
+        <span style="font-size: 12.5px; line-height: 1.4; color: #1C1B1F; max-width: 500px">Everyone the cut touches gets a seat. Each seat is recorded, declared, modeled, or left open on purpose. Nothing is assumed.</span>
       </div>
     </sc-if>
     <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
-      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; padding: 8px 10px; background: #FFFFFF; border: 1.5px solid #1C1B1F; font-size: 11.5px; line-height: 1.3">
-        <span style="display: flex; gap: 8px; align-items: center"><span class="sw sw-rec"></span><span><strong>Solid</strong> · recorded, or reported</span></span>
-        <span style="display: flex; gap: 8px; align-items: center"><span class="sw sw-dec"></span><span><strong>Outline</strong> · declared: your say-so</span></span>
-        <span style="display: flex; gap: 8px; align-items: center"><span class="sw sw-mod"></span><span><strong>Hatch</strong> · modeled: toy model v0.1</span></span>
-        <span style="display: flex; gap: 8px; align-items: center"><span class="sw sw-unk"></span><span><strong>Dashed</strong> · unknown: a hole, kept open</span></span>
-        <span style="display: flex; gap: 8px; align-items: center"><span class="sw sw-com"></span><span><strong>Toned</strong> · computed from source figures</span></span>
-        <span style="display: flex; gap: 8px; align-items: center"><span class="sw sw-wait"></span><span><strong>Dotted</strong> · open: nobody has set it yet</span></span>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 10px; padding: 7px 10px 6px; background: #FFFFFF; border: 1.5px solid #1C1B1F; font-size: 11px; line-height: 1.25">
+        <span style="display: flex; gap: 6px; align-items: center"><span class="sw sw-rec"></span><span><strong>Solid</strong> · recorded, reported</span></span>
+        <span style="display: flex; gap: 6px; align-items: center"><span class="sw sw-dec"></span><span><strong>Violet</strong> · declared, yours</span></span>
+        <span style="display: flex; gap: 6px; align-items: center"><span class="sw sw-aut"></span><span><strong>Black outline</strong> · authored</span></span>
+        <span style="display: flex; gap: 6px; align-items: center"><span class="sw sw-unk"></span><span><strong>Dashed</strong> · unknown, a hole</span></span>
+        <span style="display: flex; gap: 6px; align-items: center"><span class="sw sw-com"></span><span><strong>Toned</strong> · computed</span></span>
+        <span style="display: flex; gap: 6px; align-items: center"><span class="sw sw-wait"></span><span><strong>Dotted</strong> · open, not set</span></span>
+        <span style="grid-column: 1 / -1; color: #4E4A42">*Modeled seats wear hatch only if a model ran. None did, so the toy seat is an authored outline.</span>
+        <span style="grid-column: 1 / -1; color: #4E4A42">Payroll row: Reality’s ≈ $203.6M is cap payroll. Reported tax salary $198.7M is ≈ $1.7M under the line (salaryswish, 4 Sep 2026, verify) — two sources, shown, not averaged.</span>
       </div>
     </sc-if>
   </div>
 
-  <!-- chairs -->
-  <sc-for list="{{chairs}}" as="c" hint-placeholder-count="6">
-    <div class="chair {{c.cls}}" style="left: {{c.x}}px; top: {{c.y}}px"></div>
-  </sc-for>
-
   <!-- center of the table -->
-  <div style="position: absolute; left: 580px; top: 357px; width: 280px; display: flex; flex-direction: column; align-items: center; gap: 2px">
-    <span class="lab" style="font-size: 11px; color: #1C1B1F; letter-spacing: .1em">AT THE CENTER</span>
-    <span style="font-size: 11px; color: #4E4A42">follows unless a seat says otherwise</span>
-  </div>
-  <sc-for list="{{krows}}" as="k" hint-placeholder-count="6">
-    <div class="krow" style="position: absolute; left: 580px; top: {{k.y}}px; width: 280px; height: 38px; box-sizing: border-box; display: flex; gap: 8px; align-items: center">
-      <span class="sw {{k.sw}}" style="width: 16px; height: 16px"></span>
-      <span style="flex: 1; min-width: 0; font-size: {{kFont}}px; line-height: 1.2; color: #1C1B1F"><span class="lab" style="font-size: 11px; letter-spacing: .05em; color: {{k.tagInk}}; display: {{k.tagShow}}">{{k.tag}} · </span>{{k.text}}</span>
+  <sc-if value="{{notRan}}" hint-placeholder-val="{{true}}">
+    <div style="position: absolute; left: 580px; top: 316px; width: 280px; display: flex; flex-direction: column; align-items: center; gap: 2px">
+      <span class="lab" style="font-size: 11px; color: #1C1B1F; letter-spacing: .1em">AT THE CENTER</span>
+      <span style="font-size: 11px; color: #4E4A42">follows unless a seat says otherwise</span>
     </div>
-  </sc-for>
+    <sc-for list="{{krows}}" as="k" hint-placeholder-count="7">
+      <div class="krow" style="position: absolute; left: 574px; top: {{k.y}}px; width: 292px; height: {{k.h}}px; box-sizing: border-box; display: flex; gap: 8px; align-items: center">
+        <span class="sw {{k.sw}}" style="width: 16px; height: 16px"></span>
+        <span style="flex: 1; min-width: 0; font-size: {{kFont}}px; line-height: 1.2; color: #1C1B1F"><span class="lab" style="font-size: 11px; letter-spacing: .05em; color: {{k.tagInk}}; display: {{k.tagShow}}">{{k.tag}} · </span>{{k.text}}</span>
+      </div>
+    </sc-for>
+  </sc-if>
 
-  <!-- under the table: tally, seal -->
-  <div style="position: absolute; left: 470px; top: 748px; width: 500px; text-align: center; font-size: 12px; line-height: 1.3; color: #1C1B1F">{{tally}}</div>
+  <!-- the run: branch beside Reality, to today -->
+  <sc-if value="{{ran}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 580px; top: 312px; width: 280px; display: flex; flex-direction: column; align-items: center; gap: 2px">
+      <span class="lab" style="font-size: 11px; color: #5B3FA0; letter-spacing: .1em">RUN TO 29 SEP 2026</span>
+      <span style="font-size: 11px; color: #4E4A42">from the cut, 5 Feb 2026 · run, not lived</span>
+    </div>
+    <span class="lab" style="position: absolute; left: 567px; top: 362px; width: 150px; height: 22px; box-sizing: border-box; background: #1C1B1F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 11px">REALITY</span>
+    <span class="lab" style="position: absolute; left: 723px; top: 362px; width: 150px; height: 22px; box-sizing: border-box; border: 2px solid #5B3FA0; box-shadow: inset 0 0 0 1.5px #EDEBE6, inset 0 0 0 2.5px #5B3FA0; color: #5B3FA0; display: flex; align-items: center; justify-content: center; font-size: 11px">YOUR BRANCH</span>
+    <sc-for list="{{runRows}}" as="rr" hint-placeholder-count="3">
+      <div style="position: absolute; left: 567px; top: {{rr.y}}px; width: 306px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; height: 15px; white-space: nowrap">
+          <span class="lab" style="font-size: 11px; letter-spacing: .05em">{{rr.label}}</span>
+          <span style="font-size: 11px; color: #4E4A42; display: {{howShow}}">{{rr.how}}</span>
+        </div>
+        <div style="display: flex; gap: 6px">
+          <div class="rcell" style="border: {{rr.rBd}}; border-left: 5px solid #1C1B1F; background: #FFFFFF">
+            <span style="font-size: 13px; font-weight: 700; line-height: 1.15; color: #1C1B1F">{{rr.rMain}}</span>
+            <span style="font-size: 11px; line-height: 1.2; color: #3B3830">{{rr.rSub}}</span>
+          </div>
+          <div class="rcell" style="border: {{rr.bBd}}; background: #F1ECF9">
+            <span style="font-size: 13px; font-weight: 700; line-height: 1.15; color: #5B3FA0">{{rr.bMain}}</span>
+            <span style="font-size: 11px; line-height: 1.2; color: #3F2A78">{{rr.bSub}}</span>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+    <span style="position: absolute; left: 600px; top: 612px; width: 240px; text-align: center; font-size: 11px; line-height: 1.25; color: #4E4A42">Run, not lived. Nothing after 29 Sep 2026 is in the branch.</span>
+  </sc-if>
+
+  <!-- under the table: composition strip, keep -->
+  <div style="position: absolute; left: 510px; top: 738px; width: 420px; height: 22px; display: flex; border: 1px solid #1C1B1F; box-sizing: content-box; margin-left: -1px" role="img" aria-label="{{stripAria}}">
+    <sc-for list="{{segs}}" as="sg" hint-placeholder-count="4">
+      <span style="display: flex; align-items: center; justify-content: center; flex: none; width: {{sg.w}}px; height: 22px; box-sizing: border-box; background: {{sg.bg}}; border: {{sg.bd}}; box-shadow: {{sg.sh}}; color: {{sg.fg}}; font-size: 12px; font-weight: 700; transition: width .4s ease">{{sg.n}}</span>
+    </sc-for>
+  </div>
+  <div style="position: absolute; left: 470px; top: 764px; width: 500px; display: flex; justify-content: center; gap: 13px; white-space: nowrap">
+    <sc-for list="{{segKey}}" as="sk" hint-placeholder-count="5">
+      <span style="display: flex; align-items: center; gap: 5px; font-size: 11.5px"><span style="display: block; flex: none; width: 13px; height: 13px; box-sizing: border-box; background: {{sk.bg}}; border: {{sk.bd}}; box-shadow: {{sk.sh}}"></span>{{sk.t}}</span>
+    </sc-for>
+  </div>
   <sc-if value="{{notSealed}}" hint-placeholder-val="{{true}}">
-    <button type="button" class="btn" onClick="{{seal}}" aria-disabled="{{sealOff}}" style="position: absolute; left: 570px; top: 770px; width: 300px; min-height: 40px; border: {{sealBorder}}; background: {{sealBg}}; color: {{sealFg}}; font-size: 15px">Seal the branch</button>
-    <span style="position: absolute; left: 450px; top: 814px; width: 540px; text-align: center; font-size: 11.5px; line-height: 1.32; color: {{sealNoteInk}}">{{sealNote}}</span>
+    <button type="button" class="btn" onClick="{{seal}}" aria-disabled="{{sealOff}}" style="position: absolute; left: 570px; top: 786px; width: 300px; min-height: 40px; border: {{sealBorder}}; background: {{sealBg}}; color: {{sealFg}}; font-size: 15px">Keep this branch</button>
+    <span style="position: absolute; left: 430px; top: 830px; width: 580px; text-align: center; font-size: 11.5px; line-height: 1.3; color: {{sealNoteInk}}">{{sealNote}}</span>
   </sc-if>
   <sc-if value="{{sealed}}" hint-placeholder-val="{{false}}">
-    <div style="position: absolute; left: 440px; top: 770px; width: 560px; height: 32px; box-sizing: border-box; padding: 0 12px; border: 2.5px solid #5B3FA0; box-shadow: inset 0 0 0 3px #EDEBE6, inset 0 0 0 4.5px #5B3FA0; background: #F1ECF9; display: flex; align-items: center; justify-content: center; gap: 10px; white-space: nowrap; font-size: 12px; font-weight: 500">
-      <span class="lab" style="color: #5B3FA0; font-size: 11px">YOUR BRANCH · SEALED</span><span>Diverged 5 Feb 2026, at the trade · by you · not Reality</span>
+    <div style="position: absolute; left: 420px; top: 786px; width: 600px; height: 30px; box-sizing: border-box; padding: 0 12px; border: 2.5px solid #5B3FA0; box-shadow: inset 0 0 0 3px #EDEBE6, inset 0 0 0 4.5px #5B3FA0; background: #F1ECF9; display: flex; align-items: center; justify-content: center; gap: 10px; white-space: nowrap; font-size: 12px; font-weight: 500">
+      <span class="lab" style="color: #5B3FA0; font-size: 11px">YOUR BRANCH · KEPT</span><span>{{stampText}}</span>
     </div>
-    <button type="button" class="btn" onClick="{{reopen}}" style="position: absolute; left: 610px; top: 808px; width: 220px; min-height: 36px; border: 1.5px solid #5B3FA0; background: transparent; color: #5B3FA0; font-size: 13px">Reopen the council</button>
+    <button type="button" class="btn" onClick="{{toggleRun}}" aria-pressed="{{ranPressed}}" style="position: absolute; left: 470px; top: 822px; width: 270px; min-height: 36px; border: 2px solid #3F2A78; background: {{runBg}}; color: {{runFg}}; font-size: 13.5px">{{runLabel}}</button>
+    <button type="button" class="btn" onClick="{{reopen}}" style="position: absolute; left: 752px; top: 822px; width: 218px; min-height: 36px; border: 1.5px solid #5B3FA0; background: transparent; color: #5B3FA0; font-size: 13px">Reopen the council</button>
   </sc-if>
 
   <!-- seat cards -->
   <sc-for list="{{seats}}" as="s" hint-placeholder-count="6">
-    <section aria-label="{{s.title}}" style="position: absolute; left: {{s.x}}px; top: {{s.y}}px; width: 370px; height: 208px; box-sizing: border-box; padding: 10px 12px 8px; background: #F7F5F0; border: 1.5px solid #1C1B1F; border-left: {{s.bl}}; border-right: {{s.br}}; display: flex; flex-direction: column; gap: 7px">
+    <section aria-label="{{s.title}}" style="position: absolute; left: {{s.x}}px; top: {{s.y}}px; width: 370px; box-sizing: border-box; padding: 10px 12px 9px; background: #F7F5F0; border: 1.5px solid #1C1B1F; border-left: {{s.bl}}; border-right: {{s.br}}; display: flex; flex-direction: column; gap: 7px">
       <div style="display: flex; flex-direction: column; gap: 1px; height: 40px">
         <span class="serif" style="font-size: 17px; font-weight: 600; line-height: 1.15">{{s.title}}</span>
         <span style="font-size: 11.5px; color: #4E4A42; line-height: 1.25">{{s.sub}}</span>
@@ -156,7 +198,7 @@ a{color:#5B3FA0}a:hover{color:#3F2A78}
           <button type="button" class="chip" onClick="{{ch.pick}}" aria-pressed="{{ch.pressed}}" aria-disabled="{{ch.dis}}" title="{{ch.tip}}" style="border: {{ch.border}}; background: {{ch.bg}}; color: #1C1B1F"><span class="sw {{ch.sw}}"></span>{{ch.label}}</button>
         </sc-for>
       </div>
-      <div style="flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 5px">
+      <div style="display: flex; flex-direction: column; gap: 5px">
         <sc-if value="{{s.isNone}}" hint-placeholder-val="{{true}}">
           <span style="font-size: 12px; line-height: 1.35">Open. Nothing is assumed for this seat. It sets {{s.aff}}.</span>
         </sc-if>
@@ -189,9 +231,8 @@ a{color:#5B3FA0}a:hover{color:#3F2A78}
   </sc-for>
 
   <!-- bottom strip -->
-  <span style="position: absolute; left: 40px; top: 849px; font-size: 11px; color: #3B3830; white-space: nowrap">WHAT IF?, in this model, is a council: everyone a fork touches is recorded, declared, modeled or left open, and the branch says which.</span>
   <span style="position: absolute; left: 40px; top: 866px; width: 660px; font-size: 11px; line-height: 14px; color: #3B3830">COMMERCIAL LENS · Hypothesis: councils make forks honest enough for media and education to publish; the unit is the published branch (free to open, paid to host at scale).</span>
-  <span style="position: absolute; right: 40px; top: 866px; width: 640px; text-align: right; font-size: 11px; line-height: 14px; color: #3B3830">PROTOTYPE · DESIGN PROPOSAL · trade and tax figures as reported (ESPN / NBC Sports Boston), verify · the one model is a toy with an authored parameter</span>
+  <span style="position: absolute; right: 40px; top: 866px; width: 640px; text-align: right; font-size: 11px; line-height: 14px; color: #3B3830">PROTOTYPE · DESIGN PROPOSAL · trade and tax figures as reported (ESPN / NBC Sports Boston), verify · the one seat with a basis is a toy: authored numbers, no model ran</span>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
@@ -202,9 +243,10 @@ class Component extends DCLogic {
     const notes = s.notes || {};
     const how = !!s.how;
     const sealedNow = !!s.sealed;
+    const ranNow = sealedNow && !!s.ran;
     const CX = 720, CY = 491;
 
-    // ---- the toy model: computed here, in the browser ----
+    // ---- the toy basis: authored numbers, computed here. No model runs. ----
     const H = [0.10, 0.30];                       // AUTHORED hidden-suitor rate range
     const keepLo = Math.round((1 - H[1]) * 100), keepHi = Math.round((1 - H[0]) * 100);
     const moveLo = Math.round(H[0] * 100), moveHi = Math.round(H[1] * 100);
@@ -216,31 +258,32 @@ class Component extends DCLogic {
     const perDollar = taxGap / payrollGap;         // about 3.6
     const f1 = (x) => x.toFixed(1);
 
+    const RULE_REC = 'Rule: “Recorded” is refused when the seat’s record depended on the cut. ';
     const SEATS = [
       { id: 'chi', title: 'Chicago’s front office', sub: 'Chicago Bulls · the other side of the deal', ang: 240, x: 40, yc: 261.5, aff: 'Chicago’s books', side: 'right',
-        recWhy: 'Chicago’s recorded act is the trade itself. With no trade there is nothing to replay. Rule: an act that is the cut cannot be “as recorded”.',
+        recWhy: RULE_REC + 'Chicago’s recorded act is the trade itself, so with no trade there is nothing to replay.',
         modWhy: '', hasModel: true,
         decl: [{ k: 'keeps', t: 'Keeps Vučević' }, { k: 'moves', t: 'Moves Vučević to another team' }] },
       { id: 'own', title: 'Boston’s ownership', sub: 'Group led by Bill Chisholm · approved 13 Aug 2025 [verify]', ang: 180, x: 40, yc: 491, aff: 'the tax line', side: 'right',
-        recWhy: 'Ownership’s recorded act was approving this trade. That is the act you cut.',
-        modWhy: 'No model. BOW has no basis for how this owner group treats a tax bill, and an invented number would only be authored. Declare it, or leave it open.',
+        recWhy: RULE_REC + 'Ownership’s recorded act was approving this trade. That is the act you cut.',
+        modWhy: 'Rule: “Model” is refused without a named basis. BOW has none for how this owner group treats a tax bill, and an invented number would only be authored. Declare it, or leave it open.',
         decl: [{ k: 'pays', t: 'Pays the tax bill' }, { k: 'cuts', t: 'Cuts payroll another way' }] },
       { id: 'coa', title: 'Boston’s coach', sub: '[name: from the Reality feed]', ang: 120, x: 40, yc: 720.5, aff: 'Simons’s role', side: 'right',
-        recWhy: 'After 5 Feb the recorded rotation has Vučević, not Simons. It needs the trade.',
-        modWhy: 'No model. BOW has no minutes data for this roster in the fixture. An authored guess wears the outline: use Declare.',
+        recWhy: RULE_REC + 'After 5 Feb the recorded rotation has Vučević, not Simons. It needs the trade.',
+        modWhy: 'Rule: “Model” is refused without a named basis. The fixture has no minutes data for this roster. An authored guess wears the outline: use Declare.',
         decl: [{ k: 'rotation', t: 'Keeps Simons in the rotation' }, { k: 'bench', t: 'Moves Simons to the bench' }] },
       { id: 'sim', title: 'Anfernee Simons and his agent', sub: '≈ $27.7M · expiring deal [verify]', ang: 300, x: 1030, yc: 261.5, aff: 'Simons’s summer', side: 'left',
-        recWhy: 'His recorded path, Chicago from 5 Feb, needs the trade.',
-        modWhy: 'No model. BOW has no base rate for re-signing decisions. An authored guess wears the outline: use Declare.',
+        recWhy: RULE_REC + 'His recorded path, Chicago from 5 Feb, needs the trade.',
+        modWhy: 'Rule: “Model” is refused without a named basis. BOW has no base rate for re-signing decisions. An authored guess wears the outline: use Declare.',
         decl: [{ k: 'resign', t: 'Re-signs with Boston' }, { k: 'fa', t: 'Tests free agency' }] },
       { id: 'vuc', title: 'Nikola Vučević', sub: '≈ $21.5M [verify]', ang: 0, x: 1030, yc: 491, aff: 'Chicago’s books', side: 'left',
-        recWhy: 'His recorded path, Boston from 5 Feb, needs the trade.',
-        modWhy: 'No model. Nothing in the fixture says what he wants. Declare it, or leave it open.',
+        recWhy: RULE_REC + 'His recorded path, Boston from 5 Feb, needs the trade.',
+        modWhy: 'Rule: “Model” is refused without a named basis. Nothing in the fixture says what he wants. Declare it, or leave it open.',
         decl: [{ k: 'stays', t: 'Plays out the season in Chicago' }, { k: 'asks', t: 'Asks Chicago for a trade' }] },
       { id: 'lea', title: 'The League office', sub: 'Runs the 2023 CBA', ang: 60, x: 1030, yc: 720.5, aff: 'the tax line', side: 'left',
         canRec: true, recText: 'Applies the tax and aprons to Boston as recorded. No rule changed between the trade and now [verify].',
-        modWhy: 'No model needed: the League is not choosing anything here. Use As recorded.',
-        decl: [{ k: 'written', t: 'Applies the tax as written' }, { k: 'waive', t: 'Waives Boston’s tax', refuse: 'Rule: the 2023 CBA as modeled assesses the tax on payroll and has no waiver. Pick “as written”, or leave the seat open.' }] }
+        modWhy: 'Rule: “Model” is refused without a named basis. The League is not choosing anything here, so use As recorded.',
+        decl: [{ k: 'written', t: 'Applies the tax as written' }, { k: 'waive', t: 'Waives Boston’s tax', refuse: 'Rule: the 2023 CBA as modeled assesses the tax on tax salary and has no waiver. Pick “as written”, or leave the seat open.' }] }
     ];
 
     // status of a seat: rec | dec | mod | unk | unset
@@ -277,17 +320,17 @@ class Component extends DCLogic {
       const chipDefs = [
         { k: 'rec', label: 'Recorded', sw: 'sw-rec', dis: !m.canRec, why: m.recWhy },
         { k: 'dec', label: 'Declare', sw: 'sw-dec', dis: false },
-        { k: 'mod', label: 'Model', sw: 'sw-mod', dis: !m.hasModel, why: m.modWhy },
+        { k: 'mod', label: 'Model', sw: 'sw-aut', dis: !m.hasModel, why: m.modWhy },
         { k: 'unk', label: 'Unknown', sw: 'sw-unk', dis: false }
       ];
       const chips = chipDefs.map((c) => {
         const on = mode === c.k;
         return {
-          label: c.label, sw: c.sw, pressed: on ? 'true' : 'false', dis: c.dis ? 'true' : 'false', tip: c.dis ? 'Refused: ' + c.why : (c.k === 'rec' ? 'Set this seat as recorded' : c.k === 'dec' ? 'You state what this seat does' : c.k === 'mod' ? 'A bounded model answers, basis shown' : 'Leave the seat open'),
+          label: c.label, sw: c.sw, pressed: on ? 'true' : 'false', dis: c.dis ? 'true' : 'false', tip: c.dis ? 'Refused: ' + c.why : (c.k === 'rec' ? 'Set this seat as recorded' : c.k === 'dec' ? 'You state what this seat does' : c.k === 'mod' ? 'A named basis answers; here its numbers are authored and no model runs' : 'Leave the seat open'),
           border: on ? '3px solid ' + (c.k === 'dec' ? '#5B3FA0' : '#1C1B1F') : '1.5px solid #1C1B1F',
           bg: on ? (c.k === 'dec' ? '#E7DFF5' : '#E3E0D8') : '#FFFFFF',
           pick: () => {
-            if (locked) { setNote(m.id, 'The branch is sealed. Reopen the council to change a seat.'); return; }
+            if (locked) { setNote(m.id, 'The branch is kept. Reopen the council to change a seat.'); return; }
             if (c.dis) { setNote(m.id, c.why); return; }
             if (c.k === 'dec') setSeat(m.id, { mode: 'dec', opt: (mode === 'dec' ? x.opt : null) });
             else setSeat(m.id, { mode: c.k });
@@ -300,7 +343,7 @@ class Component extends DCLogic {
           label: o.t, pressed: on ? 'true' : 'false',
           border: on ? '3px solid #5B3FA0' : '1.5px solid #5B3FA0', bg: on ? '#E7DFF5' : '#FFFFFF',
           pick: () => {
-            if (locked) { setNote(m.id, 'The branch is sealed. Reopen the council to change a seat.'); return; }
+            if (locked) { setNote(m.id, 'The branch is kept. Reopen the council to change a seat.'); return; }
             if (o.refuse) { setNote(m.id, o.refuse); return; }
             setSeat(m.id, { mode: 'dec', opt: i });
           }
@@ -308,8 +351,8 @@ class Component extends DCLogic {
       });
       const basis = m.id === 'chi' ? [
         { sw: 'sw-obs', t: 'No other reported suitor besides Boston [verify]' },
-        { sw: 'sw-dec', t: 'Hidden-suitor rate h: ' + moveLo + '–' + moveHi + '%, authored' },
-        { sw: 'sw-mod', t: 'Keeps him: 1 − h = ' + keepLo + '–' + keepHi + '%. Modeled, weak.' }
+        { sw: 'sw-aut', t: 'Hidden-suitor rate h: ' + moveLo + '–' + moveHi + '% · illustrative, authored' },
+        { sw: 'sw-aut', t: 'Keeps him: ' + keepLo + '–' + keepHi + '% · illustrative, authored (1 − an authored rate; no model ran)' }
       ] : [];
       const note = notes[m.id] || '';
       const edgeInk = st === 'unset' ? '#B9B4A8' : (st === 'dec' ? '#5B3FA0' : '#1C1B1F');
@@ -317,13 +360,13 @@ class Component extends DCLogic {
         title: m.title, sub: m.sub, x: m.x, y: (m.yc - 104).toFixed(1), aff: m.aff,
         bl: m.side === 'left' ? '5px solid ' + edgeInk : '1.5px solid #1C1B1F', br: m.side === 'right' ? '5px solid ' + edgeInk : '1.5px solid #1C1B1F',
         chips, opts, basis, note, hasNote: !!note,
-        modName: 'DEADLINE-SUITOR MODEL v0.1 · TOY',
+        modName: 'DEADLINE-SUITOR BASIS v0.1 · TOY · NO MODEL RAN',
         recText: m.recText || '',
         isNone: mode === null, isRec: mode === 'rec', isDec: mode === 'dec', isMod: mode === 'mod', isUnk: mode === 'unk'
       };
     });
 
-    // ---- chairs and ring ----
+    // ---- ring arcs (the six seats; no chairs) ----
     const ptAt = (r, a) => [CX + r * Math.cos(a * Math.PI / 180), CY + r * Math.sin(a * Math.PI / 180)];
     const sector = (r0, r1, a0, a1) => {
       const p1 = ptAt(r1, a0), p2 = ptAt(r1, a1), p3 = ptAt(r0, a1), p4 = ptAt(r0, a0);
@@ -337,21 +380,9 @@ class Component extends DCLogic {
       const base = { d: d, d2: d2, fill: 'none', stroke: '#8E8A80', sw: 1.5, dash: '2 3', stroke2: 'none' };
       if (st === 'rec') return { ...base, fill: '#1C1B1F', stroke: '#1C1B1F', sw: 2, dash: 'none', stroke2: '#EDEBE6' };
       if (st === 'dec') return { ...base, fill: 'none', stroke: '#5B3FA0', sw: 3, dash: 'none' };
-      if (st === 'mod') return { ...base, fill: 'url(#hatchC)', stroke: '#1C1B1F', sw: 1.6, dash: 'none' };
+      if (st === 'mod') return { ...base, fill: 'none', stroke: '#1C1B1F', sw: 2, dash: 'none' };
       if (st === 'unk') return { ...base, fill: 'none', stroke: '#1C1B1F', sw: 2.5, dash: '7 5' };
       return base;
-    });
-    const chairs = SEATS.map((m) => {
-      const st = status(m.id);
-      const p = ptAt(265, m.ang);
-      const cls = st === 'rec' ? 'cx-rec' : st === 'dec' ? 'cx-dec' : st === 'mod' ? 'cx-mod' : st === 'unk' ? 'cx-unk' : 'cx-none';
-      return { cls, x: (p[0] - 20).toFixed(1), y: (p[1] - 20).toFixed(1) };
-    });
-    const lines = SEATS.map((m) => {
-      const p = ptAt(265, m.ang);
-      const cardEdge = m.side === 'right' ? 410 : 1030;
-      const chairEdge = m.side === 'right' ? p[0] - 20 : p[0] + 20;
-      return 'M' + cardEdge + ' ' + m.yc + ' L' + chairEdge.toFixed(1) + ' ' + p[1].toFixed(1);
     });
     let tk = '';
     for (let i = 0; i < 48; i++) {
@@ -361,15 +392,15 @@ class Component extends DCLogic {
 
     // ---- center: consequences and the holes ----
     const sts = {}; SEATS.forEach((m) => { sts[m.id] = status(m.id); });
-    const ok = (id) => sts[id] === 'rec' || sts[id] === 'dec' || sts[id] === 'mod';
     const waitFor = (ids) => ids.filter((i) => sts[i] === 'unset');
     const unkFor = (ids) => ids.filter((i) => sts[i] === 'unk');
     const listNames = (ids) => ids.map((i) => nameOf[i]).join(' and ');
     const mk = (kind, text) => ({ kind, text });
     const KIND = {
       comp: { sw: 'sw-com', tag: 'COMPUTED', ink: '#3B3830' },
+      rep: { sw: 'sw-obs', tag: 'REPORTED', ink: '#1C1B1F' },
       dec: { sw: 'sw-dec', tag: 'YOUR SAY-SO', ink: '#5B3FA0' },
-      mod: { sw: 'sw-mod', tag: 'MODELED', ink: '#1C1B1F' },
+      aut: { sw: 'sw-aut', tag: 'AUTHORED', ink: '#1C1B1F' },
       hole: { sw: 'sw-unk', tag: 'HOLE', ink: '#1C1B1F' },
       wait: { sw: 'sw-wait', tag: 'WAITING', ink: '#4E4A42' }
     };
@@ -378,67 +409,130 @@ class Component extends DCLogic {
       const u = unkFor(ids); if (u.length) return mk('hole', 'Depends on ' + listNames(u) + ', left open.');
       return fn();
     };
+    // fixed row order; each seat's hairline runs to the row it gates
     const K = [];
-    K.push(mk('comp', 'About $' + f1(payrollGap) + 'M more payroll than the recorded path ($' + f1(SIM) + 'M kept, $' + f1(VUC) + 'M not added).'));
-    K.push(guard(['own', 'lea'], () => {
-      if (optKey('own') === 'cuts') return mk('hole', 'Tax lands below ≈ $' + f1(TAX_BEFORE) + 'M, by how much you did not say.');
-      return mk('comp', 'Tax stays ≈ $' + f1(TAX_BEFORE) + 'M, not ≈ $' + TAX_AFTER.toFixed(0) + 'M: ≈ $' + perDollar.toFixed(1) + ' of tax per $1 of payroll kept.');
-    }));
-    K.push(mk('comp', 'Simons stays on an expiring deal, ≈ $' + f1(SIM) + 'M [verify].'));
-    K.push(guard(['chi', 'vuc'], () => {
+    K.push(mk('comp', 'About $' + f1(payrollGap) + 'M more payroll than the recorded path ($' + f1(SIM) + 'M kept, $' + f1(VUC) + 'M not added).'));   // 0: no seat gates it
+    K.push(mk('comp', 'Simons stays on an expiring deal, ≈ $' + f1(SIM) + 'M [verify].'));                                                       // 1: no seat gates it
+    K.push(guard(['sim'], () => optKey('sim') === 'fa' ? mk('hole', 'Simons tests free agency. Where he lands is not in the branch.') : mk('dec', 'Simons re-signs with Boston. Terms are not stated.'))); // 2: sim
+    K.push(guard(['chi', 'vuc'], () => {                                                                                                          // 3: chi, vuc
       if (optKey('chi') === 'moves') return mk('hole', 'Vučević leaves Chicago. Where he lands is not in the branch.');
       if (optKey('vuc') === 'asks') return mk('hole', 'Vučević asks out. Where he goes is not in the branch.');
-      if (sts.chi === 'mod') return mk('mod', 'Chicago keeps Vučević ' + keepLo + '–' + keepHi + '%, moves him ' + moveLo + '–' + moveHi + '%. Toy model, weak.');
+      if (sts.chi === 'mod') return mk('aut', 'Keeps him: ' + keepLo + '–' + keepHi + '% · illustrative, authored (1 − an authored rate; no model ran)');
       return mk('dec', 'Chicago keeps Vučević (≈ $' + f1(VUC) + 'M); Simons never arrives.');
     }));
-    K.push(guard(['coa'], () => optKey('coa') === 'bench' ? mk('dec', 'Simons moves to the bench. His minutes are not stated.') : mk('dec', 'Simons stays in Boston’s rotation.')));
-    K.push(guard(['sim'], () => optKey('sim') === 'fa' ? mk('hole', 'Simons tests free agency. Where he lands is not in the branch.') : mk('dec', 'Simons re-signs with Boston. Terms are not stated.')));
+    K.push(guard(['own', 'lea'], () => {                                                                                                          // 4: own, lea
+      if (optKey('own') === 'cuts') return mk('hole', 'Tax lands below ≈ $' + f1(TAX_BEFORE) + 'M, by how much you did not say.');
+      return mk('rep', 'Pre-trade projection, carried: tax stays ≈ $' + f1(TAX_BEFORE) + 'M (verify).');
+    }));
+    K.push(mk('comp', '≈ $' + perDollar.toFixed(1) + ' of tax per $1 of payroll kept ($' + f1(taxGap) + 'M ÷ $' + f1(payrollGap) + 'M).'));           // 5: no seat gates it
+    K.push(guard(['coa'], () => optKey('coa') === 'bench' ? mk('dec', 'Simons moves to the bench. His minutes are not stated.') : mk('dec', 'Simons stays in Boston’s rotation.'))); // 6: coa
+    const RH = [34, 34, 34, 44, 34, 34, 34];
+    const rowTop = []; let acc = 358; RH.forEach((h) => { rowTop.push(acc); acc += h; });
     const krows = K.map((k, i) => {
       const d = KIND[k.kind];
-      return { y: (392 + i * 39).toString(), sw: d.sw, text: k.text, tag: d.tag, tagInk: d.ink, tagShow: how ? 'inline' : 'none' };
+      return { y: rowTop[i], h: RH[i], sw: d.sw, text: k.text, tag: d.tag, tagInk: d.ink, tagShow: how ? 'inline' : 'none' };
     });
 
-    // ---- tally, seal ----
+    // ---- hairlines: each seat to the consequence row it gates ----
+    const GATE = { sim: 2, chi: 3, vuc: 3, own: 4, lea: 4, coa: 6 };
+    const hls = SEATS.map((m) => {
+      const st = sts[m.id];
+      const ay = m.yc - 104 + 76;
+      const ax = m.side === 'right' ? 410 : 1030;
+      const ex = m.side === 'right' ? 569 : 871;
+      const ey = rowTop[GATE[m.id]] + RH[GATE[m.id]] / 2;
+      const st0 = st === 'unset' ? { stroke: '#A8A397', dash: '1.5 3.5' }
+        : st === 'dec' ? { stroke: '#5B3FA0', dash: 'none' }
+        : st === 'unk' ? { stroke: '#1C1B1F', dash: '6 4' }
+        : { stroke: '#1C1B1F', dash: 'none' };
+      return { d: 'M' + ax + ' ' + ay.toFixed(1) + ' L' + ex + ' ' + ey.toFixed(1), ex: ex, ey: ey.toFixed(1), stroke: st0.stroke, dash: st0.dash, op: ranNow ? 0 : 1 };
+    });
+
+    // ---- composition strip: recorded / declared / modeled / unknown / open ----
     const cnt = { rec: 0, dec: 0, mod: 0, unk: 0, unset: 0 };
     SEATS.forEach((m) => { cnt[sts[m.id]]++; });
-    const tally = 'RING · ' + cnt.rec + ' recorded · ' + cnt.dec + ' declared · ' + cnt.mod + ' modeled · ' + cnt.unk + ' unknown · ' + cnt.unset + ' open';
-    const tallyShort = cnt.rec + ' recorded, ' + cnt.dec + ' declared, ' + cnt.mod + ' modeled, ' + cnt.unk + ' unknown.';
+    const RECSH = 'inset 0 0 0 2px #1C1B1F, inset 0 0 0 3.5px #EDEBE6';
+    const segDefs = [
+      { k: 'rec', name: 'recorded', bg: '#1C1B1F', bd: '0', sh: RECSH, fg: '#FFFFFF' },
+      { k: 'dec', name: 'declared', bg: '#F7F5F0', bd: '2.5px solid #5B3FA0', sh: 'none', fg: '#5B3FA0' },
+      { k: 'mod', name: 'modeled*', bg: '#F7F5F0', bd: '2px solid #1C1B1F', sh: 'none', fg: '#1C1B1F' },
+      { k: 'unk', name: 'unknown', bg: '#F7F5F0', bd: '2px dashed #1C1B1F', sh: 'none', fg: '#1C1B1F' },
+      { k: 'unset', name: 'open', bg: 'transparent', bd: '1.5px dotted #4E4A42', sh: 'none', fg: '#4E4A42' }
+    ];
+    const segs = segDefs.filter((d) => cnt[d.k] > 0).map((d) => ({ w: Math.round(cnt[d.k] / 6 * 418), bg: d.bg, bd: d.bd, sh: d.sh, fg: d.fg, n: String(cnt[d.k]) }));
+    const segKey = segDefs.map((d) => ({ t: d.name + ' ' + cnt[d.k], bg: d.k === 'rec' ? '#1C1B1F' : d.bg === 'transparent' ? '#EDEBE6' : d.bg, bd: d.k === 'rec' ? '0' : d.bd, sh: d.sh }));
+    const stripAria = cnt.rec + ' recorded, ' + cnt.dec + ' declared, ' + cnt.mod + ' modeled (authored, no model ran), ' + cnt.unk + ' unknown, ' + cnt.unset + ' open';
+
+    // ---- keep ----
     const unsetIds = SEATS.filter((m) => sts[m.id] === 'unset').map((m) => m.id);
     const canSeal = unsetIds.length === 0;
     const sealNote = canSeal
-      ? 'Every seat is set. Sealing keeps the holes as holes.'
-      : 'Not sealed: ' + unsetIds.map((i) => shortOf[i]).join(', ') + ' still open. Rule: a seat that a stated consequence depends on must be set, or left unknown on purpose.';
+      ? 'Every seat is set. Keeping holds the holes as holes.'
+      : 'Not kept: ' + unsetIds.map((i) => shortOf[i]).join(', ') + ' still open. Rule: Keep is blocked while a seat that a consequence depends on is unset.';
 
     const slugPart = (m) => {
       const q = sts[m.id];
       if (q === 'rec') return m.id + '=recorded';
-      if (q === 'mod') return m.id + '=model-v0.1';
+      if (q === 'mod') return m.id + '=basis-v0.1-authored';
       if (q === 'unk') return m.id + '=unknown';
       if (q === 'dec') return m.id + '=' + optKey(m.id);
       return m.id + '=open';
     };
     const address = sealedNow
-      ? 'bow://celtics/2026-02-05/simons-for-vucevic/branch:you·no-trade?' + SEATS.map(slugPart).join('&')
-      : 'bow://celtics/2026-02-05/simons-for-vucevic · reality' + (Object.keys(seatsState).length ? ' · council convening, not sealed' : '');
+      ? 'bow://celtics/2026-02-05/simons-for-vucevic/branch:you·no-trade' + (ranNow ? '@run-2026-09-29' : '') + '?' + SEATS.map(slugPart).join('&')
+      : 'bow://celtics/2026-02-05/simons-for-vucevic · reality' + (Object.keys(seatsState).length ? ' · council convening, not kept' : '');
+
+    // ---- the run: Reality (black) beside the branch (violet frame) ----
+    const simKey = optKey('sim');
+    const uTax = unkFor(['own', 'lea']);
+    const taxB = uTax.length ? { main: 'hole', sub: 'depends on ' + listNames(uTax) + ', left open', dash: true }
+      : optKey('own') === 'cuts' ? { main: 'hole: below ≈ $' + f1(TAX_BEFORE) + 'M', sub: 'by how much is not said', dash: true }
+      : { main: '≈ $' + f1(TAX_BEFORE) + 'M carried', sub: 'pre-trade projection, carried (verify)', dash: false };
+    const simB = sts.sim === 'unk' ? { main: 'left open', sub: 'nothing stated for summer 2026' }
+      : simKey === 'fa' ? { main: 'tests free agency', sub: 'where he lands is not in the branch' }
+      : { main: 're-signs, terms not stated', sub: '' };
+    const payB = sts.sim === 'unk' ? { main: 'hole: depends on Simons, left open', sub: '' }
+      : simKey === 'fa' ? { main: 'hole: depends on where Simons lands', sub: '' }
+      : { main: 'hole: depends on Simons’s terms', sub: optKey('own') === 'cuts' ? 'and on the cuts, not named' : '' };
+    const runRows = [
+      { y: 392, label: '2025–26 tax', how: 'reported | ' + (taxB.dash ? 'hole' : 'reported, carried'),
+        rBd: '1.5px solid #1C1B1F', rMain: '≈ $17M reported', rSub: 'projection after the 5 Feb trade · verify',
+        bBd: taxB.dash ? '2px dashed #5B3FA0' : '2px solid #5B3FA0', bMain: taxB.main, bSub: taxB.sub },
+      { y: 464, label: 'Simons, summer 2026', how: 'no feed | say-so, hole',
+        rBd: '1.5px dashed #1C1B1F', rMain: '[Reality feed]', rSub: 'not in this fixture',
+        bBd: '2px dashed #5B3FA0', bMain: simB.main, bSub: simB.sub },
+      { y: 536, label: '2026–27 payroll', how: 'reported | hole',
+        rBd: '1.5px solid #1C1B1F', rMain: '≈ $203.6M', rSub: 'cap payroll · verify · see How do we know?',
+        bBd: '2px dashed #5B3FA0', bMain: payB.main, bSub: payB.sub }
+    ];
 
     return {
       how, notHow: !how, howPressed: how ? 'true' : 'false', howBg: how ? '#1C1B1F' : 'transparent', howFg: how ? '#EDEBE6' : '#1C1B1F',
+      howShow: how ? 'inline' : 'none',
       toggleHow: () => this.setState({ how: !how }),
-      reset: () => this.setState({ seats: {}, notes: {}, sealed: false }),
+      reset: () => this.setState({ seats: {}, notes: {}, sealed: false, ran: false }),
       address, addrEdge: sealedNow ? '#5B3FA0' : '#1C1B1F', addrInk: sealedNow ? '#5B3FA0' : '#1C1B1F',
       floorTicks: tk,
-      ln0: lines[0], ln1: lines[1], ln2: lines[2], ln3: lines[3], ln4: lines[4], ln5: lines[5],
+      hl0: hls[0], hl1: hls[1], hl2: hls[2], hl3: hls[3], hl4: hls[4], hl5: hls[5],
       arc0: arcs[0], arc1: arcs[1], arc2: arcs[2], arc3: arcs[3], arc4: arcs[4], arc5: arcs[5],
-      chairs, krows, kFont: how ? 11 : 12, seats: seatViews,
-      plateTag: 'YOUR BRANCH · ' + (sealedNow ? 'SEALED' : 'NOT SEALED') + ' · CUT AT THE TRADE · 5 FEB 2026 · BY YOU',
-      tally, sealOp: sealedNow ? 1 : 0,
+      krows, kFont: how ? 11 : 12, seats: seatViews,
+      plateTag: ranNow ? 'YOUR BRANCH · KEPT · RUN TO 29 SEP 2026 · CUT 5 FEB 2026 · BY YOU'
+        : 'YOUR BRANCH · ' + (sealedNow ? 'KEPT' : 'NOT KEPT') + ' · CUT AT THE TRADE · 5 FEB 2026 · BY YOU',
+      segs, segKey, stripAria, sealOp: sealedNow ? 1 : 0,
       sealed: sealedNow, notSealed: !sealedNow,
+      ran: ranNow, notRan: !ranNow, runRows,
+      ranPressed: ranNow ? 'true' : 'false',
+      runLabel: ranNow ? 'Back to the council' : 'Run to 29 Sep 2026',
+      runBg: ranNow ? 'transparent' : '#5B3FA0', runFg: ranNow ? '#3F2A78' : '#FFFFFF',
+      toggleRun: () => this.setState({ ran: !ranNow }),
+      stampText: ranNow ? 'Diverged 5 Feb 2026: no trade · run to 29 Sep 2026 · by you · not Reality'
+        : 'Diverged 5 Feb 2026: no trade · clock stops there · by you · not Reality',
       sealOff: canSeal ? 'false' : 'true',
       sealBg: canSeal ? '#5B3FA0' : 'transparent', sealFg: canSeal ? '#FFFFFF' : '#4E4A42',
       sealBorder: canSeal ? '2px solid #3F2A78' : '2px dashed #4E4A42',
       sealNote, sealNoteInk: canSeal ? '#1C1B1F' : '#8A1C1C',
-      seal: () => { if (canSeal) this.setState({ sealed: true }); },
-      reopen: () => this.setState({ sealed: false })
+      seal: () => { if (canSeal) this.setState({ sealed: true, ran: false }); },
+      reopen: () => this.setState({ sealed: false, ran: false })
     };
   }
 }

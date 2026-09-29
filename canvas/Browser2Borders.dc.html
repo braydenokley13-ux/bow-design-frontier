@@ -65,6 +65,10 @@ body{margin:0;background:#F6F3EA;color:#1F2A24;font-family:'Alegreya Sans',sans-
         <span style="display:block;width:22px;height:0;border-top:3px solid #1F2A24"></span>{{it.label}}<span style="display:block;width:22px;height:0;border-top:3px solid #1F2A24"></span><span style="font-style:normal">▸</span></span></sc-if>
     </sc-for>
     <span style="flex:1"></span>
+    <sc-if value="{{lab.on}}" hint-placeholder-val="{{false}}">
+      <span style="display:inline-block;padding:3px 12px;border:3px double #B5421F;background:#FBF9F2;color:#8C2F1B;transform:rotate(-2deg);margin-right:6px"><span class="sc" style="font-size:18px;font-weight:800;letter-spacing:.14em;white-space:nowrap">Lab · not reality</span></span>
+      <button type="button" class="btn" onClick="{{lab.exit}}" style="min-height:38px;margin-right:6px">Back to reality</button>
+    </sc-if>
     <button type="button" class="btn" onClick="{{retrace}}" disabled="{{noRetrace}}" style="min-height:38px">{{retraceLabel}}</button>
     <button type="button" class="btn" onClick="{{forward}}" disabled="{{noForward}}" style="min-height:38px">Forward</button>
   </nav>
@@ -131,7 +135,7 @@ body{margin:0;background:#F6F3EA;color:#1F2A24;font-family:'Alegreya Sans',sans-
             <div class="t-obs" style="position:absolute;left:{{lab.payX}}px;top:112px;width:3px;height:160px;margin-left:-1px"></div>
             <div class="t-rec" style="position:absolute;left:{{lab.payX}}px;top:126px;width:26px;height:26px;margin-left:-14px;border-radius:13px"></div>
             <div class="t-rec" style="position:absolute;left:{{lab.payX}}px;top:258px;width:26px;height:26px;margin-left:-14px;border-radius:13px"></div>
-            <span style="position:absolute;left:{{lab.payX}}px;top:288px;font-size:24px;font-weight:800;transform:translateX(-50%);white-space:nowrap">Payroll ≈ $203.6M</span>
+            <span style="position:absolute;left:{{lab.payX}}px;top:288px;font-size:24px;font-weight:800;transform:translateX(-50%);white-space:nowrap">Cap payroll ≈ $203.6M</span>
             <span style="position:absolute;left:0;top:326px;font-size:23px;font-weight:700;line-height:1.2;width:640px">{{lab.verdict}}</span>
           </div>
         </sc-if>
@@ -150,10 +154,6 @@ body{margin:0;background:#F6F3EA;color:#1F2A24;font-family:'Alegreya Sans',sans-
           </button>
         </sc-for>
       </div>
-      <sc-if value="{{lab.on}}" hint-placeholder-val="{{false}}">
-        <div style="position:absolute;right:20px;top:16px;padding:6px 16px;border:3px double #B5421F;background:#FBF9F2;color:#8C2F1B;transform:rotate(-2.5deg)"><span class="sc" style="font-size:22px;font-weight:800;letter-spacing:.16em">Lab · not reality</span></div>
-        <button type="button" class="btn" onClick="{{lab.exit}}" style="position:absolute;right:20px;top:70px;min-height:40px">Back to reality</button>
-      </sc-if>
     </sc-if>
   </section>
 
@@ -164,7 +164,7 @@ body{margin:0;background:#F6F3EA;color:#1F2A24;font-family:'Alegreya Sans',sans-
       <div>
         <span class="sc" style="font-size:14px;color:#4A574E">Made of</span>
         <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px"><sc-for list="{{note.kinds}}" as="kd" hint-placeholder-count="2"><div style="display:flex;gap:8px;align-items:center"><span class="sw {{kd.cls}}"></span><sc-if value="{{kd.show}}" hint-placeholder-val="{{false}}"><span style="font-size:16px;font-weight:700">{{kd.w}}</span></sc-if></div></sc-for></div>
-        <sc-if value="{{how}}" hint-placeholder-val="{{false}}"><span style="display:block;margin-top:6px;font-size:15px;line-height:1.2">{{note.src}}</span></sc-if>
+        <sc-if value="{{how}}" hint-placeholder-val="{{false}}"><span style="display:block;margin-top:6px;font-size:{{note.srcFs}}px;line-height:1.2">{{note.src}}</span></sc-if>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;align-items:stretch">
         <sc-if value="{{note.canLab}}" hint-placeholder-val="{{false}}"><button type="button" class="btn" onClick="{{startLab}}" style="min-height:64px;text-align:left;font-size:18px;line-height:1.1">What if the media deal had stayed flat?</button></sc-if>
@@ -178,6 +178,7 @@ body{margin:0;background:#F6F3EA;color:#1F2A24;font-family:'Alegreya Sans',sans-
       <div>
         <span class="sc" style="font-size:14px;color:#4A574E">Made of</span>
         <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px"><sc-for list="{{lab.kinds}}" as="kd" hint-placeholder-count="3"><div style="display:flex;gap:8px;align-items:center"><span class="sw {{kd.cls}}"></span><span style="font-size:16px;font-weight:700">{{kd.w}}</span></div></sc-for></div>
+        <sc-if value="{{lab.srcShow}}" hint-placeholder-val="{{false}}"><span style="display:block;margin-top:6px;font-size:13px;line-height:1.2">{{lab.src}}</span></sc-if>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;align-items:stretch"><sc-for list="{{lab.btns}}" as="bt" hint-placeholder-count="3"><button type="button" class="btn" onClick="{{bt.go}}" style="min-height:40px;text-align:left;font-size:16px;line-height:1.05;background:{{bt.bg}};color:{{bt.fg}}">{{bt.t}}</button></sc-for></div>
     </div>
@@ -271,8 +272,8 @@ class Component extends DCLogic {
           { id: 'gn', edge: 'AG', a: 's', b: 'sw', kind: 'gen', title: 'Attendance & price', value: '[creator’s assumptions]', flow: 'Binds nobody. Unreviewed.', short: 'attendance & price', land: { s: 'lease', sw: 'gn' }, prov: 'Creator-built · unreviewed · the creator’s own assumptions.' }
         ],
         lms: [
-          { id: 'pay', slot: 'c', x: 1500, y: 925, name: 'Payroll ledger', kinds: ['obs', 'com'], src: 'Payroll and lines: OBSERVED, fixture, verify. Gaps: COMPUTED from them.', text: 'Committed payroll ≈ $203.6M (verify). Against the League’s lines: $3.172M past the tax line, $5.415M under the first apron, $18.086M under the second apron. The gaps are computed here. The lines themselves come across the cap border.' },
-          { id: 'ledger', slot: 'c', x: 1000, y: 1215, name: 'Contract ledger', kinds: ['obs'], src: 'Public reporting, approx., verify.', text: 'Tatum ≈ $58.5M · Brown ≈ $57.1M · White ≈ $30.3M · Hauser ≈ $10.8M · Pritchard ≈ $7.8M · rest of the roster [from the Reality feed]. Each figure is a number two parties hold.' },
+          { id: 'pay', slot: 'c', x: 1500, y: 925, name: 'Payroll ledger', kinds: ['obs', 'com'], src: 'Payroll and lines: OBSERVED, fixture, verify. Gaps: COMPUTED from them, on cap payroll. Reported tax salary $198.7M is ≈ $1.7M under the line (salaryswish, 4 Sep 2026, verify) — two sources, shown, not averaged.', text: 'Committed cap payroll ≈ $203.6M (verify). Against the League’s lines: $3.172M past the tax line (cap payroll · see How do we know?), $5.415M under the first apron, $18.086M under the second apron. The gaps are computed here. The lines themselves come across the cap border.' },
+          { id: 'ledger', slot: 'c', x: 1000, y: 1215, name: 'Contract ledger', kinds: ['obs'], src: 'Public reporting, approx., verify.', text: 'Tatum ≈ $58.5M · [roster from the Reality feed · verify — BOW Economics Live records Brown traded to Philadelphia] · White ≈ $30.3M · Hauser ≈ $10.8M · Pritchard ≈ $7.8M · rest of the roster [from the Reality feed]. Each figure is a number two parties hold.' },
           { id: 'bl', slot: 'c', x: 1850, y: 1240, name: 'Boston’s lease', kinds: ['unk'], src: 'Terms not public.', text: 'What Boston pays and earns under the lease: UNKNOWN. Nothing is drawn because nothing is known.' },
           { id: 'bc', slot: 'c', x: 1180, y: 880, name: 'Local obligations', kinds: ['unk'], src: 'Not in this prototype.', text: 'Permits and taxes Boston owes the city: [UNKNOWN in this prototype].' },
           { id: 'capc', slot: 'e', x: 2480, y: 1130, name: 'Cap computation', kinds: ['obs', 'aut'], src: 'Lines: OBSERVED, fixture, verify. The rule: AUTHORED by the 2023 CBA (verify).', text: 'Cap = share of basketball-related income under the CBA; growth limited to 10% a season (2023 CBA, verify). 2026–27: cap $164.961M · tax line $200.428M · first apron $209.015M · second apron $221.686M. The League computes it. Every team is bound by it.' },
@@ -369,7 +370,7 @@ class Component extends DCLogic {
     const lmFind = (id, slot) => lmById[id + '|' + slot];
     const step = trail[at];
     const curLm = step.lm ? lmFind(step.lm, step.t) : null;
-    const lms = SD.lms.filter((l) => SD.terr[l.slot]).map((l) => ({ x: l.x, y: l.y, name: l.name, aria: 'Landmark: ' + l.name, op: dt >= 15 && !(lab >= 3 && l.id === 'pay') ? 1 : 0, here: !!curLm && curLm.id === l.id && curLm.slot === l.slot,
+    const lms = SD.lms.filter((l) => SD.terr[l.slot]).map((l) => ({ x: l.x, y: l.y, name: l.name, aria: 'Landmark: ' + l.name, op: dt >= 15 && !(lab >= 3 && l.slot === 'c' && (l.id === 'pay' || l.id === 'ledger' || l.id === 'bc' || l.id === 'bl')) ? 1 : 0, here: !!curLm && curLm.id === l.id && curLm.slot === l.slot,
       go: () => { const st = this.state || {}; const tr = (st.trail || [{ t: 'c', v: null, lm: null }]).slice(); const a0 = Math.min(st.at || 0, tr.length - 1); if (tr[a0].t !== l.slot) return; tr[a0] = { ...tr[a0], lm: l.id }; upd({ trail: tr }); } }));
     const FOC = { c: [1580, 1000], w: [520, 900], e: [2480, 1000], n: [1500, 380], s: [1500, 1640], sw: [520, 1660], ne: [2480, 330] };
     let foc = curLm ? [curLm.x, curLm.y] : FOC[step.t];
@@ -391,8 +392,8 @@ class Component extends DCLogic {
     const mkKinds = (arr, show) => arr.map((k) => ({ cls: KIND[k][0], w: KIND[k][1], show }));
     const atLeagueOrMedia = q === 'boston' && (step.t === 'e' || step.t === 'ne');
     const note = curLm ? {
-      kick: at > 0 ? 'Arrived · ' + SD.terr[step.t].name + ' · where “' + (lastB ? lastB.short : '') + '” lives' : SD.terr[step.t].name, head: curLm.name, text: curLm.text, kinds: mkKinds(curLm.kinds, how), src: curLm.src
-    } : { kick: 'In', head: SD.intro.head, text: SD.intro.text, kinds: mkKinds(SD.intro.kinds, how), src: SD.intro.src };
+      kick: at > 0 ? 'Arrived · ' + SD.terr[step.t].name + ' · where “' + (lastB ? lastB.short : '') + '” lives' : SD.terr[step.t].name, head: curLm.name, text: curLm.text, kinds: mkKinds(curLm.kinds, how), src: curLm.src, srcFs: (curLm.src || '').length > 110 ? 13 : 15
+    } : { kick: 'In', head: SD.intro.head, text: SD.intro.text, kinds: mkKinds(SD.intro.kinds, how), src: SD.intro.src, srcFs: 15 };
     note.canLab = atLeagueOrMedia; note.noLab = !atLeagueOrMedia;
     note.noLabT = q === 'boston' ? 'What if: offered at the media border, from the League or Media partners.' : 'What if: not offered here. Refused by rule: a what-if needs a named, versioned model at that border, and none is published.';
 
@@ -411,7 +412,7 @@ class Component extends DCLogic {
       ticks: [150, 160, 170].map((v) => ({ x: CX(v), t: '$' + v + 'M' })), hasPick: !!pv, pickX: pv ? CX(pv) : 0, pickT: pv ? '$' + f1(pv) + 'M' : '',
       real: [[TAX, 'tax', '$200.4M'], [A1, 'apron 1', '$209.0M'], [A2, 'apron 2', '$221.7M']].map((l) => ({ x: RX(l[0]), t1: l[1], t2: l[2] })),
       asm: asm.map((a) => ({ x: a.x, t1: a.w, t2: '$' + f1(a.v) + 'M' })), payX: RX(PAY),
-      verdict: pv ? 'Payroll ≈ $203.6M would be ' + asm.map((a) => (a.g >= 0 ? 'over ' : 'under ') + (a.w === 'tax' ? 'the tax line' : a.w) + ' by $' + f1(Math.abs(a.g)) + 'M').join(', ') + '.' : '' };
+      verdict: pv ? 'Cap payroll ≈ $203.6M would be ' + asm.map((a) => (a.g >= 0 ? 'over ' : 'under ') + (a.w === 'tax' ? 'the tax line' : a.w) + ' by $' + f1(Math.abs(a.g)) + 'M').join(', ') + ' (cap payroll · see How do we know?).' : '' };
     const labDo = {
       1: { n: 1, head: 'What if the media deal had stayed flat?', text: 'Two authored assumptions, shown so you can see them: media is 20–30% of the income that sets the cap, and the new deal added 20–30% to that. Nobody measured either. Run the sketch and it gives a range, not an answer.', kinds: ['aut'] },
       2: { n: 2, head: 'The cap moves inside a range', text: 'Cap sketch v0.1 ran in this page: with those assumptions the 2026–27 cap lands between $' + f1(lowC) + 'M and $' + f1(highC) + 'M, not $164.961M. A range, not a prediction. To follow it across the border into Boston you must pick a number, and that pick is yours.', kinds: ['obs', 'aut', 'mod'] },
@@ -421,7 +422,7 @@ class Component extends DCLogic {
     const labBtns = lab === 1 ? [{ t: 'Run cap sketch v0.1', bg: '#1F2A24', fg: '#FBF9F2', go: () => upd({ lab: 2, pick: null, runs: runs + 1 }) }]
       : lab === 2 ? [['low', 'Assume the low end $' + f1(lowC) + 'M'], ['mid', 'Assume the middle $' + f1(midC) + 'M'], ['high', 'Assume the high end $' + f1(highC) + 'M']].map((p) => ({ t: p[1], bg: pick === p[0] ? '#1F2A24' : '#FBF9F2', fg: pick === p[0] ? '#FBF9F2' : '#1F2A24', go: () => upd({ pick: p[0], lab: 3 }) }))
       : [{ t: 'Try another end of the range', bg: '#FBF9F2', fg: '#1F2A24', go: () => upd({ lab: 2 }) }];
-    const labView = { ...labS, n: L.n, head: L.head, text: L.text, kinds: mkKinds(L.kinds, true), btns: labBtns, exit: () => upd({ lab: 0, pick: null }) };
+    const labView = { ...labS, n: L.n, head: L.head, text: L.text, kinds: mkKinds(L.kinds, true), btns: labBtns, srcShow: how && lab === 3, src: 'Reported tax salary $198.7M is ≈ $1.7M under the line (salaryswish, 4 Sep 2026, verify) — two sources, shown, not averaged.', exit: () => upd({ lab: 0, pick: null }) };
 
     return {
       qText, miss: !!s.miss, how, howPressed: how ? 'true' : 'false', howBg: how ? '#1F2A24' : '#FBF9F2', howFg: how ? '#FBF9F2' : '#1F2A24',

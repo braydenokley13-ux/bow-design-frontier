@@ -1,0 +1,909 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Proposed Browser</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Inter+Tight:wght@400;500;600;700;800&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F7F7F4;color:#111;font-family:'Inter Tight',system-ui,sans-serif}
+button,input{font-family:inherit}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.srf{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400}
+.ab{position:absolute}
+.mv{transition:left .5s cubic-bezier(.2,.7,.2,1),top .5s cubic-bezier(.2,.7,.2,1),width .5s cubic-bezier(.2,.7,.2,1),height .5s cubic-bezier(.2,.7,.2,1),font-size .5s}
+.cap{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#55554F}
+.btn{min-height:36px;padding:0 14px;border:1.5px solid #111;background:transparent;color:#111;font-size:14px;font-weight:600;border-radius:0;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
+.btn:hover:not(:disabled){background:#111;color:#F7F7F4}
+.btn:disabled{border-color:#CFCFCA;color:#66665F;cursor:not-allowed}
+.btn:focus-visible,.fc:focus-visible,.tab:focus-visible,.sug:focus-visible,.bowb:focus-visible,.dor:focus-visible,.seat:focus-visible,.adr:focus-visible,input.ini:focus-visible,input.nt:focus-visible{outline:3px solid #111;outline-offset:2px}
+.dk{background:#111;color:#F7F7F4}
+.dk:hover:not(:disabled){background:#3A3A36;color:#F7F7F4}
+.dk:disabled{background:transparent;color:#66665F}
+.gn{border-color:#007A33;color:#007A33}
+.gn:hover:not(:disabled){background:#007A33;color:#fff}
+.gf{background:#007A33;border-color:#007A33;color:#fff}
+.gf:hover:not(:disabled){background:#005C26;color:#fff}
+.og{border-color:#C2410C;color:#C2410C}
+.og:hover:not(:disabled){background:#C2410C;color:#fff}
+.tx{display:inline-block;width:16px;height:16px;box-sizing:border-box;flex:none}
+.tx-o{background:#111}
+.tx-r{background:#111;box-shadow:inset 0 0 0 2px #111,inset 0 0 0 4px #F7F7F4}
+.tx-a{border:2px solid #111}
+.tx-c{background:#A9A8A0}
+.tx-u{border:2px dashed #111}
+.tx-b{border:2px solid #C2410C}
+.chg{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.02em;line-height:18px;padding:0 6px;margin-left:8px;background:#DAD9D2;color:#111;white-space:nowrap;vertical-align:middle}
+.pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:#111;animation:pl 1.6s infinite;flex:none}
+@keyframes pl{0%,100%{opacity:1}50%{opacity:.2}}
+.fc{position:absolute;padding:0;margin:0;border:0;background:transparent;cursor:pointer}
+.fsv{width:100%;height:100%;display:block;overflow:visible}
+.lab{position:absolute;text-align:center;line-height:1.25}
+.lab b{display:block;font-size:13.5px;font-weight:600}
+.lab .k2{display:block;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#55554F;margin-top:2px;line-height:1.3}
+.chp{display:flex;align-items:center;gap:6px;min-height:26px;padding:3px 8px;margin-bottom:4px;box-sizing:border-box;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;line-height:1.25}
+.c-g{border:1.5px solid #007A33;color:#007A33;background:#F7F7F4}
+.c-d{border:1.5px dashed #111}
+.c-a{background:#E8A317;color:#111;font-weight:600}
+.c-t{color:#55554F;padding-left:0}
+.rl{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:#66665F;padding:0 12px 0 0;margin-right:12px;border-right:1px solid #CFCFCA;line-height:26px;white-space:nowrap}
+.rl.on{color:#111;font-weight:600;box-shadow:inset 0 -2px #111}
+.rl.dn{color:#111}
+.adr{border-radius:0}
+.bowb{border:0;background:transparent;font-size:21px;font-weight:800;letter-spacing:.14em;color:#111;cursor:pointer;padding:0}
+.askin{flex:1;min-width:0;height:76px;box-sizing:border-box;border:0;border-bottom:3px solid #111;border-radius:0;background:transparent;color:#111;font-size:54px;font-weight:500;letter-spacing:-.025em;padding:0 0 8px}
+.askin::placeholder{color:#8A8A82;opacity:1}
+.sug{border:0;background:transparent;padding:0;min-height:40px;font-size:23px;font-weight:500;color:#111;cursor:pointer;text-align:left;border-bottom:1.5px solid #CFCFCA}
+.sug:hover{border-bottom-color:#111}
+.tab{position:absolute;padding:0;margin:0;border:1.5px solid #111;background:#EFEFEA;color:#111;font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.1em;cursor:pointer;z-index:14;transition:background .25s,color .25s}
+.tab:hover{background:#111;color:#F7F7F4}
+.drw{position:absolute;background:#EFEFEA;overflow:hidden;z-index:12}
+.drw .in{position:absolute}
+.dor{position:absolute;display:flex;align-items:flex-end;gap:14px;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;color:#111}
+.dg{flex:none;position:relative;width:44px;height:80px;box-sizing:border-box;border:2px solid #111;border-radius:22px 22px 0 0;background:#F7F7F4;transition:background .3s}
+.dg:after{content:"";position:absolute;right:7px;top:44px;width:6px;height:6px;border-radius:50%;background:#111}
+.dor:hover .dg{background:#fff}
+.dg.on{background:#111}
+.dg.on:after{background:#F7F7F4}
+.dor:hover .dq{text-decoration:underline}
+.seat{display:block;width:100%;box-sizing:border-box;text-align:left;padding:12px 14px;margin-bottom:12px;cursor:pointer;border-radius:0;color:#111;font-size:14px}
+input.ini{height:44px;box-sizing:border-box;width:112px;border:2px solid #111;border-radius:0;background:#fff;font-family:'Instrument Serif',serif;font-style:italic;font-size:30px;padding:0 10px;color:#111}
+input.nt{height:36px;box-sizing:border-box;width:100%;border:1.5px solid #111;border-radius:0;background:#fff;font-size:13px;padding:0 10px;color:#111}
+input.pull{position:absolute;margin:0;padding:0;background:transparent;-webkit-appearance:none;appearance:none;cursor:ew-resize;z-index:9}
+input.pull::-webkit-slider-runnable-track{height:100%;background:transparent}
+input.pull::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:84px;border:0;border-radius:0;cursor:ew-resize;background:linear-gradient(90deg,#C2410C 0 6px,#F7F7F4 6px 8px,#C2410C 8px 16px,#F7F7F4 16px 18px,#C2410C 18px)}
+input.pull.sm::-webkit-slider-thumb{height:60px}
+input.pull::-moz-range-thumb{width:24px;height:84px;border:0;border-radius:0;background:#C2410C}
+input.pull.sm::-moz-range-thumb{height:60px}
+input.pull:focus-visible{outline:none}
+input.pull:focus-visible::-webkit-slider-thumb{outline:3px solid #111}
+.num{font-size:22px;font-weight:700;width:26px;flex:none;line-height:1.1}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important;animation-duration:.01s!important}}
+</style>
+</helmet>
+<div style="width:1440px;height:900px;box-sizing:border-box;position:relative;overflow:hidden;background:#F7F7F4;color:#111111;font-family:'Inter Tight',system-ui,sans-serif">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<pattern id="pH" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#111" stroke-width="1.6"></line></pattern>
+<pattern id="pS" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.3" fill="#111"></circle></pattern>
+</defs></svg>
+
+<div class="ab" style="left:0;top:0;width:8px;height:900px;background:#111;opacity:{{gut.r}};transition:opacity .5s;z-index:40"><span class="ab" style="left:0;top:96px;width:8px;height:26px;background:#F7F7F4;animation:pl 1.6s infinite"></span></div>
+<div class="ab" style="left:0;top:0;width:8px;height:900px;background:linear-gradient(90deg,#111 0 3px,transparent 3px 5px,#111 5px 8px);opacity:{{gut.w}};transition:opacity .5s;z-index:40"></div>
+
+<div class="ab" style="left:0;top:0;width:1440px;height:68px;background:#F7F7F4;border-bottom:1px solid #CFCFCA;z-index:30"></div>
+<nav class="ab" aria-label="Where you are on the demo path" style="left:24px;top:1px;height:26px;display:flex;align-items:center;z-index:31">
+<span class="rl" style="color:#55554F;font-weight:600">DEMO PATH</span>
+<sc-for list="{{rail}}" as="r" hint-placeholder-count="6">
+<span class="rl {{r.cls}}" aria-current="{{r.cur}}"><b>{{r.n}}</b> {{r.t}}</span>
+</sc-for>
+</nav>
+<span class="ab mono" role="status" style="right:24px;top:0;width:520px;height:28px;line-height:28px;text-align:right;font-size:12px;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:31">{{msg}}</span>
+<button type="button" class="ab bowb" onClick="{{goHome}}" aria-label="Home: the Clock Hall" style="left:24px;top:31px;width:64px;height:36px;z-index:31">BOW</button>
+<form class="ab" onSubmit="{{onAddr}}" style="left:96px;top:31px;width:726px;height:36px;margin:0;z-index:31">
+<input class="adr mono" type="text" value="{{addr}}" onChange="{{onAddrIn}}" spellcheck="false" aria-label="Address. It rewrites on every move. Edit it and press Enter to go there." aria-invalid="{{addrBad}}" style="width:100%;height:36px;box-sizing:border-box;border:0;border-bottom:2px {{addrRule}} #111;background:#FFFFFF;padding:0 10px;font-size:13.5px;color:#111">
+</form>
+<div class="ab" style="right:24px;top:31px;height:36px;display:flex;gap:8px;align-items:center;opacity:{{cb.op}};visibility:{{cb.vis}};transition:opacity .3s;z-index:31">
+<button type="button" class="btn" onClick="{{cb.keep}}" aria-pressed="{{cb.keepP}}" disabled="{{cb.keepOff}}" style="display:{{cb.keepD}};background:{{cb.keepBg}};color:{{cb.keepFg}}">{{cb.keepT}}</button>
+<button type="button" class="btn" onClick="{{cb.share}}">Share</button>
+<span style="width:1px;height:24px;background:#CFCFCA;margin:0 4px"></span>
+<button type="button" class="btn gn" onClick="{{cb.leave}}" disabled="{{cb.leaveOff}}" style="display:{{cb.leaveD}}">Leave the seat</button>
+<button type="button" class="btn" onClick="{{cb.rewind}}" disabled="{{cb.rewOff}}">Rewind</button>
+<button type="button" class="btn og" onClick="{{cb.branch}}" disabled="{{cb.brOff}}">Back to the branch point</button>
+</div>
+
+<div class="ab" aria-hidden="{{hall.hid}}" style="left:0;top:0;width:1440px;height:806px;transform:translateY({{hall.ty}}px);opacity:{{hall.op}};visibility:{{hall.vis}};transition:transform .55s cubic-bezier(.3,.7,.2,1),opacity .45s,visibility 0s linear {{hall.vd}}s;z-index:5">
+<form class="ab" onSubmit="{{hall.onAsk}}" style="left:44px;top:84px;width:1352px;height:80px;margin:0;display:flex;align-items:flex-end;gap:16px">
+<input class="askin" type="text" value="{{hall.q}}" onChange="{{hall.onQ}}" placeholder="Ask anything a system can answer…" aria-label="Ask anything a system can answer">
+<button type="submit" class="btn dk" style="height:52px;min-width:96px;font-size:16px">Ask</button>
+</form>
+<div class="ab" style="left:44px;top:176px;display:flex;align-items:center;gap:16px"><span class="cap">Try</span><button type="button" class="sug" onClick="{{hall.sug}}">Can Boston keep this roster under the second apron?</button></div>
+<span class="ab mono" role="status" style="left:44px;top:222px;font-size:12.5px;color:#111">{{hall.askMsg}}</span>
+<span class="ab cap" style="left:44px;top:246px">Your presences · each keeps its own kind of time while you are elsewhere</span>
+<div class="ab" style="left:24px;top:268px;width:1392px;height:2px;background:#111"></div>
+<sc-for list="{{pres}}" as="p" hint-placeholder-count="9">
+<div class="ab" style="left:{{p.rx}}px;top:270px;width:2px;height:{{p.rh}}px;background:#111;opacity:{{p.op}};transition:opacity .6s .5s"></div>
+<button type="button" class="fc" onClick="{{p.click}}" onMouseEnter="{{p.enter}}" onFocus="{{p.enter}}" onMouseLeave="{{p.leave}}" onBlur="{{p.leave}}" aria-label="{{p.aria}}" style="left:{{p.x}}px;top:{{p.y}}px;width:{{p.d}}px;height:{{p.d}}px;opacity:{{p.op}};transform:translateY({{p.ty}}px);transition:opacity .6s .5s,transform .6s .5s cubic-bezier(.3,.7,.2,1)">
+<sc-if value="{{p.is.rea}}" hint-placeholder-val="{{true}}">
+<svg viewBox="0 0 120 120" class="fsv" aria-hidden="true">
+<circle cx="60" cy="60" r="56" fill="#F7F7F4" stroke="#111" stroke-width="4"></circle>
+<path d="{{p.tk}}" stroke="#111" stroke-width="2" fill="none"></path>
+<g style="transform-origin:60px 60px;transform:rotate({{p.hd}}deg)"><line x1="60" y1="64" x2="60" y2="36" stroke="#111" stroke-width="4.5" stroke-linecap="round"></line></g>
+<g style="transform-origin:60px 60px;transform:rotate({{p.md}}deg)"><line x1="60" y1="66" x2="60" y2="20" stroke="#111" stroke-width="3" stroke-linecap="round"></line></g>
+<g style="transform-origin:60px 60px;transform:rotate({{p.sd}}deg);transition:transform .1s linear"><line x1="60" y1="74" x2="60" y2="12" stroke="#111" stroke-width="1.3"></line></g>
+<circle cx="60" cy="60" r="3.5" fill="#111"></circle>
+<rect x="38" y="82" width="44" height="18" fill="#F7F7F4" stroke="#111" stroke-width="1.2"></rect>
+<text x="60" y="95" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="600" letter-spacing="2" fill="#111">LIVE</text>
+<g style="opacity:{{p.chgO}}"><circle cx="102" cy="18" r="13" fill="#111"></circle><text x="102" y="23" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="15" font-weight="600" fill="#F7F7F4">2</text></g>
+</svg>
+</sc-if>
+<sc-if value="{{p.is.wor}}" hint-placeholder-val="{{false}}">
+<svg viewBox="0 0 120 120" class="fsv" aria-hidden="true">
+<circle cx="60" cy="60" r="56" fill="#F7F7F4" stroke="#111" stroke-width="3.5"></circle>
+<circle cx="60" cy="60" r="50.5" fill="none" stroke="#111" stroke-width="1.2"></circle>
+<circle cx="60" cy="60" r="44" fill="none" stroke="#111" stroke-width="6" stroke-dasharray="1.4 4.04"></circle>
+<circle cx="60" cy="60" r="34" fill="none" stroke="#111" stroke-width="5" style="stroke-dasharray:{{p.arc}} 300;transform:rotate(-90deg);transform-origin:60px 60px;transition:stroke-dasharray .9s cubic-bezier(.3,.7,.2,1)"></circle>
+<g style="transform-origin:60px 60px;transform:rotate({{p.wd}}deg);transition:transform .9s cubic-bezier(.3,.7,.2,1)"><line x1="60" y1="66" x2="60" y2="20" stroke="#111" stroke-width="3"></line></g>
+<circle cx="60" cy="60" r="4" fill="#111"></circle>
+<rect x="36" y="80" width="48" height="18" fill="#F7F7F4" stroke="#111" stroke-width="1.2"></rect>
+<g style="opacity:{{p.tickO}}"><circle cx="102" cy="18" r="13" fill="#007A33"></circle><path d="M95 18.5L100 23.5L109 12.5" fill="none" stroke="#fff" stroke-width="3"></path></g>
+</svg>
+<span class="mono" style="position:absolute;left:36px;top:80px;width:48px;height:18px;line-height:18px;text-align:center;font-size:11px;font-weight:600;letter-spacing:.05em">WK {{p.wk}}</span>
+</sc-if>
+<sc-if value="{{p.is.mom}}" hint-placeholder-val="{{false}}">
+<svg viewBox="0 0 120 120" class="fsv" aria-hidden="true">
+<circle cx="60" cy="60" r="56" fill="#F7F7F4" stroke="#111" stroke-width="4"></circle>
+<path d="{{p.tk}}" stroke="#111" stroke-width="2" fill="none"></path>
+<line x1="60" y1="64" x2="60" y2="38" stroke="#111" stroke-width="4.5" stroke-linecap="round" transform="rotate(262 60 60)"></line>
+<line x1="60" y1="66" x2="60" y2="18" stroke="#111" stroke-width="3" stroke-linecap="round" transform="rotate(298 60 60)"></line>
+<circle cx="60" cy="60" r="3.5" fill="#111"></circle>
+<path d="M60 6A54 54 0 0 1 60 114Z" fill="#F7F7F4" stroke="#111" stroke-width="2" stroke-dasharray="5 4"></path>
+<rect x="80" y="59" width="18" height="14" fill="#111"></rect>
+<path d="M84 59V54A5 5 0 0 1 94 54V59" fill="none" stroke="#111" stroke-width="2.6"></path>
+</svg>
+</sc-if>
+<sc-if value="{{p.is.frk}}" hint-placeholder-val="{{false}}">
+<svg viewBox="0 0 120 120" class="fsv" aria-hidden="true">
+<rect x="8" y="8" width="104" height="104" fill="#F7F7F4" stroke="#C2410C" stroke-width="5"></rect>
+<rect x="16" y="16" width="88" height="88" fill="none" stroke="#C2410C" stroke-width="1.2"></rect>
+<line x1="60" y1="70" x2="60" y2="26" stroke="#111" stroke-width="3" stroke-linecap="round" transform="rotate(16 60 70)"></line>
+<line x1="60" y1="70" x2="60" y2="36" stroke="#C2410C" stroke-width="4.5" stroke-linecap="round" transform="rotate(64 60 70)"></line>
+<path d="M68.3 41.2A30 30 0 0 1 87 56.8" fill="none" stroke="#C2410C" stroke-width="2" stroke-dasharray="2 3"></path>
+<circle cx="60" cy="70" r="4.5" fill="#111"></circle>
+<rect x="32" y="86" width="56" height="18" fill="#F7F7F4" stroke="#C2410C" stroke-width="2"></rect>
+<text x="60" y="99" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="600" letter-spacing="1" fill="#C2410C">BY YOU</text>
+</svg>
+</sc-if>
+<sc-if value="{{p.is.pub}}" hint-placeholder-val="{{false}}">
+<svg viewBox="0 0 120 120" class="fsv" aria-hidden="true">
+<rect x="8" y="8" width="104" height="104" fill="#F7F7F4" stroke="#6B5F8A" stroke-width="5"></rect>
+<rect x="16" y="16" width="88" height="88" fill="none" stroke="#6B5F8A" stroke-width="1.2"></rect>
+<line x1="60" y1="66" x2="60" y2="26" stroke="#6B5F8A" stroke-width="2.4" stroke-linecap="round" transform="rotate(16 60 66)"></line>
+<line x1="60" y1="66" x2="60" y2="34" stroke="#6B5F8A" stroke-width="3.4" stroke-linecap="round" transform="rotate(-58 60 66)"></line>
+<circle cx="60" cy="66" r="4.5" fill="#6B5F8A"></circle>
+<g transform="rotate(-8 60 92)"><rect x="17" y="80" width="86" height="20" fill="#F7F7F4" stroke="#6B5F8A" stroke-width="2"></rect><text x="60" y="94" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="600" fill="#6B5F8A">BY [AUTHOR]</text></g>
+</svg>
+</sc-if>
+<sc-if value="{{p.is.mod}}" hint-placeholder-val="{{false}}">
+<svg viewBox="0 0 120 120" class="fsv" aria-hidden="true">
+<circle cx="60" cy="60" r="56" fill="#F7F7F4" stroke="#111" stroke-width="1.5"></circle>
+<circle cx="60" cy="60" r="48" fill="none" stroke="url(#pH)" stroke-width="14" style="opacity:{{p.hatchO}}"></circle>
+<circle cx="60" cy="60" r="40" fill="#F7F7F4" stroke="#111" stroke-width="1.5"></circle>
+<rect x="28" y="50" width="64" height="28" fill="#111"></rect>
+<text x="60" y="72" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="21" font-weight="600" letter-spacing="4" fill="#F7F7F4">000</text>
+<text x="60" y="44" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="600" letter-spacing="4" fill="#111">RUN</text>
+<text x="60" y="94" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#111">v0.3</text>
+</svg>
+</sc-if>
+<sc-if value="{{p.is.gen}}" hint-placeholder-val="{{false}}">
+<svg viewBox="0 0 120 120" class="fsv" aria-hidden="true">
+<circle cx="60" cy="60" r="56" fill="url(#pS)" stroke="#111" stroke-width="2" stroke-dasharray="1 5" stroke-linecap="round"></circle>
+<circle cx="60" cy="60" r="34" fill="#F7F7F4" stroke="#111" stroke-width="1.5" stroke-dasharray="1 4" stroke-linecap="round"></circle>
+<line x1="60" y1="60" x2="60" y2="42" stroke="#111" stroke-width="2.6" stroke-linecap="round" transform="rotate(40 60 60)"></line>
+<line x1="60" y1="60" x2="60" y2="36" stroke="#111" stroke-width="1.8" stroke-linecap="round" transform="rotate(150 60 60)"></line>
+<circle cx="60" cy="60" r="3" fill="#111"></circle>
+</svg>
+</sc-if>
+<sc-if value="{{p.is.ker}}" hint-placeholder-val="{{false}}">
+<svg viewBox="0 0 120 120" class="fsv" aria-hidden="true">
+<circle cx="60" cy="60" r="56" fill="#F7F7F4" stroke="#111" stroke-width="4"></circle>
+<path d="{{p.tk}}" stroke="#111" stroke-width="2" fill="none"></path>
+<g style="transform-origin:60px 60px;transform:rotate({{p.hd}}deg)"><line x1="60" y1="64" x2="60" y2="36" stroke="#111" stroke-width="4.5" stroke-linecap="round"></line></g>
+<g style="transform-origin:60px 60px;transform:rotate({{p.md}}deg)"><line x1="60" y1="66" x2="60" y2="20" stroke="#111" stroke-width="3" stroke-linecap="round"></line></g>
+<g style="transform-origin:60px 60px;transform:rotate({{p.sd}}deg);transition:transform .1s linear"><line x1="60" y1="74" x2="60" y2="12" stroke="#111" stroke-width="1.3"></line></g>
+<circle cx="60" cy="60" r="3.5" fill="#111"></circle>
+<circle cx="60" cy="60" r="62" fill="none" stroke="#2B3FD6" stroke-width="1.8"></circle>
+<rect x="38" y="80" width="44" height="9" fill="#2B3FD6"></rect>
+</svg>
+</sc-if>
+<sc-if value="{{p.is.pul}}" hint-placeholder-val="{{false}}">
+<svg viewBox="0 0 120 120" class="fsv" aria-hidden="true">
+<rect x="8" y="8" width="104" height="104" fill="#F7F7F4" stroke="#C2410C" stroke-width="5"></rect>
+<rect x="16" y="16" width="88" height="88" fill="none" stroke="#C2410C" stroke-width="1.2"></rect>
+<line x1="60" y1="66" x2="60" y2="24" stroke="#111" stroke-width="3" stroke-linecap="round" transform="rotate(16 60 66)"></line>
+<line x1="60" y1="66" x2="60" y2="34" stroke="#C2410C" stroke-width="4.5" stroke-linecap="round" transform="rotate(-50 60 66)"></line>
+<path d="M67.4 39.6A28 28 0 0 0 38 44" fill="none" stroke="#C2410C" stroke-width="2" stroke-dasharray="2 3"></path>
+<circle cx="60" cy="66" r="4.5" fill="#111"></circle>
+</svg>
+</sc-if>
+</button>
+<div class="lab" style="left:{{p.lx}}px;top:{{p.ly}}px;width:{{p.lw}}px;opacity:{{p.op}};transition:opacity .6s .5s"><b style="text-decoration:{{p.ul}}">{{p.n1}}</b><span class="k2">{{p.n2}}</span><span class="k2" style="color:#111">{{p.nx}}</span></div>
+</sc-for>
+
+<div class="ab" style="left:30px;top:526px;width:140px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.3;display:flex;gap:6px;justify-content:center;align-items:center"><span class="pulse" style="visibility:{{hall.pulseVis}}"></span><span>{{hall.reaNote}}</span></div>
+<div class="ab" style="left:180px;top:526px;width:220px"><div class="ab" style="left:80px;top:-14px;width:2px;height:12px;background:#111;opacity:{{hall.stemO}}"></div>
+<sc-for list="{{wchips}}" as="c" hint-placeholder-count="3">
+<div class="chp {{c.cls}}"><sc-if value="{{c.tick}}" hint-placeholder-val="{{false}}"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" style="flex:none"><path d="M1.5 6.5L4.5 9.5L10.5 2.5" fill="none" stroke="#007A33" stroke-width="2"></path></svg></sc-if><span><span style="display:block">{{c.t}}</span><span style="display:block">{{c.t2}}</span></span></div>
+</sc-for>
+</div>
+
+<div class="ab mono" style="left:{{hall.keyX}}px;top:{{hall.keyY}}px;font-size:12.5px;color:#111">Kind is told by time: live · calendar · stopped · diverged · counter · stippled = unreviewed</div>
+<div class="ab" style="left:{{hall.keyX}}px;top:{{hall.wordsY}}px;width:1000px;min-height:20px;font-size:14px;line-height:1.35;color:#55554F"><b style="color:#111">{{hall.wHead}}</b> {{hall.words}}</div>
+
+<sc-if value="{{hall.again}}" hint-placeholder-val="{{false}}">
+<div>
+<div class="ab" style="left:44px;top:672px;width:640px;border-top:1px solid #CFCFCA;padding-top:10px">
+<div class="cap">Home, changed</div>
+<div style="font-size:16px;line-height:1.35;margin-top:4px">{{hall.summary}}</div>
+<div style="margin-top:10px;display:flex;align-items:center;gap:14px"><button type="button" class="btn dk" onClick="{{hall.monday}}" disabled="{{hall.monOff}}">Let Monday come without me</button><span style="font-size:12.5px;line-height:1.35;color:#55554F;flex:1">{{hall.monNote}}</span></div>
+</div>
+<div class="ab" style="left:740px;top:672px;width:660px;border-top:1px solid #CFCFCA;padding-top:10px">
+<div class="cap">Recorded in your World</div>
+<div style="margin-top:5px;font-size:13px;color:#55554F">{{hall.logNote}}</div>
+<sc-for list="{{hall.log}}" as="l" hint-placeholder-count="3">
+<div style="display:flex;gap:10px;align-items:flex-start;margin-top:5px;font-size:13px;line-height:1.3"><span class="tx {{l.tx}}" style="margin-top:1px"></span><span><span class="mono" style="font-size:12px;font-weight:600">{{l.w}}</span> · {{l.t}}</span></div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+</div>
+
+<!-- STATE 2 · ARRIVE · Reality, the payroll (or your branch of it, in its own frame) -->
+<div class="ab" style="left:0;top:0;width:1440px;height:806px;opacity:{{ar.op}};visibility:{{ar.vis}};transform:translateY({{ar.ty}}px);transition:opacity .45s .15s,transform .5s .1s cubic-bezier(.3,.7,.2,1),visibility 0s linear {{ar.vd}}s;pointer-events:{{ar.pe}};z-index:3">
+<div class="ab mv" style="left:{{ar.x0}}px;top:{{ar.y0}}px;width:{{ar.cw}}px;height:{{ar.chh}}px">
+<div class="ab mv" style="left:-16px;top:-10px;width:{{ar.bfW}}px;height:{{ar.bfH}}px;box-sizing:border-box;border:3px solid #C2410C;box-shadow:inset 0 0 0 5px #F7F7F4,inset 0 0 0 6px #C2410C;opacity:{{ar.bfO}};pointer-events:none;transition:opacity .3s"></div>
+<div class="ab" style="left:0;top:0;height:22px;display:flex;gap:10px;align-items:center;font-size:14px"><span class="tx {{ar.hTx}}"></span><span style="color:{{ar.hC}};font-weight:{{ar.hW}}">{{ar.head}}</span><span class="pulse" style="visibility:{{ar.pulseV}}"></span></div>
+<div class="ab cap mv" style="left:0;top:{{ar.capY}}px;white-space:nowrap">{{ar.cap}}</div>
+<div class="ab mv" style="left:0;top:{{ar.subY}}px;width:{{ar.subW}}px;font-size:12px;line-height:1.35;color:{{ar.subC}};font-weight:{{ar.subF}}">{{ar.sub}}</div>
+<div class="ab mv" style="left:-4px;top:{{ar.bigY}}px;font-size:{{ar.bigFs}}px;font-weight:600;letter-spacing:-.045em;line-height:1;white-space:nowrap;color:{{ar.ink}}">{{ar.big}}</div>
+<div class="ab mv" style="left:{{ar.sx}}px;top:{{ar.sY}}px;width:{{ar.sw}}px">
+<p class="srf mv" style="margin:0;font-size:{{ar.sFs}}px;line-height:1.1;color:#2B3FD6">{{ar.sentence}}</p>
+<p class="mv" style="margin:{{ar.pGap}}px 0 0;font-size:{{ar.pFs}}px;line-height:1.38;color:#111">{{ar.para}}</p>
+</div>
+
+<div class="ab mv" style="left:0;top:{{ar.barTop}}px;width:{{ar.barW}}px;height:{{ar.barH}}px;background:{{ar.ink}};overflow:hidden">
+<span class="ab mv" style="left:{{ar.bTx}}px;top:{{ar.bTy}}px;font-size:{{ar.bFs}}px;font-weight:600;color:#F7F7F4;white-space:nowrap">{{ar.barT}}</span>
+<span class="ab" style="left:{{ar.bTx}}px;top:{{ar.bSy}}px;font-size:12px;color:#F7F7F4;white-space:nowrap;opacity:{{ar.bSo}}">{{ar.barS}}</span>
+<div class="ab" style="left:12px;top:-8px;width:3px;height:{{ar.barH2}}px;background:#F7F7F4;transform:rotate(14deg)"></div>
+<div class="ab" style="left:22px;top:-8px;width:3px;height:{{ar.barH2}}px;background:#F7F7F4;transform:rotate(14deg)"></div>
+</div>
+<sc-for list="{{ar.lines}}" as="ln" hint-placeholder-count="5">
+<div class="ab mv" style="left:{{ln.x}}px;top:{{ln.top}}px;width:2px;height:{{ln.h}}px;background:{{ln.c}}"></div>
+<div class="ab mv" style="left:{{ln.x}}px;margin-left:-1px;top:{{ln.nt}}px;width:{{ln.nw}}px;height:{{ln.nh}}px;background:#F7F7F4"></div>
+<div class="ab mv" style="left:{{ln.lx}}px;top:{{ln.ly}}px;width:112px;text-align:{{ln.al}};font-size:11.5px;font-weight:700;letter-spacing:.06em;line-height:15px;background:#F7F7F4"><span>{{ln.t1}}</span><br><span class="mono" style="font-weight:500;letter-spacing:0;font-size:12px">{{ln.t2}}</span></div>
+</sc-for>
+<span class="ab mv mono" style="left:{{ar.tsLx}}px;top:{{ar.tsLy}}px;width:260px;text-align:{{ar.tsAl}};font-size:12px;font-weight:500;color:{{ar.tsC}};background:#F7F7F4">{{ar.tsT}}</span>
+
+<div class="ab mv" style="left:{{ar.b1.x}}px;top:{{ar.b1.y}}px;width:{{ar.b1.w}}px;height:8px;background:#8E8D85"></div>
+<span class="ab mv" style="left:{{ar.b1.tx}}px;top:{{ar.b1.ty}}px;width:330px;text-align:{{ar.b1.al}};font-size:{{ar.bkFs}}px;font-weight:500"><span style="background:#F7F7F4;padding:0 4px">{{ar.b1.t}}</span></span>
+<div class="ab mv" style="left:{{ar.b2.x}}px;top:{{ar.b2.y}}px;width:{{ar.b2.w}}px;height:8px;background:#8E8D85"></div>
+<span class="ab mv" style="left:{{ar.b2.tx}}px;top:{{ar.b2.ty}}px;width:330px;text-align:{{ar.b2.al}};font-size:{{ar.bkFs}}px;font-weight:500"><span style="background:#F7F7F4;padding:0 4px">{{ar.b2.t}}</span></span>
+<div class="ab mv" style="left:{{ar.b3.x}}px;top:{{ar.b3.y}}px;width:{{ar.b3.w}}px;height:10px;background:#2B3FD6"></div>
+<div class="ab mv" style="left:{{ar.b3.x}}px;top:{{ar.b3.cy}}px;width:2px;height:26px;background:#2B3FD6"></div>
+<div class="ab mv" style="left:{{ar.b3.x2}}px;top:{{ar.b3.cy}}px;width:2px;height:26px;background:#2B3FD6"></div>
+<span class="ab mv" style="left:{{ar.b3.tx}}px;top:{{ar.b3.ty}}px;width:520px;text-align:{{ar.b3.al}};font-size:{{ar.b3Fs}}px;font-weight:600;letter-spacing:-.015em;color:#2B3FD6;white-space:nowrap"><span style="background:#F7F7F4;padding:0 4px">{{ar.b3.t}}</span></span>
+
+<div class="ab mv" style="left:0;top:{{ar.axisY}}px;width:{{ar.cw}}px;height:1px;background:#111"></div>
+<sc-for list="{{ar.ticks}}" as="tk" hint-placeholder-count="9">
+<div class="ab mv" style="left:{{tk.x}}px;top:{{ar.axisY}}px;width:1px;height:7px;background:#111"></div>
+<span class="ab mv" style="left:{{tk.lx}}px;top:{{ar.tickY}}px;width:60px;text-align:{{tk.al}};font-size:11.5px;color:#55554F">{{tk.t}}</span>
+</sc-for>
+<span class="ab mv" style="left:0;top:{{ar.noteY}}px;font-size:11.5px;color:#55554F;white-space:nowrap">axis starts at $160M, so the bar is cut where the two slashes are</span>
+
+<div class="ab mv" style="left:-4px;top:{{ar.fTop}}px;width:{{ar.fW}}px;height:{{ar.fH}}px;box-sizing:border-box;border:3px solid #C2410C;opacity:{{ar.fOp}};pointer-events:none;transition:opacity .3s"></div>
+<div class="ab mv" style="left:-4px;top:{{ar.stY}}px;box-sizing:border-box;padding:4px 10px;background:#F7F7F4;border:2px solid #C2410C;color:#C2410C;font-size:12px;font-weight:600;letter-spacing:.05em;line-height:16px;opacity:{{ar.fOp}};pointer-events:none;transition:opacity .3s">YOUR PULL · NOT REALITY<br><span class="mono" style="font-size:14px">{{ar.pullT}}</span></div>
+<input class="pull {{ar.pcls}}" type="range" min="180" max="235" step="0.1" value="{{ar.pv}}" onChange="{{ar.onPull}}" aria-label="Pull the payroll. It drags between 180 and 235 million dollars." style="left:{{ar.rx}}px;top:{{ar.fTop}}px;width:{{ar.rw}}px;height:{{ar.fH}}px;visibility:{{ar.pvis}}">
+</div>
+</div>
+
+<!-- STATES 3 · 4 · 5 · YOUR WORLD · threshold, occupy, leave -->
+<div class="ab" style="left:0;top:0;width:1440px;height:806px;opacity:{{wl.op}};visibility:{{wl.vis}};transform:translateY({{wl.ty}}px);transition:opacity .45s .15s,transform .5s .1s cubic-bezier(.3,.7,.2,1),visibility 0s linear {{wl.vd}}s;pointer-events:{{wl.pe}};z-index:3">
+<div class="ab mv" style="left:{{ar.x0}}px;top:{{ar.y0}}px;width:{{ar.cw}}px;height:{{ar.chh}}px;overflow:hidden">
+<div style="height:22px;display:flex;gap:10px;align-items:center;font-size:14px"><span class="tx tx-r"></span><span>Boston · Year Two · your World · Week {{w.week}} · not NBA history</span></div>
+
+<sc-if value="{{w.thr}}" hint-placeholder-val="{{true}}">
+<div style="display:flex;flex-direction:column;gap:{{w.gap}}px;margin-top:{{w.gap}}px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span class="cap">Threshold · General Manager · Boston front office</span><span class="mono" style="font-size:13px">World clock <b>{{w.clock}}</b> · runs on its own</span></div>
+<div style="font-size:{{w.ttlFs}}px;font-weight:600;letter-spacing:-.02em;line-height:1.05">Before you sign: what this seat knows.</div>
+<div><span class="cap" style="color:#2B3FD6">Your question, here:</span> <span class="srf" style="font-size:{{w.qFs}}px;line-height:1.15;color:#2B3FD6">{{w.q.t}}</span></div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
+<sc-for list="{{w.thrBox}}" as="tb" hint-placeholder-count="4">
+<div style="box-sizing:border-box;padding:8px 12px;min-height:{{w.boxH}}px;border:{{tb.bd}};background:{{tb.bg}}"><div class="cap" style="color:#111">{{tb.k}}</div><div style="font-size:14px;line-height:1.3;margin-top:3px;font-weight:500">{{tb.t}}</div></div>
+</sc-for>
+</div>
+<div class="cap" style="color:#111">Handover sheet · what is in motion at Boston · written Tue 08:55 by the interim [fictional, authored]</div>
+<div>
+<sc-for list="{{w.sheet}}" as="sh" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:14px;border-top:1px solid #CFCFCA;padding:{{w.rowPad}}px 0">
+<span class="num">{{sh.n}}</span>
+<span style="flex:1;min-width:0"><span style="display:block;font-size:15px;font-weight:600;line-height:1.25">{{sh.t}}</span><span class="mono" style="display:block;font-size:12px;color:#55554F;margin-top:2px">{{sh.dl}} · in {{sh.cd}}, {{sh.st}}</span></span>
+<button type="button" class="btn {{sh.tCls}}" onClick="{{sh.take}}" aria-pressed="{{sh.tP}}" style="width:118px;padding:0">Taken ✓</button>
+<button type="button" class="btn {{sh.hCls}}" onClick="{{sh.back}}" aria-pressed="{{sh.hP}}" style="width:118px;padding:0">Handed back</button>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;align-items:center;gap:16px;border-top:2px solid #111;padding-top:{{w.rowPad}}px">
+<span class="cap" style="color:#111">Your initials</span>
+<input class="ini" type="text" value="{{w.ini}}" onChange="{{w.onIni}}" aria-label="Your initials. The signature is the act." placeholder="KM">
+<button type="button" class="btn dk" onClick="{{w.sign}}" disabled="{{w.signOff}}" style="height:44px;padding:0 26px;font-size:16px">Sign</button>
+<span class="mono" style="font-size:13px;font-weight:600;width:82px">{{w.setT}}</span>
+<span style="font-size:14px;line-height:1.35;flex:1"><b>Signing makes these clocks yours.</b> <span style="color:#55554F">{{w.signNote}}</span></span>
+</div>
+<div>
+<div class="cap" style="color:#111">Already on the record · written in your World before you sit</div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:5px">
+<sc-for list="{{w.hist}}" as="hh" hint-placeholder-count="3">
+<div style="display:flex;gap:10px;align-items:flex-start;border-top:1px solid #CFCFCA;padding-top:6px;font-size:13px;line-height:1.3"><span class="tx tx-r" style="margin-top:1px"></span><span><span class="mono" style="font-size:12px;font-weight:600">{{hh.w}}</span> · {{hh.t}}</span></div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{w.occ}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;gap:28px;margin-top:{{w.gap}}px">
+<div style="width:{{w.lw}}px;flex:none;display:flex;flex-direction:column;gap:{{w.gap}}px">
+<div style="display:flex;gap:10px;align-items:stretch">
+<div style="flex:1;box-sizing:border-box;border:2px solid #111;padding:6px 12px"><div class="cap" style="color:#111">World clock</div><div class="mono" style="font-size:26px;font-weight:600;line-height:1.15">{{w.clock}}</div></div>
+<div style="flex:1;box-sizing:border-box;background:#E8A317;padding:6px 12px;color:#111"><div class="cap" style="color:#111">Your clock · started {{w.signT}}</div><div class="mono" style="font-size:26px;font-weight:600;line-height:1.15">{{w.mine}} <span style="font-size:12px;font-weight:500">running</span></div></div>
+<button type="button" class="btn" onClick="{{w.x60}}" aria-pressed="{{w.x60P}}" style="width:96px;padding:0 6px;white-space:normal;line-height:1.2;font-size:12.5px;background:{{w.x60Bg}};color:{{w.x60Fg}}">×60 · AUTHORED</button>
+</div>
+<div style="font-size:14px;line-height:1.35"><b>You gave up:</b> the outside view. <b>You got:</b> {{w.ledger}}</div>
+<div>
+<sc-for list="{{w.ms}}" as="m" hint-placeholder-count="3">
+<div style="display:flex;gap:12px;border-top:1px solid #CFCFCA;padding:{{w.rowPad}}px 0">
+<span class="num">{{m.n}}</span>
+<div style="flex:1;min-width:0;background:{{m.fl}};transition:{{m.flT}}">
+<div style="font-size:15px;font-weight:600;line-height:1.25"><svg width="14" height="14" viewBox="0 0 12 12" aria-hidden="true" style="display:{{m.tickD}};margin-right:6px;vertical-align:-1px"><path d="M1.5 6.5L4.5 9.5L10.5 2.5" fill="none" stroke="#007A33" stroke-width="2"></path></svg>{{m.t}}<span class="chg" style="display:{{m.tagD}}">changed by your act · {{w.actT}}</span></div>
+<div class="mono" style="font-size:12px;color:#55554F;margin-top:2px;line-height:1.35">{{m.sub}}</div>
+<sc-if value="{{m.act}}" hint-placeholder-val="{{false}}">
+<div style="margin-top:8px;font-size:13px;line-height:1.4">
+<div style="display:flex;gap:8px;align-items:flex-start"><span class="tx tx-a" style="margin-top:2px"></span><span>2029 second for your backup guard ($2.7M, authored).</span></div>
+<div style="display:flex;gap:8px;align-items:flex-start;margin-top:3px"><span class="tx tx-c" style="margin-top:2px"></span><span>{{m.prev}}</span></div>
+<div style="display:flex;gap:8px;margin-top:8px"><button type="button" class="btn gf" onClick="{{m.take}}">Take their second</button><button type="button" class="btn" onClick="{{m.decline}}">Decline</button></div>
+</div>
+</sc-if>
+</div>
+<div class="chp {{m.cc}}" style="width:150px;align-self:flex-start;justify-content:center;font-size:{{m.cFs}}px;font-weight:600;min-height:34px;margin:0">{{m.chip}}</div>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{w.recShow}}" hint-placeholder-val="{{true}}">
+<div style="border-top:2px solid #111;padding-top:6px">
+<div class="cap" style="color:#111">The record · double rule = recorded · hollow = no act</div>
+<sc-for list="{{w.recs}}" as="l" hint-placeholder-count="5">
+<div style="display:flex;gap:10px;align-items:flex-start;padding:{{w.recPad}}px 0;border-top:1px solid #CFCFCA;font-size:13.5px;line-height:1.3"><span class="tx {{l.tx}}" style="margin-top:2px"></span><span><span class="mono" style="font-size:12px;font-weight:600">{{l.w}}</span> · {{l.t}}</span></div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:{{w.gap}}px">
+<div style="background:{{w.q.fl}};transition:{{w.q.flT}}"><span class="cap" style="color:#2B3FD6">Your question, here:</span> <span class="srf" style="font-size:{{w.qFs}}px;line-height:1.12;color:#2B3FD6">{{w.q.t}}</span><span class="chg" style="display:{{w.q.tagD}}">changed by your act · {{w.actT}}</span></div>
+<sc-if value="{{w.rec}}" hint-placeholder-val="{{true}}">
+<div style="display:flex;flex-direction:column;gap:{{w.gap}}px">
+<div style="background:{{w.g.fl}};transition:{{w.g.flT}}">
+<div class="cap" style="color:#111">World payroll vs second apron<span class="chg" style="display:{{w.g.tagD}}">changed by your act · {{w.actT}}</span></div>
+<div style="position:relative;height:84px">
+<div class="ab mono" style="left:{{w.g.apX}}%;top:8px;transform:translateX(-50%);font-size:11.5px;white-space:nowrap">2nd apron $221.686M</div>
+<div class="ab" style="left:0;top:32px;height:22px;width:{{w.g.barW}}%;background:#111;box-shadow:inset 0 0 0 3px #111,inset 0 0 0 5px #F7F7F4;transition:width .7s cubic-bezier(.3,.7,.2,1)"></div>
+<div class="ab" style="left:{{w.g.apX}}%;top:26px;width:2px;height:34px;margin-left:-1px;background:#111"></div>
+<div class="ab" style="left:{{w.g.brX}}%;top:57px;height:4px;width:{{w.g.brW}}%;background:#2B3FD6;transition:left .7s,width .7s"></div>
+</div>
+<div class="mono" style="font-size:12.5px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span><b>{{w.g.pay}}</b> <span style="color:#2B3FD6;font-weight:600">{{w.g.gap}}</span></span><span style="font-size:11px;color:#55554F;display:{{w.axD}}">axis $214M to $226M</span></div>
+</div>
+<div style="background:{{w.r.fl}};transition:{{w.r.flT}}">
+<div class="cap" style="color:#111">Roster<span class="chg" style="display:{{w.r.tagD}}">changed by your act · {{w.actT}}</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px"><sc-for list="{{w.pips}}" as="pp" hint-placeholder-count="15"><span style="width:24px;height:24px;box-sizing:border-box;border:2px {{pp.bs}} #111;background:{{pp.bg}};flex:none"></span></sc-for></div>
+<div class="mono" style="font-size:12.5px;margin-top:6px">{{w.r.t}}</div>
+</div>
+<div>
+<div class="cap" style="color:#111">Handover draft · what the interim would read if you left now</div>
+<sc-for list="{{w.notes}}" as="dd" hint-placeholder-count="3">
+<div style="display:flex;gap:8px;align-items:flex-start;margin-top:4px;padding:4px 0;border-top:1px solid #CFCFCA;font-size:13px;line-height:1.35;background:{{dd.fl}};transition:{{dd.flT}}"><span class="tx tx-c" style="margin-top:2px"></span><span><b>{{dd.n}} ·</b> {{dd.v}}<span class="chg" style="display:{{dd.tagD}}">changed by your act · {{w.actT}}</span></span></div>
+</sc-for>
+</div>
+<div class="mono" style="display:{{w.unkD}};font-size:11.5px;color:#55554F;line-height:1.4;border:1.5px dashed #111;padding:6px 10px">Unknown to everyone in the seat: what Denver’s GM does if you wait. That is what the seat is for.</div>
+</div>
+</sc-if>
+<sc-if value="{{w.lv}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;flex-direction:column;gap:{{w.gap}}px;box-sizing:border-box;border:2px solid #111;padding:14px 16px;background:#F7F7F4">
+<div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="cap" style="color:#111">Leaving the seat</div><div style="font-size:22px;font-weight:600;line-height:1.15;margin-top:2px">Matters in motion need an owner.</div></div><button type="button" class="btn" onClick="{{w.stay}}">Stay in the seat</button></div>
+<div class="cap">Hand over · one line for each open matter · edit, then sign</div>
+<div>
+<sc-for list="{{w.notes}}" as="nn" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:96px minmax(0,1fr);gap:4px 10px;align-items:center;padding:5px 0;border-top:1px solid #CFCFCA;background:{{nn.fl}}"><span style="font-size:13.5px;font-weight:600">{{nn.n}} · {{nn.short}}</span><input class="nt" type="text" value="{{nn.v}}" onChange="{{nn.on}}" aria-label="Handover line for {{nn.short}}"><div style="grid-column:2;display:{{nn.tagD}}"><span class="chg" style="margin:0">changed by your act · {{w.actT}}</span></div></div>
+</sc-for>
+<div style="font-size:12.5px;color:#55554F;padding-top:4px">{{w.noOpen}}</div>
+</div>
+<div style="display:flex;align-items:center;gap:14px"><span class="cap" style="color:#111">Sign</span><input class="ini" type="text" value="{{w.ini2}}" onChange="{{w.onIni2}}" aria-label="Initials to sign the handover"><button type="button" class="btn dk" onClick="{{w.handover}}" disabled="{{w.hoOff}}" style="height:44px;padding:0 18px;font-size:15px">Sign and hand over</button></div>
+<div style="box-sizing:border-box;border:1.5px solid #77776F;padding:10px 12px;display:flex;align-items:center;gap:12px"><span style="flex:1;font-size:13px;line-height:1.35"><b>Or vacate.</b> Every open matter reverts to the owner. A lapse after that is logged “against the vacant seat · owner holding”.</span><button type="button" class="btn" onClick="{{w.vacate}}" style="white-space:normal;line-height:1.2;padding:4px 12px;max-width:190px">Vacate · matters revert to the owner</button></div>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-if>
+</div>
+</div>
+
+<button type="button" class="tab" onClick="{{tp.tab}}" aria-expanded="{{tp.exp}}" style="left:560px;top:68px;width:320px;height:36px;background:{{tp.bg}};color:{{tp.fg}};visibility:{{tabs.tb}}">HOW DO WE KNOW?</button>
+<div class="drw" style="left:44px;top:104px;width:1360px;height:{{tp.h}}px;border-bottom:{{tp.bd}};visibility:{{tp.vis}};transition:height .45s cubic-bezier(.2,.7,.2,1),visibility 0s linear {{tp.vd}}s">
+<div class="in" style="left:0;top:0;width:1360px;height:212px;box-sizing:border-box;padding:0 28px">
+<div style="display:flex;justify-content:space-between;align-items:center;height:36px"><span class="cap" style="color:#111">How do we know? · {{tp.scope}}</span><button type="button" class="btn" onClick="{{closeDr}}">Close</button></div>
+<sc-for list="{{tp.rows}}" as="r" hint-placeholder-count="6">
+<div style="display:grid;grid-template-columns:22px 104px 600px minmax(0,1fr);gap:12px;align-items:center;height:28px;border-top:1px solid #CFCFCA"><span class="tx {{r.tx}}"></span><span class="cap" style="color:#111">{{r.tag}}</span><span style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{r.claim}}</span><span style="font-size:12.5px;color:#55554F;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{r.how}}</span></div>
+</sc-for>
+</div>
+</div>
+
+<button type="button" class="tab" onClick="{{bt.tab}}" aria-expanded="{{bt.exp}}" style="left:560px;top:770px;width:320px;height:36px;background:{{bt.bg}};color:{{bt.fg}};visibility:{{tabs.rb}}">THE RIVER · TIME</button>
+<div class="drw" style="left:44px;bottom:130px;width:1360px;height:{{bt.h}}px;border-top:{{bt.bd}};visibility:{{bt.vis}};transition:height .45s cubic-bezier(.2,.7,.2,1),visibility 0s linear {{bt.vd}}s">
+<div class="in" style="left:0;bottom:0;width:1360px;height:212px">
+<div class="ab" style="left:28px;top:0;width:1304px;height:36px;display:flex;justify-content:space-between;align-items:center"><span class="cap" style="color:#111">The river · this system’s recorded time · Boston Celtics · Reality</span><span class="mono" style="font-size:11.5px;color:#55554F">time is not to scale</span><button type="button" class="btn" onClick="{{closeDr}}">Close</button></div>
+<div class="ab" style="left:28px;top:150px;width:1304px;height:3px;background:#111"></div>
+<div class="ab mono" style="left:1130px;top:158px;width:202px;text-align:right;font-size:11.5px;font-weight:600;letter-spacing:.06em">NOW · 29 SEP 2026</div>
+<span class="pulse ab" style="left:1327px;top:146px;width:11px;height:11px"></span>
+<sc-for list="{{bt.doors}}" as="d" hint-placeholder-count="3">
+<div class="ab" style="left:{{d.stem}}px;top:126px;width:2px;height:26px;background:#111"></div>
+<button type="button" class="dor" onClick="{{d.go}}" aria-pressed="{{d.on}}" style="left:{{d.x}}px;top:46px;width:300px;height:80px"><span class="dg {{d.gc}}"></span><span style="display:block;padding-bottom:2px"><span class="mono" style="display:block;font-size:11.5px;font-weight:600;letter-spacing:.06em">{{d.date}}</span><span class="dq" style="display:block;font-size:14.5px;font-weight:600;line-height:1.25;margin-top:2px">{{d.q}}</span></span></button>
+</sc-for>
+<div class="ab" style="left:28px;top:172px;width:1080px;font-size:13.5px;line-height:1.35"><b>{{bt.head}}</b> {{bt.note}}</div>
+</div>
+</div>
+
+<button type="button" class="tab" onClick="{{lf.tab}}" aria-expanded="{{lf.exp}}" style="left:8px;top:216px;width:36px;height:250px;writing-mode:vertical-rl;transform:rotate(180deg);background:{{lf.bg}};color:{{lf.fg}};visibility:{{tabs.lb}}">SEATS · WHO COULD YOU BE?</button>
+<div class="drw" style="left:44px;top:104px;width:{{lf.w}}px;height:666px;border-right:{{lf.bd}};visibility:{{lf.vis}};transition:width .45s cubic-bezier(.2,.7,.2,1),visibility 0s linear {{lf.vd}}s">
+<div class="in" style="left:0;top:0;width:316px;height:666px;box-sizing:border-box;padding:0 22px 0 20px">
+<div style="display:flex;justify-content:space-between;align-items:center;height:36px"><span class="cap" style="color:#111">Seats</span><button type="button" class="btn" onClick="{{closeDr}}">Close</button></div>
+<div style="font-size:21px;font-weight:600;line-height:1.15;margin:6px 0 14px">Who could you be here?</div>
+<div class="seat" style="background:#111;color:#F7F7F4;border:2px solid #111"><div class="cap" style="color:#F7F7F4">{{lf.oTag}}</div><div style="font-size:17px;font-weight:600;margin-top:2px">Observer</div><div style="margin-top:3px;line-height:1.35">{{lf.oText}}</div></div>
+<button type="button" class="seat" onClick="{{lf.take}}" style="background:#F7F7F4;border:2px solid #007A33"><div class="cap" style="color:#007A33">{{lf.gTag}}</div><div style="font-size:17px;font-weight:600;margin-top:2px">GM · in your World, Boston · Year Two</div><div style="margin-top:3px;line-height:1.35">{{lf.gText}}</div></button>
+<button type="button" class="seat" onClick="{{lf.refuse}}" style="background:transparent;border:1.5px solid #77776F"><div class="cap">Observe only</div><div style="font-size:17px;font-weight:600;margin-top:2px">Boston’s real front office</div><div style="margin-top:3px;line-height:1.35;color:#55554F">Observed with sources, not played.</div></button>
+<sc-if value="{{lf.ref}}" hint-placeholder-val="{{false}}">
+<div role="alert" style="box-sizing:border-box;border:1.5px solid #111;padding:10px 12px;font-size:13.5px;line-height:1.4"><b class="mono" style="display:inline-block;margin-bottom:4px;padding:1px 8px;background:#111;color:#F7F7F4;font-size:12px;letter-spacing:.06em">REFUSED · RULE</b><br>Real people are observed, not worn. You can watch the real front office and read its sources; nobody can sit in its seat.</div>
+</sc-if>
+</div>
+</div>
+
+<button type="button" class="tab" onClick="{{rt.tab}}" aria-expanded="{{rt.exp}}" style="left:1404px;top:216px;width:36px;height:250px;writing-mode:vertical-rl;background:{{rt.bg}};color:{{rt.fg}};visibility:{{tabs.wi}}">WHAT IF?</button>
+<div class="drw" style="left:{{rt.l}}px;top:104px;width:{{rt.w}}px;height:666px;border-left:{{rt.bd}};visibility:{{rt.vis}};transition:left .45s cubic-bezier(.2,.7,.2,1),width .45s cubic-bezier(.2,.7,.2,1),visibility 0s linear {{rt.vd}}s">
+<div class="in" style="right:0;top:0;width:316px;height:666px;box-sizing:border-box;padding:0 20px 0 22px">
+<div style="display:flex;justify-content:space-between;align-items:center;height:36px"><span class="cap" style="color:#111">What if?</span><button type="button" class="btn" onClick="{{closeDr}}">Close</button></div>
+<p style="margin:2px 0 8px;font-size:13px;line-height:1.4">Pull the orange handle on the payroll bar, $180M to $235M. Let go and it returns. Nothing is kept unless you cut a branch.</p>
+<div><div class="cap" style="color:{{rt.pc}};margin-bottom:3px">{{rt.pt}}</div>
+<div style="display:flex;gap:8px">
+<div style="flex:1;box-sizing:border-box;border:2px solid {{rt.pc}};background:#F7F7F4;padding:4px 8px"><div class="cap" style="color:{{rt.pc}};font-size:11px">Cap payroll</div><div class="mono" style="font-size:21px;font-weight:600;color:{{rt.pc}};line-height:1.2">{{rt.pull}}</div></div>
+<div style="flex:1;box-sizing:border-box;border:2px solid {{rt.pc}};background:#F7F7F4;padding:4px 8px"><div class="cap" style="color:{{rt.pc}};font-size:11px">Tax salary</div><div class="mono" style="font-size:21px;font-weight:600;color:{{rt.pc}};line-height:1.2">{{rt.tsm}}</div></div>
+</div>
+<div class="mono" style="font-size:11.5px;color:#55554F;margin-top:3px">same shift ({{rt.dT}}) · two numbers, never averaged</div></div>
+<div class="cap" style="margin:8px 0 1px">Lines, at this number</div>
+<sc-for list="{{rt.rows}}" as="q" hint-placeholder-count="4">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:6px;border-top:1px solid #CFCFCA;padding:3px 0;font-size:13px"><span>{{q.nm}} <span class="mono" style="font-size:11.5px;color:#55554F">{{q.v}}</span></span><span class="mono" style="font-size:12px;font-weight:600;color:{{q.c}}">{{q.st}}</span></div>
+</sc-for>
+<div class="cap" style="margin:8px 0 1px">What these lines cost in rules</div>
+<sc-for list="{{rt.rules}}" as="ru" hint-placeholder-count="2">
+<div style="display:flex;gap:8px;border-top:1px solid #CFCFCA;padding:3px 0;font-size:12.5px;line-height:1.35"><span class="tx tx-o" style="width:12px;height:12px;margin-top:3px"></span><span>{{ru.t}}</span></div>
+</sc-for>
+<div style="border-top:1px solid #CFCFCA;padding:6px 0 0;font-size:13px;line-height:1.4"><div style="display:flex;gap:8px"><span class="tx tx-a" style="margin-top:6px;border-color:#C2410C"></span><span style="box-sizing:border-box;border:2px solid #111;padding:2px 8px;font-weight:700">Tax {{rt.taxT}}</span></div><div style="font-size:11.5px;color:#55554F;margin-top:3px;line-height:1.35">illustrative, authored: simplified brackets ($1.50, $1.75, $2.50, $3.25, $3.75, $4.25… per $1 over, $5M steps). Repeat payers pay more · verify.</div></div>
+<div style="display:flex;gap:10px;margin:8px 0 6px"><button type="button" class="btn" onClick="{{rt.letgo}}">Let go</button><button type="button" class="btn og" onClick="{{rt.cut}}" disabled="{{rt.cutOff}}">Cut a branch</button></div>
+<sc-if value="{{rt.hasBr}}" hint-placeholder-val="{{false}}">
+<div style="box-sizing:border-box;border:2px solid #C2410C;background:#F7F7F4;padding:8px 10px;font-size:12.5px;line-height:1.4;color:#C2410C;font-weight:600">BRANCH · cut 29 Sep 2026 by you · payroll {{rt.brV}} · Reality unchanged</div>
+</sc-if>
+<div role="status" style="font-size:12.5px;line-height:1.4;margin-top:6px">{{rt.msg}}</div>
+</div>
+</div>
+
+<div class="ab" style="left:0;top:806px;width:1440px;height:93px;background:#F7F7F4;border-top:1px solid #CFCFCA;z-index:30"></div>
+<div class="ab srf" style="left:24px;top:810px;width:1392px;font-size:17px;line-height:22px;color:#111;z-index:31">The Browser, in this proposal: home is what keeps time for you; a question places you; a seat is signed for; leaving is an act; following is keeping.</div>
+<div class="ab mono" style="left:24px;top:836px;width:1392px;font-size:11px;line-height:13px;color:#55554F;z-index:31">ALSO IN THIS BROWSER · PROPOSAL NOTES, NOT BUILT HERE · “Histories” mode: any presence opens as tracks (Tracks board) · Follow a variable across a border (Borders) · Weigh two presences (Specimen) · A World’s windows onto Reality (Floor) · The scale lens, Wider / Finer, carrying one state (Biology · Focus)</div>
+<div class="ab mono" style="left:24px;top:868px;width:700px;font-size:11px;line-height:13px;color:#55554F;z-index:31">COMMERCIAL LENS · Hypothesis: asking, arriving and observing are free and spread the medium; presences that keep running (Worlds, kept follows) and signed seats are what people pay for.</div>
+<div class="ab mono" style="right:24px;top:868px;width:660px;text-align:right;font-size:11px;line-height:13px;color:#55554F;z-index:31">PROTOTYPE · DESIGN PROPOSAL · a composition of Wave 2 critic picks · figures: BOW Economics Live fixture as of 29 Sep 2026, approx., verify · World values authored</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+const ORG = '#C2410C', FLASH = '#F1D98B';
+const LN = { cap: 164.961, tax: 200.428, a1: 209.015, a2: 221.686 }, PAY = 203.6, TSAL = 198.722406, WPAY = 222.8, DEN = 2.7;
+const W_START = 86400 + 9 * 3600 + 13 * 60;
+const DL = { 1: 86400 + 11 * 3600, 2: 2 * 86400 + 19 * 3600 + 1800, 3: 38 * 86400 + 15 * 3600 };
+const MT = [null, { short: 'Denver', dl: 'expires 11:00' }, { short: 'Roster', dl: 'before Wednesday’s game · Wed 19:30 [authored]' }, { short: 'Owner', dl: 'Week 14 · Thu 15:00 [authored]' }];
+const HIST = [{ w: 'Year One', t: 'funded Business over Basketball Ops (analytics staff cut).' }, { w: 'Week 6', t: 'traded Derrick White and a backup big for Jimmy Butler.' }, { w: 'Week 9', t: 'lost to Denver 112–115 at home · 20 possessions recorded.' }];
+const M1 = (v) => '$' + v.toFixed(1) + 'M';
+const P2 = (n) => (n < 10 ? '0' : '') + n;
+const DN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const tOf = (s) => { s = Math.floor(s); const r = s % 86400; return { d: DN[Math.floor(s / 86400) % 7], h: P2(Math.floor(r / 3600)), m: P2(Math.floor(r % 3600 / 60)), s: P2(r % 60) }; };
+const HMS = (s) => { const o = tOf(s); return o.h + ':' + o.m + ':' + o.s; };
+const DHM = (s) => { const o = tOf(s); return o.d + ' ' + o.h + ':' + o.m; };
+const DHMS = (s) => DHM(s) + ':' + tOf(s).s;
+const hh = (s) => { const o = tOf(s); return o.h + ':' + o.m; };
+const CD = (s) => { s = Math.max(0, Math.floor(s)); const d = Math.floor(s / 86400), r = s % 86400; return (d ? d + 'd ' : '') + P2(Math.floor(r / 3600)) + ':' + P2(Math.floor(r % 3600 / 60)) + ':' + P2(r % 60); };
+const TK = (() => { let d = ''; for (let a = 0; a < 360; a += 30) { const r = a % 90 === 0 ? 42 : 47, t = a * Math.PI / 180; d += 'M' + (60 + r * Math.sin(t)).toFixed(1) + ' ' + (60 - r * Math.cos(t)).toFixed(1) + 'L' + (60 + 52 * Math.sin(t)).toFixed(1) + ' ' + (60 - 52 * Math.cos(t)).toFixed(1); } return d; })();
+const taxSim = (p) => { let o = p - LN.tax, t = 0, i = 0; const R = [1.5, 1.75, 2.5, 3.25, 3.75, 4.25, 4.75, 5.25]; while (o > 0) { const s = Math.min(5, o); t += s * R[Math.min(i, R.length - 1)]; o -= s; i++; } return t; };
+// ONE STATE OBJECT. worldOf(res) computes the seat's facts from what has been done; LNS(W) turns them into every line
+// that shows them (matters, handover draft, question line). Nothing below is written per branch.
+const worldOf = (res) => { const took = res[1] === 'took'; const pay = WPAY - (took ? DEN : 0); return { pay: pay, roster: 15 - (took ? 1 : 0), gap: pay - LN.a2 }; };
+const gapT = (g) => (g > 0 ? M1(g) + ' over' : M1(-g) + ' under');
+const LNS = (W) => {
+  const met = W.gap <= 0, moved = W.pay !== WPAY, room = W.roster < 15;
+  return {
+    met: met,
+    q: (moved ? (met ? 'now yes' : 'now no') : (met ? 'Yes' : 'No')) + ' — ' + gapT(W.gap) + (moved ? '.' : ' the World’s second apron (Reality: ' + (PAY <= LN.a2 ? 'yes, ' + M1(LN.a2 - PAY) + ' under' : 'no, ' + M1(PAY - LN.a2) + ' over') + ').'),
+    t2: room ? 'Roster at ' + W.roster + ' · room for the call-up without a cut' : 'Roster at ' + W.roster + ' with a two-way call-up pending',
+    s2: 'Call-up open before Wed 19:30 [authored]' + (room ? '; nobody has to be cut.' : '; 15 is full, so a cut comes first.'),
+    t3: met ? 'Payroll ' + M1(W.pay) + ' · ' + M1(-W.gap) + ' under the World’s second apron — met unless you add salary' : 'Owner’s note: under the second apron by the deadline',
+    s3: met ? 'Owner’s note, Week 14 · Thu 15:00 [authored]: met now; adding salary reopens it.' : 'Payroll ≈ ' + M1(W.pay) + ', ' + gapT(W.gap) + ' the World’s second apron; the owner wants it under by Week 14.',
+    h2: 'Roster: ' + W.roster + (room ? '. Call-up open before Wed 19:30.' : ', full. Call-up open before Wed 19:30; cut first.'),
+    h3: 'Owner: payroll ' + M1(W.pay) + ', ' + gapT(W.gap) + (met ? '. Met unless you add salary.' : '; wants it under by Week 14.')
+  };
+};
+const WORDS = {
+  rea: ['Boston Celtics · Reality', 'LIVE, observed. It keeps changing without you. You can watch it and follow it; you cannot act on the real team.'],
+  wor: ['Boston · Year Two', 'CALENDAR, recorded in BOW. It advances on Mondays whether you are there or not. Your acts live here, not in the NBA’s books.'],
+  mom: ['17 Jun 2017', 'STOPPED, observed. A frozen morning in Reality’s past. The half after it is sealed: you find out by living it.'],
+  frk: ['Your fork', 'DIVERGED, yours. Two hands from one pivot: black is Reality, orange is your branch. It carries your name and the date it diverged.'],
+  pub: ['Holiday kept', 'DIVERGED, someone else’s. Their branch, in their ink, with their name stamped on it.'],
+  mod: ['Second-apron consequences', 'COUNTER, modeled. A model keeps a count, not time. RUN 000: an outline ring, because no run has happened; the hatch arrives at RUN 001.'],
+  gen: ['Garden nights', 'STIPPLED, unreviewed. Built by a creator; BOW has not reviewed it, so it looks unlike the official faces.'],
+  ker: ['Kept · Boston under the second apron?', 'LIVE, kept. You hung this arrival on your wall. It follows Reality, so its hand keeps moving; the thin blue ring marks it as kept, not a second Reality.'],
+  pul: ['Your pull', 'DIVERGED, yours. The branch you cut from the payroll bar. Orange frame, your ink, not Reality.']
+};
+
+class Component extends DCLogic {
+  componentDidMount() { this.t0 = Date.now(); this.iv = setInterval(() => this.tickFn(), 100); }
+  componentWillUnmount() { clearInterval(this.iv); }
+  tickFn() {
+    const S = this.state || {}; const n = Date.now(); const dt = Math.min(1, (n - (S.last || n)) / 1000);
+    let w = S.wAbs === undefined ? W_START : S.wAbs; const o = { now: n, last: n };
+    if (S.worldOn) { w += dt * (S.x60 ? 60 : 1); o.wAbs = w; const add = this.sweep(S, w); if (add) Object.assign(o, add); }
+    this.setState(o);
+  }
+  sweep(S, w) {
+    if (!S.signed) return null;
+    const res = { ...(S.res || {}) }; const tk = S.tk || {}; const log = (S.log || []).slice(); let ch = false;
+    [1, 2].forEach((i) => {
+      if (tk[i] === true && !res[i] && w >= DL[i]) {
+        res[i] = 'lapsed'; ch = true;
+        const ini = S.ini || 'KM'; const inSeat = S.phase === 'occupy' || S.phase === 'leave';
+        const who = S.left === 'vacate' ? 'against the vacant seat · owner holding' : S.left === 'handover' ? 'against the interim · handed over by ' + ini : (inSeat ? 'against the seat held by ' + ini : 'against ' + ini);
+        log.push({ w: DL[i], n: i, k: 'lapse', tag: 'NO ACT', t: (i === 1 ? 'Denver’s offer lapsed' : 'Roster call-up lapsed') + ' — ' + who });
+      }
+    });
+    return ch ? { res, log } : null;
+  }
+  goto(ph, o) { this.setState({ ...(ph === 'home' ? { q: '' } : {}), phase: ph, view: undefined, drawer: null, refuse: false, msg: '', addrMsg: '', addrDraft: undefined, riverDoor: null, pullV: PAY, pullMsg: '', ...(o || {}) }); }
+  ask(t) {
+    const S = this.state || {}; const q = t === undefined ? (S.q || '') : t;
+    if (/apron|payroll|celtic|boston/i.test(q)) this.goto('arrive', { q: q, visited: true, askMsg: '' });
+    else this.setState({ askMsg: q.trim() ? 'This board answers one question. Use the suggestion above.' : 'Type a question, or use the suggestion above.' });
+  }
+  toSeat() {
+    const S = this.state || {};
+    if (S.signed && !S.left) this.goto('occupy');
+    else if (S.signed) this.setState({ drawer: null, msg: 'You left this seat. Taking it again is not built in this board.' });
+    else this.goto('threshold', { worldOn: true, wAbs: S.worldOn ? S.wAbs : W_START, last: Date.now() });
+  }
+  sign() {
+    const S = this.state || {}; const ini = (S.ini || '').trim().toUpperCase().slice(0, 3); const tk = S.tk || {};
+    if (!ini || ![1, 2, 3].every((i) => tk[i] !== undefined)) return;
+    const n = [1, 2, 3].filter((i) => tk[i] === true).length; if (!n) return;
+    const w = S.wAbs === undefined ? W_START : S.wAbs;
+    this.goto('occupy', { signed: true, signW: w, ini: ini, ini2: ini, tk: { ...tk }, res: {}, log: [...(S.log || []), { w: w, k: 'sign', tag: 'RECORDED', t: 'signed ' + ini + ' as GM · ' + n + ' taken' + (n < 3 ? ', ' + (3 - n) + ' handed back' : '') }] });
+  }
+  act(kind) {
+    const S = this.state || {}; const tk = S.tk || {}; const res = { ...(S.res || {}) };
+    if (!S.signed || res[1] || tk[1] !== true || S.left) return;
+    const w = S.wAbs; res[1] = kind;
+    this.setState({ res, flashAt: Date.now(), addrDraft: undefined, log: [...(S.log || []), { w: w, n: 1, k: 'act', kind: kind, tag: 'RECORDED', t: 'Denver: ' + (kind === 'took' ? 'took their second' : 'declined') + ' · ' + (S.ini || 'KM') }] });
+  }
+  leaveNow(kind) {
+    const S = this.state || {}; const w = S.wAbs; const tk = S.tk || {}; const res = S.res || {};
+    const open = [1, 2, 3].filter((i) => tk[i] === true && !res[i]).length; const ini = (S.ini2 || S.ini || 'KM').trim().toUpperCase();
+    const t = kind === 'handover' ? 'handed over to the interim by ' + ini + ' · ' + open + (open === 1 ? ' open matter' : ' open matters') + ', one line each' : 'vacated the seat · matters revert to the owner';
+    this.goto('home', { left: kind, log: [...(S.log || []), { w: w, k: 'leave', tag: 'RECORDED', t: t }] });
+  }
+  monday() {
+    const S = this.state || {}; const add = this.sweep({ ...S, phase: 'home' }, 604800);
+    this.setState({ wAbs: 604800, monday: true, msg: 'Week 10 has begun.', ...(add || {}) });
+  }
+  tabTo(k) { const S = this.state || {}; this.setState({ drawer: S.drawer === k ? null : k, refuse: false, pullV: PAY, pullMsg: '', riverDoor: null }); }
+  faceClick(id) {
+    if (id === 'wor') this.toSeat();
+    else if (id === 'ker') this.goto('arrive');
+    else if (id === 'pul') this.goto('arrive', { view: 'branch', msg: 'Your branch, in its own frame. Reality has not moved.' });
+    else this.setState({ hov: id, msg: 'Opening this presence is not built here. This path is: ask, arrive, seat, sign, leave, home.' });
+  }
+  goAddr(raw) {
+    const S = this.state || {}; const t = String(raw).toLowerCase();
+    if (/bow:\/\/home/.test(t)) this.goto('home');
+    else if (/branches\/pull/.test(t) && S.branch !== undefined && S.branch !== null) this.goto('arrive', { view: 'branch' });
+    else if (/celtics\/reality/.test(t)) this.goto('arrive', { visited: true });
+    else if (/boston-year-two/.test(t)) this.toSeat();
+    else this.setState({ addrMsg: 'Refused by the address rule: nothing lives at that address in this prototype.' });
+  }
+  renderVals() {
+    const S = this.state || {}; const now = S.now || Date.now();
+    const ph = S.phase || 'home';
+    const home = ph === 'home', arr = ph === 'arrive', thr = ph === 'threshold', occ = ph === 'occupy', lv = ph === 'leave', inW = thr || occ || lv;
+    const visited = !!S.visited, signed = !!S.signed, left = S.left || null;
+    const tk = S.tk || {}, res = S.res || {}, log = S.log || [];
+    const ini = signed ? S.ini : ((S.ini || '').trim().toUpperCase() || 'KM');
+    const wAbs = S.wAbs === undefined ? W_START : S.wAbs;
+    const week = 9 + Math.floor(wAbs / 604800);
+    const dr = S.drawer || null;
+    const kept = !!S.kept, hasBr = S.branch !== undefined && S.branch !== null;
+    const bv = arr && S.view === 'branch' && hasBr;
+    const isTk = (i) => tk[i] === true;
+    const nTaken = [1, 2, 3].filter(isTk).length, nSet = [1, 2, 3].filter((i) => tk[i] !== undefined).length, nHand = nSet - nTaken;
+    const openIds = signed ? [1, 2, 3].filter((i) => isTk(i) && !res[i]) : [];
+    // ---- the one state object, and what changed because of the act ----
+    const W = worldOf(res), B = worldOf({}), L = LNS(W);
+    const actL = log.find((l) => l.k === 'act'), tookL = log.find((l) => l.k === 'act' && l.kind === 'took');
+    const chg2 = W.roster !== B.roster, chg3 = W.pay !== B.pay, actT = tookL ? hh(tookL.w) : '';
+    const fon = !!S.flashAt && now - S.flashAt < 330;
+    const fx = (c) => ({ fl: fon && c ? FLASH : 'transparent', flT: fon ? 'none' : 'background-color .6s', tagD: c && tookL ? 'inline-block' : 'none' });
+    // live hands
+    const t0 = this.t0 || now, el = (now - t0) / 1000, d0 = new Date(t0);
+    const s0 = d0.getSeconds() + d0.getMilliseconds() / 1000, m0 = d0.getMinutes() + s0 / 60, h0 = (d0.getHours() % 12) + m0 / 60;
+    const sd = (s0 * 6 + el * 6).toFixed(1), md = (m0 * 6 + el * 0.1).toFixed(2), hd = (h0 * 30 + el / 120).toFixed(2);
+    // ---- content box (drawers push it) ----
+    const Lw = dr === 'left' ? 316 : 0, Rw = dr === 'right' ? 316 : 0, Th = dr === 'top' ? 212 : 0, Bh = dr === 'bottom' ? 212 : 0;
+    const cx0 = 68 + Lw, cx1 = 1380 - Rw, cy0 = 112 + Th, cy1 = 762 - Bh, cw = cx1 - cx0, chh = cy1 - cy0;
+    const cmp = chh < 560;
+    // ---- address ----
+    const pv = S.pullV === undefined ? PAY : S.pullV;
+    const pullOn = arr && !bv && dr === 'right', pulling = pullOn && Math.abs(pv - PAY) > 0.049;
+    let addr = 'bow://home · as you';
+    if (bv) addr = 'bow://you/branches/pull-' + S.branch.toFixed(1) + '@2026-09-29/payroll?from=celtics/reality';
+    else if (arr) addr = 'bow://celtics/reality@2026-09-29/payroll?as=observer' + (pulling ? '&pull=' + pv.toFixed(1) : '');
+    else if (thr) addr = 'bow://boston-year-two/w' + week + '/front-office?as=gm:unsigned';
+    else if (occ) addr = 'bow://boston-year-two/w' + week + '/front-office?as=gm:' + ini + (res[1] ? '&act=denver-' + (res[1] === 'took' ? 'take' : res[1] === 'declined' ? 'decline' : 'lapsed') : '');
+    else if (lv) addr = 'bow://boston-year-two/w' + week + '/front-office?as=gm:' + ini + '&leaving';
+    const FR = { top: '#how-do-we-know', bottom: '#river', left: '#seats', right: '#what-if' };
+    if (!home && dr) addr += FR[dr];
+    const addrShown = S.addrDraft !== undefined && S.addrFor === addr ? S.addrDraft : addr;
+    // ---- rail ----
+    const rIdx = home ? (visited ? 6 : 1) : arr ? 2 : thr ? 3 : occ ? 4 : 5;
+    const RL = ['HOME', 'ASK → ARRIVE', 'SEAT → THRESHOLD', 'OCCUPY', 'LEAVE', 'HOME AGAIN'];
+    const rail = RL.map((t, i) => ({ n: i + 1, t: t, cls: i + 1 === rIdx ? 'on' : (i + 1 < rIdx ? 'dn' : ''), cur: i + 1 === rIdx ? 'step' : 'false' }));
+    // ---- chrome buttons: three distinct backs ----
+    const kOn = kept && !bv;
+    const cb = {
+      op: home ? 0 : 1, vis: home ? 'hidden' : 'visible',
+      keepD: inW ? 'none' : 'block', keepOff: bv,
+      keepT: bv ? 'On your wall' : kept ? 'Kept · on your wall' : 'Keep this', keepP: kOn ? 'true' : 'false', keepBg: kOn ? '#111' : 'transparent', keepFg: kOn ? '#F7F7F4' : '#111',
+      keep: () => this.setState({ kept: !kept, msg: kept ? '' : 'Hung on your wall. It will be waiting at home.' }),
+      share: () => this.setState({ msg: 'Share sends the address above. Whoever opens it arrives as an observer.' }),
+      leaveD: occ ? 'block' : 'none', leave: () => this.goto('leave'), leaveOff: !occ,
+      rewind: () => this.goto('arrive', { msg: bv ? 'Rewound to Reality’s arrival. Your branch is on your wall.' : 'Rewound to the arrival. Nothing changed' + (signed && !left ? '; your clocks keep running.' : '.') }), rewOff: !(thr || occ || lv || bv),
+      branch: () => this.goto('arrive', { view: 'branch', msg: 'Back at the branch point. Reality has not moved.' }), brOff: !hasBr || home || bv
+    };
+    // ---- HALL ----
+    const hov = S.hov || null;
+    const monday = !!S.monday;
+    const base = [
+      { id: 'rea', n1: 'Boston Celtics', n2: 'Reality · live' },
+      { id: 'wor', n1: 'Boston · Year Two', n2: 'your World · Week ' + week },
+      { id: 'mom', n1: '17 Jun 2017', n2: 'a Moment · stopped' },
+      { id: 'frk', n1: 'Your fork', n2: 'Keep No. 1 · by you · diverged 17 Jun 2017' },
+      { id: 'pub', n1: 'Holiday kept', n2: 'by [author] · diverged Jun 2025' },
+      { id: 'mod', n1: 'Second-apron consequences', n2: 'v0.3 · RUN 000 · sketch, not a run' },
+      { id: 'gen', n1: 'Garden nights', n2: 'by [creator] · unreviewed' }
+    ];
+    if (kept) base.push({ id: 'ker', n1: 'Kept · Boston under the second apron?', n2: 'follows Reality', ex: 0 });
+    if (hasBr) base.push({ id: 'pul', n1: 'Your pull · ' + M1(S.branch), n2: 'by you · diverged from Reality', ex: kept ? 1 : 0 });
+    const KEYS = ['rea', 'wor', 'mom', 'frk', 'pub', 'mod', 'gen', 'ker', 'pul'];
+    const RUN = S.run || 0;
+    const NX = { rea: 'next: [next preseason game · Reality feed]', wor: 'next: Mon · Week ' + (week + 1), mom: 'next: none · it is stopped', frk: 'next: when you move it', pub: 'next: when [author] moves it', mod: 'next: RUN 001, when it runs', gen: 'next: when [creator] updates', ker: 'next: [next preseason game · Reality feed]', pul: 'next: when you move it' };
+    const pres = base.map((b, i) => {
+      const ex = b.ex !== undefined, d = ex ? 96 : 120, cx = ex ? 1166 + 160 * b.ex : 111 + 150 * i, y = ex ? 314 : 302;
+      const is = {}; KEYS.forEach((k) => { is[k] = k === b.id; });
+      const wr = WORDS[b.id];
+      return {
+        id: b.id, is: is, x: cx - d / 2, y: y, d: d, rh: y - 270, rx: cx - 1, lx: cx - 69, ly: y + d + 10, lw: 138, n1: b.n1, n2: b.n2, nx: NX[b.id],
+        aria: b.n1 + ', ' + b.n2 + '. ' + NX[b.id] + '. ' + wr[1], tk: TK, hd: hd, md: md, sd: sd, wd: ((week / 52) * 360).toFixed(1), arc: ((week / 52) * 213.6).toFixed(1), wk: week,
+        chgO: b.id === 'rea' && !visited ? 1 : 0, tickO: b.id === 'wor' && actL ? 1 : 0, hatchO: RUN >= 1 ? 1 : 0,
+        ul: hov === b.id ? 'underline' : 'none', op: ex ? (home ? 1 : 0) : 1, ty: ex ? (home ? 0 : -30) : 0,
+        click: () => this.faceClick(b.id), enter: () => this.setState({ hov: b.id }), leave: () => this.setState({ hov: null })
+      };
+    });
+    const wchips = [];
+    if (actL) wchips.push({ cls: 'c-g', tick: true, t: 'Denver: ' + (actL.kind === 'took' ? 'took their second' : 'declined') + ' · ' + hh(actL.w), t2: tookL ? 'payroll ' + M1(W.pay) + ' · roster ' + W.roster : '' });
+    log.filter((l) => l.k === 'lapse').forEach((l) => wchips.push({ cls: 'c-d', tick: false, t2: '', t: (l.n === 1 ? 'Denver' : 'Roster') + ': lapsed ' + (l.n === 1 ? hh(l.w) : DHM(l.w)) }));
+    if (signed && !left && openIds.length) wchips.push({ cls: 'c-a', tick: false, t2: '', t: openIds.length + (openIds.length === 1 ? ' clock' : ' clocks') + ' yours · next ' + CD(DL[openIds[0]] - wAbs) });
+    if (left === 'handover') wchips.push({ cls: 'c-t', tick: false, t2: '', t: 'seat: handed over · the interim holds' });
+    if (left === 'vacate') wchips.push({ cls: 'c-t', tick: false, t2: '', t: 'seat: vacant · matters with the owner' });
+    const acts = log.filter((l) => l.k === 'act').length, laps = log.filter((l) => l.k === 'lapse').length;
+    const summary = (signed ? 'Since you last looked: ' + acts + (acts === 1 ? ' act' : ' acts') + ' recorded in your World' + (laps ? ', ' + laps + (laps === 1 ? ' lapse' : ' lapses') + ' recorded as NO ACT' : '') + '. ' : 'Since you last looked: nothing recorded in your World. ') + 'Reality: no change you caused (it doesn’t take your acts).';
+    const logRows = (a2) => a2.map((l) => ({ w: l.k === 'lapse' ? DHM(l.w) : DHMS(l.w), t: (l.tag === 'NO ACT' ? 'NO ACT · ' : '') + l.t, tx: l.tag === 'NO ACT' ? 'tx-u' : 'tx-r' }));
+    const sorted = log.slice().sort((a, b) => a.w - b.w);
+    const keyY = wchips.length ? 574 : 610;
+    const hall = {
+      ty: home ? 0 : -880, op: home ? 1 : 0, vis: home ? 'visible' : 'hidden', vd: home ? 0 : 0.6, hid: home ? 'false' : 'true',
+      q: S.q === undefined ? '' : S.q, onQ: (e) => this.setState({ q: e && e.target ? e.target.value : '' }),
+      onAsk: (e) => { if (e && e.preventDefault) e.preventDefault(); this.ask(); },
+      sug: () => this.ask('Can Boston keep this roster under the second apron?'), askMsg: S.askMsg || '',
+      reaNote: visited ? 'no changes since you looked' : '2 changes since you looked [from the Reality feed]', pulseVis: visited ? 'hidden' : 'visible',
+      wHead: hov ? WORDS[hov][0] + ' —' : 'Words for each face', words: hov ? WORDS[hov][1] : 'appear on hover or focus.',
+      again: home && visited, summary: summary, logNote: log.length ? '' : 'Nothing yet. You have not signed for anything.',
+      stemO: wchips.length ? 1 : 0, keyX: wchips.length ? 430 : 44, keyY: keyY, wordsY: keyY + 25,
+      monday: () => this.monday(), monOff: monday,
+      monNote: monday ? 'Week 10. ' + (laps ? laps + (laps === 1 ? ' matter' : ' matters') + ' lapsed with nobody acting; the record says whom each fell on.' : 'Nothing lapsed.') : 'The calendar advances regardless. Any open matter that lapses is recorded as NO ACT' + (signed ? '.' : '; none of yours are open.'),
+      log: logRows(sorted)
+    };
+    // ---- ARRIVAL geometry: Reality's payroll, or your branch of it ----
+    const P = bv ? S.branch : PAY;
+    const Tm = TSAL + (bv ? S.branch - PAY : (pulling ? pv - PAY : 0)), tsOrg = pulling || bv;
+    const xO = (v) => Math.round((v - 160) / 80 * cw);
+    const bigFs = cmp ? 64 : 124, bigW = Math.round(bigFs * 3.5), sx = bigW + (cmp ? 36 : 48), sw = cw - sx, sFs = cmp ? 28 : 40;
+    const gapA2 = LN.a2 - P, pastTax = PAY - LN.tax, underTs = LN.tax - TSAL;
+    const sentence = (gapA2 >= 0 ? 'Yes, by about ' + M1(gapA2) : 'No, it is over the second apron by about ' + M1(-gapA2)) + ' on the apron’s own figure.';
+    const para = bv
+      ? 'Your pull: cap payroll ' + M1(P) + '. The tax-salary marker moves by the same amount, to ' + M1(Tm) + '; on tax salary, first-time payer, the simplified tax is ' + M1(taxSim(Tm)) + ' (illustrative, authored). Two numbers, never averaged. Reality is unchanged.'
+      : 'The tax line depends on which number you use: cap payroll ' + M1(PAY) + ' is ' + M1(pastTax) + ' past it; reported tax salary ' + M1(TSAL) + ' is ' + M1(underTs) + ' under it (salaryswish, 4 Sep 2026, verify). Two sources, shown side by side, not averaged.';
+    const sY = cmp ? 20 : 40;
+    const barTop = cmp ? 206 : 304, barH = cmp ? 40 : 64, bb = barTop + barH, labY = barTop - (cmp ? 46 : 62), axisY = bb + (cmp ? 128 : 196);
+    const barW = xO(P);
+    const lnDef = [['CAP', 'cap', 0], ['TAX LINE', 'tax', 1], ['FIRST APRON', 'a1', 0], ['SECOND APRON', 'a2', 0]];
+    const lines = lnDef.map((Ld) => { const x = xO(LN[Ld[1]]); return { x: x, top: labY, h: axisY - labY, nt: barTop, nh: barH, nw: x < barW ? 4 : 0, lx: Ld[2] ? x - 120 : x + 8, ly: labY, al: Ld[2] ? 'right' : 'left', t1: Ld[0], t2: '$' + LN[Ld[1]].toFixed(3) + 'M', c: '#111' }; });
+    const tsx = xO(Tm);
+    lines.push({ x: tsx, top: barTop - 12, h: barH + 26, nt: barTop, nh: barH, nw: tsx < barW ? 4 : 0, lx: -500, ly: 0, al: 'left', t1: '', t2: '', c: tsOrg ? ORG : '#111' });
+    const tsRight = tsx < 330;
+    const bkFs = cmp ? 14 : 16;
+    const b1y = bb + (cmp ? 40 : 58), b2y = bb + (cmp ? 62 : 90), b3y = bb + (cmp ? 88 : 130);
+    const brk = (Lv, nm, sfx, ovw) => { const o = P > Lv, xa = xO(Math.min(P, Lv)), xb = xO(Math.max(P, Lv)), d = Math.abs(P - Lv); return { x: xa, x2: xb - 2, w: Math.max(2, xb - xa), al: o ? 'right' : 'left', t: o ? (ovw === 'over' ? M1(d) + ' over ' : '+' + M1(d) + ' past ') + nm + sfx : M1(d) + ' under ' + nm + sfx, o: o }; };
+    const b1 = brk(LN.tax, 'the tax line', ', on cap payroll', 'past'), b2 = brk(LN.a1, 'the first apron', '', 'past'), b3 = brk(LN.a2, 'the second apron', '', 'over');
+    b1.y = b1y; b1.ty = b1y - 8; b1.tx = b1.o ? b1.x - 338 : b1.x + b1.w + 8;
+    b2.y = b2y; b2.ty = b2y - 8; b2.tx = b2.o ? b2.x - 338 : b2.x + b2.w + 8;
+    b3.y = b3y; b3.cy = b3y - 8; b3.ty = b3y + 8; const r3 = b3.o || b3.x + 470 > cw; b3.al = r3 ? 'right' : 'left'; b3.tx = r3 ? b3.x2 + 2 - 520 : b3.x;
+    const ticks = []; for (let v = 160; v <= 240; v += 10) { const x = xO(v); ticks.push({ x: x, lx: v === 160 ? 0 : v === 240 ? x - 60 : x - 30, al: v === 160 ? 'left' : v === 240 ? 'right' : 'center', t: '$' + v + 'M' }); }
+    const rx = xO(180) - 12, rw = xO(235) - xO(180) + 24, fTop = barTop - 10, fH = barH + 20;
+    const ar = {
+      op: arr ? 1 : 0, vis: arr ? 'visible' : 'hidden', vd: arr ? 0 : 0.5, ty: arr ? 0 : 26, pe: arr ? 'auto' : 'none',
+      x0: cx0, y0: cy0, cw: cw, chh: chh, bfW: cw + 32, bfH: chh + 16, bfO: bv ? 1 : 0,
+      hTx: bv ? 'tx-b' : 'tx-o', hC: bv ? ORG : '#111', hW: bv ? 700 : 400, pulseV: bv ? 'hidden' : 'visible',
+      head: bv ? M1(P) + ' · your pull · not Reality' : 'Boston Celtics · Reality · observer · live',
+      cap: bv ? 'Your pull of Boston’s payroll, 2026–27' : 'Boston payroll, 2026–27', capY: cmp ? 24 : 32, bigY: cmp ? 38 : 50, subY: (cmp ? 38 : 50) + bigFs + 2, bigW: bigW, subW: bigW,
+      sub: bv ? 'BRANCH · cut 29 Sep 2026 by you · payroll ' + M1(P) + ' · Reality unchanged' : 'cap payroll · BOW Economics Live fixture · approx. · verify', subC: bv ? ORG : '#55554F', subF: bv ? 700 : 400,
+      big: M1(P), ink: bv ? ORG : '#111', bigFs: bigFs, sx: sx, sY: sY, sw: sw, sFs: sFs, sentence: sentence, para: para, pFs: cmp ? 13 : 16, pGap: cmp ? 6 : 12,
+      barTop: barTop, barH: barH, barH2: barH + 16, barW: barW, bTx: xO(LN.cap) + 18, bTy: cmp ? 9 : 8, bSy: 40, bFs: cmp ? 15 : 22, bSo: cmp ? 0 : 1,
+      barT: bv ? 'your pull ≈ ' + M1(P) : 'cap payroll ≈ $203.6M', barS: bv ? 'authored: no model ran · illustrative' : 'BOW Economics Live fixture · approx. · verify',
+      lines: lines, tsT: tsOrg ? 'tax salary at your pull ' + M1(Tm) : 'tax salary (reported) ' + M1(TSAL), tsC: tsOrg ? ORG : '#111', tsLx: tsRight ? tsx + 8 : tsx - 268, tsAl: tsRight ? 'left' : 'right', tsLy: bb + (cmp ? 6 : 12), bkFs: bkFs,
+      b1: b1, b2: b2, b3: b3, b3Fs: cmp ? 22 : 30,
+      axisY: axisY, ticks: ticks, tickY: axisY + 9, noteY: axisY + (cmp ? 27 : 30),
+      fTop: fTop, fH: fH, fW: xO(pv) + 16, fOp: pulling ? 1 : 0, stY: bb + 9, pullT: M1(pv), pv: pv.toFixed(1), rx: rx, rw: rw, pcls: cmp ? 'sm' : '', pvis: pullOn ? 'visible' : 'hidden',
+      onPull: (e) => this.setState({ pullV: parseFloat(e && e.target ? e.target.value : PAY), pullMsg: '' })
+    };
+    // ---- WORLD ----
+    const wl = { op: inW ? 1 : 0, vis: inW ? 'visible' : 'hidden', vd: inW ? 0 : 0.5, ty: inW ? 0 : 26, pe: inW ? 'auto' : 'none' };
+    const tt = (i) => (i === 1 ? 'Denver called about your backup guard' : i === 2 ? L.t2 : L.t3);
+    const P1 = worldOf({ 1: 'took' });
+    const sub = (i) => {
+      if (!isTk(i)) return 'Handed back at the threshold. The interim still holds this one' + (i === 2 ? '; roster ' + W.roster + '.' : i === 3 ? '; payroll ' + M1(W.pay) + '.' : '.');
+      if (i === 1) {
+        if (res[1] === 'took') return 'Took their 2029 second for your backup guard ($2.7M, authored). He goes: payroll ' + M1(W.pay) + ', roster ' + W.roster + ' (computed).';
+        if (res[1] === 'declined') return 'Declined. Nothing else moves: payroll stays ' + M1(W.pay) + ', roster ' + W.roster + '.';
+        if (res[1] === 'lapsed') return 'Nobody answered by 11:00. The offer lapsed; the record says NO ACT.';
+        return 'Denver’s GM called about your backup guard · expires 11:00. Nobody has called back.';
+      }
+      if (res[i] === 'lapsed') return 'The date passed with no act. Recorded as NO ACT.';
+      return i === 2 ? L.s2 : L.s3;
+    };
+    const chipOf = (i) => {
+      const r = res[i];
+      if (!isTk(i)) return { cc: 'c-t', chip: 'HANDED BACK' };
+      if (r === 'took' || r === 'declined') return { cc: 'c-g', chip: r === 'took' ? 'TAKEN' : 'DECLINED' };
+      if (r === 'lapsed') return { cc: 'c-d', chip: 'LAPSED' };
+      if (left) return { cc: 'c-t', chip: left === 'handover' ? 'WITH INTERIM' : 'VACANT' };
+      return { cc: 'c-a', chip: CD(DL[i] - wAbs) };
+    };
+    const ms = [1, 2, 3].map((i) => { const c = chipOf(i); return { n: i, t: tt(i), sub: sub(i), cc: c.cc, chip: c.chip, cFs: c.chip.length > 9 ? 16 : 19, tickD: i === 3 && L.met ? 'inline-block' : 'none', ...fx(i === 2 ? chg2 : i === 3 ? chg3 : false), act: i === 1 && occ && isTk(1) && !res[1] && !left, prev: 'If he goes: payroll ' + M1(P1.pay) + ', ' + gapT(P1.gap) + ' the World’s second apron, roster ' + P1.roster + ' (computed).', take: () => this.act('took'), decline: () => this.act('declined') }; });
+    const sheet = [1, 2, 3].map((i) => { const v = tk[i]; return { n: i, t: tt(i), dl: MT[i].dl, cd: CD(DL[i] - wAbs), st: v === true ? 'yours when you sign' : v === false ? 'stays with the interim' : 'not set', tCls: v === true ? 'gf' : 'gn', hCls: v === false ? 'dk' : '', tP: v === true ? 'true' : 'false', hP: v === false ? 'true' : 'false', take: () => this.setState({ tk: { ...(this.state.tk || {}), [i]: true } }), back: () => this.setState({ tk: { ...(this.state.tk || {}), [i]: false } }) }; });
+    const thrBox = [['KNOW', 'Payroll ≈ ' + M1(W.pay) + ', ' + gapT(W.gap) + ' the World’s second apron.', '1px solid #111', '#E4E3DD'], ['CAN', 'Answer Denver; call up or hold; take Butler’s meeting.', '1px solid #111', '#F7F7F4'], ['CAN’T', 'Still be over the second apron at the Week 14 deadline without the owner’s sign-off (owner’s rule, authored).', '2px solid #111', 'transparent'], ['NOBODY IN THIS SEAT KNOWS', 'What Denver’s GM will do if you wait.', '2px dashed #111', 'transparent']].map((b) => ({ k: b[0], t: b[1], bd: b[2], bg: b[3] }));
+    const defOf = (i) => (i === 1 ? 'Denver: offer open till 11:00, a 2029 second for the guard.' : i === 2 ? L.h2 : L.h3);
+    const noteOf = (i) => { const n = (S.notes || {})[i], d = defOf(i); return n && n.b === d ? n.v : d; };
+    const gx = (v) => Math.max(0, Math.min(100, (v - 214) / 12 * 100));
+    const room = W.roster < 15;
+    const w = {
+      week: week, thr: thr, occ: occ || lv, lv: lv, rec: !lv, gap: cmp ? 10 : (occ || lv ? 16 : 12), rowPad: cmp ? 6 : (occ || lv ? 11 : 8), recPad: cmp ? 3 : 5, ttlFs: cmp ? 26 : 34, qFs: cmp ? 22 : (occ || lv ? 30 : 28), boxH: cmp ? 80 : 96,
+      clock: DN[Math.floor(wAbs / 86400) % 7] + ' ' + HMS(wAbs), thrBox: thrBox, sheet: sheet, hist: HIST, actT: actT,
+      q: { t: L.q, ...fx(chg3) },
+      ini: S.ini || '', onIni: (e) => this.setState({ ini: (e && e.target ? e.target.value : '').toUpperCase().slice(0, 3) }),
+      signOff: !((S.ini || '').trim()) || nSet < 3 || nTaken === 0, sign: () => this.sign(), setT: nSet + ' of 3 set',
+      signNote: nSet < 3 ? 'Set each matter first: taken, or handed back to the interim.' : nTaken === 0 ? 'All three handed back: nothing to sign for.' : nTaken + ' taken, ' + nHand + ' handed back. Lines you hand back stay with the interim.',
+      lw: Math.round(cw * 0.56), signT: HMS(S.signW || wAbs), mine: CD(wAbs - (S.signW || wAbs)),
+      x60: () => this.setState({ x60: !S.x60 }), x60P: S.x60 ? 'true' : 'false', x60Bg: S.x60 ? '#111' : 'transparent', x60Fg: S.x60 ? '#F7F7F4' : '#111',
+      ledger: nTaken + (nTaken === 1 ? ' matter, ' : ' matters, ') + nTaken + (nTaken === 1 ? ' clock' : ' clocks') + ', the pen.',
+      ms: ms, recShow: !cmp, recs: [...HIST.map((h) => ({ w: h.w, t: h.t, tx: 'tx-r' })), ...logRows(sorted)],
+      g: { ...fx(chg3), apX: gx(LN.a2).toFixed(2), barW: gx(W.pay).toFixed(2), brX: gx(Math.min(W.pay, LN.a2)).toFixed(2), brW: Math.abs(gx(W.pay) - gx(LN.a2)).toFixed(2), pay: 'World payroll ' + M1(W.pay), gap: '· ' + gapT(W.gap) + ' the second apron' },
+      r: { ...fx(chg2), t: 'Roster ' + W.roster + ' of 15' + (room ? ' · one slot open, so the two-way call-up fits' : ' · full, so the call-up needs a cut first') },
+      pips: Array.from({ length: 15 }, (_, k) => ({ bs: k < W.roster ? 'solid' : 'dashed', bg: k < W.roster ? '#111' : 'transparent' })), unkD: res[1] || cmp ? 'none' : 'block', axD: cw < 1000 ? 'none' : 'block',
+      ini2: S.ini2 === undefined ? (S.ini || '') : S.ini2, onIni2: (e) => this.setState({ ini2: (e && e.target ? e.target.value : '').toUpperCase().slice(0, 3) }),
+      hoOff: !((S.ini2 === undefined ? (S.ini || '') : S.ini2).trim()),
+      notes: openIds.map((i) => ({ n: i, short: MT[i].short, v: noteOf(i), ...fx(i === 2 ? chg2 : i === 3 ? chg3 : false), on: (e) => this.setState({ notes: { ...(this.state.notes || {}), [i]: { v: e && e.target ? e.target.value : '', b: defOf(i) } } }) })),
+      noOpen: openIds.length ? '' : 'Nothing is open. Leaving is still recorded.',
+      stay: () => this.goto('occupy'), handover: () => this.leaveNow('handover'), vacate: () => this.leaveNow('vacate')
+    };
+    // ---- EDGES ----
+    const tabsOn = arr || inW;
+    const tabs = { tb: tabsOn ? 'visible' : 'hidden', lb: tabsOn ? 'visible' : 'hidden', rb: arr ? 'visible' : 'hidden', wi: arr && !bv ? 'visible' : 'hidden' };
+    const isOpen = (k) => dr === k;
+    const mkTab = (k) => ({ tab: () => this.tabTo(k), exp: isOpen(k) ? 'true' : 'false', bg: isOpen(k) ? '#111' : '#EFEFEA', fg: isOpen(k) ? '#F7F7F4' : '#111' });
+    const T = (o, x) => ({ ...o, ...x, vis: x.open ? 'visible' : 'hidden', vd: x.open ? 0 : 0.5, bd: x.open ? '1.5px solid #111' : '0 solid #111' });
+    const LINES6 = { tx: 'tx-o', tag: 'OBSERVED', claim: 'Cap $164.961M · tax $200.428M · aprons $209.015M, $221.686M', how: 'league lines, June 2026 · verify' };
+    const provR = [
+      { tx: 'tx-o', tag: 'OBSERVED', claim: 'Payroll ≈ ' + M1(PAY) + ' (cap payroll)', how: 'BOW Economics Live fixture · approx. · verify' },
+      { tx: 'tx-o', tag: 'OBSERVED', claim: 'Tax salary ' + M1(TSAL) + ' (reported)', how: 'salaryswish.com, via BOW Economics Live world.ts, 4 Sep 2026 · verify' },
+      { tx: 'tx-o', tag: 'OBSERVED', claim: 'Apron test: cap hit − holds; Boston holds $0', how: 'BOW Economics Live world.ts · verify · so the apron’s own figure is ' + M1(PAY) },
+      LINES6,
+      { tx: 'tx-c', tag: 'COMPUTED', claim: M1(LN.a2 - PAY) + ' to the 2nd apron · ' + M1(pastTax) + ' past tax (cap payroll) · ' + M1(underTs) + ' under (tax salary)', how: 'follows exactly from the rows above; the two payroll numbers are not averaged' },
+      { tx: 'tx-a', tag: 'AUTHORED', claim: 'The pull’s tax bill uses simplified brackets', how: 'illustrative, authored · the real brackets are indexed each year · verify' }
+    ];
+    const dP = P - PAY;
+    const provB = [
+      { tx: 'tx-a', tag: 'AUTHORED', claim: 'Your pull: cap payroll ' + M1(P), how: 'you pulled the handle; no model ran · illustrative, authored' },
+      { tx: 'tx-a', tag: 'AUTHORED', claim: 'Tax-salary marker ' + M1(Tm) + ' (moved ' + (dP >= 0 ? '+' : '−') + M1(Math.abs(dP)) + ', same as payroll)', how: 'two numbers, never averaged · authored shift' },
+      { tx: 'tx-o', tag: 'OBSERVED', claim: 'Reality is unchanged: cap payroll ≈ ' + M1(PAY), how: 'BOW Economics Live fixture · approx. · verify' },
+      LINES6,
+      { tx: 'tx-c', tag: 'COMPUTED', claim: gapT(-gapA2) + ' the second apron, on the apron’s own figure', how: 'cap hit − holds; Boston holds $0 (BOW Economics Live world.ts · verify)' },
+      { tx: 'tx-a', tag: 'AUTHORED', claim: 'Tax on tax salary, first-time payer: ' + M1(taxSim(Tm)), how: 'illustrative, authored · simplified brackets · repeat payers pay more · verify' }
+    ];
+    const provW = [
+      { tx: 'tx-r', tag: 'RECORDED', claim: 'Payroll ≈ ' + M1(WPAY) + ' after Week 6', how: 'recorded in your World: White and a backup big for Butler' },
+      { tx: 'tx-a', tag: 'AUTHORED', claim: 'World rule: flat 1.5× tax (authored)', how: 'the NBA’s real tax is incremental' },
+      { tx: 'tx-a', tag: 'AUTHORED', claim: 'Denver 11:00 · roster before Wed 19:30 · owner’s deadline Week 14', how: 'deadlines and the interim’s sheet are authored for this prototype' },
+      { tx: 'tx-a', tag: 'AUTHORED', claim: 'Backup guard $2.7M · owner’s sign-off rule at Week 14', how: 'authored for this prototype (owner’s rule)' },
+      { tx: 'tx-c', tag: 'COMPUTED', claim: 'Payroll ' + M1(W.pay) + ' · ' + gapT(W.gap) + ' the World’s second apron', how: M1(WPAY) + (tookL ? ' − ' + M1(DEN) + ' backup guard' : '') + ' vs $221.686M · one state feeds the matters, the handover and your question' },
+      { tx: 'tx-u', tag: 'UNKNOWN', claim: 'What Denver’s GM does if you wait', how: 'nobody in this seat knows; you find out by living it' }
+    ];
+    const tp = { ...T(mkTab('top'), { open: isOpen('top'), h: isOpen('top') ? 212 : 0 }), scope: inW ? 'every number in this seat' : bv ? 'every number on your branch' : 'every number on this arrival', rows: inW ? provW : bv ? provB : provR };
+    const DO = [['17 Jun 2017', 'Philadelphia calls about No. 1', 110], ['12 May 2025', 'Your best player is down. What now?', 520], ['5 Feb 2026', 'Keep Simons or take Vučević?', 930]];
+    const rd = S.riverDoor;
+    const bt = { ...T(mkTab('bottom'), { open: isOpen('bottom'), h: isOpen('bottom') ? 212 : 0 }),
+      doors: DO.map((d, i) => ({ date: d[0], q: d[1], x: d[2], stem: d[2] + 21, on: rd === i ? 'true' : 'false', gc: rd === i ? 'on' : '', go: () => this.setState({ riverDoor: i }) })),
+      head: rd === undefined || rd === null ? 'Three doors, named by the question a person in them faced.' : DO[rd][0] + ' · ' + DO[rd][1],
+      note: rd === undefined || rd === null ? 'Pick one.' : 'Doors open into Moments — see the River board. Opening one is not built here.' };
+    const holding = signed && !left;
+    const lf = { ...T(mkTab('left'), { open: isOpen('left'), w: isOpen('left') ? 316 : 0 }),
+      oTag: inW && occ ? 'Outside view · closed while you sit' : 'You, now', oText: inW ? 'Read what the seat lets you read.' : 'Read the record. Nothing you do here changes it.',
+      gTag: holding ? 'Yours · signed ' + ini : inW ? 'Yours to take · choosing' : 'Yours to take', gText: holding ? 'You hold it. Return to the seat.' : 'Enter your World and sign for what is in motion.',
+      take: () => { if (arr) this.toSeat(); else this.setState({ drawer: null }); },
+      refuse: () => this.setState({ refuse: true }), ref: !!S.refuse };
+    const rtOpen = isOpen('right');
+    const tsm = TSAL + (pv - PAY), dPv = pv - PAY;
+    const rules = [];
+    if (pv > LN.a1) rules.push({ t: 'Past the first apron: no non-taxpayer MLE ($15.044M) · verify' });
+    if (pv > LN.a2) rules.push({ t: 'Past the second apron: no taxpayer MLE ($6.064M); minimum deals only ($2.449M) · verify' });
+    if (!rules.length) rules.push({ t: 'Nothing lost at this number. Past $209.015M the non-taxpayer MLE ($15.044M) goes · verify' });
+    const rt = { ...T(mkTab('right'), { open: rtOpen }), l: rtOpen ? 1088 : 1404, w: rtOpen ? 316 : 0, bd: rtOpen ? '1.5px solid #111' : '0 solid #111',
+      pc: pulling ? ORG : '#55554F', pt: pulling ? 'Your pull · not Reality' : 'Reality’s numbers · not pulled yet', pull: M1(pv), tsm: M1(tsm), dT: (dPv >= 0 ? '+' : '−') + M1(Math.abs(dPv)), rules: rules,
+      rows: [['CAP', 'cap'], ['TAX LINE', 'tax'], ['FIRST APRON', 'a1'], ['SECOND APRON', 'a2']].map((r) => { const over = pv > LN[r[1]], was = PAY > LN[r[1]], x = over !== was; return { nm: r[0], v: '$' + LN[r[1]].toFixed(3) + 'M', st: (over ? 'over' : 'under') + (x ? ' · crossed' : ''), c: x ? ORG : '#111' }; }),
+      taxT: 'on tax salary, first-time payer: ' + M1(taxSim(tsm)), letgo: () => this.setState({ pullV: PAY, pullMsg: 'Let go. Nothing was kept, and Reality did not move.' }),
+      cut: () => this.goto('arrive', { branch: pv, view: 'branch', msg: 'Branch cut at ' + M1(pv) + '. It hangs on your wall.' }), cutOff: !pulling,
+      hasBr: hasBr, brV: hasBr ? M1(S.branch) : '', msg: S.pullMsg || '' };
+    return {
+      gut: { r: arr && !bv ? 1 : 0, w: inW ? 1 : 0 }, rail: rail, msg: S.addrMsg || S.msg || '',
+      addr: addrShown, addrBad: S.addrMsg ? 'true' : 'false', addrRule: 'solid',
+      onAddrIn: (e) => this.setState({ addrDraft: e && e.target ? e.target.value : '', addrFor: addr, addrMsg: '' }),
+      onAddr: (e) => { if (e && e.preventDefault) e.preventDefault(); this.goAddr(addrShown); },
+      goHome: () => this.goto('home'), closeDr: () => this.setState({ drawer: null, refuse: false, pullV: PAY, pullMsg: '', riverDoor: null }),
+      cb: cb, hall: hall, pres: pres, wchips: wchips, ar: ar, wl: wl, w: w, tabs: tabs, tp: tp, bt: bt, lf: lf, rt: rt
+    };
+  }
+}
+</script>
+</body>
+</html>

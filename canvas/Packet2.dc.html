@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BOW Frontier — Wave 2 packet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F0E8;color:#1B1A17;font-family:'IBM Plex Sans',sans-serif}
+.mono{font-family:'IBM Plex Mono',monospace}
+.serif{font-family:'Newsreader',serif}
+.k{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:#57534B;text-transform:uppercase}
+.tab{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;min-height:40px;padding:0 14px;border-radius:0;cursor:pointer;text-align:left;transition:background .2s,color .2s}
+.tab:focus-visible,.chip:focus-visible{outline:3px solid #A63A18;outline-offset:2px}
+.chip{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;min-height:34px;padding:0 12px;border-radius:0;cursor:pointer}
+.st{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.05em;padding:3px 6px;white-space:nowrap}
+.row{transition:opacity .25s ease}
+li{margin:0}
+</style>
+</helmet>
+<div style="width: 1440px; height: 5720px; box-sizing: border-box; padding: 56px 88px 64px; display: flex; flex-direction: column; gap: 36px; background: #F3F0E8; color: #1B1A17">
+
+  <header style="display: flex; flex-direction: column; gap: 14px">
+    <div class="k" style="display: flex; justify-content: space-between; border-bottom: 1px solid #1B1A17; padding-bottom: 10px"><span>Wave 2 · founder packet · M grammar matrix · N canon candidates · O kill list · P open questions · Q Wave 3</span><span>Evidence: rendered prototypes + independent critics · no human has used any of this</span></div>
+    <h1 class="serif" style="margin: 0; font-weight: 400; font-size: 56px; line-height: 1.03; max-width: 1220px">Does BOW have an interaction model that deserves to be called a new medium? Not yet in one place. Across forty boards it found five behaviours no existing medium has together — but the flagship that composes them still ticks rather than executes.</h1>
+  </header>
+
+  <section style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px">
+    <sc-for list="{{five}}" as="f" hint-placeholder-count="5">
+      <div style="display: flex; flex-direction: column; gap: 8px; border-top: 4px solid #1B1A17; padding-top: 12px">
+        <span class="k">{{f.n}}</span>
+        <strong class="serif" style="font-size: 22px; font-weight: 500; line-height: 1.15">{{f.t}}</strong>
+        <span style="font-size: 14px; line-height: 1.5">{{f.d}}</span>
+        <span class="mono" style="font-size: 11px; color: #A63A18">{{f.src}}</span>
+      </div>
+    </sc-for>
+  </section>
+
+  <div style="border: 2px solid #1B1A17; border-left: 8px solid #1B1A17; padding: 12px 18px; display: flex; gap: 18px; align-items: baseline"><span class="k" style="white-space: nowrap">The gap</span><span style="font-size: 16px; line-height: 1.5"><strong>One act must move other state, end to end.</strong> The Handshake does it for a trade (“Boston’s roster is now 14: the call-up can be converted”). In the flagship, taking Denver’s pick left the roster, the owner’s note and the handover draft unchanged — the critic’s verdict on the founder question was <strong>not yet</strong>. A propagation repair has since been applied and played in the browser: taking the pick now moves the roster matter, the owner’s note, the payroll gauge, the handover draft and “your question, here” — from one state, each tagged “changed by your act”. It has not been re-judged by a critic or by people, so the verdict stays “not yet”.</span></div>
+
+  <section style="display: flex; flex-direction: column; gap: 14px; border-top: 2px solid #1B1A17; padding-top: 18px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline"><h2 class="serif" style="margin: 0; font-weight: 400; font-size: 32px">The tournaments, as the critics ruled them</h2><span class="k">Pick a frontier</span></div>
+    <div role="tablist" aria-label="Frontier" style="display: flex; gap: 6px; flex-wrap: wrap">
+      <sc-for list="{{fronts}}" as="t" hint-placeholder-count="9">
+        <button type="button" role="tab" class="tab" aria-selected="{{t.sel}}" onClick="{{t.pick}}" style="border: 1px solid #1B1A17; background: {{t.bg}}; color: {{t.fg}}">{{t.label}}</button>
+      </sc-for>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 36px; border: 2px solid #1B1A17; padding: 20px 24px; min-height: 330px">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span class="k">{{cur.q}}</span>
+        <p class="serif" style="margin: 0; font-size: 23px; line-height: 1.32">{{cur.answer}}</p>
+        <div style="display: flex; flex-direction: column; gap: 0; margin-top: 6px">
+          <sc-for list="{{cur.rows}}" as="r" hint-placeholder-count="6">
+            <div style="display: grid; grid-template-columns: 200px 150px minmax(0, 1fr); gap: 12px; align-items: baseline; border-top: 1px solid #CFC8B8; padding: 7px 0">
+              <strong style="font-size: 15px">{{r.b}}</strong>
+              <span class="st" style="border: 1px {{r.ls}} {{r.c}}; color: {{r.fg}}; background: {{r.bg}}; justify-self: start">{{r.v}}</span>
+              <span style="font-size: 13.5px; line-height: 1.45; color: #3A3731">{{r.why}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span class="k">What it proved · what it didn’t</span>
+        <p style="margin: 0; font-size: 15px; line-height: 1.55">{{cur.proved}}</p>
+        <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #57534B">{{cur.notyet}}</p>
+        <span class="k" style="margin-top: 6px">Test with humans</span>
+        <p style="margin: 0; font-size: 15px; line-height: 1.55">{{cur.test}}</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 12px; border-top: 2px solid #1B1A17; padding-top: 18px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 24px"><h2 class="serif" style="margin: 0; font-weight: 400; font-size: 32px">M · Grammar matrix — the primitives, where they recur, and how far each has earned its place</h2></div>
+    <div role="group" aria-label="Filter by status" style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap">
+      <span class="k" style="margin-right: 6px">Show</span>
+      <sc-for list="{{filt}}" as="c" hint-placeholder-count="4">
+        <button type="button" class="chip" aria-pressed="{{c.pressed}}" onClick="{{c.pick}}" style="border: 1px solid #1B1A17; background: {{c.bg}}; color: {{c.fg}}">{{c.label}}</button>
+      </sc-for>
+      <span style="font-size: 13px; color: #57534B; margin-left: 10px">Statuses are the critics’ and mine. Only the founder can make anything canon.</span>
+    </div>
+    <div class="mono" style="display: grid; grid-template-columns: minmax(0, 1.6fr) 150px repeat(6, 64px) minmax(0, 1.3fr); gap: 10px; font-size: 10.5px; letter-spacing: .06em; color: #57534B; border-bottom: 2px solid #1B1A17; padding-bottom: 6px; align-items: end">
+      <span>PRIMITIVE</span><span>STATUS</span><span>SPORTS</span><span>HISTORY</span><span>SCIENCE</span><span>ENTERPR.</span><span>SCHOOL</span><span>SHELL</span><span>SEEN ON</span>
+    </div>
+    <sc-for list="{{grid}}" as="g" hint-placeholder-count="26">
+      <div class="row" style="display: grid; grid-template-columns: minmax(0, 1.6fr) 150px repeat(6, 64px) minmax(0, 1.3fr); gap: 10px; align-items: center; border-bottom: 1px solid #D8D2C4; padding: 5px 0; opacity: {{g.op}}">
+        <span style="font-size: 14px; line-height: 1.35">{{g.p}}</span>
+        <span class="st" style="justify-self: start; border: 1px {{g.ls}} {{g.c}}; color: {{g.fg}}; background: {{g.bg}}">{{g.s}}</span>
+        <sc-for list="{{g.cells}}" as="x" hint-placeholder-count="6">
+          <span style="width: 18px; height: 18px; box-sizing: border-box; border: {{x.b}}; background: {{x.bg}}; justify-self: center" aria-label="{{x.aria}}"></span>
+        </sc-for>
+        <span class="mono" style="font-size: 11px; line-height: 1.4; color: #4A4740">{{g.w}}</span>
+      </div>
+    </sc-for>
+    <span style="font-size: 12.5px; color: #57534B">Filled square: built and verified in that vertical. Outlined: specified or partial. Blank: not tried. “Shell” is the Browser itself.</span>
+  </section>
+
+  <section style="display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; border-top: 2px solid #1B1A17; padding-top: 18px">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 32px">N · Canon candidates, as sentences the founder can accept or strike</h2>
+      <ol style="margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 9px; font-size: 15px; line-height: 1.5">
+        <sc-for list="{{canon}}" as="c" hint-placeholder-count="12">
+          <li><strong>{{c.h}}</strong> {{c.t}}</li>
+        </sc-for>
+      </ol>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 32px">O · Kill list</h2>
+      <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.45">
+        <sc-for list="{{kills}}" as="c" hint-placeholder-count="12">
+          <li><strong>{{c.h}}</strong> — {{c.t}}</li>
+        </sc-for>
+      </ul>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; border-top: 2px solid #1B1A17; padding-top: 18px">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 32px">What Wave 2 got wrong about the real world — and caught</h2>
+      <p style="margin: 0; font-size: 15px; line-height: 1.55">The single most important process finding: one shared fixture number was wrong, and it was copied into eleven boards. The medium’s own answer — a value that carries its provenance and is read live from one sourced store, never pasted — is not a nicety. It is the only way BOW stays true at scale.</p>
+      <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 14.5px; line-height: 1.45">
+        <sc-for list="{{fixes}}" as="c" hint-placeholder-count="8">
+          <li><strong>{{c.h}}</strong> {{c.t}}</li>
+        </sc-for>
+      </ul>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 32px">Dissent, preserved</h2>
+      <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 14.5px; line-height: 1.45">
+        <sc-for list="{{dissent}}" as="c" hint-placeholder-count="7">
+          <li><strong>{{c.h}}</strong> {{c.t}}</li>
+        </sc-for>
+      </ul>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; border-top: 2px solid #1B1A17; padding-top: 18px">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 32px">P · Open questions</h2>
+      <ol style="margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.5">
+        <sc-for list="{{open}}" as="c" hint-placeholder-count="10">
+          <li>{{c.t}}</li>
+        </sc-for>
+      </ol>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 32px">What must be free for the medium to spread</h2>
+      <p style="margin: 0; font-size: 15px; line-height: 1.55">Hypotheses, not prices (full lens on the Commercial board and in “BOW Economic Architecture”). Free: asking and arriving; observing Reality and the public record; entering a recorded Moment; cutting and sharing a fork; the address; reading provenance. Paid: presences that keep running while you’re away (persistent Worlds — they cost compute), signed seats with warrants (organisations, agents), metered model runs, hosted publishing at scale, classroom licences with the teacher’s screen and evidence.</p>
+      <p style="margin: 0; font-size: 15px; line-height: 1.55">Wave 2 sharpened one line: <strong>observing must stay wide and free, and occupying must be the thing people pay for</strong> — which only works if ENTER actually costs something (omniscience, a signature, a running clock). The boards now show that cost; no buyer has yet paid it.</p>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 14px; border-top: 4px solid #1B1A17; padding-top: 18px">
+    <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 36px">Q · Wave 3 recommendation: stop inventing front doors; converge, run it for real, put it in front of people</h2>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+      <sc-for list="{{w3}}" as="c" hint-placeholder-count="6">
+        <div style="display: flex; flex-direction: column; gap: 6px; border-top: 2px solid #1B1A17; padding-top: 10px">
+          <span class="k">{{c.n}}</span>
+          <strong class="serif" style="font-size: 21px; font-weight: 500; line-height: 1.2">{{c.h}}</strong>
+          <span style="font-size: 14.5px; line-height: 1.5">{{c.t}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <footer class="mono" style="margin-top: auto; display: flex; justify-content: space-between; font-size: 11px; color: #57534B; border-top: 1px solid #1B1A17; padding-top: 8px">
+    <span>Research canvas look (not a product skin). Every claim here is a design reading of rendered prototypes.</span>
+    <span>PROTOTYPE · founder packet · 29 Sep 2026</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":5720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const fi = s.f === undefined ? 0 : s.f;
+    const flt = s.flt || 'ALL';
+    const VC = { 'DEFAULT': ['#1B1A17', 'solid', '#1B1A17', '#F3F0E8'], 'WINNER': ['#1B1A17', 'solid', '#1B1A17', '#F3F0E8'], 'KEEP': ['#1B1A17', 'solid', '#E4DFD2', '#1B1A17'], 'RUNNER-UP': ['#1B1A17', 'solid', 'transparent', '#1B1A17'], 'PUSH FURTHER': ['#1B1A17', 'solid', 'transparent', '#1B1A17'], 'MODE': ['#3E4F6B', 'solid', 'transparent', '#3E4F6B'], 'LENS': ['#3E4F6B', 'dashed', 'transparent', '#3E4F6B'], 'COMPONENT': ['#6A4A10', 'solid', 'transparent', '#6A4A10'], 'TRANSFER': ['#1B1A17', 'double', 'transparent', '#1B1A17'], 'KILL': ['#A63A18', 'solid', 'transparent', '#A63A18'], 'PENDING': ['#57534B', 'dotted', 'transparent', '#57534B'] };
+    const R = (b, v, why) => { const c = VC[v] || VC.PENDING; return { b: b, v: v, why: why, c: c[0], ls: c[1], bg: c[2] === '#1B1A17' ? '#1B1A17' : c[2], fg: c[3] }; };
+    const FR = [
+      { label: 'Browser', q: 'B · What replaces page, result, tab, address, open, back, follow, home?', answer: 'Home is what keeps time for you; a question places you in the state that answers it; a door is named by its question; a seat is signed for; following is keeping.',
+        rows: [R('Clocks', 'DEFAULT', 'Home, tabs, follow, back. Each presence keeps its own kind of time; a World that won’t wait records your absence.'), R('Arrive', 'DEFAULT', 'Search and open: one arrival, four edges, the address pulled down on Share.'), R('River → Seat → arrival (W1)', 'KEEP', 'Survives inside a system: doors by question, the seat’s horizon.'), R('Tracks', 'MODE', '“Histories”: every history of a system as a track; A/B at the playhead.'), R('Floor · Borders', 'COMPONENT', 'Floor’s windows onto Reality; Borders as the “follow a variable” lens.'), R('Specimen', 'KILL', 'Cubes were a cost; keep WEIGH as the two-item compare.')],
+        proved: 'That the Browser can have a home that is not a list: the kind of a system is told by the kind of time it keeps (live, calendar, stopped, diverged, counter). The proposed Browser board composes the picks on one path.', notyet: 'Whether people read clock-kinds without labels; whether a question-first arrival beats a result list for someone who doesn’t know what to ask.', test: 'Hide the labels on the Clock Hall; ask five people to sort the systems into “changes without me / waits for me / never changes”.' },
+      { label: 'ENTER', q: 'C · What perceptually changes when you stop observing and occupy a seat?', answer: 'You sign for named open matters, your clock starts beside the World’s, the view narrows and says what you gave up — and leaving is an act.',
+        rows: [R('E2 · The Handover', 'WINNER', 'Line-by-line take or hand back; the signature is the act; leave by handover in your own words, or vacate.'), R('E3 · The Clock Starts', 'RUNNER-UP', 'The scrubber leaves your hand; lapses are recorded as NO ACT, not as choices.'), R('E1 · The Narrowing', 'KILL', 'As a standalone model. Donates the “You gave up / You got” ledger.'), R('E4 · The Descent', 'KILL', 'The plain list beat the four altitudes.'), R('1787 (E3)', 'TRANSFER', 'Held: Strong’s silence is computed into a 5–5 tie. “Your absence decided it.”'), R('Harrow (E2)', 'TRANSFER', 'Held: a person signs with initials, an agent with a seal — same authority.')],
+        proved: 'That ENTER can mean responsibility, not navigation, in three unrelated worlds. Absence recorded as absence is the sharpest new behaviour.', notyet: 'Whether signing feels like a EULA to a real person; whether real-time clocks create stakes or stress.', test: 'After signing, ask which matter expires first. If people can’t say, the checkboxes are a EULA.' },
+      { label: 'WHAT IF?', q: 'D · How should a fork begin, declare, persist, compare — without fake omniscience?', answer: 'A cut convenes every actor it touches, each set to Recorded, Declare, Model or Unknown; the branch then lives beside Reality and flags every arrival that doesn’t fit.',
+        rows: [R('Council', 'DEFAULT', 'Recorded is refused when the act depended on the cut; Keep is blocked while a needed seat is unset.'), R('Living Fork', 'MODE', 'A kept branch is reconciled as Reality arrives: held, diverged, impossible, re-declare. A frozen branch has no NOW.'), R('Fork (W1)', 'KEEP', 'The spine the others plug into — still the only fork that runs end to end.'), R('Pull', 'COMPONENT', 'The rule instrument: drag a value across the CBA lines; release and nothing forked.'), R('Fan', 'COMPONENT', 'Its referee strip (call size counts). Killed as a fork: it forecasts, it doesn’t fork.')],
+        proved: 'That a fork can be honest about other people: it names who it depends on and refuses to invent them.', notyet: 'Whether the Council is too heavy for a casual fan; whether a living branch is a burden or a hook.', test: 'Run the same fork through Council and through Fork’s three cards; count how many actors each group names before claiming an outcome.' },
+      { label: 'Sports proof', q: 'E · Browser → system → role → consequential act → history/fork, in Boston', answer: 'One journey keeps seven kinds of Boston system distinct and makes a trade call inside your World change your history, not Reality.',
+        rows: [R('SportsProof', 'KEEP', 'Built before the tournaments; the proposed Browser now re-composes it from the winners.'), R('Proposed Browser', 'PUSH FURTHER', 'The right spine. How you leave decides whom Monday’s lapse is charged to — only the composition does that. But acts didn’t propagate: “not yet”.')],
+        proved: 'That sports carries the medium best: real stakes, a record to compare against, and people who care.', notyet: 'Rights posture for real teams and players; whether fans want responsibility or just play.', test: 'Give a fan the World seat for a week; ask what they did while away and whether they minded.' },
+      { label: 'Atlas', q: 'F · Search by what a system does — not keywords, not a node graph', answer: 'Search is a question that resolves into a running mechanism assembled for it — stamped GENERATED STRUCTURE until a reviewed system replaces it — whose edge you find by pushing.',
+        rows: [R('A1 · Mechanism', 'DEFAULT', '“At 96 min the crew’s limit runs out and leg 4 is cut. At 95 it still runs.” You find the threshold by pushing.'), R('A3 · Excavation', 'LENS', '“Dig upstream / Why me?”: the drill line turns dashed below what can be traced; provenance becomes a state you operate.'), R('A4 · Model landscape', 'COMPONENT', 'Keep the contested-question block (refusal named, assumptions compared, fork a model). Kill the terrain: it looked like a forecast.'), R('A2 · Field guide', 'KILL', 'A card grid sorted by one axis. Its plain-words → dynamic vocabulary becomes a component.')],
+        proved: 'That search can return something that runs — and that where BOW can’t trace a cause, the answer can say so by texture, not by hedging prose.', notyet: 'A mechanism assembled for any question on demand is a platform bet, not a prototype; every Atlas board ran on authored structure.', test: 'Ask “why was my flight late?” and time how long it takes a person to find the edge by pushing — versus reading an explanation.' },
+      { label: 'Publisher', q: 'G · Executable media forms and how they travel', answer: 'The story is the full loop (read → door → branch → publish → others fork → embed → World); the Moment card is what travels, because it lives where people already are.',
+        rows: [R('PB1 · Story with a door', 'WINNER', 'The only complete loop, in the primary domain. Repaired: illustrative money no longer written as reporting; the outcome sealed on load.'), R('PB2 · Explainer instrument', 'PUSH FURTHER', 'Take the controls at any step; the story never loses its line. Steer readers to the step where the choice matters.'), R('PB4 · Moment card', 'KEEP', 'The shared unit the other forms send out: one free decision under a thumb, then the record beside your call.'), R('PB3 · Documentary', 'KILL', 'Specified, not built.')],
+        proved: 'That a published piece can carry a door, and a reader’s branch can sit where comments go without touching the record.', notyet: 'Distribution risk: a reader’s branch borrowing the publisher’s masthead. Its author and divergence must be the first line inside the frame and survive a screenshot.', test: 'Send a Moment card to ten people in a group chat; ask afterwards whose claim the shared branch was.' },
+      { label: 'Cloud · Network', q: 'H · primitives for developers · I · one real cross-institution act', answer: 'The Handshake passes the test: one interaction, signed by both sides, stamped once by the League, recorded three ways, with no god-view — even the League lens can’t read Denver’s desk.',
+        rows: [R('I · The Handshake', 'KEEP', 'Absorb its follow-on (“your roster is now 14”) into the flagship. Denver’s counter must cost Boston something; “Start over” must never rewind the clock.'), R('H · World tools', 'KEEP', 'The platform artefact: event log, provenance scoped in time, warrants. Push: separate league rules from owner authority.'), R('Supply-chain transfer', 'TRANSFER', 'Held: Kaito’s hidden rationing is real information asymmetry.'), R('Creator transfer', 'COMPONENT', 'Mostly a re-skin; the marketplace is both referee and fee-taker, and the board hides it.')],
+        proved: 'That an act between institutions can be one object that both sign and a neutral rulebook checks, while each side keeps its own view and its own books.', notyet: 'The World’s own founding trade (White for Butler) breaks the apron-matching rule the same rulebook enforces later — rule and authority are still tangled.', test: 'Two people in two rooms, one per club, negotiate the same deal; ask each afterwards what the other side knew.' },
+      { label: 'Textbook', q: 'J · What makes a native textbook a BOOK?', answer: 'A chapter hands you the state you left; the class is the evidence; the idea gets its name only after you felt it; the exercise is a door into a different system.',
+        rows: [R('J2 · The class reveal', 'KEEP', 'The core of the vertical: fourteen desks, legal doors, a teacher’s director strip.'), R('J1 · The chapter is a route', 'PUSH FURTHER', '“Close July → December opens with your books.” Economics repaired: over the cap, only exceptions.'), R('J3 · The exercise is a door', 'PUSH FURTHER', 'Transfer to a bakery; evidence wiring repaired so the student’s own act is the first opportunity.')],
+        proved: 'That carried state is the book’s spine and the class reveal is its heart.', notyet: 'The critic caught a false lesson (over-cap signings without exceptions); a random teacher could not yet run J2 tomorrow.', test: 'A teacher who has never seen BOW runs J2 from the strip alone while a colleague role-plays a fan who objects.' },
+      { label: 'Commercial', q: 'K · L · Who pays, for what, and what must stay free', answer: 'Observing wide and free; occupying, persistence and accountability paid. Eleven frontiers carry a lens; a separate artifact holds the economic architecture.',
+        rows: [R('Commercial board', 'KEEP', 'USER / BUYER / VALUE / UNIT / MARGINAL COST / DISTRIBUTION / CHEAPEST FALSIFIER for each frontier.'), R('Economic Architecture', 'KEEP', 'Sixteen surfaces; subscription / usage / transaction / licence; cross-subsidy.')],
+        proved: 'That every board can say what it would cost to run and who would pay — as hypotheses.', notyet: 'Any buyer; any price.', test: 'The cheapest falsifier per frontier is listed on the Commercial board.' }
+    ];
+    const f = FR[fi];
+    const fronts = FR.map((x, i) => ({ label: x.label, sel: i === fi ? 'true' : 'false', bg: i === fi ? '#1B1A17' : 'transparent', fg: i === fi ? '#F3F0E8' : '#1B1A17', pick: () => this.setState({ f: i }) }));
+
+    const five = [
+      { n: '1 · Home keeps time', t: 'A presence, not a tab', d: 'Each system you’re in keeps its own kind of time — live, calendar, stopped, diverged. A World that won’t wait records what lapsed while you were away.', src: 'Clocks · Clock · Living' },
+      { n: '2 · A question places you', t: 'Arrival, not results', d: 'Asking puts you inside the state that answers, with provenance above, doors below, seats to the left, WHAT IF? to the right.', src: 'Arrive · River · Seat' },
+      { n: '3 · A seat is signed for', t: 'ENTER is responsibility', d: 'You take named open matters, your clock starts, NO ACT is recorded as absence, and leaving is a handover — for a person or an agent.', src: 'Handover · Clock · 1787 · Harrow' },
+      { n: '4 · A fork convenes', t: 'WHAT IF? without omniscience', d: 'A cut names every actor it touches and refuses to invent them; the branch then lives beside Reality and flags what no longer fits.', src: 'Council · Living · Fork' },
+      { n: '5 · The record answers', t: 'How do we know?', d: 'Every value wears its texture; the record can be asked where it came from — down to “Madison copied this from Yates”.', src: 'Notes · Lens · every board' }
+    ];
+
+    const ST = { 'CANON-CANDIDATE': ['#1B1A17', 'solid', '#1B1A17', '#F3F0E8'], 'RECURRING': ['#1B1A17', 'solid', 'transparent', '#1B1A17'], 'VERTICAL-SPECIFIC': ['#57534B', 'dashed', 'transparent', '#57534B'], 'COMPONENT / LENS': ['#6A4A10', 'solid', 'transparent', '#6A4A10'] };
+    // cells: S H Sc E Ed Sh — 2 = built, 1 = partial/spec, 0 = none
+    const G = [
+      ['Seven truth textures; words on request', 'CANON-CANDIDATE', [2, 2, 2, 2, 2, 2], 'every board'],
+      ['A branch is a frame, its own ink and a stamp — never a fill over the record', 'CANON-CANDIDATE', [2, 2, 0, 2, 0, 2], 'Fork · Room · Pull · Council · Story door'],
+      ['A door is named by its question, never its answer', 'CANON-CANDIDATE', [2, 2, 0, 0, 0, 2], 'River · Sentence · Arrive · Tracks · Proposed'],
+      ['Sealed hindsight; the unmodeled future is sealed, not hatched', 'CANON-CANDIDATE', [2, 2, 0, 1, 2, 2], 'Fork · River · Clock · 1787 · Chapter'],
+      ['The kind of time tells the kind of system', 'CANON-CANDIDATE', [2, 1, 1, 1, 0, 2], 'Clocks · Tracks · Living · Proposed'],
+      ['The address is a coordinate that rewrites on every move', 'CANON-CANDIDATE', [2, 1, 0, 0, 0, 2], 'Sentence · Fork · Arrive · Clocks · Proposed'],
+      ['A seat states its horizon: know · can · can’t · nobody knows', 'CANON-CANDIDATE', [2, 2, 0, 0, 0, 2], 'Seat · River · Tracks · Clocks · Proposed'],
+      ['Entry is a signed acceptance of named open matters', 'CANON-CANDIDATE', [2, 0, 0, 2, 0, 2], 'Handover · Harrow · Proposed'],
+      ['NO ACT is recorded as absence, never as a choice', 'CANON-CANDIDATE', [2, 2, 0, 2, 2, 2], 'Clock · Handover · 1787 · Harrow · Reveal · Clocks'],
+      ['Leaving is an act: hand over in your own words, or vacate', 'CANON-CANDIDATE', [2, 1, 0, 2, 0, 2], 'Handover · Clock · Harrow · Proposed'],
+      ['A cut convenes every actor it touches (Recorded / Declare / Model / Unknown)', 'CANON-CANDIDATE', [2, 1, 0, 0, 0, 0], 'Council · Fork (declared others)'],
+      ['A kept branch reconciles each arrival from Reality', 'CANON-CANDIDATE', [2, 0, 0, 0, 0, 0], 'Living'],
+      ['A refusal names the rule that refused', 'CANON-CANDIDATE', [2, 2, 0, 2, 2, 2], 'Agent · Foundry · Pull · Council · Handshake · Harrow · Transfer'],
+      ['Real people are observed with sources, not worn; actor models are stippled and say so', 'CANON-CANDIDATE', [2, 2, 0, 0, 0, 2], 'Seat · Room · Notes · Proposed'],
+      ['Your clock beside the World’s clock', 'RECURRING', [2, 2, 0, 2, 0, 2], 'Clock · Handover · 1787 · Harrow'],
+      ['“You gave up / You got” ledger at entry', 'RECURRING', [2, 2, 0, 2, 0, 2], 'Narrowing · Clock · Handover · 1787 · Harrow'],
+      ['Pull a value across rule lines; release and nothing forked', 'RECURRING', [2, 0, 1, 0, 0, 2], 'Pull · Proposed · Chemistry (plunger)'],
+      ['“A difference between histories — not proof of cause”', 'RECURRING', [2, 2, 0, 2, 0, 0], 'Tracks · Lens · Enterprise · Council'],
+      ['One colour, one meaning (answer / branch / yours / your clock)', 'RECURRING', [2, 0, 0, 2, 0, 2], 'Arrive · Harrow · Proposed'],
+      ['Scale lens carrying one state (wider / finer)', 'RECURRING', [2, 0, 2, 0, 0, 1], 'Focus · Biology'],
+      ['Evidence links back to the act (“from: 08:31”)', 'RECURRING', [0, 0, 0, 0, 2, 0], 'Transfer · (Decision Challenges law)'],
+      ['Five rules drawn as five kinds of object', 'VERTICAL-SPECIFIC', [0, 0, 0, 0, 2, 0], 'Chapter · Reveal · Transfer'],
+      ['A teacher’s director strip (NOW / WATCH FOR / DON’T EXPLAIN YET / ASK / TRIGGER / SYNTHESIS)', 'VERTICAL-SPECIFIC', [0, 0, 0, 0, 2, 0], 'Reveal'],
+      ['Carried state between chapters', 'VERTICAL-SPECIFIC', [0, 0, 0, 0, 2, 0], 'Chapter'],
+      ['Weigh two systems on one variable', 'COMPONENT / LENS', [2, 0, 0, 0, 0, 1], 'Specimen (killed) → component'],
+      ['Follow a variable across a border', 'COMPONENT / LENS', [2, 0, 1, 1, 0, 1], 'Borders → lens']
+    ];
+    const grid = G.map((g) => { const c = ST[g[1]]; return { p: g[0], s: g[1], w: g[3], c: c[0], ls: c[1], bg: c[2], fg: c[3], op: flt === 'ALL' || flt === g[1] ? 1 : 0.16,
+      cells: g[2].map((v, j) => ({ b: v === 0 ? '1px dotted #CFC8B8' : '1.5px solid #1B1A17', bg: v === 2 ? '#1B1A17' : 'transparent', aria: ['sports', 'history', 'science', 'enterprise', 'school', 'shell'][j] + (v === 2 ? ': built' : v === 1 ? ': partial' : ': not tried') })) }; });
+    const FL = ['ALL', 'CANON-CANDIDATE', 'RECURRING', 'VERTICAL-SPECIFIC'];
+    const filt = FL.map((x) => ({ label: x === 'ALL' ? 'All' : x.toLowerCase(), pressed: flt === x ? 'true' : 'false', bg: flt === x ? '#1B1A17' : 'transparent', fg: flt === x ? '#F3F0E8' : '#1B1A17', pick: () => this.setState({ flt: x }) }));
+
+    const canon = [
+      { h: 'The truth grammar.', t: 'Seven textures; hatch only when a named model ran; authored numbers outlined; a branch is a frame, an ink and a stamp; refusals name their rule; doors are named by their question.' },
+      { h: 'The address.', t: 'system · moment · branch · seat · view — one editable line that rewrites on every move and is what you share.' },
+      { h: 'Home is the Clock Hall.', t: 'Tabs become presences; the kind of a system is told by the kind of time it keeps; following is keeping.' },
+      { h: 'Search is arrival.', t: 'A question places you in the answering state, with four edges: provenance, the river of doors, seats, WHAT IF?.' },
+      { h: 'ENTER, five changes.', t: 'Signed acceptance of named matters · time changes kind · knowledge narrows and says what you gave up · your ink appears and lapses are recorded as absence · leaving is an act.' },
+      { h: 'WHAT IF?, one grammar.', t: 'Begin by acting in a seat or pulling a governed value · the cut convenes every actor it touches · compute what rules can, split what they can’t · the branch lives beside Reality and flags each arrival · compare in parallel rows, record in its own ink.' },
+      { h: 'Fork red lines.', t: 'Never recolour the record; never Save As; never compute through an actor without a seat; never hatch an authored number; never label a World “Reality”; never reveal an outcome before the seat acts.' },
+      { h: 'Real people.', t: 'Observed with sources, not worn; actor models are stippled, labelled, and answer about a person, never as the person.' },
+      { h: 'Absence.', t: 'In every vertical, not acting is recorded as not acting — in a front office, a roll call, a factory, a classroom.' },
+      { h: 'Acts propagate.', t: 'An act changes every piece of state that depends on it, visibly, from one state — or the board is a tour. (The flagship’s gap; the Handshake’s strength.)' },
+      { h: 'One sourced store.', t: 'A value is read live, with its provenance, from one place — never pasted into a surface. (Wave 2’s eleven-board error is the argument.)' }
+    ];
+    const kills = [
+      { h: 'Specimen (B2-2)', t: '3D cubes were a cost; WEIGH survives as a component.' },
+      { h: 'The Descent (E4)', t: 'Four altitudes lost to a plain list.' },
+      { h: 'The Narrowing as a model (E1)', t: 'It removed access, not knowledge; its ledger lives on.' },
+      { h: 'Fan as a fork (W3)', t: 'It forecasts; its referee strip survives.' },
+      { h: 'Seat and Focus as landing pages (W1)', t: 'Folded into the threshold and the scale lens.' },
+      { h: 'Sentence as a front page (W1)', t: 'It is the address, not a door.' },
+      { h: 'Network as a ledger (W1)', t: 'Replaced by the Handshake.' },
+      { h: 'Hatch on anything no model produced', t: 'Everywhere; the most common truth failure in both waves.' },
+      { h: 'Field guide of dynamics as a surface (A2)', t: 'A card grid sorted by one axis; its vocabulary survives.' },
+      { h: 'The model-landscape terrain (A4)', t: 'Hills over time read as a forecast — the one number the board refuses to give.' },
+      { h: 'Documentary moment (PB3)', t: 'Specified, not built — the budget went to the tournaments.' },
+      { h: 'Variation tree (W5)', t: 'Specified, not built.' }
+    ];
+    const fixes = [
+      { h: 'Tax salary vs cap payroll.', t: 'Boston’s ≈ $203.6M is cap payroll; reported tax salary is $198.7M — under the tax line (salaryswish, 4 Sep 2026, verify). Eleven boards said “past the tax line”; all now show both numbers, not averaged.' },
+      { h: 'Boston’s roster.', t: 'BOW Economics Live records Jaylen Brown traded to Philadelphia for Paul George (verify); boards no longer list Brown as a Celtic.' },
+      { h: 'Over-cap signings.', t: 'Textbook desks over the cap signed free agents above any exception — a false lesson. Now: only named exceptions ($15.044M big, $6.064M small; verify), and using the big one walls you at the first apron.' },
+      { h: 'The World’s tax.', t: '$34.2M is a flat 1.5× World rule, labelled as such; the NBA’s real tax is incremental.' },
+      { h: 'The 1787 silence.', t: 'My spec said silence records Massachusetts as “divided”; the rules make it vote no, and the motion fails 5–5. The board computes it.' },
+      { h: 'Madison and Yates (W1 → repaired).', t: 'The witnesses corroborate; Madison later copied passages from Yates.' },
+      { h: 'The source itself.', t: 'BOW Economics Live’s world.ts still describes Boston as “past the tax line” in its situation text, while its own sourced tax salary says otherwise. Flagged for the repo owner; not edited here.' },
+      { h: 'Tatum’s return.', t: '6 Mar 2026 vs Dallas; “now” boards stopped calling it unobserved.' }
+    ];
+    const dissent = [
+      { h: 'Browser home.', t: 'The Wave 1 critic made time (the River) the default door; the Wave 2 critic made the Clock Hall home and Arrive the door, with the River surviving inside. Both are kept as layers; the founder decides which a newcomer meets first.' },
+      { h: 'Council cost.', t: 'Chosen as the default fork, but a casual fan may never convene six actors. Counter-case: the Pull as the light door into the same council.' },
+      { h: 'Fan.', t: 'Killed as a fork, but its call-size scoring is the only honest way anyone proposed to rank models.' },
+      { h: 'Floor.', t: 'Judged a component; its window onto Reality is the strongest World-vs-Reality split in the wave.' },
+      { h: 'Handover as a EULA.', t: 'The critic warns five checkboxes read as terms-of-service; the board now makes each line a real act, but the risk stands until people use it.' },
+      { h: 'The founder question.', t: 'I read the five behaviours as “provisionally yes”. The flagship critic answered “not yet”: the systems tick, they don’t execute. The headline takes the critic’s side; my reading is kept here.' },
+      { h: 'Council hatch.', t: '1 − an authored rate was hatched as modeled; the critic ruled it authored. The builder argued a toy model is still a model. Ruled: authored.' }
+    ];
+    const open = [
+      { t: 'Which does a newcomer meet first — the Clock Hall, or an empty ask line?' },
+      { t: 'Does signing for a seat create stakes, or friction a fan won’t accept?' },
+      { t: 'Worlds that run while you’re away: compelling or punishing? (And who pays the compute?)' },
+      { t: 'May a branch be “cut with hindsight” from a question that names the outcome?' },
+      { t: 'Who owns the rules engine? The textbook’s false lesson came from rules drawn but not enforced.' },
+      { t: 'How much discretion may an agent have inside a warrant — and must its seal differ from a person’s?' },
+      { t: 'Can a 10–12-year-old read seven textures without the words?' },
+      { t: 'Rights posture for real teams, players and likeness before anything ships (escalate, don’t assume).' },
+      { t: 'Is the Council the fork, or a mode the Pull opens into?' },
+      { t: 'What is the smallest real test that would falsify “new medium” rather than confirm it?' },
+      { t: 'How much must one act propagate before a board counts as executable rather than a tour?' }
+    ];
+    const w3 = [
+      { n: '1 · Converge', h: 'One Boston week, end to end, in real code', t: 'The proposed Browser path (Clock Hall → arrive → seat → sign → occupy → leave) running on a real state store and event log, with the Council fork and a living branch, and the BOW Economics Live rules engine enforcing the CBA lines — not drawn lines.' },
+      { n: '2 · Put it in front of people', h: 'Fans, one class, one operator', t: 'Five fans for a week in a persistent World; one class running a textbook chapter with a teacher who has never seen BOW; one operations lead taking the Harrow seat. Use the human tests listed with each tournament.' },
+      { n: '3 · Make truth infrastructure', h: 'One sourced fact store with live provenance', t: 'Every Reality value read from one dated, sourced store (the econ repo’s world.ts pattern), rendered with its texture — so a correction lands everywhere at once.' },
+      { n: '4 · Textbook, one chapter', h: 'July → reveal → December → transfer', t: 'Real clubs, legal doors, the class result landing on every student’s ladder, carried books in December, and the repaired transfer exercise — gated by a Teacher Transfer run.' },
+      { n: '5 · Keep the frontier narrow', h: 'No new front doors', t: 'Spend invention on depth inside the chosen grammar: agents in seats with warrants, and the Handshake between two real institutions (a sports first, then a supply chain).' },
+      { n: '6 · Decide', h: 'Founder rulings needed first', t: 'The canon candidates above; the newcomer’s first screen; the rights posture; whether agents may sign.' }
+    ];
+    return { five: five, fronts: fronts, cur: { q: f.q, answer: f.answer, rows: f.rows, proved: f.proved, notyet: f.notyet, test: f.test }, grid: grid, filt: filt, canon: canon, kills: kills, fixes: fixes, dissent: dissent, open: open, w3: w3 };
+  }
+}
+</script>
+</body>
+</html>

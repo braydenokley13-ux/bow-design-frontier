@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dev Worldtools</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F4F6;color:#111827;font-family:'IBM Plex Sans',sans-serif}
+.mo{font-family:'JetBrains Mono',monospace;font-variant-ligatures:none}
+.code{font-variant-ligatures:none}
+.dim{color:#4B5563}
+button{font-family:'IBM Plex Sans',sans-serif;color:#111827;cursor:pointer;border-radius:2px;margin:0;box-sizing:border-box;text-align:left}
+button:focus-visible{outline:2px solid #111827;outline-offset:1px}
+.pn{position:absolute;background:#fff;border:1px solid #C4C9D1;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden}
+.ph{flex:none;height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#F3F4F6;border-bottom:1px solid #C4C9D1;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.sw{display:inline-block;width:12px;height:12px;box-sizing:border-box;flex:none}
+.t-obs{background:#111827}
+.t-rec{background:#111827;box-shadow:inset 0 0 0 2px #111827,inset 0 0 0 4px #fff}
+.t-aut{border:1.5px solid #111827;background:transparent}
+.t-com{background:#9CA3AF}
+.t-mod{background:repeating-linear-gradient(135deg,#111827 0 1.2px,transparent 1.2px 4px);border:1px solid #111827}
+.t-gen{background:radial-gradient(circle,#111827 1px,transparent 1.3px) 0 0/4px 4px;border:1px dotted #111827}
+.t-unk{border:1.5px dashed #111827;background:transparent}
+.t-brn{background:#C2410C;box-shadow:inset 0 0 0 2px #C2410C,inset 0 0 0 4px #fff}
+.t-bra{border:2px solid #C2410C;background:transparent}
+.t-non{border:1px solid transparent}
+.code{font-family:'JetBrains Mono',monospace;font-size:11px;color:#4B5563}
+.grp{flex:none;height:36px;width:100%;display:flex;align-items:center;gap:8px;padding:0 12px;border:0;border-bottom:1px solid #E5E7EB;background:#fff}
+.grp:hover,.kid:hover,.rw:hover,.dfr:hover,.chip:hover,.pre:hover{background:#F3F4F6}
+.kid{height:36px;display:flex;align-items:center;gap:6px;padding:0 8px;border:1px solid #D1D5DB;background:#fff;min-width:0;font-size:12.5px}
+.dfr{flex:none;height:38px;width:100%;display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:8px;align-items:center;padding:0 12px;border:0;border-bottom:1px solid #E5E7EB;background:#fff}
+.chip{height:36px;display:flex;align-items:center;gap:7px;padding:0 8px;font-size:12.5px;font-weight:500;background:#fff;min-width:0;white-space:nowrap}
+.pre{height:36px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 10px;border:1px solid #9CA3AF;background:#fff;font-size:12.5px;font-weight:500}
+.chip>span{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.ln{transition:opacity .3s}
+@keyframes fresh{0%{background:#E5E7EB}100%{background:transparent}}
+.fr{animation:fresh 1.2s ease-out}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F3F4F6; color: #111827; font-family: 'IBM Plex Sans', sans-serif">
+
+  <header style="position: absolute; left: 28px; right: 28px; top: 8px; height: 44px; display: flex; align-items: center; gap: 16px">
+    <div style="width: 430px; flex: none; display: flex; flex-direction: column; justify-content: center; gap: 2px">
+      <div style="display: flex; align-items: baseline; gap: 10px"><span style="font-size: 19px; font-weight: 700; letter-spacing: .05em">WORLDTOOLS</span><span class="dim" style="font-size: 13px">devtools for an executable world</span></div>
+      <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; gap: 10px; align-items: center; height: 16px; padding: 2px 4px; outline: {{ol.tags}}; outline-offset: 1px">
+          <sc-for list="{{legend}}" as="lg" hint-placeholder-count="7"><span style="display: inline-flex; align-items: center; gap: 4px"><span class="sw {{lg.sw}}"></span><span class="code" style="font-size: 11px; color: #111827">{{lg.code}}</span></span></sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{notHow}}" hint-placeholder-val="{{true}}"><div class="mo dim" style="font-size: 11px; height: 16px; padding: 2px 4px">subject World: Boston · Year Two (fixture) · you: developer</div></sc-if>
+    </div>
+    <div style="flex: 1; min-width: 0; height: 36px; display: flex; align-items: center; gap: 10px; padding: 0 12px; background: #fff; border: 1px solid #9CA3AF; outline: {{ol.addr}}; outline-offset: 2px">
+      <span class="mo" style="font-size: 12.5px; font-weight: 700; white-space: nowrap">{{addr}}</span>
+      <span class="mo dim" style="font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">→ {{addrV}}</span>
+    </div>
+    <span class="mo" style="flex: none; height: 36px; display: inline-flex; align-items: center; padding: 0 10px; border: 1.5px solid #111827; font-size: 11px; font-weight: 700; letter-spacing: .04em">PROPOSAL · APIs illustrative</span>
+    <button type="button" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="flex: none; height: 36px; padding: 0 14px; font-size: 13px; font-weight: 600; border: 1.5px solid #111827; background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+  </header>
+
+  <!-- LEFT · world definition -->
+  <section class="pn" aria-label="World definition" style="left: 28px; top: 58px; width: 352px; height: 466px">
+    <div class="ph"><span>World definition</span><span class="dim" style="font-weight: 500">typed objects</span></div>
+    <div style="flex: none; height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 1px solid #E5E7EB">
+      <span class="sw t-rec"></span>
+      <div style="min-width: 0; flex: 1"><div style="font-weight: 600; font-size: 13.5px; line-height: 17px">World · Boston, Year Two</div><div class="mo dim" style="font-size: 11px; line-height: 14px">bow://boston-y2</div></div>
+      <span class="code">{{rootCode}}</span>
+    </div>
+    <sc-for list="{{groups}}" as="g" hint-placeholder-count="6">
+      <button type="button" class="grp" onClick="{{g.pick}}" aria-expanded="{{g.exp}}" style="outline: {{g.ol}}; outline-offset: -2px">
+        <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" style="flex: none; transform: rotate({{g.rot}}deg); transition: transform .2s"><path d="M4 2 L8 6 L4 10" fill="none" stroke="#111827" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span style="font-size: 13px; font-weight: 600; flex: 1">{{g.name}}</span>
+        <span class="mo dim" style="font-size: 11px">{{g.type}}</span>
+      </button>
+      <sc-if value="{{g.open}}" hint-placeholder-val="{{false}}">
+        <div style="flex: none; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px; padding: 4px 8px 4px 22px; background: #F9FAFB; border-bottom: 1px solid #E5E7EB">
+          <sc-for list="{{g.kids}}" as="k" hint-placeholder-count="5">
+            <button type="button" class="kid" onClick="{{k.pick}}" aria-pressed="{{k.pressed}}" style="border-color: {{k.bd}}; border-width: {{k.bw}}"><span class="sw {{k.sw}}"></span><span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{k.label}}</span><span class="code">{{k.code}}</span></button>
+          </sc-for>
+        </div>
+      </sc-if>
+    </sc-for>
+    <button type="button" onClick="{{pickSeat}}" style="flex: none; margin: auto 8px 6px; height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 10px; border: 1.5px solid #111827; background: #fff; outline: {{ol.roles}}; outline-offset: 2px">
+      <span class="mo" style="font-size: 11px; font-weight: 700; letter-spacing: .06em">SEAT</span>
+      <span style="font-size: 12.5px; line-height: 15px">you hold <b>GM</b><br><span class="mo dim" style="font-size: 11px">warrant w_gm_01 [authored]</span></span>
+    </button>
+  </section>
+
+  <!-- CENTER · event log -->
+  <section class="pn" aria-label="Event log" style="left: 392px; top: 58px; width: 552px; height: 466px; outline: {{ol.log}}; outline-offset: 2px">
+    <div class="ph" style="height: 40px"><span style="display: flex; flex-direction: column; gap: 1px; line-height: 14px"><span>Event log · append-only</span><span class="dim" style="font-weight: 500; letter-spacing: .02em; text-transform: none; outline: {{ol.time}}; outline-offset: 1px; align-self: flex-start">HEAD {{head}} · Y2 Wk9 Sat</span></span>
+      <button type="button" onClick="{{resetView}}" aria-label="Renderer view: {{viewLabel}} {{viewSub}}. Activate to return to canonical." style="height: 36px; max-width: 340px; padding: 0 10px; display: flex; flex-direction: column; justify-content: center; border: 1.5px solid {{viewInk}}; color: {{viewInk}}; background: #fff; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 14px; font-weight: 700; text-transform: none; letter-spacing: 0; outline: {{ol.render}}; outline-offset: 2px"><span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{viewLabel}}</span><span style="display: {{viewSubD}}; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{viewSub}}</span></button>
+    </div>
+    <div style="flex: 1; display: flex; flex-direction: column; min-height: 0">
+      <sc-for list="{{rows}}" as="r" hint-placeholder-count="7">
+        <sc-if value="{{r.isGap}}" hint-placeholder-val="{{false}}">
+          <div class="mo dim" style="flex: none; height: 14px; display: flex; align-items: center; gap: 8px; padding: 0 12px; font-size: 11px"><span style="flex: 1; height: 1px; background: #D1D5DB"></span>{{r.t}}<span style="flex: 1; height: 1px; background: #D1D5DB"></span></div>
+        </sc-if>
+        <sc-if value="{{r.isEv}}" hint-placeholder-val="{{true}}">
+          <button type="button" class="rw {{r.fresh}}" onClick="{{r.pick}}" aria-pressed="{{r.pressed}}" aria-label="{{r.aria}}" style="flex: none; height: 48px; width: 100%; display: grid; grid-template-columns: 82px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 0 12px 0 10px; border: 0; border-bottom: 1px solid #E5E7EB; border-left: 4px solid {{r.bar}}; background: {{r.bg}}">
+            <span><span class="mo" style="display: block; font-size: 12.5px; font-weight: 700; line-height: 16px">{{r.i}}</span><span class="mo dim" style="display: block; font-size: 11px; line-height: 14px">{{r.w}}</span></span>
+            <span style="min-width: 0"><span class="mo dim" style="display: block; font-size: 11px; line-height: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.head}}</span><span style="display: block; font-size: 13px; line-height: 16px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.t}}</span><span class="mo dim" style="display: block; font-size: 11px; line-height: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.sm}}</span></span>
+            <span style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px">
+              <span class="mo" style="font-size: 11px; line-height: 14px; font-weight: 700; padding: 1px 6px; border: {{r.vb}}; color: {{r.vc}}; background: #fff">{{r.vd}}</span>
+              <span class="mo" style="display: {{r.forkD}}; font-size: 11px; line-height: 14px; font-weight: 700; padding: 0 5px; border: 1.5px solid #C2410C; color: #C2410C; background: #fff">FORK POINT</span>
+            </span>
+          </button>
+        </sc-if>
+        <sc-if value="{{r.isSeal}}" hint-placeholder-val="{{false}}">
+          <div class="mo dim" style="flex: none; height: 34px; margin: 6px 12px 0 14px; display: flex; align-items: center; padding: 0 10px; border: 1.5px dashed #4B5563; font-size: 11.5px">{{r.t}}</div>
+        </sc-if>
+        <sc-if value="{{r.isBr}}" hint-placeholder-val="{{false}}">
+          <button type="button" class="rw fr" onClick="{{r.pick}}" aria-pressed="{{r.pressed}}" aria-label="{{r.aria}}" style="flex: none; height: 48px; margin: 2px 12px 2px 30px; width: 510px; max-width: calc(100% - 42px); display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 10px; align-items: center; padding: 0 10px; border: 2px solid #C2410C; background: {{r.bg}}; color: #C2410C">
+            <span class="mo" style="justify-self: start; transform: rotate(-2deg); font-size: 11px; line-height: 13px; font-weight: 700; letter-spacing: .06em; padding: 2px 6px; border: 2px solid #C2410C; text-align: center">BRANCH<br>br_0c41</span>
+            <span style="min-width: 0"><span class="mo" style="display: block; font-size: 11px; line-height: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">fork · diverged at #1041 · your branch · parent untouched</span><span style="display: block; font-size: 13px; line-height: 16px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">you declared: denver keeps-backup</span><span class="mo" style="display: block; font-size: 11px; line-height: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">own log: 0 events · sealed — you find out by living it</span></span>
+          </button>
+        </sc-if>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- RIGHT · state diff + value inspector -->
+  <section class="pn" aria-label="State diff and value inspector" style="left: 956px; top: 58px; width: 456px; height: 466px">
+    <div class="ph" style="outline: {{ol.diff}}; outline-offset: -2px"><span>State diff · {{evI}}</span><span class="dim" style="font-weight: 500">before → after</span></div>
+    <div class="mo dim" style="flex: none; height: 24px; display: flex; align-items: center; padding: 0 12px; font-size: 11px; white-space: nowrap; border-bottom: 1px solid #E5E7EB; outline: {{ol.roles}}; outline-offset: -2px; overflow: hidden"><span style="overflow: hidden; text-overflow: ellipsis; color: {{subInk}}; font-weight: {{subFw}}">{{subText}}</span></div>
+    <sc-for list="{{diff}}" as="d" hint-placeholder-count="3">
+      <button type="button" class="dfr" onClick="{{d.pick}}" aria-pressed="{{d.pressed}}" style="background: {{d.bg}}">
+        <span class="sw {{d.sw}}"></span>
+        <span style="min-width: 0"><span style="display: flex; align-items: baseline; gap: 6px; line-height: 17px"><span style="font-size: 12.5px; font-weight: 600; white-space: nowrap">{{d.n}}</span><span class="mo" style="font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><span class="dim">{{d.b}}</span> → <b>{{d.a}}</b></span></span><span class="mo dim" style="display: block; font-size: 11px; line-height: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">by {{d.by}}</span></span>
+        <span class="code">{{d.code}}</span>
+      </button>
+    </sc-for>
+    <div class="ph" style="margin-top: auto; border-top: 1px solid #C4C9D1"><span>Value inspector</span><span class="dim" style="font-weight: 500">provenance chain</span></div>
+    <div style="flex: none; padding: 5px 12px 3px; display: flex; flex-direction: column; gap: 1px">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><span style="display: flex; align-items: baseline; gap: 8px; min-width: 0"><span class="dim" style="font-size: 12px; white-space: nowrap">{{cur.n}}</span><span class="mo dim" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{cur.ad}}</span></span>
+        <span style="flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 2px 6px; border: 1.5px solid #111827; outline: {{ol.tags}}; outline-offset: 1px"><span class="sw {{cur.sw}}"></span><span class="mo" style="font-size: 11px; font-weight: 700">{{cur.word}}</span></span></div>
+      <div style="font-size: 18px; line-height: 24px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{cur.v}}</div>
+    </div>
+    <sc-for list="{{slots}}" as="sl" hint-placeholder-count="3">
+      <div style="flex: none; min-height: 34px; display: grid; grid-template-columns: 12px 92px minmax(0, 1fr); gap: 8px; align-items: center; padding: 3px 12px; border-top: 1px solid #E5E7EB; outline: {{sl.ol}}; outline-offset: -2px">
+        <span class="sw {{sl.sw}}"></span>
+        <span class="mo dim" style="font-size: 11px; font-weight: 700; letter-spacing: .04em">{{sl.lab}}</span>
+        <span style="min-width: 0; display: flex; flex-wrap: wrap; gap: 4px; align-items: center">
+          <sc-if value="{{sl.isText}}" hint-placeholder-val="{{true}}"><span style="font-size: 12px; line-height: 15px; color: {{sl.c}}">{{sl.t}}</span></sc-if>
+          <sc-if value="{{sl.hasGo}}" hint-placeholder-val="{{false}}"><button type="button" onClick="{{sl.go}}" style="height: 36px; padding: 0 8px; border: 1px solid #111827; background: #fff; font-size: 12px; line-height: 15px; max-width: 100%">{{sl.t}}</button></sc-if>
+          <sc-for list="{{sl.chips}}" as="c" hint-placeholder-count="2"><button type="button" onClick="{{c.go}}" style="height: 36px; padding: 0 8px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #111827; background: #fff; font-size: 12px"><span class="sw {{c.sw}}"></span>{{c.t}}</button></sc-for>
+        </span>
+      </div>
+    </sc-for>
+    <div class="dim" style="flex: none; padding: 4px 12px 5px; font-size: 11.5px; line-height: 15px; border-top: 1px solid #E5E7EB; height: 35px; overflow: hidden">{{cur.note}}</div>
+  </section>
+
+  <!-- BOTTOM-LEFT · standardize vs leave open -->
+  <section class="pn" aria-label="Standardize versus leave open" style="left: 28px; top: 532px; width: 480px; height: 326px; border: 2px solid #111827">
+    <div style="flex: none; height: 26px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; background: #111827; color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: .08em"><span>STANDARDIZE vs LEAVE OPEN</span><span style="font-weight: 500">click one</span></div>
+    <div style="flex: none; display: flex; gap: 8px; padding: 8px 10px 0">
+      <div class="mo" style="flex: none; width: 16px; writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; font-size: 11px; font-weight: 700; letter-spacing: .1em">STANDARDIZE</div>
+      <div style="flex: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px">
+        <sc-for list="{{stdS}}" as="c" hint-placeholder-count="8"><button type="button" class="chip" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="border: {{c.bd}}; background: {{c.bg}}; color: {{c.fg}}"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" style="flex: none"><rect x="1" y="1" width="8" height="8" fill="{{c.fg}}"></rect></svg><span style="overflow: hidden; text-overflow: ellipsis">{{c.label}}</span></button></sc-for>
+      </div>
+    </div>
+    <div style="flex: none; display: flex; gap: 8px; padding: 8px 10px 0">
+      <div class="mo" style="flex: none; width: 16px; writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; font-size: 11px; font-weight: 700; letter-spacing: .1em">LEAVE OPEN</div>
+      <div style="flex: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px">
+        <sc-for list="{{stdO}}" as="c" hint-placeholder-count="5"><button type="button" class="chip" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="border: {{c.bd}}; background: {{c.bg}}; color: {{c.fg}}"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" style="flex: none"><circle cx="5" cy="5" r="3.6" fill="none" stroke="{{c.fg}}" stroke-width="1.6"></circle></svg><span style="overflow: hidden; text-overflow: ellipsis">{{c.label}}</span></button></sc-for>
+      </div>
+    </div>
+    <div style="flex: 1; min-height: 0; margin: 8px 10px 8px; padding: 6px 10px; border-top: 1.5px solid #111827; overflow: hidden">
+      <div class="mo" style="font-size: 11px; font-weight: 700; letter-spacing: .05em">{{capHead}}</div>
+      <div style="font-size: 12.5px; line-height: 17px; margin-top: 2px">{{capBody}}</div>
+    </div>
+  </section>
+
+  <!-- BOTTOM-RIGHT · console -->
+  <section class="pn" aria-label="Console" style="left: 520px; top: 532px; width: 892px; height: 326px">
+    <div class="ph" style="outline: {{ol.ui}}; outline-offset: -2px"><span>Console · proposed world.* calls</span><span class="dim" style="font-weight: 500; text-transform: none; letter-spacing: 0">none of this API exists · read/write through warrants only</span></div>
+    <div style="flex: 1; display: flex; gap: 12px; padding: 8px 10px; min-height: 0">
+      <div style="flex: none; width: 232px; display: flex; flex-direction: column; gap: 4px">
+        <sc-for list="{{presets}}" as="p" hint-placeholder-count="7"><button type="button" class="pre" onClick="{{p.go}}" aria-pressed="{{p.pressed}}" style="background: {{p.bg}}; color: {{p.fg}}; border-color: {{p.bd}}; outline: {{p.ol}}; outline-offset: 2px"><span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{p.label}}</span><span class="mo" style="font-size: 11px; white-space: nowrap">{{p.tag}}</span></button></sc-for>
+      </div>
+      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+        <div style="flex: none; height: 70px; padding: 6px 10px; background: #F3F4F6; border: 1px solid #C4C9D1; overflow: hidden">
+          <sc-for list="{{req}}" as="q" hint-placeholder-count="4"><div class="mo" style="font-size: 12px; line-height: 16px; white-space: pre">{{q.t}}</div></sc-for>
+        </div>
+        <div style="flex: 1; min-height: 0; padding: 6px 0; border: 1px solid #C4C9D1; background: #fff; overflow: hidden">
+          <sc-for list="{{lines}}" as="ln" hint-placeholder-count="10">
+            <div class="ln" style="display: flex; align-items: center; gap: 8px; padding-left: {{ln.pl}}px; min-height: 16px; line-height: 16px; color: {{ln.c}}">
+              <span class="sw {{ln.sw}}" style="visibility: {{ln.swd}}"></span>
+              <span class="mo" style="font-size: 12px; white-space: pre; flex: 1; min-width: 0; overflow: hidden; font-weight: {{ln.fw}}">{{ln.t}}</span>
+              <span style="display: {{ln.barD}}; position: relative; width: 150px; height: 10px; flex: none; margin-right: 12px; border-left: 1px solid #9CA3AF; border-right: 1px solid #9CA3AF"><span class="t-aut" style="position: absolute; top: 0; height: 10px; box-sizing: border-box; left: {{ln.barL}}px; width: {{ln.barW}}px"></span></span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <span class="mo dim" style="position: absolute; left: 28px; bottom: 6px; width: 820px; font-size: 11px; line-height: 15px">COMMERCIAL LENS · hypothesis: developers pay for runtime (ticks, stored branches), model execution pass-through with margin, and hosted data feeds; the World format and truth tags stay open so the medium spreads.</span>
+  <span class="mo dim" style="position: absolute; right: 28px; bottom: 6px; width: 500px; text-align: right; font-size: 11px; line-height: 15px">PLATFORM HYPOTHESIS · SPECULATIVE FRONTIER · APIs illustrative, not a design commitment · fixture figures approx., verify</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const how = !!s.how;
+    const std = s.std || '';
+    const call = s.call || '';
+    const done = s.done || {};
+    const order = s.order || [];
+    const rview = s.rview || '';
+    const grp = s.grp === undefined ? 'roles' : s.grp;
+    const ORG = '#C2410C', RED = '#B91C1C', INK = '#111827';
+    const set = (o) => this.setState(o);
+    const TAG = { obs: ['OBSERVED', 'OBS'], rec: ['RECORDED', 'REC'], aut: ['AUTHORED', 'AUT'], com: ['COMPUTED', 'COM'], mod: ['MODELED', 'MOD'], gen: ['GENERATED', 'GEN'], unk: ['UNKNOWN', 'UNK'], seal: ['SEALED', 'SEAL'], brn: ['RECORDED in branch', 'BRN'], bra: ['AUTHORED by you', 'AUT'] };
+    const SW = { obs: 't-obs', rec: 't-rec', aut: 't-aut', com: 't-com', mod: 't-mod', gen: 't-gen', unk: 't-unk', seal: 't-unk', brn: 't-brn', bra: 't-bra', non: 't-non' };
+    const idOf = (k) => { const i = order.indexOf(k); return i < 0 ? '' : '#' + (1058 + i); };
+    const forked = !!done.fork, attached = !!done.attach;
+    const calls = s.calls || {};
+    const RUN = 'court-sim v2 · run r_1057 · provider [BOW-hosted] · seed 4471902 [illustrative]';
+
+    // ---------- events ----------
+    const E = {
+      e388: { i: '#0388', w: 'Y1 · Wk1', head: 'submitAction · role:GM', role: 'GM', t: 'fund Business over Basketball Ops', vd: 'ACCEPTED', sm: 'staff: analytics cut · check: one pool ✓', wa: 'w_gm_01', df: ['staff'] },
+      e1041: { i: '#1041', w: 'Wk6 Tue', head: 'submitAction · role:GM', role: 'GM', t: 'accept trade White + backup big → Butler', vd: 'ACCEPTED', sm: 'roster −2 +1 · payroll +$8.9M · salary matching ✓', wa: 'w_gm_01 + w_own_02 (Owner co-sign)', df: ['roster', 'payroll', 'tax'] },
+      e1042: { i: '#1042', w: 'Wk6 Tue', head: 'submitAction · role:GM', role: 'GM', t: 'sign free agent $4M', vd: 'REFUSED', sm: 'no state change · rule: second apron (R-APRON-2)', wa: 'w_gm_01 (no Owner co-sign)', df: ['ref1042'] },
+      e1057: { i: '#1057', w: 'Wk9 Sat', head: 'advanceTime · role:scheduler', role: 'scheduler', t: 'Court sim v2 ran game · 112–115', vd: 'RECORDED', sm: '20 possessions · crowd 19,156 [authored]', wa: 'none (World clock, no seat)', df: ['result', 'poss', 'crowd'] },
+      sign: { i: idOf('sign'), w: 'Wk9 Sat', head: 'submitAction · role:GM', role: 'GM', t: 'sign free agent $4M', vd: 'REFUSED', sm: 'no state change · rule: second apron (R-APRON-2)', wa: 'w_gm_01 (no Owner co-sign)', df: ['refNew'] },
+      offer: { i: idOf('offer'), w: 'Wk9 Sat', head: 'submitAction · role:GM', role: 'GM', t: 'offer backup guard to Denver for a 2029 second', vd: 'ACCEPTED', sm: 'outbox +1, pending · Denver reply not visible', wa: 'w_gm_01', df: ['outbox', 'denverEval'] },
+      attach: { i: idOf('attach'), w: 'Wk9 Sat', head: 'attachModel · role:operator', role: 'operator', t: 'court slot → [id] v[x] · provider [any]', vd: 'ACCEPTED', sm: 'future Court values only · #1057 unchanged', wa: 'op_key (operator, outside)', df: ['slot', 'nextCourt'] },
+      br: { i: 'br_0c41', w: 'branch', head: 'fork', role: 'you', t: 'fork', vd: 'BRANCH', sm: '', wa: 'w_gm_01 · fork ∈ scope', df: ['brDecl', 'brInh', 'brFut'] }
+    };
+    const logKeys = ['e388', 'gap1', 'e1041'].concat(forked ? ['br'] : [], ['e1042', 'gap2', 'e1057'], order);
+    const evSel = (E[s.ev] && (E[s.ev].i || s.ev === 'br') && (s.ev !== 'br' || forked)) ? s.ev : 'e1041';
+    const ev = E[evSel];
+    const head = '#' + (1057 + order.length);
+
+    // ---------- values ----------
+    const V = {
+      staff: { n: 'analytics staff', b: 'funded', a: 'cut', by: 'rule staff.pool v1', tag: 'rec', ad: 'state/staff/analytics', wrE: 'e388', co: ['aut', 'rule staff.pool v1 · one budget pool, two claims'], dep: [], note: 'Year One choice. World event, not NBA history.' },
+      roster: { n: 'roster', b: 'White + backup big', a: 'Butler', by: 'rule roster.max v1 · ≤ 15 ✓', tag: 'rec', ad: 'state/roster', wrE: 'e1041', co: ['aut', 'rule roster.max v1 · at most 15 players — passed'], dep: ['contracts'], note: 'Two players out, one in. White ≈ $30.3M (approx., public reporting; verify).' },
+      payroll: { n: 'payroll', b: '$213.9M', a: '$222.8M', by: 'rule payroll.sum v1', tag: 'com', ad: 'state/payroll', wrE: 'e1041', co: ['aut', 'rule payroll.sum v1 · sum of 15 contracts'], dep: ['roster', 'contracts'], note: '$1.1M over the second apron ($221.686M). Before #1041: $222.8M − $8.9M = $213.9M.' },
+      tax: { n: 'projected tax', b: '$20.9M', a: '$34.2M', by: 'rule tax.flat15 v1', tag: 'com', ad: 'state/tax', wrE: 'e1041', co: ['aut', 'rule tax.flat15 v1 · (payroll − $200M) × 1.5'], dep: ['payroll'], note: 'World rule: flat 1.5× (authored) — the NBA’s real tax is incremental. (222.8 − 200) × 1.5 = 34.2.' },
+      contracts: { n: 'contracts at Year 0', v: '15 players', tag: 'obs', ad: 'state/contracts', wrT: ['obs', 'Reality feed, copied when the World was built · as of [verify date]'], dep: [], note: 'Approx., public reporting, verify: Tatum ≈ $58.5M, Brown ≈ $57.1M, Pritchard ≈ $7.8M.' },
+      ref1042: { n: 'refusal', b: 'payroll $222.8M', a: 'unchanged', by: 'rule R-APRON-2', tag: 'com', ad: 'log/1042/refusal', wrE: 'e1042', co: ['aut', 'rule R-APRON-2 · $222.8M + $4.0M = $226.8M > $221.686M'], dep: ['payroll'], note: 'Refused acts are events too, so the attempt stays attributable.' },
+      refNew: { n: 'refusal', b: 'payroll $222.8M', a: 'unchanged', by: 'rule R-APRON-2', tag: 'com', ad: 'log/' + (idOf('sign') || '#').slice(1) + '/refusal', wrE: 'sign', co: ['aut', 'rule R-APRON-2 · $222.8M + $4.0M = $226.8M > $221.686M'], dep: ['payroll'], note: 'Same act as #1042, same rule, same answer — because nothing it depends on changed.' },
+      result: { n: 'last result', b: '—', a: '112–115', v: '112–115 · lost to Denver', by: 'court-sim v2 · run r_1057', tag: 'rec', ad: 'state/last_result', wrE: 'e1057', ge: ['mod', RUN], dep: ['roster'], note: 'A model’s answer, then written to the log: another seed, another score. World event, not NBA history.' },
+      poss: { n: 'possessions', b: '0', a: '20', by: 'court-sim v2 · run r_1057', tag: 'rec', ad: 'state/possessions', wrE: 'e1057', ge: ['mod', RUN], dep: ['result'], note: '“Butler for three” twice. “Jokić scores” on the last possession, after a switch left a big on a guard.' },
+      crowd: { n: 'crowd', b: '—', a: '19,156', by: 'world.def · arena.capacity', tag: 'aut', ad: 'state/crowd', wrT: ['aut', 'world.def · arena.capacity, chosen by the World author'], dep: [], note: 'Illustrative, authored. Crowd model v0.4 reads it as an input; it did not produce it.' },
+      denverEval: { n: 'Denver’s valuation', b: '—', a: 'not shared', by: 'Denver’s World', tag: 'unk', ad: '(held in bow://denver-y2)', wrT: ['unk', 'held in Denver’s World; not published to this seat'], dep: [], note: 'A hole stays a hole. The medium never fills it with a guess.' },
+      outbox: { n: 'outbox', b: '0', a: '1 offer, pending', by: 'rule offer.valid v1', tag: 'rec', ad: 'state/outbox', wrE: 'offer', co: ['aut', 'rule offer.valid v1 · role may offer — passed'], dep: ['denverEval'], note: 'Backup guard ($2.1M, authored) for a 2029 second-round pick. The Handshake board plays it out.' },
+      slot: { n: 'court slot', b: 'court-sim v2', a: '[id] v[x]', by: 'operator warrant', tag: 'rec', ad: 'slots/court', wrE: 'attach', co: ['aut', 'slot registry · one model per slot'], dep: ['result'], note: 'Court values written after this event carry the new model. #1057 keeps court-sim v2.' },
+      nextCourt: { n: 'next Court value (Wk10)', b: '—', a: 'sealed', by: '[id] v[x] when run', tag: 'seal', ad: 'state/next_court', wrT: ['seal', 'not written yet — you find out by living it'], ge: ['mod', '[id] v[x] · provider [any] · seed at run time'], dep: ['slot'], note: 'Sealed, not modeled: no model has run. Only its provenance is known.' },
+      brDecl: { n: 'declaration: denver', b: '—', a: 'keeps-backup', by: 'you, at the fork', tag: 'bra', ad: '~br_0c41/declared/denver', wrE: 'br', dep: [], note: 'Your assumption about an actor you cannot see. It is not Denver’s word.' },
+      brInh: { n: 'inherited history', b: '—', a: '#0001–#1041', by: 'parent log, shared', tag: 'rec', ad: '~br_0c41/inherits', wrT: ['rec', 'parent log · shared and append-only'], dep: [], note: 'The record stays readable beside the branch and is never overwritten.' },
+      brFut: { n: 'branch future', b: '—', a: 'sealed', by: 'nobody yet', tag: 'seal', ad: '~br_0c41/log', wrT: ['seal', 'no events yet — you find out by living it'], dep: [], note: 'Hatch would claim a model ran. None has, so this stays sealed.' }
+    };
+    if (attached) V.nextCourt.b = '—';
+    // nodes: [label, tag, value, address, writtenBy, computedBy, generatedBy, deps, note]
+    const N = {
+      'a:bos': ['Boston Celtics', 'rec', 'institution · your seat: GM', 'actors/celtics', ['rec', 'World built from Reality at Year 0, then diverged by your acts'], null, null, ['payroll'], 'Real team identity, fictional World. World event, not NBA history.'],
+      'a:den': ['Denver Nuggets', 'unk', 'another player’s World', 'actors/nuggets', ['unk', 'bow://denver-y2 is a separate World; it publishes receipts, counters, signatures and its own record lines'], null, null, ['denverEval'], 'You see what Denver shows you. Its inside is a hole.'],
+      'a:lg': ['League office', 'aut', 'rulebook node', 'actors/league', ['aut', 'world.def · actor type: rulebook-node'], null, null, [], 'Approves or refuses transactions against the rules below.'],
+      'a:own': ['Owner', 'gen', 'actor model · answers as a persona', 'actors/owner', ['gen', 'world.def · actor type: persona'], null, ['gen', 'actor model owner-persona · [id] v[x] · provider [any]'], [], 'An actor model wears the generated stipple, never the solid record.'],
+      'a:pl': ['Players ×15', 'rec', '15 contracts', 'actors/players', ['obs', 'Reality feed at Year 0 (approx., verify), then your acts'], null, null, ['contracts'], ''],
+      'r:gm': ['GM', 'aut', 'offer · accept · waive · call up', 'roles/gm', ['aut', 'world.def · role schema'], null, null, ['a:own'], 'Held by you · warrant w_gm_01. Cap: may not exceed the second apron without the Owner.'],
+      'r:hc': ['Head coach', 'aut', 'set rotation · set lineup', 'roles/head-coach', ['aut', 'world.def · role schema'], null, null, [], 'No trade authority.'],
+      'r:cap': ['Capologist', 'aut', 'read payroll · propose, not accept', 'roles/capologist', ['aut', 'world.def · role schema'], null, null, ['payroll'], 'Can draft a move; the GM signs it.'],
+      'r:own': ['Owner', 'aut', 'co-sign above the second apron', 'roles/owner', ['aut', 'world.def · role schema'], null, null, ['a:own'], 'Played by an actor model in this World.'],
+      'r:lg': ['League office', 'aut', 'approve · refuse transactions', 'roles/league', ['aut', 'world.def · role schema'], null, null, [], ''],
+      'ru:sm': ['Salary matching', 'aut', 'incoming vs outgoing salary', 'rules/salary-matching', ['aut', 'world.def · CBA simplified'], null, null, [], 'Passed at #1041.'],
+      'ru:ap': ['Aprons', 'aut', '1st $209.015M · 2nd $221.686M', 'rules/aprons', ['aut', 'world.def · copied from the BOW Economics Live fixture (verify)'], null, null, [], 'Lines are the 2026–27 league figures; the World copies them as its own rule.'],
+      'ru:ro': ['Roster limit', 'aut', 'at most 15 players', 'rules/roster', ['aut', 'world.def · CBA simplified'], null, null, [], ''],
+      'ru:tx': ['Tax: flat 1.5×', 'aut', 'over the $200M line', 'rules/tax', ['aut', 'world.def · World rule'], null, null, ['payroll'], 'World rule: flat 1.5× (authored) — the NBA’s real tax is incremental.'],
+      'rs:pk': ['Picks', 'rec', 'held picks [from the World ledger]', 'resources/picks', ['rec', 'World ledger'], null, null, [], ''],
+      't:cal': ['Calendar', 'aut', 'World calendar · advances Mondays', 'time/calendar', ['aut', 'world.def · time model'], null, null, [], 'Time moves only through recorded advanceTime events.'],
+      't:now': ['Now: Y2 Wk9', 'aut', 'Year Two · Week 9 (authored)', 'time/now', ['aut', 'world.def · set by the World'], null, null, ['t:cal'], 'Head of the log is ' + head + '.'],
+      'm:court': [attached ? '[id] v[x]' : 'Court sim v2', 'mod', attached ? 'slot court · [id] v[x] · [any]' : 'slot court · v2 · [BOW-hosted]', 'slots/court', ['aut', 'slot registry · attached by operator'], null, ['mod', attached ? '[id] v[x] · provider [any] · from ' + idOf('attach') : RUN.replace(' · run r_1057', '')], ['result'], attached ? 'Slot switched at ' + idOf('attach') + '. Past values keep court-sim v2.' : 'Ran the game at #1057.'],
+      'm:crowd': ['Crowd model v0.4', 'mod', 'slot crowd · v0.4', 'slots/crowd', ['aut', 'slot registry'], null, ['mod', 'crowd v0.4 · provider [BOW-hosted]'], ['crowd'], 'Reads crowd 19,156 as input.']
+    };
+    const VV = (k) => {
+      if (V[k]) return V[k];
+      const a = N[k];
+      return { n: a[0], tag: a[1], v: a[2], ad: a[3], wrT: a[4], co: a[5], ge: a[6], dep: a[7] || [], note: a[8] || '' };
+    };
+    const evValid = (k) => !!E[k] && (E[k].i || k === 'br');
+    const firstVal = (k) => E[k].df[0];
+    const valSel = (s.val && (V[s.val] || N[s.val])) ? s.val : 'payroll';
+    const cur0 = VV(valSel);
+
+    // ---------- highlights (standardize vs leave open) ----------
+    const STDS = [
+      ['log', 'Event & state log', ['log', 'diff'], 'One shape for history: event, role, warrant, diff, rule check. Any tool can read any World, and a replay is the same log anywhere.'],
+      ['addr', 'Addresses', ['addr'], 'Every World, event, value and branch has a bow:// address. That is how a Moment gets cited, linked and forked by someone who was not there.'],
+      ['tags', 'Truth tags ×7', ['tags'], 'Observed, recorded, authored, computed, modeled, generated, unknown. Every value carries one, so no tool can pass a model’s answer off as a fact.'],
+      ['warrant', 'Roles & warrants', ['roles'], 'Who may do what, and who signed it. The runtime refuses; a UI never decides. A rules pack fills in the roles; the schema stays fixed.'],
+      ['fork', 'Fork semantics', ['branch'], 'A fork is a divergence point plus declarations. The parent log is append-only; what other actors do is declared, not observed.'],
+      ['time', 'Time model', ['time'], 'A World calendar that moves only by recorded advance events. Each World picks its calendar; how time advances is written down the same way.'],
+      ['run', 'Model-run record', ['run'], 'Model id, version, provider, seed. Which model runs is open. The record of the run is not, or nobody can say what wrote a value.'],
+      ['render', 'Renderer contract', ['render'], 'Renderers read canonical state and must display truth tags. One that drops them fails the check and is labelled unverified.']
+    ];
+    const STDO = [
+      ['rules', 'Domain rules', ['rules'], 'A basketball CBA, a supply contract, a treaty. The rulebook belongs to the domain author; the log format does not change.'],
+      ['models', 'Model providers', ['models'], 'Any model from any provider in any slot. Switching changes the provenance of future values only, never past ones.'],
+      ['art', 'Renderers & art', ['art'], 'Broadcast board, tactical board, plain text. Skins are the renderer’s business as long as the tags survive.'],
+      ['ui', 'UI', ['ui'], 'This workbench is one way to look at a World. Yours can look nothing like it and still read the same log.'],
+      ['price', '3rd-party pricing', ['price'], 'What a creator charges for a Moment, a model or a feed is between them and the buyer. BOW meters runtime, not their prices.']
+    ];
+    const stdSel = STDS.concat(STDO).filter((x) => x[0] === std)[0];
+    const hl = stdSel ? stdSel[2] : [];
+    const ol = {};
+    ['log', 'diff', 'addr', 'tags', 'roles', 'branch', 'time', 'run', 'render', 'rules', 'models', 'art', 'ui', 'price'].forEach((k) => { ol[k] = hl.indexOf(k) >= 0 ? '2px solid #111827' : '2px solid transparent'; });
+    if (hl.indexOf('art') >= 0) ol.render = ol.art;
+    const isOpen = STDO.filter((x) => x[0] === std).length > 0;
+    const mkChip = (x, isO) => ({ label: x[1], pressed: std === x[0] ? 'true' : 'false', bd: std === x[0] ? '2px solid #111827' : (isO ? '1.5px solid #9CA3AF' : '1.5px solid #111827'), bg: std === x[0] ? '#111827' : '#fff', fg: std === x[0] ? '#fff' : '#111827', pick: () => set({ std: std === x[0] ? '' : x[0] }) });
+
+    // ---------- tree ----------
+    const TREE = [
+      ['actors', 'Actors', 'Actor[5]', ['a:bos', 'a:den', 'a:lg', 'a:own', 'a:pl'], ''],
+      ['roles', 'Roles → Authority', 'Role[5]', ['r:gm', 'r:hc', 'r:cap', 'r:own', 'r:lg'], 'roles'],
+      ['rules', 'Rules · CBA simplified', 'Rule[4]', ['ru:sm', 'ru:ap', 'ru:ro', 'ru:tx'], 'rules'],
+      ['res', 'Resources', 'Resource[3]', ['payroll', 'rs:pk', 'staff'], ''],
+      ['time', 'Time', 'Calendar', ['t:cal', 't:now'], 'time'],
+      ['models', 'Models attached', 'Slot[2]', ['m:court', 'm:crowd'], 'models']
+    ];
+    const KL = { payroll: 'Payroll $222.8M', staff: 'Staff budget' };
+    const groups = TREE.map((g) => {
+      const open = grp === g[0];
+      let o = g[4] ? ol[g[4]] : '2px solid transparent';
+      if (g[0] === 'models' && ol.run !== '2px solid transparent') o = ol.run;
+      return { name: g[1], type: g[2], open: open, exp: open ? 'true' : 'false', rot: open ? 90 : 0, ol: o,
+        pick: () => set({ grp: open ? '' : g[0] }),
+        kids: g[3].map((k) => { const v = VV(k); const sel = valSel === k; return { label: KL[k] || v.n, sw: SW[v.tag], code: how ? TAG[v.tag][1] : '', pressed: sel ? 'true' : 'false', bd: sel ? INK : '#D1D5DB', bw: sel ? '2px' : '1px', pick: () => set({ val: k, call: '' }) }; }) };
+    });
+    const legend = ['obs', 'rec', 'aut', 'com', 'mod', 'gen', 'unk'].map((k) => ({ sw: SW[k], code: TAG[k][1] }));
+
+    // ---------- log rows ----------
+    const rows = logKeys.map((k) => {
+      if (k === 'gap1') return { isGap: true, isEv: false, isBr: false, t: '#0389–#1040 · 652 events not shown' };
+      if (k === 'gap2') return { isGap: true, isEv: false, isBr: false, t: '#1043–#1056 · 14 events not shown' };
+      const e = E[k], sel = k === evSel;
+      const pick = () => set({ ev: k, val: firstVal(k), call: '' });
+      if (k === 'br') return { isGap: false, isEv: false, isBr: true, pick: pick, pressed: sel ? 'true' : 'false', bg: sel ? '#FFF7ED' : '#FFFFFF', aria: 'Branch br_0c41, diverged at #1041' };
+      const ref = e.vd === 'REFUSED', rec = e.vd === 'RECORDED';
+      const vc = ref ? RED : INK;
+      return { isGap: false, isEv: true, isBr: false, i: e.i, w: e.w, head: e.head, t: e.t, sm: e.sm, vd: e.vd, vc: vc,
+        vb: (rec ? '3px double ' : '1.5px solid ') + vc, bar: ref ? RED : INK, bg: sel ? '#EEF0F3' : '#FFFFFF',
+        pressed: sel ? 'true' : 'false', aria: e.i + ' ' + e.head + ' ' + e.t + ' ' + e.vd, forkD: (k === 'e1041' && forked) ? 'block' : 'none',
+        fresh: (order.length && k === order[order.length - 1]) ? 'fr' : '', pick: pick };
+    });
+
+    let hsum = 34;
+    rows.forEach((r) => { hsum += r.isGap ? 14 : r.isBr ? 52 : 48; });
+    if (hsum <= 424) rows.push({ isGap: false, isEv: false, isBr: false, isSeal: true, t: '#' + (1058 + order.length) + ' · next event · sealed — you find out by living it' });
+
+    rows.forEach((r) => { if (!r.isSeal) r.isSeal = false; });
+
+    const stripped = rview === 'T' && evSel === 'e1057';
+    // ---------- diff ----------
+    const diff = ev.df.map((k) => { const v = VV(k); const sel = valSel === k; return { n: v.n, b: v.b, a: v.a, by: v.by, sw: stripped ? SW.non : SW[v.tag], code: how && !stripped ? TAG[v.tag][1] : '', pressed: sel ? 'true' : 'false', bg: sel ? '#EEF0F3' : '#FFFFFF', pick: () => set({ val: k, call: '' }) }; });
+
+    // ---------- inspector ----------
+    const evLabel = (k) => E[k].i + ' · ' + E[k].head;
+    const slots = [];
+    const goEv = (k) => () => set({ ev: k, val: E[k].df.indexOf(valSel) >= 0 ? valSel : E[k].df[0], call: '' });
+    if (cur0.wrE && E[cur0.wrE] && (E[cur0.wrE].i || cur0.wrE === 'br')) slots.push({ lab: 'WRITTEN BY', sw: SW[cur0.wrE === 'br' ? 'brn' : 'rec'], t: evLabel(cur0.wrE), isText: false, hasGo: true, go: goEv(cur0.wrE), c: INK, chips: [], ol: '2px solid transparent' });
+    else if (cur0.wrT) slots.push({ lab: 'WRITTEN BY', sw: SW[cur0.wrT[0]], t: cur0.wrT[1], isText: true, hasGo: false, go: () => {}, c: INK, chips: [], ol: '2px solid transparent' });
+    else slots.push({ lab: 'WRITTEN BY', sw: SW.non, t: 'nothing has written it', isText: true, hasGo: false, go: () => {}, c: '#4B5563', chips: [], ol: '2px solid transparent' });
+    slots.push(cur0.co ? { lab: 'COMPUTED BY', sw: SW[cur0.co[0]], t: cur0.co[1], isText: true, hasGo: false, go: () => {}, c: INK, chips: [], ol: '2px solid transparent' }
+      : { lab: 'COMPUTED BY', sw: SW.non, t: '—', isText: true, hasGo: false, go: () => {}, c: '#4B5563', chips: [], ol: '2px solid transparent' });
+    slots.push(cur0.ge ? { lab: 'GENERATED BY', sw: SW[cur0.ge[0]], t: cur0.ge[1], isText: true, hasGo: false, go: () => {}, c: INK, chips: [], ol: ol.run }
+      : { lab: 'GENERATED BY', sw: SW.non, t: '—', isText: true, hasGo: false, go: () => {}, c: '#4B5563', chips: [], ol: ol.run });
+    slots.push({ lab: 'DEPENDS ON', sw: SW.non, t: '—', isText: cur0.dep.length === 0, hasGo: false, go: () => {}, c: '#4B5563', ol: '2px solid transparent',
+      chips: cur0.dep.map((d) => { const v = VV(d); return { t: v.n, sw: SW[v.tag], go: () => set({ val: d, call: '' }) }; }) });
+    const cur = { n: cur0.n, v: cur0.v || cur0.a, ad: 'bow://boston-y2/' + cur0.ad, sw: SW[cur0.tag], word: TAG[cur0.tag][0], note: cur0.note };
+
+    // ---------- console ----------
+    const L = (t, lv, c, sw, x) => Object.assign({ t: t, pl: 12 + (lv || 0) * 14, c: c || INK, sw: sw ? (SW[sw] || sw) : 't-non', swd: sw ? 'visible' : 'hidden', fw: 400, barD: 'none', barL: 0, barW: 0 }, x || {});
+    const J = (arr) => arr.map((a) => L(a[0], a[1], a[2], a[3], a[4]));
+    let req = [], lines = [];
+    const R = (t) => ({ t: t });
+    const dup = (k) => (calls[k] > 1 ? [L('idempotent: same request key, so no second event was written', 0, '#4B5563')] : []);
+    if (call === 'fork') {
+      req = ['world.fork({', '  at: "#1041",', '  assume: { denver: "declared:keeps-backup" }', '})'].map(R);
+      lines = J([['{', 0], ['"branch": "br_0c41",', 1, ORG, 'brn', { fw: 700 }], ['"parent": "bow://boston-y2",  "diverges_at": "#1041",', 1], ['"declared": { "denver": "keeps-backup" },', 1, ORG, 'bra'],
+        ['"inherits": "#0001–#1041",  "record_touched": false,', 1, INK, 'rec'], ['"own_log": { "events": 0, "future": "sealed" },', 1, INK, 'unk'],
+        ['"provenance": { "inherited": "RECORDED", "declared": "AUTHORED (yours)" }', 1], ['}', 0]]).concat(dup('fork'));
+      lines.push(L('a BRANCH row now sits after #1041 in the log; #1042 onward is untouched', 0, ORG));
+    } else if (call === 'offer') {
+      req = ['world.submitAction({ role: "GM", action: "offer", to: "denver",', '  send: "backup guard, $2.1M (authored)", receive: "2029 second-round pick" })'].map(R);
+      lines = J([['{', 0], ['"status": "ACCEPTED",', 1, INK, '', { fw: 700 }], ['"event": "' + idOf('offer') + '",', 1, INK, 'rec'], ['"warrant": "w_gm_01 · GM · offer in scope",', 1], ['"checks": ["R-ROLE offer: pass", "R-OFFER outgoing only: pass"],', 1, INK, 'aut'],
+        ['"diff": { "outbox": "0 → 1 offer, pending" },', 1, INK, 'rec'], ['"counterparty": "denver · reply not visible to this seat"', 1, INK, 'unk'], ['}', 0]]).concat(dup('offer'));
+    } else if (call === 'sign') {
+      req = ['world.submitAction({', '  role: "GM", action: "sign", detail: "free agent, $4M"', '})'].map(R);
+      lines = J([['{', 0], ['"status": "REFUSED",', 1, RED, '', { fw: 700 }], ['"event": "' + idOf('sign') + '",   refusals are recorded too', 1, INK, 'rec'], ['"rule": "R-APRON-2 · second apron",', 1, RED, 'aut', { fw: 700 }],
+        ['"because": "GM may not add payroll above $221.686M without an Owner co-sign",', 1], ['"computed": "$222.8M + $4.0M = $226.8M > $221.686M",', 1, INK, 'com'], ['"warrant": "w_gm_01 · no Owner co-sign attached",', 1], ['"state": "unchanged"', 1], ['}', 0]]).concat(dup('sign'));
+    } else if (call === 'attach') {
+      req = ['world.attachModel({', '  slot: "court", provider: "[any]", model: "[id]", version: "[x]"', '})'].map(R);
+      lines = J([['{', 0], ['"status": "ACCEPTED",  "event": "' + idOf('attach') + '",', 1, INK, 'rec', { fw: 700 }], ['"warrant": "op_key · operator · attachModel in scope",', 1], ['"slot": "court: court-sim v2 → [id] v[x]  (provider [any])",', 1],
+        ['"applies_to": "Court values written after ' + idOf('attach') + '",', 1], ['"kept": "#1057 stays court-sim v2 · run r_1057 · seed 4471902 (rewritten: 0)"', 1], ['}', 0],
+        ['value                          model            provenance', 0, '#4B5563'],
+        ['#1057 result 112–115           court-sim v2     unchanged', 0, INK, 'rec'], ['Wk10 Sat next game             [id] v[x]        new, sealed until run', 0, INK, 'unk']]).concat(dup('attach'));
+    } else if (call === 'replayT' || call === 'replayB') {
+      const bad = call === 'replayT', rn = bad ? 'third-party:tactical-board' : 'bow:broadcast-2d';
+      req = ['world.replay("#1057", { renderer: "' + rn + '" })'].map(R);
+      const ck = (ok, t, d) => L((ok ? '✓ PASS  ' : '✗ FAIL  ') + t + (d ? '  — ' + d : ''), 1, ok ? INK : RED, ok ? 'com' : 'aut', { fw: ok ? 400 : 700 });
+      lines = [L('reads canonical state @ #1057 · writes 0 events', 0), L('', 0), L('CONTRACT CHECK · ' + rn, 0, INK, '', { fw: 700 }),
+        ck(true, 'reads canonical state only'), ck(!bad, 'every drawn value carries its truth tag', bad ? 'score and crowd drawn bare' : ''),
+        ck(!bad, 'MODELED stays distinct from RECORDED', bad ? 'Court run drawn as plain fact' : ''), ck(true, 'UNKNOWN drawn as a hole, not filled'), ck(true, 'writes nothing to the log'), L('', 0),
+        L(bad ? 'RESULT  2 of 5 fail → the runtime labels this view “unverified renderer”.' : 'RESULT  5 of 5 pass → labelled a conformant renderer.', 0, bad ? RED : INK, '', { fw: 700 }),
+        L(bad ? 'The World is unchanged; only this view is marked. Drawing style was never checked.' : 'Layout, art and style were the renderer’s own business.', 0, '#4B5563')];
+    } else if (call === 'cost') {
+      req = ['world.cost()   // per day'].map(R);
+      const C = [['simulation ticks', '~1,000–3,000', 0.02, 0.06], ['model · court', attached ? '[id] v[x] · [any]' : 'court-sim v2 [BOW]', 0.05, attached ? 1.2 : 0.5], ['model · crowd', 'crowd v0.4 [BOW]', 0.01, 0.08],
+        ['stored branches', forked ? '1 × br_0c41' : 'none yet', forked ? 0.01 : 0, forked ? 0.03 : 0], ['data feed', 'Reality feed · hosted', 0.05, 0.3]];
+      const pad = (t, n) => (t + '                                ').slice(0, n);
+      const bar = (lo, hi) => ({ barD: 'block', barL: Math.round(lo / 1.8 * 150), barW: Math.max(3, Math.round((hi - lo) / 1.8 * 150)) });
+      let tl = 0, th = 0;
+      lines = [L('AUTHORED ESTIMATES · ranges, not quotes · no meter has run', 0, '#4B5563', 'aut')];
+      C.forEach((c) => { tl += c[2]; th += c[3]; lines.push(L(pad(c[0], 18) + pad(c[1], 24) + '$' + c[2].toFixed(2) + '–' + c[3].toFixed(2), 0, INK, '', bar(c[2], c[3]))); });
+      lines.push(L(pad('total / day', 18) + pad('sum of the ranges', 24) + '$' + tl.toFixed(2) + '–' + th.toFixed(2), 0, INK, 'com', Object.assign({ fw: 700 }, bar(tl, th))));
+      if (attached) lines.push(L('court row widened: the provider sets its own price — verify', 0, '#4B5563'));
+      if (forked) lines.push(L('stored branches now counts br_0c41', 0, ORG));
+    } else {
+      req = ['world.provenance("bow://boston-y2/' + cur0.ad + '")'].map(R);
+      const wr = cur0.wrE && E[cur0.wrE] ? E[cur0.wrE].i : (cur0.wrT ? cur0.wrT[1] : null);
+      lines = J([['{', 0], ['"value": "' + (cur0.v || cur0.a) + '",', 1], ['"tag": "' + TAG[cur0.tag][0] + '",', 1, INK, cur0.tag], ['"written_by": ' + (wr ? '"' + wr + '"' : 'null') + ',', 1],
+        ['"computed_by": ' + (cur0.co ? '"' + cur0.co[1] + '"' : 'null') + ',', 1], ['"generated_by": ' + (cur0.ge ? '"' + cur0.ge[1].split(' · ').slice(0, 2).join(' · ') + '"' : 'null') + ',', 1],
+        ['"depends_on": [' + cur0.dep.map((d) => '"' + VV(d).n + '"').join(', ') + ']', 1], ['}', 0]]);
+      lines.push(L('this is the call behind the inspector: the panels are views over the API', 0, '#4B5563'));
+    }
+    const PR = [
+      ['fork', 'fork at #1041', 'fork', 'branch', 'fork'],
+      ['offer', 'offer to Denver', 'submit', '', 'offer'],
+      ['sign', 'sign free agent $4M', 'submit', '', 'sign'],
+      ['attach', 'swap the Court model', 'attach', 'models', 'attach'],
+      ['replayT', 'replay #1057 · tactical', 'replay', 'render', ''],
+      ['replayB', 'replay #1057 · broadcast', 'replay', 'render', ''],
+      ['cost', 'daily cost', 'cost', 'price', '']
+    ];
+    const presets = PR.map((p) => {
+      const on = call === p[0];
+      const ran = p[4] && done[p[4]];
+      return { label: p[1], tag: ran ? 'ran ' + (p[4] === 'fork' ? 'br_0c41' : idOf(p[4])) : p[2], pressed: on ? 'true' : 'false', bg: on ? INK : '#fff', fg: on ? '#fff' : INK, bd: on ? INK : '#9CA3AF',
+        ol: (p[3] && ol[p[3]] !== '2px solid transparent') ? ol[p[3]] : '2px solid transparent',
+        go: () => {
+          const st = this.state || {};
+          const d = st.done || {}, od = st.order || [];
+          const o = { call: p[0], calls: Object.assign({}, st.calls || {}, { [p[4] || p[0]]: ((st.calls || {})[p[4] || p[0]] || 0) + 1 }) };
+          if (p[4] && !d[p[4]]) {
+            o.done = Object.assign({}, d, { [p[4]]: true });
+            if (p[4] !== 'fork') o.order = od.concat([p[4]]);
+            o.ev = p[4] === 'fork' ? 'br' : p[4];
+            o.val = E[o.ev] ? E[o.ev].df[0] : 'payroll';
+            if (p[4] === 'fork') o.val = 'brDecl';
+          }
+          if (p[0] === 'replayT') { o.rview = 'T'; o.ev = 'e1057'; o.val = 'result'; }
+          if (p[0] === 'replayB') { o.rview = 'B'; o.ev = 'e1057'; o.val = 'result'; }
+          set(o);
+        } };
+    });
+    const viewLabel = rview === 'T' ? 'view: third-party:tactical-board' : rview === 'B' ? 'view: bow:broadcast-2d' : 'view: canonical';
+    const viewSub = rview === 'T' ? 'contract FAIL 2/5 · click to reset' : rview === 'B' ? 'contract PASS 5/5 · click to reset' : '';
+    const viewInk = rview === 'T' ? RED : INK;
+    const addr = evSel === 'br' ? 'bow://boston-y2~br_0c41' : 'bow://boston-y2/log/' + ev.i.replace('#', '');
+
+    return {
+      how: how, notHow: !how, howPressed: how ? 'true' : 'false', howBg: how ? INK : '#fff', howFg: how ? '#fff' : INK,
+      toggleHow: () => set({ how: !(this.state && this.state.how) }),
+      legend, ol, groups, rows, diff, slots, cur, presets, req, lines, head, viewLabel, viewSub, viewSubD: rview ? 'block' : 'none', viewInk,
+      rootCode: how ? 'REC' : '',
+      addr, addrV: 'bow://boston-y2/' + cur0.ad,
+      evI: ev.i, subText: stripped ? 'tactical-board draws #1057 with its truth tags dropped' : rview === 'B' && evSel === 'e1057' ? 'drawn by bow:broadcast-2d · tags kept · contract PASS' : 'role:' + ev.role + ' · warrant ' + ev.wa, subInk: stripped ? RED : '#4B5563', subFw: stripped ? 700 : 400,
+      pickSeat: () => set({ val: 'r:gm', grp: 'roles', call: '' }),
+      resetView: () => set({ rview: '' }),
+      stdS: STDS.map((x) => mkChip(x, false)), stdO: STDO.map((x) => mkChip(x, true)),
+      capHead: stdSel ? (isOpen ? 'LEAVE OPEN · ' : 'STANDARDIZE · ') + stdSel[1].toUpperCase() : 'THE POINT OF THIS BOARD',
+      capBody: stdSel ? stdSel[3] + ' Outlined on the board.' : 'A developer builds on a medium only if some things never change under them and others are theirs to decide. Pick a chip and see where it lives on this board.'
+    };
+  }
+}
+</script>
+</body>
+</html>

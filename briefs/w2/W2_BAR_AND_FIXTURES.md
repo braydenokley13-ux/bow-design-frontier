@@ -39,6 +39,20 @@ distinct. Types and what makes each one what it is:
    Contracts (approx., public reporting, verify): Jayson Tatum ≈ $58.5M · Jaylen Brown ≈ $57.1M ·
    Derrick White ≈ $30.3M · Sam Hauser ≈ $10.8M · Payton Pritchard ≈ $7.8M ·
    rest of roster "[from the Reality feed]".
+   CORRECTION (found by the Wave 2 textbook critic, 29 Sep 2026). BOW Economics Live's sourced
+   fixture (runtime/src/modules/sameLine/world.ts, read 4 Sep 2026; verify) records:
+   - Boston TAX SALARY $198,722,406 (salaryswish). The tax is charged on tax salary, so on that
+     number Boston is ≈ $1.7M UNDER the tax line. The ≈ $203.6M figure is cap payroll. Never write
+     "past the tax line" as plain fact: show both numbers, side by side, not averaged.
+   - Jaylen Brown traded to Philadelphia for Paul George (hoopsrumors; verify). The contract list
+     above may be stale; don't name other Boston contracts than Tatum's without checking.
+   - 2026–27 exceptions: non-taxpayer ("big") MLE $15.044M (using it hard-caps the team at the
+     first apron); room exception $9.366M; taxpayer ("small") MLE $6.064M (hard-caps at the second
+     apron); minimum deal $2.449M (pr.nba.com via world.ts; verify). A team over the cap signs a
+     free agent ONLY through an exception. Crossing the first apron removes the NON-taxpayer MLE.
+   - The tax brackets keep rising past $20M over ($3.75, $4.25, … per $1; verify); repeat payers
+     pay more. Label simplified rates "first-time payer".
+
 2. RECORDED MOMENTS (enterable decision points in Reality's past), OBSERVED:
    - 17 Jun 2017 — Boston holds the No. 1 pick; Philadelphia wants it (agreed that weekend,
      finalized 19 Jun; Boston took Jayson Tatum at No. 3 on 22 Jun).
@@ -60,6 +74,10 @@ distinct. Types and what makes each one what it is:
    TODAY as fixtures in the BOW Worlds branch, a World event, NOT NBA history):
    - Week 6: you traded Derrick White (and a backup big as salary filler) for Jimmy Butler.
    - Payroll after moves ≈ $222.8M vs the World's $200M tax line; projected tax ≈ $34.2M.
+     THIS IS A WORLD RULE: a flat 1.5× over the line (authored; the BOW Worlds branch uses it).
+     Always label it "World rule: flat 1.5× (authored) — the NBA's real tax is incremental"; never
+     present $34.2M as what the NBA would charge (the real incremental bill at $22.8M over is far
+     higher). Reality boards use the simplified incremental brackets in SPEC_TEXTBOOK/SPEC_WHATIF2.
    - Week 9: lost to Denver 112–115 at home; 20 recorded possessions; "Butler for three" twice;
      "Jokić scores" on the last possession after a switch left a big on a guard.
    - Year One: you funded Business over Basketball Ops (analytics staff cut).

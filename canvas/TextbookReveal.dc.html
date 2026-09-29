@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Textbook class reveal</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Source+Serif+4:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F4EE;color:#111;font-family:'Source Serif 4',serif}
+.ab{font-family:'Archivo Black',sans-serif;font-weight:400}
+.mono{font-family:'IBM Plex Mono',monospace}
+.btn{font-family:'Archivo Black',sans-serif;font-weight:400;font-size:15px;min-height:44px;padding:0 14px;border:3px solid #111;background:#F6F4EE;color:#111;cursor:pointer;border-radius:0;letter-spacing:.02em;transition:background .2s,color .2s}
+.btn:hover{background:#111;color:#F6F4EE}
+.btn:focus-visible,.mk:focus-visible{outline:4px solid #E4572E;outline-offset:2px}
+.btn.solid{background:#111;color:#F6F4EE}
+.btn.solid:hover{background:#3A3A36}
+.btn.sm{min-height:40px;font-size:13px;padding:0 12px;border-width:2px}
+.btn.rv{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0 2px;font-size:12px;line-height:14px;min-height:46px;flex:1;border-width:2px}
+.t-obs{background:#111}
+.t-rec{background:#111;box-shadow:inset 0 0 0 2px #111,inset 0 0 0 4px #F6F4EE}
+.t-aut{background:transparent;border:2px solid #111;box-sizing:border-box}
+.t-com{background:#C4BFAD;border:1px solid #111;box-sizing:border-box}
+.t-unk{background:transparent;border:2px dashed #111;box-sizing:border-box}
+.sw{display:inline-block;width:14px;height:14px;flex:none;box-sizing:border-box}
+.mk{position:absolute;box-sizing:border-box;width:46px;height:46px;border-radius:23px;border:3px solid #111;background:#FFFFFF;color:#111;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:20px;letter-spacing:-.04em;line-height:1;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mk:disabled{cursor:default;color:#111}
+.gh{position:absolute;box-sizing:border-box;width:46px;height:46px;border-radius:23px;border:2px solid #7A766A;background:#F6F4EE;color:#5F5B50;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:20px;letter-spacing:-.04em;display:flex;align-items:center;justify-content:center}
+.chip{background:#C4BFAD;border:1px solid #111;box-sizing:border-box}
+.fd{flex:none;border-top:2px solid #111;padding-top:3px;font-size:12.5px;line-height:15px;color:#111}
+.fd b{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.06em;color:#B23A17}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F6F4EE; color: #111; font-family: 'Source Serif 4', serif">
+
+  <!-- PROJECTOR BEZEL -->
+  <div style="position: absolute; left: 344px; top: 58px; width: 1084px; height: 774px; box-sizing: border-box; border: 5px solid #111; background: #F6F4EE"></div>
+
+  <!-- TEACHER CLIPBOARD -->
+  <div style="position: absolute; left: 12px; top: 58px; width: 320px; height: 774px; box-sizing: border-box; border: 3px solid #111; border-radius: 10px; background: #4B4638"></div>
+  <div style="position: absolute; left: 122px; top: 46px; width: 100px; height: 46px; box-sizing: border-box; border: 3px solid #111; border-radius: 8px; background: #B8B6AC"></div>
+  <div style="position: absolute; left: 160px; top: 56px; width: 24px; height: 10px; box-sizing: border-box; border: 3px solid #111; border-radius: 5px; background: #4B4638"></div>
+
+  <svg width="1440" height="900" viewBox="0 0 1440 900" style="position: absolute; left: 0; top: 0; pointer-events: none" aria-hidden="true">
+    <!-- axis -->
+    <path d="{{g.axis}}" fill="none" stroke="#111" stroke-width="4"></path>
+    <path d="{{g.ticks}}" fill="none" stroke="#111" stroke-width="3"></path>
+
+    <!-- the five lines run through both bands -->
+    <line x1="{{ln.f}}" y1="250" x2="{{ln.f}}" y2="{{g.lineBot}}" stroke="#E4572E" stroke-width="6"></line>
+    <line x1="{{ln.c}}" y1="250" x2="{{ln.c}}" y2="{{g.lineBot}}" stroke="#E4572E" stroke-width="4"></line>
+    <line x1="{{ln.t}}" y1="250" x2="{{ln.t}}" y2="{{g.lineBot}}" stroke="#E4572E" stroke-width="4"></line>
+    <line x1="{{ln.a}}" y1="250" x2="{{ln.a}}" y2="{{g.lineBot}}" stroke="#E4572E" stroke-width="4"></line>
+    <rect x="{{ln.w0}}" y="250" width="10" height="{{g.wallH}}" fill="#E4572E" stroke="#111" stroke-width="2"></rect>
+
+    <!-- FLOOR: plate with arrows pushing right -->
+    <g style="transform: translate({{ln.f}}px, 184px)">
+      <rect x="-7" y="0" width="14" height="60" fill="#E4572E" stroke="#111" stroke-width="3"></rect>
+      <path d="M-62 12 H-34 V6 L-13 15 L-34 24 V18 H-62 Z M-62 36 H-34 V30 L-13 39 L-34 48 V42 H-62 Z" fill="#E4572E" stroke="#111" stroke-width="2.5" stroke-linejoin="round"></path>
+    </g>
+
+    <!-- CAP: gate with two exception doors -->
+    <g style="transform: translate({{ln.c}}px, 184px)">
+      <rect x="-35" y="0" width="10" height="60" fill="#111"></rect>
+      <rect x="25" y="0" width="10" height="60" fill="#111"></rect>
+      <circle cx="-30" cy="0" r="7" fill="#E4572E" stroke="#111" stroke-width="2.5"></circle>
+      <circle cx="30" cy="0" r="7" fill="#E4572E" stroke="#111" stroke-width="2.5"></circle>
+      <rect x="-25" y="24" width="50" height="10" fill="#E4572E" stroke="#111" stroke-width="2.5"></rect>
+      <rect x="-70" y="18" width="26" height="42" fill="#F6F4EE" stroke="#111" stroke-width="3"></rect>
+      <polygon points="-70,18 -80,23 -80,55 -70,60" fill="#E7E2D3" stroke="#111" stroke-width="2.5"></polygon>
+      <circle cx="-49" cy="40" r="2.5" fill="#111"></circle>
+      <rect x="44" y="18" width="26" height="42" fill="#F6F4EE" stroke="#111" stroke-width="3"></rect>
+      <polygon points="70,18 80,23 80,55 70,60" fill="#E7E2D3" stroke="#111" stroke-width="2.5"></polygon>
+      <circle cx="49" cy="40" r="2.5" fill="#111"></circle>
+    </g>
+
+    <!-- TAX: meter with coin slot and tally -->
+    <g style="transform: translate({{mt.gx}}px, 184px)">
+      <rect x="-58" y="0" width="132" height="46" rx="6" fill="#F6F4EE" stroke="#111" stroke-width="3"></rect>
+      <circle cx="-38" cy="23" r="15" fill="#F6F4EE" stroke="#111" stroke-width="2.5"></circle>
+      <line x1="-38" y1="23" x2="-38" y2="11" stroke="#E4572E" stroke-width="3.5" stroke-linecap="round" style="transform: rotate({{mt.needle}}deg); transform-origin: -38px 23px"></line>
+      <circle cx="-38" cy="23" r="3" fill="#111"></circle>
+      <rect x="-16" y="5" width="78" height="26" fill="#111"></rect>
+      <rect x="-16" y="35" width="78" height="6" fill="{{mt.lamp}}" stroke="#111" stroke-width="1.5"></rect>
+      <rect x="66" y="14" width="6" height="16" fill="#111"></rect>
+      <path d="{{mt.tally}}" fill="none" stroke="#111" stroke-width="3.5" stroke-linecap="round"></path>
+    </g>
+
+    <!-- FIRST APRON: rack; the tools come off -->
+    <g style="transform: translate({{ln.a}}px, 184px)">
+      <rect x="-48" y="0" width="96" height="9" fill="#111"></rect>
+      <rect x="-50" y="-3" width="8" height="26" fill="#E4572E" stroke="#111" stroke-width="2"></rect>
+      <rect x="42" y="-3" width="8" height="26" fill="#E4572E" stroke="#111" stroke-width="2"></rect>
+      <g style="transform: translate({{rk.t0.x}}px, {{rk.t0.y}}px) rotate({{rk.t0.r}}deg); transform-origin: -30px 12px; opacity: {{rk.t0.o}}">
+        <rect x="-44" y="14" width="28" height="36" rx="4" fill="#F6F4EE" stroke="#111" stroke-width="2.5"></rect>
+        <circle cx="-30" cy="20" r="2.5" fill="#111"></circle>
+        <path transform="translate(-30 35)" d="M-8 -3 H8 M4 -7 L8 -3 L4 1 M8 5 H-8 M-4 1 L-8 5 L-4 9" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </g>
+      <g style="transform: translate({{rk.t1.x}}px, {{rk.t1.y}}px) rotate({{rk.t1.r}}deg); transform-origin: 0px 12px; opacity: {{rk.t1.o}}">
+        <rect x="-14" y="14" width="28" height="36" rx="4" fill="#F6F4EE" stroke="#111" stroke-width="2.5"></rect>
+        <circle cx="0" cy="20" r="2.5" fill="#111"></circle>
+        <path transform="translate(0 35)" d="M-8 0 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0 M0 -4 V4 M-4 0 H4" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="round"></path>
+      </g>
+      <g style="transform: translate({{rk.t2.x}}px, {{rk.t2.y}}px) rotate({{rk.t2.r}}deg); transform-origin: 30px 12px; opacity: {{rk.t2.o}}">
+        <rect x="16" y="14" width="28" height="36" rx="4" fill="#F6F4EE" stroke="#111" stroke-width="2.5"></rect>
+        <circle cx="30" cy="20" r="2.5" fill="#111"></circle>
+        <path transform="translate(30 36)" d="M-9 8 H9 M0 -8 V8 M-9 -3 H9 M-9 -3 l3 6 h-6 Z M9 -3 l3 6 h-6 Z" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </g>
+    </g>
+
+    <!-- SECOND APRON: wall -->
+    <g style="transform: translate({{ln.w}}px, 184px)">
+      <rect x="-45" y="6" width="90" height="54" fill="#E4572E" stroke="#111" stroke-width="3"></rect>
+      <path d="M-45 24 H45 M-45 42 H45 M-15 6 V24 M15 6 V24 M-30 24 V42 M0 24 V42 M30 24 V42 M-15 42 V60 M15 42 V60" fill="none" stroke="#111" stroke-width="2"></path>
+      <rect x="-50" y="-1" width="100" height="7" fill="#111"></rect>
+    </g>
+  </svg>
+
+  <!-- MASTHEAD -->
+  <div style="position: absolute; left: 0; top: 0; width: 1440px; height: 44px; box-sizing: border-box; padding: 0 24px; display: flex; align-items: center; gap: 16px; border-bottom: 4px solid #111">
+    <span class="ab" style="font-size: 27px; line-height: 1; letter-spacing: .01em">THE CLASS REVEAL</span>
+    <span class="mono" style="font-size: 12px; font-weight: 500; letter-spacing: .05em">M1 · THE WINDOW · JULY · FOURTEEN CLUBS, ONE SET OF LINES</span>
+    <span style="flex: 1"></span>
+    <button type="button" class="btn sm" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+  </div>
+
+  <!-- meter display -->
+  <div class="mono" style="position: absolute; left: {{mt.dx}}px; top: 189px; width: 78px; height: 26px; text-align: center; font-size: 20px; font-weight: 600; line-height: 26px; color: #F6F4EE">{{mt.disp}}</div>
+
+  <!-- ================= TEACHER'S SCREEN ================= -->
+  <div style="position: absolute; left: 24px; top: 96px; width: 296px; height: 724px; box-sizing: border-box; background: #FFFFFF; border: 2px solid #111; padding: 8px 12px; display: flex; flex-direction: column; gap: 5px">
+    <div class="mono" style="height: 26px; flex: none; box-sizing: border-box; background: #111; color: #F6F4EE; display: flex; align-items: center; gap: 6px; padding: 0 6px; font-size: 12px; font-weight: 600; white-space: nowrap">
+      <svg width="20" height="16" viewBox="0 0 20 16" aria-hidden="true"><rect x="1.5" y="1.5" width="17" height="10" fill="none" stroke="#F6F4EE" stroke-width="2"></rect><path d="M2 15 L18 1" stroke="#F6F4EE" stroke-width="2"></path></svg>
+      <span>Teacher's screen, not projected</span>
+    </div>
+    <div style="display: flex; align-items: baseline; justify-content: space-between; flex: none; height: 24px">
+      <span class="ab" style="font-size: 18px">DIRECTOR</span>
+      <span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .03em">REVEAL {{dir.k}} OF 3 · {{dir.min}} MIN</span>
+    </div>
+    <div style="display: flex; gap: 6px; flex: none">
+      <sc-for list="{{rvBtns}}" as="rb" hint-placeholder-count="3">
+        <button type="button" class="btn rv" onClick="{{rb.pick}}" aria-pressed="{{rb.pressed}}" style="background: {{rb.bg}}; color: {{rb.fg}}">
+          <span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .05em">REVEAL {{rb.k}}</span>
+          <span>{{rb.name}}</span>
+        </button>
+      </sc-for>
+    </div>
+    <sc-for list="{{fields}}" as="fd" hint-placeholder-count="8">
+      <div class="fd"><b>{{fd.lab}}</b> {{fd.txt}}</div>
+    </sc-for>
+    <div class="mono" style="flex: none; border-top: 2px solid #111; padding-top: 3px; font-size: 11px; line-height: 14px; color: #2A2A27">{{keyLine}}</div>
+    <div style="margin-top: auto; flex: none; display: flex; flex-direction: column; gap: 5px">
+      <div style="display: flex; gap: 6px">
+        <button type="button" class="btn solid" onClick="{{run}}" style="flex: 1; padding: 0 6px; font-size: 14px">{{runLabel}}</button>
+        <button type="button" class="btn" onClick="{{stepFwd}}" style="flex: 1; padding: 0 6px; font-size: 14px">Step by hand →</button>
+      </div>
+      <div style="display: flex; gap: 6px">
+        <button type="button" class="btn sm" onClick="{{stepBack}}" style="flex: 1; padding: 0 4px">← Back</button>
+        <button type="button" class="btn sm" onClick="{{skip}}" style="flex: 1; padding: 0 4px">Skip to end</button>
+        <button type="button" class="btn sm" onClick="{{resetAll}}" style="flex: 1; padding: 0 4px">Reset class</button>
+      </div>
+      <div class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .03em; text-align: center; line-height: 13px">{{stepLabel}} · timer is optional</div>
+    </div>
+  </div>
+
+  <!-- ================= PROJECTOR ================= -->
+  <div class="mono" style="position: absolute; left: 360px; top: 49px; height: 22px; box-sizing: border-box; padding: 0 10px; display: flex; align-items: center; background: #111; color: #F6F4EE; font-size: 12px; font-weight: 600; letter-spacing: .06em">PROJECTOR · WHAT THE ROOM SEES</div>
+
+  <div aria-live="polite" style="position: absolute; left: 364px; top: 78px; width: 1052px; height: 40px; display: flex; align-items: baseline; gap: 16px; white-space: nowrap">
+    <span class="ab" style="font-size: 32px; line-height: 40px">{{hd.big}}</span>
+    <span style="font-size: 20px; font-style: italic; line-height: 40px">{{hd.sub}}</span>
+  </div>
+
+  <!-- line labels -->
+  <sc-for list="{{labels}}" as="lb" hint-placeholder-count="5">
+    <div style="position: absolute; left: {{lb.x}}px; top: 124px; width: 132px; text-align: center">
+      <div class="ab" style="font-size: 20px; line-height: 24px; white-space: nowrap">{{lb.name}}</div>
+      <div class="mono" style="font-size: 20px; font-weight: 600; line-height: 24px; white-space: nowrap">{{lb.fig}}</div>
+    </div>
+  </sc-for>
+
+  <!-- band labels -->
+  <div class="ab" style="position: absolute; left: 358px; top: 296px; font-size: 20px; line-height: 22px">ENDED<br>JULY</div>
+  <sc-if value="{{is.r1}}" hint-placeholder-val="{{true}}">
+    <div class="ab" style="position: absolute; left: 353px; top: 430px; font-size: 20px; line-height: 22px">STARTED<br>JULY</div>
+  </sc-if>
+
+  <!-- axis tick labels -->
+  <sc-for list="{{tickLabels}}" as="tk" hint-placeholder-count="10">
+    <span class="mono" style="position: absolute; left: {{tk.x}}px; top: 384px; width: 64px; text-align: center; font-size: 20px; font-weight: 600; line-height: 24px; background: #F6F4EE; opacity: {{tk.op}}">{{tk.t}}</span>
+  </sc-for>
+
+  <!-- start ghosts and the club rings -->
+  <sc-for list="{{ghosts}}" as="gh" hint-placeholder-count="14">
+    <div class="gh" style="left: {{gh.x}}px; top: {{gh.y}}px; opacity: {{gh.op}}">{{gh.n}}</div>
+  </sc-for>
+  <sc-for list="{{marks}}" as="mk" hint-placeholder-count="14">
+    <button type="button" class="mk" aria-label="{{mk.aria}}" onClick="{{mk.pick}}" disabled="{{mk.dis}}" style="left: {{mk.x}}px; top: {{mk.y}}px; z-index: {{mk.z}}; opacity: {{mk.op}}; transform: scale({{mk.sc}})">{{mk.n}}</button>
+  </sc-for>
+
+  <!-- ===== REVEAL 1 PANEL ===== -->
+  <sc-if value="{{is.r1}}" hint-placeholder-val="{{true}}">
+    <div style="position: absolute; left: 356px; top: 522px; width: 1060px; height: 300px">
+      <sc-for list="{{zones}}" as="z" hint-placeholder-count="6">
+        <div style="position: absolute; left: {{z.x}}px; top: 0; width: {{z.w}}px; height: 104px; box-sizing: border-box; border-top: 6px solid #111; border-left: {{z.bl}}; text-align: center; padding-top: 0">
+          <div class="ab" style="font-size: 44px; line-height: 48px">{{z.n}}</div>
+          <div class="mono" style="font-size: 20px; font-weight: 600; line-height: 22px; padding: 0 2px; white-space: pre-line">{{z.cap}}</div>
+        </div>
+      </sc-for>
+      <div class="mono" style="position: absolute; left: 0; top: 108px; width: 1060px; font-size: 20px; font-weight: 600; line-height: 24px; white-space: nowrap">{{crossLine}}</div>
+      <div class="mono" style="position: absolute; left: 0; top: 134px; width: 1060px; font-size: 20px; font-weight: 600; line-height: 24px; white-space: nowrap">METER · tax owed by desks over the line, together: {{totalText}}</div>
+      <div style="position: absolute; left: 0; top: 168px; width: 640px; height: 128px; box-sizing: border-box; border: 3px solid #111; background: #FFFFFF; padding: 6px 14px">
+        <sc-if value="{{is.rdOn}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; align-items: baseline; gap: 14px; white-space: nowrap">
+            <span class="ab" style="font-size: 28px; line-height: 34px">{{rd.name}}</span>
+            <span class="mono" style="font-size: 20px; font-weight: 600">{{rd.move}}</span>
+          </div>
+          <div class="mono" style="font-size: 20px; font-weight: 600; line-height: 24px">{{rd.crossed}}</div>
+          <div style="font-size: 20px; line-height: 24px">{{rd.did}}</div>
+        </sc-if>
+        <sc-if value="{{is.rdOff}}" hint-placeholder-val="{{true}}">
+          <div class="ab" style="font-size: 26px; line-height: 32px; margin-top: 8px">Nothing has moved yet.</div>
+          <div style="font-size: 20px; line-height: 26px; margin-top: 4px">Tap any ring to read that club, or wait for the teacher to send them.</div>
+        </sc-if>
+      </div>
+      <div style="position: absolute; left: 664px; top: 168px; width: 396px; font-size: 20px; line-height: 25px">
+        <div><b>Thick ring:</b> where a club ended July. <b>Thin ring:</b> where it started.</div>
+        <div style="margin-top: 8px; display: flex; gap: 8px; align-items: flex-start"><span class="sw t-aut" style="margin-top: 6px"></span><span style="font-style: italic">Payrolls are authored, illustrative. Clubs are seats, not claims.</span></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===== REVEAL 2 PANEL ===== -->
+  <sc-if value="{{is.r2}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 356px; top: 418px; width: 1060px; height: 404px">
+      <div style="position: absolute; left: 0; top: 0; width: 1060px; height: 30px; white-space: nowrap; display: flex; align-items: center; gap: 22px">
+        <span style="font-size: 20px; line-height: 28px"><b>Wing A</b> asks at least $14.0M.</span>
+        <span style="display: flex; align-items: center; gap: 8px"><span class="sw t-aut"></span><span class="mono" style="font-size: 20px; font-weight: 600">AUTHORED · illustrative</span></span>
+        <span class="mono" style="font-size: 20px; font-weight: 600">first-time payer rates (simplified)</span>
+      </div>
+      <sc-for list="{{rcs}}" as="rc" hint-placeholder-count="3">
+        <div style="position: absolute; left: {{rc.x}}px; top: 36px; width: 340px; height: 366px">
+          <div style="height: 52px; box-sizing: border-box; background: #111; color: #F6F4EE; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">
+            <span class="ab" style="font-size: 26px">{{rc.desk}}</span>
+            <span class="mono" style="font-size: 20px; font-weight: 600">paid {{rc.price}}</span>
+          </div>
+          <div style="position: absolute; left: 0; top: 52px; width: 340px; height: 314px; box-sizing: border-box; border: 3px {{rc.bstyle}} #111; border-top: none; background: {{rc.bbg}}; padding: 4px 12px 0">
+            <div style="opacity: {{rc.op}}; transform: translateY({{rc.dy}}px)">
+              <div class="mono" style="font-size: 20px; font-weight: 600; line-height: 28px; white-space: nowrap">{{rc.span}}</div>
+              <sc-for list="{{rc.rows}}" as="rw" hint-placeholder-count="5">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; height: 42px; border-top: 2px solid #111">
+                  <div class="mono" style="font-size: 20px; font-weight: 600; letter-spacing: .02em; white-space: nowrap">{{rw.lab}}</div>
+                  <div class="chip mono" style="height: 32px; display: flex; align-items: center; justify-content: flex-end; padding: 0 8px; font-size: 20px; font-weight: 600; white-space: nowrap">{{rw.val}}</div>
+                </div>
+              </sc-for>
+              <div style="font-size: 20px; line-height: 24px; font-weight: 600; border-top: 2px solid #111; padding-top: 3px">{{rc.verdict}}</div>
+            </div>
+            <sc-if value="{{rc.wait}}" hint-placeholder-val="{{false}}">
+              <div style="position: absolute; left: 14px; top: 120px; width: 300px; text-align: center"><span class="ab" style="font-size: 24px; line-height: 30px">Not printed yet.</span></div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <!-- ===== REVEAL 3 PANEL ===== -->
+  <sc-if value="{{is.r3}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 356px; top: 418px; width: 1060px; height: 404px">
+      <sc-for list="{{dayHeads}}" as="dh" hint-placeholder-count="3">
+        <div class="mono" style="position: absolute; left: {{dh.x}}px; top: 0; width: 180px; font-size: 20px; font-weight: 600; letter-spacing: .06em">{{dh.t}}</div>
+      </sc-for>
+      <sc-for list="{{passers}}" as="ps" hint-placeholder-count="2">
+        <div style="position: absolute; left: 0; top: {{ps.top}}px; width: 700px; height: 150px">
+          <div style="position: absolute; left: 0; top: 0; width: 128px; height: 150px; box-sizing: border-box; border-top: 6px solid #111; padding-top: 6px">
+            <div class="ab" style="font-size: 26px; line-height: 30px">{{ps.club}}</div>
+            <div class="mono" style="font-size: 20px; font-weight: 600; line-height: 24px; margin-top: 6px">starts</div>
+            <div class="mono" style="font-size: 20px; font-weight: 600; line-height: 24px">{{ps.start}}</div>
+          </div>
+          <sc-for list="{{ps.boxes}}" as="bx" hint-placeholder-count="3">
+            <div style="position: absolute; left: {{bx.x}}px; top: 0; width: 176px; height: 150px; box-sizing: border-box; border: 3px {{bx.bs}} #111; background: {{bx.bg}}; padding: 6px 10px">
+              <div style="opacity: {{bx.op}}; transform: translateY({{bx.dy}}px)">
+                <div class="ab" style="font-size: 22px; line-height: 26px">{{bx.big}}</div>
+                <div class="mono" style="font-size: 20px; font-weight: 600; line-height: 24px; white-space: nowrap">{{bx.price}}</div>
+                <div style="font-size: 20px; line-height: 24px">{{bx.body}}</div>
+              </div>
+              <sc-if value="{{bx.wait}}" hint-placeholder-val="{{false}}">
+                <div class="mono" style="position: absolute; left: 10px; top: 46px; width: 150px; font-size: 20px; font-weight: 600; text-align: center; color: #2A2A27; line-height: 24px">SEALED</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </sc-for>
+      <div style="position: absolute; left: 0; top: 342px; width: 700px; font-size: 20px; line-height: 24px; color: #111; display: flex; gap: 8px; align-items: flex-start"><span class="sw t-aut" style="margin-top: 5px"></span><span><span class="mono" style="font-weight: 600">AUTHORED, illustrative</span> · Big B asks at least $9.5M on Day 3.<br>Dashed box: no player signed.</span></div>
+      <div style="position: absolute; left: 724px; top: 0; width: 336px; height: 402px; box-sizing: border-box; border: 3px {{oth.bs}} #111; background: {{oth.bg}}; padding: 8px 14px">
+        <div style="opacity: {{oth.op}}; transform: translateY({{oth.dy}}px)">
+          <div class="mono" style="font-size: 20px; font-weight: 600; line-height: 24px">THE OTHER 12 · DAY 3</div>
+          <div class="ab" style="font-size: 64px; line-height: 72px; margin-top: 2px">{{oth.big}}</div>
+          <div style="font-size: 20px; line-height: 25px; font-weight: 600">{{oth.cap}}</div>
+          <div class="chip mono" style="margin-top: 8px; padding: 4px 8px; font-size: 20px; font-weight: 600; line-height: 24px">{{oth.most}}</div>
+          <div style="font-size: 20px; line-height: 25px; margin-top: 8px">{{oth.why}}</div>
+        </div>
+        <sc-if value="{{oth.wait}}" hint-placeholder-val="{{true}}">
+          <div class="mono" style="position: absolute; left: 20px; top: 170px; width: 290px; font-size: 20px; font-weight: 600; text-align: center; color: #2A2A27; line-height: 24px">SEALED UNTIL THE LAST STEP</div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- HOW DO WE KNOW panel: teacher's screen only -->
+  <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 24px; top: 96px; width: 760px; box-sizing: border-box; padding: 0 0 14px; background: #FFFFFF; border: 4px solid #111; box-shadow: 6px 6px 0 #111; z-index: 30">
+      <div class="mono" style="height: 26px; background: #111; color: #F6F4EE; display: flex; align-items: center; padding: 0 12px; font-size: 12px; font-weight: 600; letter-spacing: .05em">TEACHER'S SCREEN · NOT PROJECTED</div>
+      <div style="padding: 10px 16px 0">
+        <span class="ab" style="font-size: 17px">HOW DO WE KNOW?</span>
+        <div style="display: grid; grid-template-columns: 18px 1fr; column-gap: 10px; row-gap: 7px; margin-top: 8px; font-size: 13.5px; line-height: 17px; align-items: start">
+          <span class="sw t-obs" style="margin-top: 2px"></span><span><b>OBSERVED</b> · the five 2026–27 lines (the floor as published; the CBA sets it at 90% of the cap) and the exceptions: big $15.044M (using it hard-caps a team at the first apron), room $9.366M (only after cap room is spent), small $6.064M (hard-caps at the second apron), minimum $2.449M. BOW Economics Live fixture, world.ts. Verify.</span>
+          <span class="sw t-aut" style="margin-top: 2px"></span><span><b>AUTHORED</b> · all fourteen desks (start, signings, end), which club each desk plays, Wing A's prices, Big B's $9.5M ask, the tool list, and the first-time payer rates past $20M over ($3.75, $4.25, +$0.50 per $5M; simplified, verify). We made them up for this picture. Clubs are seats, not claims about real payrolls.</span>
+          <span class="sw t-com" style="margin-top: 2px"></span><span><b>COMPUTED</b> · which door each signing used, every room, tax and wall figure, every count and zone, and the class total. They follow from the lines, the exception sizes and the desks.</span>
+          <span class="sw t-rec" style="margin-top: 2px"></span><span><b>RECORDED</b> · in a live class the desk positions would be written into the run and wear this texture. Here they do not: no class ran.</span>
+        </div>
+        <div class="mono" style="font-size: 12px; line-height: 15px; margin-top: 10px; padding-top: 8px; border-top: 2px solid #111">Desk numbers live on this screen only. No student name or private data reaches the projector. Crossing the first apron removes the non-taxpayer exception; the taxpayer exception survives until the second apron.</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- THESIS + QUIET LINES -->
+  <div style="position: absolute; left: 24px; top: 838px; width: 1400px; font-size: 13px; line-height: 17px; font-style: italic">A native textbook, in this model, is a class of people living the same system, so the class itself becomes the evidence the idea is built from.</div>
+  <div style="position: absolute; left: 24px; top: 864px; width: 690px; font-size: 12px; line-height: 15px; color: #2A2A27"><span class="mono" style="font-weight: 600; letter-spacing: .05em">COMMERCIAL LENS ·</span> <i>Hypothesis: the reveal is what a teacher shows the principal. Classroom licences sell on the room, not on the individual screen.</i></div>
+  <div class="mono" style="position: absolute; right: 24px; top: 864px; width: 690px; text-align: right; font-size: 12px; line-height: 15px; color: #2A2A27">PROTOTYPE · DESIGN PROPOSAL (the lesson it draws on EXISTS TODAY) · lines and exceptions: BOW Economics Live fixture, verify · first-time payer rates (simplified) · 14 desks authored</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  cfg() {
+    return { LO: 140, HI: 230, X0: 380, X1: 1392, AXY: 372,
+      FLOOR: 148.465, CAP: 164.961, TAX: 200.428, A1: 209.015, A2: 221.686,
+      BIGB: 9.5, BIG: 15.044, ROOMX: 9.366, SMALL: 6.064, MIN: 2.449 };
+  }
+  clubs() {
+    return [['Celtics', 'BOS'], ['Knicks', 'NYK'], ['76ers', 'PHI'], ['Nets', 'BKN'], ['Raptors', 'TOR'], ['Bucks', 'MIL'], ['Cavaliers', 'CLE'],
+      ['Pacers', 'IND'], ['Heat', 'MIA'], ['Magic', 'ORL'], ['Lakers', 'LAL'], ['Warriors', 'GSW'], ['Nuggets', 'DEN'], ['Thunder', 'OKC']];
+  }
+  desks() {
+    // AUTHORED, illustrative. s = payroll at the start of July; a = signed on Days 1-2; d3 = Big B on Day 3.
+    // The door each signing used is COMPUTED from these numbers and the exception sizes (see renderVals).
+    return [
+      { n: 1, s: 184.5, a: 7.5 },
+      { n: 2, s: 153.5, a: 0, d3: 9.5, pass: true },
+      { n: 3, s: 183.0, a: 6.0 },
+      { n: 4, s: 149.5, a: 14.5, wing: 14.5 },
+      { n: 5, s: 174.5, a: 9.0 },
+      { n: 6, s: 161.5, a: 10.5 },
+      { n: 7, s: 162.5, a: 8.5 },
+      { n: 8, s: 180.0, a: 13.5 },
+      { n: 9, s: 149.0, a: 0, d3: 10.5, pass: true },
+      { n: 10, s: 187.5, a: 11.5 },
+      { n: 11, s: 194.5, a: 14.5, wing: 14.5 },
+      { n: 12, s: 206.0, a: 6.0 },
+      { n: 13, s: 191.5, a: 15.0, wing: 15.0 },
+      { n: 14, s: 171.5, a: 9.5 }
+    ];
+  }
+  componentDidMount() { this.timer = setInterval(() => this.tick(), 40); }
+  componentWillUnmount() { clearInterval(this.timer); }
+  tick() {
+    const s = this.state || {};
+    const M = [14, 3, 3];
+    const rev = s.rev || 0;
+    const P = (s.P || [0, 0, 0]).slice(), T = (s.T || [0, 0, 0]).slice();
+    const p = P[rev]; const t = T[rev];
+    let np = p, nt = t, dw = s.dwell || 0, pl = !!s.playing;
+    const spd = rev === 0 ? (pl ? 0.19 : 0.1) : 0.08;
+    if (p < t) np = Math.min(t, p + spd); else if (p > t) np = Math.max(t, p - spd);
+    if (pl && np === t) {
+      if (t >= M[rev]) { pl = false; dw = 0; }
+      else if (rev > 0) { dw++; if (dw >= 30) { nt = t + 1; dw = 0; } }
+    }
+    if (np !== p || nt !== t || pl !== !!s.playing || dw !== (s.dwell || 0)) {
+      P[rev] = np; T[rev] = nt;
+      this.setState({ P: P, T: T, playing: pl, dwell: dw });
+    }
+  }
+  renderVals() {
+    const s = this.state || {};
+    const c = this.cfg();
+    const M = [14, 3, 3];
+    const rev = s.rev || 0;
+    const P = s.P || [0, 0, 0];
+    const how = !!s.how;
+    const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+    const sm = (u) => u * u * (3 - 2 * u);
+    const m1 = (v) => '$' + v.toFixed(1) + 'M';
+    const m2 = (v) => '$' + v.toFixed(2) + 'M';
+    const m3 = (v) => '$' + v.toFixed(3) + 'M';
+    const X = (v) => c.X0 + (v - c.LO) * (c.X1 - c.X0) / (c.HI - c.LO);
+    // first-time payer rates (simplified): $1.50, $1.75, $2.50, $3.25, then $3.75, $4.25 ... rising $0.50 per $5M over
+    const rate = (i) => i < 4 ? [1.5, 1.75, 2.5, 3.25][i] : 3.75 + 0.5 * (i - 4);
+    const taxOf = (pay) => {
+      let o = Math.max(0, pay - c.TAX); let t = 0; let i = 0;
+      while (o > 1e-9 && i < 40) { const x = Math.min(o, 5); t += x * rate(i); o -= x; i++; }
+      return t;
+    };
+    const LN = [
+      { k: 'floor', v: c.FLOOR, n: 'the floor' }, { k: 'cap', v: c.CAP, n: 'the cap' }, { k: 'tax', v: c.TAX, n: 'the tax line' },
+      { k: 'a1', v: c.A1, n: 'the first apron' }, { k: 'a2', v: c.A2, n: 'the second apron' }
+    ];
+    const CL = this.clubs();
+    // ---- the door each signing used, COMPUTED. Room never pays past the cap; over the cap only an exception signs a free agent.
+    const doorOf = (d) => {
+      const end12 = d.s + d.a;
+      if (d.a <= 0) return { name: 'no signing', kind: 'none', wall: 0, wallName: '' };
+      if (d.s < c.CAP) {
+        const room = c.CAP - d.s;
+        if (d.a <= room + 1e-9) return { name: 'cap room', kind: 'room', wall: 0, wallName: '' };
+        if (d.a - room <= c.ROOMX + 1e-9) return { name: 'cap room, then room exception', kind: 'roomx', wall: 0, wallName: '' };
+        return { name: 'NOT LEGAL', kind: 'bad', wall: 0, wallName: '' };
+      }
+      if (d.a <= c.BIG + 1e-9 && end12 <= c.A1 + 1e-9) return { name: 'big exception', kind: 'big', wall: c.A1 - end12, wallName: 'first apron' };
+      if (d.a <= c.SMALL + 1e-9 && end12 <= c.A2 + 1e-9) return { name: 'small exception', kind: 'small', wall: c.A2 - end12, wallName: 'second apron' };
+      return { name: 'NOT LEGAL', kind: 'bad', wall: 0, wallName: '' };
+    };
+    const D = this.desks().map((d, i) => {
+      const dd = { n: d.n, club: CL[i][0], code: CL[i][1], s: d.s, a: d.a || 0, d3: d.d3 || 0, pass: !!d.pass, wing: d.wing || 0, end: d.s + (d.a || 0) + (d.d3 || 0) };
+      dd.door = doorOf({ s: dd.s, a: dd.a });
+      return dd;
+    });
+    const cn = (d) => d.club + ' (Desk ' + d.n + ')';
+
+    // ---- beeswarm rows so rings never overlap
+    const rowsOf = (xs) => {
+      const order = xs.map((x, i) => i).sort((a, b) => xs[a] - xs[b]);
+      const rows = []; const rowOf = [];
+      order.forEach((i) => {
+        for (let r = 0; ; r++) {
+          const lst = rows[r] || (rows[r] = []);
+          if (lst.every((j) => Math.abs(xs[j] - xs[i]) >= 48)) { lst.push(i); rowOf[i] = r; break; }
+        }
+      });
+      return rowOf;
+    };
+    const rowS = rowsOf(D.map((d) => X(d.s))), rowE = rowsOf(D.map((d) => X(d.end)));
+    const yS = (r) => c.AXY + 64 + 54 * r, yE = (r) => c.AXY - 30 - 54 * r;
+    const u = D.map((d, i) => clamp(P[0] - i, 0, 1));
+    const cur = D.map((d, i) => d.s + (d.end - d.s) * sm(u[i]));
+    const sel = s.sel == null ? null : s.sel;
+    const wide = rev !== 0;
+
+    const pos = D.map((d, i) => {
+      const e = sm(u[i]);
+      return { x: X(d.s) + (X(d.end) - X(d.s)) * e, y: yS(rowS[i]) + (yE(rowE[i]) - yS(rowS[i])) * e };
+    });
+    const marks = D.map((d, i) => {
+      const hi = rev === 1 ? !!d.wing : rev === 2 ? d.pass : false;
+      const dim = (rev === 1 || rev === 2) && !hi;
+      return { n: d.code, aria: d.club, x: Math.round(pos[i].x - 23), y: Math.round(pos[i].y - 23),
+        z: (u[i] > 0 && u[i] < 1) ? 6 : (hi ? 5 : 3), op: dim ? 0.35 : 1, sc: sel === i ? 1.15 : (hi ? 1.12 : 1), dis: rev !== 0,
+        pick: () => this.setState({ sel: ((this.state || {}).sel === i) ? null : i }) };
+    });
+    const ghosts = D.map((d, i) => ({ n: d.code, x: Math.round(X(d.s) - 23), y: Math.round(yS(rowS[i]) - 23), op: wide ? 0 : 1 }));
+
+    // ---- lines, counts
+    const cnt = (L) => cur.filter((v) => v >= L).length;
+    const xf = X(c.FLOOR), xc = X(c.CAP), xt = X(c.TAX), xa = X(c.A1), xw = X(c.A2);
+    const ln = { f: Math.round(xf), c: Math.round(xc), t: Math.round(xt), a: Math.round(xa), w: Math.round(xw), w0: Math.round(xw) - 5 };
+    const g = { lineBot: wide ? c.AXY - 2 : 514, wallH: wide ? c.AXY - 2 - 250 : 514 - 250 };
+    g.axis = 'M' + X(c.LO) + ' ' + c.AXY + ' H' + X(c.HI);
+    let ticks = ''; const tickLabels = [];
+    const movers = pos.filter((p, i) => u[i] > 0 && u[i] < 1);
+    for (let v = c.LO; v <= c.HI; v += 5) {
+      const xx = X(v); const long = v % 10 === 0;
+      ticks += 'M' + xx.toFixed(1) + ' ' + c.AXY + ' v' + (long ? 12 : 7) + ' ';
+      if (long) {
+        // a ring sliding across the axis fades the label it passes, so no ring ever sits on top of text
+        let near = 0;
+        movers.forEach((mv) => { near = Math.max(near, clamp(1 - Math.hypot(mv.x - xx, mv.y - (c.AXY + 20)) / 64, 0, 1)); });
+        tickLabels.push({ x: Math.round(xx - 32), t: '$' + v + 'M', op: (1 - 0.92 * near).toFixed(2) });
+      }
+    }
+    g.ticks = ticks;
+
+    const labels = [
+      { x: ln.f - 66, name: 'FLOOR', fig: m3(c.FLOOR) },
+      { x: ln.c - 66, name: 'CAP', fig: m3(c.CAP) },
+      { x: ln.t - 30 - 66, name: 'TAX LINE', fig: m3(c.TAX) },
+      { x: ln.a + 4 - 66, name: '1ST APRON', fig: m3(c.A1) },
+      { x: ln.w + 8 - 66, name: '2ND APRON', fig: m3(c.A2) }
+    ];
+
+    // ---- meter: tax owed by desks over the line, together (COMPUTED)
+    const nTax = cnt(c.TAX);
+    const total = cur.reduce((a, v) => a + taxOf(v), 0);
+    const finalTotal = D.reduce((a, d) => a + taxOf(d.end), 0);
+    let tally = ''; for (let i = 0; i < Math.min(nTax, 6); i++) tally += 'M' + (-44 + i * 11) + ' 51 v10 ';
+    const mt = { gx: ln.t - 34, dx: ln.t - 34 - 16, disp: total < 0.05 ? '$0.0M' : m1(total), needle: Math.round(-110 + 220 * clamp(total / (finalTotal * 1.15), 0, 1)), lamp: nTax > 0 ? '#E4572E' : '#F6F4EE', tally: tally };
+    // ---- rack: tools come off as the first desk crosses
+    const q = clamp(cur.reduce((a, v) => a + clamp((v - c.A1) / 1.0, 0, 1), 0), 0, 1);
+    const tool = (i) => ({ x: Math.round((i - 1) * 6 * q), y: Math.round(24 * q * q), r: (i % 2 ? 1 : -1) * (8 + 5 * i) * q, o: (1 - 0.55 * q).toFixed(2) });
+    const rk = { t0: tool(0), t1: tool(1), t2: tool(2) };
+
+    // ---- reveal 1 zones and readout
+    const bounds = [c.LO, c.FLOOR, c.CAP, c.TAX, c.A1, c.A2, c.HI];
+    const zcap = ['BELOW\nFLOOR', 'UNDER THE CAP', 'OVER THE CAP, NO TAX', 'TAXED', 'TAXED,\nTOOLS OFF', 'PAST\nWALL'];
+    const zones = zcap.map((cp, k) => {
+      const lo = bounds[k], hi = bounds[k + 1];
+      const n = cur.filter((v) => v >= lo && (k === 5 ? true : v < hi)).length;
+      return { x: Math.round(X(lo)) - 356, w: Math.round(X(hi) - X(lo)), n: n, cap: cp, bl: k === 0 ? '0 solid #111' : '4px solid #E4572E' };
+    });
+    const crossed = (L) => D.filter((d, i) => d.s < L && cur[i] >= L).length;
+    const crossLine = 'CROSSED IN JULY · cap ' + crossed(c.CAP) + ' · tax line ' + crossed(c.TAX) + ' · 1st apron ' + crossed(c.A1) + ' · 2nd apron ' + crossed(c.A2);
+    const p0 = P[0];
+    const landed = Math.floor(p0 + 1e-6);
+    let focus = null;
+    if (sel != null) focus = sel;
+    else if (p0 > 0.001) focus = p0 >= 14 ? 13 : (p0 - landed > 0.001 ? landed : landed - 1);
+    const nA1end = D.filter((d) => d.end >= c.A1).length;
+    let rd = { name: '', move: '', did: '', crossed: '' };
+    if (focus != null && focus >= 0) {
+      const d = D[focus];
+      const cr = LN.filter((L) => d.s < L.v && d.end >= L.v).map((L) => L.n);
+      const tx = taxOf(d.end);
+      let did = d.wing ? 'Signed Wing A on Day 1 at ' + m1(d.wing) + '. Door: ' + d.door.name + '.'
+        : d.pass ? 'Passed on Day 1. Signed Big B on Day 3 at ' + m1(d.d3) + '. Door: cap room.'
+        : 'Signed ' + m1(d.a) + ' of players. Door: ' + d.door.name + '.';
+      if (tx > 0) did += ' Tax owed ' + m2(tx) + '.';
+      if (d.end >= c.A1 && nA1end === 1) did += ' The only club over the first apron.';
+      rd = { name: d.club, move: m1(d.s) + ' → ' + m1(d.end), did: did,
+        crossed: cr.length ? 'CROSSED · ' + cr.join(', ') : 'CROSSED · no line' };
+    }
+
+    // ---- reveal 2: the same player, three receipts (COMPUTED)
+    const p1 = P[1];
+    const wings = D.filter((d) => d.wing).sort((a, b) => (a.wing - b.wing) || (a.n - b.n));
+    const rcs = wings.map((d, j) => {
+      const roomE = Math.max(0, c.CAP - d.end);
+      const tax = taxOf(d.end) - taxOf(d.s);
+      const showBody = p1 > j;
+      const o = clamp(p1 - j, 0, 1);
+      const verdict = d.door.kind === 'room' ? 'His price came out of room. ' + m3(roomE) + ' of room left. No tax.'
+        : 'The ' + d.door.name + ' paid him. Tax ' + m2(tax) + '. A wall ' + m3(d.door.wall) + ' above.';
+      return { x: j * 360, desk: d.club, price: m1(d.wing), span: m1(d.s) + ' → ' + m1(d.end),
+        op: o, dy: Math.round((1 - o) * 14), wait: !showBody, bstyle: showBody ? 'solid' : 'dashed', bbg: showBody ? '#FFFFFF' : 'transparent',
+        verdict: verdict,
+        rows: [
+          { lab: 'DOOR', val: d.door.name },
+          { lab: 'ROOM LEFT', val: d.s < c.CAP ? m3(roomE) : 'none' },
+          { lab: 'TAX', val: m2(tax) },
+          { lab: 'WALL', val: d.door.wall > 0 ? m3(d.door.wall) + ' above' : 'none' },
+          { lab: 'ALL-IN', val: m2(d.wing + tax) }
+        ] };
+    });
+
+    // ---- reveal 3: the passers (COMPUTED from authored desks)
+    const p2 = P[2];
+    const pass = D.filter((d) => d.pass).sort((a, b) => a.n - b.n);
+    const others = D.filter((d) => !d.pass);
+    // what door could each of the other twelve still use for Big B on Day 3? The biggest single door each has left.
+    // Using cap room also spends the big exception (simplified). A partly used big exception keeps its remainder,
+    // but never past the first apron. The room exception only exists for a desk that spent its room.
+    const roomLeft = (d) => Math.max(0, c.CAP - d.end);
+    const bigLeft = (d) => d.door.kind === 'big' ? Math.max(0, Math.min(c.BIG - d.a, c.A1 - d.end)) : 0;
+    const roomxLeft = (d) => d.door.kind === 'roomx' ? Math.max(0, c.ROOMX - (d.a - Math.max(0, c.CAP - d.s))) : 0;
+    const leftBest = (d) => Math.max(roomLeft(d), bigLeft(d), roomxLeft(d));
+    const able = others.filter((d) => leftBest(d) >= c.BIGB - 1e-9).length;
+    const best = others.reduce((b, d) => (leftBest(d) > leftBest(b) ? d : b), others[0]);
+    const roomOk = others.filter((d) => c.CAP - d.s >= c.BIGB);
+    const bxOp = (k) => clamp(p2 - k, 0, 1);
+    const passers = pass.map((d, j) => {
+      const rm = c.CAP - d.s, rmAfter = c.CAP - d.end;
+      const b1 = bxOp(0), b2 = bxOp(1);
+      return { top: 28 + j * 156, club: d.club, start: m1(d.s),
+        boxes: [
+          { x: 140, big: 'PASSED', price: 'no signing', body: 'Room kept: ' + m3(rm) + '.', op: b1, dy: Math.round((1 - b1) * 12), wait: p2 < 1, bs: 'dashed', bg: p2 >= 1 ? '#FFFFFF' : 'transparent' },
+          { x: 326, big: 'NO MOVE', price: 'no signing', body: 'Room still ' + m3(rm) + '.', op: b2, dy: Math.round((1 - b2) * 12), wait: p2 < 2, bs: 'dashed', bg: p2 >= 2 ? '#FFFFFF' : 'transparent' },
+          { x: 512, big: 'SIGNED', price: 'Big B ' + m1(d.d3), body: 'Cap room. Room left: ' + m3(rmAfter) + '.', op: b2, dy: Math.round((1 - b2) * 12), wait: p2 < 2, bs: p2 >= 2 ? 'solid' : 'dashed', bg: p2 >= 2 ? '#FFFFFF' : 'transparent' }
+        ] };
+    });
+    const oo = bxOp(2);
+    const gap = c.BIGB - c.ROOMX;
+    const oth = { op: oo, dy: Math.round((1 - oo) * 14), wait: p2 < 3, bs: p2 >= 3 ? 'solid' : 'dashed', bg: p2 >= 3 ? '#FFFFFF' : 'transparent',
+      big: able + ' of ' + others.length, cap: 'could sign Big B, who asks at least ' + m1(c.BIGB) + '.',
+      most: 'Biggest door left: ' + m3(leftBest(best)) + ' (' + best.club + ')',
+      why: 'Each spent its room or most of its big exception on Day 1. The room exception pays at most ' + m3(c.ROOMX) + ', ' + m3(gap) + ' short of Big B.' };
+    const dayHeads = [{ x: 140, t: 'DAY 1' }, { x: 326, t: 'DAY 2' }, { x: 512, t: 'DAY 3' }];
+
+    // ---- headline
+    let hd = { big: '', sub: '' };
+    if (rev === 0) hd.big = p0 <= 0.001 ? 'Fourteen clubs started July here.' : p0 < 14 ? 'Watch where each club ends July.' : 'Same five lines. Fourteen places to stand.';
+    else if (rev === 1) hd.big = p1 >= 3 ? 'Same player. Three clubs. Three different bills.' : 'Wing A signed with three clubs.';
+    else { hd.big = p2 >= 3 ? 'Passing is a choice.' : 'Two clubs passed on Day 1.'; hd.sub = p2 >= 3 ? 'It cost them Day 1 and bought them Day 3.' : ''; }
+
+    // ---- teacher director strip (desk numbers live here only)
+    const k1 = Math.floor(p1 + 1e-6), k2 = Math.floor(p2 + 1e-6);
+    const w12 = D.find((d) => d.door.kind === 'small');
+    const w12tax = w12 ? taxOf(w12.end) : 0, w12add = w12 ? taxOf(w12.end) - taxOf(w12.s) : 0;
+    const rcNote = (d) => {
+      const tax = taxOf(d.end) - taxOf(d.s);
+      if (d.door.kind === 'room') return cn(d) + ': ' + m1(d.wing) + ' out of ' + m3(c.CAP - d.s) + ' of room, ' + m3(c.CAP - d.end) + ' left, no tax.';
+      const o = d.end - c.TAX;
+      const br = Math.min(o, 5) * 1.5, br2 = Math.max(0, o - 5) * 1.75;
+      return cn(d) + ': ' + d.door.name + ', ends ' + m3(d.end) + ', wall ' + m3(d.door.wall) + ' above. Tax ' + m2(tax) + ' = ' + m2(br) + ' + ' + m3(Math.max(0, o - 5)) + ' × $1.75.';
+    };
+    const nowR1 = p0 <= 0.001 ? 'Fourteen rings sit where each club started July. Nothing has moved.'
+      : p0 >= 14 ? 'All landed. Class tax ' + m1(total) + '. Warriors (Desk 12) alone is over the first apron: ' + m2(w12tax) + ' owed, ' + m2(w12add) + ' added by the signing.'
+      : (p0 - landed > 0.001 ? cn(D[landed]) + ' is sliding to where it ended July.' : landed + ' of 14 have landed. ' + cn(D[landed - 1]) + ' just landed.');
+    const nowR2 = k1 <= 0 ? 'Three rings are lit. Each signed Wing A. No receipts yet.'
+      : k1 >= 3 ? 'All three receipts are up. ' + rcNote(wings[2])
+      : 'Receipt ' + k1 + ' of 3 is printed. ' + rcNote(wings[k1 - 1]);
+    const nowR3 = k2 <= 0 ? 'Two rings are lit. Nobody has said yet what passing cost or bought.'
+      : k2 === 1 ? 'Day 1 is up: ' + cn(pass[0]) + ' and ' + cn(pass[1]) + ' both passed.'
+      : k2 === 2 ? 'Day 3 is up: both signed Big B through cap room.'
+      : 'The other twelve are up. ' + able + ' of ' + others.length + ' could sign Big B. Only ' + (roomOk.length === 1 ? cn(roomOk[0]) : roomOk.length + ' clubs') + ' started July with ' + m1(c.BIGB) + ' of room, and spent it.';
+    const now = [nowR1, nowR2, nowR3];
+    const wA = D.find((d) => d.wing && d.door.kind === 'room'), wB = D.find((d) => d.wing && d.door.kind === 'big' && d.wing === (wA ? wA.wing : 0));
+    const FD = [
+      [['SAY THIS', 'Every club played the same July under the same five lines. Watch where each one ends.'],
+       ['WATCH FOR', 'Who reacts when a ring crosses the tax line. Who checks their own club first.'],
+       ["DON'T EXPLAIN YET", "Don't call any line a rule. Let students say what each line did to the rings."],
+       ['ASK', 'Which club moved the most? Who stopped just short of a line, and why?'],
+       ['IF THEY SAY → YOU SAY', '"Those rich clubs can sign anyone." → "Point at the cap line. What does it say about who can sign?"'],
+       ['TRIGGER', 'Run the reveal, or step through by hand to send one club at a time.'],
+       ['SYNTHESIS', 'Same five lines for everyone. Fourteen different places to stand.']],
+      [['SAY THIS', 'One player, Wing A, three clubs. Read each receipt before I say anything.'],
+       ['WATCH FOR', 'Anyone who says the highest price hurt most. Check the receipts.'],
+       ["DON'T EXPLAIN YET", 'Hold "opportunity cost": it is Reveal 3.'],
+       ['ASK', (wA ? wA.club + ' (Desk ' + wA.n + ')' : '') + ' and ' + (wB ? wB.club + ' (Desk ' + wB.n + ')' : '') + ' paid the same ' + m1(wA ? wA.wing : 0) + '. Why did it cost ' + (wB ? 'the ' + wB.club : '') + ' so much more?'],
+       ['IF THEY SAY → YOU SAY', '"Can a team over the cap sign him?" → "Only through a door. The biggest pays ' + m3(c.BIG) + '."'],
+       ['TRIGGER', 'Step by hand, one receipt per press. Let them guess the tax first.'],
+       ['SYNTHESIS', "Past the tax line, every dollar costs more than a dollar. That's a price, not a ban."]],
+      [['SAY THIS', 'Two clubs did nothing on Day 1. Watch what Day 3 looks like for them.'],
+       ['WATCH FOR', 'Anyone who calls passing "doing nothing". Point at the Day 1 box.'],
+       ["DON'T EXPLAIN YET", 'Hold the name until Day 3 and the other twelve are up.'],
+       ['ASK', cn(pass[0]) + ' and ' + cn(pass[1]) + ' signed nobody on Day 1. What could they do on Day 3 that the others couldn\'t?'],
+       ['IF THEY SAY → YOU SAY', '"The others could use the room exception." → "It pays at most ' + m3(c.ROOMX) + '. Big B asks at least ' + m1(c.BIGB) + '."'],
+       ['TRIGGER', 'Step through by hand: Day 1, Day 3, then the other twelve clubs.'],
+       ['SYNTHESIS', (wA ? 'The ' + wA.club + "' room (Desk " + wA.n + ')' : 'Their room') + ' bought Wing A. It could not also buy Big B. That thing you gave up has a name: opportunity cost.']]
+    ];
+    const fields = [{ lab: 'NOW', txt: now[rev] }].concat(FD[rev].map((f) => ({ lab: f[0], txt: f[1] })));
+    const names = ['ENDINGS', 'SAME PLAYER', 'PASSERS'];
+    const mins = [3, 5, 4];
+    const rvBtns = names.map((nm, k) => ({ k: k + 1, name: nm, pressed: rev === k ? 'true' : 'false', bg: rev === k ? '#111' : '#F6F4EE', fg: rev === k ? '#F6F4EE' : '#111',
+      pick: () => {
+        const st = this.state || {};
+        const PP = (st.P || [0, 0, 0]).slice(), TT = (st.T || [0, 0, 0]).slice();
+        if (k > 0) { PP[0] = 14; TT[0] = 14; }
+        this.setState({ rev: k, P: PP, T: TT, playing: false, dwell: 0, sel: null });
+      } }));
+    const stepLabel = rev === 0 ? Math.floor(p0 + 1e-6) + ' of 14 landed' : rev === 1 ? k1 + ' of 3 receipts' : 'step ' + k2 + ' of 3';
+    const runLabel = s.playing ? 'Pause' : (P[rev] >= M[rev] ? 'Run again' : 'Run the reveal');
+    const keyLine = 'DESK · RING  ' + D.map((d) => d.n + ' ' + d.code).join(' · ');
+
+    const setRev = (fn) => {
+      const st = this.state || {};
+      const r = st.rev || 0;
+      const PP = (st.P || [0, 0, 0]).slice(), TT = (st.T || [0, 0, 0]).slice();
+      const patch = fn(r, PP, TT) || {};
+      this.setState(Object.assign({ P: PP, T: TT, dwell: 0, playing: false }, patch));
+    };
+
+    return {
+      how: how, howPressed: how ? 'true' : 'false', howBg: how ? '#111' : '#F6F4EE', howFg: how ? '#F6F4EE' : '#111',
+      toggleHow: () => this.setState({ how: !(this.state && this.state.how) }),
+      resetAll: () => this.setState({ rev: 0, P: [0, 0, 0], T: [0, 0, 0], playing: false, dwell: 0, sel: null }),
+      g: g, ln: ln, mt: mt, rk: rk, labels: labels, tickLabels: tickLabels, marks: marks, ghosts: ghosts,
+      zones: zones, crossLine: crossLine, totalText: m1(total), rd: rd, rcs: rcs, passers: passers, oth: oth, dayHeads: dayHeads, hd: hd,
+      fields: fields, keyLine: keyLine, rvBtns: rvBtns, dir: { k: rev + 1, min: mins[rev] }, stepLabel: stepLabel, runLabel: runLabel,
+      is: { r1: rev === 0, r2: rev === 1, r3: rev === 2, rdOn: focus != null && focus >= 0, rdOff: !(focus != null && focus >= 0) },
+      run: () => setRev((r, PP, TT) => {
+        if (this.state && this.state.playing) { TT[r] = Math.ceil(PP[r] - 1e-6); return { playing: false }; }
+        if (PP[r] >= M[r]) { PP[r] = 0; TT[r] = 0; }
+        TT[r] = r === 0 ? 14 : Math.min(M[r], Math.floor(PP[r] + 1e-6) + 1);
+        return { playing: true, sel: null };
+      }),
+      stepFwd: () => setRev((r, PP, TT) => { TT[r] = Math.min(M[r], Math.floor(PP[r] + 1e-6) + 1); return { sel: null }; }),
+      stepBack: () => setRev((r, PP, TT) => { TT[r] = Math.max(0, Math.ceil(PP[r] - 1e-6) - 1); return { sel: null }; }),
+      skip: () => setRev((r, PP, TT) => { PP[r] = M[r]; TT[r] = M[r]; return { sel: null }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

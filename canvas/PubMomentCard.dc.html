@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Moment card</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#D9D9D6;color:#14161A;font-family:'Figtree',sans-serif}
+.mono{font-family:'JetBrains Mono',monospace}
+.btn{font-family:'Figtree',sans-serif;font-weight:700;font-size:14px;min-height:44px;padding:0 14px;border-radius:0;cursor:pointer;background:#FFFFFF;color:#14161A;border:2px solid #14161A;transition:background .2s,color .2s}
+.btn:hover{background:#EFEFEC}
+.btn:focus-visible,.opt:focus-visible,.lnk:focus-visible{outline:3px solid #0B7A66;outline-offset:2px}
+.opt{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;width:100%;box-sizing:border-box;min-height:48px;padding:6px 12px;text-align:left;border-radius:0;border:2px solid #14161A;background:#FFFFFF;color:#14161A;cursor:pointer;font-family:'Figtree',sans-serif;transition:background .2s}
+.opt:hover{background:#E9F4F1}
+.lnk{background:transparent;border:0;padding:0 4px;min-height:36px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;color:#14161A;text-decoration:underline}
+.t-obs{background:#14161A}
+.t-aut{background:transparent;border:2px solid #14161A;box-sizing:border-box}
+.t-com{background:#A9AEB5}
+.t-unk{background:transparent;border:2px dashed #14161A;box-sizing:border-box}
+.t-you{background:transparent;border:2px solid #0B7A66;box-sizing:border-box}
+.sw{display:inline-block;width:12px;height:12px;box-sizing:border-box;flex:none}
+.gas{transition:background-color .8s ease,width .8s ease}
+.skel{height:8px;background:#CFCFCB;flex:none}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #D9D9D6; color: #14161A; font-family: 'Figtree', sans-serif">
+
+  <header style="position: absolute; left: 30px; top: 8px; width: 1380px; height: 56px; display: flex; justify-content: space-between; align-items: center; gap: 24px">
+    <div style="display: flex; align-items: baseline; gap: 14px; min-width: 0">
+      <span style="font-size: 24px; font-weight: 800; letter-spacing: -.01em; white-space: nowrap">The Moment card</span>
+      <span style="font-size: 13px; line-height: 1.4; max-width: 560px">PUBLISHING, in this form, means the thing you send is a place someone can stand in, and it arrives with its author, its sources and its rules attached.</span>
+    </div>
+    <sc-if value="{{how}}" hint-placeholder-val="{{false}}"><div class="mono" style="display: flex; gap: 8px; align-items: center; font-size: 11px; margin-left: auto; white-space: nowrap"><span class="sw t-obs"></span>observed<span class="sw t-aut"></span>authored<span class="sw t-com"></span>computed<span class="sw t-unk"></span>sealed<span class="sw t-you"></span>your act</div></sc-if>
+    <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="min-height: 38px; font-size: 13px; padding: 0 12px; background: {{howBg}}; color: {{howFg}}; white-space: nowrap">How do we know?</button>
+  </header>
+
+  <sc-for list="{{cols}}" as="c" hint-placeholder-count="3">
+    <section aria-label="{{c.aria}}" style="position: absolute; left: {{c.x}}px; top: 66px; width: 440px; height: 786px; box-sizing: border-box; background: {{c.bg}}; border: 1px solid #B4B4B0; overflow: hidden; display: flex; flex-direction: column">
+      <div style="height: 46px; flex: none; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 16px; border-bottom: 1px solid #C4C4C0; background: {{c.hbg}}">
+        <span style="width: 26px; height: 26px; border-radius: 26px; background: #C2C2BE; flex: none"></span>
+        <span style="font-size: 14px; font-weight: 600">{{c.hname}}</span>
+        <span class="mono" style="margin-left: auto; font-size: 11px; color: #55575C; letter-spacing: .06em">{{c.htag}}</span>
+      </div>
+      <div style="flex: 1; min-height: 0; padding: 14px 16px {{c.padB}}px; display: flex; flex-direction: column; gap: 12px; justify-content: {{c.just}}; position: relative; overflow: hidden">
+
+        <sc-if value="{{c.fillTop}}" hint-placeholder-val="{{true}}">
+          <sc-if value="{{c.isChat}}" hint-placeholder-val="{{true}}">
+            <div style="align-self: flex-start; width: 150px; padding: 10px 12px; background: #D6D6D2; display: flex; flex-direction: column; gap: 5px"><div class="skel" style="width: 100%"></div></div>
+            <div style="align-self: flex-end; width: 230px; padding: 10px 12px; background: #BDBDB8; display: flex; flex-direction: column; gap: 5px"><div class="skel" style="width: 100%; background: #9C9C97"></div><div class="skel" style="width: 70%; background: #9C9C97"></div></div>
+          </sc-if>
+        </sc-if>
+        <sc-if value="{{c.fillMid}}" hint-placeholder-val="{{false}}">
+          <sc-if value="{{c.isChat}}" hint-placeholder-val="{{true}}">
+            <div style="align-self: flex-start; width: 210px; padding: 10px 12px; background: #D6D6D2; display: flex; flex-direction: column; gap: 5px"><div class="skel" style="width: 100%"></div><div class="skel" style="width: 55%"></div></div>
+            <div style="align-self: flex-end; width: 120px; padding: 10px 12px; background: #BDBDB8"><div class="skel" style="width: 100%; background: #9C9C97"></div></div>
+          </sc-if>
+          <sc-if value="{{c.isFeed}}" hint-placeholder-val="{{false}}">
+            <div style="display: flex; flex-direction: column; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid #C4C4C0"><div class="skel" style="width: 30%"></div><div class="skel" style="width: 88%"></div><div style="height: 110px; background: #DEDEDA; margin-top: 4px"></div></div>
+          </sc-if>
+          <sc-if value="{{c.isArt}}" hint-placeholder-val="{{false}}">
+            <div style="display: flex; flex-direction: column; gap: 6px"><div class="skel" style="width: 100%"></div><div class="skel" style="width: 94%"></div><div class="skel" style="width: 98%"></div><div class="skel" style="width: 62%"></div></div>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{c.showIn}}" hint-placeholder-val="{{true}}">
+          <div style="align-self: flex-start; max-width: 250px; padding: 8px 12px; background: #D6D6D2; font-size: 14px; line-height: 1.35">did you see this? what would you do</div>
+        </sc-if>
+        <sc-if value="{{c.isFeed}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 14px; line-height: 1.4"><strong>[creator]</strong> <span style="color: #55575C">&middot; [date]</span></span><span style="font-size: 14px; line-height: 1.4">Line 2 used 210 chips a day. Then the plant burned. Play the first ten minutes below.</span></div>
+        </sc-if>
+        <sc-if value="{{c.isArt}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 20px; font-weight: 800; line-height: 1.15">[Article headline]</span><sc-if value="{{c.fillTop}}" hint-placeholder-val="{{true}}"><span class="mono" style="font-size: 11px; color: #55575C">[reporter] &middot; [news site] &middot; Science &middot; [date]</span></sc-if></div>
+        </sc-if>
+
+        <!-- THE CARD -->
+        <div style="width: {{c.cw}}px; box-sizing: border-box; background: #FFFFFF; border: 1.5px solid #14161A; box-shadow: 4px 4px 0 #14161A; padding: 10px 14px 8px; display: flex; flex-direction: column; gap: 8px">
+          <div class="mono" style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: .05em">
+            <span style="display: flex; align-items: center; gap: 6px; font-weight: 700"><span style="position: relative; width: 13px; height: 13px; box-sizing: border-box; border: 2px solid #14161A; display: inline-block"><span style="position: absolute; left: 2px; bottom: -1px; width: 3px; height: 6px; background: #14161A"></span></span>MOMENT</span>
+            <span>{{c.stamp}}</span>
+          </div>
+
+          <sc-if value="{{c.showPrev}}" hint-placeholder-val="{{true}}">
+            <div style="display: flex; align-items: center; gap: 12px; min-height: 84px; padding: 6px 0; border-top: 1px solid #DADAD6; border-bottom: 1px solid #DADAD6">
+              <sc-if value="{{c.isA}}" hint-placeholder-val="{{true}}">
+                <div class="t-obs" style="width: 64px; height: 64px; flex: none; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center"><span class="mono" style="font-size: 11px; line-height: 1">NO.</span><span style="font-size: 40px; font-weight: 800; line-height: 1">1</span></div>
+                <div style="font-size: 14px; line-height: 1.35"><strong>Boston holds the pick.</strong><br>Philadelphia wants it.<br><span class="mono" style="font-size: 11px; color: #55575C">frozen state &middot; 17 Jun 2017</span></div>
+              </sc-if>
+              <sc-if value="{{c.isB}}" hint-placeholder-val="{{false}}">
+                <div style="flex: 1; min-width: 0">
+                  <div style="display: flex; gap: 3px"><sc-for list="{{c.shelf}}" as="sh" hint-placeholder-count="11"><div style="position: relative; flex: 1; height: 22px; border: 1.5px solid #14161A; box-sizing: border-box"><div class="t-com" style="position: absolute; left: 0; top: 0; height: 100%; width: {{sh.w}}%"></div></div></sc-for></div>
+                  <div style="margin-top: 6px; font-size: 13px; line-height: 1.35"><strong>2,300 chips</strong> &middot; 10.95 days at 210 a day &middot; 5 promises open</div>
+                  <div class="mono" style="font-size: 11px; color: #55575C">frozen state &middot; 06:10 &middot; Harrow Medical (fictional)</div>
+                </div>
+              </sc-if>
+              <sc-if value="{{c.isC}}" hint-placeholder-val="{{false}}">
+                <div style="flex: 1; min-width: 0">
+                  <div style="position: relative; height: 56px; width: 100%">
+                    <div style="position: absolute; left: 0; top: 22px; width: 18px; height: 12px; border: 2px solid #14161A; border-right: 0; box-sizing: border-box"></div>
+                    <div style="position: absolute; left: 18px; top: 6px; width: 160px; height: 44px; border: 2px solid #14161A; box-sizing: border-box; background: #FBFBFA"><div class="gas" style="position: absolute; left: 0; top: 0; height: 100%; width: {{c.sy.gw}}px; background: {{c.sy.col}}"></div></div>
+                    <div class="gas" style="position: absolute; left: {{c.sy.pl}}px; top: 2px; width: 8px; height: 52px; background: #14161A"></div>
+                    <div class="gas" style="position: absolute; left: {{c.sy.rl}}px; top: 26px; width: 60px; height: 5px; background: #14161A"></div>
+                    <div class="gas" style="position: absolute; left: {{c.sy.hl}}px; top: 14px; width: 8px; height: 30px; background: #14161A"></div>
+                  </div>
+                  <div class="mono" style="font-size: 11px; line-height: 1.4; color: #14161A">2 NO&#8322; &#8652; N&#8322;O&#8324; &middot; {{c.sy.read}}</div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{c.isDoor}}" hint-placeholder-val="{{true}}">
+            <p style="margin: 2px 0 0; font-size: {{c.qs}}px; font-weight: 800; line-height: 1.2; letter-spacing: -.005em">{{c.q}}</p>
+            <button type="button" class="btn" onClick="{{c.enter}}" style="display: flex; justify-content: space-between; align-items: center; background: #14161A; color: #FFFFFF"><span>Enter</span><span class="mono" style="font-size: 11px; font-weight: 500">free &middot; no login</span></button>
+          </sc-if>
+
+          <sc-if value="{{c.isOpen}}" hint-placeholder-val="{{false}}">
+            <p style="margin: 0; font-size: 13px; line-height: 1.45">{{c.sit}}</p>
+            <span class="mono" style="font-size: 11px; letter-spacing: .05em; font-weight: 700">YOUR DECISION &middot; free</span>
+            <sc-for list="{{c.opts}}" as="o" hint-placeholder-count="2">
+              <button type="button" class="opt" onClick="{{o.pick}}"><span style="font-size: 15px; font-weight: 700">{{o.t}}</span><sc-if value="{{o.hasS}}" hint-placeholder-val="{{true}}"><span style="font-size: 12px; color: #55575C">{{o.s}}</span></sc-if></button>
+            </sc-for>
+          </sc-if>
+
+          <sc-if value="{{c.isDone}}" hint-placeholder-val="{{false}}">
+            <div style="position: relative; padding: 7px 10px; border: 2px solid #0B7A66; box-shadow: inset 0 0 0 2px #FFFFFF, inset 0 0 0 3px #0B7A66; color: #0B7A66">
+              <span class="mono" style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .06em">{{c.stMain}}</span>
+              <span style="display: block; font-size: 13px; font-weight: 600; line-height: 1.3">{{c.stSub}}</span>
+              <sc-if value="{{how}}" hint-placeholder-val="{{false}}"><span class="mono" style="display: block; margin-top: 2px; font-size: 11px">RECORDED in your history &middot; not the record</span></sc-if>
+            </div>
+            <sc-if value="{{c.wait}}" hint-placeholder-val="{{false}}"><span class="mono" style="font-size: 12px; padding: 6px 0">squeezing &hellip; watch the colour</span></sc-if>
+            <sc-if value="{{c.ready}}" hint-placeholder-val="{{true}}">
+              <sc-if value="{{c.isB}}" hint-placeholder-val="{{false}}">
+                <div style="display: flex; flex-direction: column; gap: 4px; padding: 4px 0">
+                  <sc-for list="{{c.bars}}" as="b" hint-placeholder-count="5">
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 12px"><span style="width: 74px; flex: none; font-weight: 600">{{b.n}}</span><div style="position: relative; flex: 1; height: 12px; border: 1.5px solid #14161A; box-sizing: border-box"><div class="t-com" style="position: absolute; left: 0; top: 0; height: 100%; width: {{b.w}}%"></div></div><span class="mono" style="width: 108px; flex: none; font-size: 11px; text-align: right; white-space: nowrap">{{b.t}}</span></div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-for list="{{c.res}}" as="r" hint-placeholder-count="2">
+                <div class="{{r.cls}}" style="padding: 6px 10px; border-color: #14161A; {{r.st}}">
+                  <span class="mono" style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .05em">{{r.head}}<sc-if value="{{how}}" hint-placeholder-val="{{false}}"> &middot; {{r.tag}}</sc-if></span>
+                  <span style="display: block; font-size: 12.5px; line-height: 1.4">{{r.text}}</span>
+                </div>
+              </sc-for>
+            </sc-if>
+            <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 0; font-size: 12px"><span>Moment by [publisher/creator] &middot;</span><button type="button" class="lnk" onClick="{{c.toggleSrc}}" aria-expanded="{{c.srcOpen}}">sources &rsaquo;</button></div>
+            <sc-if value="{{c.src}}" hint-placeholder-val="{{false}}"><p style="margin: 0; padding: 6px 10px; background: #F1F1EE; font-size: 12px; line-height: 1.4">{{c.srcTxt}}</p></sc-if>
+            <button type="button" class="btn" onClick="{{c.cont}}" style="display: flex; justify-content: space-between; align-items: center; background: #14161A; color: #FFFFFF; min-height: 40px"><span>Continue in the full World</span><span class="mono" style="font-size: 11px; font-weight: 500">&rarr;</span></button>
+            <sc-if value="{{c.contOpen}}" hint-placeholder-val="{{false}}"><p style="margin: 0; padding: 6px 10px; border: 2px solid #14161A; font-size: 12px; line-height: 1.4">{{c.contTxt}}</p></sc-if>
+            <div style="display: flex; gap: 8px">
+              <button type="button" class="btn" onClick="{{c.remix}}" aria-pressed="{{c.remixP}}" style="flex: 1; min-height: 38px; font-size: 13px; border-color: #0B7A66; color: #0B7A66">Remix this Moment</button>
+              <button type="button" class="btn" onClick="{{c.again}}" style="min-height: 38px; font-size: 13px; padding: 0 12px">Try again</button>
+            </div>
+            <sc-if value="{{c.remixOn}}" hint-placeholder-val="{{false}}">
+              <div style="padding: 7px 10px; border: 2px solid #0B7A66; display: flex; flex-direction: column; gap: 4px">
+                <span class="mono" style="font-size: 11px; font-weight: 700; letter-spacing: .04em; color: #0B7A66">REMIX &middot; state unchanged, question yours</span>
+                <input type="text" value="{{c.rq}}" onChange="{{c.setRq}}" aria-label="New question for the same state" style="min-height: 38px; box-sizing: border-box; border: 1.5px solid #14161A; border-radius: 0; padding: 0 10px; font-family: 'Figtree', sans-serif; font-size: 13px; color: #14161A">
+                <span class="mono" style="font-size: 11px">[creator] &nbsp;&rarr;&nbsp; remixed by <strong style="color: #0B7A66">[you]</strong></span>
+              </div>
+            </sc-if>
+          </sc-if>
+
+          <div class="mono" style="display: flex; gap: 12px; font-size: 11px; padding-top: 6px; border-top: 1px solid #DADAD6; white-space: nowrap">
+            <sc-for list="{{c.ladder}}" as="ld" hint-placeholder-count="3"><span style="font-weight: {{ld.fw}}; color: {{ld.fg}}; text-decoration: {{ld.td}}">{{ld.t}}</span></sc-for>
+          </div>
+        </div>
+
+        <sc-if value="{{c.chatReply}}" hint-placeholder-val="{{false}}">
+          <div style="align-self: flex-end; max-width: 320px; padding: 8px 12px; background: #3A3D42; color: #FFFFFF; font-size: 13px; line-height: 1.4">{{c.replyTxt}}<div class="mono" style="margin-top: 5px; padding: 3px 8px; border: 1.5px solid #7FD0C1; color: #7FD0C1; font-size: 11px">{{c.replyChip}}</div></div>
+        </sc-if>
+        <sc-if value="{{c.isFeed}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; gap: 22px; padding: 2px 0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#55575C" stroke-width="1.8" aria-label="Like" role="img"><path d="M12 20 C5 15 3 11 3 8.5 C3 6 5 4.5 7.2 4.5 C9.2 4.5 11 5.8 12 7.6 C13 5.8 14.8 4.5 16.8 4.5 C19 4.5 21 6 21 8.5 C21 11 19 15 12 20 Z"></path></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#55575C" stroke-width="1.8" aria-label="Comment" role="img"><path d="M4 5 H20 V16 H10 L5 20 V16 H4 Z"></path></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#55575C" stroke-width="1.8" aria-label="Share" role="img"><path d="M12 15 V4 M7 8.5 L12 4 L17 8.5 M5 13 V20 H19 V13"></path></svg>
+          </div>
+          <sc-if value="{{c.fillBot}}" hint-placeholder-val="{{true}}"><div style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid #C4C4C0"><div class="skel" style="width: 34%"></div><div class="skel" style="width: 92%"></div><div style="height: 80px; background: #DEDEDA; margin-top: 4px"></div></div></sc-if>
+        </sc-if>
+        <sc-if value="{{c.isArt}}" hint-placeholder-val="{{false}}">
+          <span class="mono" style="font-size: 11px; color: #55575C">Figure. Interactive Moment [caption]. Free to enter.</span>
+          <sc-if value="{{c.fillBot}}" hint-placeholder-val="{{true}}"><div style="display: flex; flex-direction: column; gap: 6px"><div class="skel" style="width: 96%"></div><div class="skel" style="width: 88%"></div><div class="skel" style="width: 94%"></div><div class="skel" style="width: 50%"></div></div></sc-if>
+        </sc-if>
+        <sc-if value="{{c.isChat}}" hint-placeholder-val="{{true}}">
+          <div style="position: absolute; left: 16px; right: 16px; bottom: 14px; height: 40px; box-sizing: border-box; border: 1.5px solid #A9A9A5; background: #F5F5F3; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; font-size: 13px; color: #6B6D72">Message<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B6D72" stroke-width="1.8" aria-label="Send" role="img"><path d="M4 12 L20 4 L14 20 L11 13 Z"></path></svg></div>
+        </sc-if>
+      </div>
+    </section>
+  </sc-for>
+
+  <div class="mono" style="position: absolute; left: 30px; bottom: 9px; width: 680px; font-size: 11px; line-height: 1.4; color: #3F4147">COMMERCIAL LENS &middot; Hypothesis: Moments must be free to enter everywhere (distribution); revenue comes after the door &mdash; persistent Worlds, creator plans, publisher licences.</div>
+  <div class="mono" style="position: absolute; right: 30px; bottom: 9px; width: 680px; text-align: right; font-size: 11px; line-height: 1.4; color: #3F4147">PROTOTYPE &middot; DESIGN PROPOSAL &middot; hosts are drawn, not real apps &middot; 2017 facts from the fixture, verify &middot; Harrow is fictional &middot; K approx., verify</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      const c = (this.state || {}).c;
+      if (c && c.st === 'done' && (c.t || 0) < 40) this.setState({ c: { ...c, t: (c.t || 0) + 1 } });
+    }, 300);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  renderVals() {
+    const s = this.state || {};
+    const how = !!s.how;
+    const fmt = (n) => Math.round(n).toLocaleString('en-US');
+    const upd = (k, patch) => () => this.setState({ [k]: { ...((this.state && this.state[k]) || {}), ...patch } });
+
+    /* business: same shelf, same promises as the explainer */
+    const CU = [['Ridgeway', 1400], ['Marlow', 900], ['Cedar', 800], ['Brightwater', 1200], ['Northgate', 1050]];
+    const alloc = (ord) => { let left = 2300; const cov = [0, 0, 0, 0, 0]; ord.forEach((k) => { const g = Math.min(CU[k][1], left); cov[k] = g; left -= g; }); return cov; };
+    const QUEUE = [0, 1, 2, 3, 4], HOSP = [3, 4, 0, 1, 2];
+    const shelf = []; for (let i = 0; i < 11; i++) shelf.push({ w: Math.round(Math.max(0, Math.min(1, 2300 / 210 - i)) * 100) });
+
+    /* science: 2 NO2 <-> N2O4, K approx. 168 L/mol at 25 C */
+    const Kc = 168, c0 = 0.04;
+    const solve = (c) => (-1 + Math.sqrt(1 + 8 * Kc * c)) / (4 * Kc);
+    const x0 = solve(c0), x1 = solve(2 * c0);
+    const rInst = 2, rSet = x1 / x0;
+    const mix = (I) => { const a = [243, 227, 206], b = [107, 46, 10], t = Math.min(1, I / 2.3); return 'rgb(' + a.map((v, i) => Math.round(v + (b[i] - v) * t)).join(',') + ')'; };
+
+    const LADDER = (st) => [['ENTER · free', 'door'], ['DECIDE · free', 'open'], ['CONTINUE · [terms]', 'done']].map((l) => ({ t: l[0], fw: st === l[1] ? 700 : 400, fg: st === l[1] ? '#14161A' : '#6B6D72', td: st === l[1] ? 'underline' : 'none' }));
+
+    const build = (k) => {
+      const c = s[k] || {}, st = c.st || 'door', ch = c.ch || null, t = c.t || 0;
+      const base = { k: k, st: st, isDoor: st === 'door', isOpen: st === 'open', isDone: st === 'done', isA: k === 'a', isB: k === 'b', isC: k === 'c',
+        isChat: k === 'a', isFeed: k === 'b', isArt: k === 'c', ladder: LADDER(st),
+        enter: upd(k, { st: 'open' }), again: upd(k, { st: 'door', ch: null, t: 0, dr: null }),
+        toggleSrc: () => this.setState({ [k]: { ...(this.state[k] || {}), dr: (this.state[k] || {}).dr === 'src' ? null : 'src' } }),
+        src: c.dr === 'src', srcOpen: c.dr === 'src' ? 'true' : 'false',
+        cont: () => this.setState({ [k]: { ...(this.state[k] || {}), dr: (this.state[k] || {}).dr === 'cont' ? null : 'cont' } }), contOpen: c.dr === 'cont',
+        remix: () => this.setState({ [k]: { ...(this.state[k] || {}), dr: (this.state[k] || {}).dr === 'remix' ? null : 'remix' } }), remixOn: c.dr === 'remix', remixP: c.dr === 'remix' ? 'true' : 'false',
+        setRq: (e) => this.setState({ [k]: { ...(this.state[k] || {}), rq: e.target.value } }),
+        fillTop: st === 'door', fillMid: st !== 'done', fillBot: st !== 'done', showIn: k === 'a' && st !== 'done', replyChip: '', just: k === 'a' ? 'flex-end' : 'flex-start', padB: k === 'a' ? 66 : 14, showPrev: st !== 'done' || k === 'c', sy: { gw: 156, col: 'rgb(217,166,107)', pl: 174, rl: 182, hl: 242, read: '' }, wait: false, ready: true, res: [], bars: [], shelf: shelf, chatReply: false, replyTxt: '' };
+      const mkRes = (arr) => arr.map((r) => ({ head: r[1], text: r[2], tag: r[3], cls: { obs: '', com: 't-com', aut: 't-aut', unk: 't-unk' }[r[0]], st: r[0] === 'obs' ? 'border-left: 5px solid #14161A; background: #F6F6F4' : (r[0] === 'com' ? 'background: #E4E6E9' : (r[0] === 'aut' ? 'border: 2px solid #14161A; background: transparent' : 'border: 2px dashed #14161A; background: transparent')) }));
+      if (k === 'a') {
+        const keep = ch === 'keep';
+        return { ...base, x: 30, aria: 'Moment card in a message thread', bg: '#EBEBE8', hbg: '#E2E2DF', hname: '[friend]', htag: 'MESSAGES', cw: 372, qs: 21,
+          stamp: '17 JUN 2017 · observed past', q: 'The No. 1 pick. What would you do?',
+          sit: 'Saturday 17 June 2017, five days before the draft. Boston holds the No. 1 pick, and Philadelphia wants it.',
+          opts: [{ t: 'Keep No. 1', s: 'Boston drafts first', hasS: true, pick: upd('a', { st: 'done', ch: 'keep', t: 0 }) }, { t: 'Listen to Philadelphia', s: 'Terms: [verify: picks in the offer]', hasS: true, pick: upd('a', { st: 'done', ch: 'listen', t: 0 }) }],
+          stMain: keep ? 'YOUR BRANCH' : 'YOUR CALL', stSub: keep ? 'diverged 17 Jun 2017 · you kept No. 1' : 'the same as the record · no branch was cut',
+          res: mkRes([['obs', 'WHAT ACTUALLY HAPPENED', 'Boston agreed that weekend to trade the No. 1 pick to Philadelphia. The deal was finalized 19 Jun, and Boston took Jayson Tatum at No. 3 on 22 Jun.', 'observed, dated'],
+            keep ? ['unk', 'YOUR BRANCH, FROM HERE', 'What No. 1 becomes in your branch is sealed. You find out by living it, in the full World.', 'sealed'] : ['aut', 'NO BRANCH WAS CUT', 'Enter the full World at this moment to try a different call.', 'authored']]),
+          srcTxt: 'NBA.com and league transaction records, 17–22 Jun 2017 [verify].',
+          contTxt: 'Enter the World at 17 Jun 2017 with your call as its first act. Continuing into a persistent World may need an account [terms not set here].',
+          rq: c.rq !== undefined ? c.rq : 'What would you need to hear before you moved down?',
+          chatReply: st === 'done', replyTxt: keep ? 'I kept the pick. Look what my branch does.' : 'I made the same call they did. Try keeping it.', replyChip: keep ? 'YOUR BRANCH · stamped · bow://m/no1-pick/b/[assigned]' : 'YOUR CALL · no branch cut · bow://m/no1-pick' };
+      }
+      if (k === 'b') {
+        const hosp = ch === 'hosp';
+        const cov = alloc(hosp ? HOSP : QUEUE);
+        return { ...base, x: 500, aria: 'Moment card in a social feed', bg: '#EFEFED', hbg: '#E6E6E3', hname: '[creator]', htag: 'FEED', cw: 408, qs: 21,
+          stamp: '06:10 · fictional company', q: 'The fire. Who gets the last 2,300 chips?',
+          sit: '06:10. Kaito’s plant is on fire. Harrow has 2,300 chips on the shelf, Line 2 uses 210 a day, and five customers were promised pumps.',
+          opts: [{ t: 'Contract order', s: 'Ridgeway and Marlow signed first', hasS: true, pick: upd('b', { st: 'done', ch: 'queue', t: 0 }) }, { t: 'Hospitals first', s: 'Brightwater and Northgate, then contract order', hasS: true, pick: upd('b', { st: 'done', ch: 'hosp', t: 0 }) }],
+          stMain: hosp ? 'YOUR BRANCH' : 'YOUR CALL', stSub: hosp ? 'diverged 06:10 · hospitals first' : 'the story’s rule · no branch was cut',
+          bars: CU.map((u, i) => ({ n: u[0], w: Math.round(cov[i] / u[1] * 100), t: fmt(cov[i]) + ' of ' + fmt(u[1]) })),
+          res: mkRes([['aut', 'THE STORY’S LINE', 'Contract order: Ridgeway and Marlow kept, three missed. ' + (hosp ? 'Yours keeps ' + cov.filter((v, i) => v >= CU[i][1]).length + ': the two hospitals.' : 'The same as yours.'), 'authored'],
+            ['unk', 'WHAT EACH MISS COST', 'Sealed: penalties and harm to patients are not modeled.', 'sealed']]),
+          srcTxt: 'Harrow, Kaito and the customers are fictional. Modelled on the Renesas Naka fire, March 2021 [verify].',
+          contTxt: 'Continue with the same shelf into the full system: broker, days, the other seven weeks. Continuing may need an account [terms not set here].',
+          rq: c.rq !== undefined ? c.rq : 'Same shelf, same fire. What if you could call a broker first?' };
+      }
+      const pred = { dark: 'darker', light: 'lighter', same: 'the same' }[ch] || '';
+      const ready = t >= 4;
+      const done = st === 'done';
+      const phase = !done ? 0 : (t < 3 ? 1 : 2);
+      const I = phase === 0 ? 1 : (phase === 1 ? rInst : rSet);
+      return { ...base, x: 970, aria: 'Moment card in a web article', bg: '#F4F4F2', hbg: '#EBEBE8', hname: '[news site]', htag: 'ARTICLE', cw: 408, qs: 20,
+        stamp: 'computed · no history', q: 'A syringe of NO₂. Squeeze it. Darker or lighter?',
+        sit: 'Brown NO₂ gas sits in a sealed syringe, in balance with colourless N₂O₄. You push the plunger to half the volume and let it settle. Compared with before you squeezed, is it darker, lighter, or the same?',
+        opts: [['Darker', 'dark'], ['Lighter', 'light'], ['The same', 'same']].map((o) => ({ t: o[0], s: '', hasS: false, pick: upd('c', { st: 'done', ch: o[1], t: 0 }) })),
+        sy: { gw: phase === 0 ? 156 : 78, col: mix(I), pl: phase === 0 ? 174 : 96, rl: phase === 0 ? 182 : 104, hl: phase === 0 ? 242 : 164,
+          read: phase === 0 ? 'depth 1.00' : (phase === 1 ? 'depth ' + rInst.toFixed(2) + ' at once' : 'depth ' + rSet.toFixed(2) + ' settled') },
+        stMain: 'YOUR PREDICTION', stSub: 'you said ' + pred + ' · made before the squeeze',
+        wait: done && !ready, ready: !done || ready,
+        res: mkRes([['com', 'COMPUTED', 'Depth against before: ×' + rInst.toFixed(2) + ' the instant after the squeeze, ×' + rSet.toFixed(2) + ' once settled. ' + (ch === 'dark' ? 'Matches your prediction.' : 'The computation says darker than before.'), 'computed'],
+          ['aut', 'WHY', 'Squeezing doubles every concentration at once. Then the balance shifts toward colourless N₂O₄, so some brown fades. K ≈ 168 L/mol at 25 °C (approx.; verify).', 'authored; K textbook']]),
+        srcTxt: 'Equilibrium constant: textbook value, approx. [verify]. Depths computed by BOW from the rule.',
+        contTxt: 'Continue in the lab World: change the temperature and watch the balance move. May need an account [terms not set here].',
+        rq: c.rq !== undefined ? c.rq : 'Squeeze it to a quarter of the volume. Darker or lighter?' };
+    };
+
+    return {
+      how, howPressed: how ? 'true' : 'false', howBg: how ? '#14161A' : '#FFFFFF', howFg: how ? '#FFFFFF' : '#14161A',
+      toggleHow: () => this.setState({ how: !how }),
+      cols: [build('a'), build('b'), build('c')]
+    };
+  }
+}
+</script>
+</body>
+</html>

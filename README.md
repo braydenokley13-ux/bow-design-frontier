@@ -23,7 +23,10 @@ These are prototypes and design evidence, not product code. None of it has been 
     - WHAT IF? 2 (`WhatIf*`)
     - Search/Atlas (`Atlas*`)
     - Native textbook (`Textbook*`)
-    - More boards are added as they are built.
+    - Publisher (`Pub*`)
+    - Cloud and Network (`DevWorldtools`, `NetworkHandshake`)
+    - The proposed Browser (`BrowserProposed`), which composes the critics' picks on one path
+    - The Wave 2 founder packet (`Packet2`): the tournaments, grammar matrix, canon candidates, kill list, open questions and Wave 3 recommendation
 - `briefs/` holds the working briefs:
   - the file format for boards (`DC_AUTHORING.md`);
   - the critic rubric;
@@ -60,4 +63,8 @@ cd tools/render && npm install && node render.mjs Fork.dc.html 900 steps.json
 
 ## Status
 
-This is a working checkpoint: Wave 2 is in progress. Real-world facts on the boards are dated 29 Sep 2026 and marked "verify" where they have not been checked against a source.
+Waves 1 and 2 are complete as design evidence. Every board was built, played in a browser and judged by an independent critic, and then repaired or killed. The verdicts, preserved dissent and open questions are on `Packet` (Wave 1) and `Packet2` (Wave 2).
+
+The critics' answer to the founder's question ("is this a new medium?") is "not yet in one place". The behaviours exist across boards. The flagship composition now propagates one act through its state, but that has not been re-judged by a critic or by people.
+
+Real-world facts on the boards are dated 29 Sep 2026 and marked "verify" where they have not been checked against a source. Boston's Reality figures follow BOW Economics Live's sourced fixture (see the CORRECTION block in `briefs/w2/W2_BAR_AND_FIXTURES.md`).

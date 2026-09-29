@@ -150,7 +150,7 @@ body{margin:0;background:#EDEAE3;color:#111;font-family:'Archivo',sans-serif}
         <div style="position:absolute;left:14px;right:14px;top:374px;height:136px;overflow:hidden;border-top:1px solid #111;border-bottom:1px solid #111">
           <div style="animation:crawlY 70s linear infinite">
             <sc-for list="{{city.feed2}}" as="fd" hint-placeholder-count="6">
-              <p class="nr" style="margin:0;height:34px;box-sizing:border-box;padding:7px 0;border-bottom:1px solid #C9C4B8;font-size:14px;line-height:1.3;white-space:nowrap;overflow:hidden">{{fd}}</p>
+              <p class="nr" style="margin:0;height:{{fd.h}}px;box-sizing:border-box;padding:7px 0;border-bottom:1px solid #C9C4B8;font-size:14px;line-height:1.3;white-space:{{fd.ws}};overflow:hidden">{{fd.t}}</p>
             </sc-for>
           </div>
         </div>
@@ -388,11 +388,11 @@ body{margin:0;background:#EDEAE3;color:#111;font-family:'Archivo',sans-serif}
                   <sc-for list="{{lg.lines}}" as="ln" hint-placeholder-count="4"><div style="position:absolute;left:{{ln.x}}px;top:56px;width:2px;height:120px;background:#111"></div><span class="nr" style="position:absolute;left:{{ln.x}}px;top:{{ln.ty}}px;font-size:13px;font-weight:600;line-height:1.15;white-space:nowrap;transform:translateX(-50%);text-align:center">{{ln.t}}</span></sc-for>
                   <div style="position:absolute;left:0;top:176px;width:500px;height:1.5px;background:#111"></div>
                   <div class="t-obs" style="position:absolute;left:{{lg.rx}}px;top:186px;width:12px;height:12px;margin-left:-6px"></div>
-                  <span class="nr" style="position:absolute;left:{{lg.rx}}px;top:202px;font-size:13px;font-weight:600;transform:translateX(-90%);white-space:nowrap">Reality ≈ $203.6M</span>
+                  <span class="nr" style="position:absolute;left:{{lg.rx}}px;top:202px;font-size:13px;font-weight:600;transform:translateX(-90%);white-space:nowrap">Reality ≈ $203.6M cap payroll</span>
                   <div class="t-rec" style="position:absolute;left:{{lg.wx}}px;top:186px;width:14px;height:14px;margin-left:-7px"></div>
                   <span class="nr" style="position:absolute;left:{{lg.wx}}px;top:218px;font-size:13px;font-weight:600;transform:translateX(-70%);white-space:nowrap">Your World ≈ $222.8M</span>
                 </div>
-                <p class="nr" style="margin:6px 0 0;font-size:14px;line-height:1.3">Reality sits between the tax line and the first apron: past the tax line, under the first apron (COMPUTED). Your World, if it were held to Reality’s lines, sits just past the second apron (COMPUTED). The World’s own apron line: [verify].</p>
+                <p class="nr" style="margin:6px 0 0;font-size:14px;line-height:1.3">On cap payroll, Reality sits between the tax line and the first apron: past the tax line, under the first apron (COMPUTED). Reported tax salary $198.7M is ≈ $1.7M under the line (salaryswish, 4 Sep 2026, verify) — two sources, shown, not averaged. Your World, if it were held to Reality’s lines, sits just past the second apron (COMPUTED). The World’s own apron line: [verify].</p>
               </div>
             </div>
           </div>
@@ -664,7 +664,7 @@ class Component extends DCLogic {
         fu: [['a', 50, 82, 0, 200, 16, 40], ['b', 40, 56, 0, 220, 16, 28], ['c', 30, 30, 0, 240, 16, 16]], pp: [[100, 88, 40, 64], [150, 88, 40, 64], [200, 88, 40, 64]],
         can: ['Read the rules and the league lines', 'Compare them with your World'], cant: ['Act on any team', 'Raise or lower the tax line'], tryL: 'Try: raise the tax line', rule: 'ROLE-OBSERVER · CBA',
         ref: 'The annex is read only. In Reality the lines come out of the 2023 CBA and league income, not from any team [verify].',
-        how: 'League lines: OBSERVED, BOW Economics Live fixture (verify). Rules: AUTHORED by the CBA, simplified here. Placement of the two payrolls on the ruler: COMPUTED. Model, textbook, creator-built: kinds shown by texture.' },
+        how: 'League lines: OBSERVED, BOW Economics Live fixture (verify). Rules: AUTHORED by the CBA, simplified here. Placement of the two payrolls on the ruler: COMPUTED; Reality’s is cap payroll. Model, textbook, creator-built: kinds shown by texture.' },
       dock: { n: 'Receiving dock', who: 'Procurement lead', role: 'procurement', rep: 'suppliers', panes: [[14, 66], [76, 128], [138, 190]], pz: [102, 122], ex: [[14, 66, 0, 96], [76, 128, 0, 96], [138, 190, 0, 96]],
         fu: [['b', 30, 46, 0, 50, 36, 32], ['b', 110, 56, 0, 50, 36, 32], ['c', 170, 14, 0, 36, 28, 26]], pp: [[100, 20, 0, 74]],
         can: ['Read every supplier order', 'Place and chase orders'], cant: ['Slow or stop Line 2', 'Change a customer promise'], tryL: 'Try: pull Kaito’s order forward', rule: 'UNKNOWN · nothing to compute from',
@@ -830,7 +830,7 @@ class Component extends DCLogic {
     /* ---------- overlay ---------- */
     const Mr = room ? META[room] : null;
     const isHz = q === 'harrow';
-    const CRAWL_B = 'REALITY · 29 SEP 2026 · [feed]  ·  2026–27 training camp [verify date]  ·  cap $164.961M · tax line $200.428M · first apron $209.015M · second apron $221.686M (BOW Economics Live fixture, verify)  ·  Boston committed payroll ≈ $203.6M, past the tax line (verify)  ·  Tatum returned 6 Mar 2026 vs Dallas (NBA.com; verify)  ·  ';
+    const CRAWL_B = 'REALITY · 29 SEP 2026 · [feed]  ·  2026–27 training camp [verify date]  ·  cap $164.961M · tax line $200.428M · first apron $209.015M · second apron $221.686M (BOW Economics Live fixture, verify)  ·  Boston committed cap payroll ≈ $203.6M, past the tax line on cap payroll (verify)  ·  Reported tax salary $198.7M is ≈ $1.7M under the line (salaryswish, 4 Sep 2026, verify) — two sources, shown, not averaged.  ·  Tatum returned 6 Mar 2026 vs Dallas (NBA.com; verify)  ·  ';
     const CRAWL_H = 'REALITY OF THE SUPPLY MARKET · [feed] · fictional example  ·  Kaito Semiconductor: fab fire at 06:10 [date: verify]  ·  single-source MCU supplier to Harrow Medical  ·  Kaito ship date: UNKNOWN, none in the feed  ·  market lead times: [from the Reality feed]  ·  ';
     const crawl = isHz ? CRAWL_H : CRAWL_B;
     const litR = Mr ? Mr.lit !== false : true;
@@ -870,9 +870,10 @@ class Component extends DCLogic {
     } : {
       sky: sky(0, 344, 250, 120, PB.slice(0, 26)), title: 'Boston Celtics · Reality', asof: '29 Sep 2026 · live · [feed]',
       can: 'You can watch and follow. You can’t act on the real team. You can enter its recorded Moments: the Archive, top floor.',
-      feed2: ['2026–27 training camp [verify date]', 'Cap $164.961M · tax line $200.428M', 'Aprons $209.015M · $221.686M', 'Payroll ≈ $203.6M, past the tax line (verify)', 'Tatum returned 6 Mar 2026 vs Dallas (verify)', 'Chisholm-led sale approved 13 Aug 2025 (verify)', '2026–27 training camp [verify date]', 'Cap $164.961M · tax line $200.428M', 'Aprons $209.015M · $221.686M', 'Payroll ≈ $203.6M, past the tax line (verify)', 'Tatum returned 6 Mar 2026 vs Dallas (verify)', 'Chisholm-led sale approved 13 Aug 2025 (verify)'],
-      note: 'Next preseason game: [from the Reality feed]', src: 'BOW Economics Live fixture and public reporting, as of 29 Sep 2026. Verify before use.'
+      feed2: ['2026–27 training camp [verify date]', 'Cap $164.961M · tax line $200.428M', 'Aprons $209.015M · $221.686M', 'Cap payroll ≈ $203.6M, past the tax line (cap payroll · see How do we know?)', 'Tatum returned 6 Mar 2026 vs Dallas (verify)', 'Chisholm-led sale approved 13 Aug 2025 (verify)', '2026–27 training camp [verify date]', 'Cap $164.961M · tax line $200.428M', 'Aprons $209.015M · $221.686M', 'Cap payroll ≈ $203.6M, past the tax line (cap payroll · see How do we know?)', 'Tatum returned 6 Mar 2026 vs Dallas (verify)', 'Chisholm-led sale approved 13 Aug 2025 (verify)'],
+      note: 'Next preseason game: [from the Reality feed]', src: 'BOW Economics Live fixture and public reporting, as of 29 Sep 2026. Verify before use. Feed payroll is cap payroll. Reported tax salary $198.7M is ≈ $1.7M under the line (salaryswish, 4 Sep 2026, verify) — two sources, shown, not averaged.'
     };
+    city.feed2 = city.feed2.map((x) => ({ t: x, h: x.length > 52 ? 50 : 34, ws: x.length > 52 ? 'normal' : 'nowrap' }));
     const capB = hov && META[hov] && list.some((r) => r[0] === hov) ? { has: true, none: false, name: META[hov].n, line: CAPS[hov] + ' · ' + META[hov].rep, enter: () => enterRoom(hov) } : { has: false, none: true, name: '', line: '', enter: () => {} };
 
     /* ---------- Front office ---------- */

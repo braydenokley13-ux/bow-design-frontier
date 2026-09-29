@@ -16,15 +16,16 @@ body{margin:0;background:#F3EFE6;color:#141210;font-family:'Libre Baskerville',s
 .btn{font-family:'Libre Baskerville',serif;font-weight:700;font-size:14px;min-height:44px;padding:0 16px;border-radius:0;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
 .btn:focus-visible,.lrow:focus-visible{outline:3px solid #141210;outline-offset:-3px}
 .btn:disabled{cursor:default}
-.lrow{display:grid;grid-template-columns:100px 330px 44px minmax(0,1fr);align-items:center;width:880px;height:40px;box-sizing:border-box;padding:0;margin:0;text-align:left;color:#141210;background:transparent;border:0;border-bottom:1px solid #D3C9B3;border-radius:0;cursor:pointer;font-family:'Courier Prime',monospace;transition:background .2s,opacity .5s}
+.lrow{display:grid;grid-template-columns:124px 316px 44px minmax(0,1fr);align-items:center;width:880px;height:36px;box-sizing:border-box;padding:0;margin:0;text-align:left;color:#141210;background:transparent;border:0;border-bottom:1px solid #D3C9B3;border-radius:0;cursor:pointer;font-family:'Courier Prime',monospace;transition:background .2s,opacity .5s}
 .lrow:hover{background:#ECE5D3}
 .lrow.sel{background:#EAE2CE;box-shadow:inset 4px 0 0 #C2410C}
+.lrow.gry{background:#DFDACA;color:#5B5446}
 .d{font-size:13px;padding-left:12px;color:#3D372D}
 .rl{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden}
 .bul{display:block;flex:none;width:7px;height:7px;background:#141210}
-.mk{position:relative;display:block;height:40px}
+.mk{position:relative;display:block;height:36px}
 .trunk{position:absolute;left:21px;top:0;bottom:0;display:block;width:0}
-.mark{position:absolute;left:9px;top:9px;display:flex;align-items:center;justify-content:center;box-sizing:border-box;font-family:'Courier Prime',monospace;font-weight:700;font-size:15px;color:#A03509}
+.mark{position:absolute;left:9px;top:6px;display:flex;align-items:center;justify-content:center;box-sizing:border-box;font-family:'Courier Prime',monospace;font-weight:700;font-size:15px;color:#A03509}
 .bc{display:flex;flex-direction:column;gap:0;min-width:0;padding-right:8px}
 .st{font-size:11px;font-weight:700;letter-spacing:.08em;color:#A03509;line-height:14px}
 .sh{font-size:13px;line-height:16px;color:#141210;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -35,18 +36,18 @@ body{margin:0;background:#F3EFE6;color:#141210;font-family:'Libre Baskerville',s
 <div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F3EFE6; color: #141210; font-family: 'Libre Baskerville', serif">
 
   <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 84px; box-sizing: border-box; border-bottom: 3px double #141210">
-    <div style="position: absolute; left: 40px; top: 8px; width: 640px; display: flex; flex-direction: column; gap: 1px">
+    <div style="position: absolute; left: 40px; top: 8px; width: 710px; display: flex; flex-direction: column; gap: 1px">
       <span class="cp" style="font-size: 12px; letter-spacing: .1em; color: #5A5245">BOW REALITY · W4 THE LIVING FORK · WHAT IF?</span>
       <h1 style="margin: 0; font-size: 28px; font-weight: 700; line-height: 1.2; color: #A03509; white-space: nowrap">Keep No. 1 — Fultz</h1>
       <span class="cp" style="font-size: 11px; color: #5A5245; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{address}}</span>
     </div>
-    <div style="position: absolute; left: 700px; top: 14px; width: 440px; display: flex; flex-direction: column; gap: 8px">
-      <span class="cp" style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .04em"><span style="display: block; width: 12px; height: 12px; background: #141210; box-shadow: inset 0 0 0 2px #141210, inset 0 0 0 4px #F3EFE6"></span>REALITY · NOW 29 SEP 2026 · keeps going</span>
+    <div style="position: absolute; left: 760px; top: 14px; width: 390px; display: flex; flex-direction: column; gap: 8px">
+      <span class="cp" style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .04em"><span style="display: block; width: 12px; height: 12px; background: #141210"></span>REALITY · NOW 29 SEP 2026 · keeps going</span>
       <span class="cp" style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .04em; color: #A03509"><span style="display: block; width: 12px; height: 12px; box-sizing: border-box; border: 2px solid #C2410C"></span>{{branchClock}}</span>
     </div>
-    <div style="position: absolute; right: 40px; top: 20px; display: flex; gap: 10px">
-      <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="border: 2px solid #141210; background: {{howBg}}; color: {{howFg}}; white-space: nowrap">How do we know?</button>
-      <button type="button" class="btn" onClick="{{reset}}" style="border: 2px solid #141210; background: transparent; color: #141210; white-space: nowrap">Start over</button>
+    <div style="position: absolute; right: 40px; top: 20px; display: flex; gap: 8px">
+      <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="padding: 0 12px; font-size: 13px; border: 2px solid #141210; background: {{howBg}}; color: {{howFg}}; white-space: nowrap">How do we know?</button>
+      <button type="button" class="btn" onClick="{{reset}}" style="padding: 0 12px; font-size: 13px; border: 2px solid #141210; background: transparent; color: #141210; white-space: nowrap">Start over</button>
     </div>
   </header>
 
@@ -58,7 +59,7 @@ body{margin:0;background:#F3EFE6;color:#141210;font-family:'Libre Baskerville',s
   </div>
   <div style="position: absolute; left: 480px; top: 96px; width: 432px; display: flex; flex-direction: column; gap: 3px">
     <span class="cp" style="font-size: 12px; font-weight: 700; letter-spacing: .06em; color: #A03509">YOUR BRANCH · KEEP NO. 1 — FULTZ</span>
-    <span class="cp" style="font-size: 11px; color: #A03509">diverged 17 Jun 2017 · kept 29 Sep 2026 · by you</span>
+    <span class="cp" style="font-size: 11px; color: #A03509">diverged 17 Jun 2017 · kept 20 Aug 2025 · by you</span>
     <div style="display: flex; gap: 6px; margin-top: 2px; flex-wrap: nowrap">
       <sc-for list="{{chips}}" as="ch" hint-placeholder-count="3">
         <span class="chip">{{ch.t}}</span>
@@ -66,7 +67,7 @@ body{margin:0;background:#F3EFE6;color:#141210;font-family:'Libre Baskerville',s
     </div>
   </div>
 
-  <div style="position: absolute; left: 40px; top: 160px; width: 880px; height: 32px; display: grid; grid-template-columns: 100px 330px 44px minmax(0, 1fr); align-items: center; border-top: 2px solid #141210; border-bottom: 1px solid #141210; box-sizing: border-box">
+  <div style="position: absolute; left: 40px; top: 160px; width: 880px; height: 32px; display: grid; grid-template-columns: 124px 316px 44px minmax(0, 1fr); align-items: center; border-top: 2px solid #141210; border-bottom: 1px solid #141210; box-sizing: border-box">
     <span class="cp" style="font-size: 13px; padding-left: 12px; color: #3D372D">17 Jun 2017</span>
     <span class="cp" style="font-size: 14px; font-weight: 700">Philadelphia calls about No. 1</span>
     <span style="position: relative; display: block; height: 30px"><span style="position: absolute; left: 9px; top: 5px; width: 24px; height: 20px; box-sizing: border-box; background: #C2410C; box-shadow: inset 0 0 0 2px #C2410C, inset 0 0 0 4px #F3EFE6"></span></span>
@@ -84,89 +85,110 @@ body{margin:0;background:#F3EFE6;color:#141210;font-family:'Libre Baskerville',s
     </sc-for>
   </div>
 
-  <button type="button" class="btn" onClick="{{arrive}}" disabled="{{arr.dis}}" style="position: absolute; left: 40px; top: 774px; width: 236px; height: 52px; font-size: 17px; border: 2px {{arr.bstyle}} #141210; background: {{arr.bg}}; color: {{arr.fg}}">{{arr.label}}</button>
-  <button type="button" class="btn" onClick="{{freeze}}" disabled="{{frz.dis}}" style="position: absolute; left: 290px; top: 774px; width: 210px; height: 52px; font-size: 15px; border: 2px {{frz.bstyle}} #A03509; background: {{frz.bg}}; color: {{frz.fg}}">{{frz.label}}</button>
-  <span class="cp" style="position: absolute; left: 520px; top: 774px; width: 400px; font-size: 12px; line-height: 16px; color: #3D372D">{{arr.sub}}</span>
+  <button type="button" class="btn" onClick="{{arrive}}" disabled="{{arr.dis}}" style="position: absolute; left: 40px; top: 779px; width: 236px; height: 52px; font-size: 17px; border: 2px {{arr.bstyle}} #141210; background: {{arr.bg}}; color: {{arr.fg}}">{{arr.label}}</button>
+  <button type="button" class="btn" onClick="{{freeze}}" disabled="{{frz.dis}}" style="position: absolute; left: 290px; top: 779px; width: 210px; height: 52px; font-size: 15px; border: 2px {{frz.bstyle}} #A03509; background: {{frz.bg}}; color: {{frz.fg}}">{{frz.label}}</button>
+  <span class="cp" style="position: absolute; left: 520px; top: 779px; width: 400px; font-size: 12px; line-height: 16px; color: #3D372D">{{arr.sub}}</span>
 
   <div style="position: absolute; left: 960px; top: 94px; width: 440px; display: flex; justify-content: space-between; align-items: baseline">
     <span class="bk" style="font-size: 17px; font-weight: 700">Branch health</span>
-    <span class="cp" style="font-size: 12px; color: #3D372D">{{health.total}} entries in the ledger</span>
+    <span class="cp" style="font-size: 12px; color: #3D372D">{{health.text}}</span>
   </div>
-  <div style="position: absolute; left: 960px; top: 124px; width: 440px; height: 30px; display: flex; border: 1px solid #141210; box-sizing: content-box; margin-left: -1px">
+  <div style="position: absolute; left: 960px; top: 120px; width: 440px; height: 30px; display: flex; border: 1px solid #141210; box-sizing: content-box; margin-left: -1px">
     <sc-for list="{{segs}}" as="sg" hint-placeholder-count="4">
       <span class="cp fade" style="display: flex; align-items: center; justify-content: center; flex: none; width: {{sg.w}}px; height: 30px; box-sizing: border-box; background: {{sg.bg}}; border: {{sg.bd}}; color: {{sg.fg}}; font-size: 13px; font-weight: 700; transition: width .5s ease">{{sg.n}}</span>
     </sc-for>
   </div>
-  <div style="position: absolute; left: 960px; top: 164px; width: 440px; display: flex; gap: 14px; flex-wrap: nowrap">
+  <div style="position: absolute; left: 960px; top: 155px; width: 440px; display: flex; gap: 12px; flex-wrap: nowrap">
     <sc-for list="{{legend}}" as="lg" hint-placeholder-count="4">
-      <span class="cp" style="display: flex; align-items: center; gap: 5px; font-size: 12px; white-space: nowrap"><span style="display: block; flex: none; width: 13px; height: 13px; box-sizing: border-box; background: {{lg.bg}}; border: {{lg.bd}}"></span>{{lg.t}}</span>
+      <span class="cp" style="display: flex; align-items: center; gap: 5px; font-size: 11.5px; white-space: nowrap"><span style="display: block; flex: none; width: 13px; height: 13px; box-sizing: border-box; background: {{lg.bg}}; border: {{lg.bd}}"></span>{{lg.t}}</span>
     </sc-for>
   </div>
 
-  <div style="position: absolute; left: 960px; top: 196px; width: 440px; display: flex; justify-content: space-between; align-items: baseline">
+  <div style="position: absolute; left: 960px; top: 178px; width: 440px; display: flex; justify-content: space-between; align-items: baseline">
     <span class="bk" style="font-size: 17px; font-weight: 700">Age</span>
     <span class="cp" style="font-size: 12px; color: #3D372D">{{age.text}}</span>
   </div>
-  <div style="position: absolute; left: {{age.x0}}px; top: 268px; width: {{age.w0}}px; height: 12px; box-sizing: border-box; background: #DB8E60; border: 1px solid #C2410C"></div>
-  <div class="fade" style="position: absolute; left: {{age.x3}}px; top: 268px; width: {{age.w1}}px; height: 12px; box-sizing: border-box; border: 2px dashed #C2410C"></div>
-  <div style="position: absolute; left: 972px; top: 279px; width: 416px; height: 0; border-top: 1px solid #141210"></div>
+  <div style="position: absolute; left: {{age.x0}}px; top: 248px; width: {{age.w0}}px; height: 12px; box-sizing: border-box; background: #DB8E60; border: 1px solid #C2410C"></div>
+  <div class="fade" style="position: absolute; left: {{age.x3}}px; top: 248px; width: {{age.w1}}px; height: 12px; box-sizing: border-box; border: 2px dashed #C2410C"></div>
+  <div style="position: absolute; left: 972px; top: 259px; width: 416px; height: 0; border-top: 1px solid #141210"></div>
   <sc-for list="{{ticks}}" as="tk" hint-placeholder-count="11">
     <span class="cp" style="position: absolute; left: {{tk.x}}px; top: {{tk.top}}px; width: 0; height: {{tk.h}}px; border-left: 1px solid #141210"></span>
-    <span class="cp" style="position: absolute; left: {{tk.x}}px; top: 288px; transform: translateX(-50%); font-size: 11px; color: #3D372D; white-space: nowrap; opacity: {{tk.lop}}">{{tk.t}}</span>
+    <span class="cp" style="position: absolute; left: {{tk.x}}px; top: 268px; transform: translateX(-50%); font-size: 11px; color: #3D372D; white-space: nowrap; opacity: {{tk.lop}}">{{tk.t}}</span>
   </sc-for>
-  <div style="position: absolute; left: {{age.hx}}px; top: 234px; width: 0; height: 46px; border-left: 2px solid #A03509"></div>
-  <span class="cp" style="position: absolute; left: {{age.hlx}}px; top: 232px; font-size: 11px; color: #A03509; font-weight: 700; white-space: nowrap">guess horizon · 3 seasons (Jun 2020)</span>
+  <div style="position: absolute; left: {{age.hx}}px; top: 214px; width: 0; height: 46px; border-left: 2px solid #A03509"></div>
+  <span class="cp" style="position: absolute; left: {{age.hlx}}px; top: 212px; font-size: 11px; color: #A03509; font-weight: 700; white-space: nowrap">guess horizon · 3 seasons (Jun 2020)</span>
   <sc-if value="{{age.live}}" hint-placeholder-val="{{true}}">
-    <div style="position: absolute; left: {{age.nx}}px; top: 254px; width: 0; height: 32px; border-left: 3px solid #141210"></div>
-    <span class="cp" style="position: absolute; left: 1206px; top: 302px; width: 194px; text-align: right; font-size: 11px; font-weight: 700; white-space: nowrap">NOW · Reality, 29 Sep 2026</span>
+    <div style="position: absolute; left: {{age.nx}}px; top: 234px; width: 0; height: 32px; border-left: 3px solid #141210"></div>
+    <span class="cp" style="position: absolute; left: 1206px; top: 282px; width: 194px; text-align: right; font-size: 11px; font-weight: 700; white-space: nowrap">NOW · Reality, 29 Sep 2026</span>
   </sc-if>
   <sc-if value="{{age.frozen}}" hint-placeholder-val="{{false}}">
-    <div style="position: absolute; left: {{age.ex}}px; top: 254px; width: 0; height: 32px; border-left: 3px solid #A03509"></div>
-    <span class="cp" style="position: absolute; left: 1206px; top: 302px; width: 194px; text-align: right; font-size: 11px; font-weight: 700; color: #A03509; white-space: nowrap">FROZEN · no NOW</span>
+    <div style="position: absolute; left: {{age.ex}}px; top: 234px; width: 0; height: 32px; border-left: 3px solid #A03509"></div>
+    <span class="cp" style="position: absolute; left: 1206px; top: 282px; width: 194px; text-align: right; font-size: 11px; font-weight: 700; color: #A03509; white-space: nowrap">FROZEN · no NOW</span>
   </sc-if>
-  <span class="cp" style="position: absolute; left: 960px; top: 302px; width: 240px; font-size: 11px; color: #3D372D; white-space: nowrap">{{age.recon}}</span>
+  <span class="cp" style="position: absolute; left: 960px; top: 282px; width: 240px; font-size: 11px; color: #3D372D; white-space: nowrap">{{age.recon}}</span>
+  <span class="cp" style="position: absolute; left: 1000px; top: 297px; width: 400px; text-align: right; font-size: 11px; color: #3D372D; white-space: nowrap">{{age.events}}</span>
 
-  <div style="position: absolute; left: 960px; top: 334px; width: 440px; height: 250px; box-sizing: border-box; border-top: 2px solid #141210; padding-top: 8px; display: flex; flex-direction: column; gap: 5px">
+  <div style="position: absolute; left: 960px; top: 322px; width: 440px; height: 218px; box-sizing: border-box; border-top: 2px solid #141210; padding-top: 6px; display: flex; flex-direction: column; gap: 4px">
     <div style="display: flex; justify-content: space-between; align-items: baseline">
       <span class="cp" style="font-size: 12px; font-weight: 700; letter-spacing: .06em">{{det.date}}</span>
       <span class="cp" style="font-size: 11px; color: #5A5245">REALITY · black</span>
     </div>
-    <span class="bk" style="font-size: 14px; font-weight: 700; line-height: 1.25">{{det.title}}</span>
-    <span class="bk" style="font-size: 12px; line-height: 1.45; color: #2A251D">{{det.rd}}</span>
-    <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px; border-top: 2px solid #C2410C; padding-top: 6px">
+    <span class="bk" style="font-size: 14px; font-weight: 700; line-height: 1.2">{{det.title}}</span>
+    <span class="bk" style="font-size: 11.5px; line-height: 1.4; color: #2A251D">{{det.rd}}</span>
+    <div style="display: flex; align-items: center; gap: 8px; margin-top: 2px; border-top: 2px solid #C2410C; padding-top: 5px">
       <span class="cp" style="font-size: 12px; font-weight: 700; letter-spacing: .06em; color: #A03509">IN YOUR BRANCH · {{det.status}}</span>
     </div>
-    <span class="bk" style="font-size: 12px; line-height: 1.45; color: #141210">{{det.why}}</span>
-    <span class="bk" style="font-size: 11.5px; line-height: 1.4; color: #5A5245; font-style: italic">{{det.rule}}</span>
+    <span class="bk" style="font-size: 11.5px; line-height: 1.4; color: #141210">{{det.why}}</span>
+    <span class="bk" style="font-size: 11px; line-height: 1.35; color: #5A5245; font-style: italic">{{det.rule}}</span>
   </div>
 
   <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
-    <div style="position: absolute; left: 960px; top: 334px; width: 440px; height: 250px; box-sizing: border-box; background: #FBF8F1; border: 2px solid #141210; padding: 10px 14px; display: flex; flex-direction: column; gap: 7px">
+    <div style="position: absolute; left: 960px; top: 322px; width: 440px; height: 218px; box-sizing: border-box; background: #FBF8F1; border: 2px solid #141210; padding: 8px 14px; display: flex; flex-direction: column; gap: 5px">
       <span class="cp" style="font-size: 12px; font-weight: 700; letter-spacing: .08em">HOW DO WE KNOW?</span>
-      <div style="display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 7px 12px; align-items: center; font-size: 11.5px; line-height: 1.3">
-        <span style="display: block; width: 14px; height: 14px; background: #141210; box-shadow: inset 0 0 0 2px #141210, inset 0 0 0 4px #FBF8F1"></span><span><strong>Reality, black.</strong> Public reporting (NBA.com, ESPN, NBC Sports Boston, Hoops Rumors). Dates say verify.</span>
-        <span style="display: block; width: 18px; height: 14px; background: #C2410C; box-shadow: inset 0 0 0 2px #C2410C, inset 0 0 0 4px #FBF8F1"></span><span><strong>Your act.</strong> Recorded in BOW: kept No. 1, 29 Sep 2026, by you.</span>
-        <span style="display: block; width: 18px; height: 14px; box-sizing: border-box; border: 2.5px solid #C2410C"></span><span><strong>HELD.</strong> Your declaration, outlined. Held, not proven.</span>
+      <div style="display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 5px 12px; align-items: center; font-size: 11px; line-height: 1.3">
+        <span style="display: block; width: 14px; height: 14px; background: #141210"></span><span><strong>Reality, black, solid.</strong> Public reporting (NBA.com, ESPN, NBC Sports Boston, Hoops Rumors). Verify dates.</span>
+        <span style="display: block; width: 18px; height: 14px; background: #C2410C; box-shadow: inset 0 0 0 2px #C2410C, inset 0 0 0 4px #FBF8F1"></span><span><strong>Your act.</strong> Recorded in BOW: kept No. 1, 20 Aug 2025, by you.</span>
+        <span style="display: block; width: 18px; height: 14px; box-sizing: border-box; border: 2.5px solid #C2410C"></span><span><strong>HELD, or authored.</strong> Outline only: your declaration, or a number authored here (win ranges: illustrative, no model ran).</span>
         <span style="display: block; width: 18px; height: 14px; background: #DB8E60; border: 1px solid #C2410C"></span><span><strong>DIVERGED, IMPOSSIBLE.</strong> Computed from your act and the rules. Toned.</span>
         <span style="display: block; width: 18px; height: 14px; box-sizing: border-box; border: 2.5px dashed #C2410C"></span><span><strong>UNKNOWN.</strong> The branch does not know. A hole, never filled.</span>
-        <span style="display: block; width: 14px; height: 14px; background: #141210"></span><span><strong>INDEPENDENT.</strong> Not affected. Reality’s own entry stands.</span>
+        <span style="display: block; width: 14px; height: 14px; box-sizing: border-box; border: 2px solid #141210"></span><span><strong>INDEPENDENT · assumed.</strong> Black outline: BOW assumes the roster did not matter. Assumed, not proven [verify].</span>
       </div>
-      <span style="font-size: 11px; line-height: 1.35; color: #5A5245; font-style: italic">Arrivals here replay events already in Reality’s record, in order. The live feed is [not connected].</span>
     </div>
   </sc-if>
 
-  <div style="position: absolute; left: 960px; top: 596px; width: 440px; display: flex; flex-direction: column; gap: 4px">
-    <span class="bk" style="font-size: 15px; font-weight: 700">Arrivals, checked against your branch</span>
+  <div style="position: absolute; left: 960px; top: 546px; width: 440px; height: 100px; box-sizing: border-box; border: 2px solid #C2410C">
+    <span class="cp" style="position: absolute; left: 10px; top: 3px; font-size: 12px; font-weight: 700; letter-spacing: .06em; color: #A03509; white-space: nowrap">WHAT YOUR BRANCH SAYS</span>
+    <span class="bk" style="position: absolute; left: 10px; top: 20px; font-size: 12px; line-height: 16px; color: #141210; white-space: nowrap">Fultz at No. 1 · Tatum a 76er · Hayward, Irving held</span>
+    <span class="cp" style="position: absolute; left: 10px; top: 36px; font-size: 11px; line-height: 13px; color: #A03509; white-space: nowrap">wins 2017–20: upper hurt, lower healthy · illustrative, authored</span>
+    <div style="position: absolute; left: 10px; top: 52px; width: 320px; display: flex; flex-direction: column">
+      <sc-for list="{{ranges}}" as="rg" hint-placeholder-count="3">
+        <div style="display: flex; align-items: center; height: 14px">
+          <span class="cp" style="flex: none; width: 56px; font-size: 11px; color: #3D372D">{{rg.lab}}</span>
+          <span style="position: relative; flex: none; display: block; width: 170px; height: 13px; border-left: 1px solid #141210">
+            <span style="position: absolute; left: {{rg.hx}}px; top: 0; width: {{rg.hw}}px; height: 6px; box-sizing: border-box; border: 1.5px solid #C2410C"></span>
+            <span style="position: absolute; left: {{rg.yx}}px; top: 7px; width: {{rg.yw}}px; height: 6px; box-sizing: border-box; border: 1.5px solid #C2410C"></span>
+          </span>
+          <span class="cp" style="flex: none; margin-left: 8px; font-size: 11px; color: #141210; white-space: nowrap">{{rg.txt}}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="position: absolute; right: 8px; top: 52px; width: 92px; height: 42px; box-sizing: border-box; border: 2px dashed #C2410C; display: flex; align-items: center; justify-content: center; text-align: center">
+      <span class="cp" style="font-size: 11px; line-height: 1.25; color: #A03509; font-weight: 700">after Jun 2020 · sealed</span>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 960px; top: 652px; width: 440px; display: flex; flex-direction: column; gap: 2px">
+    <span class="bk" style="font-size: 14px; font-weight: 700; line-height: 18px">Arrivals, checked against your branch</span>
     <sc-for list="{{arrLog}}" as="al" hint-placeholder-count="3">
-      <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; border-bottom: 1px solid #D3C9B3; padding-bottom: 2px">
-        <span class="cp" style="font-size: 12px; color: #3D372D">{{al.date}}</span><span class="cp" style="font-size: 13px; font-weight: 700">{{al.t}}</span><span class="cp" style="font-size: 11px; font-weight: 700; letter-spacing: .06em; color: {{al.col}}">{{al.res}}</span>
+      <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; border-bottom: 1px solid #D3C9B3; padding-bottom: 1px">
+        <span class="cp" style="font-size: 12px; color: #3D372D">{{al.date}}</span><span class="cp" style="font-size: 12.5px; font-weight: 700">{{al.t}}</span><span class="cp" style="font-size: 11px; font-weight: 700; letter-spacing: .06em; color: {{al.col}}">{{al.res}}</span>
       </div>
     </sc-for>
     <span class="cp" style="font-size: 12px; color: #5A5245; display: {{arrEmpty}}">Nothing has arrived yet. Reality is ahead of the branch.</span>
   </div>
 
   <sc-if value="{{flagOpen}}" hint-placeholder-val="{{false}}">
-    <div style="position: absolute; left: 960px; top: 706px; width: 440px; height: 120px; box-sizing: border-box; border: 2px dashed #C2410C; background: #F8F3E8; padding: 8px 12px; display: flex; flex-direction: column; gap: 6px">
+    <div style="position: absolute; left: 960px; top: 738px; width: 440px; height: 122px; box-sizing: border-box; border: 2px dashed #C2410C; background: #F8F3E8; padding: 5px 12px 6px; display: flex; flex-direction: column; gap: 6px">
       <sc-if value="{{notRedecl}}" hint-placeholder-val="{{true}}">
         <span class="cp" style="font-size: 12px; font-weight: 700; letter-spacing: .06em; color: #A03509">RE-DECLARE · 5 Feb 2026</span>
         <span class="bk" style="font-size: 12px; line-height: 1.4">Reality event depends on Boston’s 2025 roster, which your branch holds unknown — declare, or let the branch carry the gap.</span>
@@ -176,17 +198,19 @@ body{margin:0;background:#F3EFE6;color:#141210;font-family:'Libre Baskerville',s
         </div>
       </sc-if>
       <sc-if value="{{redecl}}" hint-placeholder-val="{{false}}">
-        <span class="cp" style="font-size: 12px; font-weight: 700; letter-spacing: .06em; color: #A03509">BOSTON’S 2025 APRON SUMMER, IN YOUR BRANCH</span>
-        <div style="display: flex; gap: 8px">
-          <button type="button" class="btn" onClick="{{declSame}}" style="flex: 1; min-height: 44px; padding: 4px 8px; border: 2px solid #C2410C; background: #FFFFFF; color: #141210; font-size: 12px; line-height: 1.25; text-align: left">The same moves happen<br><span style="font-weight: 400; font-size: 11px">Holiday out, Porziņģis out</span></button>
-          <button type="button" class="btn" onClick="{{declPat}}" style="flex: 1; min-height: 44px; padding: 4px 8px; border: 2px solid #C2410C; background: #FFFFFF; color: #141210; font-size: 12px; line-height: 1.25; text-align: left">Boston stands pat<br><span style="font-weight: 400; font-size: 11px">neither trade happens</span></button>
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <span class="cp" style="font-size: 12px; font-weight: 700; letter-spacing: .06em; color: #A03509">BOSTON’S 2025 APRON SUMMER, IN YOUR BRANCH</span>
+          <button type="button" class="btn" onClick="{{cancelRedecl}}" style="min-height: 36px; padding: 0 6px; margin: -4px 0; border: 0; background: transparent; color: #3D372D; font-size: 12px; text-decoration: underline">Cancel</button>
         </div>
-        <button type="button" class="btn" onClick="{{cancelRedecl}}" style="align-self: flex-start; min-height: 30px; padding: 0 10px; border: 0; background: transparent; color: #3D372D; font-size: 12px; text-decoration: underline">Cancel</button>
+        <div style="display: flex; gap: 8px">
+          <button type="button" class="btn" onClick="{{declSame}}" style="flex: 1; min-height: 50px; padding: 3px 8px; border: 2px solid #C2410C; background: #FFFFFF; color: #141210; font-size: 12px; line-height: 1.25; text-align: left">The same moves happen<br><span style="font-weight: 400; font-size: 11px">Holiday out, Porziņģis out · flips both 2023 rows to HELD</span></button>
+          <button type="button" class="btn" onClick="{{declPat}}" style="flex: 1; min-height: 50px; padding: 3px 8px; border: 2px solid #C2410C; background: #FFFFFF; color: #141210; font-size: 12px; line-height: 1.25; text-align: left">Boston stands pat<br><span style="font-weight: 400; font-size: 11px">neither trade happens</span></button>
+        </div>
       </sc-if>
     </div>
   </sc-if>
   <sc-if value="{{noFlag}}" hint-placeholder-val="{{true}}">
-    <div style="position: absolute; left: 960px; top: 706px; width: 440px; height: 120px; box-sizing: border-box; border-top: 2px solid #141210; padding: 8px 0 0; display: flex; flex-direction: column; gap: 6px">
+    <div style="position: absolute; left: 960px; top: 738px; width: 440px; height: 122px; box-sizing: border-box; border-top: 2px solid #141210; padding: 8px 0 0; display: flex; flex-direction: column; gap: 6px">
       <span class="cp" style="font-size: 12px; font-weight: 700; letter-spacing: .06em">{{noFlagHead}}</span>
       <span class="bk" style="font-size: 12px; line-height: 1.45; color: #2A251D">{{noFlagText}}</span>
     </div>
@@ -244,6 +268,18 @@ class Component extends DCLogic {
       rd: 'Boston reached the Finals and lost to Golden State. [verify]',
       why: 'UNKNOWN. This is five seasons past your divergence; the guess horizon is three. Past it, BOW says nothing unless you declare it or a rule computes it.',
       rule: 'Rule (Wave 1): guesses end at three seasons.' });
+
+    // the 2023 acquisitions: UNKNOWN until you re-declare "the same moves happen"
+    const acq = (id, date, name, rd) => decl === 'same'
+      ? { id: id, date: date, reality: name, mark: 'held', status: 'HELD', short: 'declared: the same moves happen · not checked', rd: rd,
+          why: 'Held by your re-declaration: the same moves happen. Both leave in 2025, so both had to arrive first. Not checked: BOW has no 2023 payroll for this branch.',
+          rule: 'Held is not proven. It is your say-so, kept.' }
+      : { id: id, date: date, reality: name, mark: 'unk', status: 'UNKNOWN', short: 'needs a roster the branch doesn’t have', rd: rd,
+          why: 'UNKNOWN. Boston got him with assets your 2017 fork changed, so BOW cannot say this trade exists here. It stays a hole, not a guess. Re-declaring the 2025 summer can settle it.',
+          rule: 'Rule: an acquisition that needs a roster the branch does not have is UNKNOWN, never fitted.' };
+    R.push(acq('porz', 'Jun 2023', 'Porziņģis acquired', 'Boston acquired Kristaps Porziņģis in a three-team trade in June 2023. [verify]'));
+    R.push(acq('hol', 'Oct 2023', 'Holiday acquired', 'Boston acquired Jrue Holiday from Milwaukee in October 2023. [verify]'));
+
     R.push({ id: 'title', date: 'Jun 2024', reality: 'Boston win the title', mark: 'unk', status: 'UNKNOWN',
       short: 'past the 3-season horizon · roster differs',
       rd: 'Boston won the championship over Dallas (17 Jun 2024). [verify]',
@@ -263,14 +299,16 @@ class Component extends DCLogic {
     R.push({ id: 'apron', date: 'Late Jun 2025', reality: 'Apron summer: two trades', ...ap,
       rd: 'Jrue Holiday went to Portland for Anfernee Simons and two second-round picks; Kristaps Porziņģis went to Atlanta in a three-team deal. [verify: NBA.com, Hoops Rumors]',
       rule: 'Rule: BOW cannot compute a 2025 payroll from a 2017 fork. It asks you, or carries the gap.' });
-    R.push({ id: 'sale', date: '13 Aug 2025', reality: 'NBA approves Chisholm sale', mark: 'ind', status: 'INDEPENDENT',
-      short: 'not affected · Reality’s entry stands',
+    R.push({ id: 'sale', date: '13 Aug 2025', reality: 'NBA approves Chisholm sale', mark: 'asm', status: 'INDEPENDENT · ASSUMED',
+      short: 'assumed roster-independent [verify]',
       rd: 'The NBA approved the sale to a group led by Bill Chisholm; about $6.1B reported; the rest of the stake transfers in 2028. [verify]',
-      why: 'INDEPENDENT. Ownership does not depend on who is on the roster. Reality’s entry stands and the branch adds nothing.', rule: '' });
+      why: 'INDEPENDENT, assumed. Basis: sale announced Jul 2024; assumed roster-independent [verify]. Reality’s entry stands and the branch adds nothing.',
+      rule: 'Rule: an assumption is outlined and tallied on its own. It is never counted as computed.' });
 
     // arrivals
-    const sealedRow = (id, i) => ({ id: id, date: '· · ·', reality: frozen ? 'Not received: branch frozen' : 'Sealed: not yet arrived', mark: 'sealed', status: 'SEALED',
-      short: frozen ? 'this branch has no NOW' : 'Reality has not reached this row', rd: frozen ? 'Not received. A frozen branch stops taking Reality.' : 'Sealed. You find out by letting Reality arrive.', why: '', rule: '' });
+    const sealedRow = (id) => frozen
+      ? { id: id, date: '· · ·', reality: 'after freeze · not received', mark: 'gry', status: 'AFTER FREEZE', short: 'this branch has no NOW', rd: 'Not received. A frozen branch stops taking Reality.', why: '', rule: '' }
+      : { id: id, date: '· · ·', reality: 'Sealed: not yet arrived', mark: 'sealed', status: 'SEALED', short: 'Reality has not reached this row', rd: 'Sealed. You find out by letting Reality arrive.', why: '', rule: '' };
     if (arrived >= 1) {
       const a1 = decl === 'same' ? { mark: 'held', status: 'HELD', short: 'fits: Simons is on the roster by declaration',
           why: 'Fits, by your declaration: Simons is on Boston because the Holiday trade happened. Not checked: the tax figures are Reality’s, not your branch’s.' }
@@ -285,14 +323,14 @@ class Component extends DCLogic {
         rule: 'Rule: a Reality event that leans on an UNKNOWN is never silently fitted.' });
     } else R.push(sealedRow('a1'));
     if (arrived >= 2) R.push({ id: 'a2', date: '6 Mar 2026', reality: 'Tatum returns vs Dallas', mark: 'div', status: 'DIVERGED',
-      short: 'fits silently · Tatum is a 76er here',
+      short: 'Tatum is a 76er here · no question for you',
       rd: 'Tatum returned from the Achilles injury against Dallas. [NBA.com; verify]',
-      why: 'Fits silently. phi=Tatum already answers this: Tatum is a 76er here, so a return to Boston’s lineup cannot happen. No question for you.', rule: '' });
+      why: 'Diverged: Tatum is a 76er here; any return is Philadelphia’s. phi=Tatum already answers it, so nothing in Boston’s branch is asked.', rule: '' });
     else R.push(sealedRow('a2'));
-    if (arrived >= 3) R.push({ id: 'a3', date: '[date]', reality: '[next event from the Reality feed]', mark: 'unk', status: 'UNKNOWN',
-      short: 'not checked · its content isn’t in BOW yet',
+    if (arrived >= 3) R.push({ id: 'a3', date: '[date]', reality: '[next event from the Reality feed]', mark: 'pend', status: 'NOT CHECKED',
+      short: 'not counted · its content isn’t in BOW yet',
       rd: 'Not in this prototype. BOW has not received it.',
-      why: 'Not checked. When it arrives, BOW tests it against the branch: it fits silently, or it raises a flag.', rule: '' });
+      why: 'Not checked, and not counted in the health strip. When it arrives, BOW tests it against the branch: it fits, diverges, or raises a flag.', rule: '' });
     else R.push(sealedRow('a3'));
     return { rows: R, flagOpen: flagOpen };
   }
@@ -309,39 +347,44 @@ class Component extends DCLogic {
       imp: { bg: 'linear-gradient(45deg, transparent 44%, ' + INK + ' 44%, ' + INK + ' 56%, transparent 56%), linear-gradient(-45deg, transparent 44%, ' + INK + ' 44%, ' + INK + ' 56%, transparent 56%), ' + TONE, bd: '1.5px solid ' + OR, t: '', sz: 24, sh: 'none', trunk: '2.5px solid ' + OR, col: '#A03509' },
       unk: { bg: PAPER, bd: '2.5px dashed ' + OR, t: '', sz: 24, sh: 'none', trunk: '2.5px dashed ' + OR, col: '#A03509' },
       flag: { bg: '#FFFFFF', bd: '2.5px dashed ' + OR, t: '!', sz: 24, sh: 'none', trunk: '2.5px dashed ' + OR, col: '#A03509' },
-      ind: { bg: INK, bd: '0', t: '', sz: 16, sh: 'inset 0 0 0 2px ' + INK + ', inset 0 0 0 4px ' + PAPER, trunk: '2.5px solid ' + INK, col: '#3D372D' },
+      asm: { bg: PAPER, bd: '2px solid ' + INK, t: '', sz: 18, sh: 'none', trunk: '2.5px solid ' + INK, col: '#3D372D' },
+      pend: { bg: 'transparent', bd: '1.5px dashed #9A8F78', t: '', sz: 14, sh: 'none', trunk: '1.5px dotted #B3A88F', col: '#5A5245' },
+      gry: { bg: '#CFC9B8', bd: '1.5px solid #9A917D', t: '', sz: 14, sh: 'none', trunk: '1.5px solid #B8B09B', col: '#5B5446' },
       sealed: { bg: 'transparent', bd: '1.5px dashed #9A8F78', t: '', sz: 14, sh: 'none', trunk: '1.5px dotted #B3A88F', col: '#5A5245' }
     };
-    const shown = B.rows.filter((r) => r.mark !== 'sealed');
+    // rows that are not part of the branch's count: sealed, after a freeze, or a placeholder for an event BOW has not received
+    const uncounted = (r) => r.mark === 'sealed' || r.mark === 'gry' || r.mark === 'pend';
+    const shown = B.rows.filter((r) => !uncounted(r));
     const rows = B.rows.map((r) => {
       const m = MARKS[r.mark];
-      const isSealed = r.mark === 'sealed';
+      const dim = r.mark === 'sealed' || r.mark === 'gry';
       const sel = r.id === selId;
       return {
         date: r.date, reality: r.reality, short: r.short, status: r.status,
-        cls: sel ? 'sel' : '', pressed: sel ? 'true' : 'false', op: isSealed ? 0.6 : 1,
-        bulOp: isSealed ? 0.25 : 1, rcol: isSealed ? '#5A5245' : INK,
+        cls: sel ? 'sel' : (r.mark === 'gry' ? 'gry' : ''), pressed: sel ? 'true' : 'false', op: 1,
+        bulOp: dim ? 0.25 : 1, rcol: r.mark === 'gry' ? '#5B5446' : r.mark === 'sealed' ? '#5A5245' : INK,
         trunk: m.trunk, mbg: m.bg, mbd: m.bd, mt: m.t, msz: m.sz, mm: (24 - m.sz) / 2, msh: m.sh, scol: m.col,
         pick: () => this.setState({ sel: r.id })
       };
     });
 
-    // health
-    const cnt = { held: 0, comp: 0, unk: 0, ind: 0 };
-    shown.forEach((r) => { if (r.mark === 'held') cnt.held++; else if (r.mark === 'div' || r.mark === 'imp') cnt.comp++; else if (r.mark === 'unk' || r.mark === 'flag') cnt.unk++; else if (r.mark === 'ind') cnt.ind++; });
+    // health: only what the branch actually holds
+    const cnt = { held: 0, comp: 0, unk: 0, asm: 0 };
+    shown.forEach((r) => { if (r.mark === 'held') cnt.held++; else if (r.mark === 'div' || r.mark === 'imp') cnt.comp++; else if (r.mark === 'unk' || r.mark === 'flag') cnt.unk++; else if (r.mark === 'asm') cnt.asm++; });
     const total = shown.length;
+    const notCounted = B.rows.filter((r) => r.mark === 'pend').length;
     const segDefs = [
       { k: 'held', bg: PAPER, bd: '2.5px solid ' + OR, fg: '#A03509' },
       { k: 'comp', bg: TONE, bd: '1.5px solid ' + OR, fg: INK },
       { k: 'unk', bg: PAPER, bd: '2.5px dashed ' + OR, fg: '#A03509' },
-      { k: 'ind', bg: INK, bd: '1.5px solid ' + INK, fg: PAPER }
+      { k: 'asm', bg: PAPER, bd: '2px solid ' + INK, fg: INK }
     ];
     const segs = segDefs.filter((d) => cnt[d.k] > 0).map((d) => ({ w: Math.round(cnt[d.k] / total * 438), bg: d.bg, bd: d.bd, fg: d.fg, n: String(cnt[d.k]) }));
     const legend = [
       { t: 'declared ' + cnt.held, bg: PAPER, bd: '2px solid ' + OR },
       { t: 'computed ' + cnt.comp, bg: TONE, bd: '1px solid ' + OR },
       { t: 'unknown ' + cnt.unk, bg: PAPER, bd: '2px dashed ' + OR },
-      { t: 'independent ' + cnt.ind, bg: INK, bd: '1px solid ' + INK }
+      { t: 'independent, assumed ' + cnt.asm, bg: PAPER, bd: '2px solid ' + INK }
     ];
 
     // age
@@ -349,35 +392,46 @@ class Component extends DCLogic {
     const age = yrs(lastMs), nowAge = yrs(NOW), hz = 3;
     const px = (y) => X0 + y * PPY;
     const reconTxt = 'reconciled through ' + (arrived >= 2 ? '6 Mar 2026' : arrived === 1 ? '5 Feb 2026' : '13 Aug 2025');
+    const pending = Math.max(0, 2 - arrived);
     const ageV = {
-      text: age.toFixed(1) + ' years since 17 Jun 2017 · ' + (age - hz).toFixed(1) + ' past the horizon',
+      text: 'reconciled ' + f(age) + ' yrs · ' + (frozen ? 'no NOW' : 'NOW ' + f(nowAge) + ' yrs') + ' · ' + f(age - hz) + ' past horizon',
       x0: f(px(0)), w0: f(hz * PPY), x3: f(px(hz)), w1: f((age - hz) * PPY),
       hx: f(px(hz) - 1), hlx: f(px(hz) + 6), nx: f(px(nowAge) - 1.5), ex: f(px(age) - 1.5),
-      live: !frozen, frozen: frozen, recon: reconTxt
+      live: !frozen, frozen: frozen, recon: reconTxt,
+      events: frozen ? 'events after the freeze are not received'
+        : pending > 0 ? pending + (pending === 1 ? ' event' : ' events') + ' since you last opened this branch'
+        : 'reconciled: no events waiting'
     };
     const ticks = [];
-    for (let y = 0; y <= 10; y++) ticks.push({ x: f(px(y)), top: y % 2 === 0 ? 279 : 279, h: y % 2 === 0 ? 7 : 4, t: y % 2 === 0 ? String(2017 + y) : '', lop: y % 2 === 0 ? 1 : 0 });
+    for (let y = 0; y <= 10; y++) ticks.push({ x: f(px(y)), top: 259, h: y % 2 === 0 ? 7 : 4, t: y % 2 === 0 ? String(2017 + y) : '', lop: y % 2 === 0 ? 1 : 0 });
+
+    // what the branch says: the declared frame, and the authored win ranges to the horizon
+    const wx = (w) => Math.round((w - 30) * 170 / 32);
+    const ranges = [['2017–18', 55, 3, 5, -3], ['2018–19', 49, 5, 7, -6], ['2019–20', 48, 7, 9, -7]].map((q) => {
+      const h0 = q[1] + q[4] - q[2], h1 = q[1] + q[4] + q[2], y0 = q[1] - q[3], y1 = q[1] + q[3];
+      return { lab: q[0], hx: wx(h0), hw: wx(h1) - wx(h0), yx: wx(y0), yw: wx(y1) - wx(y0), txt: h0 + '–' + h1 + ' · ' + y0 + '–' + y1 };
+    });
 
     // selected entry detail
-    const sr = B.rows.find((r) => r.id === selId) || B.rows[0];
+    const sr = B.rows.find((r) => r.id === selId) || B.rows.find((r) => r.id === 'apron');
     const det = { date: sr.date, title: sr.reality, rd: sr.rd, status: sr.status, why: sr.why || '', rule: sr.rule || '' };
 
     // arrivals log
     const arrLog = [];
     if (arrived >= 1) arrLog.push({ date: '5 Feb 2026', t: 'Simons for Vučević', res: B.flagOpen ? 'FLAG' : decl ? 'DECLARED' : 'CARRIED', col: B.flagOpen ? '#A03509' : INK });
-    if (arrived >= 2) arrLog.push({ date: '6 Mar 2026', t: 'Tatum returns', res: 'FITS', col: INK });
+    if (arrived >= 2) arrLog.push({ date: '6 Mar 2026', t: 'Tatum returns', res: 'DIVERGED', col: INK });
     if (arrived >= 3) arrLog.push({ date: '[date]', t: '[next event]', res: 'NOT CHECKED', col: '#5A5245' });
 
     // flag panel
     const noFlagHead = frozen ? 'FROZEN · NO OPEN FLAG' : arrived === 0 ? 'NO FLAGS YET' : arrived >= 3 ? 'NO OPEN FLAG · NOTHING MORE QUEUED' : 'NO OPEN FLAG';
     const noFlagText = frozen ? 'The branch stopped receiving Reality. It is a historical branch: it has no NOW, and anything unresolved stays carried as unknown.'
-      : arrived === 0 ? 'Press Reality arrives. Each event is checked against the branch: it fits silently, or it raises a flag and asks you.'
-      : 'Each arrival either fits silently or asks. This one is settled: ' + (decl ? 'you declared the 2025 summer.' : carried ? 'the branch carries the gap.' : 'it fits.');
+      : arrived === 0 ? 'Press Reality arrives. Each event is checked against the branch: it fits, it diverges, or it raises a flag and asks you.'
+      : 'Each arrival fits, diverges, or asks. This one is settled: ' + (decl ? 'you declared the 2025 summer.' : carried ? 'the branch carries the gap.' : 'it diverges, no question.');
 
     // controls
     const canArrive = !frozen && arrived < 3;
     const arr = {
-      label: frozen ? 'Reality no longer arrives' : arrived >= 3 ? 'Nothing more queued' : 'Reality arrives',
+      label: frozen ? 'Arrivals stopped' : arrived >= 3 ? 'Nothing more queued' : 'Reality arrives',
       dis: !canArrive, bg: canArrive ? INK : '#E6DFCE', fg: canArrive ? PAPER : '#3D372D', bstyle: canArrive ? 'solid' : 'dashed',
       sub: frozen ? 'Frozen: no NOW, no arrivals. Start over to reopen the prototype.'
         : arrived >= 3 ? 'This prototype queues three events. The live feed is [not connected].'
@@ -388,14 +442,14 @@ class Component extends DCLogic {
     const chips = [{ t: 'phi=Tatum' }, { t: 'health=unknown' }, { t: 'summer=held' }];
     if (decl) chips.push({ t: 'apron25=' + (decl === 'same' ? 'same' : 'pat') });
 
-    const branchClock = frozen ? 'YOUR BRANCH · FROZEN · ' + reconTxt + ' · no NOW'
-      : 'YOUR BRANCH · LIVE · ' + reconTxt;
-    const address = 'bow://celtics/2017-06-17/branch:you·keep-no1-fultz?phi=tatum&health=unknown&summer=held' + (decl ? '&apron25=' + decl : '') + (frozen ? '&frozen=' + reconTxt.replace('reconciled through ', '').replace(/ /g, '') : '');
+    const branchClock = frozen ? 'YOUR BRANCH · FROZEN at ' + reconTxt.replace('reconciled through ', '') + ' · no NOW'
+      : 'YOUR BRANCH · LIVE · ' + reconTxt.replace('through', 'to');
+    const address = 'bow://celtics/2017-06-17/you/keep-no1-fultz?phi=tatum&health=unknown&summer=held' + (decl ? '&apron25=' + decl : '') + (frozen ? '&frozen=' + reconTxt.replace('reconciled through ', '').replace(/ 20/, '').replace(/ /g, '') : '');
 
     return {
-      address, branchClock, rows, segs, legend, chips, ticks, age: ageV, det, arrLog, arr, frz,
-      health: { total: total }, segCount: segs.length,
-      frameH: 194 + rows.length * 40 - 92 + 2,
+      address, branchClock, rows, segs, legend, chips, ticks, ranges, age: ageV, det, arrLog, arr, frz,
+      health: { text: total + ' entries in the ledger' + (notCounted ? ' · ' + notCounted + ' not counted' : '') }, segCount: segs.length,
+      frameH: 194 + rows.length * 36 - 92 + 2,
       how, howPressed: how ? 'true' : 'false', howBg: how ? INK : 'transparent', howFg: how ? PAPER : INK,
       flagOpen: B.flagOpen, noFlag: !B.flagOpen, redecl: B.flagOpen && redecl, notRedecl: !(B.flagOpen && redecl),
       noFlagHead, noFlagText, arrEmpty: arrived === 0 ? 'block' : 'none',

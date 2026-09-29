@@ -80,15 +80,17 @@ button{font-family:'Barlow Semi Condensed',sans-serif;color:#15171A}
     <sc-for list="{{mon.panes}}" as="pn" hint-placeholder-count="1">
       <div style="position:absolute;left:{{pn.x}}px;top:0;width:{{pn.w}}px;height:218px;box-sizing:border-box;padding:12px 20px 0;border-right:{{pn.br}}">
         <div style="display:flex;align-items:baseline;gap:14px;height:{{pn.hh}}px">
+          <span class="mono" style="display:{{pn.bD}};background:{{pn.ink}};color:#fff;padding:0 6px;font-size:13px;font-weight:700">{{pn.badge}}</span>
           <span class="mono" style="font-size:{{pn.tcs}}px;font-weight:700;letter-spacing:-.03em;white-space:nowrap">{{pn.tc}}</span>
-          <span style="font-size:{{pn.nms}}px;font-weight:600;white-space:nowrap">{{pn.name}}</span>
+          <span style="font-size:{{pn.nms}}px;font-weight:600;white-space:nowrap;color:{{pn.ink}}">{{pn.name}}</span>
           <span class="cap" style="margin-left:auto;text-align:right">{{pn.stamp}}</span>
+          <button type="button" class="tb" onClick="{{pn.enter}}" style="display:{{pn.enterD}};align-self:center;margin-left:8px">Enter at playhead</button>
         </div>
         <div style="display:grid;grid-template-columns:{{pn.cols}};gap:0 {{pn.gap}}px">
           <div>
             <span class="cap">{{pn.rTitle}}</span>
             <sc-for list="{{pn.lines}}" as="ln" hint-placeholder-count="3">
-              <div style="display:flex;gap:8px;align-items:flex-start;margin-top:4px;font-size:{{pn.fs}}px;line-height:1.2"><span class="sw {{ln.cls}}" style="margin-top:2px"></span><span style="min-width:0"><span>{{ln.t}}</span><span class="cap" style="display:{{ln.wd}};text-transform:none;font-size:11px;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:430px">{{ln.cap}}</span></span></div>
+              <div style="display:flex;gap:8px;align-items:flex-start;margin-top:4px;font-size:{{ln.fs}}px;line-height:1.2"><span class="sw {{ln.cls}}" style="margin-top:2px"></span><span style="min-width:0"><span>{{ln.t}}</span><span class="cap" style="display:{{ln.wd}};text-transform:none;font-size:11px;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:430px">{{ln.cap}}</span></span></div>
             </sc-for>
             <div style="margin-top:5px;font-size:12.5px;line-height:1.25;color:#4D5259;display:{{pn.movesD}}">{{pn.moves}}</div>
           </div>
@@ -123,20 +125,27 @@ button{font-family:'Barlow Semi Condensed',sans-serif;color:#15171A}
               <div class="t-unk" style="margin-top:8px;padding:8px 10px;width:{{pn.cw}}px;font-size:{{pn.fs}}px;line-height:1.25;color:#4D5259">{{pn.holeText}}</div>
             </sc-if>
             <div style="margin-top:6px;font-size:{{pn.fs}}px;line-height:1.25;width:{{pn.cw}}px;display:{{pn.payD}}">{{pn.payText}}</div>
+            <div style="margin-top:4px;font-size:11px;line-height:1.25;color:#3D4247;width:{{pn.cw}}px;display:{{pn.noteCD}}">{{pn.note}}</div>
+            <div class="t-aut" style="margin-top:5px;padding:2px 8px;font-size:13px;line-height:1.2;width:{{pn.cw}}px;display:{{pn.ruleD}}">{{pn.rule}}</div>
           </div>
-          <div style="grid-column:{{pn.rc}};margin-top:{{pn.rmt}}px">
+          <div style="grid-column:{{pn.rc}};margin-top:{{pn.rmt}}px;display:{{pn.resD}}">
             <span class="cap">{{pn.resTitle}}</span>
             <div style="display:flex;gap:8px;align-items:flex-start;margin-top:4px;font-size:{{pn.fs}}px;line-height:1.2"><span class="sw {{pn.res.cls}}" style="margin-top:2px"></span><span style="min-width:0"><span>{{pn.res.t}}</span><span class="cap" style="display:{{pn.res.wd}};text-transform:none;font-size:11px;letter-spacing:0;max-width:330px">{{pn.res.cap}}</span></span></div>
+            <div style="margin-top:10px;max-width:330px;font-size:12px;line-height:1.3;color:#3D4247;display:{{pn.noteD}}">{{pn.note}}</div>
           </div>
         </div>
       </div>
     </sc-for>
     <sc-if value="{{mon.ab}}" hint-placeholder-val="{{false}}">
-      <div style="position:absolute;left:0;top:218px;width:1398px;height:60px;border-top:1px solid #B5BAB6;background:#ECEDEB;padding:8px 20px;box-sizing:border-box">
+      <div style="position:absolute;left:0;top:196px;width:1398px;height:82px;border-top:1px solid #B5BAB6;background:#F7F7F6;padding:5px 20px 0;box-sizing:border-box">
         <div style="display:flex;gap:14px;align-items:baseline"><span class="cap" style="color:#15171A">A vs B at {{mon.dtc}}</span><span style="margin-left:auto;font-size:14px;font-style:italic">a difference between histories — not proof of cause</span></div>
-        <div style="display:flex;gap:24px;margin-top:4px">
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:3px;align-items:start">
           <sc-for list="{{mon.diff}}" as="df" hint-placeholder-count="3">
-            <span style="font-size:14px;max-width:440px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span class="cap" style="margin-right:6px">{{df.k}}</span><strong style="color:{{df.c}}">{{df.v}}</strong></span>
+            <div style="font-size:13px;line-height:1.18"><span class="cap">{{df.k}}</span>
+              <div style="display:{{df.sameD}};color:#4D5259;font-weight:600">{{df.st}}</div>
+              <div style="display:{{df.difD}}"><span class="mono" style="font-weight:700;color:{{df.ca}}">A</span> <span style="color:{{df.ca}};font-weight:600">{{df.a}}</span></div>
+              <div style="display:{{df.difD}}"><span class="mono" style="font-weight:700;color:{{df.cb}}">B</span> <span style="color:{{df.cb}};font-weight:600">{{df.b}}</span></div>
+            </div>
           </sc-for>
         </div>
       </div>
@@ -146,6 +155,23 @@ button{font-family:'Barlow Semi Condensed',sans-serif;color:#15171A}
         <sc-for list="{{mon.keys}}" as="ky" hint-placeholder-count="7">
           <span style="display:inline-flex;gap:7px;align-items:center;font-size:13px"><span class="sw {{ky.cls}}"></span><span><strong>{{ky.w}}</strong> · {{ky.d}}</span></span>
         </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{mon.inside}}" hint-placeholder-val="{{false}}">
+      <div style="position:absolute;left:0;top:0;width:1398px;height:278px;background:#F7F7F6;padding:12px 24px 0;box-sizing:border-box">
+        <div style="display:flex;align-items:center;gap:12px;height:40px">
+          <span class="sw {{ar.sw}}" style="width:18px;height:18px"></span>
+          <span class="cap" style="color:#15171A">Entered at the playhead · {{ar.tc}}</span>
+          <button type="button" class="tb" onClick="{{ar.back}}" style="margin-left:auto">Back to tracks</button>
+        </div>
+        <div style="font-size:30px;font-weight:600;line-height:1.1;margin-top:2px;color:{{ar.ink}}">{{ar.name}}</div>
+        <div class="mono" style="font-size:13px;margin-top:5px;color:#3D4247">{{ar.role}}</div>
+        <div role="group" aria-label="The seat: what you know, can do, can't do, and what nobody knows" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px">
+          <sc-for list="{{ar.cells}}" as="ce" hint-placeholder-count="4">
+            <div style="box-sizing:border-box;padding:8px 12px;height:100px;border:{{ce.bd}};background:{{ce.bg}}"><span class="cap" style="color:#15171A">{{ce.k}}</span><div style="font-size:17px;line-height:1.2;margin-top:4px;font-weight:500">{{ce.t}}</div></div>
+          </sc-for>
+        </div>
+        <div style="margin-top:8px;font-size:12.5px;color:#4D5259">Nothing here changes the record. Back to tracks returns to the same playhead and the same selection.</div>
       </div>
     </sc-if>
     <sc-if value="{{mon.quiet}}" hint-placeholder-val="{{true}}">
@@ -161,7 +187,7 @@ button{font-family:'Barlow Semi Condensed',sans-serif;color:#15171A}
   <button type="button" class="tb" onClick="{{nextM}}" aria-label="Move the playhead to the next Moment" style="position:absolute;left:430px;top:350px;display:flex;align-items:center;gap:6px">Moment<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1 L9 6 L2 11 Z M10 1 V11" fill="currentColor" stroke="currentColor" stroke-width="1.5"></path></svg></button>
   <span class="mono" style="position:absolute;left:546px;top:357px;font-size:16px;font-weight:700;letter-spacing:-.02em">{{tcNow}}</span>
   <button type="button" class="tb cut {{cutOff}}" onClick="{{cut}}" style="position:absolute;left:690px;top:350px">Cut a branch here</button>
-  <span class="cap" style="position:absolute;left:846px;top:362px;max-width:330px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{cutTarget}}</span>
+  <span class="cap" style="position:absolute;left:846px;top:362px;max-width:292px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{cutTarget}}</span>
   <button type="button" class="tb {{abOff}}" onClick="{{toggleAB}}" aria-pressed="{{abP}}" style="position:absolute;left:1146px;top:350px">A/B compare</button>
   <span class="cap" style="position:absolute;left:1262px;top:362px;display:{{zoomD}}">Zoom</span>
   <button type="button" class="tb" onClick="{{zoomFull}}" aria-pressed="{{zFullP}}" style="position:absolute;left:1306px;top:350px;padding:0 8px;display:{{zoomD}}">10 yr</button>
@@ -176,31 +202,33 @@ button{font-family:'Barlow Semi Condensed',sans-serif;color:#15171A}
   </sc-for>
 
   <!-- TRACK BACKGROUNDS -->
-  <div style="position:absolute;left:20px;top:430px;width:1380px;height:430px;background:#F7F7F6;border:1px solid #B5BAB6;box-sizing:border-box"></div>
-  <div style="position:absolute;left:21px;top:431px;width:332px;height:428px;background:#ECEDEB"></div>
+  <div style="position:absolute;left:20px;top:430px;width:1380px;height:436px;background:#F7F7F6;border:1px solid #B5BAB6;box-sizing:border-box"></div>
+  <div style="position:absolute;left:21px;top:431px;width:332px;height:434px;background:#ECEDEB"></div>
   <sc-for list="{{rowsBg}}" as="rb" hint-placeholder-count="5">
     <div style="position:absolute;left:21px;top:{{rb.y}}px;width:1378px;height:{{rb.h}}px;background:{{rb.bg}};border-bottom:1px solid #C4C7C3;box-shadow:inset 4px 0 0 {{rb.edge}}"></div>
   </sc-for>
   <sc-for list="{{grid}}" as="gd" hint-placeholder-count="11">
-    <div style="position:absolute;left:{{gd.x}}px;top:432px;width:1px;height:426px;background:#D9DCD8"></div>
+    <div style="position:absolute;left:{{gd.x}}px;top:432px;width:1px;height:432px;background:#D9DCD8"></div>
   </sc-for>
-  <div style="position:absolute;left:353px;top:431px;width:1px;height:428px;background:#B5BAB6"></div>
+  <div style="position:absolute;left:353px;top:431px;width:1px;height:434px;background:#B5BAB6"></div>
   <sc-if value="{{noTracks}}" hint-placeholder-val="{{true}}">
     <div style="position:absolute;left:390px;top:620px;width:900px;font-size:22px;color:#6B7178">No tracks. Ask for a system, and each of its histories becomes a track here.</div>
   </sc-if>
   <sc-if value="{{hasNow}}" hint-placeholder-val="{{false}}">
-    <div style="position:absolute;left:{{now.x}}px;top:426px;width:0;height:432px;border-left:1px dashed #15171A;opacity:.6"></div>
+    <div style="position:absolute;left:{{now.x}}px;top:426px;width:0;height:438px;border-left:1px dashed #15171A;opacity:.6"></div>
     <span class="cap" style="position:absolute;left:{{now.lx}}px;top:417px;background:#F7F7F6;padding:0 3px;color:#15171A">NOW</span>
   </sc-if>
 
   <!-- CLIPS -->
   <sc-for list="{{clips}}" as="cl" hint-placeholder-count="8">
-    <div class="rowin" style="position:absolute;left:{{cl.x}}px;top:{{cl.y}}px;width:{{cl.w}}px;height:{{cl.h}}px;background:{{cl.bg}};border:{{cl.bd}};box-shadow:{{cl.bs}};box-sizing:border-box;opacity:{{cl.op}};transform:translateX({{cl.tx}}px);transition-delay:{{cl.dl}}s;overflow:hidden">
-      <span style="position:absolute;left:8px;top:{{cl.ly}}px;font-size:12px;font-weight:600;white-space:nowrap;color:{{cl.lc}};background:{{cl.lbg}};padding:0 {{cl.lp}}px">{{cl.label}}</span>
-    </div>
+    <div class="rowin" style="position:absolute;left:{{cl.x}}px;top:{{cl.y}}px;width:{{cl.w}}px;height:{{cl.h}}px;background:{{cl.bg}};border:{{cl.bd}};box-shadow:{{cl.bs}};box-sizing:border-box;opacity:{{cl.op}};transform:translateX({{cl.tx}}px);transition-delay:{{cl.dl}}s;overflow:hidden"></div>
+  </sc-for>
+  <div style="position:absolute;left:{{ph.x}}px;top:394px;width:2px;height:470px;background:#1D4ED8;pointer-events:none;opacity:{{ph.op}}"></div>
+  <sc-for list="{{labels}}" as="lb" hint-placeholder-count="5">
+    <span class="rowin" style="position:absolute;left:{{lb.x}}px;top:{{lb.y}}px;max-width:{{lb.w}}px;overflow:hidden;font-size:12px;font-weight:600;white-space:nowrap;color:{{lb.c}};background:{{lb.bg}};padding:0 {{lb.p}}px;opacity:{{lb.op}};transform:translateX({{lb.tx}}px);transition-delay:{{lb.dl}}s">{{lb.t}}</span>
   </sc-for>
   <sc-for list="{{mlabels}}" as="ml" hint-placeholder-count="4">
-    <span class="rowin" style="position:absolute;left:{{ml.x}}px;top:{{ml.y}}px;width:96px;font-size:11.5px;line-height:1.1;font-weight:600;color:#15171A;opacity:{{ml.op}};transition-delay:{{ml.dl}}s">{{ml.t}}</span>
+    <span class="rowin" style="position:absolute;left:{{ml.x}}px;top:{{ml.y}}px;max-width:96px;font-size:11.5px;line-height:1.1;font-weight:600;color:#15171A;background:{{ml.bg}};padding:0 2px;opacity:{{ml.op}};transition-delay:{{ml.dl}}s">{{ml.t}}</span>
   </sc-for>
   <sc-for list="{{marks}}" as="mk" hint-placeholder-count="6">
     <button type="button" class="mk rowin" onClick="{{mk.pick}}" aria-label="{{mk.aria}}" style="left:{{mk.x}}px;top:{{mk.y}}px;opacity:{{mk.op}};transition-delay:{{mk.dl}}s"><i style="top:14px"></i></button>
@@ -211,16 +239,15 @@ button{font-family:'Barlow Semi Condensed',sans-serif;color:#15171A}
     <div class="rowin" style="position:absolute;left:21px;top:{{hd.y}}px;width:332px;height:{{hd.h}}px;opacity:{{hd.op}};transform:translateX({{hd.tx}}px);transition-delay:{{hd.dl}}s">
       <span class="{{hd.chip}}" style="position:absolute;left:{{hd.cx}}px;top:{{hd.cy}}px;width:10px;height:{{hd.ch}}px;background:{{hd.cbg}};box-shadow:{{hd.cbs}};border:{{hd.cbd}};box-sizing:border-box"></span>
       <button type="button" class="hd" onClick="{{hd.pick}}" aria-pressed="{{hd.pressed}}" aria-label="{{hd.aria}}" style="left:{{hd.nx}}px;top:0;width:{{hd.nw}}px;height:{{hd.h}}px;background:{{hd.sbg}}">
-        <span style="display:flex;align-items:baseline;gap:6px;padding:5px 0 0"><span class="mono" style="display:{{hd.abD}};font-size:11px;font-weight:700;background:#1D4ED8;color:#fff;padding:0 4px">{{hd.ab}}</span><span style="font-size:15px;font-weight:600;line-height:1.1;text-decoration:{{hd.deco}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{hd.name}}</span></span>
-        <span class="mono" style="display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;font-size:11px;letter-spacing:-.03em;line-height:1.12;color:#3D4247;padding-top:2px;overflow:hidden">{{hd.brief}}</span>
+        <span style="display:flex;align-items:baseline;gap:6px;padding:5px 0 0"><span class="mono" style="display:{{hd.abD}};font-size:11px;font-weight:700;background:{{hd.abBg}};color:#fff;padding:0 4px">{{hd.ab}}</span><span style="display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:{{hd.nl}};font-size:15px;font-weight:600;line-height:1.1;text-decoration:{{hd.deco}};overflow:hidden;min-width:0">{{hd.name}}</span></span>
+        <span class="mono" style="display:{{hd.brD}};-webkit-box-orient:vertical;-webkit-line-clamp:{{hd.bl}};font-size:11px;letter-spacing:-.03em;line-height:1.12;color:#3D4247;padding-top:2px;overflow:hidden">{{hd.brief}}</span>
       </button>
       <button type="button" class="sm" onClick="{{hd.solo}}" aria-pressed="{{hd.soloP}}" aria-label="Solo {{hd.name}}" style="position:absolute;left:{{hd.sx}}px;top:{{hd.sy}}px;display:{{hd.smD}}">S</button>
       <button type="button" class="sm" onClick="{{hd.mute}}" aria-pressed="{{hd.muteP}}" aria-label="Mute {{hd.name}}" style="position:absolute;left:{{hd.mx}}px;top:{{hd.sy}}px;display:{{hd.smD}}">M</button>
     </div>
   </sc-for>
 
-  <!-- PLAYHEAD -->
-  <div style="position:absolute;left:{{ph.x}}px;top:394px;width:2px;height:464px;background:#1D4ED8;pointer-events:none;opacity:{{ph.op}}"></div>
+  <!-- PLAYHEAD DRAG -->
   <input type="range" class="rng" aria-label="Playhead: drag along the time axis" min="{{rng.min}}" max="{{rng.max}}" step="{{rng.step}}" value="{{rng.val}}" onChange="{{rng.on}}" style="left:{{rng.left}}px;top:394px;width:{{rng.w}}px;opacity:{{ph.op}}">
 
   <span style="position:absolute;left:28px;bottom:8px;width:800px;font-size:11px;line-height:1.35;color:#4D5259">COMMERCIAL LENS · Hypothesis: tracks for Reality and your own forks are free; persistent public tracks and model runs cost storage and compute — creators and studios pay.</span>
@@ -236,8 +263,10 @@ class Component extends DCLogic {
 
   pushNav(patch) {
     const s = this.state || {};
-    const snap = { ds: s.ds || null, t: s.t, sel: s.sel, bsel: s.bsel, ab: !!s.ab, zoom: s.zoom || 'full', q: s.q || '' };
-    this.setState(Object.assign({ nav: (s.nav || []).concat([snap]).slice(-30), msg: '' }, patch));
+    const snap = { ds: s.ds || null, t: s.t, sel: s.sel, bsel: s.bsel, ab: !!s.ab, zoom: s.zoom || 'full', q: s.q || '', inside: !!s.inside };
+    const out = Object.assign({ nav: (s.nav || []).concat([snap]).slice(-30), msg: '' }, patch);
+    if (!('inside' in patch) && ('sel' in patch || 'ab' in patch || 'bsel' in patch || 'ds' in patch)) out.inside = false;
+    this.setState(out);
   }
 
   renderVals() {
@@ -250,6 +279,7 @@ class Component extends DCLogic {
     const pad = (n) => (n < 10 ? '0' : '') + n;
     const fmtD = (t) => { const y = Math.floor(t + 1e-9); const dt = new Date(Date.UTC(2001, 0, 1 + Math.round((t - y) * 365))); return y + '-' + pad(dt.getUTCMonth() + 1) + '-' + pad(dt.getUTCDate()); };
     const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const fmtL = (t) => { const a = fmtD(t).split('-'); return (+a[2]) + ' ' + MON[+a[1] - 1] + ' ' + a[0]; };
     const WORD = { obs: 'OBSERVED', rec: 'RECORDED', aut: 'AUTHORED', com: 'COMPUTED', mod: 'MODELED', gen: 'GENERATED', unk: 'UNKNOWN', seal: 'SEALED' };
     const F = (t, k, src) => ({ t: t, cls: 't-' + k, word: WORD[k], src: cut1(src || 'this prototype', 52), wd: how ? 'block' : 'none' });
     const cut1 = (str, n) => (str.length > n ? str.slice(0, n - 1) + '…' : str);
@@ -268,7 +298,7 @@ class Component extends DCLogic {
       { t: DEC(1787, 6, 30), date: '30 Jun 1787', name: 'Franklin’s turn', q: 'Franklin could speak. Does he? [verify: what the record shows]' },
       { t: DEC(1787, 7, 16), date: '16 Jul 1787', name: 'The vote', q: 'The vote on equal state votes in the Senate. How does your state vote?' }
     ];
-    const W0 = DEC(2025, 7, 1), Y2 = DEC(2026, 8, 3), ACT1 = DEC(2025, 10, 6), WK6 = DEC(2026, 9, 7), WK9 = NOW;
+    const W0 = DEC(2025, 7, 1), Y2 = DEC(2026, 8, 4), ACT1 = DEC(2025, 10, 6), WK6 = DEC(2026, 9, 8), WK9 = NOW;
     const wkOf = (t) => (t < Y2 ? 'Year One · Wk ' + Math.min(52, Math.floor((t - W0) * 365 / 7) + 1) : 'Year Two · Wk ' + (Math.floor((t - Y2) * 365 / 7) + 1));
     const HZ1 = DEC(2020, 6, 17), MH = DEC(2027, 4, 15), VOTE = DEC(1787, 7, 16), SEP17 = DEC(1787, 9, 17);
     const v0 = ds === 'phl' ? DEC(1787, 5, 20) : (zoomNear ? 2025.25 : 2017.0);
@@ -295,37 +325,37 @@ class Component extends DCLogic {
         if (t >= BM[1].t && t < BM[2].t) lines.push(F('Holiday · Porziņģis', 'obs', 'public reporting · verify'));
         if (t >= BM[2].t && t < BM[4].t) lines.push(F('Simons (from Portland) · Niang (from Atlanta)', 'obs', 'NBA.com / Hoops Rumors · verify'));
         if (t >= BM[4].t) lines.push(F('Vučević (from Chicago)', 'obs', 'ESPN / NBC Sports Boston · verify'));
-        if (t >= NOW - 0.03) lines.push(F('Brown · White · Hauser · Pritchard', 'obs', 'contracts approx., public reporting · verify'));
+        if (t >= NOW - 0.03) { lines.push(F('White · Hauser · Pritchard', 'obs', 'contracts approx., public reporting · verify')); const bk = F('[roster from the Reality feed · verify — BOW Economics Live records Brown traded to Philadelphia]', 'unk'); bk.small = 1; lines.push(bk); }
         lines.push(F('rest [from the Reality feed]', 'unk'));
       }
       let moves = ''; EV.forEach((e) => { if (e[0] <= t) moves = 'last on the record · ' + e[1]; });
       const atNow = t >= NOW - 0.03;
       const p = { name: name, stamp: t >= NOW - 0.003 ? 'OBSERVED · live' : 'OBSERVED', lines: lines.slice(0, 5), moves: moves, tc: fmtD(t) + (t >= NOW - 0.003 ? ' · NOW' : ''), res: F('[from the Reality feed]', 'unk') };
-      if (atNow) Object.assign(p, { chart: { kind: 'bar', pay: 203.6, look: 'obs', lines: LINES, src: F('', 'obs', 'BOW Economics Live fixture, approx. · verify') }, payText: '≈ $203.6M · $3.2M past the tax line · $18.1M under the second apron (gaps COMPUTED)', brief: 'payroll ≈ $203.6M · OBSERVED' });
+      if (atNow) Object.assign(p, { chart: { kind: 'bar', pay: 203.6, look: 'obs', lines: LINES, src: F('', 'obs', 'BOW Economics Live fixture, approx. · verify') }, payText: '≈ $203.6M cap payroll · $3.2M past the tax line · $18.1M under the second apron (gaps COMPUTED, on cap payroll)', note: 'Reported tax salary $198.7M is ≈ $1.7M under the line (salaryswish, 4 Sep 2026, verify) — two sources, shown, not averaged.', brief: 'cap payroll ≈ $203.6M · OBSERVED' });
       else if (t >= BM[4].t && t < BM[5].t) Object.assign(p, { chart: { kind: 'hole', text: 'projected tax fell from ≈$39.5M to ≈$17M with the Feb deal · reported, verify' }, brief: 'projected tax ≈ $17M · OBSERVED' });
       else Object.assign(p, { chart: { kind: 'hole', text: 'no payroll figure is stored for this date [from the Reality feed]' }, brief: 'Tatum' + (t < BM[1].t ? '' : (t < BM[5].t ? ' out (Achilles)' : ' back')) + ' · OBSERVED' });
       return P(p);
     };
     const stWorld = () => {
       const name = 'Your World · Boston · Year Two';
-      if (t < W0) return notYet(name, 'No World yet. It branches from Reality at Year 0, Jul 2025.', 'not branched yet');
+      if (t < W0) return notYet(name, 'No World yet at this date. It branches from Reality at Year 0, Jul 2025.', 'branched from Reality at Year 0 · Jul 2025');
       if (t > WK9 + 0.002) return sealed(name, 'Past the World’s head. It advances on Mondays, with or without you.', 'sealed · past Week 9');
       const lines = [F(t < WK6 ? 'Boston as of Year 0, copied from Reality' : 'Week 6: White and a backup big out, Butler in', 'rec', 'your World’s log · an act inside BOW')];
       if (t >= ACT1) lines.push(F('Year One: funded Business over Basketball Ops', 'rec', 'your World’s log'));
       lines.push(F('names here are a World event, not NBA history', 'aut', 'BOW Worlds fixture'));
       const p = { name: name, stamp: 'RECORDED · ' + wkOf(t), tc: fmtD(t) + ' · ' + wkOf(t), lines: lines, rTitle: 'Roster · acts' };
-      if (t >= WK6) Object.assign(p, { chart: { kind: 'bar', pay: 222.8, look: 'rec', lines: [['TAX', 200, 'WORLD TAX 200']] }, payText: '≈ $222.8M vs the World’s $200M tax line · projected tax ≈ $34.2M = 1.5 × $22.8M (COMPUTED)', brief: 'payroll ≈ $222.8M · RECORDED' });
+      if (t >= WK6) Object.assign(p, { chart: { kind: 'bar', pay: 222.8, look: 'rec', lines: [['TAX', 200, 'WORLD TAX 200']] }, payText: '≈ $222.8M vs the World’s $200M tax line · projected tax ≈ $34.2M (1.5 × $22.8M)', rule: 'World rule: flat 1.5×, authored — simpler than the CBA’s incremental rates', brief: 'payroll ≈ $222.8M · RECORDED' });
       else Object.assign(p, { chart: { kind: 'hole', text: 'before Week 6: no payroll in this fixture [verify]' }, brief: 'Year 0 copy of Reality · RECORDED' });
       p.res = t >= WK9 ? F('Week 9 · lost 112–115 to Denver, at home · 20 recorded possessions', 'rec', 'your World’s log') : F('[World results before Week 9: not in this fixture]', 'unk');
       return P(p);
     };
     const stFork1 = () => {
-      const name = 'Your fork · Keep No. 1';
+      const name = 'Your fork · from 17 Jun 2017 · Keep No. 1';
       if (t < BM[0].t) return notYet(name, 'Not started. It forks from Reality on 17 Jun 2017.', 'forks from 17 Jun 2017');
       if (t > HZ1) return sealed(name, 'Past this fork’s horizon (authored: 3 seasons).', 'sealed · past the horizon');
       const early = t < DEC(2017, 6, 22);
       return P({ name: name, stamp: 'YOUR BRANCH · diverged 17 Jun 2017', tc: fmtD(t),
-        lines: [F(early ? 'Holds the No. 1 pick: kept' : 'Fultz (No. 1, kept), not Tatum', 'com', 'assumption: Boston keeps the pick and takes Fultz'), F('the rest of the roster: not computed', 'unk')],
+        lines: [F(early ? 'Holds the No. 1 pick: kept' : 'Fultz (No. 1, kept), not Tatum', 'com', 'authored assumption: Boston keeps No. 1, takes Fultz'), F('the rest of the roster: not computed', 'unk')],
         moves: 'Only the swap is computed. Health, growth and trades after it are not modeled.',
         chart: { kind: 'hole', text: 'not computed: needs the contracts this branch changes [verify: rookie scale]' },
         res: F('sealed: a branch plays no games until you live them', 'seal'), brief: early ? 'holds No. 1, kept · COMPUTED' : 'roster: Fultz, not Tatum · COMPUTED' });
@@ -340,7 +370,7 @@ class Component extends DCLogic {
       const name = 'Second-apron consequences · BOW model v0.3';
       if (t < NOW) return notYet(name, 'Runs forward from NOW. It does not look back.', 'runs from NOW');
       if (t > MH) return sealed(name, 'Past the horizon: an empty lane. The model says nothing here.', 'past horizon · empty');
-      return P({ name: name, stamp: 'MODEL WINDOW · v0.3 · no run stored', lines: [F('assumption: payroll starts at ≈ $203.6M (fixture)', 'aut', 'authored'), F('assumption: no further trades', 'aut', 'authored'), F('output: a range, never a point. This prototype stores no run.', 'unk', 'BOW model v0.3')], chart: { kind: 'range', lo: 203.6, hi: 221.686, lines: [['NOW', 203.6, 'NOW 203.6'], ['2ND', 221.686, '2ND 221.7']] },
+      return P({ name: name, stamp: 'MODEL WINDOW · v0.3 · no run stored', lines: [F('assumption: cap payroll starts at ≈ $203.6M (fixture)', 'aut', 'authored'), F('assumption: no further trades', 'aut', 'authored'), F('output: a range, never a point. This prototype stores no run.', 'unk', 'BOW model v0.3')], chart: { kind: 'range', lo: 203.6, hi: 221.686, lines: [['NOW', 203.6, 'NOW 203.6'], ['2ND', 221.686, '2ND 221.7']] },
         payText: 'illustrative, authored: bounded by today’s payroll and the second apron. This prototype ran no model.', res: F('what a real run adds: where in that span, and what binds if it crosses', 'unk'), brief: 'range · illustrative, authored' });
     };
     // 1787
@@ -366,7 +396,7 @@ class Component extends DCLogic {
       if (t < c.t) return notYet(c.name, 'Not started: it diverges ' + fmtD(c.t) + '.', 'forks ' + fmtD(c.t));
       if (t > c.end) return sealed(c.name, 'Past this fork’s horizon (authored).', 'sealed · past the horizon');
       const pp = par.st();
-      const lines = [F('No acts in this branch yet: it follows ' + cut1(par.name, 34) + '.', 'com', 'a copy, so nothing here is new')].concat(pp.lines.slice(0, 2).map((l) => Object.assign({}, l, { cls: 't-com', word: 'COMPUTED', src: 'copy of the parent' })));
+      const lines = [F('No acts in this branch yet: it follows ' + par.sn + '.', 'com', 'a copy, so nothing here is new')].concat(pp.lines.slice(0, 2).map((l) => Object.assign({}, l, { cls: 't-com', word: 'COMPUTED', src: 'copy of the parent' })));
       return Object.assign({}, pp, { name: c.name, stamp: 'YOUR BRANCH · ' + c.stamp, lines: lines, res: F('sealed: nothing has been played in this branch', 'seal'), brief: 'follows its parent · COMPUTED' });
     };
 
@@ -376,24 +406,24 @@ class Component extends DCLogic {
     let base = [];
     if (ds === 'bos') {
       base = [
-        { id: 'reality', kind: 'reality', name: 'Boston Celtics · Reality', h: 66, a: 2017.0, b: NOW, st: stReality, mom: true },
-        { id: 'fork1', kind: 'fork', name: 'Your fork · Keep No. 1', parent: 'reality', h: 46, a: BM[0].t, b: HZ1, st: stFork1, stamp: 'diverged 17 Jun 2017 · by you', horizon: 'horizon: 3 seasons' },
-        { id: 'world', kind: 'world', name: 'Your World · Boston · Year Two', h: 46, a: W0, b: WK9, st: stWorld, stamp: 'branched from Reality at Year 0 · Jul 2025 · World calendar authored', ticks: [ACT1, WK6] },
+        { id: 'reality', kind: 'reality', sn: 'Reality', name: 'Boston Celtics · Reality', h: 66, a: 2017.0, b: NOW, st: stReality, mom: true },
+        { id: 'fork1', kind: 'fork', sn: 'your fork, Keep No. 1', name: 'Your fork · from 17 Jun 2017 · Keep No. 1', parent: 'reality', h: 46, a: BM[0].t, b: HZ1, st: stFork1, stamp: 'diverged 17 Jun 2017 · by you', horizon: 'horizon: 3 seasons' },
+        { id: 'world', kind: 'world', sn: 'your World', name: 'Your World · Boston · Year Two', h: 46, a: W0, b: WK9, st: stWorld, stamp: 'branched from Reality at Year 0 · Jul 2025 · World calendar authored', ticks: [ACT1, WK6] },
         { id: 'pubgrp', kind: 'group', name: 'Public forks', h: 40, a: 0, b: 0, st: () => P({}), ticks: [BM[0].t, BM[2].t] },
-        { id: 'pub1', kind: 'public', name: 'Keep No. 1 — Fultz', parent: 'pubgrp', h: 46, a: BM[0].t, b: DEC(2019, 6, 17), st: stPub('Keep No. 1 — Fultz', BM[0].t, DEC(2019, 6, 17), 'Fultz, not Tatum, as the author states it.', 'the rest: as the author states it'), stamp: '[author] · diverged 17 Jun 2017' },
-        { id: 'pub2', kind: 'public', name: 'Holiday kept', parent: 'pubgrp', h: 46, a: BM[2].t, b: DEC(2026, 3, 1), st: stPub('Holiday kept', BM[2].t, DEC(2026, 3, 1), 'Holiday stays; Simons and the two seconds never arrive, as the author states it.', 'the rest: as the author states it'), stamp: '[author] · diverged Jun 2025' },
+        { id: 'pub1', kind: 'public', sn: 'Keep No. 1 — Fultz', name: 'Keep No. 1 — Fultz', parent: 'pubgrp', h: 46, a: BM[0].t, b: DEC(2019, 6, 17), st: stPub('Keep No. 1 — Fultz', BM[0].t, DEC(2019, 6, 17), 'Fultz, not Tatum, as the author states it.', 'the rest: as the author states it'), stamp: '[author] · diverged 17 Jun 2017' },
+        { id: 'pub2', kind: 'public', sn: 'Holiday kept', name: 'Holiday kept', parent: 'pubgrp', h: 46, a: BM[2].t, b: DEC(2026, 3, 1), st: stPub('Holiday kept', BM[2].t, DEC(2026, 3, 1), 'Holiday stays; Simons and the two seconds never arrive, as the author states it.', 'the rest: as the author states it'), stamp: '[author] · diverged Jun 2025' },
         { id: 'model', kind: 'model', name: 'Second-apron consequences · BOW model v0.3', h: 46, a: NOW, b: MH, st: stModel, stamp: 'v0.3 window · horizon Apr 2027 [verify]' }
       ];
     } else if (ds === 'phl') {
       base = [
-        { id: 'rec', kind: 'reality', name: 'Recorded history · Philadelphia, 1787', h: 66, a: DEC(1787, 5, 25), b: SEP17, st: stRec, mom: true, closed: true },
-        { id: 'br', kind: 'fork', name: 'Your branch · Strong votes no (16 Jul)', parent: 'rec', h: 46, a: VOTE, b: VOTE + 0.06, st: stBranch, stamp: 'diverged 16 Jul 1787 · by you', horizon: 'horizon: the vote' },
-        { id: 'pubf', kind: 'public', name: 'Public fork · Franklin silent (30 Jun)', h: 46, a: PM[0].t, b: DEC(1787, 8, 20), st: stPubPhl, stamp: '[author] · diverged 30 Jun 1787' }
+        { id: 'rec', kind: 'reality', sn: 'the recorded history', name: 'Recorded history · Philadelphia, 1787', h: 66, a: DEC(1787, 5, 25), b: SEP17, st: stRec, mom: true, closed: true },
+        { id: 'br', kind: 'fork', sn: 'your branch', name: 'Your branch · Strong votes no (16 Jul)', parent: 'rec', h: 46, a: VOTE, b: VOTE + 0.06, st: stBranch, stamp: 'diverged 16 Jul 1787 · by you', horizon: 'horizon: the vote' },
+        { id: 'pubf', kind: 'public', sn: 'the Franklin-silent fork', name: 'Public fork · Franklin silent (30 Jun)', h: 46, a: PM[0].t, b: DEC(1787, 8, 20), st: stPubPhl, stamp: '[author] · diverged 30 Jun 1787' }
       ];
     }
     const byId = {};
     base.forEach((b0) => { byId[b0.id] = b0; });
-    cuts.forEach((c) => { byId[c.id] = { id: c.id, kind: 'fork', name: c.name, parent: c.parent, h: 46, a: c.t, b: c.end, st: stCut(c), stamp: c.stamp, horizon: 'horizon: authored', isCut: true }; });
+    cuts.forEach((c) => { byId[c.id] = { id: c.id, kind: 'fork', sn: 'your fork, from ' + fmtL(c.t), name: c.name, parent: c.parent, h: 46, a: c.t, b: c.end, st: stCut(c), stamp: c.stamp, horizon: 'horizon: authored', isCut: true }; });
     const flat = [];
     const kidsOf = (id) => base.filter((b0) => b0.parent === id).concat(cuts.filter((c) => c.parent === id).map((c) => byId[c.id]));
     const walk = (tr, ind) => { flat.push(Object.assign({}, tr, { indent: ind })); if (tr.kind === 'group' && !pubOpen) return; kidsOf(tr.id).forEach((k) => walk(k, ind + 1)); };
@@ -416,7 +446,7 @@ class Component extends DCLogic {
       : { bg: 'repeating-linear-gradient(135deg,#5F646A 0 1.5px,transparent 1.5px 7px)', bd: '1px solid #5F646A', bs: 'none', lc: '#15171A' };
 
     // ---------- lists ----------
-    const clips = [], marks = [], mlabels = [], heads = [], rowsBg = [];
+    const clips = [], labels = [], marks = [], mlabels = [], heads = [], rowsBg = [];
     const nominal = flat.reduce((a, f) => a + f.h, 0), kH = Math.min(1.25, 428 / nominal);
     let y = 431;
     const lastLab = [-999, -999];
@@ -426,10 +456,11 @@ class Component extends DCLogic {
       const rop = mute[tr.id] ? 0.22 : (solo && solo !== tr.id ? 0.3 : 1);
       const op = rev ? rop : 0, tx = rev ? 0 : 60, dl = R(i * 9) / 100;
       const isSel = tr.id === sel, isB = ab && tr.id === bsel;
-      rowsBg.push({ y: y0, h: h, bg: isSel || isB ? '#E4EAF6' : (i % 2 ? '#F1F2F0' : '#F7F7F6'), edge: INK[tr.kind] });
+      const rowBgC = isSel || isB ? '#E4EAF6' : (i % 2 ? '#F1F2F0' : '#F7F7F6');
+      rowsBg.push({ y: y0, h: h, bg: rowBgC, edge: INK[tr.kind] });
       const cy = tr.mom ? y0 + R(h * 0.32) : y0 + (h - 24) / 2;
       const st0 = sty(tr.kind);
-      const add = (o) => clips.push(Object.assign({ x: 0, y: cy, w: 0, h: 24, bg: 'transparent', bd: '0', bs: 'none', label: '', lc: '#15171A', lbg: 'transparent', lp: 0, ly: 4, op: op, tx: tx, dl: dl }, o));
+      const add = (o) => { const c = Object.assign({ x: 0, y: cy, w: 0, h: 24, bg: 'transparent', bd: '0', bs: 'none', label: '', lc: '#15171A', lbg: 'transparent', lp: 0, ly: 4, lx: 8, op: op, tx: tx, dl: dl }, o); clips.push(c); if (c.label) labels.push({ x: c.x + c.lx, y: c.y + c.ly, w: Math.max(20, c.w - c.lx - 4), t: c.label, c: c.lc, bg: c.lbg, p: c.lp, op: op, tx: tx, dl: dl }); };
       const span = (a, b) => { const x0 = Math.max(LANE.x0, X(a)), x1 = Math.min(LANE.x0 + LANE.w, X(b)); return x1 > x0 ? { x: R(x0), w: R(x1 - x0) } : null; };
       if (tr.kind === 'group') {
         (tr.ticks || []).forEach((tk) => { const sp = span(tk, tk + 0.004); if (sp && !pubOpen) add({ x: sp.x, w: 9, y: y0 + 13, h: 14, bg: '#F5F3FA', bd: '1.5px solid #6A5F8C' }); });
@@ -440,12 +471,12 @@ class Component extends DCLogic {
           let lab = '';
           if (tr.kind === 'reality') lab = tr.closed ? '' : '';
           else if (tr.kind === 'world') lab = wide(sp, 420) ? tr.stamp : (wide(sp, 110) ? 'YOUR WORLD' : '');
-          else if (tr.kind === 'fork' || tr.kind === 'public') lab = wide(sp, 190) ? tr.stamp : (wide(sp, 60) ? '' : '');
+          else if (tr.kind === 'fork' || tr.kind === 'public') lab = wide(sp, 190) ? tr.stamp : (wide(sp, 64) && tr.isCut ? 'by you' : '');
           else if (tr.kind === 'model') lab = wide(sp, 100) ? tr.stamp : '';
-          add({ x: sp.x, w: sp.w, bg: st0.bg, bd: st0.bd, bs: st0.bs, label: lab, lc: st0.lc, lbg: tr.kind === 'model' ? '#F7F7F6' : 'transparent', lp: tr.kind === 'model' ? 5 : 0 });
+          add({ x: sp.x, w: sp.w, bg: st0.bg, bd: st0.bd, bs: st0.bs, label: lab, lc: st0.lc, lbg: tr.kind === 'model' ? '#F7F7F6' : (st0.bg.indexOf('gradient') < 0 ? st0.bg : 'transparent'), lp: tr.kind === 'model' ? 5 : 3, lx: tr.kind === 'world' ? 12 : 8 });
         }
         (tr.ticks || []).forEach((tk) => { const sp2 = span(tk, tk + 0.003); if (sp2) add({ x: sp2.x, w: 2, y: cy + 17, h: 7, bg: '#F7F7F6' }); });
-        if (tr.kind === 'model' && sp) { const c2 = span(tr.b, tr.b + 0.004); if (c2) { add({ x: c2.x, w: 3, y: cy - 4, h: 32, bd: '0', bs: 'none', bg: 'repeating-linear-gradient(180deg,#5F646A 0 5px,transparent 5px 8px)' }); mlabels.push({ x: c2.x - 46, y: y0 + 2, t: 'HORIZON', op: op, dl: dl }); } }
+        if (tr.kind === 'model' && sp) { const c2 = span(tr.b, tr.b + 0.004); if (c2) { add({ x: c2.x, w: 3, y: cy - 4, h: 32, bd: '0', bs: 'none', bg: 'repeating-linear-gradient(180deg,#5F646A 0 5px,transparent 5px 8px)' }); mlabels.push({ x: c2.x - 46, y: y0 + 2, t: 'HORIZON', op: op, dl: dl, bg: rowBgC }); } }
         if (tr.kind === 'fork' || tr.kind === 'public') { const c2 = span(tr.b, tr.b + 0.003); if (c2) add({ x: c2.x, w: 3, y: cy - 3, h: 30, bg: INK[tr.kind] }); }
         if (tr.kind === 'reality' && !tr.closed) { const sn = span(NOW - 0.004, NOW + 0.003); if (sn) add({ x: sn.x, w: 3, y: cy - 4, h: 32, bg: '#15171A' }); }
         if (tr.kind === 'reality' && tr.closed) { const c2 = span(tr.b, tr.b + 0.004); if (c2) add({ x: c2.x, w: 3, y: cy - 4, h: 32, bg: '#15171A' }); }
@@ -460,7 +491,7 @@ class Component extends DCLogic {
           const mx = X(m.t); if (mx < LANE.x0 - 4 || mx > LANE.x0 + LANE.w + 4) return;
           let lvl = j % 2; if (mx - lastLab[lvl] < 100) lvl = 1 - lvl;
           const show = mx - lastLab[lvl] >= 100 && mx + 96 < 1440;
-          if (show) { lastLab[lvl] = mx; mlabels.push({ x: R(mx) + 8, y: lvl ? y0 + h - 20 : y0 + 4, t: m.name, op: op, dl: dl }); }
+          if (show) { lastLab[lvl] = mx; mlabels.push({ x: R(mx) + 8, y: lvl ? y0 + h - 20 : y0 + 4, t: m.name, op: op, dl: dl, bg: rowBgC }); }
           marks.push({ x: R(mx) - 18, y: cy - 6, op: op, dl: dl, aria: 'Jump the playhead to ' + m.date + ': ' + m.name, pick: () => this.pushNav({ t: m.t }) });
         });
       }
@@ -468,7 +499,7 @@ class Component extends DCLogic {
       const nx = 24 + tr.indent * 16;
       heads.push({ y: y0, h: h, op: op, tx: tx, dl: dl, cx: 8 + tr.indent * 16, cy: R((h - 24) / 2), ch: 24, cbg: st0.bg, cbs: st0.bs, cbd: st0.bd, chip: '',
         nx: nx + 8, nw: 254 - nx - 8, sbg: isSel ? '#DDE6F7' : 'transparent', name: tr.kind === 'group' ? 'Public forks ' + (pubOpen ? '▾' : '▸') : tr.name, brief: tr.kind === 'group' ? (pubOpen ? 'forks by others · [author]' : '2 by others · click to open') : p.brief,
-        ab: isSel && ab ? 'A' : (isB ? 'B' : ''), abD: (isSel && ab) || isB ? 'inline-block' : 'none', deco: mute[tr.id] ? 'line-through' : 'none', pressed: isSel ? 'true' : 'false',
+        abBg: INK[tr.kind], nl: tr.kind === 'fork' ? 2 : 1, bl: tr.kind === 'fork' ? 1 : 2, brD: tr.kind === 'fork' && h < 54 ? 'none' : '-webkit-box', ab: isSel && ab ? 'A' : (isB ? 'B' : ''), abD: (isSel && ab) || isB ? 'inline-block' : 'none', deco: mute[tr.id] ? 'line-through' : 'none', pressed: isSel ? 'true' : 'false',
         aria: tr.kind === 'group' ? 'Expand or collapse public forks' : 'Select track ' + tr.name,
         soloP: solo === tr.id ? 'true' : 'false', muteP: mute[tr.id] ? 'true' : 'false', smD: tr.kind === 'group' ? 'none' : 'block', sx: 254, mx: 292, sy: R((h - 36) / 2),
         pick: () => {
@@ -481,11 +512,36 @@ class Component extends DCLogic {
         mute: () => { const m = Object.assign({}, (this.state || {}).mute); if (m[tr.id]) delete m[tr.id]; else m[tr.id] = true; this.setState({ mute: m, msg: '' }); } });
     });
     
+    const selT = sel ? byId[sel] : null, bT = ab && bsel ? byId[bsel] : null;
+    // ---------- seat horizon: Enter at playhead ----------
+    const near = MOM.filter((m) => Math.abs(m.t - t) <= 0.013)[0] || null;
+    const seatFor = (tr) => {
+      if (!tr) return { no: 'Select a track first.' };
+      const k = tr.kind;
+      if (k === 'group') return { no: 'Select one public fork first.' };
+      if (k === 'model') return { no: 'Refused · rule: a model is not a place. Read its assumptions, or run it (metered).' };
+      if (t < tr.a) return { no: tr.id === 'world' ? 'Refused · rule: no World exists at this date. It branches from Reality at Year 0, Jul 2025.' : 'Refused · rule: this track has not started at the playhead. Move the playhead right.' };
+      if (t > tr.b) return { no: 'Refused · rule: the playhead is on a sealed part of this track. There is nothing recorded to stand in.' };
+      if (k === 'reality') {
+        if (near) return { role: 'You are ' + (ds === 'phl' ? 'a delegate' : 'the person in the seat') + ' · ' + near.date, know: ds === 'phl' ? 'Delegates know only what has been said in the room so far.' : near.q, can: ds === 'phl' ? 'Vote for your state.' : 'Decide. Acting cuts a fork; the record stays beside it.', cant: ds === 'phl' ? 'Read Madison’s notes. They are published in 1840.' : 'Read ahead. What happens next is sealed.', nobody: ds === 'phl' ? 'How the other delegations will vote.' : 'What each choice leads to.' };
+        if (ds === 'bos' && t >= NOW - 0.03) return { role: 'You are an observer · live', know: 'Cap payroll ≈ $203.6M, past the tax line (cap payroll · see How do we know?).', can: 'Observe. Follow. Go to a recorded Moment.', cant: 'Act on the real team.', nobody: 'What this season brings.' };
+        return { role: 'You are a reader · the recorded past', know: 'This stretch of the record is public.', can: 'Read it. Step to a Moment to stand inside a choice.', cant: 'Cut a fork here. A fork begins at a recorded Moment.', nobody: 'Nothing is left open at this date.' };
+      }
+      if (k === 'world') return { role: 'You are the GM · ' + wkOf(t), know: t >= WK6 ? 'Payroll ≈ $222.8M against the World’s $200M line.' : 'Boston as copied from Reality at Year 0.', can: 'Set the rotation. Answer the payroll question. Your acts are recorded.', cant: 'Stop the calendar. It advances on Monday.', nobody: 'The next game. It is sealed.' };
+      if (k === 'fork') return { role: 'You are inside your branch', know: 'Your act: ' + (tr.id === 'fork1' ? 'Keep No. 1' : tr.id === 'br' ? 'Strong votes no' : '[your act]') + '. Diverged ' + fmtL(tr.a) + '.', can: ds === 'phl' ? 'Read the tally under your rule.' : 'Live one season at a time, up to the horizon.', cant: 'Edit the record beside it.', nobody: 'What comes after the horizon. It is sealed.' };
+      return { role: 'You are a reader · another person’s branch', know: 'Their fork diverged ' + fmtL(tr.a) + ', in their ink.', can: 'Read it. Cut your own from the same Moment.', cant: 'Move their hand. It is theirs.', nobody: 'Anything past the author’s last date [verify].' };
+    };
+    const enterAt = () => { const sd0 = seatFor(selT); if (sd0.no) { this.setState({ msg: sd0.no }); return; } this.pushNav({ inside: true }); };
+    const sd = selT ? seatFor(selT) : { no: 'x' };
+    const inside = !!(s.inside && ds && selT && !sd.no && !(ab && bT));
+    const CELL = [['KNOW', '2px solid #15171A', '#FBFBFA'], ['CAN', '1px solid #15171A', '#FBFBFA'], ['CAN’T', '1px solid #15171A', '#DDE0E4'], ['NOBODY KNOWS', '2px dashed #15171A', 'transparent']];
+    const ar = inside ? { sw: { reality: 't-obs', world: 't-rec', fork: 't-frk', public: 'k-pub' }[selT.kind] || 't-obs', ink: INK[selT.kind], tc: fmtD(t), name: selT.name, role: sd.role, cells: [sd.know, sd.can, sd.cant, sd.nobody].map((tx0, i) => ({ k: CELL[i][0], bd: CELL[i][1], bg: CELL[i][2], t: tx0 })), back: () => this.pushNav({ inside: false }) } : { sw: '', ink: '#15171A', tc: '', name: '', role: '', cells: [], back: () => {} };
+
     // ---------- monitor ----------
     const barPane = (p, compact) => {
       const cw = compact ? 330 : 520, ch = p.chart;
       const xv = (v) => R((v - 160) / 70 * cw);
-      const o = { cw: cw, isBar: false, isRange: false, isTally: false, isHole: false, chH: compact ? 60 : 72, barH: compact ? 14 : 22, blines: [], tokens: [], tkw: compact ? 40 : 46, holeText: '', payD: p.payText ? 'block' : 'none' };
+      const o = { ruleD: p.rule ? 'block' : 'none', rule: p.rule || '', cw: cw, isBar: false, isRange: false, isTally: false, isHole: false, chH: compact ? 48 : 72, barH: compact ? 12 : 22, blines: [], tokens: [], tkw: compact ? 40 : 46, holeText: '', payD: p.payText ? 'block' : 'none', note: p.note || '', noteD: (p.note && !compact) ? 'block' : 'none', noteCD: (p.note && compact) ? 'block' : 'none' };
       if (ch.kind === 'bar' || ch.kind === 'range') {
         o.blines = ch.lines.map((l) => ({ x: xv(l[1]), y: 14, h: 12 + o.barH + 8, lx: xv(l[1]) + 3, ty: (ch.lines.indexOf(l) % 2) * 13, t: compact ? l[0] : l[2] }));
         if (ch.kind === 'bar') { o.isBar = true; o.barW = xv(ch.pay); o.barBg = ch.look === 'rec' ? '#0F6E6A' : '#15171A'; o.barBs = ch.look === 'rec' ? 'inset 0 0 0 2px #0F6E6A, inset 0 0 0 4px #F7F7F6' : 'none'; }
@@ -497,37 +553,37 @@ class Component extends DCLogic {
           if (kk === 'aye') return { s: sname, cls: '', c: '#F7F7F6', bg: '#15171A' };
           if (kk === 'no') return { s: sname, cls: 't-aut', c: '#15171A', bg: 'transparent' };
           if (kk === 'no*') return { s: sname, cls: '', c: '#15171A', bg: '#9AA0A6' };
-          if (kk === 'div') return { s: sname, cls: '', c: '#15171A', bg: 'transparent', };
+          if (kk === 'div') return { s: sname, cls: 't-aut', c: '#15171A', bg: 'linear-gradient(90deg,#9AA0A6 0 50%,transparent 50%)' };
           return { s: sname, cls: 't-unk', c: '#4D5259', bg: 'transparent' };
         });
       } else { o.isHole = true; o.holeText = ch.text; }
       return o;
     };
-    const capOf = (f, compact) => Object.assign({}, f, { cap: compact ? f.word : f.word + ' · ' + f.src });
-    const view = (p, x, w, compact) => Object.assign({ x: x, w: w, br: compact && x === 0 ? '1px solid #B5BAB6' : '0', hh: compact ? 32 : 46, tcs: compact ? 20 : 30, nms: compact ? 17 : 26, cols: compact ? '270px 1fr' : '450px 520px 1fr', gap: compact ? 18 : 30, fs: compact ? 13 : 16, rc: compact ? '1 / 3' : '3', rmt: compact ? 4 : 0, movesD: compact ? 'none' : 'block' }, p, { name: compact ? cut1(p.name, 44) : p.name, rTitle: p.rTitle, pTitle: p.pTitle, resTitle: p.resTitle, lines: (compact ? p.lines.slice(0, 3) : p.lines).map((l) => capOf(l, compact)), res: capOf(p.res, compact) }, barPane(p, compact));
+    const capOf = (f, compact) => Object.assign({}, f, { cap: compact ? f.word : f.word + ' · ' + f.src, fs: f.small ? 12 : (compact ? 13 : 16) });
+    const view = (p, x, w, compact, tr, badge) => Object.assign({ ink: tr ? INK[tr.kind] : '#15171A', badge: badge || '', bD: badge ? 'inline-block' : 'none', enterD: compact ? 'none' : 'inline-block', resD: compact ? 'none' : 'block', enter: enterAt, x: x, w: w, br: compact && x === 0 ? '1px solid #B5BAB6' : '0', hh: compact ? 32 : 46, tcs: compact ? 20 : 30, nms: compact ? 17 : 26, cols: compact ? '270px 1fr' : '450px 520px 1fr', gap: compact ? 18 : 30, fs: compact ? 13 : 16, rc: compact ? '1 / 3' : '3', rmt: compact ? 4 : 0, movesD: compact ? 'none' : 'block' }, p, { name: compact ? cut1(p.name, 44) : p.name, rTitle: p.rTitle, pTitle: p.pTitle, resTitle: p.resTitle, lines: (compact ? p.lines.slice(0, 3) : p.lines).map((l) => capOf(l, compact)), res: capOf(p.res, compact) }, barPane(p, compact));
     let panes = [], diff = [];
-    const selT = sel ? byId[sel] : null, bT = ab && bsel ? byId[bsel] : null;
     if (selT) {
       const pa = selT.st();
       if (ab && bT) {
         const pb = bT.st();
-        panes = [view(pa, 0, 699, true), view(pb, 699, 699, true)];
-        const tx = (p) => p.lines.map((l) => l.t).join('; ');
-        const same = (a, b) => a === b;
-        const rA = tx(pa), rB = tx(pb);
-        diff.push({ k: 'roster', v: same(rA, rB) ? 'same' : cut1(rA, 30) + ' → ' + cut1(rB, 34), c: same(rA, rB) ? '#4D5259' : '#B4340A' });
-        if (pa.chart.kind === 'bar' && pb.chart.kind === 'bar') { const d = pb.chart.pay - pa.chart.pay; diff.push({ k: 'payroll', v: (d >= 0 ? '+' : '−') + '$' + Math.abs(d).toFixed(1) + 'M, B over A (COMPUTED; different tax lines)', c: Math.abs(d) < 0.05 ? '#4D5259' : '#B4340A' }); }
-        else diff.push({ k: 'payroll', v: pa.chart.kind === 'tally' && pb.chart.kind === 'tally' ? (pa.payText === pb.payText ? 'same' : pa.payText + ' → ' + pb.payText) : 'no figure for one or both: not compared', c: pa.chart.kind === 'tally' && pa.payText !== pb.payText ? '#B4340A' : '#4D5259' });
-        diff.push({ k: 'last result', v: same(pa.res.t, pb.res.t) ? 'same' : cut1(pa.res.t, 30) + ' → ' + cut1(pb.res.t, 34), c: same(pa.res.t, pb.res.t) ? '#4D5259' : '#B4340A' });
-      } else panes = [view(pa, 0, 1398, false)];
+        panes = [view(pa, 0, 699, true, selT, 'A'), view(pb, 699, 699, true, bT, 'B')];
+        const tx = (p) => (p.lines[0] ? p.lines[0].t : '—');
+        const cA = INK[selT.kind], cB = INK[bT.kind];
+        const D = (k, a1, b1, no) => ({ k: k, a: a1, b: b1, ca: cA, cb: cB, st: no || 'same', sameD: no || a1 === b1 ? 'block' : 'none', difD: no || a1 === b1 ? 'none' : 'block' });
+        diff.push(D(ds === 'phl' ? 'states' : 'roster', tx(pa), tx(pb)));
+        if (pa.chart.kind === 'bar' && pb.chart.kind === 'bar') { const d = pa.chart.pay - pb.chart.pay; diff.push(D('payroll · A − B = ' + (d >= 0 ? '+' : '−') + '$' + Math.abs(d).toFixed(1) + 'M (computed' + (selT.kind === 'world' || bT.kind === 'world' ? '; different tax lines' : '') + ')', '≈ $' + pa.chart.pay + 'M' + (pa.chart.look === 'obs' ? ' cap payroll' : ''), '≈ $' + pb.chart.pay + 'M' + (pb.chart.look === 'obs' ? ' cap payroll' : ''))); }
+        else if (pa.chart.kind === 'tally' && pb.chart.kind === 'tally') diff.push(D('the vote', pa.payText, pb.payText));
+        else diff.push(D(ds === 'phl' ? 'the vote' : 'payroll', '', '', 'no figure for one or both: not compared'));
+        diff.push(D(ds === 'phl' ? 'result' : 'last result', pa.res.t, pb.res.t));
+      } else panes = [view(pa, 0, 1398, false, selT, '')];
     }
     const KEYS = [['t-obs', 'SOLID', 'observed'], ['t-rec', 'DOUBLE RULE', 'recorded in BOW'], ['t-aut', 'OUTLINE', 'authored; a branch is a frame'], ['t-com', 'TONED', 'computed'], ['t-mod', 'HATCH', 'modeled'], ['t-gen', 'DOTS', 'generated'], ['t-unk', 'DASHED', 'unknown or sealed']];
-    const mon = { empty: !ds, panes: panes, ab: !!(ab && bT), dtc: fmtD(t), diff: diff, legend: !!(ds && how && !(ab && bT)), keys: KEYS.map((k) => ({ cls: k[0], w: k[1], d: k[2] })), quiet: !!(ds && !how && !(ab && bT)) };
+    const mon = { empty: !ds, panes: inside ? [] : panes, inside: inside, ab: !!(ab && bT), dtc: fmtD(t), diff: diff, legend: !!(ds && how && !(ab && bT) && !inside), keys: KEYS.map((k) => ({ cls: k[0], w: k[1], d: k[2] })), quiet: !!(ds && !how && !(ab && bT) && !inside) };
 
     // ---------- ruler ----------
     const ruler = [];
     const grid = [];
-    const tickAt = (tt, hgt, label) => { const x = X(tt); if (x < LANE.x0 || x > LANE.x0 + LANE.w) return; ruler.push({ x: R(x), y: 426 - hgt, h: hgt, lx: R(x) + 4, t: label }); if (hgt >= 14) grid.push({ x: R(x) }); };
+    const tickAt = (tt, hgt, label) => { const x = X(tt); if (x < LANE.x0 || x > LANE.x0 + LANE.w) return; ruler.push({ x: R(x), y: 426 - hgt, h: hgt, lx: R(x) + 4, t: x > LANE.x0 + LANE.w - 40 ? '' : label }); if (hgt >= 14) grid.push({ x: R(x) }); };
     if (ds === 'bos' && !zoomNear) for (let yy = 2017; yy <= 2027; yy++) tickAt(yy, 14, String(yy));
     else if (ds === 'bos') for (let yy = 2025; yy <= 2027; yy++) for (let mm = 1; mm <= 12; mm++) { const tt = DEC(yy, mm, 1); if (tt < 2025.25 || tt > 2027.5) continue; const maj = (mm - 1) % 3 === 0; tickAt(tt, maj ? 14 : 7, maj ? MON[mm - 1].toUpperCase() + (mm === 1 || tt < 2025.3 ? ' ' + yy : '') : ''); }
     else if (ds === 'phl') { for (let mm = 6; mm <= 9; mm++) tickAt(DEC(1787, mm, 1), 14, MON[mm - 1].toUpperCase() + ' 1787'); for (let dd = 0; dd < 130; dd += 7) { const tt = DEC(1787, 5, 20) + dd / 365; if (dd % 7 === 0) tickAt(tt, 6, ''); } }
@@ -546,16 +602,15 @@ class Component extends DCLogic {
       if (all.length >= 2) return say('Prototype limit (authored): two new forks. Mute or solo tracks instead.');
       if (t < selT.a) return say('Refused · rule: this track has not started at the playhead. Move it to the right.');
       if (t > selT.b) return say('Refused · rule: this part of the track is sealed. There is no record here to cut.');
-      let at = t, label;
+      let at = t;
       if (selT.kind === 'reality') {
         const m = MOM.filter((z) => Math.abs(z.t - t) <= 0.013)[0];
         if (!m) return say('Refused · Reality rule (authored): a fork begins at a recorded Moment. Click a diamond or use Moment buttons; Moments snap within a week.');
-        at = m.t; label = m.name;
-      } else if (selT.id === 'world') label = wkOf(t).replace(' · ', ' ');
-      else label = 'of ' + cut1(selT.name.replace('Your fork · ', '').replace('Public fork · ', ''), 22);
+        at = m.t;
+      }
       const n = all.length + 1;
-      const rec = { id: 'cut' + n, ds: ds, parent: selT.id, t: at, end: Math.min(v1, at + (ds === 'phl' ? 0.06 : 1.0)), name: 'Your fork · ' + label, stamp: 'diverged ' + fmtD(at) + ' · by you' };
-      this.pushNav({ cuts: (st.cuts || []).concat([rec]), sel: rec.id, msg: 'Cut. New track under ' + cut1(selT.name, 30) + ', ' + rec.stamp + '.' });
+      const rec = { id: 'cut' + n, ds: ds, parent: selT.id, t: at, end: ds === 'phl' ? Math.min(v1, at + 0.06) : Math.min(at + 3.0, Math.max(at + 0.25, NOW)), name: 'Your fork · from ' + fmtL(at) + ' · [your act]', stamp: 'diverged ' + fmtL(at) + ' · by you' };
+      this.pushNav({ cuts: (st.cuts || []).concat([rec]), sel: rec.id, msg: 'Cut. New track under ' + selT.sn + ', ' + rec.stamp + '.' });
     };
     const load = (id, q) => this.pushNav({ ds: id, q: q, t: id === 'phl' ? VOTE : NOW, sel: id === 'phl' ? 'rec' : 'reality', bsel: null, ab: false, zoom: 'full', solo: null, mute: {}, pubOpen: false, tT: 0 });
     const place = () => {
@@ -573,15 +628,15 @@ class Component extends DCLogic {
       q: s.q || '', onQ: (e) => this.setState({ q: e.target.value }), onKey: (e) => { if (e.key === 'Enter') place(); }, place: place,
       chips: [['Boston basketball', 'bos'], ['Philadelphia 1787', 'phl']].map((c) => ({ t: c[0], pressed: ds === c[1] ? 'true' : 'false', pick: () => load(c[1], c[0]) })),
       howP: how ? 'true' : 'false', toggleHow: () => this.setState({ how: !how }),
-      mon: mon, undoOff: nav.length ? '' : 'off', undoN: nav.length ? '(' + nav.length + ')' : '',
+      mon: mon, ar: ar, undoOff: nav.length ? '' : 'off', undoN: nav.length ? '(' + nav.length + ')' : '',
       undo: () => { const st = this.state || {}; const nv = (st.nav || []).slice(); if (!nv.length) return; const snap = nv.pop(); this.setState(Object.assign({ nav: nv, msg: '' }, snap, snap.ds !== st.ds ? { tT: 0 } : {})); },
       prevM: jump(-1), nextM: jump(1), tcNow: ds ? fmtD(t) : '----------',
-      cut: doCut, cutOff: ds && selT && selT.kind !== 'model' ? '' : 'off', cutTarget: ds && selT ? 'on ' + cut1(selT.name, 38) + ' · ' + fmtD(t) : '',
+      cut: doCut, cutOff: ds && selT && selT.kind !== 'model' ? '' : 'off', cutTarget: ds && selT ? 'on ' + cut1(selT.sn || selT.name, 30) + ' · ' + fmtD(t) : '',
       abP: ab ? 'true' : 'false', abOff: ds ? '' : 'off',
       toggleAB: () => { if (!ds) return; if (!ab) this.pushNav({ ab: true, bsel: bsel }); else this.pushNav({ ab: false }); },
       zoomD: ds === 'bos' ? 'inline-block' : 'none', zFullP: zoomNear ? 'false' : 'true', zNearP: zoomNear ? 'true' : 'false', zoomFull: zN('full'), zoomNear: zN('near'),
       status: statusTxt, ruler: ruler, grid: grid, rowsBg: rowsBg, noTracks: !ds, hasNow: nowD, now: { x: R(X(NOW)), lx: R(X(NOW)) + 4 },
-      clips: clips, mlabels: mlabels, marks: marks, heads: heads,
+      clips: clips, labels: labels, mlabels: mlabels, marks: marks, heads: heads,
       ph: { x: R(X(t)) - 1, op: ds ? 1 : 0 },
       rng: { min: v0, max: v1, step: 0.0027, val: t, left: LANE.x0 - 7, w: LANE.w + 14, on: (e) => this.setState({ t: parseFloat(e.target.value), msg: '' }) }
     };

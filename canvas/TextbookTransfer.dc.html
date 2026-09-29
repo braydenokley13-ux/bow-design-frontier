@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Textbook transfer door</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Source+Serif+4:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FBF8F2;color:#1C1A17;font-family:'Source Serif 4',serif}
+.ab{font-family:'Archivo Black',sans-serif;font-weight:400}
+.mono{font-family:'IBM Plex Mono',monospace}
+.btn{font-family:'Archivo Black',sans-serif;font-weight:400;font-size:15px;min-height:44px;padding:0 14px;border:3px solid #1C1A17;background:#FBF8F2;color:#1C1A17;cursor:pointer;border-radius:0;letter-spacing:.02em;transition:background .2s,color .2s}
+.btn:hover{background:#1C1A17;color:#FBF8F2}
+.btn:disabled{opacity:.45;cursor:not-allowed;background:#FBF8F2;color:#1C1A17}
+.btn:focus-visible,.cell:focus-visible,.tray:focus-visible,.opt:focus-visible,.inp:focus-visible{outline:4px solid #E4572E;outline-offset:2px}
+.btn.solid{background:#1C1A17;color:#FBF8F2}
+.btn.solid:hover{background:#4A453D}
+.btn.solid:disabled{background:#1C1A17;color:#FBF8F2;opacity:.45}
+.btn.sm{min-height:40px;font-size:13px;padding:0 12px;border-width:2px}
+.t-obs{background:#1C1A17}
+.t-rec{background:#1C1A17;box-shadow:inset 0 0 0 2px #1C1A17,inset 0 0 0 4px #FBF8F2}
+.t-aut{background:transparent;border:2px solid #1C1A17;box-sizing:border-box}
+.t-com{background:#D9D2BF;border:1px solid #1C1A17;box-sizing:border-box}
+.t-unk{background:transparent;border:2px dashed #1C1A17;box-sizing:border-box}
+.sw{display:inline-block;width:14px;height:14px;flex:none;box-sizing:border-box}
+.cell{position:absolute;box-sizing:border-box;padding:0;margin:0;border:0;border-style:solid;border-color:#C9C2AF;cursor:pointer}
+.tray{position:absolute;box-sizing:border-box;padding:0 4px;display:flex;align-items:center;gap:4px;cursor:grab;font-family:'Archivo Black',sans-serif;text-align:left;overflow:hidden}
+.opt{font-family:'Archivo Black',sans-serif;font-size:14px;min-height:48px;padding:6px 14px;border:3px solid #1C1A17;background:#FBF8F2;color:#1C1A17;cursor:pointer;text-align:left;line-height:17px;transition:background .2s,color .2s}
+.opt:hover{background:#EDE7D8}
+.inp{font-family:'Source Serif 4',serif;font-size:15px;height:44px;box-sizing:border-box;width:100%;border:3px solid #1C1A17;background:#FFFFFF;color:#1C1A17;padding:0 10px}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #FBF8F2; color: #1C1A17; font-family: 'Source Serif 4', serif">
+
+  <svg width="960" height="540" viewBox="0 0 960 540" style="position: absolute; left: 0; top: 0; pointer-events: none" aria-hidden="true">
+    <!-- rail and the lines of the rules through the strip -->
+    <line x1="96" y1="257" x2="936" y2="257" stroke="#1C1A17" stroke-width="3"></line>
+    <line x1="656" y1="288" x2="656" y2="402" stroke="#E4572E" stroke-width="4"></line>
+    <line x1="796" y1="288" x2="796" y2="402" stroke="#E4572E" stroke-width="4"></line>
+    <rect x="931" y="288" width="10" height="114" fill="#E4572E" stroke="#1C1A17" stroke-width="2"></rect>
+
+    <!-- 1 COMPULSION: plate the rolls must reach -->
+    <rect x="52" y="176" width="120" height="10" fill="#E4572E" stroke="#1C1A17" stroke-width="3"></rect>
+    <rect x="60" y="160" width="24" height="14" fill="{{ob.f0}}" stroke="#1C1A17" stroke-width="2"></rect>
+    <rect x="88" y="160" width="24" height="14" fill="{{ob.f1}}" stroke="#1C1A17" stroke-width="2"></rect>
+    <rect x="116" y="160" width="24" height="14" fill="{{ob.f2}}" stroke="#1C1A17" stroke-width="2"></rect>
+    <rect x="144" y="160" width="24" height="14" fill="{{ob.f3}}" stroke="#1C1A17" stroke-width="2"></rect>
+
+    <!-- 2 PERMISSION: gate with one exception door -->
+    <rect x="248" y="144" width="8" height="44" fill="#1C1A17"></rect>
+    <rect x="316" y="144" width="8" height="44" fill="#1C1A17"></rect>
+    <circle cx="252" cy="144" r="6" fill="#E4572E" stroke="#1C1A17" stroke-width="2"></circle>
+    <circle cx="320" cy="144" r="6" fill="#E4572E" stroke="#1C1A17" stroke-width="2"></circle>
+    <rect x="258" y="160" width="56" height="9" fill="#E4572E" stroke="#1C1A17" stroke-width="2.5"></rect>
+    <rect x="332" y="152" width="26" height="36" fill="#FBF8F2" stroke="#1C1A17" stroke-width="3"></rect>
+    <polygon points="{{ob.door}}" fill="#D9D2BF" stroke="#1C1A17" stroke-width="2.5"></polygon>
+    <circle cx="353" cy="171" r="2.5" fill="#1C1A17"></circle>
+
+    <!-- 3 PRICE: meter with coin slot and tally -->
+    <rect x="432" y="142" width="88" height="40" rx="6" fill="#FBF8F2" stroke="#1C1A17" stroke-width="3"></rect>
+    <circle cx="452" cy="162" r="14" fill="#FBF8F2" stroke="#1C1A17" stroke-width="2.5"></circle>
+    <line x1="452" y1="162" x2="452" y2="151" stroke="#E4572E" stroke-width="3.5" stroke-linecap="round" style="transform: rotate({{ob.needle}}deg); transform-origin: 452px 162px"></line>
+    <circle cx="452" cy="162" r="3" fill="#1C1A17"></circle>
+    <rect x="470" y="148" width="46" height="20" fill="#1C1A17"></rect>
+    <rect x="470" y="171" width="46" height="6" fill="{{ob.lamp}}" stroke="#1C1A17" stroke-width="1.5"></rect>
+    <rect x="524" y="152" width="5" height="16" fill="#1C1A17"></rect>
+    <circle cx="526" cy="146" r="5" fill="#E4572E" stroke="#1C1A17" stroke-width="2"></circle>
+    <path d="{{ob.tally}}" fill="none" stroke="#1C1A17" stroke-width="3" stroke-linecap="round"></path>
+
+    <!-- 4 CONFISCATION: rack; the second shelf comes off -->
+    <rect x="618" y="142" width="80" height="8" fill="#1C1A17"></rect>
+    <rect x="616" y="139" width="8" height="26" fill="#E4572E" stroke="#1C1A17" stroke-width="2"></rect>
+    <rect x="692" y="139" width="8" height="26" fill="#E4572E" stroke="#1C1A17" stroke-width="2"></rect>
+    <g style="transform: translate({{ob.rk.x}}px, {{ob.rk.y}}px) rotate({{ob.rk.r}}deg); transform-origin: 658px 152px; opacity: {{ob.rk.o}}">
+      <rect x="640" y="154" width="36" height="32" rx="4" fill="#FBF8F2" stroke="#1C1A17" stroke-width="2.5"></rect>
+      <circle cx="658" cy="159" r="2.5" fill="#1C1A17"></circle>
+      <path d="M646 170 H670 M646 180 H670 M648 170 V180 M668 170 V180" fill="none" stroke="#1C1A17" stroke-width="2.2" stroke-linecap="round"></path>
+    </g>
+
+    <!-- 5 PROHIBITION: wall -->
+    <rect x="795" y="146" width="90" height="42" fill="#E4572E" stroke="#1C1A17" stroke-width="3"></rect>
+    <path d="M795 160 H885 M795 174 H885 M825 146 V160 M855 146 V160 M810 160 V174 M840 160 V174 M870 160 V174 M825 174 V188 M855 174 V188" fill="none" stroke="#1C1A17" stroke-width="2"></path>
+    <rect x="790" y="140" width="100" height="6" fill="#1C1A17"></rect>
+    <rect x="822" y="157" width="46" height="18" fill="#FBF8F2" stroke="#1C1A17" stroke-width="2"></rect>
+    <text x="845" y="171" text-anchor="middle" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600" fill="#1C1A17">11:00</text>
+  </svg>
+
+  <!-- MASTHEAD -->
+  <div style="position: absolute; left: 0; top: 0; width: 1440px; height: 44px; box-sizing: border-box; padding: 0 24px; display: flex; align-items: center; gap: 16px; border-bottom: 4px solid #1C1A17">
+    <span class="ab" style="font-size: 27px; line-height: 1; letter-spacing: .01em">THE EXERCISE IS A DOOR</span>
+    <span class="mono" style="font-size: 12px; font-weight: 500; letter-spacing: .05em">END OF M1 · THE CAP · A DIFFERENT SYSTEM WHERE THE SAME IDEA IS STILL TRUE</span>
+    <span style="flex: 1"></span>
+    <button type="button" class="btn sm" onClick="{{resetAll}}">Start over</button>
+    <button type="button" class="btn sm" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+  </div>
+
+  <!-- BANNER -->
+  <svg width="30" height="40" viewBox="0 0 30 40" style="position: absolute; left: 24px; top: 52px" aria-hidden="true"><rect x="3" y="2" width="24" height="36" fill="#FBF8F2" stroke="#1C1A17" stroke-width="3"></rect><polygon points="3,2 -1,6 -1,34 3,38" fill="#D9D2BF" stroke="#1C1A17" stroke-width="2"></polygon><circle cx="21" cy="21" r="2.5" fill="#1C1A17"></circle></svg>
+  <div class="ab" style="position: absolute; left: 62px; top: 56px; font-size: 25px; line-height: 32px; white-space: nowrap">Ada's Bakery · Saturday · one oven · 6 hours</div>
+  <div style="position: absolute; left: 764px; top: 54px; width: 172px; display: flex; gap: 6px; align-items: flex-start"><span class="sw t-aut" style="margin-top: 2px"></span><span class="mono" style="font-size: 11px; font-weight: 600; line-height: 14px">AUTHORED · fictional, outside sports</span></div>
+
+  <!-- RULEBOOK -->
+  <sc-for list="{{rules}}" as="ru" hint-placeholder-count="5">
+    <div style="position: absolute; left: {{ru.x}}px; top: 98px; width: 176px; height: 140px">
+      <div style="display: flex; align-items: center; gap: 6px; height: 14px"><span class="sw {{ru.tex}}" style="width: 11px; height: 11px"></span><span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .04em; color: #B23A17; white-space: nowrap">{{ru.tag}}</span></div>
+      <div class="ab" style="font-size: 15px; line-height: 20px; white-space: nowrap; margin-top: 1px">{{ru.name}}</div>
+      <div style="position: absolute; left: 0; top: 96px; width: 176px; font-size: 13px; line-height: 15px; color: #2A2824">{{ru.rule}}</div>
+    </div>
+  </sc-for>
+  <div class="mono" style="position: absolute; left: 40px; top: 140px; width: 152px; text-align: center; font-size: 12px; font-weight: 600; line-height: 14px">{{ob.rollsText}}</div>
+  <div class="mono" style="position: absolute; left: 470px; top: 148px; width: 46px; height: 20px; text-align: center; font-size: 12px; font-weight: 600; line-height: 20px; color: #FBF8F2">{{ob.disp}}</div>
+
+  <!-- RAIL: flags on the timeline -->
+  <sc-for list="{{flags}}" as="fl" hint-placeholder-count="5">
+    <div class="ab" style="position: absolute; left: {{fl.x}}px; top: 243px; width: 26px; height: 26px; box-sizing: border-box; border-radius: 13px; border: 3px solid #1C1A17; background: #FBF8F2; font-size: 12px; line-height: 20px; text-align: center; z-index: 3">{{fl.n}}</div>
+  </sc-for>
+  <span class="mono" style="position: absolute; left: 686px; top: 240px; font-size: 11px; font-weight: 600; letter-spacing: .04em">2× RATE</span>
+  <sc-for list="{{hours}}" as="hr" hint-placeholder-count="7">
+    <span class="mono" style="position: absolute; left: {{hr.x}}px; top: 270px; width: 56px; text-align: center; font-size: 13px; font-weight: 600; line-height: 16px">{{hr.t}}</span>
+  </sc-for>
+
+  <!-- LANES -->
+  <div class="mono" style="position: absolute; left: 24px; top: 300px; width: 68px; font-size: 12px; font-weight: 600; line-height: 14px">SHELF 1<br><span style="font-weight: 400">main</span></div>
+  <div class="mono" style="position: absolute; left: 24px; top: 356px; width: 70px; font-size: 12px; font-weight: 600; line-height: 14px">SHELF 2<br><span style="font-weight: 400">the door</span></div>
+  <div style="position: absolute; left: 656px; top: 286px; width: 280px; height: 6px; box-sizing: border-box; background: #D9D2BF; border: 1px solid #1C1A17"></div>
+  <sc-for list="{{cells}}" as="ce" hint-placeholder-count="48">
+    <button type="button" class="cell" tabindex="-1" aria-label="{{ce.aria}}" onClick="{{ce.pick}}" onDragOver="{{ce.over}}" onDrop="{{ce.drop}}" style="left: {{ce.x}}px; top: {{ce.y}}px; width: 35px; height: 52px; background: {{ce.bg}}; border-width: 1px 1px 1px {{ce.bl}}"></button>
+  </sc-for>
+  <sc-if value="{{is.shut}}" hint-placeholder-val="{{false}}">
+    <div class="mono" style="position: absolute; left: 410px; top: 350px; width: 386px; height: 52px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; line-height: 15px; font-weight: 600; letter-spacing: .03em; pointer-events: none; z-index: 1; background: rgba(217,210,191,.6)"><span>SHELF 2 DOOR CLOSED</span><span style="font-weight: 400">opens when shelf 1 has no room before 10:00</span></div>
+  </sc-if>
+  <sc-if value="{{is.gone}}" hint-placeholder-val="{{true}}">
+    <div class="mono" style="position: absolute; left: 796px; top: 350px; width: 140px; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; letter-spacing: .04em; pointer-events: none; z-index: 1">SHELF 2 GONE</div>
+  </sc-if>
+  <sc-if value="{{is.late}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 570px; top: 288px; width: 4px; height: 114px; background: #1C1A17; z-index: 2"></div>
+    <div class="mono" style="position: absolute; left: 550px; top: 272px; width: 44px; height: 18px; box-sizing: border-box; text-align: center; font-size: 12px; line-height: 18px; font-weight: 700; letter-spacing: .04em; z-index: 4; background: #1C1A17; color: #FBF8F2">NOW</div>
+    <div class="mono" style="position: absolute; left: 100px; top: 372px; width: 300px; font-size: 11px; font-weight: 600; letter-spacing: .04em; z-index: 1; pointer-events: none">BAKED: THE PAST STAYS BAKED</div>
+  </sc-if>
+
+  <!-- TARGET PREVIEW -->
+  <sc-if value="{{pv.on}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: {{pv.x}}px; top: {{pv.y}}px; width: {{pv.w}}px; height: 44px; box-sizing: border-box; border: 3px dashed {{pv.col}}; z-index: 2; pointer-events: none"></div>
+  </sc-if>
+
+  <!-- TRAYS ON THE STRIP -->
+  <sc-for list="{{trays}}" as="tr" hint-placeholder-count="8">
+    <button type="button" class="tray" draggable="{{tr.drag}}" onClick="{{tr.pick}}" onDragStart="{{tr.start}}" aria-pressed="{{tr.pressed}}" aria-label="{{tr.aria}}" style="left: {{tr.x}}px; top: {{tr.y}}px; width: {{tr.w}}px; height: 44px; background: {{tr.bg}}; color: {{tr.fg}}; border: 3px solid #1C1A17; box-shadow: {{tr.sh}}; outline: {{tr.ol}}; outline-offset: 2px; z-index: {{tr.z}}">
+      <svg width="16" height="16" viewBox="0 0 24 24" style="flex: none; display: {{tr.idisp}}" aria-hidden="true"><path d="{{tr.icon}}" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 11px; line-height: 13px; white-space: nowrap">{{tr.label}}</span><span class="mono" style="font-size: 11px; line-height: 13px; font-weight: 500; white-space: nowrap">{{tr.sub}}</span></span>
+    </button>
+  </sc-for>
+
+  <!-- TOOLBAR -->
+  <sc-if value="{{tb.idle}}" hint-placeholder-val="{{true}}">
+    <div style="position: absolute; left: 24px; top: 408px; width: 912px; height: 44px; display: flex; align-items: center; gap: 12px">
+      <span style="flex: 1; font-size: 16px; line-height: 20px">{{tb.idleText}}</span>
+      <sc-if value="{{tb.ada}}" hint-placeholder-val="{{true}}">
+        <button type="button" class="btn sm" onClick="{{loadAda}}" style="min-height: 44px">Use Ada's usual plan</button>
+      </sc-if>
+    </div>
+  </sc-if>
+  <sc-if value="{{tb.sel}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 24px; top: 408px; width: 912px; height: 44px; display: flex; align-items: center; gap: 8px">
+      <span class="ab" style="font-size: 14px; width: 168px; line-height: 16px">{{tb.name}}<br><span class="mono" style="font-size: 11px; font-weight: 500">{{tb.len}}</span></span>
+      <button type="button" class="btn sm" onClick="{{tgtBack}}" aria-label="Start 15 minutes earlier" style="min-height: 44px; min-width: 44px; padding: 0">←</button>
+      <span class="mono" style="width: 128px; text-align: center; font-size: 15px; font-weight: 600; line-height: 16px">start {{tb.time}}</span>
+      <button type="button" class="btn sm" onClick="{{tgtFwd}}" aria-label="Start 15 minutes later" style="min-height: 44px; min-width: 44px; padding: 0">→</button>
+      <button type="button" class="btn sm" onClick="{{shelf1}}" aria-pressed="{{tb.s1}}" style="min-height: 44px; background: {{tb.s1bg}}; color: {{tb.s1fg}}">Shelf 1</button>
+      <button type="button" class="btn sm" onClick="{{shelf2}}" aria-pressed="{{tb.s2}}" style="min-height: 44px; background: {{tb.s2bg}}; color: {{tb.s2fg}}">Shelf 2</button>
+      <button type="button" class="btn solid" onClick="{{place}}" disabled="{{tb.placeOff}}" style="min-height: 44px">{{tb.placeLabel}}</button>
+      <sc-if value="{{tb.canBack}}" hint-placeholder-val="{{false}}">
+        <button type="button" class="btn sm" onClick="{{putBack}}" style="min-height: 44px">Put back</button>
+      </sc-if>
+    </div>
+  </sc-if>
+  <sc-if value="{{tb.late}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 24px; top: 408px; width: 912px; height: 44px; display: flex; align-items: center; font-size: 16px; line-height: 20px">{{tb.lateText}}</div>
+  </sc-if>
+  <div style="position: absolute; left: 24px; top: 452px; width: 912px; height: 16px; font-size: 13px; line-height: 16px; font-weight: 600; color: #B23A17">{{tb.msg}}</div>
+
+  <!-- TRAY BANK / FORGONE BIN -->
+  <div class="mono" style="position: absolute; left: 24px; top: 470px; font-size: 11px; font-weight: 600; letter-spacing: .06em; line-height: 14px">{{bankLabel}}</div>
+  <sc-for list="{{bank}}" as="bk" hint-placeholder-count="9">
+    <button type="button" class="tray" draggable="{{bk.drag}}" onClick="{{bk.pick}}" onDragStart="{{bk.start}}" aria-pressed="{{bk.pressed}}" aria-label="{{bk.aria}}" style="left: {{bk.x}}px; top: 490px; width: {{bk.w}}px; height: 44px; background: {{bk.bg}}; color: {{bk.fg}}; border: 3px solid #1C1A17; box-shadow: {{bk.sh}}; outline: {{bk.ol}}; outline-offset: 2px">
+      <svg width="16" height="16" viewBox="0 0 24 24" style="flex: none; display: {{bk.idisp}}" aria-hidden="true"><path d="{{bk.icon}}" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 11px; line-height: 13px; white-space: nowrap; text-decoration: {{bk.td}}">{{bk.label}}</span><span class="mono" style="font-size: 11px; line-height: 13px; font-weight: 500; white-space: nowrap">{{bk.sub}}</span></span>
+    </button>
+  </sc-for>
+
+  <!-- QUESTION PANEL -->
+  <sc-if value="{{is.plan}}" hint-placeholder-val="{{true}}">
+    <div style="position: absolute; left: 24px; top: 544px; width: 912px; height: 288px; box-sizing: border-box; border: 4px dashed #1C1A17; padding: 16px 22px; display: flex; gap: 24px; align-items: center">
+      <svg width="86" height="132" viewBox="0 0 86 132" style="flex: none" aria-hidden="true"><rect x="8" y="6" width="70" height="120" fill="#FBF8F2" stroke="#1C1A17" stroke-width="5"></rect><rect x="20" y="20" width="46" height="34" fill="none" stroke="#1C1A17" stroke-width="3"></rect><rect x="20" y="66" width="46" height="46" fill="none" stroke="#1C1A17" stroke-width="3"></rect><circle cx="62" cy="62" r="4" fill="#1C1A17"></circle><rect x="30" y="84" width="26" height="20" fill="#1C1A17"></rect><path d="M34 84 V78 a9 9 0 0 1 18 0 V84" fill="none" stroke="#1C1A17" stroke-width="4"></path></svg>
+      <div style="flex: 1">
+        <div class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .06em">SEALED · UNTIL THE OVEN HAS RUN TO 08:30</div>
+        <div class="ab" style="font-size: 26px; line-height: 32px; margin-top: 4px">A call is coming. You find out what it asks by living the morning.</div>
+        <div style="font-size: 16px; line-height: 21px; margin-top: 8px">First, fill the strip. The café's standing order needs <b>4 trays of rolls done by 10:00</b>. Everything else is up to you. Trays that start before 08:30 will be baked and cannot be taken back.</div>
+        <div style="display: flex; align-items: center; gap: 14px; margin-top: 12px">
+          <button type="button" class="btn solid" onClick="{{startCall}}" style="min-height: 48px">Run the oven to 08:30 →</button>
+          <span class="mono" style="font-size: 13px; font-weight: 600; line-height: 16px; max-width: 470px">{{sealMsg}}</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{is.call}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 24px; top: 544px; width: 912px; height: 288px; box-sizing: border-box; border: 4px solid #1C1A17; background: #FFFFFF; padding: 12px 20px">
+      <div class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .06em">08:30 · THE PHONE RINGS</div>
+      <div class="ab" style="font-size: 24px; line-height: 30px; margin-top: 2px">The café calls at 08:30: can you add 2 trays of rolls?</div>
+      <div style="font-size: 16px; line-height: 22px; margin-top: 2px">The strip is open for trays that have not started. Take one off, move one, or use shelf 2. Then answer the café.</div>
+      <div style="display: flex; gap: 28px; margin-top: 8px">
+        <div style="width: 540px">
+          <div class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .06em; margin-bottom: 3px">ON THE STRIP NOW</div>
+          <div style="font-size: 16px; line-height: 21px">{{cl.status}}</div>
+          <sc-if value="{{cl.askS2}}" hint-placeholder-val="{{false}}">
+            <div style="margin-top: 8px; border-top: 2px solid #1C1A17; padding-top: 6px">
+              <div class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .06em">YOU USED SHELF 2</div>
+              <div class="ab" style="font-size: 18px; line-height: 24px">What does the second shelf cost you?</div>
+              <div style="display: flex; gap: 8px; margin-top: 4px">
+                <sc-for list="{{cl.s2opts}}" as="so" hint-placeholder-count="3">
+                  <button type="button" class="opt" onClick="{{so.pick}}" aria-pressed="{{so.pressed}}" style="background: {{so.bg}}; color: {{so.fg}}; min-height: 44px">{{so.t1}}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+        <div style="flex: 1">
+          <div class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .06em; margin-bottom: 5px">YOUR ANSWER</div>
+          <div style="display: flex; gap: 8px">
+            <button type="button" class="btn solid" onClick="{{ansYes}}" style="flex: 1; min-height: 52px">Yes, bake them</button>
+            <button type="button" class="btn" onClick="{{ansNo}}" style="flex: 1; min-height: 52px">No, keep my plan</button>
+          </div>
+          <div class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .05em; margin: 10px 0 4px">TELL ADA WHY · OPTIONAL</div>
+          <input class="inp" type="text" maxlength="90" value="{{note}}" onChange="{{onNote}}" placeholder="One line, in your own words" aria-label="Tell Ada why, optional">
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{is.done}}" hint-placeholder-val="{{false}}">
+    <div aria-live="polite" style="position: absolute; left: 24px; top: 544px; width: 912px; height: 288px; box-sizing: border-box; border: 4px solid #1C1A17; background: #FFFFFF; padding: 8px 20px">
+      <div class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .06em; display: flex; align-items: center; gap: 8px"><span class="sw t-com"></span>THE MORNING RAN TO 11:00 · WHAT FOLLOWED FROM YOUR ANSWER · COMPUTED</div>
+      <div class="ab" style="font-size: 23px; line-height: 28px; margin-top: 1px">{{out.head}}</div>
+      <div style="font-size: 15px; line-height: 19px; margin-top: 1px">{{out.sub}}</div>
+      <div style="margin-top: 5px">
+        <sc-for list="{{out.rows}}" as="or" hint-placeholder-count="4">
+          <div style="display: flex; align-items: center; gap: 12px; min-height: 31px; border-top: 2px solid #1C1A17; padding: 1px 0">
+            <span class="mono" style="width: 190px; font-size: 12px; font-weight: 600; letter-spacing: .04em; line-height: 14px">{{or.lab}}</span>
+            <span class="mono chipv" style="min-width: 210px; box-sizing: border-box; padding: 3px 10px; font-size: 14px; font-weight: 600; line-height: 18px; background: #D9D2BF; border: 1px solid #1C1A17">{{or.val}}</span>
+            <span style="flex: 1; font-size: 13.5px; line-height: 16px">{{or.note}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ask.on}}" hint-placeholder-val="{{false}}">
+        <div style="margin-top: 5px; border-top: 3px solid #1C1A17; padding-top: 5px; display: flex; align-items: center; gap: 12px">
+          <div style="flex: none"><div class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .05em; line-height: 13px; white-space: nowrap">{{ask.tag}}</div><div class="ab" style="font-size: 18px; line-height: 23px; white-space: nowrap">{{ask.title}}</div></div>
+          <sc-for list="{{ask.opts}}" as="ao" hint-placeholder-count="3">
+            <button type="button" class="opt" onClick="{{ao.pick}}" aria-pressed="{{ao.pressed}}" style="background: {{ao.bg}}; color: {{ao.fg}}; min-height: 46px; padding: 4px 12px">{{ao.t1}}<br><span class="mono" style="font-size: 12px; font-weight: 500">{{ao.t2}}</span></button>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ================= WHAT THE TEACHER SEES ================= -->
+  <div style="position: absolute; left: 960px; top: 52px; width: 456px; height: 780px; box-sizing: border-box; background: #FFFFFF; border: 3px solid #1C1A17; box-shadow: 8px 8px 0 #1C1A17; padding: 12px 16px 12px 30px; display: flex; flex-direction: column; gap: 7px; overflow: hidden">
+    <div style="position: absolute; left: 0; top: 0; width: 16px; height: 780px; background: radial-gradient(circle at 8px 9px, #FBF8F2 4.5px, transparent 5.5px) 0 0/16px 34px repeat-y; border-right: 2px dotted #1C1A17"></div>
+    <div class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .06em; line-height: 14px">TEACHER'S VIEW · THE STUDENT DOES NOT SEE THIS PAGE</div>
+    <div class="ab" style="font-size: 26px; line-height: 30px">What the teacher sees</div>
+    <div style="font-size: 14.5px; line-height: 18px; font-style: italic">A trace of what the student did, in order. Not a score.</div>
+
+    <div style="border-top: 3px solid #1C1A17; padding-top: 4px">
+      <div style="display: flex; align-items: center; gap: 7px"><span class="sw t-rec"></span><span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .06em">THE ACTS · RECORDED</span></div>
+      <div style="font-size: 12px; line-height: 15px; color: #2A2824; height: 15px" class="mono">{{ev.earlier}}</div>
+      <sc-for list="{{ev.acts}}" as="ac" hint-placeholder-count="4">
+        <div style="display: flex; gap: 10px; align-items: baseline; height: 20px; overflow: hidden; white-space: nowrap"><span class="mono" style="font-size: 12px; font-weight: 600; width: 44px; flex: none">{{ac.t}}</span><span style="font-size: 14px; line-height: 20px; overflow: hidden; text-overflow: ellipsis">{{ac.x}}</span></div>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ev.sealed}}" hint-placeholder-val="{{true}}">
+      <div style="border: 3px dashed #1C1A17; padding: 10px 12px; margin-top: 4px">
+        <div class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .06em">OBSERVATIONS · SEALED WITH THE QUESTION</div>
+        <div style="font-size: 15px; line-height: 20px; margin-top: 4px">{{ev.sealText}}</div>
+      </div>
+      <div style="border: 2px dashed #1C1A17; padding: 8px 12px"><span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .06em">WHAT THE TRACE SHOWS</span><div style="font-size: 14px; line-height: 18px; margin-top: 2px">Waits for the answer. Names what the student did to the strip, or says it was not observed.</div></div>
+      <div style="border: 2px dashed #1C1A17; padding: 8px 12px"><span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .06em">LEVEL, IN WORDS</span><div style="font-size: 14px; line-height: 18px; margin-top: 2px">Waits for the trace. Shown as a sentence, never a number.</div></div>
+      <div style="border: 2px dashed #1C1A17; padding: 8px 12px"><span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .06em">THE OUTCOME</span><div style="font-size: 14px; line-height: 18px; margin-top: 2px">Waits for the answer. Kept separate from the decision.</div></div>
+    </sc-if>
+
+    <sc-if value="{{ev.open}}" hint-placeholder-val="{{false}}">
+      <div style="border-top: 3px solid #1C1A17; padding-top: 4px">
+        <div style="display: flex; align-items: center; gap: 7px"><span class="sw t-com"></span><span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .06em">WHAT THE TRACE SHOWS · COMPUTED FROM THE ACTS</span></div>
+        <div style="font-size: 17px; line-height: 22px; font-weight: 600; margin-top: 4px">{{ev.obs}}</div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-top: 5px">
+          <span class="mono" style="font-size: 12px; font-weight: 600; line-height: 15px; flex: 1">{{ev.from}}</span>
+          <sc-if value="{{ev.canShow}}" hint-placeholder-val="{{false}}">
+            <button type="button" class="btn sm" onClick="{{showAct}}" aria-pressed="{{ev.showP}}" style="flex: none; min-height: 40px">{{ev.showLabel}}</button>
+          </sc-if>
+        </div>
+      </div>
+      <div style="border-top: 2px solid #1C1A17; padding-top: 4px">
+        <div class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .06em">LEVEL, IN WORDS</div>
+        <div style="margin-top: 3px; padding: 6px 10px; background: #D9D2BF; border: 1px solid #1C1A17; font-size: 16px; line-height: 20px; font-weight: 600">{{ev.level}}</div>
+        <div style="font-size: 13.5px; line-height: 17px; margin-top: 4px"><span class="mono" style="font-weight: 600; font-size: 11px; letter-spacing: .05em">SUPPORT</span> · {{ev.support}}</div>
+      </div>
+      <div style="border-top: 2px solid #1C1A17; padding-top: 4px">
+        <div class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .06em">THE OUTCOME · CONTEXT, KEPT SEPARATE FROM THE DECISION</div>
+        <div style="font-size: 14.5px; line-height: 18px; margin-top: 3px">{{ev.outcome}}</div>
+        <div class="mono" style="font-size: 12px; font-weight: 600; line-height: 15px; margin-top: 3px">{{ev.from2}}</div>
+      </div>
+      <sc-if value="{{ev.hasNote}}" hint-placeholder-val="{{false}}">
+        <div style="border-top: 2px solid #1C1A17; padding-top: 4px">
+          <div class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .06em">IN THE STUDENT'S WORDS</div>
+          <div style="font-size: 15px; line-height: 19px; font-style: italic; margin-top: 2px">“{{ev.note}}”</div>
+        </div>
+      </sc-if>
+    </sc-if>
+
+    <div style="margin-top: auto; flex: none">
+      <div class="mono" style="font-size: 11px; line-height: 14px; margin-bottom: 8px; color: #2A2824">HOW THIS WAS MADE · act → event → observation → rubric wording. Only named acts are read: no mouse paths, click counts or pauses.</div>
+      <div style="border: 3px dashed #1C1A17; padding: 7px 12px; display: flex; align-items: center; gap: 8px"><span class="sw t-unk"></span><span style="font-size: 14px; line-height: 18px"><b>Teacher's reading</b> (human, signed by you): <span class="mono" style="font-size: 12px">not yet written</span></span></div>
+      <div style="font-size: 13.5px; line-height: 17px; margin-top: 7px; font-weight: 600">Written explanations are read by the teacher, not scored by BOW.</div>
+    </div>
+  </div>
+
+  <!-- HOW DO WE KNOW panel: teacher-visible -->
+  <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 24px; top: 476px; width: 912px; height: 356px; box-sizing: border-box; padding: 0; background: #FFFFFF; border: 4px solid #1C1A17; z-index: 30">
+      <div class="mono" style="height: 24px; background: #1C1A17; color: #FBF8F2; display: flex; align-items: center; padding: 0 14px; font-size: 12px; font-weight: 600; letter-spacing: .05em">TEACHER-VISIBLE · THE STUDENT'S STRIP DOES NOT SHOW THE RULE KINDS</div>
+      <div style="padding: 8px 16px 0">
+        <span class="ab" style="font-size: 17px">HOW DO WE KNOW?</span>
+        <div style="display: grid; grid-template-columns: 18px 1fr; column-gap: 10px; row-gap: 5px; margin-top: 5px; font-size: 13.5px; line-height: 17px; align-items: start">
+          <span class="sw t-aut" style="margin-top: 2px"></span><span><b>AUTHORED</b> · the whole bakery: the five rules, the times, the tray lengths, the prices, Ada's usual plan, the café's call. Fictional, outside sports, made up for this picture.</span>
+          <span class="sw t-rec" style="margin-top: 2px"></span><span><b>RECORDED</b> · every placement, every answer, with the kitchen clock's time. Acts inside the exercise.</span>
+          <span class="sw t-com" style="margin-top: 2px"></span><span><b>COMPUTED</b> · whether a tray fits, the meter, the outcome, and the sentences on the right. They follow from the acts and the rules, and from the wording of the shared rubric in BOW Decision Challenges (which EXISTS TODAY).</span>
+          <span class="sw t-unk" style="margin-top: 2px"></span><span><b>UNKNOWN</b> · the teacher's reading. A person writes it. BOW does not fill it in.</span>
+        </div>
+        <div style="margin-top: 7px; padding-top: 6px; border-top: 2px solid #1C1A17">
+          <div class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .06em">WHICH JULY LINE EACH BAKERY RULE MATCHES · TEACHER ONLY</div>
+          <div style="display: grid; grid-template-columns: 200px 1fr; column-gap: 12px; row-gap: 1px; margin-top: 3px; font-size: 13.5px; line-height: 17px">
+            <sc-for list="{{kinds}}" as="kd" hint-placeholder-count="5">
+              <span class="ab" style="font-size: 12px">{{kd.name}}</span><span><span class="mono" style="font-weight: 600; font-size: 12px; color: #B23A17">{{kd.tag}}</span> · {{kd.line}}</span>
+            </sc-for>
+          </div>
+        </div>
+        <div class="mono" style="font-size: 11px; line-height: 14px; margin-top: 6px; padding-top: 5px; border-top: 2px solid #1C1A17">The level appears only as a sentence, never as a number. Absence is written "Not observed". Nothing here reads a mouse path, a click count or a pause.</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- THESIS + QUIET LINES -->
+  <div style="position: absolute; left: 24px; top: 840px; width: 1392px; font-size: 13px; line-height: 17px; font-style: italic">A native textbook, in this model, tests an idea by dropping you into a different system where it's still true, and the teacher sees how you thought, not just what you chose.</div>
+  <div style="position: absolute; left: 24px; top: 864px; width: 912px; font-size: 11px; line-height: 14px; color: #2A2824"><span class="mono" style="font-weight: 600; letter-spacing: .05em">COMMERCIAL LENS ·</span> <i>Hypothesis: evidence is what a district pays for. Transfer tasks across worlds are the assessment product; the course is the engagement product.</i></div>
+  <div class="mono" style="position: absolute; left: 960px; top: 864px; width: 456px; text-align: right; font-size: 11px; line-height: 14px; color: #2A2824">PROTOTYPE · DESIGN PROPOSAL · evidence rules EXIST TODAY in BOW Decision Challenges · bakery authored, fictional</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  K() { return { SX0: 96, SL: 35, NOW: 14, DBL: 16, DUE: 20, END: 24, LT1: 292, LT2: 350 }; }
+  INV() {
+    return [
+      { id: 'R1', kind: 'rolls' }, { id: 'R2', kind: 'rolls' }, { id: 'R3', kind: 'rolls' }, { id: 'R4', kind: 'rolls' },
+      { id: 'P1', kind: 'pie' }, { id: 'P2', kind: 'pie' },
+      { id: 'B1', kind: 'bread' }, { id: 'B2', kind: 'bread' }, { id: 'B3', kind: 'bread' },
+      { id: 'N0', kind: 'rolls', cafe: true }, { id: 'N1', kind: 'rolls', cafe: true }
+    ];
+  }
+  ADA() {
+    return [['R1', 0], ['R2', 2], ['R3', 4], ['R4', 6], ['P1', 8], ['B1', 12], ['P2', 15], ['B2', 19]];
+  }
+  lenOf(kind) { return { rolls: 2, pie: 4, bread: 3 }[kind]; }
+  tl(t) { return this.lenOf(t.kind) + (t.shelf === 2 ? 1 : 0); }
+  hh(sl) { return this.mm(300 + 15 * sl); }
+  mm(m) { const p = (n) => (n < 10 ? '0' : '') + n; return p(Math.floor(m / 60)) + ':' + p(m % 60); }
+  range(t) { return this.hh(t.start) + '–' + this.hh(t.start + this.tl(t)); }
+  // The shelf 2 door opens only when shelf 1 has no room for a rolls tray before 10:00.
+  doorOpen(list) { return this.firstFit(list, 'rolls', 1, 0, 20) < 0; }
+  canPlace(list, kind, shelf, start, selfId, phase) {
+    const len = this.lenOf(kind) + (shelf === 2 ? 1 : 0); const end = start + len;
+    if (start < 0) return { ok: false, msg: 'That is before the oven opens at 05:00.' };
+    if (phase === 'call' && start < 14) return { ok: false, msg: 'That time has passed. What started before 08:30 is baked.' };
+    if (end > 24) return { ok: false, msg: "The inspector's 6-hour limit: nothing stays in the oven after 11:00." };
+    if (shelf === 2 && this.firstFit(list, 'rolls', 1, 0, 20) >= 0) return { ok: false, msg: 'Shelf 2 is an exception. Its door opens only when shelf 1 has no room before 10:00.' };
+    if (shelf === 2 && end > 20) return { ok: false, msg: 'The second shelf is lost after 5 hours (10:00): it gets too hot.' };
+    const hit = list.find((p) => p.id !== selfId && p.shelf === shelf && p.start < end && start < p.start + this.tl(p));
+    if (hit) return { ok: false, msg: 'Shelf ' + shelf + ' is busy then: the ' + hit.kind + ' is in that slot.' };
+    return { ok: true, msg: '' };
+  }
+  firstFit(list, kind, shelf, lo, hiEnd) {
+    const len = this.lenOf(kind) + (shelf === 2 ? 1 : 0);
+    for (let st = lo; st + len <= hiEnd; st++) { if (this.canPlace(list, kind, shelf, st, null).ok) return st; }
+    return -1;
+  }
+  premium(list) {
+    let n = 0;
+    list.forEach((t) => { for (let sl = t.start; sl < t.start + this.tl(t); sl++) if (sl >= 16) n++; });
+    return 2 * n;
+  }
+  rollsDone(list) { return list.filter((t) => t.kind === 'rolls' && t.start + this.tl(t) <= 20).length; }
+  addRolls(list, shelf, count) {
+    const out = [];
+    for (let i = 0; i < count; i++) {
+      const st = this.firstFit(list.concat(out), 'rolls', shelf, 14, 20);
+      if (st < 0) break;
+      out.push({ id: 'X' + (list.length + out.length), kind: 'rolls', shelf: shelf, start: st, isNew: true });
+    }
+    return out;
+  }
+  // What the morning became. Pure function of the plan at 08:30, the strip the student left, and the answer.
+  resolve(plan0, placed, ans) {
+    const R = { ans: ans, freeRoom: this.addRolls(plan0, 1, 2).length, forgone: [], news: [], after: [] };
+    if (ans === 'no') {
+      R.after = plan0.slice();
+    } else {
+      const list = placed.slice();
+      ['N0', 'N1'].forEach((id) => {
+        if (list.some((t) => t.id === id)) return;
+        const f1 = this.firstFit(list, 'rolls', 1, 14, 20);
+        // the oven only fills free room on shelf 1. Using shelf 2 is the student's own act, never the oven's.
+        if (f1 >= 0) list.push({ id: id, kind: 'rolls', shelf: 1, start: f1, isNew: true, auto: true });
+      });
+      R.after = list;
+      R.forgone = plan0.filter((p) => !list.some((q) => q.id === p.id));
+      R.news = list.filter((t) => t.isNew);
+    }
+    R.fits = R.news.filter((t) => t.start + this.tl(t) <= 20).length;
+    R.heat = R.news.filter((t) => t.shelf === 2).length;
+    R.prem0 = this.premium(plan0); R.prem1 = this.premium(R.after);
+    return R;
+  }
+  act(text, id, kind, sh) {
+    const st = this.state || {}; const acts = (st.acts || []).slice();
+    const phase = st.phase || 'plan';
+    const m = phase === 'plan' ? 300 + acts.length + 1 : 510 + (st.k2 || 0) + 1;
+    acts.push({ t: this.mm(m), x: text, id: id || null, kind: kind || null, ph: phase, sh: sh || 0 });
+    return acts;
+  }
+  tryPlace(id, shelf, slot) {
+    const st = this.state || {};
+    const phase = st.phase || 'plan';
+    if (phase === 'done') return;
+    const inv = this.INV().find((x) => x.id === id); if (!inv) return;
+    const placed = st.placed || []; const rest = placed.filter((p) => p.id !== id);
+    const was = placed.find((p) => p.id === id);
+    if (phase === 'call' && was && !was.isNew && was.start < this.K().NOW) return;
+    const chk = this.canPlace(rest, inv.kind, shelf, slot, id, phase);
+    if (!chk.ok) { this.setState({ msg: chk.msg }); return; }
+    const kind = phase === 'plan' ? 'place' : (inv.cafe ? 'placenew' : 'move');
+    const txt = phase === 'plan' ? (was ? 'moved ' : 'placed ') + inv.kind + ' to ' + this.hh(slot) + ' on shelf ' + shelf
+      : (inv.cafe ? "placed the café's rolls at " : (was ? 'moved the ' + inv.kind + ' to ' : 'put the ' + inv.kind + ' back at ')) + this.hh(slot) + ' on shelf ' + shelf;
+    this.setState({ placed: rest.concat([{ id: id, kind: inv.kind, shelf: shelf, start: slot, isNew: !!inv.cafe }]), sel: null, tgt: null, msg: '', acts: this.act(txt, id, kind, shelf), k2: phase === 'call' ? (st.k2 || 0) + 1 : (st.k2 || 0) });
+  }
+  renderVals() {
+    const s = this.state || {};
+    const K = this.K();
+    const INV = this.INV();
+    const phase = s.phase || 'plan';
+    const placed = s.placed || [];
+    const plan0 = s.plan0 || placed;
+    const acts = s.acts || [];
+    const how = !!s.how;
+    const ans = s.ans || null;
+    const X = (sl) => K.SX0 + K.SL * sl;
+    const laneY = (sh) => (sh === 1 ? K.LT1 : K.LT2);
+    const NAME = { rolls: 'ROLLS', pie: 'PIE', bread: 'BREAD' };
+    const ICON = {
+      rolls: 'M4 15 a4 4 0 1 0 8 0 a4 4 0 1 0 -8 0 M12 15 a4 4 0 1 0 8 0 a4 4 0 1 0 -8 0 M8 8 a4 4 0 1 0 8 0 a4 4 0 1 0 -8 0',
+      pie: 'M3 12 a9 9 0 1 0 18 0 a9 9 0 1 0 -18 0 M6 6 L18 18 M18 6 L6 18',
+      bread: 'M4 18 V12 a8 6 0 0 1 16 0 V18 Z M9 9 L11 14 M14 9 L16 14'
+    };
+    const RANGE = (t) => this.range(t);
+    const isLocked = (t) => phase !== 'plan' && !t.isNew && t.start < K.NOW;
+    const R = phase === 'done' ? this.resolve(plan0, placed, ans) : null;
+
+    // ---- selection and target
+    const sel = s.sel || null;
+    const selInv = sel ? INV.find((x) => x.id === sel) : null;
+    const selPlaced = sel ? placed.find((p) => p.id === sel) : null;
+    let tgt = s.tgt || null;
+    if (sel && !tgt) {
+      const rest0 = placed.filter((p) => p.id !== sel);
+      if (selPlaced) tgt = { slot: selPlaced.start, shelf: selPlaced.shelf };
+      else if (phase === 'call') {
+        const f1 = this.firstFit(rest0, selInv.kind, 1, 14, 20);
+        if (f1 >= 0) tgt = { slot: f1, shelf: 1 };
+        else { const f2 = this.firstFit(rest0, selInv.kind, 2, 14, 20); tgt = f2 >= 0 ? { slot: f2, shelf: 2 } : { slot: 14, shelf: 1 }; }
+      } else { const ff = this.firstFit(rest0, selInv.kind, 1, 0, 24); tgt = { slot: ff < 0 ? 0 : ff, shelf: 1 }; }
+    }
+    const rest = placed.filter((p) => p.id !== sel);
+    const chk = sel && phase !== 'done' ? this.canPlace(rest, selInv.kind, tgt.shelf, tgt.slot, sel, phase) : { ok: false, msg: '' };
+
+    // ---- lane cells
+    const cells = [];
+    [1, 2].forEach((sh) => {
+      for (let sl = 0; sl < 24; sl++) {
+        const baked = phase !== 'plan' && sl < K.NOW;
+        const gone = sh === 2 && sl >= K.DUE;
+        cells.push({
+          x: X(sl), y: laneY(sh), aria: 'Shelf ' + sh + ', ' + this.hh(sl),
+          bg: gone ? '#D9D2BF' : baked ? '#EDE7D8' : '#FFFFFF', bl: sl % 4 === 0 ? '3px' : '1px',
+          pick: () => { const st = this.state || {}; if ((st.phase || 'plan') !== 'done' && st.sel) this.setState({ tgt: { slot: sl, shelf: sh }, msg: '' }); },
+          over: (e) => { if (e && e.preventDefault) e.preventDefault(); },
+          drop: (e) => { if (e && e.preventDefault) e.preventDefault(); const id = this._drag; this._drag = null; if (id) this.tryPlace(id, sh, sl); }
+        });
+      }
+    });
+
+    // ---- trays
+    const tileStyle = (t, kind) => {
+      const locked = isLocked(t);
+      const isSel = sel === t.id;
+      const hl = s.hl && s.hl === 'second' && t.isNew && t.shelf === 2;
+      return {
+        bg: kind === 'new' ? '#D9D2BF' : locked ? '#1C1A17' : '#FFFFFF',
+        fg: kind === 'new' ? '#1C1A17' : locked ? '#FBF8F2' : '#1C1A17',
+        sh: kind === 'new' ? 'none' : locked ? 'inset 0 0 0 2px #1C1A17, inset 0 0 0 4px #FBF8F2' : 'inset 0 0 0 2px #FFFFFF, inset 0 0 0 4px #1C1A17',
+        ol: hl ? '4px solid #E4572E' : isSel ? '3px solid #1C1A17' : 'none'
+      };
+    };
+    const onStrip = (phase === 'done' ? R.after : placed);
+    const trays = onStrip.map((t) => {
+      const st = tileStyle(t, t.isNew ? 'new' : 'rec');
+      const locked = isLocked(t);
+      const inv = INV.find((x) => x.id === t.id);
+      return { x: X(t.start), y: laneY(t.shelf) + 4, w: this.tl(t) * K.SL - 2, z: 3, bg: st.bg, fg: st.fg, sh: st.sh, ol: st.ol,
+        icon: ICON[t.kind], idisp: t.kind === 'rolls' ? 'none' : 'block', label: NAME[t.kind] + (t.isNew ? ' +' : ''), sub: this.hh(t.start),
+        aria: NAME[t.kind] + ' at ' + this.hh(t.start) + ' on shelf ' + t.shelf + (locked ? ', baked' : ''),
+        drag: phase !== 'done' && !locked ? 'true' : 'false', pressed: sel === t.id ? 'true' : 'false',
+        start: (e) => { if (locked || phase === 'done') return; this._drag = t.id; if (e && e.dataTransfer) { try { e.dataTransfer.setData('text/plain', t.id); e.dataTransfer.effectAllowed = 'move'; } catch (_e) { } } this.setState({ sel: t.id, tgt: { slot: t.start, shelf: t.shelf }, msg: '' }); },
+        pick: () => { if (phase !== 'done' && inv && !locked) this.setState({ sel: (this.state || {}).sel === t.id ? null : t.id, tgt: null, msg: '' }); } };
+    });
+
+    // ---- bank / forgone bin
+    let bank = [];
+    let bankLabel = 'TRAY BANK · WHAT YOU HAVE TO BAKE · ROLLS 2 SLOTS · BREAD 3 · PIE 4';
+    const bankItem = (x, bx, sub) => {
+      const w = this.lenOf(x.kind) * K.SL - 2;
+      return { x: bx, w: w, bg: x.cafe ? '#D9D2BF' : '#FFFFFF', fg: '#1C1A17', sh: x.cafe ? 'none' : 'inset 0 0 0 2px #FFFFFF, inset 0 0 0 4px #1C1A17', ol: sel === x.id ? '3px solid #1C1A17' : 'none',
+        icon: ICON[x.kind], idisp: x.kind === 'rolls' ? 'none' : 'block', label: NAME[x.kind] + (x.cafe ? ' +' : ''), sub: sub, td: 'none', aria: NAME[x.kind] + ', ' + sub + ', in the bank', drag: 'true', pressed: sel === x.id ? 'true' : 'false',
+        start: (e) => { this._drag = x.id; if (e && e.dataTransfer) { try { e.dataTransfer.setData('text/plain', x.id); e.dataTransfer.effectAllowed = 'move'; } catch (_e) { } } this.setState({ sel: x.id, tgt: null, msg: '' }); },
+        pick: () => this.setState({ sel: (this.state || {}).sel === x.id ? null : x.id, tgt: null, msg: '' }), w2: w };
+    };
+    if (phase === 'plan') {
+      let bx = 24;
+      bank = INV.filter((x) => !x.cafe && !placed.some((p) => p.id === x.id)).map((x) => { const it = bankItem(x, bx, this.lenOf(x.kind) + ' slots'); bx += it.w2 + 6; return it; });
+    } else if (phase === 'call') {
+      bankLabel = "THE CAFÉ'S 2 EXTRA TRAYS OF ROLLS · AND ANYTHING YOU TAKE OFF THE STRIP";
+      let bx = 24;
+      bank = INV.filter((x) => !placed.some((p) => p.id === x.id) && (x.cafe || plan0.some((p) => p.id === x.id))).map((x) => { const it = bankItem(x, bx, x.cafe ? '2 slots' : 'taken off'); bx += it.w2 + 6; return it; });
+    } else {
+      bankLabel = 'FORGONE · COMPUTED FROM YOUR ANSWER';
+      let bx = 24;
+      const extra = (lab, sub, w) => { bank.push({ x: bx, w: w, bg: '#D9D2BF', fg: '#1C1A17', sh: 'none', ol: s.hl === 'second' ? '4px solid #E4572E' : 'none', icon: ICON.rolls, idisp: 'none', label: lab, sub: sub, td: 'none', aria: lab + ', ' + sub, drag: 'false', pressed: 'false', start: () => { }, pick: () => { } }); bx += w + 6; };
+      if (!R.forgone.length) {
+        if (ans === 'no') extra('ROLLS ×2', "the café's extra order", 190);
+        else if (R.heat) extra('HEAT TIME', R.heat + (R.heat === 1 ? ' extra slot' : ' extra slots'), 140);
+        else extra('NOTHING', R.freeRoom >= 2 ? 'free room absorbed them' : 'no tray came off', 190);
+      }
+      R.forgone.forEach((t) => {
+        const w = this.lenOf(t.kind) * K.SL - 2;
+        bank.push({ x: bx, w: w, bg: '#D9D2BF', fg: '#1C1A17', sh: 'none', ol: s.hl === 'give' ? '4px solid #E4572E' : 'none', icon: ICON[t.kind], idisp: t.kind === 'rolls' ? 'none' : 'block', label: NAME[t.kind], sub: 'forgone', td: 'line-through', aria: NAME[t.kind] + ', forgone', drag: 'false', pressed: 'false', start: () => { }, pick: () => { } });
+        bx += w + 6;
+      });
+    }
+
+    // ---- preview and toolbar
+    const pv = { on: false, x: 0, y: 0, w: 0, col: '#1C1A17' };
+    if (sel && phase !== 'done') { pv.on = true; pv.x = X(tgt.slot); pv.y = laneY(tgt.shelf) + 4; pv.w = Math.min((this.lenOf(selInv.kind) + (tgt.shelf === 2 ? 1 : 0)) * K.SL - 2, X(24) - pv.x - 2); pv.col = chk.ok ? '#1C1A17' : '#E4572E'; }
+    const late = phase === 'done';
+    const tb = {
+      idle: phase !== 'done' && !sel, sel: phase !== 'done' && !!sel, late: late,
+      idleText: phase === 'plan' ? 'Select a tray, then press Place. Or drag it onto a shelf.' : 'Select a tray, then press Place. Baked trays are locked. Or drag a tray onto a shelf.',
+      ada: phase === 'plan',
+      lateText: '11:00. The oven is cold. The strip shows what the morning became.',
+      name: sel ? NAME[selInv.kind] + (selPlaced ? ' · on the strip' : ' · in the bank') : '', len: sel ? (this.lenOf(selInv.kind) + (tgt.shelf === 2 ? 1 : 0)) + ' slots' + (tgt.shelf === 2 ? ' (+1 heat)' : '') : '',
+      time: sel ? this.hh(tgt.slot) : '', s1: tgt && tgt.shelf === 1 ? 'true' : 'false', s2: tgt && tgt.shelf === 2 ? 'true' : 'false',
+      s1bg: tgt && tgt.shelf === 1 ? '#1C1A17' : '#FBF8F2', s1fg: tgt && tgt.shelf === 1 ? '#FBF8F2' : '#1C1A17',
+      s2bg: tgt && tgt.shelf === 2 ? '#1C1A17' : '#FBF8F2', s2fg: tgt && tgt.shelf === 2 ? '#FBF8F2' : '#1C1A17',
+      placeOff: !chk.ok, placeLabel: selPlaced ? 'Move' : 'Place', canBack: !!selPlaced,
+      msg: s.msg || (sel && phase !== 'done' && !chk.ok ? "Can't place there. " + chk.msg : '')
+    };
+
+    // ---- rulebook and live objects
+    const rollsN = this.rollsDone(onStrip);
+    const prem = this.premium(onStrip);
+    const usesS2 = onStrip.some((t) => t.shelf === 2);
+    const doorNow = phase === 'done' ? (usesS2 || this.doorOpen(plan0)) : this.doorOpen(placed);
+    const dblTrays = onStrip.filter((t) => t.start + this.tl(t) > 16).length;
+    let tally = ''; for (let i = 0; i < Math.min(dblTrays, 6); i++) tally += 'M' + (440 + i * 10) + ' 185 v7 ';
+    const done = phase === 'done';
+    const ob = {
+      f0: rollsN >= 1 ? '#1C1A17' : '#FBF8F2', f1: rollsN >= 2 ? '#1C1A17' : '#FBF8F2', f2: rollsN >= 3 ? '#1C1A17' : '#FBF8F2', f3: rollsN >= 4 ? '#1C1A17' : '#FBF8F2',
+      rollsText: 'by 10:00: ' + Math.min(4, rollsN) + ' of 4' + (rollsN > 4 ? ' +' + (rollsN - 4) : ''),
+      door: doorNow ? '358,152 372,158 372,182 358,188' : '332,152 322,158 322,182 332,188',
+      needle: Math.round(-110 + 220 * Math.min(1, prem / 40)), lamp: prem > 0 ? '#E4572E' : '#FBF8F2', tally: tally, disp: '+$' + prem,
+      rk: { x: 0, y: done ? 6 : 0, r: done ? 16 : 0, o: done ? 0.4 : 1 }
+    };
+    // the student sees rule numbers. The July lines they echo are teacher-only, in "How do we know?".
+    const rules = [
+      { x: 24, n: 1, name: "THE CAFÉ'S ORDER", rule: '4 trays of rolls done by 10:00. Rolls take 2 slots.', tex: 't-aut' },
+      { x: 206, n: 2, name: 'THE MAIN SHELF', rule: 'Six hours. When shelf 1 is full, shelf 2 opens: +1 heat slot per tray.', tex: 't-aut' },
+      { x: 388, n: 3, name: 'ELECTRICITY', rule: 'Doubles after 4 hours (09:00). Each busy slot after that adds $2.', tex: 't-aut' },
+      { x: 570, n: 4, name: 'THE SECOND SHELF', rule: 'Lost after 5 hours (10:00): too hot.', tex: 't-aut' },
+      { x: 752, n: 5, name: 'THE INSPECTOR', rule: '6-hour limit. Nothing in the oven after 11:00.', tex: 't-aut' }
+    ].map((r) => Object.assign(r, { tag: 'RULE ' + r.n }));
+    const kinds = [
+      { name: "THE CAFÉ'S ORDER", tag: 'MUST REACH', line: 'the floor. A minimum the plan has to meet.' },
+      { name: 'THE MAIN SHELF', tag: 'NEEDS A DOOR', line: 'the cap. When it is full, only an exception gets more in.' },
+      { name: 'ELECTRICITY', tag: 'COSTS MONEY', line: 'the tax line. Past it, every unit costs more.' },
+      { name: 'THE SECOND SHELF', tag: 'COMES OFF', line: 'the first apron. Using the exception has a limit.' },
+      { name: 'THE INSPECTOR', tag: 'NO ENTRY', line: 'the second apron. A hard stop.' }
+    ];
+    const flags = [{ n: '3', x: X(16) - 13 }, { n: '1', x: X(20) - 28 }, { n: '4', x: X(20) + 2 }, { n: '5', x: X(24) - 13 }];
+    const hours = []; for (let h = 0; h <= 6; h++) hours.push({ x: X(h * 4) - (h === 6 ? 50 : 28), t: this.mm(300 + h * 60) });
+
+    // ---- what the student did to the strip after the call (their own acts are the first opportunity)
+    const gone = plan0.filter((p) => !placed.some((q) => q.id === p.id));
+    const movedW = placed.filter((q) => !q.isNew && plan0.some((p) => p.id === q.id && (p.start !== q.start || p.shelf !== q.shelf)));
+    const newW = placed.filter((t) => t.isNew);
+    const s2W = newW.filter((t) => t.shelf === 2);
+    const s2q = s.s2q || null;
+    const scaf = s.scaf || null;
+    const S2NAME = { heat: 'heat time', elec: 'electricity', none: 'nothing' };
+    const freesInTime = (t) => t.start + this.lenOf('rolls') + (t.shelf === 2 ? 1 : 0) <= 20;
+
+    // ---- call panel
+    const s2opts = ['heat', 'elec', 'none'].map((v) => ({ t1: v === 'heat' ? 'Heat time' : v === 'elec' ? 'Electricity' : 'Nothing', pressed: s2q === v ? 'true' : 'false', bg: s2q === v ? '#1C1A17' : '#FBF8F2', fg: s2q === v ? '#FBF8F2' : '#1C1A17',
+      pick: () => { const st = this.state || {}; this.setState({ s2q: v, acts: this.act('said the second shelf costs ' + S2NAME[v], 's2q', 's2q'), k2: (st.k2 || 0) + 1 }); } }));
+    const cl = {
+      status: "Café trays on the strip: " + newW.length + ' of 2. ' + (this.doorOpen(placed) ? 'Shelf 1 has no room before 10:00, so the shelf 2 door is open.' : 'Shelf 1 still has room before 10:00.'),
+      askS2: phase === 'call' && s2W.length > 0, s2opts: s2opts
+    };
+
+    // ---- outcome rows
+    const out = { head: '', sub: '', rows: [] };
+    const phrase = (t) => 'the ' + t.kind + ' (' + RANGE(t) + ')';
+    const goneNames = R ? R.forgone.map(phrase).join(' and ') : '';
+    if (R) {
+      if (ans === 'no') { out.head = "You said no. The café's 2 extra trays did not happen."; out.sub = "Your plan stayed as it was. The café's extra order was not baked."; }
+      else if (R.forgone.length) {
+        out.head = 'You took ' + goneNames + ' off the strip. ' + R.fits + ' of 2 rolls trays fit.';
+        out.sub = R.fits >= 2 ? 'The freed slots held both trays before 10:00.'
+          : R.forgone.filter((f) => !freesInTime(f)).map((f) => 'The ' + f.kind + "'s slot frees at " + this.hh(f.start) + ', too late for rolls that must be out by 10:00.').concat(R.forgone.every(freesInTime) ? ['The freed slots were not enough before 10:00.'] : []).join(' ');
+      }
+      else if (s2W.length) { out.head = 'Second shelf: ' + R.fits + ' of 2 rolls trays fit.'; out.sub = 'No tray was taken off. Each tray on the second shelf took 1 extra slot of heat.'; }
+      else if (R.freeRoom >= 2) { out.head = 'You said yes. ' + R.fits + ' of 2 rolls trays fit.'; out.sub = 'Shelf 1 had room, so both went in without anything coming off.'; }
+      else { out.head = 'You said yes. ' + R.fits + ' of 2 rolls trays fit.'; out.sub = R.fits ? 'They went into whatever room was free.' : 'Nothing came off the strip, so there was no room before 10:00.'; }
+      out.rows = [
+        { lab: 'FORGONE', val: ans === 'no' ? "the café's 2 extra trays" : R.forgone.length ? R.forgone.map((f) => f.kind + ', ' + RANGE(f)).join('; ') : R.heat ? R.heat + ' extra heat ' + (R.heat === 1 ? 'slot' : 'slots') : 'no tray removed', note: ans === 'no' ? 'Saying no is a choice, and it also gives something up.' : R.forgone.length ? 'A tray that had not started could be given up. The baked ones could not.' : R.heat ? 'The second shelf is not free: it costs heat time.' : 'Nothing came off the strip.' },
+        { lab: "THE CAFÉ'S EXTRA ORDER", val: (ans === 'no' ? 0 : R.fits) + ' of 2 by 10:00', note: 'A tray counts only if it is out before 10:00.' },
+        { lab: 'STANDING ORDER', val: R.after.filter((t) => !t.isNew && t.kind === 'rolls' && t.start + this.tl(t) <= 20).length + ' of 4 promised trays', note: R.forgone.some((f) => f.kind === 'rolls') ? 'A promised rolls tray left the plan.' : 'The café was promised 4 trays of rolls by 10:00.' },
+        { lab: 'THE METER', val: '+$' + R.prem0 + ' → +$' + R.prem1, note: 'Extra electricity for busy slots after 09:00, at $2 a slot.' }
+      ];
+    }
+
+    // ---- evidence strip: computed from the student's own acts. Support is stated; levels are words.
+    const ev = { acts: [], earlier: '', sealed: phase !== 'done', open: phase === 'done', sealText: '', obs: '', from: '', canShow: false, showP: 'false', showLabel: 'Show it', level: '', support: '', outcome: '', from2: '', hasNote: false, note: '' };
+    const shown = acts.slice(-4);
+    ev.acts = shown.map((a) => ({ t: a.t, x: a.x }));
+    ev.earlier = acts.length > 4 ? '+ ' + (acts.length - 4) + ' earlier acts' : (acts.length ? '' : 'nothing yet');
+    ev.sealText = phase === 'plan' ? 'The question has not opened. The teacher sees acts as they happen. Nothing is scored.' : 'The café has called. What the student does to the strip next is the first real opportunity. The trace opens after the answer.';
+    const NONE = 'Not observed. A missing observation is not a result.';
+    let ask = { on: false, tag: '', title: '', opts: [] };
+    if (R) {
+      const actOf = (pred) => acts.filter(pred).slice(-1)[0];
+      const ansAct = actOf((a) => a.kind === 'ans');
+      const takeAct = actOf((a) => a.ph === 'call' && a.kind === 'putback');
+      const s2Act = actOf((a) => a.kind === 'placenew' && a.sh === 2);
+      const mvAct = actOf((a) => a.ph === 'call' && a.kind === 'move');
+      const scafAct = actOf((a) => a.kind === 'scaf');
+      const freeIn = (f) => R.news.some((n) => n.shelf === f.shelf && n.start < f.start + this.tl(f) && f.start < n.start + this.tl(n) && n.start + this.tl(n) <= 20);
+      let canPrompt = false;
+      ev.support = 'standard tools. No hint was shown before the answer.';
+      if (scaf) {
+        const f = scaf.id === 'none' ? null : plan0.find((p) => p.id === scaf.id);
+        const would = f ? this.addRolls(plan0.filter((p) => p.id !== f.id), 1, 2).length : 0;
+        if (f) {
+          ev.obs = 'After the prompt "What gives?", named ' + phrase(f) + '. ' + (would >= 2 ? 'Taking it off would have held both trays.' : freesInTime(f) ? 'Taking it off would have held ' + would + ' of 2.' : 'Its slot frees at ' + this.hh(f.start) + ', too late for rolls that must be out by 10:00.');
+          ev.level = would >= 2 ? 'Succeeds after a direct scaffold or hint.' : 'Partial usable evidence with a meaningful gap: a tray was named after the prompt, but taking it off would not have made room.';
+        } else {
+          ev.obs = 'After the prompt "What gives?", said nothing gives. ' + (R.freeRoom >= 2 ? 'The oven had room, so nothing needed to.' : 'The strip was full before 10:00.');
+          ev.level = R.freeRoom >= 2 ? 'Succeeds after a direct scaffold or hint.' : 'A clear non-demonstration on this question: the strip was full, so something had to give.';
+        }
+        ev.support = 'direct scaffold. "What gives?" was shown after the answer, so the level stays at this wording.';
+        ev.from = 'from: ' + (scafAct ? scafAct.t + ' ' + scafAct.x : '');
+      } else if (ans === 'no') {
+        if (gone.length) {
+          const g = gone[0];
+          ev.obs = 'Named the ' + g.kind + ', then said no. Whether they saw that its slot frees ' + (freesInTime(g) ? 'in time for 10:00' : 'too late') + ' may matter; not observed — read their words.';
+          ev.level = 'Partial usable evidence with a meaningful gap: a tray was named, but why the answer was no is not observed.';
+          ev.from = 'from: ' + (takeAct ? takeAct.t + ' ' + takeAct.x : '');
+          ev.canShow = false;
+        } else {
+          ev.obs = 'Said no without acting on the strip. Not observed: read their words.';
+          ev.level = NONE; ev.from = 'from: ' + (ansAct ? ansAct.t + ' ' + ansAct.x : '');
+          canPrompt = true;
+        }
+      } else if (gone.length) {
+        const helped = R.forgone.some(freeIn);
+        const g = R.forgone[0];
+        if (helped) {
+          ev.obs = 'Took ' + goneNames + ' off the strip, their own act after the call. The rolls used that room.';
+          ev.level = 'Correct at the first real opportunity, with standard tools.';
+        } else {
+          ev.obs = 'Took ' + goneNames + ' off the strip. ' + (freesInTime(g) ? 'The freed slots did not carry the café\'s trays.' : 'Its slot frees at ' + this.hh(g.start) + ', too late for rolls that must be out by 10:00, so the café\'s trays did not use that room.');
+          ev.level = 'Partial usable evidence with a meaningful gap: a tray was named, but it was not what made room.';
+        }
+        ev.from = 'from: ' + (takeAct ? takeAct.t + ' ' + takeAct.x : '');
+        ev.canShow = true;
+      } else if (s2W.length) {
+        if (!s2q) { ev.obs = 'Used the second shelf, an allowed exception. Not observed: the board did not ask what the second shelf costs.'; ev.level = NONE; }
+        else if (s2q === 'heat') { ev.obs = 'Used the second shelf and named heat time as its cost. The outcome shows ' + R.heat + (R.heat === 1 ? ' tray' : ' trays') + ' took 1 extra heat slot each.'; ev.level = 'Correct at the first real opportunity, with standard tools.'; }
+        else if (s2q === 'elec') { ev.obs = 'Used the second shelf and named electricity. Electricity follows from the extra heat slot after 09:00; the heat slot itself was not named.'; ev.level = 'Partial usable evidence with a meaningful gap: the cost named follows from heat time, which was not named.'; }
+        else { ev.obs = 'Used the second shelf and said it costs nothing. The outcome shows each tray took 1 extra heat slot.'; ev.level = 'A clear non-demonstration on this question: the second shelf did cost heat time.'; }
+        ev.support = 'standard tools. The board asked once, after the act. No hint was shown.';
+        ev.from = 'from: ' + (s2Act ? s2Act.t + ' ' + s2Act.x : '');
+        ev.canShow = true;
+      } else if (movedW.length) {
+        ev.obs = 'Moved a tray after the call. Whether that gave anything up: not observed — read their words.';
+        ev.level = NONE; ev.from = 'from: ' + (mvAct ? mvAct.t + ' ' + mvAct.x : '');
+      } else if (R.freeRoom >= 2) {
+        ev.obs = 'The oven had room: both trays fit on shelf 1 without anything coming off. Nothing needed to give.';
+        ev.level = NONE; ev.from = 'from: ' + (ansAct ? ansAct.t + ' ' + ansAct.x : '');
+      } else {
+        ev.obs = 'Not observed. Said yes without acting on the strip, so the trays found no room.';
+        ev.level = NONE; ev.from = 'from: ' + (ansAct ? ansAct.t + ' ' + ansAct.x : '');
+        canPrompt = true;
+      }
+      ev.showP = s.hl ? 'true' : 'false'; ev.showLabel = s.hl ? 'Hide it' : 'Show it';
+      ev.outcome = ans === 'no' ? "Answered no. Saying no gave up the café's 2 extra trays, recorded as a choice."
+        : R.fits + ' of 2 trays fit by 10:00; meter +$' + R.prem0 + ' to +$' + R.prem1 + '.';
+      ev.from2 = 'from: ' + (ansAct ? ansAct.t + ' ' + ansAct.x : '');
+      const nt = (s.note || '').trim();
+      ev.hasNote = nt.length > 0; ev.note = nt;
+      // one follow-up at a time, asked only after the answer
+      if (s2W.length && !s2q && !scaf) {
+        ask = { on: true, tag: 'ASKED AFTER YOU USED SHELF 2', title: 'What does the second shelf cost you?', opts: s2opts.map((o) => ({ t1: o.t1, t2: '', pressed: o.pressed, bg: o.bg, fg: o.fg, pick: o.pick })) };
+      } else if (canPrompt && !scaf) {
+        const fut = plan0.filter((p) => p.start >= K.NOW);
+        ask = { on: true, tag: 'ASKED AFTER YOUR ANSWER · A PROMPT', title: 'What gives?',
+          opts: fut.map((t) => ({ t1: 'The ' + t.kind, t2: RANGE(t), pressed: 'false', bg: '#FBF8F2', fg: '#1C1A17',
+            pick: () => { const st = this.state || {}; this.setState({ scaf: { id: t.id }, acts: this.act('after the prompt "What gives?", chose the ' + t.kind + ' (' + RANGE(t) + ')', t.id, 'scaf'), k2: (st.k2 || 0) + 1 }); } }))
+          .concat([{ t1: 'Nothing', t2: 'the room was free', pressed: 'false', bg: '#FBF8F2', fg: '#1C1A17',
+            pick: () => { const st = this.state || {}; this.setState({ scaf: { id: 'none' }, acts: this.act('after the prompt "What gives?", chose nothing', 'none', 'scaf'), k2: (st.k2 || 0) + 1 }); } }]) };
+      }
+    }
+
+    const sealMsg = s.sealMsg || (this.rollsDone(placed) >= 4 ? 'The standing order is covered. The oven can run.' : 'Not yet: the café\'s standing order needs 4 trays of rolls done by 10:00. On the strip: ' + this.rollsDone(placed) + '.');
+    const finish = (a) => {
+      const st = this.state || {};
+      this.setState({ ans: a, phase: 'done', acts: this.act(a === 'yes' ? 'answered yes' : 'answered no', 'ans', 'ans'), k2: (st.k2 || 0) + 1, sel: null, tgt: null, hl: null });
+    };
+
+    return {
+      how: how, howPressed: how ? 'true' : 'false', howBg: how ? '#1C1A17' : '#FBF8F2', howFg: how ? '#FBF8F2' : '#1C1A17',
+      toggleHow: () => this.setState({ how: !(this.state && this.state.how) }),
+      resetAll: () => { this._drag = null; this.setState({ phase: 'plan', placed: [], plan0: null, acts: [], sel: null, tgt: null, msg: '', sealMsg: '', ans: null, note: '', hl: null, k2: 0, s2q: null, scaf: null }); },
+      cells: cells, trays: trays, bank: bank, bankLabel: bankLabel, pv: pv, tb: tb, ob: ob, rules: rules, kinds: kinds, flags: flags, hours: hours, cl: cl, out: out, ev: ev, ask: ask, sealMsg: sealMsg,
+      note: s.note || '',
+      is: { plan: phase === 'plan', call: phase === 'call', done: phase === 'done', late: phase !== 'plan', gone: true, shut: phase !== 'done' && !this.doorOpen(placed) },
+      onNote: (e) => this.setState({ note: e && e.target ? e.target.value : '' }),
+      tgtBack: () => { const st = this.state || {}; const t = st.tgt || tgt; this.setState({ tgt: { slot: Math.max(0, t.slot - 1), shelf: t.shelf }, msg: '' }); },
+      tgtFwd: () => { const st = this.state || {}; const t = st.tgt || tgt; this.setState({ tgt: { slot: Math.min(23, t.slot + 1), shelf: t.shelf }, msg: '' }); },
+      shelf1: () => { const st = this.state || {}; const t = st.tgt || tgt; this.setState({ tgt: { slot: t.slot, shelf: 1 }, msg: '' }); },
+      shelf2: () => { const st = this.state || {}; const t = st.tgt || tgt; this.setState({ tgt: { slot: t.slot, shelf: 2 }, msg: '' }); },
+      place: () => { const st = this.state || {}; const t = st.tgt || tgt; if (st.sel) this.tryPlace(st.sel, t.shelf, t.slot); },
+      putBack: () => {
+        const st = this.state || {}; if (!st.sel) return;
+        const ph = st.phase || 'plan';
+        const p = (st.placed || []).find((x) => x.id === st.sel); if (!p) return;
+        if (ph === 'call' && !p.isNew && p.start < K.NOW) return;
+        const txt = ph === 'plan' ? 'put the ' + p.kind + ' back in the bank' : (p.isNew ? "took the café's rolls off the strip" : 'took the ' + p.kind + ' (' + this.range(p) + ') off the strip');
+        this.setState({ placed: (st.placed || []).filter((x) => x.id !== st.sel), sel: null, tgt: null, msg: '', acts: this.act(txt, st.sel, 'putback'), k2: ph === 'call' ? (st.k2 || 0) + 1 : (st.k2 || 0) });
+      },
+      loadAda: () => { const pl = this.ADA().map((a) => ({ id: a[0], kind: INV.find((x) => x.id === a[0]).kind, shelf: 1, start: a[1] })); this.setState({ placed: pl, sel: null, tgt: null, msg: '', acts: this.act("loaded Ada's usual plan (8 trays)", 'ada') }); },
+      startCall: () => {
+        const st = this.state || {};
+        if (this.rollsDone(st.placed || []) < 4) { this.setState({ sealMsg: "Not yet: the café's standing order needs 4 trays of rolls done by 10:00. On the strip: " + this.rollsDone(st.placed || []) + '.' }); return; }
+        const acts = (st.acts || []).concat([{ t: '08:30', x: 'the café called: the oven ran to 08:30', id: null, kind: 'call', ph: 'plan', sh: 0 }]);
+        this.setState({ phase: 'call', plan0: (st.placed || []).slice(), acts: acts, sel: null, tgt: null, msg: '', ans: null, k2: 0, sealMsg: '', s2q: null, scaf: null });
+      },
+      ansYes: () => finish('yes'),
+      ansNo: () => finish('no'),
+      showAct: () => this.setState({ hl: (this.state || {}).hl ? null : (s2W.length && !gone.length ? 'second' : 'give') })
+    };
+  }
+}
+</script>
+</body>
+</html>

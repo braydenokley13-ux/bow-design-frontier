@@ -283,7 +283,7 @@ class Component extends DCLogic {
         { k: sq(160, 200, 5, 3, 44, 16) + sq(556, 200, 5, 3, 44, 16) + H(470, 100, 900) + [164.961, 200.428, 209.015, 221.686].map((v) => V(100 + (v - 150) * 10, 452, 478)).join(''), s: R(160, 200, 44, 44) + R(632, 458, 8, 24), t: V(500, 170, 380) },
         [lb(302, 176, 'Eastern Conference · 15', 'c'), lb(698, 176, 'Western Conference · 15', 'c'), lb(182, 222, 'BOS', 'c', 'w'), lb(500, 110, 'NBA · 30 teams · one cap system', 'c', 'm'), lb(500, 132, 'one square = one team · filled = Boston', 'c', 'm'),
          lb(250, 446, 'cap 165.0', 'c', 'm'), lb(598, 446, 'tax 200.4', 'r', 'm'), lb(696, 446, '1st apron 209.0', 'l', 'm'), lb(822, 446, '2nd apron 221.7', 'l', 'm'),
-         lb(636, 494, 'Boston ≈ 203.6 (fixture, verify)', 'c', 'n'), lb(100, 494, 'payroll, $M', 'l', 'm'), lb(500, 522, 'other 29 payrolls are public but not loaded in this prototype', 'c', 'm')],
+         lb(636, 494, 'Boston ≈ 203.6 cap payroll (fixture, verify)', 'c', 'n'), lb(100, 494, 'payroll, $M', 'l', 'm'), lb(500, 522, 'other 29 payrolls are public but not loaded in this prototype', 'c', 'm')],
         [137, 190, 330]),
       lv('Conference', '15 teams', 'rival scout',
         [['COMPARE', 'records inside one division'], ['FOLLOW', 'the race for the top six seeds']],
@@ -297,10 +297,10 @@ class Component extends DCLogic {
         [['FOLLOW', 'money from the owners down to the payroll'], ['COMPARE', 'this payroll with the tax bill it triggers']],
         'the club’s books: payroll, tax owed, and what the owners have signed off on.',
         [['obs', 'Control passed to a group led by Bill Chisholm in Aug 2025, at a reported ≈ $6.1B valuation; the rest transfers in 2028.', 'NBA approval 13 Aug 2025 · press reports · verify'],
-         ['com', '@TAX@', 'Computed from fixture payroll · verify repeater status'],
+         ['com', '@TAX@', 'Computed from fixture cap payroll · verify repeater status'],
          ['unk', 'How much loss the owners will accept to win: UNKNOWN.', 'Private; no public source']],
         { k: R(400, 70, 200, 60) + R(230, 210, 230, 60) + R(540, 210, 230, 60) + R(430, 360, 170, 56) + R(620, 360, 150, 56) + R(790, 360, 190, 56) + V(500, 130, 170) + H(170, 345, 655) + V(345, 170, 210) + V(655, 170, 210) + V(655, 270, 320) + H(320, 515, 885) + V(515, 320, 360) + V(695, 320, 360) + V(885, 320, 360) },
-        [lb(500, 100, 'Ownership', 'c'), lb(345, 240, 'Business operations', 'c'), lb(655, 240, 'Basketball operations', 'c'), lb(515, 388, 'Coaching staff', 'c'), lb(695, 388, 'Roster', 'c'), lb(885, 388, 'Maine Celtics · G League', 'c'), lb(500, 470, 'boxes are parts of the club, not a full org chart', 'c', 'm')],
+        [lb(500, 100, 'Ownership', 'c'), lb(345, 240, 'Business operations', 'c'), lb(655, 240, 'Basketball operations', 'c'), lb(515, 388, 'Coaching staff', 'c'), lb(695, 388, 'Roster', 'c'), lb(885, 388, 'Maine Celtics · G League', 'c'), lb(500, 470, 'boxes are parts of the club, not a full org chart', 'c', 'm'), lb(570, 496, 'Reported tax salary $198.7M is ≈ $1.7M under the line', 'c', 'm'), lb(570, 514, '(salaryswish, 4 Sep 2026, verify) — two sources, shown, not averaged.', 'c', 'm')],
         [505, 156, 300]),
       lv('Front office', '1 room', 'president of basketball ops',
         [['PROPOSE', 'a trade, a signing, a waiver'], ['WEIGH', 'next season’s wins against next season’s tax']],
@@ -315,7 +315,7 @@ class Component extends DCLogic {
         [['BALANCE', 'depth on the court against dollars on the books'], ['FOLLOW', 'each player’s minutes and pay']],
         'fifteen contracts stacked against the tax line and both aprons.',
         [['aut', '15 standard contracts, plus up to 3 two-way contracts.', '2023 CBA roster rules'],
-         ['com', 'Team payroll today ≈ $203.6M, the sum of every cap hit on the books.', 'Computed · project fixture as of 29 Sep 2026, verify'],
+         ['com', 'Team cap payroll today ≈ $203.6M, the sum of every cap hit on the books.', 'Computed · project fixture as of 29 Sep 2026, verify'],
          ['unk', 'Who other teams would trade for, and at what price: UNKNOWN.', 'Known only when teams talk']],
         { k: sq(290, 130, 5, 3, 70, 16), t: sq(780, 130, 1, 3, 70, 16), s: R(290, 130, 70, 70) },
         [lb(704, 108, 'Standard contracts · 15', 'r'), lb(815, 108, 'Two-way · up to 3', 'c'), lb(325, 152, '#0', 'c', 'w'), lb(325, 178, 'TATUM', 'c', 'w'), lb(290, 410, 'the other 14 names are not loaded in this prototype (roster as of 29 Sep 2026)', 'l', 'm')],
@@ -627,9 +627,9 @@ class Component extends DCLogic {
     const bill = (over, rep) => { const rt = [1.5, 1.75, 2.5, 3.25]; let left = over, tot = 0; for (let i = 0; i < 4 && left > 0; i++) { const part = Math.min(left, 5); tot += part * (rt[i] + (rep ? 1 : 0)); left -= part; } if (left > 0) tot += left * (rt[3] + (rep ? 1 : 0)); return tot; };
     const taxText = () => {
       const over = pay - TAXL;
-      if (over <= 0) return 'Under the tax line by ≈ $' + fmt(-over) + 'M: no tax bill.';
-      if (over <= 5) return 'Over the tax line by ≈ $' + fmt(over) + 'M: a bill of ≈ $' + fmt(bill(over, false)) + 'M at the $1.50 rate, ≈ $' + fmt(bill(over, true)) + 'M at the repeater $2.50 rate.';
-      return 'Over the tax line by ≈ $' + fmt(over) + 'M: a bill of ≈ $' + fmt(bill(over, false)) + 'M on simplified brackets, ≈ $' + fmt(bill(over, true)) + 'M at repeater rates.';
+      if (over <= 0) return 'On cap payroll, under the tax line by ≈ $' + fmt(-over) + 'M: no tax bill.';
+      if (over <= 5) return 'On cap payroll, over the tax line by ≈ $' + fmt(over) + 'M: a bill of ≈ $' + fmt(bill(over, false)) + 'M at the $1.50 rate, ≈ $' + fmt(bill(over, true)) + 'M at the repeater $2.50 rate.';
+      return 'On cap payroll, over the tax line by ≈ $' + fmt(over) + 'M: a bill of ≈ $' + fmt(bill(over, false)) + 'M on simplified brackets, ≈ $' + fmt(bill(over, true)) + 'M at repeater rates.';
     };
     const stepUp = () => this.setState({ sal2: Math.min(66, Math.floor(sal2 + 1e-9) + 1) });
     const stepDn = () => this.setState({ sal2: Math.max(50, Math.ceil(sal2 - 1e-9) - 1) });
@@ -640,7 +640,7 @@ class Component extends DCLogic {
       if (L.n === 'League' && wi) {
         const xw = 100 + (pay - 150) * 10;
         ex.w = rp(xw - 4, 455, 8, 27);
-        ex.add = [[xw, 400, 'if year 2 were ' + salTxt + ': payroll ≈ ' + fmt(pay) + ' · all else as the fixture', 'c', 'v'], [xw, 421, 'YOUR WHAT IF · not the record', 'c', 'b']];
+        ex.add = [[xw, 400, 'if year 2 were ' + salTxt + ': cap payroll ≈ ' + fmt(pay) + ' · all else as the fixture', 'c', 'v'], [xw, 421, 'YOUR WHAT IF · not the record', 'c', 'b']];
       }
       if (L.n === 'Contract') {
         ex.hasCtl = true;

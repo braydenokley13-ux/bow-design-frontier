@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Story with a door</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&amp;family=Source+Serif+4:ital,wght@0,400;0,600;1,400&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF;color:#0A0A0A;font-family:'Source Serif 4',serif}
+.bc{font-family:'Barlow Condensed',sans-serif}
+.mono{font-family:'DM Mono',monospace}
+.btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:16px;min-height:38px;padding:0 14px;border-radius:0;cursor:pointer;background:#FFFFFF;color:#0A0A0A;border:2px solid #0A0A0A;transition:background .2s,color .2s,border-color .2s,opacity .2s}
+.btn:hover{background:#EFEFEA}
+.btn:focus-visible,.num:focus-visible,.door:focus-visible,.opt:focus-visible{outline:3px solid #007A33;outline-offset:2px}
+.num{width:36px;height:36px;box-sizing:border-box;flex:none;border-radius:0;border:1.5px solid #0A0A0A;background:#FFFFFF;color:#0A0A0A;font-family:'DM Mono',monospace;font-size:13px;cursor:pointer;padding:0}
+.door{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;letter-spacing:.02em;text-transform:uppercase;color:#FFFFFF;background:#C8341A;border:0;border-radius:0;padding:0 12px;min-height:36px;cursor:pointer;vertical-align:middle;margin-left:4px;transition:background .2s}
+.door:hover{background:#9E2610}
+.opt{display:flex;align-items:center;gap:14px;width:100%;box-sizing:border-box;min-height:40px;padding:0 12px;text-align:left;border-radius:0;border:2px solid #C8341A;background:#FFFFFF;color:#0A0A0A;cursor:pointer;transition:background .2s}
+.opt:hover{background:#FBEDE9}
+.t-obs{background:#0A0A0A}
+.t-aut{background:transparent;border:2px solid #0A0A0A;box-sizing:border-box}
+.t-com{background:#D7D7D0}
+.t-rec{background:#C8341A;box-shadow:inset 0 0 0 2px #C8341A,inset 0 0 0 4px #FFFFFF}
+.t-unk{background:transparent;border:2px dashed #0A0A0A;box-sizing:border-box}
+.sw{display:inline-block;width:12px;height:12px;box-sizing:border-box;flex:none}
+.seg{position:absolute;top:0;height:100%;box-sizing:border-box;overflow:hidden;white-space:nowrap;padding:0 6px;display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:11px;transition:left .8s ease,width .8s ease,opacity .5s ease}
+.fade{transition:opacity .45s ease}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #FFFFFF; color: #0A0A0A; font-family: 'Source Serif 4', serif">
+
+  <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 46px; box-sizing: border-box; padding: 0 40px; display: flex; align-items: center; gap: 16px; border-bottom: 2px solid #0A0A0A">
+    <span style="display: inline-block; width: 10px; height: 10px; background: #007A33"></span>
+    <span class="bc" style="font-size: 22px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase">[publisher]</span>
+    <span class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55554F; white-space: nowrap">NBA · THE CAP</span>
+    <span class="mono" style="flex: 1; min-width: 0; font-size: 12px; padding: 6px 10px; border: 1px solid #0A0A0A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{address}}</span>
+    <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="min-height: 36px; font-size: 15px; background: {{howBg}}; color: {{howFg}}; white-space: nowrap">How do we know?</button>
+  </header>
+
+  <section style="position: absolute; left: 40px; top: 56px; width: 1360px; height: 102px">
+    <h1 class="bc" style="margin: 0; font-size: 58px; font-weight: 800; line-height: 1; text-transform: uppercase; letter-spacing: .005em; white-space: nowrap">The apron summer: why Boston let Jrue Holiday go</h1>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; margin-top: 8px">
+      <span class="mono" style="font-size: 12px; color: #55554F; white-space: nowrap">By [staff writer] · [publisher] · late June 2025 · verify</span>
+      <span class="mono" style="font-size: 11px; line-height: 1.45; max-width: 700px; text-align: right; color: #0A0A0A">PUBLISHING, in this form, means the story ships with its cap sheet, and every reader who steps in leaves a branch the next reader can fork.</span>
+    </div>
+  </section>
+
+  <!-- STORY COLUMN -->
+  <section style="position: absolute; left: 40px; top: 160px; width: 560px; height: 446px">
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <sc-for list="{{paras}}" as="pa" hint-placeholder-count="5">
+        <sc-if value="{{pa.rowShow}}" hint-placeholder-val="{{true}}">
+        <div class="fade" style="display: flex; gap: 8px; align-items: flex-start; opacity: {{pa.op}}">
+          <sc-if value="{{pa.open}}" hint-placeholder-val="{{true}}">
+            <button type="button" class="num" onClick="{{pa.go}}" aria-label="Show the sheet for paragraph {{pa.n}}" aria-current="{{pa.cur}}" style="border-width: {{pa.bw}}px; font-weight: {{pa.fw}}">{{pa.n}}</button>
+          </sc-if>
+          <sc-if value="{{pa.sealed}}" hint-placeholder-val="{{false}}">
+            <span class="num t-unk" aria-hidden="true" style="display: flex; align-items: center; justify-content: center; border: 2px dashed #0A0A0A; font-size: 11px; cursor: default">4&ndash;5</span>
+          </sc-if>
+          <div style="flex: 1; min-width: 0; padding-top: 2px">
+            <sc-if value="{{pa.sealed}}" hint-placeholder-val="{{false}}">
+              <div class="t-unk" style="padding: 8px 12px 10px; line-height: 1.4"><span class="mono" style="font-size: 11px; letter-spacing: .06em; font-weight: 500">SEALED &middot; 2 paragraphs</span><div style="font-size: 13px; margin: 2px 0 8px">What Boston did, and what it did to the sheet. Closed until you read it or make the call.</div><div style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="btn" onClick="{{readSealed}}" style="white-space: nowrap">Read what Boston did</button><button type="button" class="door" onClick="{{enterSeat}}" style="margin-left: 0; white-space: nowrap; min-height: 38px">Enter the morning before the call</button></div></div>
+            </sc-if>
+            <sc-if value="{{pa.open}}" hint-placeholder-val="{{true}}">
+              <p style="margin: 0; font-size: 14px; line-height: 1.4; color: {{pa.fg}}">{{pa.text}}<sc-if value="{{pa.door}}" hint-placeholder-val="{{false}}"> <button type="button" class="door" onClick="{{enterSeat}}">Enter the morning before the call &rarr;</button></sc-if></p>
+              <sc-if value="{{pa.note}}" hint-placeholder-val="{{false}}"><span class="mono" style="display: block; margin-top: 3px; font-size: 11px; color: #55554F">AUTHORED &middot; [staff writer]&rsquo;s reporting &middot; figures read off the sheet</span></sc-if>
+            </sc-if>
+          </div>
+        </div>
+        </sc-if>
+      </sc-for>
+    </div>
+    <div style="position: absolute; left: 0; bottom: 0; width: 560px; display: flex; gap: 10px; align-items: center">
+      <sc-if value="{{notSeat}}" hint-placeholder-val="{{true}}">
+        <button type="button" class="btn" onClick="{{prev}}" aria-label="Previous paragraph" style="width: 54px; padding: 0">&larr;</button>
+        <button type="button" class="btn" onClick="{{next}}" aria-disabled="{{nextOff}}" style="min-width: 150px; white-space: nowrap; opacity: {{nextOp}}">Next paragraph &rarr;</button>
+        <span class="mono" style="font-size: 11px; color: #55554F; white-space: nowrap">{{navHint}}</span>
+      </sc-if>
+      <sc-if value="{{seat}}" hint-placeholder-val="{{false}}">
+        <button type="button" class="btn" onClick="{{leaveSeat}}" style="background: #0A0A0A; color: #FFFFFF; white-space: nowrap; padding: 0 16px">Return to the story</button>
+        <sc-if value="{{hasCall}}" hint-placeholder-val="{{false}}"><button type="button" class="btn" onClick="{{changeCall}}" style="white-space: nowrap; padding: 0 16px">Change my call</button></sc-if>
+        <span class="mono" style="font-size: 11px; color: #55554F; line-height: 1.35">Paused at paragraph 3.</span>
+      </sc-if>
+    </div>
+  </section>
+
+  <!-- SYSTEM SPINE -->
+  <section aria-label="System spine: Boston 2025-26 cap sheet" style="position: absolute; left: 660px; top: 160px; width: 740px; height: 446px; box-sizing: border-box; border: {{spine.bw}}px solid {{spine.bc}}; background: #FFFFFF">
+    <div style="position: absolute; left: 0; top: 0; width: 100%; height: 28px; box-sizing: border-box; padding: 0 20px; display: flex; align-items: center; background: {{spine.hbg}}; color: {{spine.hfg}}; border-bottom: 1px solid #0A0A0A">
+      <span class="mono" style="font-size: 11px; letter-spacing: .06em; white-space: nowrap">{{spine.head}}</span>
+    </div>
+    <sc-for list="{{vlines}}" as="vl" hint-placeholder-count="4">
+      <span class="mono" style="position: absolute; left: {{vl.lx}}px; top: {{vl.ly}}px; width: 130px; text-align: right; font-size: 11px; line-height: 14px; white-space: nowrap">{{vl.lab}}</span>
+    </sc-for>
+    <sc-for list="{{bars}}" as="bar" hint-placeholder-count="2">
+      <sc-if value="{{bar.show}}" hint-placeholder-val="{{true}}">
+        <span class="mono" style="position: absolute; left: 20px; top: {{bar.ty}}px; font-size: 11px; letter-spacing: 0; color: {{bar.tc}}; white-space: nowrap">{{bar.title}}</span>
+        <div style="position: absolute; left: 20px; top: {{bar.y}}px; width: 700px; height: 38px">
+          <sc-if value="{{bar.framed}}" hint-placeholder-val="{{false}}"><div class="t-rec" style="position: absolute; left: -7px; top: -7px; width: 714px; height: 52px; background: transparent; border: 3px solid #C8341A; box-shadow: inset 0 0 0 2px #FFFFFF, inset 0 0 0 3px #C8341A"></div></sc-if>
+          <sc-for list="{{bar.segs}}" as="sg" hint-placeholder-count="5">
+            <div class="seg" style="left: {{sg.l}}px; width: {{sg.w}}px; opacity: {{sg.op}}; background: {{sg.bg}}; color: {{sg.fg}}; border: 2px solid {{sg.bd}}">{{sg.txt}}</div>
+          </sc-for>
+        </div>
+        <sc-if value="{{bar.sealed}}" hint-placeholder-val="{{false}}"><div class="t-unk" style="position: absolute; left: 20px; top: {{bar.y}}px; width: 700px; height: 38px; display: flex; align-items: center; padding: 0 12px; background: #FFFFFF"><span class="mono" style="font-size: 12px">Payroll after your call &middot; sealed &mdash; you find out by making it</span></div></sc-if>
+      </sc-if>
+    </sc-for>
+    <sc-for list="{{vpieces}}" as="vp" hint-placeholder-count="12">
+      <div style="position: absolute; left: {{vp.x}}px; top: {{vp.top}}px; width: {{vp.w}}px; height: {{vp.h}}px; background: #0A0A0A; box-shadow: 0 0 0 1px #FFFFFF"></div>
+    </sc-for>
+
+    <sc-for list="{{segLabs}}" as="sl" hint-placeholder-count="1">
+      <div class="mono" style="position: absolute; left: {{sl.x}}px; top: {{sl.y}}px; width: 78px; box-sizing: border-box; padding: 0 3px; background: #FFFFFF; font-size: 11px; line-height: 14px; color: {{sl.c}}">{{sl.t}}</div>
+    </sc-for>
+
+    <div style="position: absolute; left: 20px; top: {{tbl.top}}px; width: 700px">
+      <div class="mono" style="display: flex; height: 18px; align-items: center; font-size: 11px; color: #55554F; letter-spacing: .03em">
+        <span style="width: 150px">SHEET</span><span style="width: 110px">PAYROLL</span><span style="width: 100px">VS TAX LINE</span><span style="width: 105px">VS 1ST APRON</span><span style="width: 105px">VS 2ND APRON</span><span style="width: 130px">TAX, SIMPLIFIED</span>
+      </div>
+      <sc-for list="{{tbl.rows}}" as="tr" hint-placeholder-count="2">
+        <sc-if value="{{tr.real}}" hint-placeholder-val="{{true}}">
+          <div class="mono" style="display: flex; height: 26px; align-items: center; font-size: 13px; border-top: 1px solid #0A0A0A">
+            <span style="width: 150px; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; color: {{tr.ink}}"><span class="sw {{tr.sw}}"></span>{{tr.lab}}</span>
+            <span class="t-aut" style="width: 100px; margin-right: 10px; padding: 1px 6px; box-sizing: border-box; font-weight: 500; border-color: {{tr.ink}}">{{tr.pay}}</span>
+            <span style="width: 100px">{{tr.d0}}</span><span style="width: 105px">{{tr.d1}}</span><span style="width: 105px">{{tr.d2}}</span>
+            <span class="t-aut" style="width: 120px; padding: 1px 6px; box-sizing: border-box; border-color: {{tr.ink}}">{{tr.tax}}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{tr.sealed}}" hint-placeholder-val="{{false}}">
+          <div class="mono" style="display: flex; height: 26px; align-items: center; font-size: 11px; border-top: 1px solid #0A0A0A">
+            <span style="width: 150px; font-weight: 500; color: #C8341A">YOUR BRANCH</span>
+            <span class="t-unk" style="flex: 1; height: 20px; display: flex; align-items: center; padding: 0 8px">sealed until you call</span>
+          </div>
+        </sc-if>
+      </sc-for>
+      <span class="mono" style="display: block; margin-top: 3px; font-size: 11px; line-height: 15px; color: #55554F">Tax, simplified: first-time-payer rates: $1.50 / $1.75 / $2.50 / $3.25 per $1 for each $5M, then $3.75, $4.25, $4.75&hellip;; repeat payers pay more &mdash; verify Boston&rsquo;s status.</span>
+    </div>
+
+    <div style="position: absolute; left: 20px; top: {{zone.top}}px; width: 700px">
+      <sc-if value="{{zone.isRows}}" hint-placeholder-val="{{true}}">
+        <div style="display: flex; justify-content: space-between; align-items: center; height: 22px">
+          <span class="mono" style="font-size: 11px; letter-spacing: .06em; font-weight: 500">{{zone.title}}</span>
+          <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+            <span class="mono" style="display: flex; gap: 10px; align-items: center; font-size: 11px"><span class="sw t-obs"></span>observed<span class="sw t-aut"></span>authored<span class="sw t-com"></span>computed<span class="sw t-unk"></span>sealed<span class="sw t-rec"></span>your branch</span>
+          </sc-if>
+        </div>
+        <sc-for list="{{zone.rows}}" as="zr" hint-placeholder-count="4">
+          <div style="display: flex; align-items: center; gap: 10px; min-height: 26px; padding: 0 6px; background: {{zr.bg}}; border-top: 1px solid #C9C9C2">
+            <span class="sw {{zr.sw}}"></span>
+            <span style="width: 170px; flex: none; font-size: 13px; font-weight: 600; font-family: 'Barlow Condensed', sans-serif; letter-spacing: .02em; text-transform: uppercase">{{zr.a}}</span>
+            <span class="mono" style="flex: 1; font-size: 12px; line-height: 1.3">{{zr.b}}</span>
+            <sc-if value="{{how}}" hint-placeholder-val="{{false}}"><span class="mono" style="font-size: 11px; color: #55554F; text-align: right; max-width: 210px; line-height: 1.25">{{zr.c}}</span></sc-if>
+          </div>
+        </sc-for>
+      </sc-if>
+      <sc-if value="{{zone.isOpts}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; align-items: center; height: 22px"><span class="mono" style="font-size: 11px; letter-spacing: .06em; font-weight: 500; color: #C8341A">YOUR CALL &middot; nothing here is the publisher&rsquo;s record &middot; declarations are shown before you choose</span></div>
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <sc-for list="{{opts}}" as="op" hint-placeholder-count="3">
+            <button type="button" class="opt" onClick="{{op.pick}}"><span class="bc" style="width: 250px; flex: none; font-size: 21px; font-weight: 800; text-transform: uppercase; letter-spacing: .01em; white-space: nowrap">{{op.t}}</span><span class="mono" style="font-size: 11px; line-height: 1.3">{{op.d}}</span></button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{zone.isDecl}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; align-items: center; height: 20px"><span class="mono" style="font-size: 11px; letter-spacing: .06em; font-weight: 500; color: #C8341A">YOUR BRANCH DECLARES &middot; {{zone.callName}}</span></div>
+        <sc-for list="{{zone.decl}}" as="dl" hint-placeholder-count="3">
+          <div style="display: flex; align-items: center; gap: 10px; min-height: 22px; border-top: 1px solid #C9C9C2"><span class="sw t-aut" style="border-color: #C8341A"></span><span class="mono" style="font-size: 12px; line-height: 1.25; flex: 1">{{dl}}</span><sc-if value="{{how}}" hint-placeholder-val="{{false}}"><span class="mono" style="font-size: 11px; color: #55554F">AUTHORED · yours</span></sc-if></div>
+        </sc-for>
+        <div class="t-unk" style="display: flex; align-items: center; gap: 10px; min-height: 22px; padding: 0 6px"><span class="mono" style="font-size: 12px">Wins and the rest of the season: sealed for both &mdash; not modeled; you find out by living it.</span></div>
+      </sc-if>
+    </div>
+  </section>
+
+  <!-- BRANCH THREAD -->
+  <section aria-label="Reader branches" style="position: absolute; left: 40px; top: 616px; width: 860px; height: 236px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #0A0A0A; padding-bottom: 3px">
+      <span class="bc" style="font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; white-space: nowrap">Reader branches <span class="mono" style="font-size: 11px; font-weight: 400; letter-spacing: .04em; text-transform: none">&middot; instead of comments &middot; [count from the publisher]</span></span>
+      <sc-if value="{{how}}" hint-placeholder-val="{{false}}"><span class="mono" style="font-size: 11px; color: #C8341A; white-space: nowrap">RECORDED in each reader&rsquo;s own history</span></sc-if>
+    </div>
+    <div class="mono" style="display: flex; gap: 12px; height: 20px; align-items: center; font-size: 11px; color: #55554F"><span style="width: 76px">AUTHOR</span><span style="width: 150px">CALL</span><span style="width: 250px">DECLARED</span><span style="width: 150px">PAYROLL (COMPUTED)</span></div>
+    <sc-for list="{{thread}}" as="tb" hint-placeholder-count="4">
+      <div style="display: flex; gap: 12px; align-items: center; min-height: {{tb.h}}px; box-sizing: border-box; padding: 0 {{tb.pad}}px; margin-bottom: {{tb.mb}}px; border: {{tb.bd}}; box-shadow: {{tb.sh}}; background: {{tb.bg}}">
+        <sc-if value="{{tb.real}}" hint-placeholder-val="{{true}}">
+          <span class="mono" style="width: 76px; flex: none; font-size: 11px; line-height: 1.3; color: {{tb.ink}}">{{tb.who}}</span>
+          <span class="bc" style="width: 150px; flex: none; font-size: 17px; font-weight: 700; line-height: 1.05; text-transform: uppercase; color: {{tb.ink}}">{{tb.call}}</span>
+          <span style="width: 250px; flex: none; font-size: 12px; line-height: 1.28">{{tb.decl}}</span>
+          <span class="mono" style="width: 150px; flex: none; font-size: 12px; line-height: 1.3"><span class="t-com" style="padding: 1px 5px">{{tb.pay}}</span><br><span style="font-size: 11px; color: #55554F">{{tb.vs}}</span></span>
+          <button type="button" class="btn" onClick="{{tb.act}}" style="flex: none; min-height: 36px; font-size: 14px; padding: 0 10px; border-color: {{tb.btnInk}}; color: {{tb.btnFg}}; background: {{tb.btnBg}}">{{tb.btnLab}}</button>
+        </sc-if>
+        <sc-if value="{{tb.isNone}}" hint-placeholder-val="{{false}}"><span class="t-unk" style="flex: 1; padding: 8px 12px; font-size: 13px; line-height: 1.35"><span class="mono" style="font-size: 12px">No branch of yours yet.</span> Take the seat at paragraph 3 and make the call &mdash; it appears here, in its own ink.</span></sc-if>
+      </div>
+    </sc-for>
+  </section>
+
+  <!-- DISTRIBUTION -->
+  <section aria-label="How this Moment travels" style="position: absolute; left: 930px; top: 616px; width: 470px; height: 236px">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0A0A0A; padding-bottom: 3px">
+      <span class="bc" style="font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em">How it travels</span>
+      <span style="display: flex; gap: 0">
+        <button type="button" class="btn" onClick="{{scopeMoment}}" aria-pressed="{{scMomPressed}}" style="min-height: 36px; font-size: 13px; padding: 0 10px; background: {{scMomBg}}; color: {{scMomFg}}">The Moment</button>
+        <button type="button" class="btn" onClick="{{scopeBranch}}" aria-pressed="{{scBrPressed}}" style="min-height: 36px; font-size: 13px; padding: 0 10px; margin-left: -2px; border-color: #C8341A; background: {{scBrBg}}; color: {{scBrFg}}">My branch</button>
+      </span>
+    </div>
+    <div style="display: flex; gap: 8px; margin-top: 8px">
+      <button type="button" class="btn" onClick="{{dShare}}" aria-pressed="{{pressShare}}" style="flex: 1; padding: 0 6px; font-size: 14px; background: {{bgShare}}; color: {{fgShare}}">{{labShare}}</button>
+      <button type="button" class="btn" onClick="{{dEmbed}}" aria-pressed="{{pressEmbed}}" style="flex: 0 0 96px; padding: 0 6px; font-size: 14px; background: {{bgEmbed}}; color: {{fgEmbed}}">Embed</button>
+      <button type="button" class="btn" onClick="{{dWorld}}" aria-pressed="{{pressWorld}}" style="flex: 1.3; padding: 0 6px; font-size: 14px; background: {{bgWorld}}; color: {{fgWorld}}">Continue in a BOW World</button>
+    </div>
+    <div style="margin-top: 8px; box-sizing: border-box; height: 138px; padding: 8px 10px; border: {{dist.bd}}; background: #FAFAF7; overflow: hidden">
+      <span class="mono" style="display: block; font-size: 11px; letter-spacing: .05em; color: {{dist.tc}}; margin-bottom: 4px">{{dist.tag}}</span>
+      <span class="mono" style="display: block; font-size: {{dist.cfs}}px; line-height: 1.4; word-break: break-word">{{dist.code}}</span>
+      <sc-if value="{{dist.emb}}" hint-placeholder-val="{{false}}">
+        <div style="margin-top: 6px; box-sizing: border-box; padding: 5px 9px 6px; border: 3px solid #C8341A; box-shadow: inset 0 0 0 2px #FFFFFF, inset 0 0 0 3px #C8341A; background: #FFFFFF">
+          <span class="mono" style="display: block; font-size: 11px; line-height: 15px; font-weight: 500; color: #C8341A">{{dist.embHead}}</span>
+          <span class="bc" style="display: block; font-size: 19px; font-weight: 800; line-height: 1.1; text-transform: uppercase">{{dist.embCall}}</span>
+          <span class="mono" style="display: block; font-size: 11px; line-height: 15px; color: #55554F">{{dist.embLine}}</span>
+        </div>
+      </sc-if>
+      <span style="display: block; margin-top: 5px; font-size: 12px; line-height: 1.38">{{dist.text}}</span>
+    </div>
+  </section>
+
+  <div class="mono" style="position: absolute; left: 40px; bottom: 9px; width: 660px; font-size: 11px; line-height: 1.4; color: #55554F">COMMERCIAL LENS &middot; Hypothesis: publishers license executable Moments per story (or per season); readers enter free; reader branches are the publisher&rsquo;s engagement and distribution engine.</div>
+  <div class="mono" style="position: absolute; right: 40px; bottom: 9px; width: 660px; text-align: right; font-size: 11px; line-height: 1.4; color: #55554F">PROTOTYPE &middot; DESIGN PROPOSAL &middot; salaries approx. and 2025&ndash;26 lines as reported, verify &middot; start payroll, returns and other readers&rsquo; branches are authored placeholders</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const p = s.p || 0;
+    const seat = !!s.seat;
+    const call = s.call || null;
+    const fork = (s.fork == null) ? null : s.fork;
+    const pub = !!s.pub;
+    const how = !!s.how;
+    const read = !!s.read;
+    const dist = s.dist || null;
+    const scope = s.scope || 'moment';
+    const BR = '#C8341A', INK = '#0A0A0A';
+
+    const LN = { cap: 154.6, tax: 187.9, a1: 195.9, a2: 207.8 };
+    const HOL = 32.4, POR = 30.7, P0 = 219.0, SIM = 27.0, NIA = 8.0;
+    const REST = Math.round((P0 - HOL - POR) * 10) / 10;
+    const K = 700 / 225;
+    const f1 = (v) => (Math.round(v * 10) / 10).toFixed(1);
+    const money = (v) => '$' + f1(v) + 'M';
+    const RATES = [1.5, 1.75, 2.5, 3.25, 3.75, 4.25, 4.75];
+    const taxBill = (over) => {
+      let left = over, tot = 0, i = 0;
+      while (left > 0.0001) { const r = i < RATES.length ? RATES[i] : RATES[RATES.length - 1] + 0.5 * (i - RATES.length + 1); const a = Math.min(5, left); tot += a * r; left -= a; i++; }
+      return tot;
+    };
+    const vs = (pay, line) => { const d = Math.round((pay - line) * 10) / 10; return d > 0 ? 'over ' + f1(d) : 'under ' + f1(-d); };
+    const ST = { start: { hol: 1, por: 1, sim: 0, nia: 0 }, both: { hol: 0, por: 0, sim: 1, nia: 1 } };
+    const payOf = (st) => REST + st.hol * HOL + st.por * POR + st.sim * SIM + st.nia * NIA;
+    const CALLS = {
+      holiday: { t: 'Trade Holiday', st: { hol: 0, por: 1, sim: 1, nia: 0 }, d: ['Portland sends back Simons [approx. $27M, authored]: declared', 'Portland says yes: declared, no other team was asked', 'Start payroll [$219.0M]: authored placeholder'] },
+      porz: { t: 'Trade Porziņģis only', st: { hol: 1, por: 0, sim: 0, nia: 1 }, d: ['Atlanta sends back Niang [approx. $8M, authored]: declared', 'Atlanta says yes: declared, no other team was asked', 'Start payroll [$219.0M]: authored placeholder'] },
+      keep: { t: 'Pay the tax, keep both', st: ST.start, d: ['No partner is needed: nothing leaves the sheet', 'The owner pays the bill as computed: declared', 'Start payroll [$219.0M]: authored placeholder'] },
+      portz: { t: 'Portland takes Porziņģis instead', st: { hol: 1, por: 0, sim: 1, nia: 0 }, d: ['Portland sends back Simons [approx. $27M, authored]: declared', 'Holiday stays in Boston: declared', 'Start payroll [$219.0M]: authored placeholder'] }
+    };
+    const OTH = [
+      { call: 'porz', decl: 'Atlanta sends back Niang [approx. $8M]: declared. Holiday stays: declared.' },
+      { call: 'portz', decl: 'Portland takes Porziņģis instead: declared. Simons [approx. $27M] comes back: declared.' },
+      { call: 'keep', decl: 'No partner needed. The owner pays the bill: declared.' }
+    ];
+    const seg = (st, branch) => {
+      const vals = [REST, st.hol * HOL, st.por * POR, st.sim * SIM, st.nia * NIA];
+      const txt = ['REST OF ROSTER · [authored]', 'HOLIDAY 32.4', 'PORZIŅĢIS', 'SIMONS', ''];
+      const kind = ['aut', 'obs', 'obs', 'aut', 'aut'];
+      const ink = branch ? BR : INK;
+      let x = 0;
+      return vals.map((v, i) => {
+        const w = Math.round(v * K * 10) / 10; const o = { l: Math.round(x * 10) / 10, w: w, op: v > 0 ? 1 : 0, txt: txt[i],
+
+          bg: kind[i] === 'obs' ? INK : '#FFFFFF', fg: kind[i] === 'obs' ? '#FFFFFF' : ink, bd: kind[i] === 'obs' ? INK : ink };
+        x += w; return o;
+      });
+    };
+    const afterState = p >= 3 ? ST.both : ST.start;
+    const recState = ST.both;
+    const callDef = call ? CALLS[call] : null;
+    const twoBars = seat && !!call;
+    const preCall = seat && !call;
+
+    /* bars */
+    const bars = [
+      { show: true, y: 104, ty: 86, title: seat ? 'THE SHEET THIS MORNING · illustrative · start $219.0M authored' : (p >= 3 ? 'THE RECORD’S MOVES · on an illustrative start · start $219.0M authored' : 'EARLY JUNE · illustrative · start $219.0M authored'), tc: '#55554F', framed: false, sealed: false, segs: seg(seat ? ST.start : afterState, false) },
+      { show: false, y: 170, ty: 154, title: '', tc: '#55554F', framed: false, sealed: false, segs: seg(ST.start, false) }
+    ];
+    if (twoBars) {
+      bars[0] = { show: true, y: 104, ty: 84, title: 'YOUR BRANCH · diverged the morning before the call · ' + (pub ? 'published' : 'unpublished'), tc: BR, framed: true, sealed: false, segs: seg(callDef.st, true) };
+      bars[1] = { show: true, y: 170, ty: 154, title: how ? 'THE RECORD’S MOVES · OBSERVED, untouched · start $219.0M authored' : 'THE RECORD’S MOVES · on an illustrative start · start $219.0M authored', tc: '#55554F', framed: false, sealed: false, segs: seg(recState, false) };
+    }
+    const lineBottom = twoBars ? 214 : 150;
+    const vdefs = [['cap', 'CAP', 2], ['tax', 'TAX', 2], ['a1', '1ST APRON', 1], ['a2', '2ND APRON', 0]];
+    const vlines = [], vpieces = [];
+    /* apron/tax guide lines: cross a bar as two short ticks only where the bar actually reaches the line;
+       beyond the end of a bar the line runs unbroken, so no tick is left floating beside nothing */
+    const barEnds = bars.filter((b) => b.show).map((b) => ({ y: b.y, end: 20 + b.segs.reduce((m, g) => Math.max(m, g.op ? g.l + g.w : 0), 0) }));
+    vdefs.forEach((d) => {
+      const x = Math.round(20 + LN[d[0]] * K);
+      const ty = 36 + d[2] * 16;
+      const hot = (p === 1 && d[0] === 'a2' && !seat);
+      const w = hot ? 4 : 2, xx = x - w / 2;
+      vlines.push({ lx: x - 138, ly: ty, lab: d[1] + ' ≈$' + f1(LN[d[0]]) + 'M' });
+      const piece = (a, b) => { if (b > a) vpieces.push({ x: xx, w: w, top: a, h: b - a }); };
+      let cur = ty + 7;
+      barEnds.forEach((b) => {
+        if (x < b.end) { piece(cur, b.y + 6); piece(b.y + 32, b.y + 38); cur = b.y + 38; }
+      });
+      piece(cur, lineBottom);
+    });
+
+    const segLabs = [];
+    bars.forEach((b) => { const g = b.segs[4]; if (b.show && g && g.op) segLabs.push({ x: Math.round((20 + g.l + g.w + 5) * 10) / 10, y: b.y + 5, t: 'NIANG ≈8 [authored]', c: b.framed ? BR : INK }); });
+
+    /* table */
+    const row = (lab, st, ink, sw) => {
+      const pay = payOf(st);
+      return { real: true, sealed: false, lab: lab, ink: ink, sw: sw, pay: money(pay), d0: vs(pay, LN.tax), d1: vs(pay, LN.a1), d2: vs(pay, LN.a2), tax: pay > LN.tax ? money(taxBill(pay - LN.tax)) : 'none' };
+    };
+    let rows;
+    if (twoBars) rows = [row('YOUR BRANCH', callDef.st, BR, 't-rec'), row('THE RECORD', recState, INK, 't-aut')];
+    else if (preCall) rows = [row('THIS MORNING', ST.start, INK, 't-aut'), { real: false, sealed: true }];
+    else rows = [row(p >= 3 ? 'AFTER THE DEALS' : 'EARLY JUNE', afterState, INK, 't-aut')];
+    const tbl = { top: twoBars ? 218 : 158, rows: rows };
+    const tblH = 18 + 26 * rows.length + 34;
+    const zoneTop = tbl.top + tblH + 6;
+
+    /* zone rows */
+    const finalPay = payOf(ST.both), delta = P0 - finalPay;
+    const ZR = [
+      [
+        { sw: 't-obs', a: 'Jrue Holiday', b: '≈ $32.4M · 2025–26', c: 'OBSERVED · approx., verify' },
+        { sw: 't-obs', a: 'Kristaps Porziņģis', b: '≈ $30.7M · 2025–26', c: 'OBSERVED · approx., verify' },
+        { sw: 't-aut', a: 'Start payroll', b: '[$219.0M] illustrative, authored placeholder', c: 'AUTHORED · replace from the Reality feed' },
+        { sw: 't-com', a: 'Everything else', b: money(REST) + ' = start payroll minus the two', c: 'COMPUTED from an authored start' }
+      ],
+      [
+        { sw: 't-obs', a: 'Tax line', b: '$187.9M · pay tax on every dollar over', c: 'line OBSERVED (reported) · rule simplified' },
+        { sw: 't-obs', a: '1st apron', b: '$195.9M · salary matching gets tighter', c: 'simplified · verify', bg: '#FFFFFF' },
+        { sw: 't-obs', a: '2nd apron', b: '$207.8M · cannot combine salaries; cannot take back more than sent', c: 'simplified · verify', bg: '#F0F0EA' },
+        { sw: 't-aut', a: 'This sheet', b: 'sits ' + money(payOf(ST.start) - LN.a2) + ' over the 2nd apron', c: 'COMPUTED · start payroll authored' }
+      ],
+      [
+        { sw: 't-aut', a: 'Which salary can go?', b: 'Holiday ≈$32.4M or Porziņģis ≈$30.7M, or neither', c: 'the reporter’s framing · AUTHORED' },
+        { sw: 't-unk', a: 'What comes back?', b: 'not known to the desk until a partner answers', c: 'UNKNOWN at that moment · not filled in' },
+        { sw: 't-aut', a: 'The door', b: 'stand in that morning; the ending stays sealed until you call', c: 'sealed hindsight' }
+      ],
+      [
+        { sw: 't-obs', a: 'Out · Holiday', b: '− $32.4M → Portland', c: 'OBSERVED · NBA.com / Hoops Rumors, verify' },
+        { sw: 't-obs', a: 'Out · Porziņģis', b: '− $30.7M → Atlanta (three-team deal)', c: 'OBSERVED · verify' },
+        { sw: 't-aut', a: 'In · Portland', b: 'Simons [≈$27M] + two second-round picks', c: 'names observed · salary AUTHORED' },
+        { sw: 't-aut', a: 'In · Atlanta', b: 'Niang [≈$8M] + 2031 second (sent a 2026 second)', c: 'names observed · salary AUTHORED' }
+      ],
+      [
+        { sw: 't-com', a: 'Salary cut', b: '− ' + money(delta) + ' (two out ' + money(HOL + POR) + ', two in ' + money(SIM + NIA) + ')', c: 'COMPUTED · the two returning salaries are AUTHORED' },
+        { sw: 't-aut', a: 'Tax, simplified', b: money(taxBill(finalPay - LN.tax)) + ' on ' + money(finalPay - LN.tax) + ' over the line', c: 'illustrative, authored · rides on the start payroll' },
+        { sw: 't-unk', a: 'What it did on the floor', b: 'sealed: you find out by living it. The sheet does not model wins.', c: 'unmodeled future · not hatched' }
+      ]
+    ];
+    const ZT = ['TWO SALARIES ON THE SHEET', 'WHAT EACH LINE DOES · simplified, verify', 'THE OPEN QUESTION', 'WHAT MOVED', 'WHAT THE SHEET CAN’T SAY'];
+    const zone = { top: zoneTop, isRows: !seat, isOpts: preCall, isDecl: twoBars, title: ZT[p],
+      rows: ZR[p].map((r) => ({ sw: r.sw, a: r.a, b: r.b, c: r.c, bg: r.bg || '#FFFFFF' })),
+      callName: callDef ? callDef.t.toUpperCase() + (fork != null ? ' · forked from [reader]' : '') : '', decl: callDef ? callDef.d : [] };
+
+    const pick = (k) => () => this.setState({ call: k, fork: null, pub: false, seat: true, read: true });
+    const opts = [
+      { t: 'Trade Holiday', d: 'Holiday out ≈$32.4M · declares: Portland sends back Simons [≈$27M, authored]', pick: pick('holiday') },
+      { t: 'Trade Porziņģis', d: 'Porziņģis out ≈$30.7M · declares: Atlanta sends back Niang [≈$8M, authored]', pick: pick('porz') },
+      { t: 'Pay the tax, keep both', d: 'Nothing leaves · declares: the owner pays the bill as computed', pick: pick('keep') }
+    ];
+
+    /* paragraphs */
+    const sealed = !read && !call;
+    const T = [
+      'Boston began the summer paying two players ≈$63.1M: Jrue Holiday (≈$32.4M) and Kristaps Porziņģis (≈$30.7M). With the rest of the roster, payroll sat past every line the league draws.',
+      'The line that mattered was the second apron, ≈$207.8M. It is not just a bigger tax: over it, a team cannot combine salaries in a trade or take back more money than it sends (simplified, verify).',
+      'So the question was never whether Holiday could still play. It was which salary could leave, and what could come back. The capologist had one morning before the calls started.',
+      'Holiday went to Portland for Anfernee Simons and two second-round picks. Porziņģis went to Atlanta in a three-team deal; Boston took back Georges Niang and a 2031 second, and sent a 2026 second.',
+      'The two deals cut ' + money(delta) + ' of salary. Where that left Boston against the tax line depends on the rest of the roster; the sheet’s starting payroll is illustrative.'
+    ];
+
+    const paras = T.map((t, i) => {
+      const cur = !seat && i === p;
+      const sl = sealed && i === 3;
+      const dim = seat && !sl;
+      return { n: i + 1, text: t, cur: cur ? 'step' : 'false', bw: cur ? 3 : 1.5, fw: cur ? 500 : 400,
+        op: dim ? 0.56 : 1, fg: (cur || seat) ? INK : '#5B5B54', sealed: sl, open: !(sealed && i >= 3), rowShow: !(sealed && i === 4), door: i === 2, note: cur && how,
+        go: () => this.setState({ p: i, seat: false }) };
+    });
+
+    /* thread */
+    const brName = 'bow://branches/[reader]/apron-summer-2025@p3';
+    const thread = [];
+    const SH = 'inset 0 1px 0 #C9C9C2';
+    if (!call) thread.push({ real: false, isNone: true, h: 46, pad: 0, mb: 6, bd: '0 solid transparent', sh: 'none', bg: '#FFFFFF' });
+    else {
+      const pay = payOf(callDef.st);
+      thread.push({ real: true, isNone: false, h: 62, pad: 8, mb: 6, bd: '2px solid ' + BR, sh: 'inset 0 0 0 1px #FFFFFF, inset 0 0 0 2px ' + BR, bg: '#FFFFFF', ink: BR,
+        who: pub ? 'You · published' : 'You · unpublished', call: callDef.t,
+        decl: (fork != null ? 'Forked from [reader]’s branch; declarations inherited.' : callDef.d[0] + '.') + ' Diverged: the morning before the call.',
+        pay: money(pay), vs: '2nd apron: ' + vs(pay, LN.a2),
+        act: () => this.setState({ pub: true }), btnLab: pub ? 'Published' : 'Publish your branch', btnInk: BR, btnFg: pub ? '#FFFFFF' : BR, btnBg: pub ? BR : '#FFFFFF' });
+    }
+    OTH.forEach((o, i) => {
+      const c = CALLS[o.call]; const pay = payOf(c.st);
+      thread.push({ real: true, isNone: false, h: 40, pad: 4, mb: 0, bd: '0 solid transparent', sh: SH, bg: '#FFFFFF', ink: INK, who: '[reader]', call: c.t, decl: o.decl, pay: money(pay), vs: '2nd apron: ' + vs(pay, LN.a2),
+        act: () => this.setState({ call: o.call, fork: i, pub: false, seat: true, p: 2, read: true }), btnLab: 'Fork this branch', btnInk: INK, btnFg: INK, btnBg: '#FFFFFF' });
+    });
+
+    /* address */
+    const addr = !seat ? 'bow://moments/apron-summer-2025 · reading · paragraph ' + (p + 1) + ' of 5 · as: reader'
+      : !call ? 'bow://moments/apron-summer-2025#seat · as: capologist · the morning before the call · branch: none yet'
+      : pub ? brName + ' · published branch · by you'
+      : 'bow://moments/apron-summer-2025#seat · branch: unpublished · diverged the morning before the call';
+
+    /* distribution */
+    let dEmb = false, dCfs = 12, dEmbHead = '', dEmbCall = '', dEmbLine = '';
+    let dTag = 'NOTHING IS SENT FROM HERE', dCode = 'Pick one to see what would travel.', dText = 'A Moment leaves this page with its byline, date, sources and its sealed ending attached. Reading and entering the door are free.', dBd = '1px solid #0A0A0A', dTc = '#55554F';
+    const noBr = scope === 'branch' && !call;
+    const unpub = scope === 'branch' && call && !pub;
+    const refuse = (rule) => { dTag = 'REFUSED · ' + rule; dTc = BR; dBd = '2px solid ' + BR; };
+    if (dist === 'share') {
+      dTag = scope === 'branch' ? 'ADDRESS OF YOUR BRANCH' : 'ADDRESS OF THE MOMENT';
+      dCode = scope === 'branch' ? brName : 'bow://moments/apron-summer-2025#door=3';
+      dText = scope === 'branch' ? 'Opens as a branch beside the record, never on top of it. Author, call and declarations travel with it.' : 'Opens at paragraph 3’s door. Free, no login. Byline, publisher and date travel with the address.';
+      if (noBr) { refuse('rule: a branch exists once you make the call'); dCode = 'No address: you have no branch yet.'; dText = 'Take the seat at paragraph 3 and make the call first.'; }
+      else if (unpub) { refuse('rule: a branch is shareable only once published'); dCode = 'No address yet.'; dText = 'The address carries the author, the call and the declarations, so it is made when you publish.'; }
+    } else if (dist === 'embed') {
+      dTag = scope === 'branch' ? 'EMBED · YOUR BRANCH' : 'EMBED · THE MOMENT';
+      dCode = scope === 'branch' ? '<bow-branch by="[reader]" of="apron-summer-2025" diverged="p3">' : '<bow-moment src="bow://moments/apron-summer-2025" by="[staff writer]" pub="[publisher]" dated="2025-06" sources="[list]" sealed>';
+      dText = 'The embed carries its provenance. Strip the byline, date or sources and it does not render (rule: a Moment travels with its provenance).';
+      if (scope === 'branch' && call && pub) {
+        dEmb = true; dCfs = 11;
+        dText = '';
+        dEmbHead = '[reader]’s branch · not the publisher’s record';
+        dEmbCall = callDef.t;
+        dEmbLine = 'diverged p3 · declares 3 · renders beside the record';
+      }
+      if (noBr) { refuse('rule: a branch exists once you make the call'); dCode = 'Nothing to embed yet.'; dText = 'Make the call at paragraph 3 first.'; }
+      else if (unpub) { refuse('rule: an embed needs an address, and a branch gets one when published'); dCode = 'Nothing to embed yet.'; dText = 'Publish your branch, then the embed line exists.'; }
+    } else if (dist === 'world') {
+      dTag = 'HAND-OFF · CONTINUE IN A BOW WORLD';
+      dCode = scope === 'branch' ? 'Boston · Year Zero = late Jun 2025 + your call as its first act' : 'Boston · Year Zero = late Jun 2025, no call yet';
+      dText = 'Free to enter the door; a persistent World is a separate step, terms [set by the platform]. World rule: flat 1.5× tax (authored) — the NBA’s real tax is incremental, so the World’s bill will not match this sheet.';
+      if (noBr) { refuse('rule: a World seeds from a state, and a branch is a state you made'); dCode = 'Choose “The Moment” to seed from the story’s state.'; dText = 'Or make a call first, then continue from your branch.'; }
+    }
+    const btn = (k) => ({ on: dist === k });
+
+    return {
+      how, howPressed: how ? 'true' : 'false', howBg: how ? INK : '#FFFFFF', howFg: how ? '#FFFFFF' : INK,
+      toggleHow: () => this.setState({ how: !how }),
+      address: addr, paras, seat, notSeat: !seat, hasCall: !!call,
+      prev: () => this.setState({ p: Math.max(0, p - 1) }),
+      next: () => { const lim = sealed ? 2 : 4; if (p < lim) this.setState({ p: p + 1 }); },
+      readSealed: () => this.setState({ read: true, p: seat ? p : 3 }),
+      nextOff: (sealed && p >= 2) ? 'true' : 'false', nextOp: (sealed && p >= 2) ? 0.45 : 1,
+      navHint: sealed ? (p >= 2 ? '4–5 are sealed · read them or take the seat' : 'or pick a number · the sheet follows') : 'or pick a number · the sheet follows',
+      enterSeat: () => this.setState({ seat: true, p: 2 }),
+      leaveSeat: () => this.setState({ seat: false, p: call ? 3 : 2 }),
+      changeCall: () => this.setState({ call: null, fork: null, pub: false }),
+      spine: {
+        bw: seat ? 3 : 1, bc: seat ? BR : INK, hbg: seat ? BR : '#FFFFFF', hfg: seat ? '#FFFFFF' : INK,
+        head: !seat ? 'SYSTEM SPINE · Boston 2025–26 cap sheet · as paragraph ' + (p + 1) + ' describes it' : (!call ? (read ? 'IN THE SEAT · You know what Boston did. The sheet doesn’t know what you’ll do.' : 'IN THE SEAT · capologist · the morning before the call · your act is not the record') : 'YOUR BRANCH · the record sits beside it, unchanged')
+      },
+      vlines, vpieces, segLabs, bars, tbl, zone, opts,
+      thread,
+      scope, scMomPressed: scope === 'moment' ? 'true' : 'false', scMomBg: scope === 'moment' ? INK : '#FFFFFF', scMomFg: scope === 'moment' ? '#FFFFFF' : INK,
+      scBrPressed: scope === 'branch' ? 'true' : 'false', scBrBg: scope === 'branch' ? BR : '#FFFFFF', scBrFg: scope === 'branch' ? '#FFFFFF' : BR,
+      scopeMoment: () => this.setState({ scope: 'moment' }), scopeBranch: () => this.setState({ scope: 'branch' }),
+      labShare: scope === 'branch' ? 'Share my branch' : 'Share this Moment',
+      dShare: () => this.setState({ dist: 'share' }), dEmbed: () => this.setState({ dist: 'embed' }), dWorld: () => this.setState({ dist: 'world' }),
+      pressShare: btn('share').on ? 'true' : 'false', pressEmbed: btn('embed').on ? 'true' : 'false', pressWorld: btn('world').on ? 'true' : 'false',
+      bgShare: dist === 'share' ? INK : '#FFFFFF', fgShare: dist === 'share' ? '#FFFFFF' : INK,
+      bgEmbed: dist === 'embed' ? INK : '#FFFFFF', fgEmbed: dist === 'embed' ? '#FFFFFF' : INK,
+      bgWorld: dist === 'world' ? INK : '#FFFFFF', fgWorld: dist === 'world' ? '#FFFFFF' : INK,
+      dist: { tag: dTag, code: dCode, text: dText, bd: dBd, tc: dTc, cfs: dCfs, emb: dEmb, embHead: dEmbHead, embCall: dEmbCall, embLine: dEmbLine }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -26,6 +26,9 @@ a{color:#111}
 .t-com{background:#B9B4A4;border:1px solid #111;box-sizing:border-box}
 .t-unk{background:transparent;border:2px dashed #111;box-sizing:border-box}
 .sw{display:inline-block;width:14px;height:14px;flex:none;box-sizing:border-box}
+@keyframes push{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.pushing{animation:push 1.1s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.pushing{animation:none}}
 </style>
 </helmet>
 <div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F6F4EE; color: #111; font-family: 'Source Serif 4', serif">
@@ -46,6 +49,8 @@ a{color:#111}
     <!-- payroll axis -->
     <path d="{{g.axis}}" fill="none" stroke="#111" stroke-width="4"></path>
     <path d="{{g.ticks}}" fill="none" stroke="#111" stroke-width="3"></path>
+    <!-- your room under the cap: a bar that shrinks as you spend it -->
+    <rect x="264" y="{{p.roomTop}}" width="7" height="{{p.roomH}}" fill="#007A33" stroke="#111" stroke-width="1.5"></rect>
 
     <!-- five hairlines -->
     <line x1="112" y1="{{y.a2}}" x2="1040" y2="{{y.a2}}" stroke="#E4572E" stroke-width="1.5" opacity=".55"></line>
@@ -65,25 +70,27 @@ a{color:#111}
     <rect x="640" y="{{g.rackEnd}}" width="10" height="28" fill="#E4572E" stroke="#111" stroke-width="2"></rect>
     <path d="{{g.hooks}}" fill="none" stroke="#111" stroke-width="3"></path>
     <g style="transform: translate({{t0.x}}px, {{t0.y}}px) rotate({{t0.r}}deg); transform-origin: {{t0.ox}}px {{t0.oy}}px; opacity: {{t0.o}}">
-      <rect x="293" y="{{t0.top}}" width="104" height="40" rx="5" fill="#F6F4EE" stroke="#111" stroke-width="2.5"></rect>
-      <circle cx="345" cy="{{t0.hole}}" r="3" fill="#111"></circle>
-      <path d="{{t0.icon}}" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
-      <text x="327" y="{{t0.l1}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="#111">sign-and-</text>
-      <text x="327" y="{{t0.l2}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="#111">trade</text>
+      <rect x="282" y="{{t0.top}}" width="118" height="42" rx="5" fill="#F6F4EE" stroke="#111" stroke-width="2.5"></rect>
+      <circle cx="341" cy="{{t0.hole}}" r="3" fill="#111"></circle>
+      <text x="341" y="{{t0.l1}}" text-anchor="middle" style="font-family: 'Source Serif 4', serif; font-size: 12px; font-weight: 600" fill="#111">big exception</text>
+      <text x="341" y="{{t0.l2}}" text-anchor="middle" style="font-family: 'Source Serif 4', serif; font-size: 12px; font-weight: 600" fill="#111">non-taxpayer MLE</text>
     </g>
     <g style="transform: translate({{t1.x}}px, {{t1.y}}px) rotate({{t1.r}}deg); transform-origin: {{t1.ox}}px {{t1.oy}}px; opacity: {{t1.o}}">
-      <rect x="413" y="{{t1.top}}" width="104" height="40" rx="5" fill="#F6F4EE" stroke="#111" stroke-width="2.5"></rect>
+      <rect x="406" y="{{t1.top}}" width="118" height="42" rx="5" fill="#F6F4EE" stroke="#111" stroke-width="2.5"></rect>
       <circle cx="465" cy="{{t1.hole}}" r="3" fill="#111"></circle>
-      <path d="{{t1.icon}}" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
-      <text x="447" y="{{t1.l1}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="#111">taxpayer</text>
-      <text x="447" y="{{t1.l2}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="#111">MLE</text>
+      <text x="465" y="{{t1.l1}}" text-anchor="middle" style="font-family: 'Source Serif 4', serif; font-size: 12px; font-weight: 600" fill="#111">sign-and-trade</text>
+      <text x="465" y="{{t1.l2}}" text-anchor="middle" style="font-family: 'Source Serif 4', serif; font-size: 12px; font-weight: 600" fill="#111">taking a player in</text>
     </g>
     <g style="transform: translate({{t2.x}}px, {{t2.y}}px) rotate({{t2.r}}deg); transform-origin: {{t2.ox}}px {{t2.oy}}px; opacity: {{t2.o}}">
-      <rect x="533" y="{{t2.top}}" width="104" height="40" rx="5" fill="#F6F4EE" stroke="#111" stroke-width="2.5"></rect>
-      <circle cx="585" cy="{{t2.hole}}" r="3" fill="#111"></circle>
-      <path d="{{t2.icon}}" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
-      <text x="567" y="{{t2.l1}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="#111">bigger</text>
-      <text x="567" y="{{t2.l2}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="#111">trades</text>
+      <rect x="530" y="{{t2.top}}" width="118" height="42" rx="5" fill="#F6F4EE" stroke="#111" stroke-width="2.5"></rect>
+      <circle cx="589" cy="{{t2.hole}}" r="3" fill="#111"></circle>
+      <text x="589" y="{{t2.l1}}" text-anchor="middle" style="font-family: 'Source Serif 4', serif; font-size: 12px; font-weight: 600" fill="#111">every-other-year</text>
+      <text x="589" y="{{t2.l2}}" text-anchor="middle" style="font-family: 'Source Serif 4', serif; font-size: 12px; font-weight: 600" fill="#111">exception</text>
+    </g>
+    <!-- YOUR WALL (first apron), only after the big exception is used -->
+    <g style="transform: translate(0px, {{w1.dy}}px); opacity: {{w1.op}}">
+      <rect x="280" y="{{w1.top}}" width="370" height="36" fill="#111" stroke="#111" stroke-width="3"></rect>
+      <path d="{{w1.bricks}}" fill="none" stroke="#F6F4EE" stroke-width="2"></path>
     </g>
 
     <!-- METER (tax line): starts running, coin slot, tally -->
@@ -95,14 +102,18 @@ a{color:#111}
     <circle cx="314" cy="{{m.dialY}}" r="4" fill="#111"></circle>
     <rect x="352" y="{{m.dispTop}}" width="140" height="30" fill="#111"></rect>
     <circle cx="510" cy="{{m.lampY}}" r="7" fill="{{m.lamp}}" stroke="#111" stroke-width="2.5"></circle>
-    <rect x="352" y="{{m.cellTop}}" width="32" height="16" fill="{{m.c0}}" stroke="#111" stroke-width="2"></rect>
-    <rect x="388" y="{{m.cellTop}}" width="32" height="16" fill="{{m.c1}}" stroke="#111" stroke-width="2"></rect>
-    <rect x="424" y="{{m.cellTop}}" width="32" height="16" fill="{{m.c2}}" stroke="#111" stroke-width="2"></rect>
-    <rect x="460" y="{{m.cellTop}}" width="32" height="16" fill="{{m.c3}}" stroke="#111" stroke-width="2"></rect>
-    <text x="368" y="{{m.cellText}}" text-anchor="middle" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="{{m.t0}}">1.50</text>
-    <text x="404" y="{{m.cellText}}" text-anchor="middle" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="{{m.t1}}">1.75</text>
-    <text x="440" y="{{m.cellText}}" text-anchor="middle" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="{{m.t2}}">2.50</text>
-    <text x="476" y="{{m.cellText}}" text-anchor="middle" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="{{m.t3}}">3.25</text>
+    <rect x="352" y="{{m.cellTop}}" width="28" height="16" fill="{{m.c0}}" stroke="#111" stroke-width="2"></rect>
+    <rect x="383" y="{{m.cellTop}}" width="28" height="16" fill="{{m.c1}}" stroke="#111" stroke-width="2"></rect>
+    <rect x="414" y="{{m.cellTop}}" width="28" height="16" fill="{{m.c2}}" stroke="#111" stroke-width="2"></rect>
+    <rect x="445" y="{{m.cellTop}}" width="28" height="16" fill="{{m.c3}}" stroke="#111" stroke-width="2"></rect>
+    <rect x="476" y="{{m.cellTop}}" width="28" height="16" fill="{{m.c4}}" stroke="#111" stroke-width="2"></rect>
+    <rect x="507" y="{{m.cellTop}}" width="28" height="16" fill="{{m.c5}}" stroke="#111" stroke-width="2"></rect>
+    <text x="366" y="{{m.cellText}}" text-anchor="middle" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="{{m.t0}}">1.50</text>
+    <text x="397" y="{{m.cellText}}" text-anchor="middle" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="{{m.t1}}">1.75</text>
+    <text x="428" y="{{m.cellText}}" text-anchor="middle" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="{{m.t2}}">2.50</text>
+    <text x="459" y="{{m.cellText}}" text-anchor="middle" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="{{m.t3}}">3.25</text>
+    <text x="490" y="{{m.cellText}}" text-anchor="middle" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="{{m.t4}}">3.75</text>
+    <text x="521" y="{{m.cellText}}" text-anchor="middle" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600" fill="{{m.t5}}">4.25</text>
     <rect x="566" y="{{m.slotTop}}" width="7" height="26" fill="#111"></rect>
     <circle cx="{{m.coinX}}" cy="{{m.coinY}}" r="9" fill="#E4572E" stroke="#111" stroke-width="2.5" opacity="{{m.coinOp}}"></circle>
     <rect x="612" y="{{m.bodyTop}}" width="100" height="64" fill="#F6F4EE" stroke="#111" stroke-width="3"></rect>
@@ -113,7 +124,7 @@ a{color:#111}
     <rect x="554" y="{{g.postTop}}" width="12" height="44" fill="#111"></rect>
     <circle cx="340" cy="{{g.postTop}}" r="8" fill="#E4572E" stroke="#111" stroke-width="2.5"></circle>
     <circle cx="560" cy="{{g.postTop}}" r="8" fill="#E4572E" stroke="#111" stroke-width="2.5"></circle>
-    <rect x="352" y="{{g.armTop}}" width="200" height="12" fill="#E4572E" stroke="#111" stroke-width="2.5" style="transform: rotate({{g.gateRot}}deg); transform-origin: 352px {{y.cap}}px"></rect>
+    <rect x="352" y="{{g.armTop}}" width="200" height="12" fill="#E4572E" stroke="#111" stroke-width="2.5" style="transform: scaleX({{g.gateSc}}); transform-origin: 352px {{y.cap}}px"></rect>
     <rect x="286" y="{{g.doorTop}}" width="40" height="44" fill="#F6F4EE" stroke="#111" stroke-width="3"></rect>
     <polygon points="{{g.doorL}}" fill="#E7E2D3" stroke="#111" stroke-width="2.5"></polygon>
     <circle cx="318" cy="{{g.knob}}" r="3" fill="#111"></circle>
@@ -125,7 +136,7 @@ a{color:#111}
 
     <!-- FLOOR (minimum team salary): a plate pushing up -->
     <rect x="280" y="{{y.floor}}" width="370" height="15" fill="#E4572E" stroke="#111" stroke-width="3"></rect>
-    <path d="{{g.arrows}}" fill="#E4572E" stroke="#111" stroke-width="2.5" stroke-linejoin="round" opacity="{{g.arrowOp}}"></path>
+    <path class="{{g.arrowCls}}" d="{{g.arrows}}" fill="#E4572E" stroke="#111" stroke-width="2.5" stroke-linejoin="round" opacity="{{g.arrowOp}}"></path>
 
     <!-- your desk / another desk -->
     <polygon points="{{p.ghostPts}}" fill="none" stroke="#007A33" stroke-width="2.5" stroke-dasharray="5 4" opacity="{{p.ghostOp}}"></polygon>
@@ -139,8 +150,8 @@ a{color:#111}
     <span class="ab" style="font-size: 27px; line-height: 1; letter-spacing: .01em">M1 · THE CAP</span>
     <span class="mono" style="font-size: 12px; font-weight: 500; letter-spacing: .05em">BOW ECONOMICS · TRACK 101 · GRADES 5–6 · A CHAPTER IS A ROUTE THROUGH ONE LEAGUE-YEAR</span>
     <span style="flex: 1"></span>
-    <button type="button" class="btn sm" onClick="{{replay}}">Replay July</button>
-    <button type="button" class="btn sm" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+    <button type="button" class="btn sm" onClick="{{replay}}" style="min-height: 36px">Replay July</button>
+    <button type="button" class="btn sm" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="min-height: 36px; background: {{howBg}}; color: {{howFg}}">How do we know?</button>
   </div>
 
   <!-- ROUTE: stop tickets -->
@@ -148,12 +159,12 @@ a{color:#111}
     <span class="ab" style="font-size: 21px">JUL · THE WINDOW</span>
     <span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em; padding: 3px 8px; border: 2px solid #F6F4EE">{{route.julTag}}</span>
   </div>
-  <div style="position: absolute; left: 900px; top: 52px; height: 40px; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 14px; border: {{route.decBorder}}; background: {{route.decBg}}">
-    <span class="ab" style="font-size: 21px; color: {{route.decFg}}">DEC · THE SEASON</span>
+  <div style="position: absolute; left: 790px; top: 52px; height: 40px; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 12px; white-space: nowrap; border: {{route.decBorder}}; background: {{route.decBg}}">
+    <span class="ab" style="font-size: 17px; color: {{route.decFg}}">DEC · THE SEASON</span>
     <span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em; color: #111">{{route.decTag}}</span>
   </div>
-  <div style="position: absolute; left: 1196px; top: 52px; height: 40px; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 14px; border: 3px dashed #111">
-    <span class="ab" style="font-size: 21px; color: #55554F">FEB · THE DEADLINE</span>
+  <div style="position: absolute; left: 1102px; top: 52px; height: 40px; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 12px; white-space: nowrap; border: 3px dashed #111">
+    <span class="ab" style="font-size: 17px; color: #55554F">FEB · THE DEADLINE</span>
     <span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em">SEALED</span>
   </div>
   <!-- month names -->
@@ -171,23 +182,33 @@ a{color:#111}
     <button type="button" class="btn" onClick="{{closeJuly}}" style="position: absolute; left: 292px; top: 118px; min-height: 46px; border-color: #007A33; box-shadow: 4px 4px 0 #007A33">Close July →</button>
   </sc-if>
   <sc-if value="{{is.closeWait}}" hint-placeholder-val="{{true}}">
-    <div class="mono" style="position: absolute; left: 292px; top: 118px; height: 46px; box-sizing: border-box; display: flex; align-items: center; padding: 0 14px; border: 3px dashed #111; font-size: 12px; font-weight: 500; color: #3A3A36">Close July · after your move</div>
+    <div class="mono" style="position: absolute; left: 292px; top: 118px; height: 46px; box-sizing: border-box; display: flex; align-items: center; padding: 0 14px; background: #F6F4EE; border: 3px dashed #111; font-size: 12px; font-weight: 500; color: #3A3A36">Close July · after your move</div>
   </sc-if>
   <sc-if value="{{is.closed}}" hint-placeholder-val="{{false}}">
     <div class="ab" style="position: absolute; left: 292px; top: 122px; height: 38px; box-sizing: border-box; display: flex; align-items: center; padding: 0 12px; border: 3px solid #111; box-shadow: inset 0 0 0 3px #F6F4EE, inset 0 0 0 5px #111; font-size: 15px; transform: rotate(-2deg)">JULY CLOSED</div>
   </sc-if>
   <span style="position: absolute; left: 530px; top: 143px; width: 330px; font-size: 14px; font-style: italic; line-height: 18px; text-align: center">Your July roster is December’s problem.</span>
   <sc-if value="{{is.decSealed}}" hint-placeholder-val="{{true}}">
-    <span style="position: absolute; left: 1000px; top: 126px; width: 170px; font-size: 14px; font-style: italic; line-height: 18px; color: #3A3A36">You’ll get there by living July.</span>
+    <span style="position: absolute; left: 996px; top: 142px; width: 200px; font-size: 13px; font-style: italic; line-height: 16px; color: #3A3A36">You’ll get there by living July.</span>
   </sc-if>
   <sc-if value="{{is.decOpen}}" hint-placeholder-val="{{false}}">
-    <div style="position: absolute; left: 1000px; top: 122px; width: 190px; font-size: 14px; line-height: 18px; font-weight: 600"><span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .05em; padding: 1px 6px; background: #007A33; color: #FFFFFF">CARRIED</span> {{route.decLine}}</div>
+    <div style="position: absolute; left: 880px; top: 142px; width: 320px; font-size: 13px; line-height: 16px; font-weight: 600"><span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em; padding: 1px 6px; background: #007A33; color: #FFFFFF">CARRIED</span> {{route.decLine}}</div>
   </sc-if>
-  <span style="position: absolute; left: 1206px; top: 126px; width: 210px; font-size: 14px; font-style: italic; line-height: 18px; color: #3A3A36">Your December roster is February’s problem.</span>
+  <span style="position: absolute; left: 1206px; top: 142px; width: 210px; font-size: 13px; font-style: italic; line-height: 16px; color: #3A3A36">Your December roster is February’s problem.</span>
 
-  <!-- AUTHORED note, said once -->
-  <div style="position: absolute; left: 280px; top: 168px; height: 18px; display: flex; align-items: center; gap: 8px">
-    <span class="sw t-aut"></span><span class="mono" style="font-size: 11px; font-weight: 500">AUTHORED · illustrative: a July desk, made up</span>
+  <!-- AUTHORED note, said once, at the desk it describes -->
+  <div style="position: absolute; left: 114px; top: {{p.nTop}}px; width: 148px; padding: 2px 0 2px 2px; background: #F6F4EE; line-height: 15px">
+    <div style="display: flex; align-items: center; gap: 6px"><span class="sw t-aut" style="width: 12px; height: 12px"></span><span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .02em">AUTHORED START</span></div>
+    <div class="mono" style="font-size: 13px">{{p.nLine}}</div>
+    <div class="mono" style="display: {{p.gDisp}}; font-size: 12px; line-height: 15px; font-weight: 600; color: {{p.gCol}}">{{p.g2}}</div>
+    <div class="mono" style="display: {{p.gDisp}}; font-size: 12px; line-height: 15px; font-weight: 600; color: {{p.gCol}}">{{p.g3}}</div>
+  </div>
+
+  <!-- the desk league is a named kind: not Reality, not a persistent World -->
+  <div style="position: absolute; left: 120px; top: 160px; width: 150px; box-sizing: border-box; padding: 4px 7px 5px; border: 2px solid #111; background: #F6F4EE">
+    <div class="mono" style="font-size: 12px; font-weight: 600; line-height: 15px; white-space: nowrap">YOUR CLASS LEAGUE</div>
+    <div class="ab" style="font-size: 14px; line-height: 18px">July, Days 1–3</div>
+    <div class="mono" style="font-size: 12px; line-height: 14px; color: #2A2A27">not Reality, not a persistent World</div>
   </div>
 
   <!-- axis tick labels -->
@@ -197,16 +218,12 @@ a{color:#111}
 
   <!-- pennants: text -->
   <div style="position: absolute; left: 118px; top: {{p.youTop}}px; width: 124px; height: 44px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; color: #FFFFFF; line-height: 1.05">
-    <span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .06em">YOUR DESK</span>
+    <span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .06em">YOUR DESK</span>
     <span class="mono" style="font-size: 19px; font-weight: 600">{{p.youText}}</span>
   </div>
   <div style="position: absolute; left: 118px; top: {{p.othTop}}px; width: 124px; height: 44px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; color: #F6F4EE; line-height: 1.05; opacity: {{p.othOp}}">
-    <span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .06em">ANOTHER DESK</span>
+    <span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .06em">ANOTHER DESK</span>
     <span class="mono" style="font-size: 19px; font-weight: 600">{{p.othText}}</span>
-  </div>
-  <!-- ghost label -->
-  <div style="position: absolute; left: 116px; top: {{p.gTop}}px; width: 160px; font-size: 12px; line-height: 15px; color: {{p.gCol}}; opacity: {{p.gOp}}">
-    <span class="mono" style="font-weight: 600">{{p.g1}}</span><br><span class="mono">{{p.g2}}</span><br><span class="mono" style="font-weight: 600">{{p.g3}}</span>
   </div>
 
   <!-- line labels -->
@@ -220,35 +237,39 @@ a{color:#111}
         <span class="ab" style="font-size: 20px">{{lb.name}}</span>
         <span class="mono" style="font-size: 18px; font-weight: 600">{{lb.fig}}</span>
       </div>
-      <div style="font-size: 14px; line-height: 18px; color: #2A2A27">{{lb.rule}}</div>
-      <div class="mono" style="font-size: 12px; line-height: 16px; color: #2A2A27">{{lb.note}}</div>
+      <div style="font-size: {{lb.fs}}px; line-height: 18px; color: #2A2A27">{{lb.rule}}</div>
+      <div class="mono" style="font-size: 13px; line-height: 16px; letter-spacing: -.02em; color: #2A2A27; white-space: pre-line">{{lb.note}}</div>
     </div>
   </sc-for>
   <!-- meter display digits -->
   <div class="mono" style="position: absolute; left: 352px; top: {{m.dispTop}}px; width: 140px; height: 30px; box-sizing: border-box; padding: 0 8px; display: flex; align-items: center; justify-content: flex-end; font-size: 22px; font-weight: 600; color: #F6F4EE">{{m.disp}}</div>
-  <span class="mono" style="position: absolute; left: 352px; top: {{m.statTop}}px; font-size: 11px; font-weight: 600; letter-spacing: .05em">{{m.stat}}</span>
-  <span class="mono" style="position: absolute; left: 616px; top: {{m.tallyLab}}px; width: 96px; font-size: 11px; line-height: 13px; text-align: center; color: #2A2A27">{{m.tallyText}}</span>
+  <span class="mono" style="position: absolute; left: 352px; top: {{m.statTop}}px; font-size: 12px; font-weight: 600; letter-spacing: .05em">{{m.stat}}</span>
+  <span class="mono" style="position: absolute; left: 500px; top: {{m.tallyLab}}px; width: 212px; font-size: 12px; line-height: 13px; text-align: right; color: #2A2A27; white-space: nowrap">{{m.tallyText}}</span>
+
+  <!-- first-apron wall plaque: only when the big exception was used -->
+  <div class="mono" style="position: absolute; left: 315px; top: {{w1.plTop}}px; width: 300px; height: 20px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; background: #F6F4EE; border: 2px solid #F6F4EE; outline: 2px solid #111; font-size: 12px; font-weight: 600; letter-spacing: .01em; white-space: nowrap; opacity: {{w1.op}}; transform: translateY({{w1.dy}}px)">{{w1.text}}</div>
 
   <!-- ACT / RECEIPT ZONE -->
   <sc-if value="{{showHeadline}}" hint-placeholder-val="{{false}}">
-    <div class="ab" style="position: absolute; left: 280px; top: 466px; width: 760px; height: 28px; font-size: 22px; line-height: 28px">The same player cost two desks two different things.</div>
+    <div class="ab" style="position: absolute; left: 280px; top: 474px; width: 760px; height: 24px; box-sizing: border-box; padding: 0 12px; background: #111; color: #F6F4EE; font-size: 15px; line-height: 24px; white-space: nowrap">{{headline}}</div>
   </sc-if>
 
   <sc-if value="{{is.act}}" hint-placeholder-val="{{true}}">
-    <div style="position: absolute; left: 280px; top: 480px; width: 760px; height: 132px; display: grid; grid-template-columns: 236px 276px 220px; column-gap: 14px; align-items: stretch">
+    <div style="position: absolute; left: 280px; top: 480px; width: 760px; height: 136px; display: grid; grid-template-columns: 236px 276px 220px; column-gap: 14px; align-items: stretch">
       <div style="box-sizing: border-box; padding: 10px 12px; border: 3px solid #111; background: #FFFFFF; display: flex; flex-direction: column; justify-content: center; gap: 2px">
-        <span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .07em">ONE FREE AGENT ON THE BOARD</span>
+        <span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em">ONE FREE AGENT · DAY 1</span>
         <span class="ab" style="font-size: 30px; line-height: 34px">Wing A</span>
         <span style="font-size: 15px; line-height: 18px">a starting-calibre wing</span>
-        <span class="mono" style="font-size: 14px; font-weight: 600">asks at least $14.0M</span>
+        <span class="mono" style="font-size: 14px; font-weight: 600">asks at least {{askText}}</span>
       </div>
-      <div style="box-sizing: border-box; padding: 8px 12px; display: flex; flex-direction: column; justify-content: center; gap: 4px">
-        <span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .07em">YOU OFFER · $14.0M TO $22.0M</span>
+      <div style="box-sizing: border-box; padding: 6px 12px; display: flex; flex-direction: column; justify-content: center; gap: 2px">
+        <span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em">YOU OFFER · {{rangeText}}</span>
         <div style="display: flex; align-items: center; gap: 8px">
           <button type="button" class="btn" onClick="{{dec}}" aria-label="Offer $0.5M less" style="min-width: 48px; padding: 0; font-size: 24px">−</button>
           <span class="mono" style="flex: 1; text-align: center; font-size: 34px; font-weight: 600">{{offerText}}</span>
           <button type="button" class="btn" onClick="{{inc}}" aria-label="Offer $0.5M more" style="min-width: 48px; padding: 0; font-size: 24px">+</button>
         </div>
+        <span class="mono" style="font-size: 13px; line-height: 16px; font-weight: 600; color: #006B2D">{{roomAfterText}}</span>
         <span style="font-size: 13px; line-height: 16px">His printed figure is the least he will accept, not his price.</span>
       </div>
       <div style="display: flex; flex-direction: column; justify-content: center; gap: 10px">
@@ -263,69 +284,80 @@ a{color:#111}
   </sc-if>
 
   <sc-if value="{{is.receipts}}" hint-placeholder-val="{{false}}">
-    <div aria-live="polite" style="position: absolute; left: 280px; top: 498px; width: 760px; height: 124px; display: grid; grid-template-columns: 372px 372px; column-gap: 16px">
-      <div style="box-sizing: border-box; height: 124px; padding: 6px 12px 6px 14px; border: 3px solid #111; border-left: 12px solid #007A33; background: #FFFFFF; box-shadow: inset 0 0 0 2px #FFFFFF, inset 0 0 0 4px #111; display: flex; flex-direction: column; gap: 1px">
-        <span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .07em; line-height: 14px">{{rc1.tag}}</span>
-        <span class="ab" style="font-size: 22px; line-height: 26px">{{rc1.big}}</span>
+    <div aria-live="polite" style="position: absolute; left: 280px; top: {{rcTop}}px; width: 760px; height: {{rcH}}px; display: grid; grid-template-columns: 372px 372px; column-gap: 16px">
+      <div style="box-sizing: border-box; height: {{rcH}}px; padding: {{rcPad}}; border: 3px solid #111; border-left: 12px solid #007A33; background: #FFFFFF; box-shadow: inset 0 0 0 2px #FFFFFF, inset 0 0 0 4px #111; display: flex; flex-direction: column; justify-content: space-between">
+        <span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em; line-height: 14px">{{rc1.tag}}</span>
+        <span class="ab" style="font-size: {{rcBig}}px; line-height: {{rcBigLH}}px">{{rc1.big}}</span>
         <span style="font-size: 14px; line-height: 17px">{{rc1.body}}</span>
-        <div class="mono" style="display: flex; gap: 10px; margin-top: auto; font-size: 12px; line-height: 14px; border-top: 2px solid #111; padding-top: 3px"><span>TAX <b>{{rc1.tax}}</b></span><span>TOOLS OFF <b>{{rc1.tools}}</b></span><span>ALL-IN <b>{{rc1.all}}</b></span></div>
+        <div class="mono" style="font-size: 13px; line-height: 16px; font-weight: 600">{{rc1.door}}</div>
+        <div class="mono" style="box-sizing: border-box; border: 2px dashed #111; padding: 0 6px; font-size: 12px; line-height: 15px; white-space: nowrap">{{rc1.ghost}}</div>
+        <div class="mono" style="display: flex; gap: 10px; font-size: 12px; line-height: 14px; border-top: 2px solid #111; padding-top: 2px"><span>TAX <b>{{rc1.tax}}</b></span><span>TOOLS OFF <b>{{rc1.tools}}</b></span><span>ALL-IN <b>{{rc1.all}}</b></span></div>
       </div>
       <sc-if value="{{is.otherOn}}" hint-placeholder-val="{{false}}">
-        <div style="box-sizing: border-box; height: 124px; padding: 6px 12px 6px 14px; border: 3px solid #111; border-left: 12px solid #111; background: #FFFFFF; display: flex; flex-direction: column; gap: 1px">
-          <span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .07em; line-height: 14px">{{rc2.tag}}</span>
-          <span class="ab" style="font-size: 22px; line-height: 26px">{{rc2.big}}</span>
+        <div style="box-sizing: border-box; height: {{rcH}}px; padding: {{rcPad}}; border: 3px solid #111; border-left: 12px solid #111; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between">
+          <span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em; line-height: 14px">{{rc2.tag}}</span>
+          <span class="ab" style="font-size: {{rcBig}}px; line-height: {{rcBigLH}}px">{{rc2.big}}</span>
           <span style="font-size: 14px; line-height: 17px">{{rc2.body}}</span>
-          <div class="mono" style="display: flex; gap: 10px; margin-top: auto; font-size: 12px; line-height: 14px; border-top: 2px solid #111; padding-top: 3px"><span>TAX <b>{{rc2.tax}}</b></span><span>TOOLS OFF <b>{{rc2.tools}}</b></span><span>ALL-IN <b>{{rc2.all}}</b></span></div>
+          <div class="mono" style="font-size: 13px; line-height: 16px; font-weight: 600">{{rc2.door}}</div>
+          <div class="mono" style="box-sizing: border-box; background: #111; color: #F6F4EE; padding: 0 6px; font-size: 12px; line-height: 18px; font-weight: 600; white-space: nowrap">{{rc2.wall}}</div>
+          <div class="mono" style="display: flex; gap: 10px; font-size: 12px; line-height: 14px; border-top: 2px solid #111; padding-top: 2px"><span>TAX <b>{{rc2.tax}}</b></span><span>TOOLS OFF <b>{{rc2.tools}}</b></span><span>ALL-IN <b>{{rc2.all}}</b></span></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{is.otherRefuse}}" hint-placeholder-val="{{false}}">
+        <div style="box-sizing: border-box; height: {{rcH}}px; padding: {{rcPad}}; border: 3px solid #111; border-left: 12px solid #B23A17; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between">
+          <span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em; line-height: 14px">{{rc2r.tag}}</span>
+          <span class="ab" style="font-size: {{rcBig}}px; line-height: {{rcBigLH}}px">{{rc2r.big}}</span>
+          <span style="font-size: 15px; line-height: 18px; font-weight: 600">{{rc2r.body}}</span>
+          <button type="button" class="btn sm" onClick="{{tryLegal}}" style="align-self: flex-start; min-height: 38px">{{rc2r.btn}}</button>
         </div>
       </sc-if>
       <sc-if value="{{is.otherMoving}}" hint-placeholder-val="{{false}}">
-        <div style="box-sizing: border-box; height: 124px; padding: 8px 14px; border: 3px solid #111; border-left: 12px solid #111; display: flex; align-items: center">
-          <span class="ab" style="font-size: 20px; line-height: 25px">Same player, same number, another desk. Watch the meter and the rack.</span>
+        <div style="box-sizing: border-box; height: {{rcH}}px; padding: 8px 14px; border: 3px solid #111; border-left: 12px solid #111; display: flex; align-items: center">
+          <span class="ab" style="font-size: 20px; line-height: 25px">Same player, another desk. Watch the meter and the rack.</span>
         </div>
       </sc-if>
       <sc-if value="{{is.otherOff}}" hint-placeholder-val="{{true}}">
-        <div style="box-sizing: border-box; height: 124px; padding: 8px 14px; border: 3px dashed #111; display: flex; flex-direction: column; justify-content: center; gap: 6px">
-          <span style="font-size: 14px; line-height: 17px">The same player, the same number, at a desk that starts at $196.0M.</span>
+        <div style="box-sizing: border-box; height: {{rcH}}px; padding: 8px 14px; border: 3px dashed #111; display: flex; flex-direction: column; justify-content: center; gap: 6px">
+          <span style="font-size: 14px; line-height: 17px">The same player, the same number, at a desk that starts at {{othStartText}}, over the cap.</span>
           <button type="button" class="btn" onClick="{{toggleOther}}" aria-pressed="false" style="align-self: flex-start">Another desk</button>
         </div>
       </sc-if>
     </div>
     <sc-if value="{{is.otherBack}}" hint-placeholder-val="{{false}}">
-      <button type="button" class="btn sm" onClick="{{toggleOther}}" aria-pressed="true" style="position: absolute; left: 836px; top: 466px; min-height: 40px">{{otherBackLabel}}</button>
+      <button type="button" class="btn sm" onClick="{{toggleOther}}" aria-pressed="true" style="position: absolute; left: 728px; top: 336px; min-height: 40px">{{otherBackLabel}}</button>
     </sc-if>
   </sc-if>
 
   <!-- LADDER OF MEANING -->
-  <div style="position: absolute; left: 1056px; top: 166px; width: 360px; height: 666px">
-    <div style="position: absolute; left: 0; top: 0; width: 5px; height: 666px; background: #111"></div>
-    <div style="position: absolute; right: 0; top: 0; width: 5px; height: 666px; background: #111"></div>
+  <div style="position: absolute; left: 1056px; top: 190px; width: 360px; height: 640px">
+    <div style="position: absolute; left: 0; top: 0; width: 5px; height: 640px; background: #111"></div>
+    <div style="position: absolute; right: 0; top: 0; width: 5px; height: 640px; background: #111"></div>
     <div class="mono" style="position: absolute; left: 14px; top: 0; font-size: 12px; font-weight: 600; letter-spacing: .08em; line-height: 18px">THE LADDER OF MEANING · ONE RUNG PER ACT</div>
     <div style="position: absolute; left: 5px; right: 5px; top: 22px; display: flex; flex-direction: column; gap: 6px">
 
       <div style="height: 92px; box-sizing: border-box; border-top: 6px {{ld.b1}} #111; padding: 6px 12px 0 14px; position: relative">
-        <div style="display: flex; align-items: center; gap: 8px; height: 18px"><span class="ab" style="font-size: 15px">1</span><span class="sw {{ld.tex1}}"></span><span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .07em">YOUR MOMENT {{ld.w1}}</span></div>
+        <div style="display: flex; align-items: center; gap: 8px; height: 18px"><span class="ab" style="font-size: 15px">1</span><span class="sw {{ld.tex1}}"></span><span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em">YOUR MOMENT {{ld.w1}}</span></div>
         <div style="font-size: 16px; line-height: 20px; font-weight: 600; margin-top: 4px; color: {{ld.c1}}">{{ld.t1}}</div>
       </div>
 
       <div style="height: 82px; box-sizing: border-box; border-top: 6px dashed #111; padding: 6px 12px 0 14px">
-        <div style="display: flex; align-items: center; gap: 8px; height: 18px"><span class="ab" style="font-size: 15px">2</span><span class="sw t-unk"></span><span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .07em">THE CLASS {{ld.w2}}</span></div>
-        <div style="font-size: 14px; line-height: 18px; margin-top: 3px; color: #2A2A27">Fills when the class reveal runs.</div>
-        <a class="lnk mono" href="TextbookReveal.dc.html" style="display: inline-flex; align-items: center; min-height: 36px; font-size: 12px; font-weight: 600">Board J2 · The Class Reveal →</a>
+        <div style="display: flex; align-items: center; gap: 8px; height: 18px"><span class="ab" style="font-size: 15px">2</span><span class="sw t-unk"></span><span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em">THE CLASS {{ld.w2}}</span></div>
+        <div style="font-size: 15px; line-height: 19px; margin-top: 4px; color: #2A2A27">Your class’s result lands here after the reveal.</div>
       </div>
 
-      <div style="height: 168px; box-sizing: border-box; border-top: 6px {{ld.b3}} #111; padding: 6px 12px 0 14px">
-        <div style="display: flex; align-items: center; gap: 8px; height: 18px"><span class="ab" style="font-size: 15px">3</span><span class="sw {{ld.tex3}}"></span><span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .07em">REAL SPORTS {{ld.w3}}</span></div>
+      <div style="height: 158px; box-sizing: border-box; border-top: 6px {{ld.b3}} #111; padding: 6px 12px 0 14px">
+        <div style="display: flex; align-items: center; gap: 8px; height: 18px"><span class="ab" style="font-size: 15px">3</span><span class="sw {{ld.tex3}}"></span><span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em">REAL SPORTS {{ld.w3}}</span></div>
         <sc-if value="{{is.r3}}" hint-placeholder-val="{{false}}">
-          <div style="font-size: 15px; line-height: 19px; margin-top: 4px"><b>Boston’s apron summer, late June 2025.</b> The Celtics traded Jrue Holiday to Portland and Kristaps Porziņģis to Atlanta, partly to get under the second apron.</div>
-          <div class="mono" style="font-size: 11px; line-height: 14px; margin-top: 6px; color: #2A2A27">Source: BOW Economics Live fixture; NBA.com and Hoops Rumors reporting. Verify. As of 29 Sep 2026. Payroll now ≈ $203.6M, past the tax line.</div>
+          <div style="font-size: 15px; line-height: 19px; margin-top: 4px"><b>Using the big exception hard-caps a team at the first apron.</b> Boston’s 2026 summer: [from the Reality feed · verify].</div>
+          <div class="mono" style="font-size: 13px; line-height: 16px; margin-top: 6px; color: #2A2A27">29 Sep 2026, fixture, verify: cap payroll ≈ $203.6M; tax salary $198.722M. The tax is charged on tax salary.</div>
         </sc-if>
         <sc-if value="{{is.r3no}}" hint-placeholder-val="{{true}}">
           <div style="font-size: 14px; line-height: 18px; margin-top: 4px; color: #2A2A27">Fills after you compare another desk.</div>
         </sc-if>
       </div>
 
-      <div style="height: 150px; box-sizing: border-box; border-top: 6px {{ld.b4}} #111; padding: 6px 12px 0 14px">
-        <div style="display: flex; align-items: center; gap: 8px; height: 18px"><span class="ab" style="font-size: 15px">4</span><span class="sw {{ld.tex4}}"></span><span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .07em">THE NAME {{ld.w4}}</span></div>
+      <div style="height: 142px; box-sizing: border-box; border-top: 6px {{ld.b4}} #111; padding: 6px 12px 0 14px">
+        <div style="display: flex; align-items: center; gap: 8px; height: 18px"><span class="ab" style="font-size: 15px">4</span><span class="sw {{ld.tex4}}"></span><span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em">THE NAME {{ld.w4}}</span></div>
         <sc-if value="{{is.r4}}" hint-placeholder-val="{{false}}">
           <div style="font-size: 15px; line-height: 19px; margin-top: 4px; font-weight: 600">What you just gave up has a name:</div>
           <div class="ab" style="font-size: 27px; line-height: 32px; color: #B23A17">OPPORTUNITY COST</div>
@@ -340,8 +372,8 @@ a{color:#111}
         </sc-if>
       </div>
 
-      <div style="height: 122px; box-sizing: border-box; border-top: 6px {{ld.b5}} #111; padding: 6px 12px 0 14px">
-        <div style="display: flex; align-items: center; gap: 8px; height: 18px"><span class="ab" style="font-size: 15px">5</span><span class="sw t-aut"></span><span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .07em">OUTSIDE SPORTS {{ld.w5}}</span></div>
+      <div style="height: 116px; box-sizing: border-box; border-top: 6px {{ld.b5}} #111; padding: 6px 12px 0 14px">
+        <div style="display: flex; align-items: center; gap: 8px; height: 18px"><span class="ab" style="font-size: 15px">5</span><span class="sw t-aut"></span><span class="mono" style="font-size: 12px; font-weight: 600; letter-spacing: .05em">OUTSIDE SPORTS {{ld.w5}}</span></div>
         <sc-if value="{{is.r5}}" hint-placeholder-val="{{false}}">
           <div style="font-size: 15px; line-height: 19px; margin-top: 4px">A family with $1,200 left this month: the new phone is also the three months of guitar lessons it replaces.</div>
         </sc-if>
@@ -360,28 +392,28 @@ a{color:#111}
     <div style="position: absolute; left: 1010px; top: 50px; width: 406px; box-sizing: border-box; padding: 12px 16px 14px; background: #FFFFFF; border: 4px solid #111; box-shadow: 6px 6px 0 #111; z-index: 20">
       <span class="ab" style="font-size: 17px">HOW DO WE KNOW?</span>
       <div style="display: grid; grid-template-columns: 18px 1fr; column-gap: 10px; row-gap: 7px; margin-top: 8px; font-size: 13px; line-height: 16px; align-items: start">
-        <span class="sw t-obs" style="margin-top: 2px"></span><span><b>OBSERVED</b> · the 2026–27 lines and Boston’s June 2025 moves. BOW Economics Live fixture and public reporting. Verify.</span>
+        <span class="sw t-obs" style="margin-top: 2px"></span><span><b>OBSERVED</b> · the 2026–27 lines (the floor as published), the exceptions ($15.044M big, $9.366M room, $6.064M small, $2.449M minimum) and Boston’s figures. BOW Economics Live fixture and public reporting. Verify.</span>
         <span class="sw t-rec" style="margin-top: 2px"></span><span><b>RECORDED</b> · what you did in this run.</span>
-        <span class="sw t-aut" style="margin-top: 2px"></span><span><b>AUTHORED</b> · desk payrolls, the tool list, the tax brackets, the family example. We chose them.</span>
-        <span class="sw t-com" style="margin-top: 2px"></span><span><b>COMPUTED</b> · the floor, every distance, every tax figure. They follow from the lines and brackets.</span>
+        <span class="sw t-aut" style="margin-top: 2px"></span><span><b>AUTHORED</b> · desk payrolls, Big B’s $9.5M ask, the tool list, “cap room spends the big exception too” (simplified), the tax rates past $20M over, the family example, your class league. We chose them.</span>
+        <span class="sw t-com" style="margin-top: 2px"></span><span><b>COMPUTED</b> · every room, distance and tax figure. They follow from the lines and rates.</span>
         <span class="sw t-unk" style="margin-top: 2px"></span><span><b>UNKNOWN</b> · the class result, and December and February until you live them.</span>
       </div>
-      <div class="mono" style="font-size: 11px; line-height: 14px; margin-top: 10px; padding-top: 8px; border-top: 2px solid #111">The line labels now show their source. Five lines, five kinds of rule: must reach · needs a door · costs money · tools come off · no entry.</div>
+      <div class="mono" style="font-size: 13px; line-height: 16px; margin-top: 10px; padding-top: 8px; border-top: 2px solid #111">The line labels now show their source. Five lines, five kinds of rule: must reach · needs a door · costs money · tools come off · no entry.</div>
     </div>
   </sc-if>
 
   <!-- THESIS + QUIET LINES -->
   <div style="position: absolute; left: 24px; top: 838px; width: 1000px; font-size: 13px; line-height: 17px; font-style: italic">A native textbook, in this model, is one system you keep living in, where each chapter hands you the state you left and the idea gets its name only after you felt it.</div>
-  <div style="position: absolute; left: 24px; top: 864px; width: 880px; font-size: 11px; line-height: 14px; color: #2A2A27"><span class="mono" style="font-weight: 600; letter-spacing: .05em">COMMERCIAL LENS ·</span> <i>Hypothesis: schools buy courses, not simulations. The unit is a course seat per student per year; the carried thread is what makes it a course and not a game.</i></div>
-  <div class="mono" style="position: absolute; right: 24px; top: 864px; width: 470px; text-align: right; font-size: 11px; line-height: 14px; color: #2A2A27">PROTOTYPE · DESIGN PROPOSAL (the lesson it draws on EXISTS TODAY) · lines: BOW Economics Live fixture, verify · tax brackets simplified · desks authored</div>
+  <div style="position: absolute; left: 24px; top: 864px; width: 690px; font-size: 12px; line-height: 15px; color: #2A2A27"><span class="mono" style="font-weight: 600; letter-spacing: .05em">COMMERCIAL LENS ·</span> <i>Hypothesis: schools buy courses, not simulations. The unit is a course seat per student per year; the carried thread is what makes it a course and not a game.</i></div>
+  <div class="mono" style="position: absolute; right: 24px; top: 864px; width: 690px; text-align: right; font-size: 12px; line-height: 15px; color: #2A2A27">PROTOTYPE · DESIGN PROPOSAL (the lesson it draws on EXISTS TODAY) · lines and exceptions: BOW Economics Live fixture, verify · first-time payer rates (simplified) · desks authored</div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   cfg() {
     return { F: 34, R: 14, LO: 140, HI: 230, TOP: 166, BOT: 832,
-      FLOOR: 0.9 * 164.961, CAP: 164.961, TAX: 200.428, A1: 209.015, A2: 221.686,
-      S_YOU: 158.2, S_OTH: 196.0, ASK: 14.0, PMIN: 14.0, PMAX: 22.0 };
+      FLOOR: 148.465, CAP: 164.961, TAX: 200.428, A1: 209.015, A2: 221.686,
+      S_YOU: 146.5, S_OTH: 192.0, ASK: 14.0, PMIN: 14.0, PMAX: 18.0, BIG: 15.044, BIGB: 9.5 };
   }
   componentDidMount() {
     this.timer = setInterval(() => {
@@ -408,11 +440,11 @@ class Component extends DCLogic {
     const f3 = (v) => '$' + v.toFixed(3) + 'M';
     const Y = (v) => c.TOP + (c.HI - v) * (c.BOT - c.TOP) / (c.HI - c.LO);
     const R1 = (v) => Math.round(v * 10) / 10;
-    // simplified brackets, labelled so on screen
+    // first-time payer rates (simplified): $1.50, $1.75, $2.50, $3.25, then $3.75, $4.25 ... rising $0.50 per $5M over
+    const rate = (i) => i < 4 ? [1.5, 1.75, 2.5, 3.25][i] : 3.75 + 0.5 * (i - 4);
     const taxOf = (pay) => {
-      let o = Math.max(0, pay - c.TAX); let t = 0;
-      const br = [[5, 1.5], [5, 1.75], [5, 2.5], [1e9, 3.25]];
-      for (let i = 0; i < br.length; i++) { const x = Math.min(o, br[i][0]); t += x * br[i][1]; o -= x; if (o <= 0) break; }
+      let o = Math.max(0, pay - c.TAX); let t = 0; let i = 0;
+      while (o > 1e-9 && i < 40) { const x = Math.min(o, 5); t += x * rate(i); o -= x; i++; }
       return t;
     };
     const LINES = [
@@ -420,6 +452,7 @@ class Component extends DCLogic {
       { k: 'a1', v: c.A1, n: 'the first apron' }, { k: 'a2', v: c.A2, n: 'the second apron' }
     ];
     const y = {}; LINES.forEach((L) => { y[L.k] = Y(L.v); });
+    const bigStep = Math.floor(c.BIG * 2) / 2;   // the largest half-million step the big exception can pay: 15.0
 
     const how = !!s.how;
     const offer = s.offer == null ? 16.5 : s.offer;
@@ -428,9 +461,16 @@ class Component extends DCLogic {
     const price = s.price || 0;
     const seenOther = !!s.seenOther, named = !!s.named, outside = !!s.outside, closed = !!s.closed;
     const view = s.view === 'other' ? 'other' : 'you';
+    // your desk: room under the cap is the door. The stepper never reaches past it.
     const you = { start: c.S_YOU, price: choice === 'sign' ? price : 0 };
     you.end = you.start + you.price;
-    const oth = { start: c.S_OTH, price: choice === 'sign' ? price : c.ASK };
+    const roomBefore = c.CAP - c.S_YOU;
+    const roomNow = c.CAP - you.end;
+    const under = Math.max(0, c.FLOOR - you.end);
+    // another desk: already over the cap, so only an exception can sign him; the biggest pays c.BIG
+    const othAsk = s.othOffer != null ? s.othOffer : (choice === 'sign' ? price : c.ASK);
+    const othLegal = othAsk <= c.BIG + 1e-9;
+    const oth = { start: c.S_OTH, price: othLegal ? othAsk : 0 };
     oth.end = oth.start + oth.price;
     const vd = view === 'other' ? oth : you;
     const animWho = s.animWho || 'you';
@@ -439,7 +479,7 @@ class Component extends DCLogic {
     const u = acted ? clamp(ff / c.F, 0, 1) : 0;
     const cur = acted ? vd.start + (vd.end - vd.start) * u : vd.start;
     const finished = acted && !(s.anim && animWho === 'you');
-    
+
     // how far each line's reaction has run (0 = not crossed, 1 = crossed)
     const react = {};
     LINES.forEach((L) => {
@@ -461,7 +501,7 @@ class Component extends DCLogic {
     const cf = closed ? clamp((s.cf || 0) / 20, 0, 1) : 0;
     const threadEnd = Math.round(262 + (981 - 262) * (cf * cf * (3 - 2 * cf)));
     const decOpen = closed && (s.cf || 0) >= 20;
-    const decLine = 'December opens with your books: ' + f1(you.end) + ' · tax meter ' + (you.end > c.TAX ? 'running' : 'not running');
+    const decLine = 'December opens with your books: ' + f1(you.end) + ' · ' + (roomNow > 0 ? f3(roomNow) + ' of room' : 'no room') + (under > 0 ? ' · ' + f3(under) + ' under the floor' : '');
     const route = {
       julTag: closed ? 'CLOSED' : 'OPEN · YOU ARE HERE',
       decBorder: decOpen ? '3px solid #111' : '3px dashed #111',
@@ -475,7 +515,8 @@ class Component extends DCLogic {
     };
     const is = {
       act: !acted,
-      otherOn: view === 'other' && !animating, otherMoving: view === 'other' && animating, otherOff: view !== 'other', otherBack: view === 'other' && !animating,
+      otherOn: view === 'other' && !animating && othLegal, otherRefuse: view === 'other' && !animating && !othLegal,
+      otherMoving: view === 'other' && animating, otherOff: view !== 'other', otherBack: view === 'other' && !animating,
       closeOpen: acted && finished && !closed, closeWait: !acted || (acted && !finished), closed: closed,
       decSealed: !decOpen, decOpen: decOpen,
       r3: seenOther, r3no: !seenOther,
@@ -495,7 +536,7 @@ class Component extends DCLogic {
     }
     const axis = 'M112 ' + Y(c.HI).toFixed(1) + ' V' + Y(c.LO).toFixed(1);
 
-    // ---- wall
+    // ---- wall (second apron)
     const wallTop = y.a2 - 40;
     let bricks = '';
     [0, 1, 2].forEach((row) => {
@@ -503,23 +544,29 @@ class Component extends DCLogic {
       if (row < 2) bricks += 'M280 ' + y1.toFixed(1) + ' H650 ';
       for (let x = (row % 2 ? 23 : 0) + 46; x < 370; x += 46) bricks += 'M' + (280 + x) + ' ' + y0.toFixed(1) + ' V' + y1.toFixed(1) + ' ';
     });
+    // ---- your wall (first apron): only a desk that used the big exception gets one
+    const usedBig = view === 'other' && othLegal && oth.price > 0;
+    const wq = usedBig ? clamp((ff - c.F) / c.R, 0, 1) : 0;
+    const w1Top = y.a1 - 34;
+    let bricks1 = '';
+    [0, 1, 2].forEach((row) => {
+      const y0 = w1Top + row * 12, y1 = y0 + 12;
+      if (row < 2) bricks1 += 'M280 ' + y1.toFixed(1) + ' H650 ';
+      for (let x = (row % 2 ? 23 : 0) + 46; x < 370; x += 46) bricks1 += 'M' + (280 + x) + ' ' + y0.toFixed(1) + ' V' + y1.toFixed(1) + ' ';
+    });
+    const w1 = { op: wq.toFixed(2), dy: Math.round(-30 * (1 - wq)), top: w1Top, bricks: bricks1, plTop: Math.round(w1Top + 8),
+      text: 'YOUR WALL THIS YEAR · ' + f3(c.A1 - oth.end) + ' ABOVE YOU' };
     // ---- rack tools
     const rackBeam = y.a1 - 6;
     const q = react.a1;
-    const iconAt = (i, cx) => {
-      const x = cx - 40, cy = y.a1 + 36;
-      if (i === 0) return 'M' + (x + 2) + ' ' + (cy - 5) + ' H' + (x + 18) + ' M' + (x + 14) + ' ' + (cy - 9) + ' L' + (x + 18) + ' ' + (cy - 5) + ' L' + (x + 14) + ' ' + (cy - 1) + ' M' + (x + 18) + ' ' + (cy + 6) + ' H' + (x + 2) + ' M' + (x + 6) + ' ' + (cy + 2) + ' L' + (x + 2) + ' ' + (cy + 6) + ' L' + (x + 6) + ' ' + (cy + 10);
-      if (i === 1) return 'M' + (x + 10) + ' ' + (cy - 9) + ' a9 9 0 1 0 0.01 0 Z M' + (x + 10) + ' ' + (cy - 4) + ' v8 M' + (x + 6) + ' ' + (cy - 2) + ' h8';
-      return 'M' + (x + 2) + ' ' + (cy + 9) + ' H' + (x + 20) + ' M' + (x + 11) + ' ' + (cy - 9) + ' V' + (cy + 9) + ' M' + (x + 1) + ' ' + (cy - 4) + ' H' + (x + 21) + ' M' + (x + 1) + ' ' + (cy - 4) + ' l3 8 h-6 Z M' + (x + 21) + ' ' + (cy - 4) + ' l3 8 h-6 Z';
-    };
     const tool = (i, cx) => {
       const qi = clamp(q * 1.7 - i * 0.35, 0, 1);
-      const top = y.a1 + 16;
+      const top = y.a1 + 14;
       return { x: 0, y: Math.round(96 * qi * qi), r: (i % 2 ? 1 : -1) * (12 + 9 * i) * qi, o: (1 - qi).toFixed(2),
-        ox: cx, oy: top + 8, top: top, hole: top + 8, l1: top + 17, l2: top + 31, icon: iconAt(i, cx) };
+        ox: cx, oy: top + 8, top: top, hole: top + 6, l1: top + 21, l2: top + 35 };
     };
-    const t0 = tool(0, 345), t1 = tool(1, 465), t2 = tool(2, 585);
-    const hooks = [345, 465, 585].map((cx) => 'M' + cx + ' ' + (y.a1 + 6) + ' V' + (y.a1 + 12)).join(' ');
+    const t0 = tool(0, 341), t1 = tool(1, 465), t2 = tool(2, 589);
+    const hooks = [341, 465, 589].map((cx) => 'M' + cx + ' ' + (y.a1 + 6) + ' V' + (y.a1 + 12)).join(' ');
 
     // ---- meter
     const over = Math.max(0, cur - c.TAX);
@@ -544,12 +591,15 @@ class Component extends DCLogic {
       bodyTop: bodyTop, dialY: dialY, dialTicks: dialTicks, needleTop: dialY - 20, needle: Math.round(-110 + 220 * Math.min(1, taxNow / 45)),
       dispTop: bodyTop + 6, disp: f2(taxNow), lampY: bodyTop + 21, lamp: runningNow ? '#E4572E' : '#F6F4EE',
       cellTop: bodyTop + 42, cellText: bodyTop + 54,
-      c0: bk(0) ? '#111' : '#F6F4EE', c1: bk(1) ? '#111' : '#F6F4EE', c2: bk(2) ? '#111' : '#F6F4EE', c3: bk(3) ? '#111' : '#F6F4EE',
-      t0: bk(0) ? '#F6F4EE' : '#111', t1: bk(1) ? '#F6F4EE' : '#111', t2: bk(2) ? '#F6F4EE' : '#111', t3: bk(3) ? '#F6F4EE' : '#111',
       slotTop: bodyTop + 19, coinX: Math.round(606 - 34 * frac), coinY: bodyTop + 32, coinOp: coinOn ? 1 : 0,
       tally: tally, statTop: bodyTop + 66, stat: runningNow ? 'METER RUNNING' : 'METER NOT RUNNING',
-      tallyLab: bodyTop + 66, tallyText: '1 mark = $1M over'
+      tallyLab: bodyTop + 66, tallyText: '1 mark = $1M over the line'
     };
+    for (let i = 0; i < 6; i++) {
+      m['c' + i] = bk(i) ? '#111' : '#F6F4EE';
+      m['t' + i] = bk(i) ? '#F6F4EE' : '#111';
+      m['r' + i] = rate(i).toFixed(2);
+    }
 
     // ---- gate
     const Yc = y.cap;
@@ -557,112 +607,141 @@ class Component extends DCLogic {
       calBands: calBands, calTicks: calTicks, threadEnd: threadEnd, decLinkOp: closed ? 1 : 0,
       axis: axis, ticks: ticks, wallTop: wallTop, wallCope: wallTop - 7, bricks: bricks,
       rackBeam: rackBeam, rackEnd: y.a1 - 14, hooks: hooks,
-      postTop: Yc - 22, armTop: Yc - 6, gateRot: Math.round(-78 * (1 - react.cap)),
+      postTop: Yc - 22, armTop: Yc - 6, gateSc: (0.16 + 0.84 * react.cap).toFixed(3),
       doorTop: Yc - 24, knob: Yc + 0,
       doorL: '286,' + (Yc - 24) + ' 272,' + (Yc - 18) + ' 272,' + (Yc + 26) + ' 286,' + (Yc + 20),
       doorR: '614,' + (Yc - 24) + ' 628,' + (Yc - 18) + ' 628,' + (Yc + 26) + ' 614,' + (Yc + 20),
       doorLab: Yc + 38
     };
-    // floor arrows
+    // floor arrows: the plate pushes while a desk sits under the floor
     let arrows = '';
     for (let i = 0; i < 6; i++) {
       const cx = 312 + i * 65, t = y.floor - 50, b = y.floor - 5;
       arrows += 'M' + cx + ' ' + t + ' L' + (cx + 14) + ' ' + (t + 20) + ' L' + (cx + 6) + ' ' + (t + 20) + ' L' + (cx + 6) + ' ' + b + ' L' + (cx - 6) + ' ' + b + ' L' + (cx - 6) + ' ' + (t + 20) + ' L' + (cx - 14) + ' ' + (t + 20) + ' Z ';
     }
-    g.arrows = arrows; g.arrowOp = react.floor >= 1 ? 0.35 : 1;
+    g.arrows = arrows; g.arrowOp = react.floor >= 1 ? 0.35 : 1; g.arrowCls = react.floor >= 1 ? '' : 'pushing';
 
     // ---- pennants
     const pen = (yy) => '112,' + (yy - 22).toFixed(1) + ' 262,' + (yy - 22).toFixed(1) + ' 250,' + yy.toFixed(1) + ' 262,' + (yy + 22).toFixed(1) + ' 112,' + (yy + 22).toFixed(1);
-    const yYou = Y(view === 'other' ? you.end : cur);
+    const youNow = view === 'other' ? you.end : cur;
+    const yYou = Y(youNow);
     const yOth = Y(cur);
-    const nx = LINES.find((L) => L.v > vd.start);
+    const nx = view === 'other' ? LINES.find((L) => L.v > oth.start) : LINES.find((L) => L.k === 'cap');
     const dist = nx ? nx.v - vd.start : 0;
     const ghostShow = acted && vd.price > 0 && u > 0.05;
     const showGone = acted && vd.price > 0 && ff >= c.F;
-    const ghostTop = Y(vd.start) + 26;
+    let n2 = '', n3 = '';
+    if (view === 'you') {
+      if (!acted) { n2 = f3(under) + ' under floor'; n3 = 'room ' + f3(roomBefore); }
+      else if (choice === 'sign') { if (showGone) { n2 = 'room left ' + f3(roomNow); n3 = f1(you.price) + ' spent'; } }
+      else { n2 = f3(under) + ' under floor'; n3 = 'room kept ' + f3(roomBefore); }
+    } else if (!othLegal) { n2 = 'refused at ' + f1(othAsk); n3 = 'no door pays it'; }
+    else if (showGone) { n2 = 'room to ' + nx.n.replace('the ', ''); n3 = f3(dist) + ' gone'; }
+    const noteH = 66;
     const p = {
-      youPts: pen(yYou), youTop: Math.round(yYou - 22), youText: f1(view === 'other' ? you.end : cur),
+      youPts: pen(yYou), youTop: Math.round(yYou - 22), youText: f1(youNow),
       othPts: pen(view === 'other' ? yOth : -100), othTop: Math.round(view === 'other' ? yOth - 22 : -100), othText: f1(cur), othOp: view === 'other' ? 1 : 0,
       ghostPts: pen(Y(you.start)), ghostOp: (view === 'you' && ghostShow) ? 1 : 0,
       ghost2Pts: pen(Y(oth.start)), ghost2Op: (view === 'other' && ghostShow) ? 1 : 0,
-      gTop: Math.round(ghostTop), gOp: ghostShow ? 1 : 0, gCol: view === 'other' ? '#111' : '#006B2D',
-      g1: 'started ' + f1(vd.start), g2: showGone ? 'room to ' + nx.n : '', g3: showGone ? f3(dist) + ' gone' : ''
+      gCol: view === 'other' ? '#111' : (acted && choice === 'sign' ? '#006B2D' : '#B23A17'), gDisp: n2 ? 'block' : 'none',
+      nTop: view === 'you' ? Math.round(Y(vd.start) - 22 - 4 - noteH) : Math.round(Y(vd.start) + 24),
+      nLine: 'illustrative',
+      g2: n2, g3: n3,
+      roomTop: Math.round(Y(c.CAP)), roomH: Math.max(0, Math.round(Y(youNow) - Y(c.CAP)))
     };
 
     // ---- labels
-    const lab = (k, above, x, w, tag, name, rule, prov, note, tex, extra) => {
+    const lab = (k, above, x, w, tag, name, rule, prov, note, tex) => {
       const L = LINES.find((z) => z.k === k);
-      const h = 16 + 28 + 18 + (note ? 16 : 0);
-      return { x: x, w: w, top: Math.round(above ? y[k] - h - 6 : y[k] + 6), tag: tag, name: name, fig: f3(L.v), rule: how ? prov : rule, note: how ? '' : note, tex: tex };
+      const h = 16 + 28 + 18 + (note ? (note.split('\n').length * 16) : 0);
+      return { x: x, w: w, top: Math.round(above ? y[k] - h - 6 : y[k] + 6), tag: tag, name: name, fig: f3(L.v), rule: how ? prov : rule, note: how ? '' : note, tex: tex, fs: how ? 13 : 14 };
     };
     const labels = [
       lab('a2', true, 668, 372, 'NO ENTRY', 'SECOND APRON', 'The league says no. You cannot go past.', 'OBSERVED · fixture, verify', '', 't-obs'),
-      lab('a1', true, 668, 372, 'TOOLS COME OFF', 'FIRST APRON', 'Cross it and these tools leave the rack.', 'OBSERVED line · tool list AUTHORED', 'tool list: AUTHORED, verify', 't-obs'),
-      lab('tax', false, 728, 312, 'COSTS MONEY', 'TAX LINE', 'Every dollar over pays a bracket rate.', 'OBSERVED line · brackets AUTHORED', 'simplified: the real brackets are indexed each year', 't-obs'),
-      lab('cap', false, 668, 372, 'NEEDS A DOOR', 'THE CAP', 'Above it, only exception doors let you sign.', 'OBSERVED · fixture, verify', '', 't-obs'),
-      lab('floor', false, 668, 372, 'MUST REACH', 'THE FLOOR', 'Minimum team salary: 90% of the cap.', 'COMPUTED · 90% × the cap', '', 't-com')
+      lab('a1', true, 668, 372, 'TOOLS COME OFF', 'FIRST APRON', 'Cross it and these tools leave the rack.', 'OBSERVED line · tool list AUTHORED', 'Used the big exception? A wall.', 't-obs'),
+      lab('tax', false, 724, 332, 'COSTS MONEY', 'TAX LINE', 'Every dollar over pays a bracket rate.', 'OBSERVED line · rates AUTHORED', 'first-time payer rates (simplified)', 't-obs'),
+      lab('cap', false, 668, 372, 'NEEDS A DOOR', 'THE CAP', 'Above it, only an exception can sign a free agent.', 'OBSERVED · fixture, verify', 'Biggest door: ' + f3(c.BIG) + ' (verify).\nCap room spends it too (simplified).', 't-obs'),
+      lab('floor', false, 668, 372, 'MUST REACH', 'THE FLOOR', 'Minimum team salary. Below it, the plate pushes up.', 'OBSERVED · published; the CBA sets it at 90% of the cap', '', 't-obs')
     ];
 
     // ---- receipts
-    const receipt = (d, isYou) => {
-      const nxt = LINES.find((L) => L.v > d.start);
-      const dst = nxt ? nxt.v - d.start : 0;
-      const crossed = LINES.filter((L) => d.start < L.v && d.end >= L.v);
-      const tax = taxOf(d.end) - taxOf(d.start);
-      const tools = crossed.some((L) => L.k === 'a1') ? 3 : 0;
-      const list = crossed.map((L) => L.n).join(' and ');
-      if (isYou) {
-        return {
-          tag: 'YOUR RECEIPT · COMPUTED',
-          big: d.price > 0 ? 'You paid ' + f1(d.price) + '.' : 'You passed.',
-          body: d.price > 0 ? 'The distance to your next line was ' + f3(dst) + '. That distance is gone.' : 'Your ' + f3(dst) + ' of room under ' + (nxt ? nxt.n : 'the cap') + ' is still there. Wing A signs somewhere else.',
-          tax: f2(tax), tools: tools + ' of 3', all: f2(d.price + tax)
-        };
-      }
-      return {
-        tag: 'ANOTHER DESK · STARTS ' + f1(d.start) + ' · ILLUSTRATIVE',
-        big: 'It paid ' + f1(d.price) + (tax > 0 ? ', then ' + f2(tax) + ' tax.' : '.'),
-        body: 'Its next line was ' + f3(dst) + ' away. That distance is gone.' + (list ? ' It crossed ' + list + '.' : ''),
-        tax: f2(tax), tools: tools + ' of 3', all: f2(d.price + tax)
-      };
+    const compact = is.otherOn || is.otherRefuse;
+    const crossedOf = (d) => LINES.filter((L) => d.start < L.v && d.end >= L.v);
+    const tax1 = taxOf(you.end) - taxOf(you.start);
+    const rc1 = {
+      tag: 'YOUR RECEIPT · COMPUTED',
+      big: choice === 'sign' ? 'You paid ' + f1(you.price) + '.' : 'You passed.',
+      body: choice === 'sign' ? 'Room was ' + f3(roomBefore) + '. ' + f3(roomNow) + ' is left.' : 'You kept ' + f3(roomBefore) + '. Still ' + f3(under) + ' under the floor.',
+      door: choice === 'sign' ? 'DOOR · cap room' : 'DOOR · none used, room kept',
+      ghost: 'Day 3: Big B asks ' + f1(c.BIGB) + '. Your room: ' + f3(roomNow) + '.',
+      tax: f2(tax1), tools: (crossedOf(you).some((L) => L.k === 'a1') ? 3 : 0) + ' of 3', all: f2(you.price + tax1)
     };
-    const rc1 = receipt(you, true), rc2 = receipt(oth, false);
+    const tax2 = taxOf(oth.end) - taxOf(oth.start);
+    const rc2 = {
+      tag: 'ANOTHER DESK · ' + f1(oth.start) + ' START · AUTHORED',
+      big: 'Paid ' + f1(oth.price) + ' + ' + f2(tax2) + ' tax.',
+      body: 'The tax line was ' + f3(c.TAX - oth.start) + ' away. Now ' + f3(Math.max(0, oth.end - c.TAX)) + ' over.',
+      door: 'DOOR · big exception, up to ' + f3(c.BIG),
+      wall: 'Wall at the first apron, ' + f3(c.A1 - oth.end) + ' above.',
+      tax: f2(tax2), tools: (crossedOf(oth).some((L) => L.k === 'a1') ? 3 : 0) + ' of 3', all: f2(oth.price + tax2)
+    };
+    const rc2r = {
+      tag: 'ANOTHER DESK · ' + f1(oth.start) + ' START · REFUSED',
+      big: 'Not at ' + f1(othAsk) + '.',
+      body: 'Over the cap, the biggest door pays ' + f3(c.BIG) + '.',
+      btn: 'Try ' + f1(bigStep) + ' instead'
+    };
 
     // ---- ladder
-    const crossedCap = you.start < c.CAP && you.end >= c.CAP;
     const r1 = choice === 'sign'
-      ? 'You paid ' + f1(you.price) + ' for Wing A and ' + (crossedCap ? 'lost your room under the cap.' : 'used up part of your room under the cap.')
-      : choice === 'pass' ? 'You passed on Wing A and kept your ' + f3(c.CAP - you.start) + ' of room under the cap.'
+      ? 'You paid ' + f1(you.price) + ' from your room. ' + f3(roomNow) + ' of room is left under the cap.'
+      : choice === 'pass' ? 'You passed on Wing A and kept your ' + f3(roomBefore) + ' of room under the cap.'
       : 'Fills when you sign Wing A or pass.';
+    const t4 = choice === 'pass'
+      ? 'You kept ' + f3(roomBefore) + '. On Day 3 Big B asks ' + f1(c.BIGB) + ' and fits. Wing A is what you gave up.'
+      : 'On Day 3 Big B asks ' + f1(c.BIGB) + ' and you have ' + f3(roomNow) + '. That room went to Wing A. Big B is what you gave up.';
     const ld = {
       b1: acted && finished ? 'solid' : 'dashed', tex1: acted && finished ? 't-rec' : 't-unk', t1: acted && finished ? r1 : 'Fills when you sign Wing A or pass.', c1: acted && finished ? '#111' : '#2A2A27', w1: how && acted && finished ? '· RECORDED' : '',
       w2: how ? '· UNKNOWN' : '',
       b3: seenOther ? 'solid' : 'dashed', tex3: seenOther ? 't-obs' : 't-unk', w3: how ? (seenOther ? '· OBSERVED' : '· UNKNOWN') : '',
       b4: named ? 'solid' : 'dashed', tex4: named ? 't-aut' : 't-unk', w4: how ? (named ? '· AUTHORED' : '') : '',
-      t4: choice === 'pass' ? 'Passing kept the room and gave up the player. It is the next-best thing you could have done, and you can only spend the room once.' : 'It is the next-best thing you could have done with what you spent. You can only spend the same room once.',
+      t4: t4,
       b5: outside ? 'solid' : 'dashed', w5: how ? (outside ? '· AUTHORED' : '') : ''
     };
 
     const otherBackLabel = 'Back to my desk';
-    const movingText = view === 'other' ? 'Same player, same number, another desk. Watch the meter and the rack.' : 'The marker is moving. Watch what each line does.';
+    const movingText = view === 'other' ? 'Same player, another desk. Watch the meter and the rack.' : 'The marker is moving. Watch what each line does.';
+    const headline = !othLegal ? f1(othAsk) + ' fits your room. No door at the other desk pays it.'
+      : choice === 'pass' ? 'Wing A cost the other desk ' + rc2.all + '. You kept your room.'
+      : s.othOffer != null ? 'At ' + f1(oth.price) + ' the other desk pays ' + rc2.all + ' and gets a wall.'
+      : 'The same player cost two desks two different things.';
 
     return {
       how: how, howPressed: how ? 'true' : 'false', howBg: how ? '#111' : '#F6F4EE', howFg: how ? '#F6F4EE' : '#111',
       toggleHow: () => this.setState({ how: !(this.state && this.state.how) }),
-      replay: () => this.setState({ offer: 16.5, choice: null, price: 0, view: 'you', f: 0, anim: false, animWho: 'you', seenOther: false, named: false, outside: false, closed: false, cf: 0 }),
-      g: g, y: y, t0: t0, t1: t1, t2: t2, m: m, p: p, months: months, route: route, is: is, tickLabels: tickLabels,
-      labels: labels, rc1: rc1, rc2: rc2, ld: ld,
-      showHeadline: is.otherOn, movingText: movingText, otherBackLabel: otherBackLabel,
+      replay: () => this.setState({ offer: 16.5, choice: null, price: 0, view: 'you', f: 0, anim: false, animWho: 'you', seenOther: false, named: false, outside: false, closed: false, cf: 0, othOffer: null }),
+      g: g, y: y, t0: t0, t1: t1, t2: t2, m: m, p: p, w1: w1, months: months, route: route, is: is, tickLabels: tickLabels,
+      labels: labels, rc1: rc1, rc2: rc2, rc2r: rc2r, ld: ld,
+      rcTop: compact ? 500 : 488, rcH: compact ? 122 : 134, rcPad: compact ? '4px 10px 4px 12px' : '6px 12px 6px 14px', rcBig: compact ? 20 : 24, rcBigLH: compact ? 22 : 28,
+      headline: headline,
+      showHeadline: compact, movingText: movingText, otherBackLabel: otherBackLabel,
+      askText: f1(c.ASK), rangeText: f1(c.PMIN) + ' TO ' + f1(c.PMAX), othStartText: f1(c.S_OTH),
       offerText: f1(offer),
+      roomAfterText: 'Room after signing: ' + f3(c.CAP - (c.S_YOU + offer)),
       dec: () => { const o = (this.state && this.state.offer == null) ? 16.5 : (this.state || {}).offer; this.setState({ offer: Math.max(c.PMIN, R1(o - 0.5)) }); },
       inc: () => { const o = (this.state && this.state.offer == null) ? 16.5 : (this.state || {}).offer; this.setState({ offer: Math.min(c.PMAX, R1(o + 0.5)) }); },
-      sign: () => this.setState({ choice: 'sign', price: offer, view: 'you', f: 0, anim: true, animWho: 'you' }),
-      pass: () => this.setState({ choice: 'pass', price: 0, view: 'you', f: FT, anim: false, animWho: 'you' }),
+      sign: () => this.setState({ choice: 'sign', price: offer, view: 'you', f: 0, anim: true, animWho: 'you', othOffer: null }),
+      pass: () => this.setState({ choice: 'pass', price: 0, view: 'you', f: FT, anim: false, animWho: 'you', othOffer: null }),
       toggleOther: () => {
         const st = this.state || {};
         if (st.view === 'other') this.setState({ view: 'you', anim: false, f: FT });
-        else this.setState({ view: 'other', seenOther: true, f: 0, anim: true, animWho: 'other' });
+        else {
+          const ask = st.othOffer != null ? st.othOffer : (st.choice === 'sign' ? (st.price || 0) : c.ASK);
+          const legal = ask <= c.BIG + 1e-9;
+          this.setState({ view: 'other', seenOther: true, f: legal ? 0 : FT, anim: legal, animWho: 'other' });
+        }
       },
+      tryLegal: () => this.setState({ othOffer: bigStep, f: 0, anim: true, animWho: 'other' }),
       closeJuly: () => this.setState({ closed: true, cf: 0 }),
       nameIt: () => this.setState({ named: true }),
       outsideIt: () => this.setState({ outside: true })
