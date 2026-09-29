@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Guest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,800;1,400&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16120E; --tx:#16120E; --paper:#FBF8F0; --desk:#D9D4C7; --dt:#26221C; --dm:#4A443A; --muted:#5A5347;
+  --you:#B0401A; --guest:#1F6B4C; --rule:#BDB6A3; --focus:#C2410C;
+  --serif:'Spectral','Iowan Old Style','Liberation Serif',Georgia,serif;
+  --sans:'Work Sans','Liberation Sans','DejaVu Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--desk);color:var(--dt);font:15px/1.45 var(--sans)}
+body{min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 2px #fff}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1440px;margin:0 auto;padding:0 16px 14px}
+
+/* ---------- prototype chrome (the stage, never BOW) ---------- */
+.status{margin:0;padding:5px 0 3px;font-size:11.5px;letter-spacing:.02em;color:var(--dm)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:2px 0 6px}
+.bar h1{margin:0;font:600 13px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--dt)}
+.bar h1 small{font-weight:400;letter-spacing:.02em;text-transform:none;color:var(--dm);margin-left:8px}
+.sw{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.tb{border:1.5px solid var(--dt);background:transparent;padding:5px 10px;min-height:32px;font-size:12.5px;font-weight:500;border-radius:3px;color:var(--dt)}
+.tb[aria-pressed=true]{background:var(--dt);color:var(--desk)}
+.tb[aria-pressed=true]::before{content:"\25A0\00a0"}
+.eps{display:flex;gap:3px;border-top:1.5px solid var(--dt);border-bottom:1px solid var(--rule);padding:4px 0}
+.ep{flex:1 1 0;min-width:0;border:0;background:transparent;padding:6px 4px;min-height:36px;font-size:12.5px;font-weight:500;text-align:left;border-bottom:3px solid transparent;color:var(--dt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ep b{font-weight:600;margin-right:5px;color:var(--dm)}
+.ep[aria-current=step]{border-bottom-color:var(--ink);font-weight:600;background:rgba(255,255,255,.35)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;padding:5px 0;font-size:12px;color:var(--dt)}
+.legend span{white-space:nowrap}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:16px;margin-top:10px;align-items:start}
+.stage{min-width:0}
+.stage>h2{margin:0 0 6px;font:600 12px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--dm)}
+.stage>h2:focus{outline:none}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 258px;gap:14px;align-items:start}
+.cols.wide{grid-template-columns:minmax(0,1fr) 300px}
+.note{font-size:12.5px;line-height:1.4;color:var(--dt);border-left:3px solid var(--dt);padding:2px 0 2px 10px}
+.note h3{margin:0 0 4px;font:600 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--dm)}
+.note p{margin:0 0 7px}
+.note code{font:11.5px/1.35 ui-monospace,'DejaVu Sans Mono',monospace;background:rgba(255,255,255,.45);padding:1px 3px;display:inline-block;word-break:break-word}
+.note ul{margin:0 0 6px;padding-left:16px}
+.stagectl{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:8px 0 0;font-size:12.5px;color:var(--dt)}
+
+/* ---------- the record rail (stage state inspector) ---------- */
+.rail{font-size:12.5px;line-height:1.35;max-height:calc(100vh - 150px);overflow:auto;padding-right:2px}
+.rail h2{margin:0 0 2px;font:600 12px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--dt)}
+.rail h2 small{display:block;font:400 11.5px var(--sans);letter-spacing:0;text-transform:none;color:var(--dm)}
+.rail .clk{margin:6px 0;padding:5px 0;border-top:1.5px solid var(--dt);border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums}
+.log{list-style:none;margin:0;padding:0}
+.log li{padding:5px 0 5px 8px;border-bottom:1px solid var(--rule);border-left:3px solid var(--dt)}
+.log li.fk{border-left-color:var(--you)}
+.log li.abs{border-left-style:dashed}
+.log .n{display:inline-block;min-width:1.6em;font-weight:600;color:var(--dm)}
+.log .m{display:block;font-size:11.5px;color:var(--dm)}
+.rail h3{margin:12px 0 4px;font:600 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--dm)}
+.rail dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:2px 8px}
+.rail dt{color:var(--dm)}
+.rail dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- truth grammar: seven textures ---------- */
+.ks{display:inline-block;width:12px;height:12px;vertical-align:-1px;margin-right:6px;border:1.5px solid var(--ink);background:var(--paper)}
+.ks[data-k=OBSERVED]{background:var(--ink)}
+.ks[data-k=RECORDED]{background:var(--ink);box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3.5px var(--ink)}
+.ks[data-k=AUTHORED]{background:transparent}
+.ks[data-k=COMPUTED]{background:#B9B2A2}
+.ks[data-k=MODELED]{background:repeating-linear-gradient(135deg,var(--ink) 0 1.5px,transparent 1.5px 4px)}
+.ks[data-k=GENERATED]{background:radial-gradient(var(--ink) 1px,transparent 1.3px) 0 0/4px 4px,var(--paper)}
+.ks[data-k=UNKNOWN]{border-style:dashed;background:transparent}
+.kv{display:inline-block;padding:0 .32em;border:1.5px solid var(--ink);line-height:1.35;font-variant-numeric:tabular-nums lining-nums;white-space:nowrap}
+.kv[data-k=OBSERVED]{background:var(--ink);color:var(--paper)}
+.kv[data-k=RECORDED]{background:var(--ink);color:var(--paper);box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 3px var(--paper)}
+.kv[data-k=AUTHORED]{background:transparent;color:var(--tx)}
+.kv[data-k=COMPUTED]{background:#D6D0BF;border-color:#D6D0BF;color:var(--tx)}
+.kv[data-k=MODELED]{background:repeating-linear-gradient(135deg,rgba(22,18,14,.34) 0 1px,transparent 1px 5px),var(--paper);color:var(--tx)}
+.kv[data-k=GENERATED]{background:radial-gradient(rgba(22,18,14,.6) 1px,transparent 1.5px) 0 0/5px 5px,var(--paper);color:var(--tx)}
+.kv[data-k=UNKNOWN]{border-style:dashed;background:transparent;color:var(--muted)}
+.kv.big{font:600 26px/1.15 var(--serif);padding:2px 10px}
+.prov{display:none;font:400 11.5px/1.3 var(--sans);color:var(--muted);margin:2px 0 0;white-space:normal}
+body.know .prov{display:block}
+.fork .prov,.fork .kv{--ink:var(--you)}
+
+/* ---------- capability overlay (What's real?) ---------- */
+.cap{display:none;position:absolute;left:8px;bottom:4px;z-index:6;max-width:calc(100% - 40px);padding:1px 6px;font:600 10px/1.3 var(--sans);letter-spacing:.05em;text-transform:uppercase;background:var(--paper);color:var(--tx);border:1.5px solid var(--tx)}
+.cap[data-c=R]{background:var(--ink);color:var(--paper)}
+.cap[data-c=S]{border-style:dashed}
+body.cap-on .cap{display:block}
+.rel{position:relative}
+
+/* ---------- BOW's frame: identical in every host ---------- */
+.bow{position:relative;background:var(--paper);color:var(--tx);font-family:var(--serif);border:3px solid var(--ink);border-top-width:10px;clip-path:polygon(0 0,calc(100% - 26px) 0,100% 26px,100% 100%,0 100%)}
+.bow::after{content:"";position:absolute;top:-10px;right:-3px;width:26px;height:26px;background:linear-gradient(to bottom left,transparent 50%,var(--ink) 50% calc(50% + 7px),transparent calc(50% + 7px))}
+.bowhd{display:flex;align-items:baseline;gap:10px;padding:7px 34px 6px 12px;border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.wm{font:800 14px var(--serif);letter-spacing:.24em;padding-right:2px}
+.bk{font:600 12.5px var(--serif);letter-spacing:.06em;text-transform:uppercase}
+.drawn{font:italic 400 11.5px var(--serif);color:var(--muted);margin-left:auto}
+.bowbd{padding:12px 14px 26px}
+.bow h3{font:600 20px/1.2 var(--serif);margin:0 0 6px}
+.bow h4{font:600 12px var(--serif);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 4px;color:var(--muted)}
+.bow p{margin:0 0 8px}
+.bow .sm{font-size:13.5px;color:var(--muted)}
+.bow .tiny{font-size:12px;color:var(--muted)}
+.bow ul{margin:0 0 8px;padding-left:18px}
+.bow.fork{--ink:var(--you)}
+.bow.fork::after{background:linear-gradient(to bottom left,transparent 50%,var(--you) 50% calc(50% + 7px),transparent calc(50% + 7px))}
+.bow.quiet{border-width:1px;border-top-width:2px;clip-path:none;color:var(--muted)}
+.bow.quiet::after{display:none}
+.bow.quiet .wm{color:var(--muted);font-weight:400}
+.bb{border:2px solid var(--ink);background:var(--paper);color:var(--tx);font:600 14.5px/1.2 var(--serif);padding:9px 14px;min-height:44px;letter-spacing:.01em}
+.bb:hover{background:#EDE7D6}
+.bb.pri{background:var(--ink);color:var(--paper)}
+.bb.pri:hover{background:#3a332b}
+.bb[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.bb[aria-pressed=true]::before{content:"\25CF\00a0"}
+.bb[disabled]{opacity:1;color:var(--muted);border-style:dashed;background:transparent;cursor:not-allowed}
+.bb.you{border-color:var(--you);color:var(--you)}
+.bb.you.pri{background:var(--you);color:#fff}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stamp{display:inline-block;border:2.5px solid var(--ink);padding:3px 9px;font:800 12.5px var(--serif);letter-spacing:.09em;text-transform:uppercase}
+.stamp.you{border-color:var(--you);color:var(--you)}
+.sealed{border:2px dashed var(--ink);padding:8px 10px;margin:6px 0;color:var(--tx)}
+.sealed b{font-weight:600}
+.hole{border:1.5px dashed var(--ink);padding:5px 9px;margin:4px 0;color:var(--muted)}
+.rule2{border:0;border-top:3px double var(--ink);margin:10px 0}
+.ln{display:flex;gap:8px;align-items:baseline;margin:4px 0}
+.ln .ks{flex:none;transform:translateY(2px)}
+.ln>span{flex:1}
+.lbl{font:600 11px var(--serif);letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.rec{border:3px solid var(--ink);box-shadow:inset 0 0 0 3px var(--paper),inset 0 0 0 4.5px var(--ink);padding:10px 12px 8px;background:var(--paper)}
+.recl{font:600 11px var(--serif);letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+.forkbox{border:3px solid var(--you);padding:10px 12px 8px;background:var(--paper);color:var(--tx)}
+.forkbox .recl{color:var(--you)}
+.forkbox .kv[data-k]{--ink:var(--you)}
+
+/* ---------- hosts: deliberately plain, borrowed rooms ---------- */
+.host{position:relative;border:1px solid #9A9384;background:#fff}
+.hh{display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid #C8C4BA;font:600 12.5px var(--sans);background:#F1F1EF}
+.hh em{font:400 11px var(--sans);color:#5B564B;margin-left:auto;font-style:normal}
+.hh .dot{width:9px;height:9px;border-radius:50%;background:#8B8F95}
+.hb{border:0;border-radius:8px;background:#E3E4E6;padding:7px 14px;min-height:38px;font:500 13px var(--sans);color:#1F2226}
+.hb:hover{background:#D6D8DB}
+.hb.pri{background:#3B3F45;color:#fff}
+.asst .tr{background:#EEF0F2;padding:14px;overflow:auto;height:calc(100vh - 285px);min-height:330px;max-height:640px;display:flex;flex-direction:column;gap:10px;font-family:var(--sans)}
+.bub{max-width:72%;padding:9px 13px;border-radius:14px;font:400 14.5px/1.45 var(--sans)}
+.bub.u{align-self:flex-end;background:#D3D8DE}
+.bub.a{align-self:flex-start;background:#fff;border:1px solid #D5D8DC}
+.bub small{display:block;font-size:11px;color:#5B6067;margin-bottom:2px}
+.tr .bow{align-self:stretch;margin:2px 4px 4px 0}
+.hint{color:#4C5157;font-size:13.5px;margin:auto}
+.comp{display:flex;gap:8px;padding:10px 12px;border-top:1px solid #C8C4BA;background:#F7F7F6}
+.comp input{flex:1;font:400 14px var(--sans);padding:8px 10px;border:1px solid #B5B8BC;border-radius:8px;background:#fff;color:#1F2226}
+.paper{background:#F1EBD9;color:#1C1A16;border:1px solid #8C8570;font-family:Georgia,'Liberation Serif',serif}
+.paper .mast{text-align:center;border-bottom:4px double #1C1A16;padding:10px 0 6px;margin:0 14px}
+.paper .mast b{font:italic 700 30px/1 Georgia,'Liberation Serif',serif;letter-spacing:.02em}
+.paper .mast small{display:block;font:500 10.5px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#4B4536;margin-top:3px}
+.paper .art{padding:12px 20px 14px;max-width:660px;margin:0 auto}
+.paper .kick{font:600 11px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#6A2E14}
+.paper h3{font:700 27px/1.15 Georgia,'Liberation Serif',serif;margin:4px 0 6px}
+.paper .by{font:400 11.5px var(--sans);color:#4B4536;margin-bottom:10px}
+.paper p{font-size:17.5px;line-height:1.95;margin:0 0 10px}
+.mark{border:0;background:transparent;font:inherit;color:inherit;padding:2px 1px;border-bottom:2px solid #1C1A16;cursor:pointer;line-height:1.2;min-height:28px}
+.mark:hover{background:#E4DCC2}
+.mark[aria-pressed=true]{background:#1C1A16;color:#F1EBD9}
+.mark.none{border-bottom:2px dashed #1C1A16}
+.phonewrap{display:flex;justify-content:center}
+.phone{width:330px;border:9px solid #2B2926;border-radius:30px;background:#F6F6F4;color:#1F2226;overflow:hidden;font-family:var(--sans);position:relative}
+.phone .sb{display:flex;justify-content:space-between;padding:6px 14px 4px;font:500 11.5px var(--sans);background:#F6F6F4}
+.phone .who{padding:6px 14px 8px;text-align:center;font:600 14px var(--sans);border-bottom:1px solid #D6D6D2}
+.phone .who small{display:block;font:400 10.5px var(--sans);color:#5B564B}
+.phone .msgs{padding:10px;display:flex;flex-direction:column;gap:8px;min-height:400px}
+.pm{max-width:88%;padding:8px 11px;border-radius:14px;background:#E6E6E2;font-size:14px;line-height:1.4}
+.pm.me{align-self:flex-end;background:#D5E7D2}
+.pm .plain{display:block;font:500 12.5px/1.35 ui-monospace,'DejaVu Sans Mono',monospace;margin-top:4px;word-break:break-word}
+.pm .hb{margin-top:6px;font-size:12.5px;min-height:34px;padding:5px 12px}
+.voice{background:#F0EEE8;border:1px solid #9A9384}
+.voice .vt{padding:12px 16px;display:flex;flex-direction:column;gap:8px;min-height:300px;font-family:var(--sans)}
+.vl{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:start;font-size:14.5px}
+.vl>b{font:600 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#4B4739;padding-top:3px}
+.vl .bow{margin:0}
+.speaker{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#E2DFD6;border-bottom:1px solid #B0AA9A}
+.speaker svg{flex:none}
+.call{background:#2A2724;color:#F1EFEA;border-color:#161412;width:330px}
+.call .who{border-color:#4A4641;background:#2A2724;color:#F1EFEA}
+.call .who small{color:#C9C4BB}
+.call .sb{background:#2A2724;color:#D9D5CC}
+.call .cbody{padding:16px 14px;min-height:400px;display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center}
+.call .cn{font:600 20px/1.2 var(--sans)}
+.call .cs{font-size:13px;color:#D7D3C9;line-height:1.4}
+.call .cbtn{display:flex;gap:26px;margin-top:auto;padding-bottom:6px}
+.call .cbtn button{min-width:104px;min-height:48px;border-radius:24px;border:0;font:600 14px var(--sans);color:#fff}
+.call .yes{background:#2F7A4B}
+.call .no{background:#9C3B2B}
+.call .cbtn button:disabled{background:#4A4641;color:#C9C4BB}
+.phone .bow{margin:8px}
+</style>
+<style>
+.drift{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border:2px solid var(--ink);border-left-width:8px;padding:6px 10px;margin:8px 0}
+.ticks{display:inline-flex;gap:4px}
+.tick{display:inline-block;width:14px;height:14px;border:2px solid var(--ink);background:transparent}
+.tick.on{background:var(--ink)}
+</style>
+</head>
+<body>
+<div id="app" class="wrap"></div>
+<div id="live" class="sr" aria-live="polite" role="status"></div>
+<script src="_shared/boston-fixture.js"></script>
+<script>
+'use strict';
+/* P4 · THE GUEST — a nearly invisible Browser. Design evidence, not product code.
+   One canonical state S, one act(kind, payload). Every representation re-renders from S. */
+const FX = window.BOW_FIXTURE, L = FX.league.season2627, R = FX.reality, W = FX.world, C0 = FX.cuts.deadline2026;
+const $ = (s, r) => (r || document).querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const Mx = v => '$' + (+(v / 1e6).toFixed(3)) + 'M';
+const M1 = v => '$' + (v / 1e6).toFixed(1) + 'M';
+const M2 = v => '$' + (+(v / 1e6).toFixed(2)) + 'M';
+const USD = v => '$' + Math.round(v).toLocaleString('en-US');
+/* Values invented for this prototype are AUTHORED and say so; derived values are COMPUTED. */
+const A = (v, note) => ({ v: v, k: 'AUTHORED', src: 'authored for this prototype' + (note ? ' (' + note + ')' : '') + ' — illustrative', asOf: null, verify: false });
+const Cp = (v, src) => ({ v: v, k: 'COMPUTED', src: src, asOf: null, verify: false });
+const UNK = note => ({ v: null, k: 'UNKNOWN', src: null, asOf: null, verify: true, note: note });
+const provOf = f => f.k + ' · ' + (f.src || 'no source') + (f.asOf ? ' · as of ' + f.asOf : '') + (f.verify ? ' · verify' : '') + (f.note ? ' · ' + f.note : '');
+const KD = k => '<i class="ks" data-k="' + k + '" aria-hidden="true"></i>';
+const kv = (k, t, p, cls) => '<span class="kv' + (cls ? ' ' + cls : '') + '" data-k="' + k + '">' + t + '</span>' + (p ? '<span class="prov">' + esc(p) + '</span>' : '');
+const fv = (f, t, cls) => kv(f.k, t, provOf(f), cls);
+const fmtVal = f => f.v == null ? (f.note || 'unknown') : typeof f.v === 'number' ? (f.v >= 1e6 ? '≈ ' + M1(f.v) : String(f.v)) : f.v;
+const CAPS = { R: 'REAL CURRENT PRODUCT CAPABILITY', P: 'PROPOSED PLATFORM CAPABILITY', S: 'SPECULATIVE FRONTIER' };
+const cap = (c, cost) => '<span class="cap" data-c="' + c + '">' + CAPS[c] + (cost ? ' · ' + cost : '') + '</span>';
+const B = (label, a, p, cls, x) => '<button type="button" class="' + (cls || 'bb') + '" data-a="' + a + '"' + (p != null ? ' data-p="' + esc(p) + '"' : '') + ' data-fk="' + a + '|' + (p == null ? '' : esc(p)) + '"' + (x ? ' ' + x : '') + '>' + label + '</button>';
+const TG = (label, a, p, on, cls) => B(label, a, p, cls || 'bb', 'aria-pressed="' + (on ? 'true' : 'false') + '"');
+const hash = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return ('0000000' + (h >>> 0).toString(16)).slice(-8); };
+
+/* ---------------------------------------------------------------- canonical state */
+const TIMES = [
+  { real: 'Tue 29 Sep 2026', world: 'Year Two · Week 9' },
+  { real: 'Mon 5 Oct 2026, 09:41', world: 'Year Two · Week 10 · Monday' },
+  { real: 'Tue 13 Oct 2026, 10:12', world: 'Year Two · Week 11 · Tuesday' },
+  { real: 'Mon 19 Oct 2026, 18:40', world: 'Year Two · Week 12 · Monday' }
+];
+const S = {
+  scene: 'assistant', floor: false, know: false, cap: false, panel: false, n: 0, time: 0, seat: false, bound: null,
+  log: [], revealed: {},
+  asst: { sent: false, cut: false, cutAt: 'today', enter: false },
+  art: { mark: null, door: null, moment: null },
+  msg: { later: false, open: null, see: false, kept: false },
+  voice: { step: 0, miss: false, typed: false, opened: false },
+  offer: { id: 'owner', phase: 'arrival', taken: [false, false, false], carrier: 'text', second: false, ghost: false, redeemed: { owner: false, maya: false } },
+  ring: { phase: 'ringing', hold: null, answer: null, hung: false, note: null },
+  w: { payroll: W.payroll.v, roster: 15, guard: true, callup: 'open', owner: 'open', denver: 'open', tradeBy: null },
+  orders: { away: false, fired: null, ratified: false, takeout: false },
+  round: { started: false, stop: 0, res: {}, door: 'branch', end: false },
+  stand: { sel: 'seat', sentence: false },
+  floorAsk: { text: 'the Philadelphia call in June 2017', done: null, queued: false },
+  kept: { branch: 'held' }
+};
+const T = () => TIMES[S.time];
+function log(who, what, o) {
+  o = o || {};
+  S.log.unshift({ n: ++S.n, who: who, what: what, real: o.real || T().real, world: o.world !== undefined ? o.world : (S.seat ? T().world : 'no seat yet'), hist: o.hist || 'Reality (read only)', k: o.k || 'RECORDED', abs: !!o.abs, fork: !!o.fork });
+}
+function say(t) { const l = $('#live'); if (l) { say.n = (say.n || 0) + 1; l.textContent = t + (say.n % 2 ? '' : '​'); } }
+/* World rule (authored): flat 1.5x over the World's own $200M line — not the NBA's incremental tax. */
+const projTax = p => Math.max(0, p - W.taxLine.v) * 1.5;
+const ACTS = {}, SCENE = {};
+function act(kind, p) {
+  const f = ACTS[kind];
+  if (!f) { console.error('unknown act ' + kind); return; }
+  f(p);
+  render(kind === 'goto');
+}
+
+/* ---------------------------------------------------------------- shared pieces */
+const bow = (kind, body, o) => {
+  o = o || {};
+  return '<section class="bow ' + (o.cls || '') + '"' + (o.aria ? ' aria-label="' + esc(o.aria) + '"' : '') + '><header class="bowhd"><span class="wm">BOW</span><span class="bk">' + kind + '</span><span class="drawn">' + (o.drawn || 'drawn by BOW · the host cannot restyle this') + '</span></header><div class="bowbd">' + body + '</div>' + (o.cap || '') + '</section>';
+};
+const ln = (k, html) => '<div class="ln">' + KD(k) + '<span>' + html + '</span></div>';
+const sealedBox = t => '<div class="sealed"><b>Sealed.</b> ' + (t.charAt(0).toUpperCase() + t.slice(1)) + '</div>';
+const seam = (title, html) => '<aside class="note" aria-label="Stage note"><h3>Stage note · ' + esc(title) + '</h3>' + html + '</aside>';
+
+/* a door into a past moment is named by its QUESTION; the outcome stays sealed until an observer asks */
+function sealedDoor(id) {
+  const m = FX.moments.find(x => x.id === id);
+  const open = S.revealed[id];
+  return '<div class="rec"><p class="recl">Door · Recorded moment</p><p><b>' + esc(m.question) + '</b></p>' +
+    (m.seat ? '<p class="sm">Seat: ' + esc(m.seat) + '</p>' : '') +
+    (open ? ln(m.sealed.k, esc(m.sealed.v) + '<span class="prov">' + esc(provOf(m.sealed)) + '</span>') + '<p class="tiny">You asked as an observer: nobody sat in the seat. In the seat, this stays sealed until you act.</p>'
+      : sealedBox('The outcome is not on the door. In the seat you find out by acting; as an observer you can ask.') + '<div class="row">' + B('Ask as an observer', 'observe', id) + '</div>') + '</div>';
+}
+ACTS.observe = id => { S.revealed[id] = true; const m = FX.moments.find(x => x.id === id); log('you', 'asked as an observer: ' + (m ? m.question : id), { hist: 'Reality (observer; no seat)', k: 'OBSERVED' }); say('Outcome revealed to you as an observer.'); };
+
+/* layered cut: state / known / sealed */
+function cutData(id) {
+  if (id === 'deadline') return {
+    title: C0.label + ' · Boston Celtics · Reality',
+    state: C0.state.map(s => ({ what: s.what, f: s.value })),
+    known: C0.known.map(s => ({ what: s.what, f: s.value })),
+    sealed: C0.sealed.map(s => ({ date: s.date, what: s.what, f: s.value, note: s.note }))
+  };
+  return {
+    title: 'Today · 29 Sep 2026 · Boston Celtics · Reality',
+    state: [
+      { what: 'Phase', f: R.clock.phase },
+      { what: 'Cap payroll', f: R.capPayroll, txt: '≈ ' + M1(R.capPayroll.v) },
+      { what: 'Tax salary', f: R.taxSalary, txt: USD(R.taxSalary.v) },
+      { what: 'Tax line', f: L.tax, txt: Mx(L.tax.v) },
+      { what: 'First / second apron', f: L.apron1, txt: Mx(L.apron1.v) + ' / ' + Mx(L.apron2.v) }
+    ],
+    known: L.rulesInWords.map(t => ({ what: t, f: { k: 'OBSERVED', src: 'published league rules (fixture rulesInWords)', asOf: '2026-09-04', verify: true }, plain: true })),
+    sealed: [{ date: null, what: 'The 2026–27 season', f: null, generic: 'the season not yet played' }]
+  };
+}
+function cutView(id, rid) {
+  const c = cutData(id), rev = S.revealed[rid];
+  const row = it => it.f.k === 'UNKNOWN'
+    ? '<div class="hole"><b>' + esc(it.what) + '</b> — no record. <span class="tiny">' + esc(it.f.note || '') + '</span></div>'
+    : ln(it.f.k, it.plain ? esc(it.what) + '<span class="prov">' + esc(provOf(it.f)) + '</span>' : '<b>' + esc(it.what) + '</b> · ' + esc(it.txt || fmtVal(it.f)) + '<span class="prov">' + esc(provOf(it.f)) + '</span>');
+  const sealedRows = c.sealed.map(s => rev && s.f
+    ? ln(s.f.k, '<b>' + esc(s.what) + '</b> · ' + esc(fmtVal(s.f)) + (s.date ? ' <span class="tiny">(' + esc(s.date) + ')</span>' : '') + '<span class="prov">' + esc(provOf(s.f)) + '</span>')
+    : sealedBox(esc(s.generic || (s.date ? s.date + (s.note ? ' — ' + s.note : '') : 'later')) + ' <span class="tiny">You find out by living it.</span>')).join('');
+  return '<h4>State · what existed</h4>' + c.state.map(row).join('') +
+    '<h4>Known · what a person in the building could know</h4>' + c.known.map(row).join('') +
+    '<h4>Sealed · not yet happened at this cut</h4>' + sealedRows +
+    (id === 'deadline' && !rev ? '<div class="row">' + B('Ask as an observer', 'observe', rid) + '</div>' : '') +
+    (rev && id === 'deadline' ? '<p class="tiny">Hindsight opened by an observer. A seat at this cut would not have it.</p>' : '');
+}
+
+/* ---------------------------------------------------------------- chrome */
+const SCENES = [['assistant', 'Assistant'], ['article', 'Article'], ['text', 'Text'], ['voice', 'Voice'], ['offer', 'Offer'], ['ring', 'Ring'], ['orders', 'Orders'], ['round', 'Round'], ['standing', 'Standing'], ['floor', 'Floor']];
+function header() {
+  return '<p class="status">PROTOTYPE · The Guest — BOW as the executable layer inside other rooms; the Browser appears only at thresholds · data: shared fixture, dated 29 Sep 2026, verify · every host surface here is fictional</p>' +
+    '<div class="bar"><h1>The Guest <small>a person’s day, in borrowed rooms</small></h1><div class="sw">' +
+    TG('How do we know?', 'know', null, S.know, 'tb') + TG('What’s real?', 'cap', null, S.cap, 'tb') + TG('Models unavailable', 'floor', null, S.floor, 'tb') + TG('Host or BOW?', 'panel', null, S.panel, 'tb') + '</div></div>' +
+    '<nav class="eps" aria-label="Where you are today">' + SCENES.map((s, i) => '<button type="button" class="ep" data-a="goto" data-p="' + s[0] + '" data-fk="goto|' + s[0] + '" aria-label="' + (i + 1) + ' ' + s[1] + '"' + (S.scene === s[0] ? ' aria-current="step"' : '') + '><b>' + (i + 1) + '</b>' + s[1] + '</button>').join('') + '</nav>' +
+    (S.know ? '<div class="legend" aria-label="The seven textures">' + Object.keys(FX.meta.kinds).map(k => '<span>' + KD(k) + '<b>' + k + '</b> ' + esc(FX.meta.kinds[k]) + '</span>').join('') + '</div>' : '');
+}
+function rail() {
+  const w = S.w, wr = { open: 'open', declined: 'declined', accepted: 'accepted', 'declined-default': 'declined by default (no act)', 'accepted-order': 'accepted by standing order §2', 'declined-order': 'declined by standing order §1' };
+  return '<h2>The record<small>Stage view of canonical state — the prototype’s, not BOW’s</small></h2>' +
+    '<p class="clk">Real · ' + esc(T().real) + '<br>World · Boston · ' + esc(T().world) + (S.seat ? '' : ' <span class="tiny">(no seat yet)</span>') + '</p>' +
+    '<ol class="log" aria-label="Acts, newest first">' + (S.log.length ? S.log.slice(0, 40).map(e => '<li class="' + (e.fork ? 'fk ' : '') + (e.abs ? 'abs' : '') + '"><span class="n">' + e.n + '</span>' + KD(e.k) + '<b>' + esc(e.who) + '</b> ' + esc(e.what) + '<span class="m">' + esc(e.real) + ' · ' + esc(e.world) + ' · ' + esc(e.hist) + '</span></li>').join('') : '<li>Nothing yet. Every act you make lands here, with whose it is and in which history.</li>') + '</ol>' +
+    '<h3>Books · Boston · Year Two</h3><dl>' +
+    '<dt>Seat</dt><dd>' + (S.seat ? 'GM · this device' : 'none') + '</dd>' +
+    '<dt>Payroll</dt><dd>' + KD('RECORDED') + M2(w.payroll) + '</dd>' +
+    '<dt>Projected tax</dt><dd>' + KD('COMPUTED') + M2(projTax(w.payroll)) + '</dd>' +
+    '<dt>Roster</dt><dd>' + KD('AUTHORED') + w.roster + '</dd>' +
+    '<dt>Denver’s offer</dt><dd>' + esc(wr[w.denver] || w.denver) + '</dd>' +
+    '<dt>Two-way call-up</dt><dd>' + esc(w.callup === 'lapsed' ? 'lapsed · no act' : w.callup) + '</dd>' +
+    '<dt>Owner’s note</dt><dd>' + esc(w.owner === 'open' ? 'open' : w.owner === 'answered' ? 'answered' : 'no act') + '</dd></dl>' +
+    '<p class="tiny" style="margin-top:8px;color:var(--dm)">Payroll and roster are World record; the roster count and matters are illustrative (authored).</p>';
+}
+function panelHTML() {
+  if (!S.panel) return '';
+  return '<div style="position:fixed;z-index:30;top:118px;right:22px;width:min(600px,calc(100vw - 44px))" role="region" aria-label="What a host can do, and what only BOW can">' +
+    bow('what a host can · what only BOW can', '<div class="two"><div><h4 style="margin-top:0">In a host surface you can</h4><ul><li>read a claim</li><li>verify a sentence</li><li>open a cut</li><li>carry an offer</li></ul><p class="tiny">A host may quote, point and carry. It never signs, never holds your branch, never sees your seat.</p></div><div><h4 style="margin-top:0">Only in BOW</h4><ul><li>sign a seat</li><li>hold a branch</li><li>compare</li><li>run your Round</li><li>see the frame BOW alone draws</li></ul></div></div><div class="row">' + B('Close', 'panel', null, 'bb') + '</div>', { cap: cap('P', 'NO AI REQUIRED'), drawn: 'always reachable' }) + '</div>';
+}
+function render(top) {
+  const ae = document.activeElement, fk = ae && ae.getAttribute ? ae.getAttribute('data-fk') : null;
+  document.body.classList.toggle('know', S.know);
+  document.body.classList.toggle('cap-on', S.cap);
+  const fn = SCENE[S.scene];
+  const title = { assistant: 'Inside an assistant', article: 'Inside an article', text: 'A text from a friend', voice: 'Spoken', offer: 'The Offer', ring: 'A ring · on call', orders: 'Standing orders', round: 'Return after 14 days · the Round', standing: 'Standing · what you hold', floor: 'Models unavailable' }[S.scene];
+  $('#app').innerHTML = header() + '<div class="main"><section class="stage" aria-label="' + esc(title) + '"><h2 id="st" tabindex="-1">' + esc(title) + '</h2>' + (fn ? fn() : '') + '</section><aside class="rail" aria-label="The record">' + rail() + '</aside></div>' + panelHTML();
+  let el = fk && !top ? document.querySelector('[data-fk="' + fk.replace(/"/g, '\\"') + '"]') : null;
+  if (!el && top) el = $('#st');
+  if (el) el.focus({ preventScroll: true });
+  const tr = $('#tr'); if (tr) tr.scrollTop = tr.scrollHeight;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-a]');
+  if (!b || b.disabled) return;
+  act(b.dataset.a, b.dataset.p);
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.panel) { S.panel = false; render(); const t = document.querySelector('[data-fk="panel|"]'); if (t) t.focus(); } });
+
+ACTS.goto = id => { S.scene = id; say('Now in: ' + id); };
+ACTS.know = () => { S.know = !S.know; say(S.know ? 'How we know: on' : 'How we know: off'); };
+ACTS.cap = () => { S.cap = !S.cap; say(S.cap ? 'What is real: on' : 'What is real: off'); };
+ACTS.panel = () => { S.panel = !S.panel; };
+ACTS.floor = () => { S.floor = !S.floor; log('you', S.floor ? 'switched models off: reads, verify, offers, rings, orders and the Round still work' : 'switched models on', { hist: 'Device setting (not in any record)', k: 'AUTHORED' }); say(S.floor ? 'Models unavailable. Language asks become typed choices.' : 'Models available.'); };
+/*@@ACTS@@*/
+
+/* ================================================================ 1 · INSIDE AN ASSISTANT */
+function claimSet() {
+  const cp = R.capPayroll, ts = R.taxSalary, tx = L.tax, d = tx.v - ts.v;
+  return { cp: cp, ts: ts, tx: tx, d: d, hash: hash([cp.v, ts.v, tx.v, d].join('|')) };
+}
+SCENE.assistant = function () {
+  const a = S.asst, q = claimSet();
+  let tr;
+  if (!a.sent) {
+    tr = '<p class="hint">Ask something about a team. The assistant answers in its own voice.<br>BOW is drawn only where a claim needs checking.</p>';
+  } else {
+    const card = bow('claim card · Boston Celtics · Reality',
+      '<p class="lbl">Verify · the assistant’s sentence</p>' +
+      '<p style="margin:0 0 6px">“…Boston is <b>past the tax line</b> this season…”</p>' +
+      '<p><span class="stamp">Does not match the record</span> <span class="sm">True of cap payroll. Not true of tax salary, which is what the tax is charged on.</span></p>' +
+      '<h4>Two payrolls</h4><div class="two">' +
+      '<div><p class="lbl" style="margin:0 0 3px">Cap payroll</p>' + fv(q.cp, '≈ ' + M1(q.cp.v), 'big') + '<p class="tiny" style="margin:3px 0 0">counts against the cap</p></div>' +
+      '<div><p class="lbl" style="margin:0 0 3px">Tax salary</p>' + fv(q.ts, USD(q.ts.v), 'big') + '<p class="tiny" style="margin:3px 0 0">the tax is charged on this</p></div></div>' +
+      '<p style="margin:10px 0 6px">The tax line is ' + fv(L.tax, Mx(q.tx.v)) + '. Tax salary is ' + kv('COMPUTED', '≈ ' + M1(q.d) + ' under it', 'COMPUTED · ' + Mx(q.tx.v) + ' − ' + USD(q.ts.v) + ' = ' + USD(q.d) + ' · verify (inputs are verify)') + '.</p>' +
+      '<div class="row">' + TG('Open the cut', 'asst-cut', null, a.cut) + B('Enter as owner', 'asst-enter', null, 'bb pri') + '</div>',
+      { cap: cap('P', 'NO AI REQUIRED · the assistant pays its own tokens') });
+    const cut = a.cut ? bow('cut · read only',
+      '<h3>' + esc(cutData(a.cutAt).title) + '</h3><div class="row">' + TG('Today', 'asst-cutat', 'today', a.cutAt === 'today') + TG('Trade deadline · 5 Feb 2026', 'asst-cutat', 'deadline', a.cutAt === 'deadline') + '</div>' +
+      cutView(a.cutAt, 'cut-' + a.cutAt) + '<p class="tiny" style="margin-top:8px">Here you can look. Moving the cut, forking it and comparing: only in BOW.</p>', { cap: cap('P', 'NO AI REQUIRED') }) : '';
+    const enter = a.enter ? bow('hand-in · refused here',
+      '<p style="font-size:17px"><b>Signing happens in BOW, not here — the assistant cannot sign.</b></p>' +
+      '<p class="sm">Rule that refused: an act needs your present signature in BOW’s own threshold. A host can carry an offer; it can never redeem or sign one. Nothing was signed and no act was recorded.</p>' +
+      '<p class="sm">Reality cannot be acted on, so BOW hands you into your own copy, not into the real club’s chair.</p>' +
+      '<div class="row">' + B('Hand me over to BOW', 'asst-handin') + '</div>', { cap: cap('P', 'NO AI REQUIRED') }) : '';
+    tr = '<div class="bub u"><small>You</small>Is Boston over the tax line?</div><div class="bub a"><small>Assistant</small>Boston is past the tax line this season, so expect a luxury tax bill.</div>' + card + cut + enter;
+  }
+  const wire = a.sent ? '<p><code>resolve("Boston tax line") → boston.reality</code></p><p>BOW’s closed, quotable text handed to the assistant:</p><p><code>c2 tax salary ' + USD(q.ts.v) + ' · c3 line ' + USD(q.tx.v) + ' · c4 ' + USD(q.d) + ' under · c1 cap payroll ≈ ' + M1(q.cp.v) + '</code></p><p>The assistant kept its own phrasing. <code>verify(sentence, c1–c4)</code> → <b>mismatch</b>. Claim set hash <code>' + q.hash + '</code> (computed here from the four values).</p><p>Deltas ship as claims so nobody subtracts by eye. BOW cannot force faithful quoting; it makes the truth cheap to quote and the deviation cheap to catch.</p>' : '<p>Nothing has crossed yet. When the assistant asks BOW, it gets back claims with ids, a state hash and closed text — never a style.</p>';
+  return '<div class="cols"><div class="host asst rel"><div class="hh"><span class="dot"></span>Assistant<em>fictional host · generic</em></div><div class="tr" id="tr">' + tr + '</div>' +
+    '<div class="comp"><input aria-label="Message to the assistant" readonly value="' + (a.sent ? '' : 'Is Boston over the tax line?') + '" placeholder="Message">' + (a.sent ? '<button type="button" class="hb" disabled>Sent</button>' : B('Send', 'send', null, 'hb pri')) + '</div></div>' +
+    seam('the seam', wire + '<p class="tiny">SPECULATIVE at scale: whether assistants honour the card and quote it faithfully. MCP, MCP Apps and WebMCP exist outside BOW; no BOW server does.</p>') + '</div>';
+};
+ACTS.send = () => {
+  if (S.asst.sent) return;
+  S.asst.sent = true; const q = claimSet();
+  log('you', 'asked the assistant: “Is Boston over the tax line?”', { hist: 'Host transcript (not in any record)', k: 'AUTHORED' });
+  log('BOW', 'verified the assistant’s sentence against the record: mismatch (claim set ' + q.hash + ')', { hist: 'Reality (read only)', k: 'COMPUTED' });
+  say('BOW drew a claim card. It flags the assistant’s sentence: does not match the record.');
+};
+ACTS['asst-cut'] = () => { S.asst.cut = !S.asst.cut; if (S.asst.cut) log('you', 'opened the cut · ' + cutData(S.asst.cutAt).title, { hist: 'Reality (read only)', k: 'OBSERVED' }); };
+ACTS['asst-cutat'] = p => { S.asst.cutAt = p; log('you', 'moved the read-only cut to ' + cutData(p).title, { hist: 'Reality (read only)', k: 'OBSERVED' }); };
+ACTS['asst-enter'] = () => { S.asst.enter = true; log('BOW', 'refused “Enter as owner” from the assistant: signing happens in BOW. No act recorded.', { hist: 'nowhere (refused)', k: 'AUTHORED', abs: true }); say('Signing happens in BOW, not here. The assistant cannot sign.'); };
+ACTS['asst-handin'] = () => { S.offer.carrier = 'assistant'; S.scene = 'offer'; log('you', 'followed the assistant’s hand-in link into BOW', { hist: 'Reality (read only)', k: 'AUTHORED' }); };
+
+/* ================================================================ 2 · INSIDE AN ARTICLE */
+const tax395 = C0.state.find(s => /^Projected luxury tax/.test(s.what)).value;
+const tax17 = (function () { const m = FX.moments.find(x => x.id === 'm2026-02-05').sealed, mm = /to ≈\$(\d+(?:\.\d+)?)M/.exec(m.v); return { v: +mm[1] * 1e6, k: m.k, src: m.src, asOf: m.asOf, verify: true, note: 'read from the fixture sentence' }; })();
+const d22 = Cp(tax395.v - tax17.v, '≈ $39.5M − ≈ $17M (two reported figures, subtracted here)');
+const MARKS = {
+  t395: {
+    txt: '≈ ' + M1(tax395.v), f: tax395, label: 'Projected luxury tax before any deadline move · 5 Feb 2026',
+    doors: {
+      because: [
+        { k: 'OBSERVED', t: 'The 2025–26 tax line was ' + Mx(FX.league.season2526.tax.v), f: FX.league.season2526.tax },
+        { k: 'UNKNOWN', t: 'Boston’s payroll on the morning of 5 Feb', f: C0.state[6].value },
+        { k: 'OBSERVED', t: 'Anfernee Simons was on Boston’s roster, arrived from Portland in summer 2025', f: C0.state[2].value, door: 'm2025-06' }
+      ],
+      meanwhile: [
+        { k: 'OBSERVED', t: 'Jayson Tatum: ' + C0.state[1].value.v, f: C0.state[1].value },
+        { k: 'OBSERVED', t: 'The deadline closes today: ' + C0.known[2].value.v, f: C0.known[2].value }
+      ],
+      who: [
+        { k: 'AUTHORED', t: 'Boston — the seat that holds this payroll', f: A(null, 'public face of a seat; no names') },
+        { k: 'AUTHORED', t: 'Chicago — the other side of any signed trade', f: A(null, 'public face of a seat; no names') }
+      ],
+      yes: [
+        { k: 'OBSERVED', t: FX.neighbours[0].name + ' — ' + FX.neighbours[0].crossing, f: { k: 'OBSERVED', src: 'fixture neighbours[league]', asOf: null, verify: true } },
+        { k: 'OBSERVED', t: 'The other club — ' + FX.neighbours[4].crossing, f: { k: 'OBSERVED', src: 'fixture neighbours[denver] (Denver there; Chicago here)', asOf: null, verify: true } }
+      ],
+      diff: [
+        { k: 'COMPUTED', t: 'In your World, Boston · Year Two projects ' + M1(W.projectedTax.v) + ' — under the World’s own flat 1.5× rule (authored). The NBA’s real tax is incremental. Same question, different rule, different number.', f: W.projectedTax }
+      ]
+    }
+  },
+  t17: {
+    txt: '≈ ' + M1(tax17.v), f: tax17, label: 'Projected luxury tax after the deadline trade',
+    doors: {
+      because: [
+        { k: 'OBSERVED', t: 'Anfernee Simons to Chicago for Nikola Vučević, 5 Feb 2026', f: C0.sealed[0].value, door: 'm2026-02-05' },
+        { k: 'COMPUTED', t: 'The tax follows the payroll over the line: when salary leaves, the projection falls (rule, not a quote)', f: Cp(null, 'tax rule applied to tax salary') }
+      ],
+      diff: [{ k: 'OBSERVED', t: 'Two reports, two numbers: ' + C0.taxAfter.v, f: C0.taxAfter }]
+    }
+  },
+  d22: {
+    txt: '≈ ' + M1(d22.v), f: d22, label: 'The fall in the projection',
+    doors: { because: [{ k: 'COMPUTED', t: '≈ $39.5M − ≈ $17M = ≈ ' + M1(d22.v) + '. Both inputs are reported, approximate figures.', f: d22 }] }
+  },
+  f12: {
+    txt: '$12M', none: true, label: 'A figure the paper prints about a season not yet played',
+    doors: {}
+  }
+};
+const DOORS = [['because', 'Because'], ['meanwhile', 'Meanwhile'], ['who', 'Who'], ['yes', 'Who says yes'], ['diff', 'What’s different']];
+function markSheet() {
+  const id = S.art.mark, m = id && MARKS[id];
+  if (!m) return bow('true marks', '<p>Every number underlined in the paragraph is a mark BOW can check against the record. Press one.</p><p class="sm">A solid hairline: the record backs it. A dashed hairline: BOW holds no record for it.</p><p class="sm">The paper draws its own page. BOW draws only this frame and the marks’ provenance.</p>', { cap: cap('P', 'NO AI REQUIRED · a small model only to phrase third-party strata') });
+  if (m.none) return bow('no record',
+    '<h3 style="margin-bottom:8px"><span class="kv" data-k="UNKNOWN">' + m.txt + '</span></h3><p class="lbl">' + esc(m.label) + '</p>' +
+    '<div class="hole"><b>No record.</b> This is the Ledger’s own projection. BOW holds nothing to back a bill for a season that has not been played.</div>' +
+    sealedBox('A forecast is not a record. You find out by living it.') +
+    '<p class="sm">What the record does hold today is a fact about now, not a forecast: tax salary ' + fv(R.taxSalary, USD(R.taxSalary.v)) + ' against a tax line of ' + fv(L.tax, Mx(L.tax.v)) + '.</p>' +
+    '<p class="tiny">Doors that exist for this mark: none.</p>', { cap: cap('P', 'NO AI REQUIRED') });
+  const doorKeys = DOORS.filter(d => m.doors[d[0]]);
+  const open = S.art.door && m.doors[S.art.door];
+  let list = '';
+  if (open) {
+    list = '<h4>' + esc(DOORS.find(d => d[0] === S.art.door)[1]) + ' · ' + open.length + '</h4>' + open.map(it => it.k === 'UNKNOWN' ? '<div class="hole"><b>' + esc(it.t) + '</b> — no record. <span class="tiny">' + esc(it.f.note || '') + '</span></div>' : ln(it.k, esc(it.t) + (it.f ? '<span class="prov">' + esc(provOf(it.f)) + '</span>' : '') + (it.door ? '<br>' + B('Open the door · ' + esc(FX.moments.find(x => x.id === it.door).question), 'moment', it.door, 'bb') : ''))).join('') +
+      (S.art.moment && open.some(it => it.door === S.art.moment) ? sealedDoor(S.art.moment) : '');
+  }
+  return bow('true mark · provenance',
+    '<p class="lbl" style="margin:0 0 4px">' + esc(m.label) + '</p><h3>' + fv(m.f, m.txt, 'big') + '</h3>' +
+    '<p class="sm"><b>' + m.f.k + '</b> · ' + esc(m.f.src || 'no source') + (m.f.asOf ? ' · as of ' + esc(m.f.asOf) : '') + (m.f.verify ? ' · <b>verify</b>' : '') + (m.f.note ? '<br>' + esc(m.f.note) : '') + '</p>' +
+    '<h4>Doors that exist · before you open any</h4><div class="row">' + doorKeys.map(d => TG(d[1] + ' <b>' + m.doors[d[0]].length + '</b>', 'door', d[0], S.art.door === d[0])).join('') + '</div>' + list,
+    { cap: cap('P', 'NO AI REQUIRED · counts come from the record') });
+}
+SCENE.article = function () {
+  const mk = (id, t) => '<button type="button" class="mark' + (MARKS[id].none ? ' none' : '') + '" data-a="mark" data-p="' + id + '" data-fk="mark|' + id + '" aria-pressed="' + (S.art.mark === id) + '">' + t + '</button>';
+  return '<div class="cols wide"><div class="host paper rel"><div class="mast"><b>The Harbour Ledger</b><small>a fictional paper · text authored for this prototype</small></div><div class="art">' +
+    '<div class="kick">Sport · Business</div><h3>The February squeeze: how Boston’s tax bill got cut down</h3><div class="by">The Ledger desk · Tue 29 Sep 2026</div>' +
+    '<p>On deadline day last season, 5 February 2026, Boston’s projected luxury tax stood at ' + mk('t395', MARKS.t395.txt) + '. Before the window closed, Anfernee Simons went to Chicago for Nikola Vučević, and the projection fell to ' + mk('t17', MARKS.t17.txt) + ' — a cut of ' + mk('d22', MARKS.d22.txt) + '. The Ledger’s own model puts this season’s bill near ' + mk('f12', MARKS.f12.txt) + '.</p>' +
+    '</div>' + cap('P', 'NO AI REQUIRED') + '</div>' + markSheet() + '</div>' +
+    '<div class="stagectl">Underlined numbers are BOW’s marks (a hairline). Press one; nothing else on the page changes.</div>';
+};
+ACTS.mark = id => { S.art.mark = id; S.art.door = null; S.art.moment = null; log('you', 'pressed the mark ' + MARKS[id].txt + ' in The Harbour Ledger', { hist: 'Reality (read only)', k: MARKS[id].none ? 'UNKNOWN' : MARKS[id].f.k }); say(MARKS[id].none ? 'No record for that figure.' : 'Provenance for ' + MARKS[id].txt); };
+ACTS.door = d => { S.art.door = S.art.door === d ? null : d; S.art.moment = null; if (S.art.door) log('you', 'opened the door ' + d.toUpperCase() + ' on ' + MARKS[S.art.mark].txt + ' (traced to recorded causes)', { hist: 'Reality (read only)', k: 'OBSERVED' }); };
+ACTS.moment = id => { S.art.moment = id; log('you', 'opened a door named by its question: ' + FX.moments.find(x => x.id === id).question, { hist: 'Reality (read only)', k: 'OBSERVED' }); };
+
+/* ================================================================ 3 · A TEXT FROM A FRIEND */
+function drift() { return S.msg.later ? 3 : 0; }
+function driftStripe() {
+  const n = drift();
+  if (!n) return '<div class="drift"><span>Reality recorded nothing since Maya looked, six minutes ago.</span></div>';
+  return '<div class="drift"><span class="ticks" aria-hidden="true"><i class="tick"></i><i class="tick"></i><i class="tick on"></i></span><span><b>Reality recorded 3 things since Maya looked; 1 touches this.</b></span>' + TG('See the 3', 'msg-see', null, S.msg.see) + '</div>' +
+    (S.msg.see ? '<div class="sm" style="margin-top:6px">' + [['A roster transaction', false], ['A schedule item', false], ['A contract report', true]].map(x => '<div class="hole" style="' + (x[1] ? 'border-left:6px solid var(--ink)' : '') + '"><b>' + x[0] + '</b>' + (x[1] ? ' — <b>touches this</b>: it moves the payroll figures Maya saw' : '') + ' <span class="tiny">[Reality feed: none exists yet — staged; contents deliberately not invented]</span></div>').join('') + '</div>' : '');
+}
+function seenNow(withNow) {
+  const num = () => '<p style="margin:0 0 3px">Cap payroll ' + fv(R.capPayroll, '≈ ' + M1(R.capPayroll.v)) + '</p><p style="margin:0">Tax salary ' + fv(R.taxSalary, USD(R.taxSalary.v)) + '</p>';
+  return '<div class="two" style="margin-top:8px"><div class="rec"><p class="recl">Maya saw · 29 Sep 2026, 14:03</p>' + num() + '</div>' +
+    (withNow ? (S.msg.later ? '<div class="hole" style="margin:0;padding:10px 12px"><p class="recl" style="margin:0 0 4px">Now · 20 Oct 2026</p><b>No number here.</b> <span class="tiny">A live Reality feed would answer beside Maya’s. This prototype has only the dated 29 Sep fixture; it will not pretend.</span></div>' : '<div class="rec"><p class="recl">Now · 29 Sep 2026, 14:09</p>' + num() + '<p class="tiny" style="margin:4px 0 0">Nothing recorded since.</p></div>') : '') + '</div>';
+}
+function arrival() {
+  const o = S.msg.open, later = S.msg.later;
+  if (!o) return bow('arrival note', '<p>A Reading arrives here first, kind first. Opening never acts.</p><p class="sm">Open one of Maya’s messages. Three weeks on, it will say what changed since she looked.</p>', { cap: cap('P', 'NO AI REQUIRED') });
+  if (o === 'follow') return bow('arrival note · opening never acts',
+    '<p class="lbl" style="margin:0">Kind</p><h3 style="font-size:26px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px">Following</h3>' +
+    '<p style="font-size:17px;margin:0 0 6px"><b>Boston Celtics · Reality</b></p>' +
+    '<p class="sm">From <b>Maya</b> (a fictional friend) · she saw it 29 Sep 2026, 14:03 · check words <b>maple-otter</b></p>' +
+    '<p class="sm"><b>What this is.</b> A Follow keeps you beside Reality’s head and carries when Maya looked. You can ' + esc(R.youCan.join(', ')) + '. You cannot ' + esc(R.youCannot.join(', ')) + '.</p>' +
+    driftStripe() + seenNow(true) + '<div class="row" style="margin-top:10px">' + TG('Keep following', 'msg-keep', null, S.msg.kept, 'bb pri') + '</div>', { cap: cap('P', 'NO AI REQUIRED · the Reality feed does not exist yet') });
+  return bow('arrival note · opening never acts',
+    '<p class="lbl" style="margin:0">Kind</p><h3 style="font-size:26px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px">Snapshot</h3>' +
+    '<p style="font-size:17px;margin:0 0 6px"><b>Boston Celtics · as Reality stood 29 Sep 2026, 14:03</b></p>' +
+    '<p class="sm">From <b>Maya</b> (a fictional friend) · check words <b>maple-otter</b></p><p class="sm"><b>What this is.</b> A Snapshot opens exactly as it stood, dated. It never turns into “now” by itself.</p>' +
+    '<p><span class="stamp">As it stood · 29 Sep 2026, 14:03</span></p>' + seenNow(false) + '<div style="margin-top:8px">' + driftStripe() + '</div>', { cap: cap('P', 'NO AI REQUIRED') });
+}
+SCENE.text = function () {
+  const later = S.msg.later;
+  return '<div class="cols wide"><div><div class="phonewrap"><div class="phone rel"><div class="sb"><span>' + (later ? '09:12' : '14:09') + '</span><span>' + (later ? 'Tue 20 Oct (simulated)' : 'Tue 29 Sep') + '</span></div><div class="who">Maya<small>fictional friend · generic messages</small></div><div class="msgs">' +
+    '<div class="pm">You need to see this before you argue about their payroll.</div>' +
+    '<div class="pm">Follow · Boston Celtics · Maya saw it 29 Sep 2026, 14:03 · maple-otter<span class="plain">as plain text; it survives being pasted</span>' + B('Open the Follow', 'msg-open', 'follow', 'hb pri') + '</div>' +
+    '<div class="pm">and this is exactly how it looked when I did</div>' +
+    '<div class="pm">Snapshot · Boston Celtics · as Reality stood 29 Sep 2026, 14:03 · maple-otter' + B('Open the Snapshot', 'msg-open', 'snap', 'hb pri') + '</div></div></div></div>' +
+    '<div class="stagectl" style="justify-content:center">Stage clock (not BOW): ' + TG('Same day', 'msg-later', '0', !later, 'tb') + TG('Three weeks later (simulated)', 'msg-later', '1', later, 'tb') + '</div></div>' +
+    '<div>' + arrival() + '<div style="margin-top:12px">' + seam('what the message holds', '<p>Only a sentence. It has no authority and no state: the cut, the seen-at and the check words live in BOW.</p><p>Pasted anywhere, it degrades to its own sentence. A screenshot is a pointer, not proof: type the words and the record answers.</p>') + '</div></div></div>';
+};
+ACTS['msg-later'] = p => { S.msg.later = p === '1'; S.msg.see = false; say(S.msg.later ? 'Simulated: three weeks later.' : 'Same day.'); };
+ACTS['msg-open'] = p => {
+  S.msg.open = p; S.msg.see = false;
+  const later = S.msg.later;
+  log('you', 'opened Maya’s ' + (p === 'follow' ? 'Follow' : 'Snapshot') + (later ? ' three weeks later; drift: 3 things, 1 touches this' : ' the same day; no drift'), { real: later ? 'Tue 20 Oct 2026, 09:12 (simulated)' : undefined, hist: 'Reality (read only)', k: 'OBSERVED' });
+  say('Arrival note: ' + (p === 'follow' ? 'Following' : 'Snapshot') + ' from Maya' + (later ? '. Reality recorded 3 things since she looked; 1 touches this.' : '.'));
+};
+ACTS['msg-see'] = () => { S.msg.see = !S.msg.see; };
+ACTS['msg-keep'] = () => { S.msg.kept = !S.msg.kept; log('you', S.msg.kept ? 'kept following Boston Celtics · Reality (Maya’s Follow)' : 'stopped following Boston Celtics · Reality', { real: S.msg.later ? 'Tue 20 Oct 2026, 09:12 (simulated)' : undefined, hist: 'Your standing (private)', k: 'RECORDED' }); say(S.msg.kept ? 'Following kept.' : 'Following ended.'); };
+/*@@SCENES2@@*/
+
+render();
+</script>
+</body>
+</html>
+

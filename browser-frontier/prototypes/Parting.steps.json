@@ -1,0 +1,16 @@
+[
+ {"wait": 600},
+ {"shot": "sealed-door"},
+ {"click": "Take Butler"},
+ {"shot": "act-pending"},
+ {"click": "Commit: Take Butler"},
+ {"wait": 3600},
+ {"shot": "sheet-opens"},
+ {"click": "A pile of"},
+ {"shot": "pile-rule"},
+ {"click": "Where wins parts"},
+ {"shot": "where-wins-part"},
+ {"click": "Sol & Bea", "nth": 0},
+ {"click": "Your pair", "nth": 0},
+ {"shot": "pair-picked"}
+]

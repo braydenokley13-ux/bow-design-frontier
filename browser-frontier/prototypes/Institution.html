@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Institution</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./_shared/vendor/three/three.module.min.js", "three/addons/": "./_shared/vendor/three/addons/" } }</script>
+<style>
+:root{
+  --plaster:#f2eee2; --paper:#faf6ea; --paper2:#efe8d6; --rule:#cdc3aa; --ink:#26221b; --soft:#564f42;
+  --brass:#a17a1f; --brassText:#6b4f0e; --you:#1d4c99; --branch:#9c4f08; --branchFill:#c8701c; --focus:#0b57d0;
+  --sans:Archivo,'Franklin Gothic Medium','Trebuchet MS',sans-serif; --serif:Newsreader,Georgia,'Times New Roman',serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--plaster);color:var(--ink);font:15px/1.4 var(--sans);overflow:hidden}
+button{font:inherit;color:inherit}
+#app{display:grid;grid-template-columns:minmax(0,1fr) 380px;height:100vh;min-height:560px}
+#stage{position:relative;min-width:0;overflow:hidden;background:#e8e2d1}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none}
+#gl:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
+#chips{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.chip{position:absolute;transform:translate(-50%,-50%);background:var(--paper);border:1px solid var(--ink);padding:2px 6px;font:600 11px/1.25 var(--sans);letter-spacing:.02em;max-width:190px;text-align:left;white-space:normal}
+.chip b{display:block;font-weight:700;letter-spacing:.06em;font-size:10px}
+.chip.REAL{border-width:2px}.chip.PROPOSED{border-style:dashed;border-width:2px}.chip.SPECULATIVE{border-style:dotted;border-width:2px}
+#frame{position:absolute;inset:0;pointer-events:none;border:0 solid var(--branchFill);z-index:3}
+body.in-branch #frame{border-width:7px;border-style:solid}
+#stamp{display:none;position:absolute;left:0;top:0;z-index:4;background:var(--branchFill);color:#1c1200;font:700 12px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;padding:8px 12px 7px;max-width:100%}
+body.in-branch #stamp{display:block}
+#loading{position:absolute;inset:0;display:grid;place-items:center;font:italic 400 20px var(--serif);color:var(--soft);z-index:2;background:var(--plaster)}
+#sched{position:absolute;inset:0;overflow:auto;background:var(--paper);padding:20px 28px 60px;z-index:5}
+#sched[hidden]{display:none}
+#sched h1{font:600 26px/1.1 var(--sans);margin:0 0 4px;letter-spacing:-.01em}
+#sched h2{font:700 12px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;margin:26px 0 6px;padding-top:10px;border-top:2px solid var(--ink)}
+#sched .lede{font:400 16px/1.45 var(--serif);color:var(--soft);max-width:70ch;margin:6px 0 10px}
+#sched table{width:100%;border-collapse:collapse;font-size:13.5px}
+#sched th{font:600 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;text-align:left;color:var(--soft);padding:6px 8px 5px 0;border-bottom:1px solid var(--ink)}
+#sched td{vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid var(--rule)}
+#sched td.mk{font:600 12px var(--sans);white-space:nowrap;color:var(--soft);width:48px}
+#sched td.nm{width:150px;font-weight:600}
+#sched td.ln{font:400 15px/1.4 var(--serif);max-width:60ch}
+#sched td.ad{font:400 11.5px var(--sans);color:var(--soft);width:170px;word-break:break-all}
+#sched td.ac{width:190px}
+#sched .prov{display:block;font:400 11.5px/1.35 var(--sans);color:var(--soft);margin-top:3px}
+#sched .mine{color:var(--you)}#sched .bch{color:var(--branch)}
+#sched .kw{font-weight:700;font-family:var(--sans);font-size:12.5px;letter-spacing:.03em}
+#sched table.diff td.a{width:34%}#sched table.diff td.b{width:34%}
+#sched .ledger{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;max-width:760px}
+.sw{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px;border:1.5px solid var(--ink);background:transparent}
+.sw.k-OBSERVED{background:var(--ink)}
+.sw.k-RECORDED{background:var(--ink);box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--ink)}
+.sw.k-AUTHORED{background:transparent}
+.sw.k-COMPUTED{background:#b7ae98}
+.sw.k-MODELED{background:repeating-linear-gradient(135deg,var(--ink) 0 1.5px,transparent 1.5px 4px)}
+.sw.k-GENERATED{background:radial-gradient(var(--ink) 1px,transparent 1.4px) 0 0/4px 4px}
+.sw.k-UNKNOWN{border-style:dashed;background:transparent}
+.sw.k-SEALED{border-style:dashed;background:repeating-linear-gradient(0deg,transparent 0 3px,var(--rule) 3px 4px)}
+/* side panel */
+#panel{background:var(--paper);border-left:1px solid var(--ink);display:flex;flex-direction:column;min-height:0;min-width:0}
+#ptop{padding:12px 16px 8px;border-bottom:1px solid var(--rule)}
+#ptop .who{font:700 10.5px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+#addr{font:500 12px/1.35 var(--sans);margin:5px 0 0;word-break:break-word;color:var(--ink)}
+#addr b{font-weight:700}
+#pscroll{flex:1;min-height:0;overflow:auto;padding:12px 16px 10px}
+#pfoot{border-top:1px solid var(--ink);padding:8px 16px 8px;background:var(--paper2)}
+#pfoot .tg{display:flex;gap:6px;flex-wrap:wrap}
+#status{font:500 10.5px/1.35 var(--sans);color:var(--soft);margin:6px 0 0}
+.kick{font:700 10.5px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin:0 0 6px}
+h2.pt{font:600 22px/1.15 var(--sans);margin:0 0 6px;letter-spacing:-.005em}
+.pl{font:400 16.5px/1.42 var(--serif);margin:0 0 8px}
+.pl.sm{font-size:15px;color:var(--soft)}
+.sheet{border:1px solid var(--ink);padding:10px 12px 10px;background:#fffdf5;margin:0 0 10px}
+.sheet.k-RECORDED{border:1px solid var(--ink);box-shadow:inset 0 0 0 3px #fffdf5,inset 0 0 0 4px var(--ink)}
+.sheet.k-AUTHORED{border:2px solid var(--ink)}
+.sheet.k-COMPUTED{background:#e9e4d3}
+.sheet.k-MODELED{background:repeating-linear-gradient(135deg,rgba(38,34,27,.10) 0 1.3px,transparent 1.3px 6px),#fffdf5}
+.sheet.k-UNKNOWN,.sheet.k-SEALED{border:2px dashed var(--ink);background:var(--paper)}
+.sheet.k-GENERATED{background:radial-gradient(rgba(38,34,27,.28) 1px,transparent 1.5px) 0 0/5px 5px,#fffdf5}
+.btn{display:block;width:100%;text-align:left;min-height:44px;padding:8px 12px;border:1.5px solid var(--ink);background:var(--paper);cursor:pointer;font:600 14.5px/1.25 var(--sans);margin:0 0 6px;border-radius:2px}
+.btn:hover{background:#fff}
+.btn.pri{background:var(--ink);color:var(--paper)}
+.btn.pri:hover{background:#3b352a}
+.btn small{display:block;font:400 11.5px/1.3 var(--sans);opacity:.85;margin-top:2px}
+.btn kbd{float:right;font:600 11px var(--sans);border:1px solid currentColor;padding:1px 5px;margin-left:6px;opacity:.85}
+.btn[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.btn.sm{min-height:36px;padding:5px 9px;font-size:13px;margin:0}
+.tg .btn.sm{width:auto;flex:1 1 auto;text-align:center}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 8px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:0 0 8px}
+.grid2 .btn,.grid4 .btn{margin:0}
+.grid4 .btn{text-align:center;padding:4px 2px;font-size:12.5px;min-height:42px}
+.grid4 .btn i{display:block;font:700 15px var(--sans);font-style:normal}
+.refuse{border:2px dashed var(--ink);padding:8px 10px;margin:0 0 10px;font:400 14.5px/1.4 var(--serif);background:var(--paper)}
+.refuse b{font:700 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:2px}
+.rec{margin:0;padding:0;list-style:none;font:500 12.5px/1.35 var(--sans);max-height:112px;overflow:auto}
+.rec li{padding:3px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px}
+.rec .no{font-weight:700;min-width:30px}
+.rec .mine{color:var(--you);font-weight:600}.rec .bch{color:var(--branch);font-weight:600}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 8px}
+.clk{border:1px solid var(--ink);padding:6px 8px;font:500 12px/1.3 var(--sans);background:#fffdf5}
+.clk b{display:block;font:700 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+.clk.you{border-color:var(--you);color:var(--you)}
+.led{font:400 14.5px/1.4 var(--serif);margin:0 0 6px}
+.led b{font:700 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase}
+.know{font:400 12px/1.4 var(--sans);margin:6px 0 0;padding-top:6px;border-top:1px solid var(--rule)}
+.know dt{font-weight:700;display:inline}.know dd{display:inline;margin:0}.know div{margin:0 0 2px}
+.cap{font:700 10px/1.3 var(--sans);letter-spacing:.08em;text-transform:uppercase;margin:2px 0 8px;padding:3px 6px;border:1.5px solid var(--ink);display:inline-block}
+.cap.PROPOSED{border-style:dashed}.cap.SPECULATIVE{border-style:dotted}
+details.leave{margin:8px 0 0;border-top:1px solid var(--rule);padding-top:6px}
+details.leave summary{cursor:pointer;font:600 13px var(--sans);padding:6px 0}
+details.leave input{width:100%;font:400 14px var(--serif);padding:6px 8px;border:1.5px solid var(--ink);background:#fffdf5;margin:4px 0 6px}
+.sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.sect{margin:12px 0 4px}
+@media (max-width:1300px){#app{grid-template-columns:minmax(0,1fr) 352px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+  <main id="stage" aria-label="The building">
+    <canvas id="gl" tabindex="0" aria-label="The building, in 3D. The Schedule (key S) is the same building as text."></canvas>
+    <div id="chips" aria-hidden="true"></div>
+    <div id="frame" aria-hidden="true"></div>
+    <div id="stamp" aria-hidden="true"></div>
+    <div id="loading">Opening the building…</div>
+    <section id="sched" hidden aria-label="Room schedule"></section>
+  </main>
+  <aside id="panel" aria-label="Plate, acts and record">
+    <div id="ptop"><div class="who">BOW Browser · the Institution</div><p id="addr"></p></div>
+    <div id="pscroll"></div>
+    <div id="pfoot">
+      <div class="tg">
+        <button type="button" class="btn sm" id="tgReal" aria-pressed="false">What’s real?</button>
+        <button type="button" class="btn sm" id="tgKnow" aria-pressed="false">How do we know?</button>
+        <button type="button" class="btn sm" id="tgSched" aria-pressed="false">Schedule <kbd>S</kbd></button>
+      </div>
+      <p id="status">PROTOTYPE · place-first Browser: an institution you are allowed into · data: shared fixture, dated, verify · the building is authored</p>
+    </div>
+  </aside>
+</div>
+<div id="live" class="sr" aria-live="polite" role="status"></div>
+<script src="_shared/boston-fixture.js"></script>
+<script type="module">
+/* =====================================================================================
+   THE INSTITUTION — one canonical state, one act(), two drawings (Room, Schedule).
+   Every fixture line, number and act below is read from window.BOW_FIXTURE or is marked
+   AUTHORED (illustrative). Nothing in the Room is drawn that the manifest does not hold.
+   ===================================================================================== */
+const FX = window.BOW_FIXTURE, WD = FX.world, LG = FX.league.season2627, RL = FX.reality;
+const val = f => (f && typeof f === 'object' && 'v' in f) ? f.v : f;
+const mm = n => '$' + (Math.abs(n) / 1e6).toFixed(1) + 'M';
+const M1 = n => (n / 1e6).toFixed(1);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const $ = (s, r = document) => r.querySelector(s);
+const REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- 1. facts from the shared store ---------- */
+const DEPT = Object.fromEntries(WD.departments.map(d => [d.id, d]));
+const TF = WD.tradeFile;
+const P_OUT = TF.send[0].player, P_IN = TF.get[0].player;
+const TF_OUT = val(TF.send[0].salary), TF_IN = val(TF.get[0].salary), TF_DELTA = TF_IN - TF_OUT;
+const LINE = val(WD.taxLine), PAY = val(WD.payroll), HARD = val(WD.hardLimit);
+const MULT = parseFloat((/([0-9.]+)×/.exec(val(WD.taxRule)) || [0, 1.5])[1]);
+const NIGHT = /([\d,]+) expected, of ([\d,]+)/.exec(val(WD.arena.nextNight)) || [0, '?', '?'];
+const LOSS = WD.acts[2].what.split(';')[0];
+const LOSS_DETAIL = WD.acts[2].what;
+const REALTAX = val(LG.tax), REAL_TAXSAL = val(RL.taxSalary), REAL_CAPPAY = val(RL.capPayroll);
+/* AUTHORED for this prototype (illustrative) — the fixture holds none of these */
+const AUTH = {
+  actsBefore: 42, cash0: 20000000, clock0: 9 * 60 + 13, week: 'Year Two · Week 9', reportWeek: 'Week 11',
+  lapsed: 'Week 8 · Review premium seat prices again?',
+  q: { callup: 'Convert the two-way call-up?', denver: 'Answer Denver about a second-round pick?', owner: 'Answer the owner’s note on the tax bill?' }
+};
+const REC = WD.record.map((r, i) => ({ ...r, no: AUTH.actsBefore - WD.record.length + 1 + i }));
+const W6 = REC.find(r => r.id === 'w6-trade');
+const LEDGER = {
+  gave: [{ id: 'maquette', text: 'the outside view (the maquette)' }, { id: 'later', text: 'everything after Week 9 (sealed)' }],
+  got: ['3 matters', 'the pen', 'your clock']
+};
+function books(hist) { const pay = hist === 'branch' ? PAY - TF_DELTA : PAY; const over = pay - LINE; return { pay, over, tax: Math.max(0, over) * MULT }; }
+(function assertFacts() {
+  const r = books('record'), b = books('branch');
+  if (r.tax !== val(WD.projectedTax) || b.pay !== val(TF.payrollBefore)) console.error('fixture arithmetic disagrees with the World record');
+})();
+
+/* ---------- 2. canonical state ---------- */
+const fresh = () => ({
+  posture: 'maquette', pose: 'maquette', maq: 'world', signed: false, left: null, history: 'record', mode: 'room',
+  funded: { analytics: false, scouting: false, ticketing: true, partnerships: true }, fundedBy: {}, fundedWeek: false,
+  cash: AUTH.cash0, clock: AUTH.clock0, seatStart: null, lapsedExtra: 0, paper: null, held: false, why: 0,
+  branch: null, arch: { y1: {}, w6: {}, w9: {}, w10: {} }, po: null, refusal: null, jump: null,
+  log: [], seq: 0, actNo: AUTH.actsBefore, reads: {}, layers: { real: false, know: false }, ledgerCheck: null, handNote: 'Scouting funded; the owner’s note on the tax bill is still unanswered.'
+});
+let S = fresh();
+const fmtClock = m => 'Tue ' + String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+const hm = m => fmtClock(m).slice(4);
+function log(kind, what, extra) {
+  S.seq++;
+  const e = Object.assign({ seq: S.seq, kind, what, clock: fmtClock(S.clock), hist: S.history }, extra || {});
+  S.log.push(e); return e;
+}
+const REF = (rule, why) => ({ ok: false, rule, why });
+const BASEPOSE = { maquette: 'maquette', door: 'door', rail: 'rail', desk: 'desk' };
+const tick = () => { S.clock += 1; };
+const touchable = fx => S.posture === 'rail' || S.posture === 'desk' || (S.posture === 'door' && fx.room === 'T');
+
+const ACTS = {
+  arrive() { S.posture = 'door'; S.pose = 'door'; S.paper = null; log('read', 'Arrived at the door'); return { say: 'At the door. Owed 3. Lapsed while you were away: ' + (1 + S.lapsedExtra) + '.' }; },
+  outside() {
+    if (S.signed) return REF('R-SEAT-1', 'You hold the seat. The outside view stays covered until you leave the seat: hand over or vacate.');
+    S.posture = 'maquette'; S.pose = 'maquette'; S.paper = null; log('read', 'Stepped back to the maquette'); return { say: 'Outside again, looking at the maquette.' };
+  },
+  look() { S.posture = 'rail'; S.pose = 'rail'; S.paper = null; log('read', 'Entered: standing at the rail'); return { say: 'At the rail. Reading the record. Nothing here is yours.' }; },
+  sit() { S.posture = 'desk'; S.pose = 'desk'; S.paper = null; log('read', 'Sat at the desk (free)'); return { say: S.signed ? 'Back at the desk.' : 'Seated at the desk. Sitting is free; nothing is signed.' }; },
+  stand() { S.posture = 'rail'; S.pose = 'rail'; S.paper = null; log('read', S.signed ? 'Stood up; nothing restored' : 'Stood up'); return { say: S.signed ? 'Standing. You still hold the seat; the outside view is still covered.' : 'Standing at the rail.' }; },
+  go({ id }) {
+    if (S.posture === 'maquette') return REF('R-POSTURE-1', 'You are outside. The maquette is an object to look at; arrive at the door first.');
+    S.posture = id === 'desk' ? 'desk' : 'rail'; S.pose = id; S.paper = null; S.why = 0; S.held = false;
+    return { say: 'Hopped to ' + (STN.find(s => s.id === id) || { name: id }).name + '.' };
+  },
+  sign() {
+    if (S.posture !== 'desk') return REF('R-SEAT-2', 'A seat is signed at the desk, with the pen. Sit first; sitting is free.');
+    if (S.signed) return REF('R-SEAT-3', 'You already hold the seat.');
+    S.signed = true; S.left = null; S.seatStart = S.clock;
+    log('seat', 'Signed for 3 open matters', { by: 'you' });
+    return { say: 'Signed. You hold the seat. The maquette is covered, later plates are shuttered, three folders are in your tray, other seats show doors, and your clock started at ' + hm(S.clock) + '.' };
+  },
+  fund({ dept }) {
+    if (!S.signed) return REF('R-SEAT-4', 'Only the seat holder writes to the World’s books. You are reading the record.');
+    if (S.history === 'branch') return REF('R-FORK-2', 'Acting inside a branch is not in this prototype. A branch is a cut you stand in to read and compare.');
+    if (S.posture !== 'desk') return REF('R-SEAT-5', 'Orders are written at the desk. Sit first.');
+    if (S.funded[dept]) return REF('R-BUDGET-0', DEPT[dept].name + ' is already funded.');
+    if (S.fundedWeek) return REF('R-BUDGET-1', 'One funding decision per week (authored, illustrative). This week’s is already written.');
+    const price = DEPT[dept].opensFor;
+    if (S.cash < price) return REF('R-BUDGET-2', 'Cash ' + mm(S.cash) + ' does not cover ' + mm(price) + '.');
+    tick(); S.funded[dept] = true; S.fundedWeek = true; S.cash -= price; S.actNo += 1;
+    S.fundedBy[dept] = S.actNo; S.po = { no: S.actNo, dept, price, clock: S.clock };
+    log('act', 'Fund ' + DEPT[dept].name + ' · ' + mm(price), { actNo: S.actNo, dept });
+    return { say: 'Act ' + S.actNo + '. ' + DEPT[dept].name + ' is funded, ' + mm(price) + '. Cash ' + mm(S.cash) + '. First report due ' + AUTH.reportWeek + ', pending.' };
+  },
+  pick({ id }) {
+    const fx = FIXTURES().find(f => f.id === id); if (!fx) return REF('R-0', 'No such fixture.');
+    if (S.posture === 'maquette') return REF('R-POSTURE-1', 'From outside, nothing is touchable. The maquette is an object you observe. Arrive at the door.');
+    if (!touchable(fx)) return REF('R-POSTURE-2', 'From the door you can read the plate and the folder. Look around to read the floor.');
+    S.paper = id; S.held = id === 'desk.tradefile'; S.reads[id] = true; S.why = 0;
+    const p = (fx.pose || '').split('|'); const np = S.posture === 'desk' ? p[0] : p[1];
+    if (np) S.pose = np;
+    log('read', 'Read: ' + fx.name);
+    return { say: fx.name + '. ' + fx.line };
+  },
+  put() { S.paper = null; S.held = false; S.why = 0; return { say: 'Put it down.' }; },
+  view({ pose }) { if (S.posture === 'maquette') return REF('R-POSTURE-1', 'You are outside. Arrive at the door first.'); S.pose = pose; S.paper = null; S.why = 0; S.held = false; return { say: 'Turned to look ' + (pose === 'window' ? 'out of the window.' : 'at the history wall.') }; },
+  why({ step }) {
+    if (!S.held) return REF('R-WHY-1', 'Pick up the trade file first. WHY reads from an object in your hands.');
+    if (S.history === 'branch') return REF('R-FORK-3', 'This branch never wrote the trade, so it has nothing to trace. The record’s trace is in the record.');
+    S.why = Math.max(1, Math.min(6, step)); const c = CHAIN()[S.why - 1];
+    if (c) S.pose = c.pose; else S.pose = 'why5';
+    S.paper = null; log('read', S.why < 6 ? 'Traced: ' + c.title : 'Traced: page two');
+    return { say: S.why < 6 ? c.title + '. ' + c.text : 'Reached 5. Not reached: draft picks, none in the terms.' };
+  },
+  whyEnd() { S.why = 0; S.held = false; S.paper = null; S.pose = BASEPOSE[S.posture]; return { say: 'Back to normal light.' }; },
+  lift({ id }) {
+    const a = ARCHES().find(x => x.id === id); if (!a) return REF('R-0', 'No such arch.');
+    if (a.state === 'open' || a.state === 'shutter') return REF('R-HIND-1', 'Sealed until the seat acts on it. An open matter has no answer to show, and a shutter opens on its date.');
+    S.arch[id].cover = true; S.paper = 'arch.' + id; log('read', 'Lifted the cover on ' + a.name); return { say: 'Cover lifted. ' + a.answer };
+  },
+  whatif({ id }) {
+    const a = ARCHES().find(x => x.id === id);
+    if (!S.signed) return REF('R-FORK-0', 'A branch is cut from a seat. Sign first, then ask what if.');
+    if (S.history === 'branch') return REF('R-FORK-4', 'You are already inside a branch. Go back to the record to cut another.');
+    if (a.state === 'open') return REF('R-FORK-5', 'Nothing has been decided here yet, so there is nothing to differ from. This is one of your three matters; act on it instead.');
+    if (a.state === 'shutter') return REF('R-FORK-6', 'A shutter opens on its date. Nothing is written behind it to cut.');
+    if (id !== 'w6') return REF('R-FORK-7', 'A cut here would replay a whole season of consequences, and no model has run for it. This prototype has one worked cut: Week 6.');
+    tick();
+    S.arch.w6.cover = true; S.arch.w6.out = true;
+    S.branch = {
+      id: 'fork.w6', at: W6.no, stamp: 'Your branch · Week 6 trade not made · diverged Week 6', hindsight: true,
+      funded: { ...S.funded }, cash: S.cash, kept: S.log.filter(e => e.kind === 'act' && e.hist === 'record').map(e => ({ ...e })), at_clock: fmtClock(S.clock)
+    };
+    S.history = 'branch'; S.paper = null; S.why = 0; S.held = false; S.pose = 'arches';
+    log('fork', 'Cut: Week 6 trade not made · cut with hindsight', { hist: 'branch', actNo: null, no: '40′' });
+    return { say: 'The brass cover lifts and one brick comes out. You are in Your branch: Week 6 trade not made, diverged Week 6, cut with hindsight. The record still stands across the slip.' };
+  },
+  cross({ to }) {
+    if (!S.branch) return REF('R-FORK-8', 'There is no branch to cross to.');
+    S.history = to; S.paper = null; S.why = 0; S.held = false; S.pose = 'window'; log('read', 'Crossed the footbridge to ' + (to === 'record' ? 'the record' : 'your branch'));
+    return { say: to === 'record' ? 'You crossed the footbridge. This is the record; your branch stands across the slip under scaffold, with a plaque.' : 'You crossed to your branch. The record stands lit across the slip.' };
+  },
+  compare() { S.mode = 'schedule'; S.jump = 'compare'; return { say: 'Schedule open at Compare: record on the left, your branch on the right.' }; },
+  maq({ v }) { S.maq = v; return { say: v === 'reality' ? 'Boston · Reality. The four department rooms are sheeted: nobody outside knows their funding.' : 'Boston · Year Two, a BOW World.' }; },
+  mode({ m }) { S.mode = m; return { say: m === 'schedule' ? 'Schedule. The same building as text.' : 'The Room.' }; },
+  handover({ note }) {
+    if (!S.signed) return REF('R-SEAT-6', 'You do not hold the seat.');
+    tick(); S.handNote = note || S.handNote; S.signed = false; S.left = 'handed over'; S.posture = 'door'; S.pose = 'door'; S.paper = null; S.why = 0; S.held = false;
+    if (S.history === 'branch') S.history = 'record';
+    log('seat', 'Handed over: “' + S.handNote + '”', { by: 'you' });
+    return { say: 'Handed over. Your clock stopped at ' + hm(S.clock) + '. The outside view is uncovered. The matters stay open, carried by your note.' };
+  },
+  vacate() {
+    if (!S.signed) return REF('R-SEAT-6', 'You do not hold the seat.');
+    tick(); S.signed = false; S.left = 'vacated'; S.lapsedExtra += 3; S.posture = 'door'; S.pose = 'door'; S.paper = null; S.why = 0; S.held = false;
+    if (S.history === 'branch') S.history = 'record';
+    log('seat', 'Vacated: no note left. 3 matters lapse as NO ACT', { by: 'you' });
+    return { say: 'Vacated. Three matters lapse and are recorded as NO ACT, an absence, not a choice.' };
+  }
+};
+function act(kind, p = {}) {
+  const r = (ACTS[kind] || (() => REF('R-0', 'Unknown act.')))(p) || {};
+  if (r.ok === false) { S.refusal = { rule: r.rule, why: r.why }; say('Refused by rule ' + r.rule + '. ' + r.why); }
+  else { S.refusal = null; if (r.say) say(r.say); }
+  paint();
+}
+function say(t) { const l = $('#live'); l.textContent = ''; setTimeout(() => { l.textContent = t; }, 30); }
+
+/* ---------- 3. the manifest: every fixture, its kind, its line, its acts ---------- */
+const STN = [
+  { id: 'rail', name: 'The floor from the rail', short: 'Rail' }, { id: 'desk', name: 'The owner’s desk', short: 'Desk' },
+  { id: 'money', name: 'The money wall', short: 'Money' }, { id: 'court', name: 'Practice court', short: 'Court' },
+  { id: 'analytics', name: 'Analytics and scouting', short: 'Analytics' }, { id: 'ticketing', name: 'Ticketing and partnerships', short: 'Business' },
+  { id: 'film', name: 'Film room', short: 'Film' }, { id: 'arches', name: 'The doors', short: 'Doors' }
+];
+const ROOMS = { T: 'Threshold', M: 'Mezzanine · rail and desk', H: 'Ops floor and rooms', W: 'Window wall · across the water', B: 'Brick wall · doors', Y: 'History wall', X: 'Your branch' };
+const KW = { OBSERVED: 'Observed.', RECORDED: 'Recorded.', AUTHORED: 'Authored.', COMPUTED: 'Computed.', MODELED: 'Estimate.', GENERATED: 'Generated.', UNKNOWN: 'Unknown.' };
+const KNAME = { OBSERVED: 'OBSERVED', RECORDED: 'RECORDED', AUTHORED: 'AUTHORED', COMPUTED: 'COMPUTED', MODELED: 'MODELED', GENERATED: 'GENERATED', UNKNOWN: 'UNKNOWN', SEALED: 'SEALED' };
+const CAPTXT = { REAL: 'REAL CURRENT PRODUCT CAPABILITY', PROPOSED: 'PROPOSED PLATFORM CAPABILITY', SPECULATIVE: 'SPECULATIVE FRONTIER' };
+const SRC = {
+  world: 'World record (BOW World “Boston · Year Two”)', auth: 'Authored for this prototype (illustrative)', calc: 'Computed from World rules and state',
+  evid: 'Boston spatial evidence, unmerged branch (no human verdict)', fx: 'Shared fixture'
+};
+
+function ARCHES() {
+  const br = S.history === 'branch';
+  return [
+    { id: 'y1', name: 'Year One · Business or Basketball Ops?', state: 'bricked', answer: 'You funded Business over Basketball Ops. ' + WD.acts[0].what.replace(/^.*\(/, '(').replace(/\)$/, ')') + '.', act: 'Year One' },
+    { id: 'w6', name: 'Week 6 · Golden State calls about ' + P_OUT, state: br ? 'passage' : 'bricked', answer: 'You traded ' + P_OUT + ' to Golden State for ' + P_IN + '. Signed by both owners.', act: 'Week 6' },
+    { id: 'w9', name: 'Week 9 · Denver asks about a second-round pick', state: 'open', answer: '', act: 'Week 9' },
+    { id: 'w10', name: 'Week 10', state: 'shutter', answer: '', act: 'Week 10' }
+  ];
+}
+function CHAIN() {
+  const b = books('record'), before = PAY - TF_DELTA;
+  return [
+    { id: 'board.roster', pose: 'why1', k: 'RECORDED', title: '1 · Roster board', path: 'world.roster[' + P_IN + '] ← act ' + W6.no, text: P_IN + '’s bar (' + mm(TF_IN) + ') is on the board. ' + P_OUT + '’s (' + mm(TF_OUT) + ') stays behind it, dashed: the salary that left.' },
+    { id: 'board.cap', pose: 'why2', k: 'COMPUTED', title: '2 · Cap wall', path: 'world.payroll = ' + M1(before) + ' + (' + M1(TF_IN) + ' − ' + M1(TF_OUT) + ')', text: 'Payroll ' + mm(b.pay) + ' is over the World’s ' + mm(LINE) + ' line. Its ghost, ' + mm(before) + ', sits just under it: the trade is what crossed the line. Computed; verify against the save.' },
+    { id: 'board.tax', pose: 'why3', k: 'COMPUTED', title: '3 · Tax ledger', path: 'world.projectedTax = over × ' + MULT, text: M1(b.over) + ' × ' + MULT + ' = ' + M1(b.tax) + '. World rule, authored — the NBA’s real tax is incremental.' },
+    { id: 'plate.cash', pose: 'why4', k: 'AUTHORED', title: '4 · Cash plate', path: 'world.cash (unchanged)', text: 'Cash ' + mm(S.cash) + ' has not moved. The ' + mm(b.tax) + ' tax is projected, not yet due; it is not in this number.' },
+    { id: 'film.room', pose: 'why5', k: 'RECORDED', title: '5 · Film room', path: 'world.games[wk9].roster ∋ ' + P_IN, text: LOSS + '. The roster that played had ' + P_IN + '. Whether ' + P_IN.split(' ').pop() + ' changed the result: not determined. The route ends where causality ends.' }
+  ];
+}
+function FIXTURES() {
+  const br = S.history === 'branch', b = books(br ? 'branch' : 'record'), fund = br ? S.branch.funded : S.funded;
+  const out = []; const you = S.signed;
+  const add = (id, mark, room, name, k, lead, text, o) => out.push(Object.assign({ id, mark, room, name, k, lead, text, line: lead + ' ' + text, addr: '', cap: 'PROPOSED', src: SRC.auth, asof: 'illustrative', acts: [], pose: '', body: [] }, o));
+  /* Threshold */
+  add('door.plate', 'T-01', 'T', 'Door plate', 'RECORDED', 'Recorded.', 'Owed: ' + WD.openMatters.length + ' · Lapsed while you were away: ' + (1 + S.lapsedExtra) + '.' + (you ? ' Held by you since ' + hm(S.seatStart) + '.' : S.left ? ' Seat ' + S.left + '.' : ''),
+    { addr: 'boston/threshold/plate', src: SRC.world + '; counts illustrative', asof: AUTH.week, pose: 'door|door', body: ['Three matters are open in the World and nobody holds them.', 'One folder lapsed while nobody was here. It is dusty, and stamped with a hollow NO ACT: an absence, never a choice.'], acts: [{ act: 'pick', arg: { id: 'door.plate' }, label: 'Read the door plate' }] });
+  add('door.folder', 'T-02', 'T', 'Lapsed folder', 'RECORDED', 'Lapsed.', AUTH.lapsed + ' Nobody answered and the World moved on. NO ACT is written as an absence, never as a choice.',
+    { addr: 'boston/threshold/tray[lapsed]', src: SRC.world + '; question text illustrative', asof: 'Year Two · Week 8', pose: 'door|door', body: ['Dust on the folder, a hollow stamp: NO ACT.', 'No banner. Nobody is told they failed.'] });
+  /* Mezzanine */
+  add('plate.rail', 'M-01', 'M', 'Rail plate', 'AUTHORED', 'Authored.', 'Reading the record. Nothing here is yours.', { addr: 'boston/mezzanine/rail/plate', pose: 'rail|rail', body: ['You can read every fixture on this floor. You cannot act on any of them until you sign a seat.'] });
+  add('hall.maquette', 'M-02', 'M', 'Maquette inset', 'AUTHORED', you ? 'Covered.' : 'Authored.',
+    you ? 'Under a dust sheet since ' + hm(S.seatStart) + '. You gave up the outside view when you signed. Standing up restores nothing; leaving the seat uncovers it.' : 'The outside view: this building as a scale model on a plinth by the rail. It is what you looked at before you came in.',
+    { addr: 'boston/mezzanine/maquette', pose: 'desk|rail', body: ['A model of the whole building, with the four rooms lit or dark as the World has them.'] });
+  add('later.rack', 'M-03', 'M', 'Weeks ahead', you ? 'UNKNOWN' : 'AUTHORED', you ? 'Sealed.' : 'Authored.',
+    you ? 'Weeks after Week 9 are shuttered. You gave them up when you signed. You find out by living it.' : 'The World’s calendar, open to an observer. ' + WD.openMatters[0].due.replace('Week 9 · ', 'Week 9, ') + ': the two-way call-up deadline. ' + WD.openMatters[1].due + ': Denver’s pick question comes due.',
+    { addr: 'boston/mezzanine/calendar[10..12]', pose: 'desk|rail', body: ['Three slips in a brass rack: Week 10, 11, 12. The seat holder’s clock does not run ahead of the World’s.'] });
+  add('desk.tradefile', 'M-04', 'M', 'Trade file', br ? 'AUTHORED' : 'RECORDED', br ? 'Not made.' : 'Recorded.',
+    br ? 'In this branch the ' + TF.with + ' trade file was never written. Its outline stays on the desk so you can see where it was.' : 'Trade file with ' + TF.with + ': send ' + P_OUT + ', get ' + P_IN + '. ' + TF.status + '.',
+    { addr: 'boston/mezzanine/desk/deals.closed[0]', cap: 'REAL', src: br ? SRC.auth : SRC.world, asof: TF.week, pose: 'desk-file|desk', body: br ? ['The dashed outline is drawn from the diff between your branch and the record.'] : [P_OUT + ' ' + mm(TF_OUT) + ' out. ' + P_IN + ' ' + mm(TF_IN) + ' in. Net ' + mm(TF_DELTA) + ' added to payroll.', 'Pick it up, then ask: what did this trade touch?'], acts: br ? [] : [{ act: 'pick', arg: { id: 'desk.tradefile' }, label: 'Pick up the trade file' }] });
+  add('desk.blotter', 'M-05', 'M', 'Blotter ledger', you ? 'RECORDED' : 'AUTHORED', you ? 'Recorded.' : 'Authored.',
+    (you ? 'Signed ' + hm(S.seatStart) + '. Gave up: ' : 'You give up: ') + LEDGER.gave.map(g => g.text).join(', ') + '. ' + (you ? 'Got: ' : 'You get: ') + LEDGER.got.join(', ') + '.',
+    { addr: 'boston/mezzanine/desk/blotter', pose: 'desk|desk', body: ['Sitting is free. Signing is the act.', 'The ledger names what you will lose before you lose it, and the Room covers exactly that list.'] });
+  add('desk.pen', 'M-06', 'M', 'The pen', 'AUTHORED', 'Authored.', you ? 'The pen is capped. It signed at ' + hm(S.seatStart) + '.' : 'The pen. Sitting is free; signing is the act. Standing up again restores nothing.',
+    { addr: 'boston/mezzanine/desk/pen', pose: 'desk|desk', acts: you ? [] : [{ act: 'sign', arg: {}, label: 'Sign with the pen', pri: true }] });
+  add('desk.tray', 'M-07', 'M', 'In-tray', you ? 'RECORDED' : 'AUTHORED', you ? 'Recorded.' : 'Authored.',
+    you ? 'In-tray: 3 folders, each named by its question: ' + WD.openMatters.map(m => AUTH.q[m.id]).join(' · ') : 'In-tray: empty. It fills with the matters you sign for.',
+    { addr: 'boston/mezzanine/desk/seat.matters[]', pose: 'desk|desk', body: you ? WD.openMatters.map(m => AUTH.q[m.id] + ' Due ' + m.due + '. (' + m.note + ')') : [] });
+  add('desk.clocks', 'M-08', 'M', 'Two clocks', 'RECORDED', 'Recorded.', 'World · ' + AUTH.week + ' · ' + fmtClock(S.clock) + '. ' + (you ? 'Your clock · started ' + hm(S.seatStart) + '.' : S.left ? 'Your clock stopped.' : 'Your clock has not started.'),
+    { addr: 'boston/mezzanine/desk/clocks', pose: 'desk|desk', body: ['The World keeps its own calendar. Your clock starts beside it when you sign, and never runs ahead of it.'] });
+  add('glass.doors', 'M-09', 'M', 'Glass onto other seats’ material', you ? 'AUTHORED' : 'UNKNOWN', you ? 'Authored.' : 'Withheld.',
+    you ? 'Doors, not contents. Owner’s budget folder · opens: never, it is the owner’s. Scouting board · opens: if Scouting is funded (' + (fund.scouting ? 'it is: open now' : 'it is not') + '). Pending offer · opens: when signed and delivered.'
+      : 'Frosted glass onto other seats’ material. As an observer you read the record, not their desks. Doors appear when you hold a seat.',
+    { addr: 'boston/mezzanine/glass[0..2]', pose: 'desk|desk', src: SRC.auth + '; seed: pending terms stay owner-scoped (REAL, League tables)', body: you ? ['Each folder shows its kind and the rule that opens it. Contents never reach this seat.'] : [] });
+  if (S.po && !br) add('desk.po', 'M-10', 'M', 'Purchase order', 'RECORDED', 'Recorded.', 'Purchase order, act ' + S.po.no + ': fund ' + DEPT[S.po.dept].name + ', ' + mm(S.po.price) + '. Your ink. It left the blotter at ' + hm(S.po.clock) + '.', { addr: 'boston/mezzanine/desk/po[' + S.po.no + ']', src: SRC.world, asof: AUTH.week, pose: 'desk|desk' });
+  /* Ops floor */
+  add('board.roster', 'H-01', 'H', 'Roster board · Who we pay', br ? 'COMPUTED' : 'RECORDED', br ? 'Computed.' : 'Recorded.',
+    br ? 'Who we pay in your branch. ' + P_OUT + ' stays. Payroll ' + mm(b.pay) + ', ' + mm(-b.over) + ' under the World’s ' + mm(LINE) + ' line. No one arrived by trade.' : 'Who we pay. Payroll ' + mm(b.pay) + ', ' + mm(b.over) + ' over the World’s ' + mm(LINE) + ' line. Arrived by trade: ' + P_IN + '.',
+    { addr: 'boston/ops/roster[]', cap: 'REAL', src: br ? SRC.calc : SRC.world, asof: AUTH.week, pose: 'money|money', body: br ? [P_OUT + ' stays on the board at ' + mm(TF_OUT) + '; ' + P_IN + ' is not on it. Ink tape marks what differs from the record.'] : [P_IN + ' ' + mm(TF_IN) + ', arrived Week 6. ' + P_OUT + ' ' + mm(TF_OUT) + ' left Week 6.'] });
+  add('board.cap', 'H-02', 'H', 'Cap wall', br ? 'COMPUTED' : 'RECORDED', br ? 'Computed.' : 'Recorded.',
+    br ? 'Cap wall in your branch: payroll ' + mm(b.pay) + ', ' + mm(-b.over) + ' under the World’s tax line. The record’s payroll is a ghost above it.' : 'Cap wall. Payroll ' + mm(b.pay) + ' against the World’s ' + mm(LINE) + ' tax line and ' + mm(HARD) + ' hard limit (both authored).',
+    { addr: 'boston/ops/money.payroll · taxLine · payrollLimit', cap: 'REAL', src: br ? SRC.calc : SRC.world, asof: AUTH.week, pose: 'money|money', body: ['The line and the limit are World rules, chosen on purpose. The NBA’s own numbers for 2026–27 are the tax line ' + mm(REALTAX) + ' (observed, verify).'] });
+  add('board.tax', 'H-03', 'H', 'Tax ledger', 'COMPUTED', 'Computed.', br ? 'Tax ledger: under the line, so nothing is charged. ' + mm(b.tax) + ' under the World rule (flat ' + MULT + '×, authored).' : 'Tax ledger: ' + M1(b.over) + ' × ' + MULT + ' = ' + M1(b.tax) + '. World rule, authored — the NBA’s real tax is incremental.',
+    { addr: 'boston/ops/money.projectedTax', cap: 'REAL', src: SRC.calc, asof: AUTH.week, pose: 'money|money', body: ['A projected bill, not a paid one.'] });
+  add('plate.cash', 'H-04', 'H', 'Cash plate', 'AUTHORED', 'Authored.', 'Cash ' + mm(S.cash) + ' (illustrative: the fixture holds no cash figure).' + (S.po ? ' Scouting’s ' + mm(S.po.price) + ' has come out.' : '') + ' The projected tax is a bill that has not come due; it is not in this number yet.',
+    { addr: 'boston/ops/money.cash', src: SRC.auth, pose: 'money|money' });
+  const dept = (id, mark, room) => {
+    const d = DEPT[id], on = fund[id], act = S.fundedBy[id];
+    let lead, text, k = 'RECORDED';
+    if (!on) { lead = 'Unbought.'; k = 'UNKNOWN'; text = d.name + ' is dark: chairs stacked, desks under sheets. Not funded since Year One, when Business was funded instead. ' + mm(d.opensFor) + ' would open it.'; }
+    else if (act) { lead = 'Recorded.'; text = d.name + ' is lit. Funded Week 9 · ' + mm(d.opensFor) + ' (act ' + act + (br ? ', held' : '') + ').'; }
+    else { lead = 'Recorded.'; text = d.name + ' is lit: ' + d.why.replace('Business funded', 'Business was funded') + '.'; }
+    add('dept.' + id, mark, room, d.name, k, lead, text, {
+      way: on ? undefined : 'Unbought', cause: on ? undefined : 'Nobody paid for this.',
+      addr: 'boston/ops/v4.departments[' + WD.departments.indexOf(d) + ']', cap: 'REAL', src: SRC.world + ' · ' + SRC.evid, asof: AUTH.week, pose: 'analytics|analytics',
+      body: on ? [d.side === 'business' ? 'Business side. A funded ticketing room is what makes the next home night’s forecast exist.' : 'Basketball side.'] : ['Price on the door: ' + mm(d.opensFor) + '. [verify: price read from the spatial evidence, not from the save]', 'Dark is chairs stacked and sheets on the desks; the light is only a second cue.'],
+      acts: (!on && id !== 'partnerships' && id !== 'ticketing') ? [{ act: 'fund', arg: { dept: id }, label: 'Fund ' + d.name + ' · ' + mm(d.opensFor) }] : []
+    });
+  };
+  dept('analytics', 'H-05', 'H'); dept('scouting', 'H-06', 'H'); dept('ticketing', 'H-07', 'H'); dept('partnerships', 'H-08', 'H');
+  out.find(f => f.id === 'dept.ticketing').pose = 'ticketing|ticketing'; out.find(f => f.id === 'dept.partnerships').pose = 'ticketing|ticketing';
+  add('board.draft', 'H-09', 'H', 'Draft board', fund.scouting ? 'AUTHORED' : 'UNKNOWN', fund.scouting ? 'Pending.' : 'Unbought.',
+    fund.scouting ? 'The draft board keeps its outlines. First report due ' + AUTH.reportWeek + ': pending, not magic. Nothing is on it yet.' : 'The draft board is under a sheet. No reports feed it while Scouting is dark.',
+    { addr: 'boston/ops/scouting/draftBoard', src: SRC.auth, asof: AUTH.week, pose: 'analytics|analytics', body: fund.scouting ? ['A dated tag, not a result: what Scouting finds is not known until it reports.'] : [] });
+  add('film.room', 'H-10', 'H', 'Film room', br ? 'UNKNOWN' : 'RECORDED', br ? 'Sealed.' : 'Recorded.', br ? 'The Week 9 game with a different roster has not been played in this branch. You find out by living it.' : 'Last game, at home: ' + LOSS_DETAIL + '.',
+    { addr: 'boston/ops/v4.court.last', cap: 'REAL', src: br ? SRC.auth : SRC.world, asof: AUTH.week, pose: 'film|film', body: br ? ['The screen is a dashed empty frame. The record’s tape is across the slip.'] : ['Whether ' + P_IN + ' changed the result is not determined by anything in the record.'] });
+  add('court', 'H-11', 'H', 'Practice court', 'AUTHORED', 'Authored.', 'Practice court. Nothing is recorded here; it stands for the work between games.', { addr: 'boston/ops/court', pose: 'court|court' });
+  /* Window wall */
+  add('win.league', 'W-01', 'W', 'League counter', 'UNKNOWN', 'Withheld.', 'Another seat holds this. Terms between other clubs sit in sleeves at the League counter; only signed facts reach the League’s public board.',
+    { addr: 'league/counter/slots[]', cap: 'PROPOSED', src: 'League office as a neighbouring system: observed from outside · seed: League tables, vote record (REAL, DOM, unmerged)', asof: 'illustrative', cause: 'Another seat holds this.', way: 'Withheld', pose: 'desk-league|window', body: ['Sleeved envelopes: “terms between other clubs — not shown.” Nothing here is actionable from Boston.', 'A pane admits that something exists; the sleeve shows its shape, not its terms.'] });
+  const tk = fund.ticketing;
+  add('win.arena', 'W-02', 'W', 'Next home night', tk ? 'MODELED' : 'UNKNOWN', tk ? 'Estimate by the ticketing forecast, ran Week 9.' : 'Unknown.',
+    tk ? NIGHT[0] && ('About ' + NIGHT[1] + ' of ' + NIGHT[2] + ' seats expected. Not a played night. Band: [verify: the forecast’s range is not in the fixture].') : 'No seat forecast without a funded ticketing room.',
+    { addr: 'boston/arena/v4.arena.nights[0].forecast', cap: 'REAL', src: val(WD.arena.nextNight) ? 'Ticketing room forecast (World model) · version [verify: not in the fixture]' : '', asof: 'ran Week 9', cause: 'It has not happened yet.', way: 'Unlived', pose: 'desk-bowl|window', body: tk ? ['Ticketing is funded, so a forecast exists. Pencil hatch on pale linen: expected to sell. The linen stays on until the night is played.'] : ['The bowl is bare grey seats.'] });
+  if (S.branch) add('win.record', 'W-03', 'W', br ? 'The record building' : 'Your branch, across the slip', br ? 'RECORDED' : 'AUTHORED', br ? 'Recorded.' : 'Authored.',
+    br ? 'The record building, lit across the slip. Your branch diverged from it at Week 6 and never overwrites it.' : 'Your branch stands across the slip under scaffold: ' + S.branch.stamp.replace('Your branch · ', '') + '. A paper plaque names the cut.',
+    { addr: br ? 'boston/record' : 'boston/branch/fork.w6', src: SRC.world, asof: AUTH.week, pose: 'window|window', acts: [{ act: 'cross', arg: { to: br ? 'record' : 'branch' }, label: br ? 'Back to the record · cross the footbridge' : 'Cross the footbridge to your branch' }] });
+  /* Brick wall */
+  for (const a of ARCHES()) {
+    const cov = S.arch[a.id].cover, live = a.state === 'passage';
+    const leadTxt = a.state === 'bricked' ? 'Bricked by your act. The arch is still visible, the infill is paler, your ink is on the mortar.' : live ? 'Open in your branch. The brick came out; you went through here.' : a.state === 'open' ? 'Still live. This is one of your three matters. It has no answer yet.' : 'A shutter. It opens itself on its date. Nothing behind it is written.';
+    add('arch.' + a.id, 'B-0' + (['y1', 'w6', 'w9', 'w10'].indexOf(a.id) + 1), 'B', a.name, a.state === 'shutter' ? 'UNKNOWN' : 'RECORDED', a.state === 'shutter' ? 'Sealed.' : a.state === 'open' ? 'Open.' : 'Recorded.', leadTxt + (cov && a.answer ? ' Under the cover: ' + a.answer + (a.id === 'w6' && br ? ' (cut with hindsight)' : '') : ''),
+      { addr: 'boston/doors/moments[' + ['y1', 'w6', 'w9', 'w10'].indexOf(a.id) + ']', src: SRC.world + '; question wording authored', asof: a.act, pose: 'arches|arches', body: ['Named by its question, never its answer. The answer sits under a hinged brass cover.'],
+        acts: (a.state === 'bricked' || live ? [{ act: 'lift', arg: { id: a.id }, label: 'Lift the cover' }] : []).concat([{ act: 'whatif', arg: { id: a.id }, label: 'What if?' }]) });
+  }
+  /* History wall */
+  add('hist.y1', 'Y-01', 'Y', 'Plaque · Year One', 'RECORDED', 'Recorded.', WD.acts[0].when + ' · ' + WD.acts[0].what + '.', { addr: 'boston/history/memory[0]', src: SRC.world, asof: 'Year One', pose: 'history|history' });
+  add('hist.w6', 'Y-02', 'Y', 'Plaque · Week 6', br ? 'AUTHORED' : 'RECORDED', br ? 'Not made.' : 'Recorded.', br ? 'Week 6 · the trade was not made in this branch. An outline where the plaque would hang.' : 'Act ' + W6.no + ' · Week 6 · ' + REC.find(r => r.id === 'w6-trade').what + '.', { addr: 'boston/history/memory[1]', src: SRC.world, asof: TF.week, pose: 'history|history' });
+  add('hist.w9', 'Y-03', 'Y', 'Plaque · Week 9', br ? 'UNKNOWN' : 'RECORDED', br ? 'Sealed.' : 'Recorded.', br ? 'Week 9 has not been played in this branch.' : 'Week 9 · ' + LOSS + '.', { addr: 'boston/history/memory[2]', src: SRC.world, asof: 'Year Two · Week 9', pose: 'history|history' });
+  if (S.po) add('hist.mine', 'Y-04', 'Y', 'Plaque · your act', 'RECORDED', 'Recorded.', 'Act ' + S.po.no + ' · Week 9 · Fund ' + DEPT[S.po.dept].name + ' · ' + mm(S.po.price) + (br ? ' (held in your branch)' : '') + '. Your ink.', { addr: 'boston/history/memory[' + S.po.no + ']', src: SRC.world, asof: AUTH.week, pose: 'history|history' });
+  add('hist.untraced', 'Y-05', 'Y', 'Empty frame', 'UNKNOWN', 'Untraced.', 'Nobody wrote it down. Year One’s Business funding cut analytics staff; the record holds no names, dates or amounts for that cut. No record found.',
+    { addr: 'boston/history/memory[?]', src: 'Authored gap, labelled (the fixture holds only the act, not its detail)', asof: 'Year One', cause: 'Nobody wrote it down.', way: 'Untraced', pose: 'desk-history|history', body: ['A dashed outline on the history wall: something happened here and no source exists.'] });
+  if (S.branch) add('branch.plaque', 'X-01', 'X', 'Branch plaque', 'AUTHORED', 'Authored.', S.branch.stamp + ' · cut with hindsight. Assumptions: the Week 6 trade is not made; acts that needed ' + P_IN + ' are impossible; acts that did not are held; Week 9 is not replayed.', { addr: 'boston/branch/fork.w6/stamp', src: SRC.auth, asof: S.branch.at_clock, pose: 'window|window' });
+  return out;
+}
+const KW_SRC = k => ({ OBSERVED: 'Measured or reported from outside BOW', RECORDED: 'Written into BOW’s own canonical history', AUTHORED: 'A rule or number someone chose on purpose', COMPUTED: 'Follows exactly from rules and state', MODELED: 'A named model’s answer (a range)', GENERATED: 'Made by a generator', UNKNOWN: 'Nobody has it here: a marked hole', SEALED: 'Not yet happened' }[k]);
+
+function recordRows(hist) {
+  const rows = [];
+  for (const r of REC) { if (hist === 'branch' && r.no >= W6.no) continue; rows.push({ no: String(r.no), what: r.what, mine: false }); }
+  if (hist === 'branch' && S.branch) {
+    rows.push({ no: '40′', what: 'Cut: Week 6 trade not made · cut with hindsight', mine: true, br: true });
+    let n = 41; for (const e of S.branch.kept) rows.push({ no: n++ + '′', what: e.what + ' (held)', mine: true, br: true });
+  } else for (const e of S.log.filter(e => e.kind === 'act' && e.hist === 'record')) rows.push({ no: String(e.actNo), what: e.what, mine: true });
+  return rows;
+}
+function diffRows() {
+  const r = books('record'), b = books('branch'), br = S.branch; if (!br) return [];
+  const rows = [
+    ['Roster · ' + P_OUT, 'Left in Week 6 (' + mm(TF_OUT) + ' out)', 'Stays on the board', 'RECORDED', 'COMPUTED'],
+    ['Roster · ' + P_IN, 'Arrived by trade (' + mm(TF_IN) + ')', 'Not on the board', 'RECORDED', 'COMPUTED'],
+    ['Payroll', mm(r.pay), mm(b.pay) + ' = ' + M1(PAY) + ' − (' + M1(TF_IN) + ' − ' + M1(TF_OUT) + ')', 'RECORDED', 'COMPUTED'],
+    ['Against the World’s ' + mm(LINE) + ' line', mm(r.over) + ' over', mm(-b.over) + ' under', 'COMPUTED', 'COMPUTED'],
+    ['Projected tax (World rule, flat ' + MULT + '×, authored)', mm(r.tax), mm(b.tax), 'COMPUTED', 'COMPUTED'],
+    ['Trade file · ' + TF.with, 'Signed by both owners (act ' + W6.no + ')', 'Not made: a dashed ghost on the desk', 'RECORDED', 'AUTHORED']
+  ];
+  for (const a of REC.filter(x => x.no > W6.no)) rows.push([a.when + ' · ' + a.what + ' (act ' + a.no + ')', 'Happened', a.needs ? 'Impossible here: it needs the Week 6 trade' : 'Held', 'RECORDED', a.needs ? 'UNKNOWN' : 'COMPUTED']);
+  rows.push(['Week 9 vs Denver', LOSS, 'Sealed: with a different roster it has not been played. You find out by living it.', 'RECORDED', 'UNKNOWN']);
+  for (const e of br.kept) rows.push([e.what, 'Act ' + e.actNo + ' (record)', 'Held in the branch', 'RECORDED', 'COMPUTED']);
+  for (const e of S.log.filter(e => e.kind === 'act' && e.hist === 'record' && !br.kept.find(k => k.seq === e.seq))) rows.push([e.what, 'Act ' + e.actNo + ' (record)', 'Not in the branch: declared after the cut', 'RECORDED', 'UNKNOWN']);
+  rows.push(['Cash', mm(S.cash) + ' (illustrative)', mm(br.cash) + ' (same: the trade moved payroll, not cash)', 'AUTHORED', 'AUTHORED']);
+  return rows;
+}
+function coveredNow() { return S.signed ? { maquette: 1, later: 1 } : {}; }
+
+/* ---------- 4. the drawings: panel + Schedule (the Room is in section 5) ---------- */
+const kindSw = k => '<span class="sw k-' + k + '" aria-hidden="true"></span>';
+const btn = (a, cls = '', extra = '') => '<button type="button" class="btn ' + cls + '" data-act="' + a.act + '" data-arg="' + esc(JSON.stringify(a.arg || {})) + '" data-k="' + a.act + (a.arg && (a.arg.id || a.arg.dept || a.arg.to || a.arg.v || a.arg.m) ? ':' + (a.arg.id || a.arg.dept || a.arg.to || a.arg.v || a.arg.m) : '') + '">' + a.label + (a.kbd ? '<kbd>' + a.kbd + '</kbd>' : '') + (a.sub ? '<small>' + a.sub + '</small>' : '') + '</button>';
+function addressLine() {
+  const seat = S.signed ? 'gm (you)' : '—', h = S.history === 'branch' ? 'branch fork.w6' : 'record';
+  return '<b>boston · year-two</b> · wk9 ' + hm(S.clock) + ' · ' + h + ' · seat: ' + seat + ' · ' + (S.mode === 'schedule' ? 'schedule' : S.posture);
+}
+function plateBlock(FXS) {
+  const br = S.history === 'branch';
+  if (S.paper) {
+    const fx = FXS.find(f => f.id === S.paper) || (S.paper.startsWith('arch.') && FXS.find(f => f.id === S.paper));
+    if (fx) {
+      const why = S.layers.know ? '<dl class="know"><div><dt>Kind: </dt><dd>' + fx.k + ' — ' + KW_SRC(fx.k) + '</dd></div><div><dt>Source: </dt><dd>' + esc(fx.src) + '</dd></div><div><dt>As of: </dt><dd>' + esc(fx.asof) + '</dd></div></dl>' : '';
+      return '<div class="sheet k-' + fx.k + '"><p class="kick">' + kindSw(fx.k) + fx.k + (fx.way ? ' · ' + fx.way.toUpperCase() : '') + '</p><h2 class="pt">' + esc(fx.name) + '</h2>' +
+        (fx.cause ? '<p class="pl"><b>' + esc(fx.cause) + '</b> ' + esc(fx.text.replace(fx.cause, '').trim()) + '</p>' : '<p class="pl">' + esc(fx.line) + '</p>') + fx.body.map(t => '<p class="pl sm">' + esc(t) + '</p>').join('') + why + '</div>' +
+        (S.held && !br ? btn({ act: 'why', arg: { step: 1 }, label: 'What did this trade touch?', kbd: 'G' }, 'pri') : '') +
+        fx.acts.filter(a => !(a.act === 'pick')).map(a => btn(a)).join('') + btn({ act: 'put', label: S.held ? 'Put it down' : 'Put it back', kbd: 'Esc' });
+    }
+  }
+  if (S.why) {
+    const C = CHAIN(), n = S.why;
+    if (n <= 5) { const c = C[n - 1]; return '<p class="kick">WHY · reading order, not plumbing</p><div class="sheet k-' + c.k + '"><p class="kick">' + kindSw(c.k) + c.k + '</p><h2 class="pt">' + esc(c.title) + '</h2><p class="pl">' + esc(c.text) + '</p>' + (S.layers.know ? '<dl class="know"><div><dt>State path: </dt><dd>' + esc(c.path) + '</dd></div></dl>' : '') + '</div>' + (n < 5 ? btn({ act: 'why', arg: { step: n + 1 }, label: 'Next tag', kbd: '→' }, 'pri') : btn({ act: 'why', arg: { step: 6 }, label: 'Page two: what it reached', kbd: '→' }, 'pri')) + (n > 1 ? btn({ act: 'why', arg: { step: n - 1 }, label: 'Previous tag', kbd: '←' }) : '') + btn({ act: 'whyEnd', label: 'Return to the desk', kbd: 'Esc' }); }
+    return '<p class="kick">WHY · page two</p><div class="sheet k-COMPUTED"><h2 class="pt">Reached 5</h2><p class="pl">Roster board, cap wall, tax ledger, cash plate, film room.</p><p class="pl"><b>Not reached:</b> draft picks (none in the terms).</p><p class="pl sm">Nothing else reads what this trade wrote. The route ends where causality ends.</p></div>' + btn({ act: 'why', arg: { step: 1 }, label: 'Trace again' }) + btn({ act: 'whyEnd', label: 'Return to the desk', kbd: 'Esc' }, 'pri');
+  }
+  const stamp = br ? '<div class="sheet k-AUTHORED" style="border-color:var(--branch)"><p class="kick" style="color:var(--branch)">' + kindSw('AUTHORED') + 'AUTHORED · a branch, in its own ink</p><p class="pl"><b>' + esc(S.branch.stamp) + '</b> · cut with hindsight.</p><p class="pl sm">Assumptions: the trade is not made · acts that needed ' + esc(P_IN) + ' are impossible · acts that did not are held · Week 9 is not replayed.</p></div>' : '';
+  const b = books(br ? 'branch' : 'record');
+  switch (S.posture) {
+    case 'maquette': {
+      const real = S.maq === 'reality';
+      return '<p class="kick">Outside · observing the system as an object</p><h2 class="pt">' + (real ? 'Boston Celtics · Reality' : 'Boston · Year Two') + '</h2>' +
+        (real ? '<p class="pl">Observed from outside. The four department rooms are sheeted: nobody outside knows their funding. The World knows more than Reality because someone wrote it.</p><p class="pl sm">Cap payroll ≈ ' + mm(REAL_CAPPAY) + '; tax salary ' + '$' + REAL_TAXSAL.toLocaleString('en-US') + ', about ' + mm(REALTAX - REAL_TAXSAL) + ' under the ' + mm(REALTAX) + ' line. Two numbers, side by side [verify].</p>'
+          : '<p class="pl">A BOW World, diverged from Reality at Year 0. Authored building; Boston’s real offices are not shown.</p><p class="pl sm">Nothing here is touchable from outside. The four rooms behind glass are lit when funded in the save and dark when not.</p>') +
+        btn({ act: 'arrive', label: 'Arrive at the door' }, 'pri') + '<button type="button" class="btn" id="tgReality" data-act="maq" data-arg="' + esc(JSON.stringify({ v: real ? 'world' : 'reality' })) + '" data-k="maq" aria-pressed="' + real + '">Show Boston · Reality instead</button>';
+    }
+    case 'door': {
+      const fx = FXS.find(f => f.id === 'door.plate');
+      return '<p class="kick">Arrive · the door</p><h2 class="pt">The seat, Boston</h2><div class="sheet k-RECORDED"><p class="pl" style="margin:0"><b>' + esc(fx.text) + '</b></p></div><p class="pl sm">A folder on the sill has dust on it and a hollow stamp: NO ACT. No banner.</p>' +
+        btn({ act: 'look', label: 'Look around', sub: 'Enter the building and read the record. Nothing is yours.' }, 'pri') + btn({ act: 'sit', label: 'Take the seat', sub: 'Sit at the desk. Sitting is free; the pen is the act.' }) + (S.signed ? '' : btn({ act: 'outside', label: 'Step back to the maquette' }));
+    }
+    case 'rail':
+      return stamp + '<p class="kick">Entered · the place, not the role</p><h2 class="pt">' + (S.signed ? 'The floor · you hold the seat' : 'The rail') + '</h2><div class="sheet k-AUTHORED"><p class="pl" style="margin:0"><b>' + (S.signed ? 'Standing up restores nothing. The outside view is still covered.' : 'Reading the record. Nothing here is yours.') + '</b></p></div>' +
+        (br ? btn({ act: 'compare', label: 'Compare with the record' }, 'pri') + btn({ act: 'cross', arg: { to: 'record' }, label: 'Back to the record', sub: 'Cross the footbridge. The branch stays as a scaffolded neighbour.' }) : btn({ act: 'sit', label: S.signed ? 'Back to the desk' : 'Take the seat', sub: S.signed ? '' : 'Sit at the desk. Sitting is free.' }, 'pri')) + (S.signed ? '' : btn({ act: 'arrive', label: 'Back to the door' }));
+    case 'desk': {
+      if (!S.signed) return '<p class="kick">Desk · rehearsal, nothing signed</p><h2 class="pt">The ledger of the seat</h2><div class="sheet k-AUTHORED"><p class="led"><b>You give up:</b> ' + LEDGER.gave.map(g => esc(g.text)).join(', ') + '.</p><p class="led"><b>You get:</b> ' + LEDGER.got.join(', ') + '.</p></div><p class="pl sm">Sitting is free. Signing is the act.</p>' + btn({ act: 'sign', label: 'Sign with the pen', sub: 'One act. Five things change in this frame.' }, 'pri') + btn({ act: 'stand', label: 'Stand up' });
+      const lc = S.ledgerCheck === 'ok' ? 'Ledger check: what you gave up = what the Room covered (asserted).' : S.ledgerCheck ? 'LEDGER MISMATCH' : '';
+      return stamp + '<p class="kick">Signed · you hold the seat</p><h2 class="pt">' + (br ? 'Inside your branch' : 'Week 9 · ' + hm(S.clock)) + '</h2>' +
+        '<div class="two"><div class="clk"><b>World</b>' + AUTH.week + '<br>' + fmtClock(S.clock) + '</div><div class="clk you"><b>Your clock</b>started ' + hm(S.seatStart) + '<br>' + (S.clock - S.seatStart) + ' min in</div></div>' +
+        '<p class="led"><b>Gave up:</b> ' + LEDGER.gave.map(g => esc(g.text)).join(', ') + '.<br><b>Got:</b> ' + LEDGER.got.join(', ') + '.</p><p class="pl sm">' + lc + '</p>' +
+        (br ? btn({ act: 'compare', label: 'Compare with the record' }, 'pri') + btn({ act: 'cross', arg: { to: 'record' }, label: 'Back to the record', sub: 'Cross the footbridge.' })
+          : (S.funded.scouting ? '<div class="sheet k-RECORDED"><p class="pl" style="margin:0"><b>Act ' + S.fundedBy.scouting + '</b> · Funded Scouting · ' + mm(DEPT.scouting.opensFor) + '. First report due ' + AUTH.reportWeek + ', pending.</p></div>' : btn({ act: 'fund', arg: { dept: 'scouting' }, label: 'Fund Scouting · ' + mm(DEPT.scouting.opensFor), sub: 'Cash ' + mm(S.cash) + ' → ' + mm(S.cash - DEPT.scouting.opensFor) + ' (illustrative)' }, 'pri'))) +
+        btn({ act: 'stand', label: 'Stand up', sub: 'Restores nothing.' }) +
+        '<details class="leave"><summary>Leave the seat</summary><label class="pl sm" for="hnote">Hand over in your own words</label><input id="hnote" type="text" value="' + esc(S.handNote) + '"><button type="button" class="btn" data-act="handover" data-k="handover">Hand over</button><button type="button" class="btn" data-act="vacate" data-k="vacate">Vacate<small>Matters lapse as NO ACT.</small></button></details>';
+    }
+  }
+  return '';
+}
+function inView(FXS) {
+  const by = id => FXS.find(f => f.id === id);
+  let ids = [];
+  if (S.posture === 'door') ids = ['door.plate', 'door.folder'];
+  else if (S.posture === 'rail') ids = ['board.roster', 'board.cap', 'board.tax', 'dept.analytics', 'dept.scouting', 'film.room', 'hall.maquette', 'later.rack'];
+  else if (S.posture === 'desk') ids = ['desk.tradefile', 'desk.blotter', 'desk.pen', 'desk.tray', 'desk.clocks', 'glass.doors', 'hall.maquette', 'later.rack'];
+  if (S.branch && S.posture !== 'maquette') ids.push('win.record');
+  return ids.map(by).filter(Boolean);
+}
+function fourWays(FXS) { return ['win.league', 'dept.' + (S.funded.analytics ? 'scouting' : 'analytics'), 'win.arena', 'hist.untraced'].map(id => FXS.find(f => f.id === id)); }
+function renderPanel(FXS) {
+  const focusK = document.activeElement && document.activeElement.dataset && document.activeElement.dataset.k;
+  let h = '';
+  if (S.refusal) h += '<div class="refuse" role="note"><b>Refused by rule ' + esc(S.refusal.rule) + '</b>' + esc(S.refusal.why) + '</div>';
+  h += plateBlock(FXS);
+  if (S.layers.real) h += '<div class="cap ' + (S.posture === 'maquette' ? 'PROPOSED' : 'REAL') + '">' + (S.posture === 'maquette' ? CAPTXT.PROPOSED : CAPTXT.REAL + ' · unmerged branch, no human verdict') + ' · NO AI REQUIRED</div>';
+  if (S.posture !== 'maquette' && !S.paper && !S.why) {
+    const iv = inView(FXS);
+    if (iv.length) { h += '<p class="kick sect">In view · pick one up</p><div class="grid2">' + iv.map(f => btn({ act: 'pick', arg: { id: f.id }, label: f.name }, 'sm')).join('') + '</div>'; }
+    if (S.posture === 'desk' && S.signed) {
+      h += '<p class="kick sect">Four ways not to know · from the desk</p><div class="grid2">' + fourWays(FXS).map((f, i) => btn({ act: 'pick', arg: { id: f.id }, label: ['Withheld', 'Unbought', 'Unlived', 'Untraced'][i], sub: f.name }, 'sm')).join('') + '</div>';
+    }
+    h += '<p class="kick sect">The doors · what if</p><div class="grid2">' + ARCHES().map(a => btn({ act: 'pick', arg: { id: 'arch.' + a.id }, label: a.name.split(' · ')[0], sub: a.state === 'bricked' ? 'bricked by you' : a.state === 'passage' ? 'open · your branch' : a.state }, 'sm')).join('') + '</div>';
+    h += '<p class="kick sect">Stations</p><div class="grid4">' + STN.map((s, i) => '<button type="button" class="btn sm" data-act="go" data-arg="' + esc(JSON.stringify({ id: s.id })) + '" data-k="go:' + s.id + '" aria-label="Station ' + (i + 1) + ' · ' + esc(s.name) + '" title="' + esc(s.name) + '"><i>' + (i + 1) + '</i>' + s.short + '</button>').join('') + '</div>';
+    h += '<div class="grid2">' + btn({ act: 'view', arg: { pose: 'window' }, label: 'Look out of the window' }, 'sm') + btn({ act: 'view', arg: { pose: 'history' }, label: 'Look at the history wall' }, 'sm') + '</div>';
+  }
+  h += '<p class="kick sect">The record · ' + (br() ? 'your branch' : 'your ink is blue') + '</p><ul class="rec" tabindex="0" aria-label="The record">' + recordRows(S.history).slice(-6).map(r => '<li><span class="no ' + (r.br ? 'bch' : r.mine ? 'mine' : '') + '">' + r.no + '</span><span class="' + (r.br ? 'bch' : r.mine ? 'mine' : '') + '">' + esc(r.what) + '</span></li>').join('') + '</ul>';
+  const sc = $('#pscroll'); sc.innerHTML = h;
+  $('#addr').innerHTML = addressLine();
+  $('#tgReal').setAttribute('aria-pressed', S.layers.real); $('#tgKnow').setAttribute('aria-pressed', S.layers.know); $('#tgSched').setAttribute('aria-pressed', S.mode === 'schedule');
+  if (focusK) { const el = sc.querySelector('[data-k="' + CSS.escape(focusK) + '"]'); if (el) el.focus(); }
+}
+function br() { return S.history === 'branch'; }
+function renderSchedule(FXS) {
+  const el = $('#sched');
+  const kn = S.layers.know, rl = S.layers.real;
+  let h = '<h1>Room schedule</h1><p class="addr" style="font:500 12px var(--sans);margin:0">' + addressLine() + '</p><p class="lede">The same building as the Room, written down. Every line starts with what kind of knowing it is. Every act is a button, and acting here changes the Room: act numbers match.</p>';
+  h += '<div class="ledger"><div class="clk"><b>World</b>' + AUTH.week + ' · ' + fmtClock(S.clock) + '</div><div class="clk you"><b>Your clock</b>' + (S.signed ? 'started ' + hm(S.seatStart) : S.left ? 'stopped' : 'not started') + '</div></div>';
+  h += '<h2>Posture · where you stand</h2><p class="lede" style="margin:0 0 8px">' + esc(({ maquette: 'Outside, looking at the maquette. Nothing is touchable.', door: 'At the door.', rail: 'At the rail, reading the record.', desk: S.signed ? 'At the desk. You hold the seat.' : 'At the desk, unsigned. Sitting is free.' })[S.posture]) + '</p><div style="display:flex;gap:6px;flex-wrap:wrap;max-width:760px">' +
+    [['arrive', 'Door'], ['look', 'Rail'], ['sit', 'Desk'], ['sign', 'Sign with the pen'], ['stand', 'Stand up'], ['outside', 'Outside (maquette)']].map(([a, l]) => '<button type="button" class="btn sm" style="flex:0 0 auto;width:auto" data-act="' + a + '" data-arg="{}" data-k="s:' + a + '">' + l + '</button>').join('') + '</div>';
+  if (S.refusal) h += '<div class="refuse" style="max-width:760px;margin-top:10px"><b>Refused by rule ' + esc(S.refusal.rule) + '</b>' + esc(S.refusal.why) + '</div>';
+  const by = {}; FXS.forEach(f => (by[f.room] = by[f.room] || []).push(f));
+  for (const rk of ['T', 'M', 'H', 'W', 'B', 'Y', 'X']) if (by[rk]) {
+    h += '<h2 id="h-' + rk + '">' + ROOMS[rk] + '</h2><table><thead><tr><th>Mark</th><th>Fixture</th><th>Line</th><th>Address</th><th>Acts</th></tr></thead><tbody>';
+    for (const f of by[rk]) {
+      const isB = S.history === 'branch' && f.k !== 'RECORDED' && ['board.roster', 'board.cap', 'desk.tradefile', 'hist.w6'].includes(f.id);
+      h += '<tr><td class="mk">' + f.mark + '</td><td class="nm">' + esc(f.name) + '</td><td class="ln ' + (isB ? 'bch' : '') + '"><span class="kw">' + kindSw(f.k) + esc(f.lead) + '</span> ' + esc(f.text) +
+        (kn ? '<span class="prov">' + f.k + ' · ' + esc(f.src) + ' · as of ' + esc(f.asof) + '</span>' : '') + (rl ? '<span class="prov"><b>' + CAPTXT[f.cap] + '</b> · NO AI REQUIRED</span>' : '') + '</td><td class="ad">' + esc(f.addr) + '</td><td class="ac">' +
+        [{ act: 'pick', arg: { id: f.id }, label: 'Pick up / read' }].concat(f.acts.filter(a => a.act !== 'pick')).map(a => btn(a, 'sm').replace('class="btn sm"', 'class="btn sm" style="margin:0 0 4px"')).join('') + '</td></tr>';
+    }
+    h += '</tbody></table>';
+  }
+  h += '<h2>The record · acts, numbered as in the Room</h2><table><thead><tr><th>No.</th><th>Act</th></tr></thead><tbody>' + recordRows(S.history).map(r => '<tr><td class="mk ' + (r.br ? 'bch' : r.mine ? 'mine' : '') + '">' + r.no + '</td><td class="' + (r.br ? 'bch' : r.mine ? 'mine' : '') + '">' + esc(r.what) + '</td></tr>').join('') + '</tbody></table>';
+  h += '<h2>Event log · everything you did, in order</h2><table><thead><tr><th>Seq</th><th>Kind</th><th>What</th><th>Clock</th><th>History</th></tr></thead><tbody>' + S.log.map(e => '<tr><td class="mk">' + e.seq + '</td><td>' + e.kind + '</td><td>' + esc(e.what) + '</td><td>' + e.clock + '</td><td>' + e.hist + '</td></tr>').join('') + '</tbody></table>';
+  if (S.branch) {
+    h += '<h2 id="compare">Compare · record | ' + esc(S.branch.stamp) + '</h2><p class="lede">The record is never overwritten. The branch differs only where an act reached.</p><table class="diff"><thead><tr><th>Fixture</th><th>Record</th><th>Your branch</th></tr></thead><tbody>' +
+      diffRows().map(r => '<tr><td class="nm">' + esc(r[0]) + '</td><td class="a">' + kindSw(r[3]) + esc(r[1]) + '</td><td class="b bch">' + kindSw(r[4]) + esc(r[2]) + '</td></tr>').join('') + '</tbody></table>' +
+      '<p style="margin-top:10px;max-width:420px">' + btn({ act: 'cross', arg: { to: S.history === 'branch' ? 'record' : 'branch' }, label: S.history === 'branch' ? 'Back to the record · cross the footbridge' : 'Cross the footbridge to your branch' }, 'pri') + '</p>';
+  }
+  const y = el.scrollTop; el.innerHTML = h; el.scrollTop = y;
+  if (S.jump) { const t = $('#' + S.jump, el); if (t) t.scrollIntoView(); S.jump = null; }
+}
+let ROOM = null;
+function paint() {
+  const FXS = FIXTURES();
+  document.body.classList.toggle('in-branch', S.history === 'branch');
+  $('#stamp').textContent = S.branch && S.history === 'branch' ? S.branch.stamp + ' · cut with hindsight' : '';
+  $('#sched').hidden = S.mode !== 'schedule';
+  if (S.mode === 'schedule') renderSchedule(FXS);
+  renderPanel(FXS);
+  if (ROOM) ROOM.update(S, FXS);
+  /* the ledger's "gave up" list must equal what actually got covered (asserted, in code) */
+  const want = S.signed ? LEDGER.gave.map(g => g.id).sort().join() : '';
+  const have = ROOM ? ROOM.coveredIds().sort().join() : Object.keys(coveredNow()).sort().join();
+  const ok = want === have; S.ledgerCheck = S.signed ? (ok ? 'ok' : 'bad') : null;
+  if (!ok) console.error('ledger mismatch: ledger says [' + want + '] but the Room covers [' + have + ']');
+}
+window.__bow = { get S() { return S; }, act, paint, FIXTURES, get room() { return ROOM; }, reset() { S = fresh(); paint(); } };
+
+/* ---------- 6. input ---------- */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  let arg = {}; try { arg = JSON.parse(b.dataset.arg || '{}'); } catch (_) {}
+  if (b.dataset.act === 'handover') { const n = $('#hnote'); arg.note = n ? n.value.trim() : ''; }
+  act(b.dataset.act, arg);
+});
+$('#tgReal').addEventListener('click', () => { S.layers.real = !S.layers.real; paint(); });
+$('#tgKnow').addEventListener('click', () => { S.layers.know = !S.layers.know; paint(); });
+$('#tgSched').addEventListener('click', () => act('mode', { m: S.mode === 'schedule' ? 'room' : 'schedule' }));
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const t = e.target; if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+  const k = e.key;
+  if (k === 's' || k === 'S') { e.preventDefault(); act('mode', { m: S.mode === 'schedule' ? 'room' : 'schedule' }); }
+  else if (/^[1-8]$/.test(k)) { e.preventDefault(); act('go', { id: STN[+k - 1].id }); }
+  else if (k === 'g' || k === 'G') { if (S.held) { e.preventDefault(); act('why', { step: 1 }); } }
+  else if (k === 'ArrowRight' && S.why) { e.preventDefault(); act('why', { step: S.why + 1 }); }
+  else if (k === 'ArrowLeft' && S.why > 1) { e.preventDefault(); act('why', { step: S.why - 1 }); }
+  else if (k === 'Escape') { if (S.why) act('whyEnd'); else if (S.paper) act('put'); else if (S.mode === 'schedule') act('mode', { m: 'room' }); }
+});
+/*__ROOM__*/
+paint();
+$('#loading').textContent = 'The Room needs WebGL. The Schedule (key S) is the same building as text.';
+</script>
+</body>
+</html>
