@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Same World Lockstep</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&amp;family=IBM+Plex+Mono:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#fff;color:#111;font-family:'Archivo',sans-serif}
+button{font-family:'Archivo',sans-serif;color:#111;cursor:pointer}
+button:hover{background:#eee}
+button:focus-visible{outline:3px solid #e8a400;outline-offset:1px}
+.fl{display:inline-flex;align-items:center;justify-content:center;background:#111;color:#f4f4f0;font-family:'IBM Plex Mono',monospace;font-weight:700;border-radius:2px;position:relative;line-height:1;box-sizing:border-box}
+.fl:after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(255,255,255,.28)}
+.grp{display:flex;gap:2px}
+.lab{font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.mono{font-family:'IBM Plex Mono',monospace}
+.ic-rec{width:12px;height:12px;box-sizing:border-box;border:2px solid #111;background:#111;box-shadow:inset 0 0 0 2px #fff}
+.ic-mod{width:12px;height:12px;box-sizing:border-box;border:1px solid #111;background:repeating-linear-gradient(135deg,#111 0 1.3px,transparent 1.3px 3.5px)}
+.ic-not{width:12px;height:12px;box-sizing:border-box;border:1.5px dashed #111;background:transparent}
+.btn{height:36px;box-sizing:border-box;border:1px solid #111;background:#fff;font-size:13px;font-weight:600;padding:0 10px}
+.btn-x{height:36px;box-sizing:border-box;border:1px dashed #777;background:#fff;font-size:13px;font-weight:600;padding:0 10px;color:#777;cursor:not-allowed}
+.btn-x:hover{background:#fff}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;margin:0;height:24px;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:3px;background:#111}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:22px;background:#e8a400;border:2px solid #111;margin-top:-10px;box-sizing:border-box}
+input[type=range]::-moz-range-track{height:3px;background:#111}
+input[type=range]::-moz-range-thumb{width:20px;height:22px;background:#e8a400;border:2px solid #111;border-radius:0}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background:#fff; color:#111;">
+
+  <!-- ===== the two panes ===== -->
+  <sc-for list="{{panes}}" as="p" hint-placeholder-count="2">
+  <div style="position:absolute;left:{{p.left}}px;top:62px;width:568px;height:838px">
+    <div style="position:absolute;left:0;top:0;width:568px;height:702px;box-sizing:border-box;border:2px solid #111;background:#fff">
+      <div style="position:absolute;left:13px;top:13px;font-size:17px;font-weight:800;line-height:20px;text-transform:uppercase">{{p.title}}</div>
+      <div style="position:absolute;left:13px;top:33px;width:200px;font-size:12.5px;line-height:15px;color:#444">{{p.sub}}</div>
+      <div style="position:absolute;right:14px;top:6px;display:flex;align-items:center;gap:4px"><span class="lab" style="font-size:11px">{{p.openLabel}}</span><span class="lab" style="font-size:11px;background:#e8a400;padding:1px 5px">NOW</span></div>
+      <div style="position:absolute;left:218px;top:20px;width:334px;height:39px;box-sizing:border-box;border:2px solid #e8a400;padding:3px 4px;display:flex;gap:12px;justify-content:center">
+        <sc-for list="{{p.clock}}" as="g" hint-placeholder-count="4"><div class="grp"><sc-for list="{{g.cells}}" as="k" hint-placeholder-count="3"><span class="fl" style="width:{{k.w}}px;height:{{k.h}}px;font-size:{{k.fs}}px">{{k.c}}</span></sc-for></div></sc-for>
+      </div>
+      <div style="position:absolute;left:13px;top:66px;font-size:12.5px;font-weight:600;line-height:14px;width:60px">pretend it<br>is later</div>
+      <input type="range" min="0" max="72" step="1" value="{{p.off}}" onChange="{{p.slide}}" onInput="{{p.slide}}" aria-label="{{p.sliderLabel}}" style="position:absolute;left:83px;top:70px;width:326px">
+      <div class="mono" style="position:absolute;right:14px;top:64px;text-align:right;font-size:11.5px;line-height:15px">{{p.offA}}<br>{{p.offB}}</div>
+      <div style="position:absolute;left:13px;top:113px;font-size:15.5px;font-weight:600;white-space:nowrap">{{p.headline}}</div>
+      <div class="ic-mod" style="position:absolute;left:286px;top:118px;width:11px;height:11px"></div>
+      <div class="mono" style="position:absolute;left:304px;top:113px;font-size:17px;font-weight:700">W–L {{p.wl}}</div>
+      <div style="position:absolute;left:403px;top:109px;width:150px;font-size:11px;line-height:13px;color:#333">{{p.modelNote}}</div>
+
+      <!-- since you looked -->
+      <div style="position:absolute;left:13px;top:143px;width:538px;height:93px;box-sizing:border-box;background:#e9e7dc;border-left:6px solid #111;padding:12px 14px">
+        <div class="lab" style="font-size:11px">{{p.sinceLabel}}</div>
+        <div style="margin-top:12px;font-size:12.5px;line-height:17px;white-space:pre-line;width:500px">{{p.since}}</div>
+        <button type="button" class="btn" onClick="{{p.markSeen}}" style="position:absolute;right:8px;top:3px;width:88px;font-size:12.5px">Mark seen</button>
+      </div>
+
+      <!-- last 3 events -->
+      <div class="lab" style="position:absolute;left:13px;top:244px;font-size:11px">LAST 3 EVENTS</div>
+      <div style="position:absolute;left:13px;top:262px;width:538px;height:108px">
+        <sc-if value="{{p.noEvents}}" hint-placeholder-val="{{false}}"><div style="font-size:13px;color:#333;padding-top:6px">{{p.noEventsText}}</div></sc-if>
+        <sc-for list="{{p.events}}" as="ev" hint-placeholder-count="3">
+          <div style="display:flex;align-items:flex-start;gap:8px;min-height:33px;box-sizing:border-box;border-bottom:1px solid #ccc;padding:6px 0 3px 0">
+            <div class="{{ev.icon}}" style="flex:none;margin-top:1px"></div>
+            <div class="mono" style="flex:none;width:122px;font-size:11px;line-height:15px;{{ev.timeStyle}}">{{ev.time}}</div>
+            <div style="flex:1;font-size:12.5px;line-height:15px;{{ev.textStyle}}">{{ev.text}}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- open matters -->
+      <div class="lab" style="position:absolute;left:13px;top:372px;font-size:11px">OPEN MATTERS · COUNTDOWN TO EXPIRY</div>
+      <div style="position:absolute;left:13px;top:390px;width:538px;height:130px">
+        <sc-if value="{{p.noMatters}}" hint-placeholder-val="{{false}}"><div style="font-size:13px;color:#333;padding-top:6px">No matter is open at this moment.</div></sc-if>
+        <sc-for list="{{p.matters}}" as="m" hint-placeholder-count="2">
+          <div style="display:flex;align-items:center;gap:8px;min-height:56px;box-sizing:border-box;border-bottom:1px solid #ccc;padding:4px 0">
+            <div style="flex:none;width:11px;height:11px;border:1.5px solid #111;box-sizing:border-box;align-self:flex-start;margin-top:10px"></div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;line-height:15px">{{m.title}}</div>
+              <div class="mono" style="font-size:11px;margin-top:3px">{{m.closes}}</div>
+              <sc-if value="{{m.hasRefusal}}" hint-placeholder-val="{{false}}"><div style="font-size:11px;font-weight:700;margin-top:2px;letter-spacing:.01em">{{m.refusal}}</div></sc-if>
+            </div>
+            <div style="flex:none;width:88px;text-align:center">
+              <div class="grp" style="justify-content:center"><sc-for list="{{m.cd}}" as="k" hint-placeholder-count="4"><span class="fl" style="width:{{k.w}}px;height:{{k.h}}px;font-size:{{k.fs}}px">{{k.c}}</span></sc-for></div>
+              <div style="font-size:10.5px;color:#444;margin-top:2px">h:mm left</div>
+            </div>
+            <sc-if value="{{p.canAct}}" hint-placeholder-val="{{true}}">
+              <div style="flex:none;display:flex;gap:6px">
+                <button type="button" class="{{m.b1Class}}" onClick="{{m.b1Do}}">{{m.b1}}</button>
+                <button type="button" class="{{m.b2Class}}" onClick="{{m.b2Do}}">{{m.b2}}</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{p.readOnly}}" hint-placeholder-val="{{false}}"><div style="flex:none;width:112px;font-size:10.5px;line-height:13px;color:#444">read-only view · acts belong to the YOU seat</div></sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="position:absolute;left:13px;top:526px;width:540px;font-size:10.6px;line-height:15px;color:#333">Rules the fold applies: R-15 roster ≤ 15 at tip-off, else forfeit · M-1 a matter closes at expiry, unanswered = NO ACT · L-1 the log only grows · L-2 an act id is used once</div>
+
+      <!-- payroll -->
+      <div class="lab" style="position:absolute;left:13px;top:563px;font-size:11px">PAYROLL VS THE 2026–27 LINES (fixture, verify)</div>
+      <div style="position:absolute;left:13px;top:577px;font-size:21px;font-weight:800;letter-spacing:-.01em">{{p.payroll}}</div>
+      <div style="position:absolute;left:112px;top:583px;font-size:12.5px">{{p.overText}}</div>
+      <div style="position:absolute;left:13px;top:603px;width:420px;height:26px">
+        <div style="position:absolute;left:0;top:14px;width:400px;height:5px;background:#bbb"></div>
+        <div style="position:absolute;left:0;top:14px;width:{{p.fillW}}px;height:5px;background:#777"></div>
+        <div style="position:absolute;left:{{p.overX}}px;top:15px;width:66px;height:3px;border:1px solid #111;box-sizing:border-box;background:#fff"></div>
+        <sc-for list="{{p.ticks}}" as="tk" hint-placeholder-count="3">
+          <div style="position:absolute;left:{{tk.x}}px;top:0;height:20px;border-left:1.5px solid #111;padding-left:3px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:12px;white-space:nowrap">{{tk.label}}</div>
+        </sc-for>
+      </div>
+      <div class="lab" style="position:absolute;left:433px;top:563px;font-size:11px">ROSTER</div>
+      <div style="position:absolute;left:433px;top:577px;display:flex;align-items:center;gap:8px">
+        <div class="grp"><sc-for list="{{p.roster}}" as="k" hint-placeholder-count="2"><span class="fl" style="width:{{k.w}}px;height:{{k.h}}px;font-size:{{k.fs}}px">{{k.c}}</span></sc-for></div>
+        <span class="mono" style="font-size:12.5px">of 15</span>
+      </div>
+      <div style="position:absolute;left:433px;top:602px;width:120px;font-size:11px;line-height:13px;color:#444">{{p.callNote}}</div>
+
+      <!-- state hash -->
+      <div class="lab" style="position:absolute;left:13px;top:645px;font-size:11px">STATE HASH</div>
+      <div style="position:absolute;left:13px;top:658px;width:130px;font-size:11px;line-height:13px;color:#444">{{p.hashCap}}</div>
+      <div class="grp" style="position:absolute;left:162px;top:648px"><sc-for list="{{p.hash}}" as="k" hint-placeholder-count="8"><span class="fl" style="width:{{k.w}}px;height:{{k.h}}px;font-size:{{k.fs}}px">{{k.c}}</span></sc-for></div>
+      <div class="mono" style="position:absolute;right:14px;top:657px;font-size:11.5px">seed {{p.seed}}</div>
+    </div>
+
+    <!-- pane log -->
+    <div class="lab" style="position:absolute;left:0;top:710px;font-size:11px">{{p.logHead}}</div>
+    <div style="position:absolute;left:0;top:728px;width:568px;min-height:40px;box-sizing:border-box;border:{{p.logBorder}};padding:6px 8px;font-size:11.5px;line-height:15px;background:#fff">
+      <sc-if value="{{p.logEmpty}}" hint-placeholder-val="{{true}}"><div style="color:#444;padding-top:4px">The public log is empty. Answer a matter in the YOU pane to append the first act.</div></sc-if>
+      <sc-for list="{{p.logLines}}" as="ln" hint-placeholder-count="1"><div class="mono" style="font-size:11px;{{ln.style}}">{{ln.text}}</div></sc-for>
+    </div>
+  </div>
+  </sc-for>
+
+  <!-- ===== agreement strip ===== -->
+  <div style="position:absolute;left:609px;top:62px;width:222px;height:702px;box-sizing:border-box;border:2px solid #111;background:#fff;padding:12px 12px 0 12px">
+    <div class="lab" style="font-size:11px">AGREEMENT STRIP</div>
+    <div style="font-size:12.5px;line-height:16px;margin-top:6px">{{mid.desc}}</div>
+    <div class="lab" style="font-size:11px;margin-top:12px">WORLD TIME T</div>
+    <div style="margin-top:4px;box-sizing:border-box;border:2px solid #e8a400;padding:2px 3px;display:inline-flex;gap:5px">
+      <sc-for list="{{mid.clock}}" as="g" hint-placeholder-count="4"><div class="grp" style="gap:1px"><sc-for list="{{g.cells}}" as="k" hint-placeholder-count="3"><span class="fl" style="width:{{k.w}}px;height:{{k.h}}px;font-size:{{k.fs}}px">{{k.c}}</span></sc-for></div></sc-for>
+    </div>
+    <div class="mono" style="font-size:11px;margin-top:3px">{{mid.tText}}</div>
+    <div class="lab" style="font-size:11px;margin-top:12px">YOU AT T</div>
+    <div class="grp" style="margin-top:4px;gap:1px"><sc-for list="{{mid.hashYou}}" as="k" hint-placeholder-count="8"><span class="fl" style="width:{{k.w}}px;height:{{k.h}}px;font-size:{{k.fs}}px">{{k.c}}</span></sc-for></div>
+    <div class="lab" style="font-size:11px;margin-top:9px">FRIEND AT T</div>
+    <div class="grp" style="margin-top:4px;gap:1px"><sc-for list="{{mid.hashFr}}" as="k" hint-placeholder-count="8"><span class="fl" style="width:{{k.w}}px;height:{{k.h}}px;font-size:{{k.fs}}px">{{k.c}}</span></sc-for></div>
+    <div style="margin-top:12px;box-sizing:border-box;padding:9px 10px;min-height:76px;{{mid.verdictStyle}}">
+      <div style="font-size:18px;font-weight:800;margin-bottom:4px">{{mid.verdictHead}}</div>
+      <div style="font-size:12px;line-height:15.5px">{{mid.verdictText}}</div>
+    </div>
+    <div class="mono" style="font-size:11px;line-height:15px;margin-top:9px;color:#333">{{mid.inputs}}</div>
+    <button type="button" class="btn" onClick="{{breakIt}}" aria-pressed="{{broken}}" style="width:196px;height:44px;margin-top:10px;font-size:15px;font-weight:600;border-width:2px;margin-left:0">{{mid.breakLabel}}</button>
+    <div style="font-size:11px;line-height:14px;color:#333;margin-top:5px">{{mid.breakNote}}</div>
+    <button type="button" class="btn" onClick="{{toggleHash}}" aria-pressed="{{fnv}}" style="width:196px;height:38px;margin-top:14px;font-size:12.5px;line-height:15px;padding:0 8px;{{mid.hashBtnStyle}}">{{mid.hashBtn}}</button>
+    <div class="mono" style="margin-top:10px;border:1px solid #111;padding:8px 10px;font-size:11.5px;line-height:15px;white-space:pre;color:#222">{{mid.code}}</div>
+  </div>
+  <div class="lab" style="position:absolute;left:608px;top:772px;font-size:11px">PUBLIC ACT LOG</div>
+  <div style="position:absolute;left:608px;top:797px;font-size:11px;width:114px">append-only · {{mid.nActs}}</div>
+  <button type="button" class="btn" onClick="{{clearLog}}" style="position:absolute;left:725px;top:787px;width:98px;font-size:12px;padding:0 6px">Clear demo log</button>
+
+  <!-- ===== header ===== -->
+  <div style="position:absolute;left:28px;top:15px;width:36px;height:36px;background:#111;color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center">X3</div>
+  <div style="position:absolute;left:76px;top:12px;font-size:17px;font-weight:800;letter-spacing:.01em">THE SAME WORLD FOR EVERYONE, WITHOUT A SERVER</div>
+  <div style="position:absolute;left:76px;top:35px;font-size:12.5px;color:#333">Try it: move YOUR clock forward, answer a matter, move the friend’s clock past that act, then press Break it.</div>
+  <button type="button" class="btn" onClick="{{toggleLive}}" aria-pressed="{{live}}" style="position:absolute;left:916px;top:13px;width:124px;font-size:12.5px;white-space:nowrap;padding:0 4px;{{liveStyle}}">{{liveText}}</button>
+  <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{showHow}}" style="position:absolute;left:1051px;top:13px;width:130px;font-size:13px">How do we know?</button>
+  <button type="button" class="btn" onClick="{{toggleChecks}}" aria-pressed="{{showChecks}}" style="position:absolute;left:1201px;top:13px;width:211px;border-width:2px;font-size:12.5px;{{engStyle}}">{{engText}}</button>
+
+  <!-- ===== footer ===== -->
+  <div style="position:absolute;left:28px;top:841px;font-size:13px"><b style="font-weight:800;letter-spacing:.03em">WHAT A COPY WOULD MISS:</b> determinism. A copy can show two screens that look alike; only a pure World function makes them provably the same World.</div>
+  <div style="position:absolute;left:28px;top:864px;width:900px;font-size:11.5px;line-height:15px;color:#444">COMMERCIAL LENS · Hypothesis: persistent Worlds without per-World servers change the margin — compute is spent only when someone looks, and anyone can audit the log.</div>
+  <div style="position:absolute;left:960px;top:864px;width:452px;text-align:right;font-size:11.5px;line-height:15px;color:#444">SPECULATIVE FRONTIER · toy model, authored inputs · 1 real hour = 1 World day (authored pace) · league lines: fixture, verify</div>
+
+  <!-- ===== popups ===== -->
+  <sc-if value="{{showChecks}}" hint-placeholder-val="{{false}}">
+    <div style="position:absolute;left:754px;top:58px;width:656px;box-sizing:border-box;border:2px solid #111;background:#fff;padding:12px 14px 10px 14px;z-index:20;box-shadow:4px 4px 0 rgba(0,0,0,.25)">
+      <div class="lab" style="font-size:11px;margin-bottom:8px">ENGINE SELF-CHECKS · THESE RUN IN THIS BROWSER EVERY TIME THE BOARD LOADS</div>
+      <sc-for list="{{checks}}" as="c" hint-placeholder-count="23"><div style="display:flex;gap:10px;font-size:12px;line-height:19px"><span style="width:12px;flex:none">{{c.mark}}</span><span>{{c.label}}</span></div></sc-for>
+    </div>
+  </sc-if>
+  <sc-if value="{{showHow}}" hint-placeholder-val="{{false}}">
+    <div style="position:absolute;left:830px;top:58px;width:400px;box-sizing:border-box;border:2px solid #111;background:#fff;padding:12px 14px;z-index:20;box-shadow:4px 4px 0 rgba(0,0,0,.25)">
+      <div class="lab" style="font-size:11px;margin-bottom:8px">HOW DO WE KNOW? · WHAT EACH MARK CLAIMS</div>
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px"><div class="ic-rec" style="flex:none;margin-top:2px"></div><div style="font-size:12px;line-height:16px">Double-ruled square: an act written into the public log. Recorded, append-only.</div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px"><div class="ic-mod" style="flex:none;margin-top:2px"></div><div style="font-size:12px;line-height:16px">Hatched square: a toy-model result (game, injury, offer). Inputs are authored; the seed picks the outcome. Not real league data.</div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px"><div class="ic-not" style="flex:none;margin-top:2px"></div><div style="font-size:12px;line-height:16px">Dashed square: not yet. That pane is earlier than the act.</div></div>
+      <div style="font-size:12px;line-height:16px">Each pane folds seed + public log up to its own clock. Same seed, same log, same time: same state, same hash. Payroll lines are a fixture; verify before use.</div>
+      <div style="font-size:11px;margin-top:8px;color:#444">PROTOTYPE · DESIGN PROPOSAL · data: prototype, dated, verify before use</div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+/* ---------- pure engine: no Math.random, no Date inside the fold ---------- */
+const OPP = ['Miami','Toronto','Chicago','Denver','Atlanta','Brooklyn','Phoenix','Dallas'];
+const WHO = ['Big A','Guard B','Wing C','Forward D'];
+const CITY = ['Orlando','Charlotte','Utah','Portland'];
+const CALLUP_EXP = 4320;
+const GOLDEN = 'c00ee448';
+function at(dd, h, m) { return dd * 1440 + h * 60 + m - 540; }
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function fixtures() {
+  return [
+    { id: 'O0', kind: 'offer', dd: 0, t: at(0, 18, 0), exp: at(1, 15, 0), trade: true, cost: 3100, desc: 'Orlando: Wing D ($3.1M, 1 yr) for a 2028 2nd' },
+    { id: 'G1', kind: 'game', dd: 1, t: at(1, 22, 0), w: false, us: 104, them: 113, opp: 'Miami', home: true },
+    { id: 'I3', kind: 'injury', dd: 3, t: at(3, 12, 0), who: 'Big A', until: at(11, 12, 0) },
+    { id: 'G3', kind: 'game', dd: 3, t: at(3, 22, 0), w: true, us: 117, them: 109, opp: 'Toronto', home: false },
+    { id: 'O4', kind: 'offer', dd: 4, t: at(4, 19, 0), exp: at(5, 18, 0), trade: false, cost: 2400, desc: 'Free agent: guard FA 1 signs at the minimum, $2.4M' }
+  ];
+}
+function genDay(seed, dd) {
+  const r = mulberry32(seed * 9973 + dd * 7919 + 17);
+  const out = [];
+  const a = r(), b = r(), c = r(), d = r(), e = r(), f = r();
+  if (a < 0.55) {
+    const win = b < 0.5; const us = 95 + Math.floor(c * 30); const gap = 1 + Math.floor(d * 14);
+    out.push({ id: 'G' + dd, kind: 'game', dd: dd, t: at(dd, 22, 0), w: win, us: us, them: win ? us - gap : us + gap, opp: OPP[Math.floor(e * OPP.length)], home: f < 0.5 });
+  }
+  const g = r(), h = r(), i = r(), j = r();
+  if (g < 0.3) {
+    const trade = h < 0.5; const cost = trade ? [2800, 3100, 3600][Math.floor(i * 3)] : 2400;
+    const t = at(dd, 18, 0) + Math.floor(j * 2) * 60;
+    out.push({ id: 'O' + dd, kind: 'offer', dd: dd, t: t, exp: t + (21 + Math.floor(j * 3)) * 60, trade: trade, cost: cost,
+      desc: trade ? CITY[Math.floor(i * CITY.length)] + ': Wing ' + 'E' + ' ($' + (cost / 1000).toFixed(1) + 'M, 1 yr) for a 2029 2nd' : 'Free agent: guard FA ' + (dd + 1) + ' signs at the minimum, $2.4M' });
+  }
+  const k = r(), l = r();
+  if (k < 0.12) { out.push({ id: 'I' + dd, kind: 'injury', dd: dd, t: at(dd, 12, 0), who: WHO[Math.floor(l * WHO.length)], until: at(dd, 12, 0) + (5 + Math.floor(l * 6)) * 1440 }); }
+  return out;
+}
+function genEvents(seed, T) {
+  const out = []; const last = Math.floor((T + 540) / 1440);
+  for (let dd = 0; dd <= last; dd++) {
+    const list = (seed === 2026 && dd < 6) ? fixtures().filter(x => x.dd === dd) : genDay(seed, dd);
+    list.forEach(x => { if (x.t <= T) out.push(x); });
+  }
+  return out;
+}
+function tipoff(roster) { return roster > 15 ? { forfeit: true } : { forfeit: false }; }
+function tryAct(st, M, a) {
+  const m = M[a.mid];
+  if (!m || m.t > a.t || a.t >= m.exp || st.answered[a.mid]) return 'rule M-1: that matter is not open';
+  if (a.kind === 'callup' || a.kind === 'accept') {
+    if (st.roster + 1 > 15) return 'rule R-15: roster would be ' + (st.roster + 1) + ' of 15';
+    if (a.kind === 'accept' && m.trade && st.picks < 1) return 'no 2nd-round pick left to send';
+  }
+  return null;
+}
+function fold(seed, acts, T) {
+  const st = { seed: seed, day: Math.floor(T / 1440), roster: 14, contracts: 214000, dead: 6400, pending: 2400, picks: 2, w: 0, l: 0, cu: 'open', entries: [], applied: [], answered: {}, open: [], lastAct: null };
+  const M = { C: { id: 'C', kind: 'callup', t: -1000000, exp: CALLUP_EXP, cost: 2400, trade: false } };
+  const tl = [];
+  genEvents(seed, T).forEach(e => {
+    tl.push({ t: e.t, o: 0, ev: e });
+    if (e.kind === 'offer') { M[e.id] = e; tl.push({ t: e.exp, o: 1, lapse: e.id }); }
+  });
+  tl.push({ t: CALLUP_EXP, o: 1, lapse: 'C' });
+  const seen = {};
+  acts.forEach(a => { if (a.t <= T && !seen[a.id]) { seen[a.id] = 1; tl.push({ t: a.t, o: 2, act: a }); } });
+  tl.sort((x, y) => (x.t - y.t) || (x.o - y.o) || (((x.act && x.act.id) || 0) - ((y.act && y.act.id) || 0)));
+  tl.forEach(x => {
+    if (x.t > T) return;
+    if (x.ev) {
+      const e = x.ev;
+      if (e.kind === 'game') {
+        const tp = tipoff(st.roster); const win = tp.forfeit ? false : e.w;
+        if (win) st.w++; else st.l++;
+        st.entries.push({ t: e.t, type: 'game', id: e.id, ev: e });
+      } else {
+        st.entries.push({ t: e.t, type: e.kind, id: e.id, ev: e });
+      }
+    } else if (x.lapse) {
+      const id = x.lapse;
+      if (!st.answered[id]) {
+        st.answered[id] = 'lapsed';
+        if (id === 'C') { st.pending = 0; st.cu = 'lapsed'; }
+        st.entries.push({ t: x.t, type: 'lapse', id: id });
+      }
+    } else {
+      const a = x.act; const why = tryAct(st, M, a);
+      if (why) return;
+      const m = M[a.mid]; st.answered[a.mid] = a.kind; st.applied.push(a.id + a.kind + a.t);
+      if (a.kind === 'callup') { st.cu = 'called'; st.pending = 0; st.contracts += 2400; st.roster++; }
+      if (a.kind === 'skip') { st.cu = 'passed'; st.pending = 0; }
+      if (a.kind === 'accept') { st.roster++; st.contracts += m.cost; if (m.trade) st.picks--; }
+      st.lastAct = a;
+      st.entries.push({ t: a.t, type: 'act', id: a.id, act: a });
+    }
+  });
+  Object.keys(M).forEach(id => { const m = M[id]; if (m.t <= T && T < m.exp && !st.answered[id]) st.open.push(m); });
+  st.open.sort((p, q) => p.exp - q.exp);
+  st.M = M;
+  st.payroll = st.contracts + st.dead + st.pending;
+  return st;
+}
+function canon(st) {
+  return JSON.stringify({ seed: st.seed, day: st.day, roster: st.roster, payroll: st.payroll, picks: st.picks, w: st.w, l: st.l, cu: st.cu, ev: st.entries.map(x => x.type.charAt(0) + x.t + (x.id || '')), acts: st.applied });
+}
+function fnv1a(s) { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('00000000' + (h >>> 0).toString(16)).slice(-8); }
+function sha256(s) {
+  const mw = Math.pow(2, 32); const K = []; let H = []; const isC = {}; let pc = 0;
+  for (let c = 2; pc < 64; c++) { if (!isC[c]) { for (let i = 0; i < 313; i += c) isC[i] = c; if (pc < 8) H[pc] = (Math.pow(c, 0.5) * mw) | 0; K[pc++] = (Math.pow(c, 1 / 3) * mw) | 0; } }
+  const b = []; for (let i = 0; i < s.length; i++) b.push(s.charCodeAt(i) & 255);
+  const bl = b.length * 8; b.push(0x80); while (b.length % 64 !== 56) b.push(0);
+  for (let i = 7; i >= 0; i--) b.push(i > 3 ? 0 : (bl >>> (i * 8)) & 255);
+  const rr = (x, n) => (x >>> n) | (x << (32 - n));
+  for (let o = 0; o < b.length; o += 64) {
+    const w = [];
+    for (let i = 0; i < 64; i++) {
+      if (i < 16) w[i] = (b[o + i * 4] << 24) | (b[o + i * 4 + 1] << 16) | (b[o + i * 4 + 2] << 8) | b[o + i * 4 + 3];
+      else { const s0 = rr(w[i - 15], 7) ^ rr(w[i - 15], 18) ^ (w[i - 15] >>> 3); const s1 = rr(w[i - 2], 17) ^ rr(w[i - 2], 19) ^ (w[i - 2] >>> 10); w[i] = (w[i - 16] + s0 + w[i - 7] + s1) | 0; }
+    }
+    let [a, bb, c, d, e, f, g, h] = H;
+    for (let i = 0; i < 64; i++) {
+      const S1 = rr(e, 6) ^ rr(e, 11) ^ rr(e, 25); const ch = (e & f) ^ (~e & g); const t1 = (h + S1 + ch + K[i] + w[i]) | 0;
+      const S0 = rr(a, 2) ^ rr(a, 13) ^ rr(a, 22); const mj = (a & bb) ^ (a & c) ^ (bb & c); const t2 = (S0 + mj) | 0;
+      h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = bb; bb = a; a = (t1 + t2) | 0;
+    }
+    H = [(H[0] + a) | 0, (H[1] + bb) | 0, (H[2] + c) | 0, (H[3] + d) | 0, (H[4] + e) | 0, (H[5] + f) | 0, (H[6] + g) | 0, (H[7] + h) | 0];
+  }
+  return H.map(x => ('00000000' + (x >>> 0).toString(16)).slice(-8)).join('');
+}
+function hashOf(useFnv, str) { return useFnv ? fnv1a(str) : sha256(str).slice(0, 8); }
+
+/* ---------- presentation helpers (dates live here, never in the fold) ---------- */
+const EPOCH = Date.UTC(2026, 8, 29, 9, 0);
+const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function pad(n) { return (n < 10 ? '0' : '') + n; }
+function dObj(t) { return new Date(EPOCH + t * 60000); }
+function fDay(t) { const d = dObj(t); return DOW[d.getUTCDay()] + ' ' + d.getUTCDate() + ' ' + MON[d.getUTCMonth()]; }
+function fHM(t) { const d = dObj(t); return pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()); }
+function fFull(t) { return fDay(t) + ' ' + fHM(t); }
+function fDH(t) { return DOW[dObj(t).getUTCDay()] + ' ' + fHM(t); }
+function commas(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+const SZ = { L: [22, 27, 17], H: [21, 30, 16], C: [17, 24, 14], S: [16, 22, 13], T: [12, 20, 11] };
+function cells(str, sz) {
+  const z = SZ[sz];
+  return str.split('').map(ch => ({ c: ch === ' ' ? '' : ch.toUpperCase() === ch && /[a-z]/.test(ch) ? ch : ch, w: ch === ':' ? Math.round(z[0] * 0.5) : z[0], h: z[1], fs: z[2] }));
+}
+function hexCells(str, sz) { return cells(str, sz); }
+function clockGroups(T, sz) {
+  const d = dObj(T);
+  const parts = [DOW[d.getUTCDay()].toUpperCase(), pad(d.getUTCDate()), MON[d.getUTCMonth()].toUpperCase(), fHM(T)];
+  return parts.map(p => ({ cells: cells(p, sz) }));
+}
+function cdCells(min) { const h = Math.floor(min / 60); const m = min % 60; return cells(h + ':' + pad(m), 'C'); }
+function entryText(e, seed) {
+  if (e.type === 'game') { const g = e.ev; return (g.w ? 'W' : 'L') + ' ' + g.us + '–' + g.them + (g.home ? ' vs ' : ' at ') + g.opp + ' · toy model · seed ' + seed; }
+  if (e.type === 'injury') return e.ev.who + ' injured, out until ' + fFull(e.ev.until) + ' · toy model · seed ' + seed;
+  if (e.type === 'offer') return 'Offer ' + e.id + ' arrived · ' + e.ev.desc + ' · expires ' + fFull(e.ev.exp);
+  if (e.type === 'lapse') return (e.id === 'C' ? 'Two-way call-up' : 'Offer ' + e.id) + ' lapsed · NO ACT recorded against the seat';
+  return e.act.text;
+}
+function actText(kind, mid) {
+  if (mid === 'C') return kind === 'callup' ? 'YOU called up the two-way' : 'YOU passed on the two-way';
+  return kind === 'accept' ? 'YOU accepted Offer ' + mid : 'YOU declined Offer ' + mid;
+}
+function m1(k) { return '$' + (k / 1000).toFixed(1) + 'M'; }
+function m3(k) { return '$' + (k / 1000).toFixed(3) + 'M'; }
+function xOf(k) { return Math.max(0, Math.min(400, (k / 1000 - 190.0) * 9.07)); }
+
+function runChecks() {
+  const L = [];
+  const add = (label, ok) => L.push({ label: label, ok: !!ok, mark: ok ? '✓' : '✗' });
+  const f0 = mulberry32(2026)();
+  const st0 = fold(2026, [], 5 * 1440 + 1);
+  const A1 = [{ id: 1, t: 2881, kind: 'callup', mid: 'C', text: 'x' }];
+  const fnvOk = fnv1a('') === '811c9dc5' && fnv1a('a') === 'e40c292c' && fnv1a('foobar') === 'bf9cf968';
+  add('FNV-1a matches its published vectors ("", "a", "foobar")', fnvOk);
+  add('mulberry32(2026) begins ' + f0 + ', the same in every browser', f0 === mulberry32(2026)());
+  add('same inputs twice give the same state', canon(fold(2026, A1, 5000)) === canon(fold(2026, A1, 5000)));
+  add('same inputs twice give the same hash (active hash function, canonical JSON)', hashOf(false, canon(st0)) === hashOf(false, canon(fold(2026, [], 5 * 1440 + 1))));
+  add('a tick’s events depend only on (seed, tick), not on what was generated before', JSON.stringify(genDay(7, 9)) === (genEvents(7, 100000), JSON.stringify(genDay(7, 9))));
+  add('acts after t never affect state(t)', canon(fold(2026, A1, 2000)) === canon(fold(2026, [], 2000)));
+  add('a client holding only the acts up to T folds the same state(T) as one holding the whole log', canon(fold(2026, A1, 3000)) === canon(fold(2026, A1.concat([{ id: 2, t: 9000, kind: 'skip', mid: 'O4', text: 'x' }]), 3000)));
+  const s1 = fold(2026, A1, 3000); const s2 = fold(2026, A1, 6000); const s1b = fold(2026, A1, 3000);
+  add('evaluation order does not matter: no hidden state between folds', canon(s1) === canon(s1b) && canon(fold(2026, A1, 6000)) === canon(s2));
+  add('state(t1) is a prefix of state(t2): the World only grows forward', s1.entries.every((e, i) => e.type === s2.entries[i].type && e.t === s2.entries[i].t));
+  add('a different seed gives a different World, even at t = 0', hashOf(false, canon(fold(2026, [], 0))) !== hashOf(false, canon(fold(2027, [], 0))));
+  const sw = fold(2026, [], 9000);
+  add('lapses are recorded exactly once, at expiry, by the sweep step', sw.entries.filter(e => e.type === 'lapse' && e.id === 'O0').length === 1 && sw.entries.filter(e => e.type === 'lapse')[0].t === at(1, 15, 0));
+  add('an offer answered before expiry never lapses', fold(2026, [{ id: 1, t: 700, kind: 'decline', mid: 'O0', text: 'x' }], 9000).entries.filter(e => e.type === 'lapse' && e.id === 'O0').length === 0);
+  add('a forged log that reuses an act id is rejected (rule L-2)', fold(2026, [{ id: 1, t: 2881, kind: 'callup', mid: 'C', text: 'x' }, { id: 1, t: 2900, kind: 'accept', mid: 'O4', text: 'x' }], 9000).applied.length === 1);
+  const full = fold(2026, [{ id: 1, t: 600, kind: 'accept', mid: 'O0', text: 'x' }, { id: 2, t: 700, kind: 'callup', mid: 'C', text: 'x' }], 900);
+  add('a 16th player is refused: signing at 15 fails (rule R-15)', full.roster === 15 && full.applied.length === 1);
+  add('a roster over 15 at tip-off forfeits the game (rule R-15)', tipoff(16).forfeit === true && tipoff(15).forfeit === false);
+  add('payroll = Σ 14 contracts ' + m1(214000).replace('M', '.0M').replace('.0.0M', '.0M') + ' + dead money ' + m1(6400) + ' + pending ' + m1(2400) + ' = ' + m1(fold(2026, [], 1).payroll), fold(2026, [], 1).payroll === 222800 && fold(2026, [], 1).roster === 14);
+  add('payroll follows the call-up: declining the call-up removes the ' + m1(2400) + ' pending', fold(2026, [{ id: 1, t: 100, kind: 'skip', mid: 'C', text: 'x' }], 200).payroll === 220400);
+  add('an act is absent at t−1 and present at t, so the earlier pane says "not yet"', fold(2026, A1, 2880).applied.length === 0 && fold(2026, A1, 2881).applied.length === 1);
+  add('the public log refuses time travel (rule L-1) and illegal acts (rule M-1)', tryAct(fold(2026, [], 5), fold(2026, [], 5).M, { id: 1, t: 5, kind: 'accept', mid: 'O9', text: 'x' }) !== null);
+  add('perturbing one pane’s seed is detected: hashes diverge (Break it)', hashOf(false, canon(fold(2026, A1, 4000))) !== hashOf(false, canon(fold(2027, A1, 4000))));
+  const fns = [mulberry32, genDay, genEvents, fold, tipoff, tryAct, at, canon];
+  const bad = new RegExp('Math' + '\\.random|\\bDa' + 'te\\b');
+  add('the fold reads no Math.random and no Date (source scan of ' + fns.length + ' engine functions)', fns.every(fn => !bad.test(fn.toString())));
+  add('the active hash function matches its published test vector', sha256('abc') === 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad' && fnvOk);
+  add('golden state: fnv1a(canonical state(seed, no acts, day 5)) is pinned', fnv1a(canon(fold(2026, [], 5 * 1440 + 1))) === GOLDEN);
+  return L;
+}
+
+class Component extends DCLogic {
+  componentDidMount() {
+    this.t = setInterval(() => { const s = this.state || {}; if (s.live === false) return; this.setState({ liveMin: (s.liveMin || 0) + 0.4 }); }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this.t); }
+  tOf(s, who) { return 1 + Math.floor(s.liveMin || 0) + (who === 'you' ? (s.youOff || 0) : (s.frOff || 0)) * 1440; }
+  doAct(mid, kind) {
+    const s = this.state || {}; const acts = s.acts || []; const T = this.tOf(s, 'you');
+    const st = fold(2026, acts, T);
+    const last = acts.reduce((m, a) => Math.max(m, a.t), -1);
+    if (T < last) return;
+    const a = { id: (acts.reduce((m, x) => Math.max(m, x.id), 0)) + 1, t: T, kind: kind, mid: mid, text: actText(kind, mid) };
+    if (tryAct(st, st.M, a)) return;
+    this.setState({ acts: acts.concat([a]) });
+  }
+  renderVals() {
+    const s = this.state || {};
+    const live = s.live !== false; const acts = s.acts || []; const broken = !!s.broken; const fnv = !!s.fnv;
+    const showChecks = !!s.showChecks; const showHow = !!s.showHow;
+    if (!this._chk) this._chk = runChecks();
+    const tY = this.tOf(s, 'you'); const tF = this.tOf(s, 'fr');
+    const seedY = 2026; const seedF = broken ? 2027 : 2026;
+    const lastAct = acts.reduce((m, a) => (!m || a.t >= m.t ? a : m), null);
+    const mk = (key, T, seed, seenT, off) => {
+      const st = fold(seed, acts, T);
+      const isYou = key === 'you';
+      const inRange = st.entries.filter(e => e.t > seenT && e.t <= T);
+      const games = inRange.filter(e => e.type === 'game'); const gw = games.filter(e => e.ev.w).length;
+      const offs = inRange.filter(e => e.type === 'offer'); const inj = inRange.filter(e => e.type === 'injury'); const ac = inRange.filter(e => e.type === 'act');
+      const parts = [];
+      if (games.length) parts.push(games.length + (games.length > 1 ? ' games' : ' game') + ' (toy model: ' + gw + 'W–' + (games.length - gw) + 'L)');
+      if (offs.length) parts.push(offs.length + (offs.length > 1 ? ' offers' : ' offer') + ' arrived');
+      if (inj.length) parts.push(inj.length + (inj.length > 1 ? ' injuries' : ' injury'));
+      if (ac.length) parts.push(ac.length + (ac.length > 1 ? ' acts' : ' act') + ' by you');
+      const lapses = inRange.filter(e => e.type === 'lapse').map(e => {
+        const arrived = offs.some(o => o.id === e.id);
+        return (e.id === 'C' ? 'Two-way call-up' : 'Offer ' + e.id + (arrived ? ' arrived and' : '')) + ' lapsed at ' + fDH(e.t) + ' · NO ACT recorded against the seat';
+      });
+      const since = (parts.length ? parts.join(' · ') : 'Nothing happened.') + (lapses.length ? '\n' + lapses.join('\n') : '');
+      // events: not-yet acts first (only this pane is earlier), then the fold's latest
+      const notYet = acts.filter(a => a.t > T).sort((p, q) => q.t - p.t).map(a => ({ icon: 'ic-not', time: fFull(a.t), text: a.text + ': not yet, this pane is earlier than that act', timeStyle: 'color:#555;', textStyle: 'color:#555;' }));
+      const seen = st.entries.slice().sort((p, q) => q.t - p.t || q.id - p.id).map(e => ({ icon: (e.type === 'act' || e.type === 'lapse') ? 'ic-rec' : 'ic-mod', time: fFull(e.t), text: entryText(e, seed), timeStyle: '', textStyle: '' }));
+      const events = notYet.concat(seen).slice(0, 3);
+      // matters
+      const matters = st.open.map(m => {
+        const isC = m.id === 'C'; const k1 = isC ? 'callup' : 'accept'; const k2 = isC ? 'skip' : 'decline';
+        let refusal = null;
+        if (isYou) {
+          const probe = tryAct(st, st.M, { id: 0, t: T, kind: k1, mid: m.id });
+          if (probe) refusal = 'REFUSED · ' + probe;
+          else if (lastAct && T < lastAct.t) refusal = null;
+        }
+        const timeTravel = isYou && lastAct && T < lastAct.t;
+        const ttWhy = 'REFUSED · rule L-1: the log only grows; #' + (lastAct ? lastAct.id : '') + ' is at ' + (lastAct ? fFull(lastAct.t) : '');
+        const b1Bad = !!refusal || timeTravel;
+        return {
+          title: isC ? 'Two-way call-up · $2.4M pending on the books' : 'Offer ' + m.id + ' · ' + m.desc,
+          closes: 'closes ' + fFull(m.exp), cd: cdCells(m.exp - T),
+          hasRefusal: b1Bad, refusal: timeTravel ? ttWhy : refusal,
+          b1: isC ? 'Call up' : 'Accept', b2: isC ? 'Don’t call up' : 'Decline',
+          b1Class: b1Bad ? 'btn-x' : 'btn', b2Class: timeTravel ? 'btn-x' : 'btn',
+          b1Do: () => { if (!b1Bad) this.doAct(m.id, k1); }, b2Do: () => { if (!timeTravel) this.doAct(m.id, k2); }
+        };
+      });
+      const inLog = acts.filter(a => a.t <= T);
+      const logLines = acts.slice().sort((p, q) => p.id - q.id).map(a => (a.t <= T
+        ? { text: '#' + a.id + ' · ' + fFull(a.t) + ' · ' + a.text, style: '' }
+        : { text: 'not yet · #' + a.id + ' · ' + fFull(a.t) + ' · ' + a.text, style: 'color:#555;' }));
+      const total = st.payroll;
+      const over = total > 221686 ? 'over the 2nd apron by ' + m3(total - 221686) : total > 209000 ? 'over the 1st apron by ' + m3(total - 209000) : total > 200400 ? 'over the tax line by ' + m3(total - 200400) : 'under the tax line by ' + m3(200400 - total);
+      const cuNote = 'call-up: ' + st.cu + ' · 2nd-round picks held: ' + st.picks;
+      const d0 = Math.floor((T + 540) / 1440);
+      const wk = 9 + Math.floor((1 + d0) / 7);
+      const hex = hashOf(fnv, canon(st));
+      return {
+        left: isYou ? 28 : 844,
+        title: isYou ? 'YOU' : 'A FRIEND', sub: isYou ? 'Boston GM seat · can act' : 'viewer of the same World · read-only',
+        openLabel: isYou ? 'OPENED AT' : 'OPENS AT', clock: clockGroups(T, 'L'),
+        off: off, slide: (e) => { const v = Number(e.target.value); this.setState(isYou ? { youOff: v, live: false } : { frOff: v, live: false }); },
+        sliderLabel: isYou ? 'pretend it is later, your clock' : 'pretend it is later, friend’s clock',
+        offA: '+' + off + ' h real', offB: '= ' + Math.floor(T / 1440) + (Math.floor(T / 1440) === 1 ? ' World day' : ' World days'),
+        headline: 'Week ' + wk + ' · ' + fDay(T) + ' · World day ' + Math.floor(T / 1440),
+        wl: (14 + st.w) + '–' + (10 + st.l), modelNote: '14–10 authored + ' + st.w + '–' + st.l + ' toy model · seed ' + seed,
+        sinceLabel: (isYou ? 'SINCE YOU LOOKED' : 'SINCE IT LOOKED') + ' · FROM ' + fFull(seenT).toUpperCase(), since: since,
+        markSeen: () => this.setState(isYou ? { seenYou: T } : { seenFr: T }),
+        events: events, noEvents: events.length === 0, noEventsText: 'Nothing has happened in this World yet at this moment.',
+        matters: matters, noMatters: matters.length === 0, canAct: isYou, readOnly: !isYou,
+        payroll: m1(total), overText: over, fillW: xOf(total), overX: xOf(221686) + 7,
+        ticks: [{ x: xOf(200400), label: 'TAX 200.4' }, { x: xOf(209000), label: '1ST APRON 209.0' }, { x: xOf(221686), label: '2ND APRON 221.7' }],
+        roster: cells(pad(st.roster), 'C'), callNote: cuNote,
+        hash: hexCells(hex, 'H'), hashCap: fnv ? 'FNV-1a 32-bit FALLBACK, not cryptographic' : 'SHA-256 of canonical JSON, first 8 of 64 hex', seed: seed,
+        logHead: 'LOG AS THIS PANE SEES IT · ' + inLog.length + ' OF ' + acts.length + ' ACTS INCLUDED',
+        logBorder: inLog.length ? '2px solid #111' : '1.5px dashed #111',
+        logEmpty: acts.length === 0, logLines: logLines, hexRaw: hex
+      };
+    };
+    const seenY = s.seenYou || 0; const seenF = s.seenFr || 0;
+    const offY = s.youOff || 0; const offF = s.frOff || 0;
+    const pY = mk('you', tY, seedY, seenY, offY); const pF = mk('fr', tF, seedF, seenF, offF);
+    // agreement strip
+    const T = Math.min(tY, tF);
+    const sY = fold(seedY, acts, T); const sF = fold(seedF, acts, T);
+    const hY = hashOf(fnv, canon(sY)); const hF = hashOf(fnv, canon(sF));
+    const same = hY === hF;
+    const desc = tY === tF ? 'Both panes sit at the same World time, so it is same fold twice.' : 'Both panes are folded again at the earlier moment: ' + (tF < tY ? 'the friend’s.' : 'yours.');
+    const atOrBefore = acts.filter(a => a.t <= T).length;
+    const mid = {
+      desc: desc, clock: clockGroups(T, 'T'), tText: fDay(T) + ' ' + fHM(T) + ' · t=' + commas(T),
+      hashYou: hexCells(hY, 'S'), hashFr: hexCells(hF, 'S'),
+      verdictStyle: same ? 'background:#111;color:#fff;' : 'background:#fff;color:#111;border:2px dashed #111;',
+      verdictHead: same ? '✓ same World' : '✗ different World',
+      verdictText: same ? 'At World time ' + fDay(T) + ' ' + fHM(T) + ', your state hash = friend’s state hash ✓ ' + hY
+        : 'At World time ' + fDay(T) + ' ' + fHM(T) + ', your state hash ' + hY + ' ≠ friend’s ' + hF + '. The seeds differ, so these are two Worlds.',
+      inputs: 'inputs: seed ' + (broken ? seedY + ' vs ' + seedF : seedY) + ' · ' + acts.length + (acts.length === 1 ? ' act' : ' acts') + ' in the log, ' + atOrBefore + ' at or before T',
+      breakLabel: broken ? 'Fix it' : 'Break it',
+      breakNote: broken ? 'Friend’s seed is now ' + seedF + '. Same log, same clock, different World.' : 'Break it changes one digit of the friend’s seed.',
+      hashBtn: fnv ? 'Hash: FNV-1a fallback · back to SHA-256' : 'Hash: SHA-256 · try the FNV-1a fallback',
+      hashBtnStyle: fnv ? 'background:#111;color:#fff;' : '',
+      code: 'state(t) =\n  fold(rules, seed,\n  publicActLog, t)\nno Math.random, no Date\ninside the fold; "now"\narrives as t',
+      nActs: acts.length + (acts.length === 1 ? ' act' : ' acts')
+    };
+    const nOk = this._chk.filter(c => c.ok).length;
+    const strip = (p) => p;
+    return {
+      panes: [pY, pF].map(strip), mid: mid, broken: broken, fnv: fnv, live: live, showChecks: showChecks, showHow: showHow,
+      liveText: 'Live clock · ' + (live ? 'on' : 'paused'), liveStyle: live ? 'background:#111;color:#fff;' : '',
+      engText: 'ENGINE · ' + nOk + '/' + this._chk.length + ' checks passing', engStyle: showChecks ? 'background:#111;color:#fff;' : '',
+      checks: this._chk,
+      toggleLive: () => this.setState({ live: !live }),
+      toggleHow: () => this.setState({ showHow: !showHow, showChecks: false }),
+      toggleChecks: () => this.setState({ showChecks: !showChecks, showHow: false }),
+      breakIt: () => this.setState({ broken: !broken }),
+      toggleHash: () => this.setState({ fnv: !fnv }),
+      clearLog: () => this.setState({ acts: [] })
+    };
+  }
+}
+</script>
+</body>
+</html>

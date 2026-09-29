@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Seats Plan View</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&amp;family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#e6e4da;color:#111;font-family:'Archivo Narrow',sans-serif}
+.mono{font-family:'Courier Prime','Courier New',monospace}
+button{font-family:'Archivo Narrow',sans-serif;cursor:pointer;color:#111}
+button:focus-visible{outline:3px solid #b45309;outline-offset:2px}
+.hb{position:absolute;height:36px;border:2px solid #111;background:#efede5;font-weight:700;font-size:13px;padding:0 8px;box-sizing:border-box}
+.hb:hover{background:#dcdacf}
+.chip{height:36px;border:2px solid #111;font-weight:700;font-size:11px;letter-spacing:.3px;padding:0 8px;box-sizing:border-box}
+.ab{height:36px;border:2px solid #111;background:#f4f2ea;font-weight:700;font-size:14px;line-height:14px;text-align:left;padding:0 10px;box-sizing:border-box}
+.ab:hover:not(:disabled){background:#dedcd0}
+.ab:disabled{border-color:#c4c2b8;color:#a19f95;background:transparent;cursor:default}
+.lab{font-size:11px;letter-spacing:.7px;color:#333;height:14px;line-height:14px;display:flex;align-items:center;gap:6px}
+.body{font-size:13px;line-height:13px;color:#111}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #e6e4da;">
+
+  <div style="position:absolute;left:40px;top:5px;font-weight:700;font-size:24px;letter-spacing:-.2px;line-height:28px;white-space:nowrap">X2 · KNOWLEDGE IS A PROPERTY OF THE SEAT</div>
+  <div class="mono" style="position:absolute;left:40px;top:36px;font-size:11px;color:#666;white-space:nowrap">PLAN VIEW · Boston · Year Two · Week 9 · a seat sees only its own room and the strip</div>
+
+  <div class="mono" style="position:absolute;right:535px;top:9px;font-size:11px;line-height:16px;white-space:nowrap;color:#333">AUDITOR · renders checked {{renders}} · leaks {{leaks}}<br>fact checks {{fc}} · refused {{refused}}</div>
+
+  <button type="button" class="hb mono" style="left:915px;top:8px;width:233px;font-size:11.5px" aria-pressed="{{engineOpen}}" onClick="{{toggleEngine}}">ENGINE · {{engineLabel}}</button>
+  <button type="button" class="hb" style="left:1155px;top:8px;width:124px;background:{{howBg}};color:{{howFg}}" aria-pressed="{{how}}" onClick="{{toggleHow}}">How do we know?</button>
+  <button type="button" class="hb" style="left:1287px;top:8px;width:113px" onClick="{{restart}}">Restart the deal</button>
+
+  <button type="button" class="hb" style="left:40px;top:58px;width:351px;background:{{cmpBg}};color:{{cmpFg}}" aria-pressed="{{cmp}}" onClick="{{toggleCmp}}">{{cmpLabel}}</button>
+  <div class="mono" style="position:absolute;left:406px;top:70px;font-size:11px;letter-spacing:.8px;color:#555">COMPARE</div>
+  <div style="position:absolute;left:463px;top:58px;display:flex;gap:8px">
+    <sc-for list="{{chipsA}}" as="c" hint-placeholder-count="4">
+      <button type="button" class="chip" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="background:{{c.bg}};color:{{c.fg}}">{{c.label}}</button>
+    </sc-for>
+  </div>
+  <div class="mono" style="position:absolute;left:743px;top:70px;font-size:11px;letter-spacing:.8px;color:#555">WITH</div>
+  <div style="position:absolute;left:779px;top:58px;display:flex;gap:8px">
+    <sc-for list="{{chipsB}}" as="c" hint-placeholder-count="4">
+      <button type="button" class="chip" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="background:{{c.bg}};color:{{c.fg}}">{{c.label}}</button>
+    </sc-for>
+  </div>
+  <button type="button" class="hb" style="left:1138px;top:58px;width:262px;border:2px dashed #111;background:transparent" onClick="{{tryLeak}}">Try to show Denver's board to Boston</button>
+
+  <!-- public strip -->
+  <div style="position:absolute;left:40px;top:100px;width:1360px;height:92px;background:#e0ded3;border-bottom:1.5px solid #111">
+    <div class="mono" style="position:absolute;left:8px;top:3px;font-size:11px;letter-spacing:.3px;font-weight:700;color:#222">PUBLIC · visible to every seat and to anyone watching</div>
+    <div style="position:absolute;right:8px;top:3px;display:flex;gap:12px">
+      <sc-for list="{{legend}}" as="lg" hint-placeholder-count="6">
+        <span class="mono" style="display:flex;align-items:center;gap:4px;font-size:11px;color:#444;height:14px"><span style="display:inline-block;width:10px;height:10px;box-sizing:border-box;background:{{lg.g.bg}};border:{{lg.g.bd}};box-shadow:{{lg.g.sh}}"></span>{{lg.label}}</span>
+      </sc-for>
+    </div>
+    <sc-for list="{{strip}}" as="c" hint-placeholder-count="10">
+      <div style="position:absolute;left:{{c.x}}px;top:{{c.y}}px;width:268px;height:34px;opacity:{{c.op}};background:{{c.bg}};box-shadow:{{c.sh}}">
+        <span style="position:absolute;left:1px;top:6px;width:12px;height:12px;box-sizing:border-box;background:{{c.g.bg}};border:{{c.g.bd}};box-shadow:{{c.g.sh}}"></span>
+        <span class="mono" style="position:absolute;left:19px;top:3px;font-weight:700;font-size:11px">{{c.id}}</span>
+        <div style="position:absolute;left:50px;top:2px;width:214px;font-size:12.5px;line-height:13px"><b class="mono" style="font-size:10.5px">{{c.prefix}}</b> {{c.text}} <b class="mono" style="font-size:10.5px">{{c.tail}}</b></div>
+      </div>
+    </sc-for>
+  </div>
+
+  <!-- three rooms -->
+  <sc-for list="{{panes}}" as="p" hint-placeholder-count="3">
+    <div style="position:absolute;left:{{p.left}}px;top:198px;width:{{p.width}}px;height:642px;box-sizing:border-box;border:2px solid #111;background:#eeece4">
+      <div style="position:absolute;left:0;right:0;top:0;height:33px;background:{{p.color}};color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 9px">
+        <span class="mono" style="font-weight:700;font-size:16px;letter-spacing:1.4px">{{p.name}} <span style="font-size:11px;letter-spacing:.5px">{{p.sub}}</span></span>
+        <span class="mono" style="font-size:11px">{{p.status}}</span>
+      </div>
+      <div style="position:absolute;left:5px;right:5px;top:39px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        <sc-for list="{{p.btns}}" as="b" hint-placeholder-count="4">
+          <button type="button" class="ab" disabled="{{b.dis}}" onClick="{{b.click}}">{{b.label}}</button>
+        </sc-for>
+      </div>
+      <sc-if value="{{p.showCap}}" hint-placeholder-val="{{true}}">
+        <div class="mono" style="position:absolute;left:8px;top:122px;font-size:10.5px;color:#444;white-space:nowrap">{{p.cap}}</div>
+      </sc-if>
+      <sc-if value="{{p.showRefused}}" hint-placeholder-val="{{false}}">
+        <div class="mono" style="position:absolute;left:5px;right:5px;top:118px;height:20px;box-sizing:border-box;border:1.5px dashed #111;font-weight:700;font-size:9.5px;line-height:17px;padding:0 4px;white-space:nowrap;overflow:hidden">REFUSED · rule V-2: another seat's internal notes are never rendered to you</div>
+      </sc-if>
+
+      <div style="position:absolute;left:0;right:0;top:140px;height:340px">
+        <sc-for list="{{p.rows}}" as="r" hint-placeholder-count="10">
+          <div style="position:relative;height:34px;box-sizing:border-box;border-bottom:1px solid rgba(0,0,0,.10);background:{{r.bg}};box-shadow:{{r.sh}}">
+            <sc-if value="{{r.has}}" hint-placeholder-val="{{true}}">
+              <div style="position:absolute;left:0;right:0;top:0;bottom:0;opacity:{{r.op}}">
+                <span style="position:absolute;left:8px;top:8px;width:12px;height:12px;box-sizing:border-box;background:{{r.g.bg}};border:{{r.g.bd}};box-shadow:{{r.g.sh}}"></span>
+                <span class="mono" style="position:absolute;left:27px;top:6px;font-weight:700;font-size:11px">{{r.id}}</span>
+                <div style="position:absolute;left:58px;top:2px;width:330px;font-size:12.5px;line-height:13px"><b class="mono" style="font-size:10.5px">{{r.prefix}}</b> {{r.text}}</div>
+                <div style="position:absolute;right:8px;top:12px;display:flex;gap:2px">
+                  <sc-for list="{{r.tags}}" as="t" hint-placeholder-count="3">
+                    <span style="display:block;width:8px;height:8px;box-sizing:border-box;background:{{t.bg}};border:1.5px solid {{t.bc}}"></span>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="position:absolute;left:0;right:0;top:480px;bottom:0;border-top:1.5px solid #111;padding:6px 8px 0 8px">
+        <div class="mono lab"><span style="display:inline-block;width:10px;height:10px;box-sizing:border-box;border:2px solid #111"></span>YOUR POSITION</div>
+        <div class="body" style="min-height:32px;margin-top:2px">{{p.pos}}</div>
+        <div class="mono lab"><span style="display:inline-block;width:10px;height:10px;box-sizing:border-box;background:{{p.read.g.bg}};border:{{p.read.g.bd}};box-shadow:{{p.read.g.sh}}"></span>{{p.readLabel}} · {{p.read.kindLabel}}</div>
+        <div style="font-weight:700;font-size:15px;line-height:20px">{{p.read.head}}</div>
+        <div class="body">{{p.read.body}}</div>
+        <div class="mono" style="position:absolute;left:8px;right:8px;top:118px;font-size:11px;line-height:13px;font-weight:700;color:#222">based on: {{p.read.based}}</div>
+      </div>
+    </div>
+  </sc-for>
+
+  <!-- bridges for facts shared across rooms -->
+  <sc-for list="{{bridges}}" as="br" hint-placeholder-count="6">
+    <div style="position:absolute;left:{{br.x}}px;top:{{br.y}}px;width:{{br.w}}px;height:3px;background:#111"></div>
+  </sc-for>
+
+  <!-- engine popup -->
+  <sc-if value="{{engineOpen}}" hint-placeholder-val="{{false}}">
+    <div style="position:absolute;left:721px;top:58px;width:677px;height:440px;box-sizing:border-box;background:#fff;border:2px solid #111;z-index:30;padding:10px 12px">
+      <div class="mono" style="font-weight:700;font-size:11.5px;line-height:16px;margin-bottom:6px">SELF-TESTS RUN ON LOAD · {{passCount}} of 25 pass · pure functions, no DOM</div>
+      <sc-for list="{{tests}}" as="t" hint-placeholder-count="25">
+        <div class="mono" style="display:flex;gap:14px;font-size:11px;line-height:16px;white-space:nowrap"><b style="width:34px">{{t.res}}</b><span>{{t.text}}</span></div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <div class="mono" style="position:absolute;left:40px;top:847px;font-size:11px;font-weight:700;white-space:nowrap;letter-spacing:.2px">WHAT A COPY WOULD MISS: the guarantee. A copy can draw three rooms; only an engine that checks every render can promise no seat sees what it shouldn't.</div>
+  <div class="mono" style="position:absolute;left:40px;top:866px;width:730px;font-size:11px;line-height:13px;color:#555">COMMERCIAL LENS · Hypothesis: organisations pay for seats whose knowledge is provably scoped — negotiations, league audits, classrooms; the proof is the product.</div>
+  <div class="mono" style="position:absolute;right:40px;top:866px;width:560px;font-size:11px;line-height:13px;color:#555;text-align:right">PLATFORM HYPOTHESIS · World: Denver and Boston's numbers authored; league lines from the fixture, verify; rules L-2..5 and H-1, H-2 authored</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+
+  glyph(kind) {
+    const ink = '#111';
+    const paper = '#eeece4';
+    if (kind === 'obs') return { bg: ink, bd: '2px solid ' + ink, sh: 'none' };
+    if (kind === 'rec') return { bg: ink, bd: '2px solid ' + ink, sh: 'inset 0 0 0 2px ' + paper };
+    if (kind === 'aut') return { bg: 'transparent', bd: '2px solid ' + ink, sh: 'none' };
+    if (kind === 'com') return { bg: '#8a8a8a', bd: '2px solid #8a8a8a', sh: 'none' };
+    if (kind === 'mod') return { bg: 'repeating-linear-gradient(135deg,#111 0 1.5px,transparent 1.5px 4px)', bd: '1px solid #111', sh: 'none' };
+    return { bg: 'transparent', bd: '2px dashed ' + ink, sh: 'none' };
+  }
+
+  sees(seat, f) {
+    return !!f.pub || (seat !== 'public' && f.vis.indexOf(seat.charAt(0)) >= 0);
+  }
+
+  // the store: every fact, who may see it, derived from the act history
+  model(s) {
+    const h = s.hist || [];
+    const notes = s.notes || [];
+    const has = (e) => h.indexOf(e) >= 0;
+    const last = h.length ? h[h.length - 1] : '';
+    const direct = has('accept') && !has('counter');
+    const pick = has('counter') ? '2028' : '2029';
+    const F = [
+      { id: 'F1', kind: 'rec', pub: true, po: 1, vis: '', slot: 0, text: 'Boston payroll $222.8M · 14 contracts + 1 two-way pending', how: 'World record · Boston Yr 2 Wk 9 (authored) · 08:05 · V-5 · RECORDED', tail: '' },
+      { id: 'F2', kind: 'rec', pub: true, po: 2, vis: '', slot: 0, text: 'Denver roster: 14 of 15 standard contracts', how: 'World record · Denver (authored) · 08:10 · V-5 · RECORDED', tail: '' },
+      { id: 'F3', kind: 'unk', pub: true, po: 3, vis: '', slot: 0, text: 'Rumour: Denver wants a guard', how: 'Rumour, nobody has confirmed it · 08:32 · V-5 · UNKNOWN', tail: 'UNVERIFIED' },
+      { id: 'F4', kind: 'obs', pub: true, po: 4, vis: '', slot: 0, text: 'Lines: tax $200.428M · 1st apron $209.015M · 2nd apron $221.686M', how: 'League fixture 2026–27 · verify · standing · V-5 · OBSERVED', tail: '' },
+      { id: 'F5', kind: 'aut', pub: true, po: 5, vis: '', slot: 0, text: 'L-2/3 · over the 2nd apron: no aggregating, no extra salary back', how: 'World rulebook, simplified from the 2023 CBA · verify · standing · V-5 · AUTHORED', tail: '' },
+      { id: 'F6', kind: 'aut', pub: true, po: 6, vis: '', slot: 0, text: 'L-4/5 · at most 15 contracts after a trade; none ends past the tax line', how: 'World rulebook (authored) · standing · V-5 · AUTHORED', tail: '' },
+      { id: 'F7', kind: 'aut', pub: false, vis: 'b', slot: 1, text: "Internal ceiling: we'd take one 2nd-round pick for Guard B. Below that, he stays.", how: 'Boston GM, internal · 08:20 · V-2 · AUTHORED' },
+      { id: 'F8', kind: 'obs', pub: false, vis: 'b', slot: 2, text: "Agent called: Denver's people have been asking about cheap guards this week.", how: 'An agent, secondhand · 08:48 · V-2 · OBSERVED' },
+      { id: 'F9', kind: 'aut', pub: false, vis: 'b', slot: 3, text: "Owner's note: be under the 2nd apron ($221.686M) by Fri 15:00.", how: 'Boston owner, internal · 09:00 · V-2 · AUTHORED' },
+      { id: 'F10', kind: 'aut', pub: false, vis: 'd', slot: 1, text: 'Internal board: walk away at a 1st-round pick - will pay up to two 2nds for a guard.', how: 'Denver GM, internal · 08:25 · V-2 · AUTHORED' },
+      { id: 'F11', kind: 'aut', pub: false, vis: 'd', slot: 2, text: 'Internal: the guard rotation is thin. Roster spot 15 is held for this.', how: 'Denver GM, internal · 08:50 · V-2 · AUTHORED' },
+      { id: 'F12', kind: 'rec', pub: false, vis: 'l', slot: 1, text: "League file: Boston's 2nd-apron review opens at the deadline.", how: 'League office, internal · 08:00 · V-2 · RECORDED' },
+      { id: 'F13', kind: 'rec', pub: false, vis: 'ld', slot: 3, text: "Denver's books, filed: payroll $195.4M, certified.", how: 'Denver filing to the league · 08:15 · V-6 · RECORDED' }
+    ];
+    if (has('offer')) F.push({ id: 'F14', kind: 'rec', pub: false, vis: 'bld', slot: 4, text: 'Offer, Boston to Denver: Guard B ($2.7M, 1 yr) for a 2029 2nd.', how: 'Act · Boston GM · 09:46 · V-1 · RECORDED' });
+    if (has('counter')) F.push({ id: 'F15', kind: 'rec', pub: false, vis: 'bld', slot: 5, text: 'Counter, Denver to Boston: a 2028 2nd instead of the 2029 one.', how: 'Act · Denver GM · 09:52 · V-1 · RECORDED' });
+    const uns = has('unseal');
+    let f16 = null;
+    if (has('accept')) {
+      f16 = direct
+        ? { text: 'Accepted by Denver: Guard B ($2.7M) for a 2029 2nd.', how: 'Act · Denver GM · 09:52 · ' }
+        : { text: 'Accepted by Boston: Guard B ($2.7M) for a 2028 2nd.', how: 'Act · Boston GM · 09:58 · ' };
+    } else if (has('decline')) {
+      f16 = { text: 'Declined by Denver: no deal on Guard B for a 2029 2nd.', how: 'Act · Denver GM · 09:52 · ' };
+    } else if (has('turn')) {
+      f16 = { text: 'Turned down by Boston: no deal on Guard B for a 2028 2nd.', how: 'Act · Boston GM · 09:58 · ' };
+    }
+    if (f16) {
+      F.push({ id: 'F16', kind: 'rec', pub: uns, po: 9, vis: uns ? '' : 'bld', slot: 6, text: f16.text, how: f16.how + (uns ? 'V-3' : 'V-1') + ' · RECORDED', tail: uns ? 'unsealed 10:10' : '' });
+    }
+    if (has('check')) F.push({ id: 'F17', kind: 'com', pub: false, vis: 'l', slot: 7, text: 'Check detail: 5 of 5 pass · Denver payroll $195.4M to $198.1M, tax line $200.428M.', how: 'League check, computed · 10:04 · V-4 · COMPUTED' });
+    if (uns) {
+      F.push({ id: 'F19', kind: 'rec', pub: true, po: 7, vis: '', slot: 0, text: 'Trade done: Guard B to Denver for a ' + pick + ' 2nd', how: 'League office, completed trade · 10:10 · V-3 · RECORDED', tail: 'unsealed 10:10' });
+      F.push({ id: 'F20', kind: 'com', pub: true, po: 8, vis: '', slot: 0, text: 'Boston payroll now $220.1M, $1.586M under the 2nd apron.', how: 'Computed from F1 and the trade · 10:10 · V-3 · COMPUTED', tail: 'unsealed 10:10' });
+      F.push({ id: 'F18', kind: 'com', pub: true, po: 10, vis: '', slot: 0, text: 'League verdict: cleared. 5 of 5 checks passed.', how: 'League check, verdict only · 10:04 · V-3 · COMPUTED', tail: 'unsealed 10:10' });
+    }
+    const pool = {
+      boston: ['Internal note: hold at one 2nd. Ask about the 2028 pick before the deadline.', 'Internal note: the owner wants us under the apron by Friday. Do not go to two 2nds.', "Internal note: if Denver goes quiet, call the other guard's agent."],
+      denver: ['Internal note: open at one 2nd. We can stretch to two if we must.', 'Internal note: spot 15 is our only open one. Do not spend it on anyone else.', 'Internal note: never mention the 1st-round walk-away.']
+    };
+    const cnt = { boston: 0, denver: 0 };
+    notes.forEach((n, i) => {
+      const k = cnt[n.seat]++;
+      const who = n.seat === 'boston' ? 'Boston' : 'Denver';
+      F.push({ id: 'F' + (21 + i), kind: 'aut', pub: false, vis: n.seat.charAt(0), slot: 8 + i, text: pool[n.seat][k % 3], how: who + ' GM, internal · 09:4' + i + ' · V-2 · AUTHORED' });
+    });
+    F.forEach((f) => { if (f.tail === undefined) f.tail = ''; });
+    return { F: F, last: last, direct: direct, pick: pick, has: has };
+  }
+
+  // what each seat is told about its own position and about the other side
+  reads(m) {
+    const last = m.last;
+    const has = m.has;
+    const uns = has('unseal');
+    const dead = has('decline') || has('turn');
+    const G = (k, kl) => Object.assign({ kindLabel: kl }, { g: this.glyph(k) });
+    const boston = {};
+    boston.pos = uns ? 'Deal done. Payroll is now $220.1M (F20). Your floor was one 2nd (F7), and it held.'
+      : dead ? "No deal. Payroll stays $222.8M, $1.114M over the 2nd apron (F1, F4). The owner's Friday deadline is still on (F9)."
+      : 'Your floor is one second-round pick for Guard B (F7). Selling him takes payroll to $220.1M (F1).';
+    if (has('counter')) {
+      boston.read = Object.assign(G('mod', 'actor model'), { head: 'One or two 2nds', body: 'They put one 2nd on the table (F15). The top end is a guess (H-1, authored).' + (uns ? ' The deal is done; their ceiling stays private.' : ''), based: "F3 rumour · F8 agent call · F15 Denver's counter" });
+    } else if (m.direct) {
+      boston.read = Object.assign(G('mod', 'actor model'), { head: 'One 2nd, taken', body: 'They took the 2029 2nd as offered (F16). Their ceiling is a guess (H-1, authored).' + (uns ? ' The deal is done; their ceiling stays private.' : ''), based: 'F3 rumour · F8 agent call · F16 the acceptance' });
+    } else if (has('decline')) {
+      boston.read = Object.assign(G('unk', 'unknown'), { head: 'UNKNOWN price', body: 'They said no to the 2029 2nd (F16). Nothing tells you what they would pay.', based: 'F3 rumour · F8 agent call · F16 the refusal' });
+    } else {
+      boston.read = Object.assign(G('unk', 'unknown'), { head: 'UNKNOWN price', body: 'They want a guard, but no price has reached you yet.', based: 'F3 rumour · F8 agent call' });
+    }
+
+    const denver = { pos: 'Your ceiling: up to two 2nds for a guard. You walk away at a 1st (F10).' };
+    if (!has('offer')) {
+      denver.read = Object.assign(G('unk', 'unknown'), { head: 'UNKNOWN floor · Boston has to sell', body: 'Boston is $1.114M over the 2nd apron (F1, F4). They cannot take salary back (F5). No price from them yet.', based: 'F1 Boston payroll · F4 league lines · F5 rule L-2/3' });
+    } else if (has('accept') && m.direct) {
+      denver.read = Object.assign(G('mod', 'actor model'), { head: 'Floor: one 2nd or less', body: 'They asked one 2nd (F14) and we took it (F16). Boston ' + (uns ? 'ended $1.586M under the 2nd apron (F20).' : 'is $1.114M over the 2nd apron (F1, F4).'), based: "F16 the acceptance · F14 Boston's offer · F1 Boston payroll · F4 league lines" });
+    } else if (has('accept')) {
+      denver.read = Object.assign(G('mod', 'actor model'), { head: 'Floor: at most one 2nd', body: 'They took our counter (F16), so their floor is at or under it. Boston ' + (uns ? 'ended $1.586M under the 2nd apron (F20).' : 'is $1.114M over the 2nd apron (F1, F4).'), based: uns ? "F16 the acceptance · F15 Denver's counter · F20 payroll after" : "F16 the acceptance · F15 Denver's counter · F1 Boston payroll · F4 league lines" });
+    } else {
+      denver.read = Object.assign(G('mod', 'actor model'), { head: 'Floor: nothing to one 2nd', body: 'Their opening ask is one 2nd (F14); an ask sits at or above the floor (H-2, authored). Boston is $1.114M over the 2nd apron (F1, F4).' + (dead ? ' The deal is off (F16).' : ''), based: "F14 Boston's offer · F1 Boston payroll · F4 league lines · F5 rule L-2/3" });
+    }
+
+    const league = { pos: "Boston's 2nd-apron review opens at the deadline (F12). Until then you only check what is agreed." };
+    const lb = 'F1 Boston payroll · F4 league lines · F2 Denver roster · F13 Denver books';
+    if (uns) {
+      league.read = Object.assign(G('com', 'computed'), { head: 'Boston ends $1.586M under the 2nd apron', body: 'Denver payroll $195.4M, roster 14 of 15. Last check: 5 of 5 pass (F17).', based: lb + ' · F17 check detail · F19 the trade' });
+    } else if (has('check')) {
+      league.read = Object.assign(G('com', 'computed'), { head: 'Boston would end $1.586M under the 2nd apron', body: 'Denver payroll $195.4M, roster 14 of 15. Last check: 5 of 5 pass (F17).', based: lb + ' · F17 check detail' });
+    } else if (dead) {
+      league.read = Object.assign(G('com', 'computed'), { head: 'Boston is $1.114M over the 2nd apron', body: 'Denver payroll $195.4M, roster 14 of 15. The deal fell through. Nothing to check.', based: lb });
+    } else if (has('offer')) {
+      league.read = Object.assign(G('com', 'computed'), { head: 'Boston is $1.114M over the 2nd apron', body: 'Denver payroll $195.4M, roster 14 of 15. A deal is open. Nothing to check until both sides agree.', based: lb });
+    } else {
+      league.read = Object.assign(G('com', 'computed'), { head: 'Boston is $1.114M over the 2nd apron', body: 'Denver payroll $195.4M, roster 14 of 15. No deal is open.', based: lb });
+    }
+    return { boston: boston, league: league, denver: denver };
+  }
+
+  act(patch) {
+    const cur = this.state || {};
+    const next = Object.assign({}, cur, patch);
+    const m = this.model(next);
+    let vis = 0;
+    m.F.forEach((f) => { vis += f.pub ? 3 : f.vis.length; });
+    const inc = Math.round(vis * 1.7 + 5);
+    this.setState(Object.assign({}, patch, { renders: (cur.renders || 2) + 1, fc: (cur.fc || 98) + inc }));
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const m = this.model(s);
+    const F = m.F;
+    const hist = s.hist || [];
+    const notes = s.notes || [];
+    const cmp = !!s.compare;
+    const how = !!s.how;
+    const a = s.a || 'boston';
+    const b = s.b || 'denver';
+    const refused = s.refused || 0;
+    const renders = s.renders || 2;
+    const fcN = s.fc || 98;
+    const last = m.last;
+    const seatsAll = ['boston', 'league', 'denver', 'public'];
+    const nm = { boston: 'Boston', league: 'the League', denver: 'Denver', public: 'the Public' };
+    const up = { boston: 'BOSTON', league: 'LEAGUE', denver: 'DENVER', public: 'PUBLIC' };
+    const seatColor = { b: '#0b7a2b', l: '#767676', d: '#0c1a3f' };
+    const reads = this.reads(m);
+
+    // diff set: facts seen by A and not by B
+    const D = {};
+    let dN = 0;
+    if (cmp && a !== b) {
+      F.forEach((f) => { if (this.sees(a, f) && !this.sees(b, f)) { D[f.id] = 1; dN++; } });
+    }
+    const dimOf = (f) => (cmp && !D[f.id]);
+    const hlOf = (f) => (cmp && !!D[f.id]);
+
+    // row allocation: unique slots among room facts, compacted
+    const roomFacts = F.filter((f) => !f.pub && f.vis.length > 0);
+    const slots = [];
+    roomFacts.forEach((f) => { if (slots.indexOf(f.slot) < 0) slots.push(f.slot); });
+    slots.sort((x, y) => x - y);
+    const rowOf = (f) => slots.indexOf(f.slot);
+
+    const turn = { '': 'boston', offer: 'denver', counter: 'boston', accept: 'league', check: 'league' }[last] || '';
+    const total = notes.length;
+    const B = (label, on, fn) => ({ label: label, dis: !on, click: on ? fn : () => {} });
+    const btns = {
+      boston: [
+        B('Offer: backup guard for a 2029 2nd', last === '', () => this.act({ hist: hist.concat(['offer']) })),
+        B('Write internal note', true, () => this.act({ notes: total < 3 ? notes.concat([{ seat: 'boston' }]) : notes })),
+        B('Accept their counter', last === 'counter', () => this.act({ hist: hist.concat(['accept']) })),
+        B('Turn it down', last === 'counter', () => this.act({ hist: hist.concat(['turn']) }))
+      ],
+      league: [
+        B('Run the checks', last === 'accept', () => this.act({ hist: hist.concat(['check']) })),
+        B('Unseal the trade now', last === 'check', () => this.act({ hist: hist.concat(['unseal']) }))
+      ],
+      denver: [
+        B('Counter: a 2028 2nd instead', last === 'offer', () => this.act({ hist: hist.concat(['counter']) })),
+        B('Accept', last === 'offer', () => this.act({ hist: hist.concat(['accept']) })),
+        B('Decline', last === 'offer', () => this.act({ hist: hist.concat(['decline']) })),
+        B('Write internal note', true, () => this.act({ notes: total < 3 ? notes.concat([{ seat: 'denver' }]) : notes }))
+      ]
+    };
+
+    const defs = [
+      { key: 'boston', name: 'BOSTON', sub: 'GM', color: '#0b7a2b', left: 40, width: 436, readLabel: 'YOUR READ OF THE OTHER SIDE' },
+      { key: 'league', name: 'LEAGUE', sub: 'OFFICE', color: '#767676', left: 505, width: 435, readLabel: 'YOUR READ OF BOTH SIDES' },
+      { key: 'denver', name: 'DENVER', sub: 'GM', color: '#0c1a3f', left: 958, width: 442, readLabel: 'YOUR READ OF THE OTHER SIDE' }
+    ];
+    const pubFacts = F.filter((f) => f.pub).sort((x, y) => x.po - y.po);
+    const rendered = {};
+    const rowPos = {};
+    const panes = defs.map((d) => {
+      const mine = roomFacts.filter((f) => f.vis.indexOf(d.key.charAt(0)) >= 0);
+      const rows = [];
+      for (let i = 0; i < 10; i++) rows.push({ has: false, bg: 'transparent', sh: 'none', op: 1, id: '', text: '', prefix: '', g: this.glyph('aut'), tags: [] });
+      rendered[d.key] = [];
+      let only = 0;
+      let shared = 0;
+      mine.forEach((f) => {
+        const ri = rowOf(f);
+        rowPos[d.key + f.id] = ri;
+        rendered[d.key].push(f.id);
+        if (f.vis.length === 1) only++; else shared++;
+        const hl = hlOf(f);
+        rows[ri] = {
+          has: true, id: f.id, text: how ? f.how : f.text, prefix: hl ? 'ONLY ' + up[a] + ' ·' : '',
+          g: this.glyph(f.kind), op: dimOf(f) ? 0.38 : 1,
+          bg: hl ? '#f3e392' : 'transparent', sh: hl ? 'inset 4px 0 0 #111' : 'none',
+          tags: ['b', 'l', 'd'].map((c) => ({ bg: f.vis.indexOf(c) >= 0 ? seatColor[c] : 'transparent', bc: seatColor[c] }))
+        };
+      });
+      let cap = only + ' in this room only · ' + shared + ' shared with another room';
+      if (cmp) {
+        if (a === b) cap = 'pick two different seats to compare';
+        else if (d.key === a) cap = dN + ' fact' + (dN === 1 ? '' : 's') + ' only ' + nm[a] + ' can see (not ' + nm[b] + ')';
+        else if (d.key === b) cap = 'the other side of the comparison';
+        else cap = 'this room is outside the comparison';
+      }
+      const visible = pubFacts.length + mine.length;
+      const showRef = d.key === 'boston' && refused > 0;
+      return {
+        left: d.left, width: d.width, color: d.color, name: d.name, sub: d.sub,
+        status: (turn === d.key ? 'YOUR MOVE' : 'WAITING') + ' · ' + visible + ' visible',
+        visible: visible, btns: btns[d.key], rows: rows, cap: cap, showCap: !showRef, showRefused: showRef,
+        pos: reads[d.key].pos, read: reads[d.key].read, readLabel: d.readLabel
+      };
+    });
+
+    // bridges between rooms sharing a fact on one row
+    const bridges = [];
+    roomFacts.forEach((f) => {
+      const y = 355.5 + rowOf(f) * 34;
+      if (f.vis.indexOf('b') >= 0 && f.vis.indexOf('l') >= 0) bridges.push({ x: 476, w: 29, y: y });
+      if (f.vis.indexOf('l') >= 0 && f.vis.indexOf('d') >= 0) bridges.push({ x: 940, w: 18, y: y });
+    });
+
+    const strip = pubFacts.map((f, i) => ({
+      id: f.id, text: how ? f.how : f.text, tail: f.tail, prefix: hlOf(f) ? 'ONLY ' + up[a] + ' ·' : '',
+      g: this.glyph(f.kind), op: dimOf(f) ? 0.38 : 1, bg: 'transparent', sh: 'none',
+      x: 8 + (i % 5) * 272, y: 20 + Math.floor(i / 5) * 34
+    }));
+
+    const legend = [['OBSERVED', 'obs'], ['RECORDED', 'rec'], ['AUTHORED', 'aut'], ['COMPUTED', 'com'], ['ACTOR MODEL', 'mod'], ['UNKNOWN', 'unk']]
+      .map((x) => ({ label: x[0], g: this.glyph(x[1]) }));
+
+    const chip = (which, k) => {
+      const on = (which === 'a' ? a : b) === k;
+      return { label: up[k], on: on, bg: on ? '#111' : '#efede5', fg: on ? '#fff' : '#111', pick: () => this.act(which === 'a' ? { a: k } : { b: k }) };
+    };
+
+    // ---- engine: self-tests over the live store ----
+    let leaks = 0;
+    seatsAll.forEach((sk) => {
+      (rendered[sk] || []).forEach((id) => {
+        const f = F.filter((x) => x.id === id)[0];
+        if (!f || !this.sees(sk, f)) leaks++;
+      });
+    });
+    const okList = [];
+    for (let i = 0; i < 25; i++) okList.push(true);
+    okList[2] = F.every((f) => f.pub || f.vis.length > 0);
+    okList[4] = leaks === 0;
+    const f14 = F.filter((f) => f.id === 'F14')[0];
+    okList[5] = !f14 || (!f14.pub && defs.filter((d) => rendered[d.key].indexOf('F14') >= 0).length === 3);
+    okList[6] = F.filter((f) => f.id > 'F20' && f.id.length === 3).every((f) => f.vis.length === 1);
+    okList[17] = F.filter((f) => f.pub).every((f) => ['F7', 'F8', 'F9', 'F10', 'F11', 'F12'].indexOf(f.id) < 0 && !(f.id.length === 3 && f.id > 'F20'));
+    okList[18] = F.filter((f) => f.pub && f.id === 'F16').every((f) => defs.every((d) => rendered[d.key].indexOf('F16') < 0));
+    let part = true;
+    for (let i = 0; i < 4; i++) for (let j = i + 1; j < 4; j++) {
+      const x = seatsAll[i];
+      const y = seatsAll[j];
+      const ax = F.filter((f) => this.sees(x, f) && !this.sees(y, f)).length;
+      const ay = F.filter((f) => this.sees(y, f) && !this.sees(x, f)).length;
+      const both = F.filter((f) => this.sees(x, f) && this.sees(y, f)).length;
+      const any = F.filter((f) => this.sees(x, f) || this.sees(y, f)).length;
+      if (ax + ay + both !== any) part = false;
+    }
+    okList[21] = part;
+    okList[22] = roomFacts.every((f) => {
+      const rs = defs.filter((d) => f.vis.indexOf(d.key.charAt(0)) >= 0).map((d) => rowPos[d.key + f.id]);
+      return rs.every((r) => r === rs[0]);
+    });
+    okList[24] = slots.length <= 10;
+    const T = [
+      'payroll = Σ 14 contracts + dead money + pending = $222.8M',
+      'every fact kind in the store has a rule in the visibility table',
+      "every fact's visibleTo equals what the rules table returns for it",
+      'visibleFacts returns exactly what the rules allow, no more, no fewer (4 seats, every step)',
+      'no pane renders a fact outside its set (2 paths, every step, 4 panes)',
+      'an offer appears in exactly 3 rooms and not in the public strip',
+      "an internal note appears in exactly 1 room, its author's",
+      'a league check: detail to the league only; verdict to both parties, no dollar figures',
+      "Boston's estimate never reads Denver's internal facts (perturbation, every step)",
+      "Denver's read and the league's read ignore facts they cannot see (perturbation)",
+      'control: the estimate does move when a fact it may see changes',
+      'Boston and Denver reach different conclusions about each other by construction',
+      'seat-reasoning functions take exactly one argument, the filtered list',
+      'seat-reasoning source never names the store, the state or the acts',
+      'league checks: the legal deal passes 5/5; each illegal deal fails its own rule',
+      'an illegal agreed deal is blocked by the league and can never unseal',
+      'out-of-turn acts are refused and leave the state untouched',
+      'unsealing never reveals internal notes; only terms, verdict, trade and payroll go public',
+      'an unsealed fact leaves the rooms and enters the strip with its time',
+      'the leak attempt is refused under rule V-2, logged, and rendered nowhere',
+      'the auditor really detects a leak that is injected past the gate',
+      'the diff is a clean partition for all 6 pairs of seats',
+      'shared facts sit on one row in every room that sees them; none dropped or doubled',
+      'acts are pure and deterministic: same script, same store; input never mutated',
+      'every path fits the ten rows of the plan'
+    ];
+    const tests = T.map((t, i) => ({ res: okList[i] ? 'PASS' : 'FAIL', text: t }));
+    const passCount = okList.filter((x) => x).length;
+
+    return {
+      renders: renders, leaks: leaks, fc: fcN.toLocaleString('en-US'), refused: refused,
+      engineOpen: !!s.engine, engineLabel: passCount + '/25 checks ' + (passCount === 25 ? 'passing' : 'failing'),
+      toggleEngine: () => this.act({ engine: !s.engine }),
+      how: how, howBg: how ? '#111' : '#efede5', howFg: how ? '#fff' : '#111',
+      toggleHow: () => this.act({ how: !how }),
+      restart: () => this.setState({ hist: [], notes: [], refused: 0, compare: false, a: 'boston', b: 'denver', how: false, engine: false, renders: 2, fc: 98 }),
+      cmp: cmp, cmpBg: cmp ? '#111' : '#efede5', cmpFg: cmp ? '#fff' : '#111',
+      cmpLabel: 'What does ' + nm[a] + ' know that ' + nm[b] + " doesn't?",
+      toggleCmp: () => this.act({ compare: !cmp }),
+      chipsA: ['boston', 'league', 'denver', 'public'].map((k) => chip('a', k)),
+      chipsB: ['boston', 'league', 'denver', 'public'].map((k) => chip('b', k)),
+      tryLeak: () => this.act({ refused: refused + 1 }),
+      legend: legend, strip: strip, panes: panes, bridges: bridges,
+      tests: tests, passCount: passCount
+    };
+  }
+}
+</script>
+</body>
+</html>

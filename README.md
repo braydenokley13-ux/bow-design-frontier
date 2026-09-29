@@ -27,12 +27,27 @@ These are prototypes and design evidence, not product code. None of it has been 
     - Cloud and Network (`DevWorldtools`, `NetworkHandshake`)
     - The proposed Browser (`BrowserProposed`), which composes the critics' picks on one path
     - The Wave 2 founder packet (`Packet2`): the tournaments, grammar matrix, canon candidates, kill list, open questions and Wave 3 recommendation
+  - **Wave 3 · EXECUTE (engines, not screens):**
+    - `X3Engine`: every number knows why, with a causal engine and a reverse search for the moves that reach a target.
+    - `X3Seats`: knowledge belongs to the seat, via an epistemic engine where each seat sees only its own facts.
+    - `X3Lockstep`: the same World for everyone without a server, by folding a seed and an act log in lockstep.
+    - `X3Proof`: the record proves itself, with a SHA-256 hash chain and forks that verify against it.
+    - `CloneVerdict`: the Wave 3 verdict. A copier rebuilt all four boards from screenshots in about 12–22 tool calls each, and independent critics probed the originals and the copies. Each board's COPY line states that result honestly.
 - `briefs/` holds the working briefs:
   - the file format for boards (`DC_AUTHORING.md`);
   - the critic rubric;
   - the Wave 2 bar and shared Boston fixture (`w2/W2_BAR_AND_FIXTURES.md`), which includes the binding truth-grammar rules;
   - one spec per tournament (`w2/SPEC_*.md`);
-  - repair lists produced by independent critics (`repairs/`).
+  - repair lists produced by independent critics (`repairs/`);
+  - the Wave 3 specs, clone test, critic brief and Live World spec (`w3/`).
+- `live/live-world.html` is the Live World, a standalone page and one persistent, shared World.
+  - People take the Boston and Denver GM seats by lease, act before real deadlines and keep a private board.
+  - Every browser folds the same act log to the same SHA-256 state and compares hashes live.
+  - It uses the artifact platform's `db`, `room` and `user` capabilities.
+  - Opened as a plain file, it runs in local mode with an in-memory stand-in and a "Simulate a second person" panel.
+  - The source is `live-world.src.html`, built by `build.mjs`. `e2e*.mjs` are the local browser checks, and `canon.seed.json` is the founding record, with its start time left as a placeholder.
+  - It has not yet run on the real shared store.
+- `evidence/w3-clone-test/` holds the four screenshot-only copies and the critics' probe scripts.
 - `econ/bow-economic-architecture.html` is the standalone "BOW Economic Architecture: Design Implications" page.
 - `tools/render/render.mjs` is the render harness used to play each board in headless Chromium and screenshot every state for critique.
 

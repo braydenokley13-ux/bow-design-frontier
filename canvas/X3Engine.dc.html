@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Every number knows why</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Source+Serif+4:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F1EEE3;color:#1C2A22;font-family:'Source Serif 4',serif}
+button{font-family:inherit;color:inherit}
+.fig{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+.cap{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase}
+.mut{color:#4A5A50}
+.btn{white-space:nowrap;cursor:pointer;border:1.5px solid #1C2A22;background:#FBFAF4;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.03em;min-height:36px;padding:0 12px;transition:background .2s,color .2s}
+.btn:hover{background:#E3ECDD}
+.btn:focus-visible,.vb:focus-visible,.cv:focus-visible,.wl:focus-visible,.tg:focus-visible,.dr:focus-visible,.gh:focus-visible{outline:3px solid #1C2A22;outline-offset:1px}
+.sw{display:inline-block;width:12px;height:12px;box-sizing:border-box;flex:none}
+.t-rec{background:#1C2A22;box-shadow:inset 0 0 0 2px #1C2A22,inset 0 0 0 4px #F1EEE3}
+.t-obs{background:#1C2A22}
+.t-aut{background:transparent;border:2px solid #1C2A22}
+.t-com{background:#8FA595;border:1px solid #1C2A22}
+.rw{display:flex;align-items:center;gap:8px;height:20px;padding:0 6px;border-bottom:1px solid #CFE0CF;font-size:13.5px;line-height:1}
+.nm{white-space:nowrap}
+.meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4A5A50;white-space:nowrap}
+.dots{flex:1;min-width:6px;border-bottom:1px dotted #7E9686;margin-bottom:3px}
+.was{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4A5A50;text-decoration:line-through;white-space:nowrap}
+.vb{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:500;background:transparent;border:0;text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer;height:20px;padding:0 4px;min-width:52px;text-align:right}
+.vb:hover{background:#DDE8D6}
+.cr{display:flex;align-items:center;gap:8px;height:36px;padding:0 6px;border-bottom:1px solid #CFE0CF}
+.cv{min-width:150px;height:30px;border:1.5px solid #1C2A22;background:#FBFAF4;font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;text-align:right;padding:0 8px;cursor:pointer;transition:background .2s}
+.cv:hover{background:#DDE8D6}
+.wl{display:flex;gap:6px;align-items:flex-start;width:100%;box-sizing:border-box;text-align:left;background:transparent;border:0;border-bottom:1px solid #DFE8DA;padding:2px 6px;font-size:12px;line-height:1.3;min-height:20px}
+button.wl{cursor:pointer}
+button.wl:hover{background:#E6EEDF}
+.tg{display:flex;gap:8px;align-items:flex-start;width:100%;box-sizing:border-box;text-align:left;padding:4px 8px;background:#FBFAF4;border:1.5px solid #1C2A22;min-height:40px;cursor:pointer;transition:background .2s}
+.gh{display:flex;justify-content:space-between;align-items:center;width:100%;box-sizing:border-box;min-height:27px;padding:0 8px;background:transparent;border:0;border-bottom:1px solid #1C2A22;font-size:13px;cursor:pointer;text-align:left}
+.dr{display:block;width:100%;box-sizing:border-box;text-align:left;padding:4px 8px;background:#FBFAF4;border:1.5px solid #B9CDBB;min-height:42px;cursor:pointer;margin-bottom:3px;transition:background .2s,border-color .2s}
+.dr:hover{background:#E6EEDF}
+@keyframes flA{0%{background:#EE9B6C}100%{background:#FBE7D8}}
+@keyframes flB{0%{background:#EE9B6C}100%{background:#FBE7D8}}
+.flA{animation:flA 1.5s ease-out both}
+.flB{animation:flB 1.5s ease-out both}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F1EEE3 repeating-linear-gradient(to bottom, transparent 0, transparent 23px, rgba(190,214,192,.45) 23px, rgba(190,214,192,.45) 24px); color: #1C2A22; font-family: 'Source Serif 4', serif">
+
+  <header style="position: absolute; left: 24px; right: 24px; top: 0; height: 46px; display: flex; align-items: center; gap: 14px; border-bottom: 3px double #1C2A22">
+    <span class="cap" style="font-weight: 600">BOW · Ledger</span>
+    <h1 style="margin: 0; font-size: 21px; font-weight: 600; white-space: nowrap">Every number knows why</h1>
+    <span class="fig mut" style="font-size: 11px; white-space: nowrap; overflow: hidden">{{addr}}</span>
+    <span style="flex: 1"></span>
+    <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+    <button type="button" class="btn" onClick="{{toggleChecks}}" aria-expanded="{{checksPressed}}" style="border-color: {{engBd}}; color: {{engFg}}; font-weight: 600">{{engLine}}</button>
+  </header>
+
+  <sc-if value="{{checksOpen}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; right: 24px; top: 86px; width: 590px; z-index: 30; background: #FBFAF4; border: 2px solid #1C2A22; padding: 10px 14px 12px; box-shadow: 6px 6px 0 rgba(28,42,34,.18)">
+      <div class="cap" style="margin-bottom: 6px">ENGINE · these ran in this page on load · nothing is precomputed</div>
+      <sc-for list="{{checks}}" as="ck" hint-placeholder-count="10">
+        <div class="fig" style="display: flex; gap: 8px; font-size: 11.5px; line-height: 1.45; color: {{ck.fg}}"><span style="width: 14px; flex: none">{{ck.mark}}</span><span>{{ck.name}}<span style="display: block; font-size: 11px">{{ck.err}}</span></span></div>
+      </sc-for>
+      <div class="fig mut" style="margin-top: 6px; font-size: 11px">{{checksNote}}</div>
+    </div>
+  </sc-if>
+
+  <div style="position: absolute; left: 24px; right: 24px; top: 51px; height: 30px; display: flex; align-items: center; gap: 12px; box-sizing: border-box; padding: 0 10px; background: {{bar.bg}}; color: {{bar.fg}}; border: 1.5px solid #1C2A22; border-color: {{bar.bd}}; transition: background .3s">
+    <span class="cap" style="font-weight: 600; white-space: nowrap">{{bar.stamp}}</span>
+    <span style="font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1">{{bar.text}}</span>
+    <span class="fig" style="font-size: 11px; white-space: nowrap">{{bar.fp}}</span>
+    <sc-if value="{{inBranch}}" hint-placeholder-val="{{false}}">
+      <button type="button" class="btn" onClick="{{undo}}" style="min-height: 24px; height: 24px; padding: 0 10px; background: #FBFAF4; color: #1C2A22; border-color: #FBFAF4">Undo branch</button>
+    </sc-if>
+    <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+      <span class="fig" style="display: flex; gap: 10px; align-items: center; font-size: 11px; white-space: nowrap; color: #1C2A22; background: #F1EEE3; padding: 2px 8px; margin: -1px -6px -1px 0">
+        <span><span class="sw t-obs"></span> observed</span><span><span class="sw t-rec"></span> recorded</span><span><span class="sw t-aut"></span> authored</span><span><span class="sw t-com"></span> computed</span><span>no hatch, stipple or dashes: nothing here is modeled or unknown</span>
+      </span>
+    </sc-if>
+  </div>
+
+  <div style="position: absolute; left: 16px; top: 85px; width: 976px; height: 738px; box-sizing: border-box; border: 3px solid #C2410C; pointer-events: none; opacity: {{frameOp}}; transition: opacity .35s"></div>
+
+  <section aria-label="The books" style="position: absolute; left: 24px; top: 90px; width: 480px; height: 728px; display: flex; flex-direction: column">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; height: 24px; border-bottom: 3px double #1C2A22; padding: 0 6px 2px">
+      <span class="cap" style="font-weight: 600">THE BOOKS · Boston · Year Two · Wk 9</span>
+      <span class="cap mut">$M · click any figure</span>
+    </div>
+    <sc-for list="{{roster}}" as="r" hint-placeholder-count="14">
+      <div class="rw {{r.fl}}" style="background: {{r.bg}}">
+        <span class="sw {{r.tex}}"></span>
+        <span class="nm" style="text-decoration: {{r.strike}}; color: {{r.fg}}">{{r.name}}</span>
+        <span class="meta">{{r.meta}}</span>
+        <span class="dots"></span>
+        <sc-if value="{{r.gone}}" hint-placeholder-val="{{false}}"><span class="fig mut" style="font-size: 12.5px; text-decoration: line-through; padding: 0 4px">{{r.val}}</span></sc-if>
+        <sc-if value="{{r.live}}" hint-placeholder-val="{{true}}"><span class="was">{{r.was}}</span><button type="button" class="vb" onClick="{{r.pick}}" aria-label="Why is {{r.name}} {{r.val}}?">{{r.val}}</button></sc-if>
+      </div>
+    </sc-for>
+    <sc-for list="{{extras}}" as="x" hint-placeholder-count="2">
+      <div class="rw {{x.fl}}" style="height: 22px; background: {{x.bg}}; border-top: {{x.bt}}">
+        <span class="sw {{x.tex}}"></span>
+        <span class="nm">{{x.name}}</span>
+        <span class="dots"></span>
+        <span class="was">{{x.was}}</span>
+        <button type="button" class="vb" onClick="{{x.pick}}" aria-label="Why is {{x.name}} {{x.val}}?">{{x.val}}</button>
+      </div>
+    </sc-for>
+    <div style="height: 6px; border-bottom: 3px double #1C2A22; margin-bottom: 2px"></div>
+    <sc-for list="{{calc}}" as="k" hint-placeholder-count="8">
+      <div>
+        <div class="cr {{k.fl}}" style="background: {{k.bg}}">
+          <span class="sw {{k.tex}}"></span>
+          <span style="flex: 1; line-height: 1.15"><span style="font-size: 13.5px; font-weight: 600">{{k.label}}</span><br><span class="mut" style="font-size: 11px">{{k.sub}}</span></span>
+          <span class="was">{{k.was}}</span>
+          <button type="button" class="cv" onClick="{{k.pick}}" aria-label="Why: {{k.label}}" style="color: {{k.fg}}; box-shadow: {{k.ring}}">{{k.val}}</button>
+        </div>
+        <sc-if value="{{k.hasNote}}" hint-placeholder-val="{{false}}"><div class="mut" style="font-size: 11.5px; font-style: italic; padding: 2px 6px 3px 26px; border-bottom: 1px solid #CFE0CF">{{k.note}}</div></sc-if>
+      </div>
+    </sc-for>
+  </section>
+
+  <section aria-label="Why" style="position: absolute; left: 524px; top: 90px; width: 460px; height: 728px; display: flex; flex-direction: column">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; height: 24px; border-bottom: 3px double #1C2A22; padding: 0 6px 2px">
+      <span class="cap" style="font-weight: 600">WHY · the derivation, live</span>
+      <span class="cap mut">click a line to fold it</span>
+    </div>
+    <div style="padding: 6px 6px 5px; border-bottom: 1px solid #1C2A22">
+      <div style="font-size: 19px; font-weight: 600; line-height: 1.2">{{why.label}} <span class="fig" style="font-size: 17px">{{why.val}}</span> <span class="was" style="font-size: 12px">{{why.was}}</span></div>
+      <sc-if value="{{why.hasSub}}" hint-placeholder-val="{{false}}"><div class="mut" style="font-size: 11.5px; font-style: italic; margin-top: 1px">{{why.sub}}</div></sc-if>
+    </div>
+    <div style="flex: 1; overflow: hidden">
+      <sc-for list="{{lines}}" as="l" hint-placeholder-count="12">
+        <div>
+          <sc-if value="{{l.branch}}" hint-placeholder-val="{{true}}">
+            <button type="button" class="wl {{l.fl}}" onClick="{{l.toggle}}" aria-expanded="{{l.openStr}}" style="padding-left: {{l.pad}}px">
+              <span class="fig" style="width: 10px; flex: none; font-size: 11px; margin-top: 2px">{{l.caret}}</span><span class="sw {{l.tex}}" style="margin-top: 3px"></span>
+              <span><span class="mut">{{l.pre}}</span><strong>{{l.label}}</strong> <span class="fig" style="font-size: 12px">{{l.val}}</span> <span class="was">{{l.was}}</span> <span class="fig" style="font-size: 11.5px">= {{l.formula}}</span> <span class="mut" style="font-style: italic">· {{l.kind}}</span></span>
+            </button>
+          </sc-if>
+          <sc-if value="{{l.plain}}" hint-placeholder-val="{{false}}">
+            <div class="wl {{l.fl}}" style="padding-left: {{l.pad}}px">
+              <span style="width: 10px; flex: none"></span><span class="sw {{l.tex}}" style="margin-top: 3px"></span>
+              <span><span class="mut">{{l.pre}}</span><strong>{{l.label}}</strong> <span class="fig" style="font-size: 12px">{{l.val}}</span> <span class="was">{{l.was}}</span> <span class="mut" style="font-style: italic">· {{l.kind}}</span></span>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+    <div style="border-top: 1px solid #1C2A22; padding: 5px 6px 0; min-height: 70px">
+      <div class="fig" style="font-size: 11px; line-height: 1.4"><span class="mut">THIS FIGURE FEEDS ·</span> {{why.feeds}}</div>
+      <sc-if value="{{why.canAsk}}" hint-placeholder-val="{{true}}">
+        <button type="button" class="btn" onClick="{{why.ask}}" style="margin-top: 5px; width: 100%; text-align: left; font-family: 'Source Serif 4', serif; font-size: 13.5px; font-weight: 600">What would change this? → {{why.askTarget}}</button>
+      </sc-if>
+    </div>
+  </section>
+
+  <section aria-label="What would change this" style="position: absolute; left: 1004px; top: 90px; width: 412px; height: 728px; display: flex; flex-direction: column">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; height: 24px; border-bottom: 3px double #1C2A22; padding: 0 2px 2px">
+      <span class="cap" style="font-weight: 600">WHAT WOULD CHANGE THIS?</span>
+      <span class="cap mut">reverse search</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px; padding-top: 8px">
+      <sc-for list="{{targets}}" as="t" hint-placeholder-count="4">
+        <button type="button" class="tg" onClick="{{t.pick}}" aria-pressed="{{t.pressed}}" style="background: {{t.bg}}; box-shadow: {{t.ring}}">
+          <span class="sw t-aut" style="margin-top: 3px; background: {{t.dot}}"></span>
+          <span style="line-height: 1.25"><span style="font-size: 13px; font-weight: 600">{{t.label}}</span><br><span class="fig" style="font-size: 11px; color: {{t.fg}}">{{t.status}}</span></span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="margin-top: 7px; padding: 4px 8px; border: 2px solid #1C2A22; font-size: 11.5px; line-height: 1.3">
+      <span class="cap" style="font-size: 11px; font-weight: 600">MOVE SET · authored · 88 candidates:</span>
+      1 trade a player to <b>R1</b> $12M, <b>R2</b> $9M or <b>R3</b> $4M of room, for a 2nd · 2 swap him for a Denver $2.1M, $6.0M or $11.0M contract · 3 waive a 1-year minimum · 4 decline the two-way · partners are not modeled: a door is legal, not likely
+    </div>
+    <button type="button" class="btn" onClick="{{runSearch}}" style="margin-top: 7px; min-height: 38px; background: #1C2A22; color: #F1EEE3; font-size: 13px; font-weight: 600">Search: every 1- and 2-move combination</button>
+    <sc-if value="{{res.has}}" hint-placeholder-val="{{false}}">
+      <div style="padding: 5px 2px 3px; border-bottom: 1px solid #1C2A22">
+        <div style="font-size: 13.5px; line-height: 1.3; font-weight: 600">searched {{res.searched}} combinations · {{res.legal}} legal · {{res.meet}} meet the target</div>
+        <div class="mut" style="font-size: 11.5px; line-height: 1.3; font-style: italic">{{res.detail}}</div>
+      </div>
+    </sc-if>
+    <sc-if value="{{res.none}}" hint-placeholder-val="{{false}}">
+      <div style="margin-top: 8px; padding: 8px 10px; border: 2px dashed #1C2A22; font-size: 13px; line-height: 1.4">
+        <b>No 1- or 2-move combination in this move set meets the target.</b> Wider searches need more moves (not built).
+        <div class="fig mut" style="font-size: 11px; margin-top: 4px">{{res.closest}}</div>
+      </div>
+    </sc-if>
+    <sc-if value="{{res.some}}" hint-placeholder-val="{{false}}">
+            <sc-for list="{{groups}}" as="g" hint-placeholder-count="5">
+        <div>
+          <button type="button" class="gh" onClick="{{g.pick}}" aria-expanded="{{g.open}}" style="opacity: {{g.op}}">
+            <span><span class="fig" style="font-size: 11px">{{g.caret}}</span> <b>{{g.label}}</b> <span class="fig mut" style="font-size: 11px">{{g.sub}}</span></span><span class="fig" style="font-size: 12px">{{g.count}}</span>
+          </button>
+          <sc-if value="{{g.showDoors}}" hint-placeholder-val="{{false}}">
+            <div style="padding: 3px 0 0">
+              <div class="fig mut" style="font-size: 11px; padding: 0 2px 3px">{{g.members}}</div>
+              <sc-for list="{{g.doors}}" as="d" hint-placeholder-count="3">
+                <button type="button" class="dr" onClick="{{d.apply}}" aria-pressed="{{d.applied}}" style="border-color: {{d.bd}}; background: {{d.bg}}">
+                  <span style="font-size: 13px; line-height: 1.25; display: flex; justify-content: space-between; gap: 8px"><span>{{d.what}}</span><span class="fig mut" style="font-size: 11px; white-space: nowrap">{{d.ways}}</span></span>
+                  <span class="fig mut" style="font-size: 11px; display: block">{{d.meta}}</span>
+                </button>
+              </sc-for>
+              <sc-if value="{{g.paged}}" hint-placeholder-val="{{true}}"><div style="display: flex; align-items: center; gap: 8px">
+                <button type="button" class="btn" onClick="{{g.prev}}" aria-label="Previous doors" style="min-height: 36px; width: 44px; padding: 0">‹</button>
+                <span class="fig" style="font-size: 11.5px; flex: 1; text-align: center">{{g.range}}</span>
+                <button type="button" class="btn" onClick="{{g.next}}" aria-label="Next doors" style="min-height: 36px; width: 44px; padding: 0">›</button>
+              </div></sc-if>
+              <sc-if value="{{g.unpaged}}" hint-placeholder-val="{{false}}"><div class="fig mut" style="font-size: 11px; padding: 1px 2px">{{g.range}}</div></sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </sc-if>
+  </section>
+
+  <div style="position: absolute; left: 24px; right: 24px; top: 826px; font-size: 13px; font-style: italic; line-height: 1.3"><b style="font-style: normal" class="cap">CLONE TEST, 29 SEP:</b> copied from 7 screenshots in ~12 tool calls with identical doors; it got only unprinted numbers wrong. The moat would be a correct, sourced rulebook for both sides of every trade — not built yet.</div>
+  <div class="fig mut" style="position: absolute; left: 24px; top: 852px; width: 800px; font-size: 11px; line-height: 1.4">COMMERCIAL LENS · Hypothesis: a rulebook that can search itself is what capologists, agents and media pay for; the public sees every number’s why for free.</div>
+  <div class="fig mut" style="position: absolute; right: 24px; top: 852px; width: 560px; text-align: right; font-size: 11px; line-height: 1.4">PLATFORM HYPOTHESIS · prototype · World facts authored; league lines from the BOW Economics Live fixture (verify); 2023 CBA simplified (verify)</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+/* ==== ENGINE BEGIN · pure functions, no DOM. Money is integer $K (thousands). ==== */
+const LINES = { cap: 164961, tax: 200000, first: 209015, second: 221686 };
+const RATE = 1.5;
+const MLE = { non: 15044, tax: 6064 };
+const FLOOR = 13, CEIL = 15, DEAD0 = 6400, PEND0 = 2400;
+const TIERS = ['none', 'bench', 'rotation', 'starter', 'star'];
+const mm = (k) => (k / 1000).toFixed(3).replace(/0{1,2}$/, '');
+const usd = (k) => '$' + mm(k) + 'M';
+const pl = (id, name, role, tier, sal, yrs, x) => Object.assign({ id, name, role, tier, sal, yrs, min: false, date: 'Week 9', note: '', tex: 'rec' }, x || {});
+const ROSTER = [
+  pl('tatum', 'Jayson Tatum', 'wing', 'star', 58500, 3),
+  pl('butler', 'Jimmy Butler', 'wing', 'star', 56800, 1, { date: 'Week 6', note: 'acquired for Derrick White + filler' }),
+  pl('guardA', 'Guard A', 'starter guard', 'starter', 24000, 2),
+  pl('bigA', 'Big A', 'starter big', 'starter', 19500, 3),
+  pl('hauser', 'Sam Hauser', 'wing', 'rotation', 10800, 3),
+  pl('pritchard', 'Payton Pritchard', 'guard', 'rotation', 7800, 2),
+  pl('bigB', 'Big B', 'rotation big', 'rotation', 9900, 1),
+  pl('wingC', 'Wing C', 'rotation wing', 'rotation', 8400, 2),
+  pl('guardB', 'Guard B', 'backup guard', 'bench', 2700, 1),
+  pl('rook1', 'Rookie 1', 'rookie scale', 'bench', 5100, 3),
+  pl('rook2', 'Rookie 2', 'rookie scale', 'bench', 3300, 3),
+  pl('min1', 'Min 1', 'minimum', 'bench', 2400, 1, { min: true }),
+  pl('min2', 'Min 2', 'minimum', 'bench', 2400, 1, { min: true }),
+  pl('min3', 'Min 3', 'minimum', 'bench', 2400, 1, { min: true })
+];
+const PL = {}; ROSTER.forEach((c) => { PL[c.id] = c; });
+const DEN = [2100, 6000, 11000].map((sal, i) => ({ id: 'den' + 'ABC'[i], name: 'Denver ' + 'ABC'[i], sal, yrs: 2, tier: 'bench' }));
+const DENP = {}; DEN.forEach((d) => { DENP[d.id] = d; });
+const TEAMS = { R1: { name: 'Team R1', room: 12000 }, R2: { name: 'Team R2', room: 9000 }, R3: { name: 'Team R3', room: 4000 } };
+const clone = (o) => JSON.parse(JSON.stringify(o));
+const cloneState = (o) => ({ contracts: o.contracts.map((c) => Object.assign({}, c)), dead: o.dead, pending: o.pending, rooms: Object.assign({}, o.rooms), den: o.den.slice(), picks: o.picks, lost: o.lost.slice(), back: o.back.slice(), log: o.log.slice() });
+const nameOf = (id) => (PL[id] || DENP[id]).name;
+const tierOf = (id) => (PL[id] || DENP[id]).tier;
+
+function initialState() {
+  return { contracts: ROSTER.map((c) => Object.assign({}, c)), dead: DEAD0, pending: PEND0,
+    rooms: { R1: TEAMS.R1.room, R2: TEAMS.R2.room, R3: TEAMS.R3.room }, den: DEN.map((d) => d.id), picks: 0, lost: [], back: [], log: [] };
+}
+function statusFor(p, tax, first, second) { return p > second ? 'over second apron' : p > first ? 'over first apron' : p > tax ? 'over tax' : 'under tax'; }
+function takeBackPct(status) { return status === 'over second apron' ? 100 : status === 'over first apron' ? 110 : 125; }
+function fnv(s) { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('00000000' + h.toString(16)).slice(-8); }
+const bookKey = (st) => JSON.stringify([st.contracts.map((c) => c.id).sort(), st.dead, st.pending, st.den.slice().sort(), st.picks]);
+function stKey(st) { return JSON.stringify([bookKey(st), st.rooms.R1, st.rooms.R2, st.rooms.R3]); }
+const fingerprint = (st) => fnv(stKey(st) + JSON.stringify(st.contracts.map((c) => [c.id, c.sal, c.yrs]).sort()));
+
+/* ---- node graph: every displayed number is the output of one of these computeFns ---- */
+function fmtNode(d, v) {
+  if (d.fmt) return d.fmt(v);
+  return d.unit === 'K' ? usd(v) : d.unit === 'x' ? v + '×' : d.unit === 'pct' ? v + '%' : String(v);
+}
+function graph(st, full) {
+  const D = {}, add = (d) => { D[d.id] = d; };
+  const ids = st.contracts.map((c) => 'c:' + c.id);
+  st.contracts.forEach((c) => add({ id: 'c:' + c.id, label: c.name, tex: c.tex, unit: 'K', leaf: true, v: c.sal,
+    kind: () => (c.tex === 'rec' ? 'World record, ' + c.date + (c.note ? ' · ' + c.note : '') + ' · double-rule' : 'authored Denver contract, in your branch'),
+    meta: () => c.role + ' · ' + c.yrs + ' yr' + (c.yrs > 1 ? 's' : '') + (c.note ? ' · ' + c.note : '') }));
+  add({ id: 'dead', label: 'Dead money', tex: 'rec', unit: 'K', leaf: true, v: st.dead,
+    kind: () => 'World record, waived in Year One · double-rule' + (st.dead !== DEAD0 ? ' + ' + usd(st.dead - DEAD0) + ' waived in your branch' : '') });
+  add({ id: 'pending', label: 'Two-way pending', tex: 'rec', unit: 'K', leaf: true, v: st.pending, kind: 'World record, Week 9 · double-rule' });
+  const lg = (id, label, v, tex, kind) => add({ id, label, tex, unit: 'K', leaf: true, v, kind });
+  const fx = '2026–27 league line · BOW Economics Live fixture, as of 29 Sep 2026 · verify';
+  lg('L.cap', 'Salary cap', LINES.cap, 'obs', fx);
+  lg('L.tax', 'World tax line', LINES.tax, 'aut', 'World rule, authored');
+  add({ id: 'L.rate', label: 'World tax rate', tex: 'aut', unit: 'x', leaf: true, v: RATE, kind: 'World rule: flat 1.5× (authored) — the NBA’s real tax is incremental' });
+  lg('L.first', 'First apron', LINES.first, 'obs', fx);
+  lg('L.second', 'Second apron', LINES.second, 'obs', fx);
+  lg('L.mleN', 'Non-taxpayer MLE', MLE.non, 'obs', '2026–27 exception · fixture (pr.nba.com via world.ts) · verify');
+  lg('L.mleT', 'Taxpayer MLE', MLE.tax, 'obs', '2026–27 exception · fixture (pr.nba.com via world.ts) · verify');
+  const cm = (id, label, unit, inputs, fn, show, x) => add(Object.assign({ id, label, tex: 'com', unit, inputs, fn, show, kind: 'computed' }, x || {}));
+  cm('contractsSum', 'Σ contracts', 'K', ids, (g) => ids.reduce((a, i) => a + g(i), 0), () => ids.length + ' salaries added');
+  cm('payroll', 'Payroll', 'K', ['contractsSum', 'dead', 'pending'], (g) => g('contractsSum') + g('dead') + g('pending'),
+    (V) => 'Σ ' + ids.length + ' contracts ' + V('contractsSum') + ' + dead money ' + V('dead') + ' + pending ' + V('pending'));
+  cm('overTax', 'Over the World tax line', 'K', ['payroll', 'L.tax'], (g) => Math.max(0, g('payroll') - g('L.tax')),
+    (V) => 'payroll ' + V('payroll') + ' − tax line ' + V('L.tax') + ', floor 0');
+  cm('worldTax', 'World tax', 'K', ['overTax', 'L.rate'], (g) => Math.round(g('overTax') * g('L.rate')),
+    (V, g) => g('L.rate') + ' × over-tax ' + V('overTax'), { kind: 'computed · World rule, authored' });
+  cm('overSecond', 'Over the second apron', 'K', ['payroll', 'L.second'], (g) => Math.max(0, g('payroll') - g('L.second')),
+    (V) => 'payroll ' + V('payroll') + ' − second apron ' + V('L.second') + ', floor 0');
+  cm('apronStatus', 'Apron status', 's', ['payroll', 'L.tax', 'L.first', 'L.second'], (g) => statusFor(g('payroll'), g('L.tax'), g('L.first'), g('L.second')),
+    (V) => 'payroll ' + V('payroll') + ' against tax ' + V('L.tax') + ' · first apron ' + V('L.first') + ' · second apron ' + V('L.second'), { fmt: (v) => v });
+  cm('rosterCount', 'Roster', 'n', ids, (g) => ids.filter((i) => g(i) > 0).length, () => 'count of standard contracts (the window is ' + FLOOR + '–' + CEIL + ', authored · verify)');
+  cm('ownerNoteMet', 'Owner’s note', 'b', ['overSecond'], (g) => g('overSecond') === 0,
+    (V) => 'met only if over-the-second-apron is $0.0M · now ' + V('overSecond'), { fmt: (v) => (v ? 'MET' : 'NOT MET') });
+  const tb = (id, label, inputs, fn, show) => cm(id, label, 'b', inputs, fn, show, { fmt: (v) => (v ? 'available' : 'gone'), kind: 'computed · 2023 CBA, simplified · verify' });
+  tb('tool.aggregate', 'Aggregate salaries in trades', ['apronStatus'], (g) => g('apronStatus') !== 'over second apron', (V) => 'lost over the second apron · status now ' + V('apronStatus'));
+  tb('tool.signTrade', 'Sign-and-trade in', ['apronStatus'], (g) => g('apronStatus') === 'under tax' || g('apronStatus') === 'over tax', (V) => 'lost over the first apron · status now ' + V('apronStatus'));
+  tb('tool.pick7', 'Trade a first-round pick 7 years out', ['apronStatus'], (g) => g('apronStatus') !== 'over second apron', (V) => 'frozen over the second apron · status now ' + V('apronStatus'));
+  tb('tool.nonTaxMLE', 'Non-taxpayer MLE', ['payroll', 'L.first', 'L.mleN'], (g) => g('payroll') + g('L.mleN') <= g('L.first'),
+    (V, g) => 'payroll ' + V('payroll') + ' + MLE ' + V('L.mleN') + ' = ' + usd(g('payroll') + g('L.mleN')) + ' must stay ≤ first apron ' + V('L.first') + ' (hard cap)');
+  tb('tool.taxMLE', 'Taxpayer MLE', ['payroll', 'L.second', 'L.mleT'], (g) => g('payroll') + g('L.mleT') <= g('L.second'),
+    (V, g) => 'payroll ' + V('payroll') + ' + MLE ' + V('L.mleT') + ' = ' + usd(g('payroll') + g('L.mleT')) + ' must stay ≤ second apron ' + V('L.second') + ' (hard cap)');
+  cm('tool.takeBack', 'Take-back limit in trades', 'pct', ['apronStatus'], (g) => takeBackPct(g('apronStatus')),
+    (V) => 'status ' + V('apronStatus') + ' → 125% under the first apron · 110% over it · 100% over the second', { kind: 'computed · 2023 CBA, simplified · verify' });
+  const five = ['tool.aggregate', 'tool.signTrade', 'tool.pick7', 'tool.nonTaxMLE', 'tool.taxMLE'];
+  cm('tools', 'Tools left', 'l', five, (g) => five.filter((i) => g(i)), () => 'the CBA tools whose conditions hold, of 5', { fmt: (v) => v.length + ' of 5' });
+  if (full) {
+    add({ id: 'M.set', label: 'Authored move set', tex: 'aut', unit: 'n', leaf: true, v: candidateMoves(st).length, kind: 'authored: 4 kinds of move · 3 rooms · 1 partner' });
+    cm('legalMoves', 'Legal moves now', 'n', ['M.set', 'rosterCount', 'tool.takeBack'], () => candidateMoves(st).filter((m) => applyMove(st, m).ok).length,
+      (V, g) => 'candidates that pass room, salary-matching (≤ ' + V('tool.takeBack') + ') and the roster window, out of ' + V('M.set'));
+  }
+  return D;
+}
+function evalGraph(D) {
+  const vals = {};
+  const get = (id) => { if (id in vals) return vals[id]; const d = D[id]; if (!d) throw new Error('missing node ' + id); return (vals[id] = d.leaf ? d.v : d.fn(get)); };
+  Object.keys(D).forEach(get);
+  return vals;
+}
+function compute(st, full) { const D = graph(st, full); return { D, vals: evalGraph(D) }; }
+
+/* ---- moves and legality ---- */
+function candidateMoves(st) {
+  const out = [];
+  st.contracts.forEach((c) => Object.keys(TEAMS).forEach((t) => out.push({ t: 'room', pid: c.id, team: t })));
+  st.contracts.forEach((c) => DEN.forEach((d) => out.push({ t: 'swap', pid: c.id, den: d.id })));
+  st.contracts.filter((c) => c.min).forEach((c) => out.push({ t: 'waive', pid: c.id }));
+  out.push({ t: 'twoway' });
+  return out;
+}
+const mvKey = (m) => m.t + ':' + (m.pid || '') + ':' + (m.team || m.den || '');
+const fail = (rule, why) => ({ ok: false, rule, why });
+function checkTrade(st, outIds, inSal) {
+  const v = compute(st, false).vals;
+  if (outIds.length > 1 && !v['tool.aggregate']) return fail('T-agg', 'over the second apron, salaries cannot be aggregated in trades');
+  const out = outIds.reduce((a, id) => a + st.contracts.find((c) => c.id === id).sal, 0), pct = v['tool.takeBack'];
+  if (inSal * 100 > out * pct) return fail('T-match', 'incoming ' + usd(inSal) + ' is more than ' + pct + '% of outgoing ' + usd(out) + ' (' + v.apronStatus + ')');
+  return { ok: true };
+}
+function applyMove(st, mv) {
+  const i = mv.pid ? st.contracts.findIndex((c) => c.id === mv.pid) : -1;
+  if (mv.pid && i < 0) return fail('M-roster', 'that player is no longer on the roster');
+  const c = i >= 0 ? st.contracts[i] : null;
+  let d = null;
+  if (mv.t === 'room') {
+    if (c.sal > st.rooms[mv.team]) return fail('T-room', TEAMS[mv.team].name + ' has ' + usd(st.rooms[mv.team]) + ' of room; ' + c.name + ' is ' + usd(c.sal));
+  } else if (mv.t === 'swap') {
+    if (st.den.indexOf(mv.den) < 0) return fail('D-used', 'that Denver contract is already spoken for');
+    d = DENP[mv.den];
+    const chk = checkTrade(st, [c.id], d.sal);
+    if (!chk.ok) return chk;
+  } else if (mv.t === 'waive') {
+    if (!c.min) return fail('W-min', 'only a 1-year minimum player can be waived in this move set');
+  } else if (mv.t === 'twoway') {
+    if (st.pending <= 0) return fail('W-none', 'no two-way call-up is pending');
+  } else return fail('M-kind', 'unknown move');
+  const n = st.contracts.length - (mv.t === 'room' || mv.t === 'waive' ? 1 : 0), pend = mv.t === 'twoway' ? 0 : st.pending;
+  if (n < FLOOR) return fail('R-floor', 'roster would be ' + n + '; the window is ' + FLOOR + '–' + CEIL + ' (authored · verify)');
+  if (n + (pend > 0 ? 1 : 0) > CEIL) return fail('R-ceil', 'roster would pass ' + CEIL);
+  const s = cloneState(st);
+  if (mv.t === 'room') { s.rooms[mv.team] -= c.sal; s.contracts.splice(i, 1); s.lost.push(c.id); s.picks += 1; }
+  else if (mv.t === 'swap') {
+    s.contracts.splice(i, 1);
+    s.contracts.push({ id: d.id, name: d.name, role: 'from Denver', tier: 'bench', sal: d.sal, yrs: d.yrs, min: false, date: 'branch', note: '', tex: 'aut' });
+    s.lost.push(c.id); s.back.push(d.id); s.den = s.den.filter((x) => x !== d.id);
+  } else if (mv.t === 'waive') { s.contracts.splice(i, 1); s.dead += c.sal; s.lost.push(c.id); }
+  else s.pending = 0;
+  s.log.push(mv);
+  return { ok: true, state: s };
+}
+function applySeq(st, moves) {
+  let cur = st;
+  for (let i = 0; i < moves.length; i++) { const r = applyMove(cur, moves[i]); if (!r.ok) return Object.assign({ at: i }, r); cur = r.state; }
+  return { ok: true, state: cur };
+}
+function describeMove(mv) {
+  return mv.t === 'room' ? 'Trade ' + nameOf(mv.pid) + ' to ' + TEAMS[mv.team].name + ' for a 2nd'
+    : mv.t === 'swap' ? 'Trade ' + nameOf(mv.pid) + ' for Denver’s ' + usd(DENP[mv.den].sal)
+    : mv.t === 'waive' ? 'Waive ' + nameOf(mv.pid) : 'Decline the two-way';
+}
+const describeSeq = (moves) => moves.map((m, i) => { const d = describeMove(m); return i ? 'then ' + d.charAt(0).toLowerCase() + d.slice(1) : d; }).join(', ');
+
+/* ---- targets and reverse search ---- */
+const TARGETS = [
+  { id: 'owner', short: 'Owner’s note', label: 'Owner’s note: under the second apron by the deadline', node: 'ownerNoteMet', keep: [],
+    clauses: [{ node: 'ownerNoteMet', op: 'is', val: true }], gap: (v) => v.overSecond, gapText: (g) => usd(g) + ' over the second apron' },
+  { id: 'mle', short: 'Taxpayer MLE', label: 'Have the taxpayer MLE at the deadline', node: 'tool.taxMLE', keep: [],
+    clauses: [{ node: 'tool.taxMLE', op: 'is', val: true }], gap: (v) => Math.max(0, v.payroll + v['L.mleT'] - v['L.second']), gapText: (g) => 'payroll must fall ' + usd(g) },
+  { id: 'tax25', short: 'World tax under $25M', label: 'World tax under $25M', node: 'worldTax', keep: [],
+    clauses: [{ node: 'worldTax', op: 'lt', val: 25000 }], gap: (v) => Math.max(0, v.worldTax - 24999), gapText: (g) => usd(g) + ' over the target' },
+  { id: 'cap', short: 'Under the cap', label: 'Under the cap (' + usd(LINES.cap) + '), keeping Tatum and Butler', node: 'payroll', keep: ['tatum', 'butler'],
+    clauses: [{ node: 'payroll', op: 'le', ref: 'L.cap' }], gap: (v) => Math.max(0, v.payroll - v['L.cap']), gapText: (g) => usd(g) + ' over the cap' }
+];
+function judge(tg, st) {
+  const c = compute(st, false), v = c.vals;
+  const cl = tg.clauses.every((k) => { const x = v[k.node], r = k.ref ? v[k.ref] : k.val; return k.op === 'is' ? x === r : k.op === 'le' ? x <= r : x < r; });
+  const keep = (tg.keep || []).every((id) => st.contracts.some((q) => q.id === id));
+  return { met: cl && keep, keep, gap: tg.gap(v), vals: v };
+}
+function makeDoor(moves, st, j) {
+  const lost = st.lost.map((id) => ({ id, name: nameOf(id), tier: tierOf(id) }));
+  const tier = lost.reduce((m, q) => Math.max(m, TIERS.indexOf(q.tier)), 0);
+  return { key: moves.map(mvKey).join('>'), moves, tier: TIERS[tier], lost: lost.map((q) => q.name), back: st.back.length, picks: st.picks,
+    roster: st.contracts.length, payroll: j.vals.payroll, tax: j.vals.worldTax, bk: bookKey(st), ways: 1 };
+}
+function reverseSearch(state, tg) {
+  const cands = candidateMoves(state), seen = {}, singleHit = {}, firsts = [];
+  const out = { target: tg.id, singles: cands.length, evaluated: 0, pairs: 0, legal: 0, singlesLegal: 0, meetRaw: 0, redundant: 0, merged: 0, doors: [], closest: null };
+  const take = (moves, st, j) => {
+    if (j.keep && (!out.closest || j.gap < out.closest.gap)) out.closest = { gap: j.gap, payroll: j.vals.payroll, what: describeSeq(moves) };
+    if (!j.met) return;
+    out.meetRaw++;
+    const d = makeDoor(moves, st, j);
+    if (seen[d.bk]) { seen[d.bk].ways++; out.merged++; return; }
+    seen[d.bk] = d; out.doors.push(d);
+  };
+  cands.forEach((a) => {
+    out.evaluated++;
+    const r = applyMove(state, a);
+    if (!r.ok) return;
+    out.legal++; out.singlesLegal++;
+    const j = judge(tg, r.state);
+    if (j.met) singleHit[mvKey(a)] = true;
+    take([a], r.state, j);
+    firsts.push({ a, s: r.state });
+  });
+  firsts.forEach((f) => cands.forEach((b) => {
+    if (mvKey(b) === mvKey(f.a)) return;
+    out.evaluated++; out.pairs++;
+    const r = applyMove(f.s, b);
+    if (!r.ok) return;
+    out.legal++;
+    const j = judge(tg, r.state);
+    if (j.met && (singleHit[mvKey(f.a)] || singleHit[mvKey(b)])) { out.redundant++; out.meetRaw++; return; }
+    take([f.a, b], r.state, j);
+  }));
+  out.meet = out.doors.length;
+  return out;
+}
+
+/* ---- WHY: every line is generated by walking the node graph ---- */
+function whyLines(G, root, coll, cmp, fold) {
+  const V = (id) => fmtNode(G.D[id], G.vals[id]), out = [], seen = {};
+  (function walk(id, depth, path) {
+    const d = G.D[id], key = path + '>' + id, again = !!seen[id];
+    seen[id] = true;
+    const kids = again || d.leaf ? [] : d.inputs, open = key in coll ? !coll[key] : !(fold && depth > 0 && fold(id));
+    let was = '';
+    if (cmp) { const o = cmp.D[id]; if (!o) was = 'new'; else if (JSON.stringify(cmp.vals[id]) !== JSON.stringify(G.vals[id])) was = fmtNode(o, cmp.vals[id]); }
+    out.push({ key, id, depth, label: d.label, val: V(id), was, tex: d.tex, again, leaf: !!d.leaf, hasKids: kids.length > 0, open,
+      formula: d.leaf || again ? '' : d.show(V, (i) => G.vals[i]), kind: again ? 'derived above' : typeof d.kind === 'function' ? d.kind() : d.kind, meta: d.meta ? d.meta() : '' });
+    if (open) kids.forEach((k) => walk(k, depth + 1, key));
+  })(root, 0, '');
+  return out;
+}
+const usedBy = (G, id) => Object.keys(G.D).filter((k) => (G.D[k].inputs || []).indexOf(id) >= 0);
+function downstream(G, id) { const seen = {}, q = [id]; while (q.length) usedBy(G, q.pop()).forEach((k) => { if (!seen[k]) { seen[k] = 1; q.push(k); } }); return Object.keys(seen); }
+
+/* ---- the board's own tests: run on first render, shown as ENGINE · n/n ---- */
+function selfTests() {
+  const T = [], t = (name, fn) => T.push({ name, fn });
+  const eq = (a, b, m) => { if (a !== b) throw new Error((m || 'expected') + ': got ' + a + ', want ' + b); };
+  const yes = (c, m) => { if (!c) throw new Error(m || 'assertion failed'); };
+  const rec = initialState(), G = compute(rec, true), V = G.vals, S = {};
+  const withPay = (p) => { const s = clone(rec); s.dead = p - V.contractsSum - s.pending; return s; };
+  const TG = (id) => TARGETS.find((x) => x.id === id);
+  const search = (id) => S[id] || (S[id] = reverseSearch(rec, TG(id)));
+  const mv = { hauserR1: { t: 'room', pid: 'hauser', team: 'R1' }, guardBR1: { t: 'room', pid: 'guardB', team: 'R1' } };
+  t('payroll = Σ contracts + dead money + pending', () => { eq(rec.contracts.reduce((a, c) => a + c.sal, 0) + rec.dead + rec.pending, V.payroll); eq(V.payroll, 222800); });
+  t('14 contracts sum to $214.0M', () => { eq(V.contractsSum, 214000); eq(V.rosterCount, 14); });
+  t('World tax = 1.5 × (payroll − $200.0M) = $34.2M', () => { eq(V.worldTax, Math.round(1.5 * (V.payroll - LINES.tax))); eq(V.worldTax, 34200); });
+  t('second-apron overage = $1.114M; owner’s note not met', () => { eq(V.overSecond, 1114); eq(V.ownerNoteMet, false); });
+  t('apron status flips exactly at each line', () => {
+    const f = (p) => statusFor(p, LINES.tax, LINES.first, LINES.second);
+    eq(f(200000), 'under tax'); eq(f(200001), 'over tax'); eq(f(209015), 'over tax'); eq(f(209016), 'over first apron'); eq(f(221686), 'over first apron'); eq(f(221687), 'over second apron');
+  });
+  t('at $222.8M every CBA tool is gone; at $205.0M three stay', () => {
+    eq(V.tools.length, 0);
+    const v = compute(withPay(205000), false).vals;
+    yes(v['tool.aggregate'] && v['tool.signTrade'] && v['tool.pick7'] && v['tool.taxMLE'] && !v['tool.nonTaxMLE'], 'tool set wrong at $205.0M');
+  });
+  t('hard-cap MLE tests flip at the exact $K', () => {
+    const at = (p, id) => compute(withPay(p), false).vals[id];
+    yes(at(215622, 'tool.taxMLE') && !at(215623, 'tool.taxMLE'), 'taxpayer MLE edge');
+    yes(at(193971, 'tool.nonTaxMLE') && !at(193972, 'tool.nonTaxMLE'), 'non-taxpayer MLE edge');
+  });
+  t('over the second apron, salaries cannot be aggregated', () => {
+    eq(checkTrade(rec, ['guardA', 'bigA'], 1000).rule, 'T-agg');
+    yes(checkTrade(withPay(215000), ['guardA', 'bigA'], 1000).ok, 'aggregation should be allowed under the second apron');
+  });
+  t('over the second apron, no taking back more than sent', () => {
+    eq(applyMove(rec, { t: 'swap', pid: 'bigB', den: 'denC' }).rule, 'T-match');
+    yes(applyMove(rec, { t: 'swap', pid: 'bigB', den: 'denB' }).ok, 'Big B for the $6.0M contract should be legal');
+  });
+  t('the take-back limit loosens once a move gets under the second apron', () => {
+    const swap = { t: 'swap', pid: 'hauser', den: 'denC' };
+    eq(applyMove(rec, swap).rule, 'T-match');
+    yes(applySeq(rec, [mv.guardBR1, swap]).ok, 'Hauser for the $11.0M contract should pass at 110%');
+  });
+  t('room is enforced and used up: R2 $9M, R1 $12M', () => {
+    eq(applyMove(rec, { t: 'room', pid: 'hauser', team: 'R2' }).rule, 'T-room');
+    eq(applyMove(rec, { t: 'room', pid: 'bigA', team: 'R1' }).rule, 'T-room');
+    const s = applyMove(rec, mv.hauserR1).state;
+    eq(s.rooms.R1, 1200); eq(applyMove(s, mv.guardBR1).rule, 'T-room');
+  });
+  t('waiving keeps the cap hit and drops the roster', () => {
+    const r = applyMove(rec, { t: 'waive', pid: 'min1' }), v = compute(r.state, false).vals;
+    eq(v.payroll, 222800); eq(v.rosterCount, 13); eq(r.state.dead, 8800);
+    eq(applyMove(rec, { t: 'waive', pid: 'guardB' }).rule, 'W-min');
+  });
+  t('declining the two-way cuts $2.4M; a second decline is refused', () => {
+    const r = applyMove(rec, { t: 'twoway' });
+    eq(compute(r.state, false).vals.payroll, 220400); eq(applyMove(r.state, { t: 'twoway' }).rule, 'W-none');
+  });
+  t('roster window: 13 → 12 is refused', () => { eq(applySeq(rec, [mv.guardBR1, { t: 'room', pid: 'rook2', team: 'R2' }]).rule, 'R-floor'); });
+  t('a Denver contract can be used only once', () => { eq(applySeq(rec, [{ t: 'swap', pid: 'guardA', den: 'denA' }, { t: 'swap', pid: 'bigA', den: 'denA' }]).rule, 'D-used'); });
+  t('applyMove never mutates its input', () => { const b = JSON.stringify(rec); applyMove(rec, mv.hauserR1); applySeq(rec, [mv.hauserR1, mv.guardBR1]); eq(JSON.stringify(rec), b); });
+  t('applying then undoing a branch restores the exact state', () => {
+    const f0 = fingerprint(rec), br = applySeq(rec, [mv.hauserR1, { t: 'twoway' }]).state;
+    yes(fingerprint(br) !== f0, 'branch should differ'); eq(fingerprint(rec), f0); eq(JSON.stringify(rec), JSON.stringify(initialState()));
+  });
+  t('search never returns an illegal door', () => {
+    ['owner', 'mle', 'tax25'].forEach((id) => search(id).doors.forEach((d) => {
+      const r = applySeq(rec, d.moves); yes(r.ok, id + ': ' + describeSeq(d.moves) + ' is illegal (' + r.rule + ')'); eq(bookKey(r.state), d.bk, 'replayed state differs');
+    }));
+  });
+  t('every door meets its target, recomputed from the graph', () => {
+    ['owner', 'mle', 'tax25'].forEach((id) => search(id).doors.forEach((d) => yes(judge(TG(id), applySeq(rec, d.moves).state).met, id + ': ' + describeSeq(d.moves))));
+  });
+  t('search agrees with brute force over all 88 × 88 sequences', () => {
+    const c = candidateMoves(rec), s = search('owner'); let legal = 0, meet = 0;
+    c.forEach((a) => { const r = applyMove(rec, a); if (r.ok) { legal++; if (judge(TG('owner'), r.state).met) meet++; } });
+    c.forEach((a) => c.forEach((b) => { if (mvKey(a) === mvKey(b)) return; const r = applySeq(rec, [a, b]); if (r.ok) { legal++; if (judge(TG('owner'), r.state).met) meet++; } }));
+    eq(legal, s.legal, 'legal'); eq(meet, s.meetRaw, 'meeting');
+  });
+  t('search is deterministic and stays under 5,000 evaluations', () => {
+    const a = search('mle'), b = reverseSearch(rec, TG('mle'));
+    eq(JSON.stringify([a.doors, a.legal, a.evaluated]), JSON.stringify([b.doors, b.legal, b.evaluated])); yes(a.evaluated < 5000, 'evaluated ' + a.evaluated);
+  });
+  t('no door is padded: no move inside a pair already meets the target', () => {
+    ['owner', 'mle', 'tax25'].forEach((id) => search(id).doors.filter((d) => d.moves.length === 2).forEach((d) => d.moves.forEach((m) => {
+      const r = applyMove(rec, m); yes(!(r.ok && judge(TG(id), r.state).met), id + ': ' + describeSeq(d.moves));
+    })));
+  });
+  t('the cap target is empty because of its keep clause, not a bug', () => {
+    eq(search('cap').meet, 0);
+    const loose = reverseSearch(rec, Object.assign({}, TG('cap'), { keep: [] }));
+    yes(loose.meet > 0, 'no keep clause should give doors'); yes(loose.doors.every((d) => d.lost.indexOf('Jayson Tatum') >= 0 || d.lost.indexOf('Jimmy Butler') >= 0), 'a door without a star');
+  });
+  t('legal-moves node = legal single moves found by search', () => { eq(V.legalMoves, search('owner').singlesLegal); eq(V['M.set'], 88); });
+  t('WHY leaves under payroll sum to payroll; every line has a source', () => {
+    const L = whyLines(G, 'payroll', {}, null); let sum = 0;
+    L.forEach((l) => { yes(l.kind, l.id + ' has no source line'); if (l.leaf) sum += G.vals[l.id]; });
+    eq(sum, V.payroll); yes(whyLines(G, 'worldTax', {}, null).some((l) => l.depth >= 3), 'World tax is not 3 levels deep');
+  });
+  t('node graph is acyclic and every input id exists', () => {
+    const ids = Object.keys(G.D), state = {};
+    const dfs = (id) => { yes(G.D[id], 'missing ' + id); if (state[id] === 1) throw new Error('cycle at ' + id); if (state[id] === 2) return; state[id] = 1; (G.D[id].inputs || []).forEach(dfs); state[id] = 2; };
+    ids.forEach(dfs);
+  });
+  t('changing one contract changes only the figures downstream of it', () => {
+    const st = clone(rec); st.contracts[1].sal += 1000; const G2 = compute(st, true), dn = downstream(G, 'c:butler');
+    const ch = Object.keys(G.D).filter((id) => JSON.stringify(G.vals[id]) !== JSON.stringify(G2.vals[id]));
+    yes(ch.indexOf('payroll') >= 0 && ch.indexOf('worldTax') >= 0, 'payroll and World tax should move'); ch.forEach((id) => yes(id === 'c:butler' || dn.indexOf(id) >= 0, id + ' changed but is not downstream'));
+  });
+  t('money stays whole $K in every node', () => { Object.keys(G.D).forEach((id) => { if (G.D[id].unit === 'K') yes(Number.isInteger(G.vals[id]), id); }); });
+  return T.map((x) => { try { x.fn(); return { name: x.name, ok: true, err: '' }; } catch (e) { return { name: x.name, ok: false, err: e.message }; } });
+}
+/* ==== ENGINE END ==== */
+
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const C = this._c || (this._c = {});
+    if (!C.rec) {
+      C.rec = initialState(); C.G0 = compute(C.rec, true); C.f0 = fingerprint(C.rec);
+      const t0 = performance.now(); C.tests = selfTests(); C.tms = Math.round(performance.now() - t0);
+    }
+    const rec = C.rec, G0 = C.G0, V0 = G0.vals;
+    const set = (o) => this.setState(o);
+    const n = (x) => x.toLocaleString('en-US');
+    const sel = s.sel || 'worldTax', coll = s.coll || {}, how = !!s.how, tgtId = s.tgt || 'owner', br = s.br || null;
+    if (br && C.bkey !== br.key) { C.bkey = br.key; C.bs = applySeq(rec, br.moves).state; C.G1 = compute(C.bs, true); }
+    const bs = br ? C.bs : rec, G1 = br ? C.G1 : G0, V1 = G1.vals;
+    const flc = br ? ((s.fl || 0) % 2 ? 'flB' : 'flA') : '';
+
+    /* engine line */
+    const bad = C.tests.filter((t) => !t.ok), okN = C.tests.length - bad.length;
+    const engLine = bad.length ? 'ENGINE · ' + okN + '/' + C.tests.length + ' · FAILING: ' + bad[0].name.slice(0, 34) + '…' : 'ENGINE · ' + okN + '/' + C.tests.length + ' checks passing';
+    const checks = C.tests.map((t) => ({ mark: t.ok ? '✓' : '✗', name: t.name, err: t.err, fg: t.ok ? '#1C2A22' : '#B3261E' }));
+
+    /* the books: rows are read from the state and the node graph, never typed */
+    const goneTxt = (m) => (!m ? '' : m.t === 'room' ? 'traded to ' + TEAMS[m.team].name + ' · +2nd' : m.t === 'swap' ? 'traded to Denver' : 'waived · cap hit stays');
+    const roster = rec.contracts.map((c) => {
+      const live = bs.contracts.some((x) => x.id === c.id), m = br ? br.moves.find((q) => q.pid === c.id) : null, sw = !live && m && m.t === 'swap' ? DENP[m.den] : null;
+      const base = { name: c.name, tex: 't-' + c.tex, gone: !live && !sw, live: live || !!sw, strike: live ? 'none' : 'line-through', fg: live ? '#1C2A22' : '#4A5A50', was: '', fl: live ? '' : flc };
+      if (sw) return { ...base, meta: '→ ' + sw.name + ' · ' + sw.yrs + ' yrs · authored', val: mm(sw.sal), was: mm(c.sal) + ' →', tex: 't-aut', bg: sel === 'c:' + sw.id ? '#DDE8D6' : 'transparent', pick: () => set({ sel: 'c:' + sw.id }) };
+      return { ...base, meta: live ? c.role + ' · ' + c.yrs + ' yr' + (c.yrs > 1 ? 's' : '') + (c.note ? ' · ' + c.date : '') + (how ? ' · recorded' : '') : goneTxt(m), val: mm(c.sal),
+        bg: live && sel === 'c:' + c.id ? '#DDE8D6' : 'transparent', pick: () => set({ sel: 'c:' + c.id }) };
+    });
+    const extras = [{ id: 'contractsSum', name: 'Σ ' + V1.rosterCount + ' contracts' + (how ? ' · computed' : ''), tex: 't-com', now: mm(V1.contractsSum), was: mm(V0.contractsSum), bt: '1.5px solid #1C2A22' }]
+      .concat([['dead', 'Dead money · waived Year One'], ['pending', 'Two-way conversions pending']].map((e) => ({ id: e[0], name: e[1] + (how ? ' · recorded' : ''), tex: 't-rec', now: mm(bs[e[0]]), was: mm(rec[e[0]]), bt: '0' })))
+      .map((e) => { const ch = e.now !== e.was; return { name: e.name, val: e.now, tex: e.tex, bt: e.bt, was: ch ? e.was + ' →' : '', fl: ch ? flc : '', bg: sel === e.id ? '#DDE8D6' : 'transparent', pick: () => set({ sel: e.id }) }; });
+    const cv = (id, V, st) => id === 'rosterCount' ? V.rosterCount + (st.pending > 0 ? ' + 1 pending' : '')
+      : id === 'ownerNoteMet' ? (V.ownerNoteMet ? 'MET' : 'NOT MET') : id === 'tools' ? V.tools.length + ' of 5' : id === 'legalMoves' ? V.legalMoves + ' of ' + V['M.set']
+      : id === 'apronStatus' ? V.apronStatus.toUpperCase() : fmtNode(G0.D[id], V[id]);
+    const SUB = { payroll: 'Σ contracts + dead + pending', overTax: 'above the ' + usd(LINES.tax) + ' World line', worldTax: 'flat 1.5× (authored)', apronStatus: 'vs the 2026–27 lines (verify)',
+      rosterCount: 'window ' + FLOOR + '–' + CEIL + ' (authored)', ownerNoteMet: V1.ownerNoteMet ? usd(LINES.second - V1.payroll) + ' under the 2nd apron' : usd(V1.overSecond) + ' over the 2nd apron',
+      tools: 'of 5 · take-back ≤ ' + V1['tool.takeBack'] + '%', legalMoves: 'in the authored set of ' + V1['M.set'] };
+    const CALC = [['payroll', 'Payroll'], ['overTax', 'Over the World tax line'], ['worldTax', 'World tax'], ['apronStatus', 'Apron status'], ['rosterCount', 'Roster'], ['ownerNoteMet', 'Owner’s note'], ['tools', 'Tools left'], ['legalMoves', 'Legal moves now']];
+    const calc = CALC.map((k) => {
+      const now = cv(k[0], V1, bs), was = cv(k[0], V0, rec), ch = now !== was, fail = k[0] === 'ownerNoteMet' && !V1.ownerNoteMet;
+      return { label: k[1], sub: (how ? 'computed · ' : '') + SUB[k[0]], val: now, was: ch ? was + ' →' : '', fl: ch ? flc : '', tex: 't-com', bg: sel === k[0] ? '#E9EFE2' : 'transparent', fg: fail ? '#B3261E' : '#1C2A22',
+        ring: sel === k[0] ? '0 0 0 3px #1C2A22' : 'none', hasNote: k[0] === 'worldTax', note: 'World rule: flat 1.5× (authored) — the NBA’s real tax is incremental', pick: () => set({ sel: k[0] }) };
+    });
+
+    /* WHY: generated from the graph */
+    const selOK = G1.D[sel] ? sel : 'payroll', d0 = G1.D[selOK];
+    const BUDGET = 556, cmp = br ? G0 : null;
+    const estH = (l) => 4 + 15.6 * Math.max(1, Math.ceil((l.label.length + l.val.length + (l.was || '').length + (l.formula ? l.formula.length + 3 : 0) + l.kind.length + 6) * 6.0 / (400 - l.depth * 12)));
+    const sumH = (ls) => ls.reduce((a, l) => a + estH(l), 0), auto = new Set();
+    let raw = whyLines(G1, selOK, coll, cmp);
+    for (let g = 0; g < 14 && sumH(raw) > BUDGET; g++) {
+      if (!auto.has('contractsSum')) { auto.add('contractsSum'); auto.add('rosterCount'); } else {
+        const c = raw.filter((l) => l.hasKids && l.open && l.depth > 0 && !(l.key in coll)).sort((x, y) => y.depth - x.depth)[0];
+        if (!c) break; auto.add(c.id);
+      }
+      raw = whyLines(G1, selOK, coll, cmp, (id) => auto.has(id));
+    }
+    let acc = 0, cut = raw.length;
+    for (let i = 0; i < raw.length; i++) { acc += estH(raw[i]); if (acc > BUDGET + 16) { cut = i; break; } }
+    const hid = raw.length - cut;
+    const lines = raw.slice(0, cut).map((l) => ({ ...l, tex: 't-' + l.tex, pad: 6 + l.depth * 12, pre: l.depth ? '└ ' : '', caret: l.hasKids ? (l.open ? '▾' : '▸') : '',
+      branch: l.hasKids, plain: !l.hasKids, fl: l.was ? flc : '', openStr: String(l.open),
+      toggle: () => { const c = { ...((this.state && this.state.coll) || {}) }; c[l.key] = l.open; set({ coll: c }); } }));
+    if (hid) lines.push({ key: 'more', tex: 't-aut', pad: 6, pre: '', label: '… ' + hid + ' more lines', val: '', was: '', kind: 'fold something above to see them', branch: false, plain: true, fl: '' });
+    const feeds = Array.from(new Set(usedBy(G1, selOK).map((i) => G1.D[i].label)));
+    const ASK = { ownerNoteMet: 'owner', overSecond: 'owner', apronStatus: 'owner', payroll: 'owner', 'tool.taxMLE': 'mle', tools: 'mle', worldTax: 'tax25', overTax: 'tax25' };
+    const RULE = ['worldTax', 'overTax', 'L.rate'].indexOf(selOK) >= 0 ? ' · World rule: flat 1.5× (authored) — the NBA’s real tax is incremental' : '';
+    const why = { label: d0.label, val: fmtNode(d0, V1[selOK]), was: br && JSON.stringify(V0[selOK]) !== JSON.stringify(V1[selOK]) && G0.D[selOK] ? 'was ' + fmtNode(G0.D[selOK], V0[selOK]) : '',
+      sub: ((G1.D[sel] ? '' : 'That contract is not in your branch, so this shows payroll. ') + RULE).replace(/^ · /, ''),
+      feeds: feeds.length ? feeds.join(' · ') + ' → ' + downstream(G1, selOK).length + ' figures recompute if it changes' : 'nothing further: this is the top of the chain', canAsk: !!ASK[selOK],
+      askTarget: ASK[selOK] ? TARGETS.find((t) => t.id === ASK[selOK]).short : '', ask: () => set({ tgt: ASK[selOK] }) };
+    why.hasSub = !!why.sub;
+
+    /* targets, search report, doors */
+    const targets = TARGETS.map((tg) => {
+      const j = judge(tg, rec), on = tg.id === tgtId, inB = br ? ' · branch ' + (judge(tg, bs).met ? 'MET' : 'NOT MET') : '';
+      return { label: tg.label, status: (j.met ? 'MET now' : 'NOT MET · ' + tg.gapText(j.gap)) + inB, fg: j.met ? '#1C2A22' : '#B3261E', pressed: String(on),
+        bg: on ? '#E3ECDD' : '#FBFAF4', ring: on ? 'inset 5px 0 0 #1C2A22' : 'none', dot: on ? '#1C2A22' : 'transparent', pick: () => set({ tgt: tg.id }) };
+    });
+    const tg = TARGETS.find((t) => t.id === tgtId), r0 = s.srch && s.srch.target === tgtId ? s.srch : null;
+    const PS = 3, TL = { none: 'Nobody on the roster leaves', bench: 'A bench player leaves', rotation: 'A rotation player leaves', starter: 'A starter leaves', star: 'A star leaves' };
+    const MEM = (t) => (t === 'none' ? 'only the two-way call-up is declined' : ROSTER.filter((c) => c.tier === t).map((c) => c.name).join(' · '));
+    const res = { has: !!r0, none: !!r0 && r0.meet === 0, some: !!r0 && r0.meet > 0, searched: r0 ? n(r0.evaluated) : '', legal: r0 ? n(r0.legal) : '', meet: r0 ? n(r0.meet) : '',
+      detail: r0 ? r0.singles + ' singles + ' + n(r0.pairs) + ' pairs (illegal starts skipped) · ' + n(r0.redundant) + ' beaten by a shorter combo · ' + r0.merged + ' same-books merged · ' + r0.ms + ' ms' : '',
+      closest: r0 && r0.closest ? 'Closest legal combination' + (tg.keep.length ? ', keeping both stars' : '') + ': ' + r0.closest.what + ' → payroll ' + usd(r0.closest.payroll) + ', still ' + tg.gapText(r0.closest.gap) + '.' : '' };
+    let groups = [];
+    if (r0 && r0.meet > 0) {
+      const first = TIERS.filter((t) => r0.doors.some((d) => d.tier === t))[0], gk = s.grp && r0.doors.some((d) => d.tier === s.grp) ? s.grp : first;
+      groups = TIERS.map((t) => {
+        const ds = r0.doors.filter((d) => d.tier === t), open = t === gk, pages = Math.max(1, Math.ceil(ds.length / PS)), pg = open ? Math.min(s.pg || 0, pages - 1) : 0;
+        return { label: TL[t], sub: '', count: ds.length, open: String(open), caret: open ? '▾' : '▸', op: ds.length ? 1 : 0.5, pick: () => set({ grp: t, pg: 0 }), showDoors: open, members: MEM(t),
+          range: ds.length ? (pg * PS + 1) + '–' + Math.min(ds.length, pg * PS + PS) + ' of ' + ds.length + ' · not ranked' : 'none at this cost: nothing here meets the target', paged: pages > 1, unpaged: pages <= 1,
+          prev: () => set({ grp: t, pg: Math.max(0, pg - 1) }), next: () => set({ grp: t, pg: Math.min(pages - 1, pg + 1) }),
+          doors: ds.slice(pg * PS, pg * PS + PS).map((d) => { const ap = !!br && br.key === d.key;
+            return { what: describeSeq(d.moves), meta: 'roster ' + d.roster + ' · tax ' + usd(d.tax) + ' · ' + d.back + ' player' + (d.back === 1 ? '' : 's') + ' back' + (d.picks ? ' · +' + d.picks + ' 2nd' : ''), ways: d.ways > 1 ? '×' + d.ways + ' same books' : '',
+              applied: String(ap), bd: ap ? '#C2410C' : '#B9CDBB', bg: ap ? '#FBE7D8' : '#FBFAF4', apply: () => set({ br: { moves: d.moves, key: d.key }, fl: ((this.state && this.state.fl) || 0) + 1 }) }; }) };
+      });
+    }
+
+    const bar = br ? { stamp: 'YOUR BRANCH · NOT THE WORLD RECORD', text: describeSeq(br.moves), bg: '#C2410C', fg: '#FFFFFF', bd: '#C2410C', fp: 'branch ' + fingerprint(bs) + ' · record ' + C.f0 }
+      : { stamp: 'WORLD RECORD', text: how ? 'Boston · Year Two · Wk 9 · RECORDED' : 'Boston · Year Two · Week 9 · RECORDED · nothing on this page has been changed', bg: 'transparent', fg: '#1C2A22', bd: '#1C2A22', fp: 'fingerprint ' + C.f0 + ' · FNV-1a' };
+    return {
+      addr: br ? 'bow://boston-y2 · branch of ' + br.moves.length + ' move' + (br.moves.length > 1 ? 's' : '') + ' · diverged from the record at year2/wk9' : 'bow://boston-y2 · world record · year2/wk9 · books',
+      how, howPressed: String(how), howBg: how ? '#1C2A22' : '#FBFAF4', howFg: how ? '#F1EEE3' : '#1C2A22', toggleHow: () => set({ how: !how }),
+      engLine, engBd: bad.length ? '#B3261E' : '#1C2A22', engFg: bad.length ? '#B3261E' : '#1C2A22', checksOpen: !!s.chk, checksPressed: String(!!s.chk), toggleChecks: () => set({ chk: !s.chk }),
+      checks, checksNote: C.tests.length + ' checks in ' + C.tms + ' ms · pure functions: graph, applyMove, reverseSearch · money in whole $K · no randomness, no server',
+      bar, inBranch: !!br, frameOp: br ? 1 : 0, undo: () => set({ br: null }),
+      roster, extras, calc, why, lines, targets, res, groups,
+      runSearch: () => { const t0 = performance.now(), r = reverseSearch(rec, tg); r.ms = Math.round(performance.now() - t0); set({ srch: r, grp: null, pg: 0 }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+import { chromium } from '/tmp/claude-0/-home-user/f52fdf4a-05b5-5a92-af12-fa83ad11fa7e/scratchpad/render/node_modules/playwright-core/index.mjs';
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = [];
+page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errs.push(m.type() + ': ' + m.text().slice(0, 300)); });
+page.on('pageerror', (e) => errs.push('pageerror: ' + e.message.slice(0, 400) + (e.stack ? '\n' + e.stack.split('\n').slice(0, 4).join('\n') : '')));
+await page.goto('http://127.0.0.1:8765/live-world.html', { waitUntil: 'load' });
+await page.waitForTimeout(2000);
+console.log("errs early:", JSON.stringify(errs));
+const res = await page.evaluate(() => ({ tests: window.__world.testResults.map((t) => (t.ok ? 'ok   ' : 'FAIL ') + t.name + (t.msg ? ' :: ' + t.msg : '')), n: window.__world.TESTS.length }));
+console.log(res.tests.join('\n'));
+console.log('errors:', JSON.stringify(errs.filter((e) => !/fonts\.g|ERR_|net::/.test(e)), null, 1));
+await page.screenshot({ path: '/tmp/claude-0/-home-user/f52fdf4a-05b5-5a92-af12-fa83ad11fa7e/scratchpad/live/shots/smoke.png' });
+await browser.close();

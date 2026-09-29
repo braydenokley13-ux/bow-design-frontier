@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BOW Frontier — the clone test</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F0E8;color:#1B1A17;font-family:'IBM Plex Sans',sans-serif}
+.mono{font-family:'IBM Plex Mono',monospace}
+.serif{font-family:'Newsreader',serif}
+.k{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:#57534B;text-transform:uppercase}
+.st{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.05em;padding:3px 6px;white-space:nowrap;border:1px solid #1B1A17}
+li{margin:0}
+</style>
+</helmet>
+<div style="width: 1440px; height: 2200px; box-sizing: border-box; padding: 56px 88px 56px; display: flex; flex-direction: column; gap: 32px; background: #F3F0E8; color: #1B1A17">
+  <header style="display: flex; flex-direction: column; gap: 14px">
+    <div class="k" style="display: flex; justify-content: space-between; border-bottom: 1px solid #1B1A17; padding-bottom: 10px"><span>Wave 3 · the clone test · 29 Sep 2026</span><span>Four engines, four copies from screenshots, two independent critics with probes</span></div>
+    <h1 class="serif" style="margin: 0; font-weight: 400; font-size: 54px; line-height: 1.04; max-width: 1240px">Could someone copy this in a day? Every screen and every engine we built — yes. Each was copied from seven screenshots in 12 to 22 tool calls. What could not be copied is not on any screen.</h1>
+  </header>
+
+  <section style="display: flex; flex-direction: column; gap: 0">
+    <div class="mono" style="display: grid; grid-template-columns: 210px 110px minmax(0, 1.2fr) minmax(0, 1.2fr) 190px; gap: 18px; font-size: 11px; letter-spacing: .06em; color: #57534B; border-bottom: 2px solid #1B1A17; padding-bottom: 6px">
+      <span>ENGINE BOARD</span><span>COPY COST</span><span>WHAT THE COPY MATCHED</span><span>WHAT IT FAKED OR GOT WRONG</span><span>CRITIC’S VERDICT</span>
+    </div>
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="4">
+      <div style="display: grid; grid-template-columns: 210px 110px minmax(0, 1.2fr) minmax(0, 1.2fr) 190px; gap: 18px; align-items: start; border-bottom: 1px solid #CFC8B8; padding: 12px 0; font-size: 14px; line-height: 1.45">
+        <strong class="serif" style="font-size: 19px; font-weight: 500; line-height: 1.2">{{r.b}}</strong>
+        <span class="mono" style="font-size: 13px">{{r.cost}}</span>
+        <span>{{r.match}}</span>
+        <span style="color: #4A4740">{{r.miss}}</span>
+        <span class="st" style="justify-self: start; white-space: normal">{{r.v}}</span>
+      </div>
+    </sc-for>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 14px; border-top: 4px solid #1B1A17; padding-top: 16px">
+    <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 34px">What a copy cannot be — the three things the critics agree are the moat</h2>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px">
+      <sc-for list="{{moat}}" as="m" hint-placeholder-count="3">
+        <div style="display: flex; flex-direction: column; gap: 8px; border-top: 2px solid #1B1A17; padding-top: 10px">
+          <span class="k">{{m.n}}</span>
+          <strong class="serif" style="font-size: 23px; font-weight: 500; line-height: 1.18">{{m.h}}</strong>
+          <span style="font-size: 14.5px; line-height: 1.55">{{m.t}}</span>
+          <span class="mono" style="font-size: 11.5px; line-height: 1.5; color: #A63A18">{{m.now}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; border-top: 2px solid #1B1A17; padding-top: 16px">
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 30px">What this changes about the design</h2>
+      <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 9px; font-size: 15px; line-height: 1.5">
+        <li><strong>Transparency stays.</strong> Printing the formula taught the copier — and it is still right. BOW’s value is that anyone can check it; the moat was never going to be secrecy.</li>
+        <li><strong>Every surface becomes a view onto three shared things:</strong> the canonical record, the verified rules, the accumulated history. A board that doesn’t read from them is a demo, however good it looks.</li>
+        <li><strong>Invention moves from screens to substrate.</strong> Waves 1–2 found the grammar. The work now is breadth and correctness under it — which is slow, and that is the point.</li>
+        <li><strong>Engines must prove more than they display.</strong> The seats engine guards what is rendered, not what can be inferred; the rules engine checked one side of each trade. Both overclaimed on their own boards, and both lines are now corrected.</li>
+      </ul>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 30px">Bugs the critics found in our originals</h2>
+      <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 14.5px; line-height: 1.5">
+        <sc-for list="{{bugs}}" as="b" hint-placeholder-count="7">
+          <li><strong>{{b.h}}</strong> {{b.t}}</li>
+        </sc-for>
+      </ul>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 12px; border-top: 4px solid #1B1A17; padding-top: 16px">
+    <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 34px">Next builds, smallest first</h2>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px">
+      <sc-for list="{{next}}" as="c" hint-placeholder-count="4">
+        <div style="display: flex; flex-direction: column; gap: 6px; border-top: 2px solid #1B1A17; padding-top: 10px">
+          <span class="k">{{c.n}}</span>
+          <strong class="serif" style="font-size: 20px; font-weight: 500; line-height: 1.2">{{c.h}}</strong>
+          <span style="font-size: 14px; line-height: 1.5">{{c.t}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <footer class="mono" style="margin-top: auto; display: flex; justify-content: space-between; font-size: 11px; color: #57534B; border-top: 1px solid #1B1A17; padding-top: 8px">
+    <span>Method: each copier saw 7 screenshots and the file format, never the source or spec, with ~35 tool calls as a stand-in for “a day with a chatbot”. Critics probed originals and copies with scripts and independent recomputation.</span>
+    <span>PROTOTYPE · evidence</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2200}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const rows = [
+      { b: 'X1 · Every number knows why', cost: '~12 calls', match: 'All panels, the WHY trees, the reverse search — 4,699 combinations and the same 33 doors; payroll identical on all 72 distinct doors.', miss: 'An unprinted first-apron line ($205.0M invented), so 2 of 1,865 legal combinations differ; “tools left” banded and wrong on 26 of 72 branches; two self-checks that can never fail.', v: 'KNOWN IDEA, NEW PLACE' },
+      { b: 'X2 · Knowledge is a property of the seat', cost: '~12 calls', match: 'Layout, the full negotiation, the diff between seats, the refused leak — and no reachable leak on any path the critic drove.', miss: '16 of 25 self-checks hard-coded to pass; each seat’s “read” is a fixed string, not reasoning from its own facts; the league’s verdict never reaches the parties.', v: 'INNOVATIVE, THIN MOAT' },
+      { b: 'X3 · The same World for everyone', cost: '~20 calls', match: 'Two panes, split-flap clocks, a real pure fold: the same hashes across two page loads, acts after t never change state(t).', miss: 'Its hash covers a summary, not the state; the first five days hand-authored but labelled “seeded”; its World’s hashes never match ours.', v: 'KNOWN IDEA, NEW PLACE' },
+      { b: 'X4 · The record can prove itself', cost: '~22 calls', match: 'A real SHA-256 chain with seals identical to ours — the page prints its own formula — and the correct tamper cascade.', miss: 'Branch heads in an invented scheme, so the copy and the original can’t verify each other’s branches; guest verdicts hard-coded.', v: 'KNOWN IDEA, NEW PLACE' }
+    ];
+    const moat = [
+      { n: '1 · Identity', h: 'One canonical World and record that everyone can check against', t: 'A copy’s World never has our hash and its branches never verify against our record. That only matters once many people seal their work to one canonical World — so the World has to exist and be used.', now: 'Built, not yet published: the Live World (a separate page) is one shared, persistent World that real people can join, hold seats in and act in. It passes its local tests; it has not yet run on the real shared store.' },
+      { n: '2 · Verified breadth', h: 'A sourced, dated rulebook, correct on both sides of every trade', t: 'The copy got the rules wherever the screen printed them and guessed wherever it didn’t. The real moat is the rules nobody prints: post-trade apron status, the actual matching brackets, hard caps, applied to both teams — and a test suite of real, dated trades the engine must rule on correctly.', now: 'Seed exists: BOW Economics Live already carries sourced, dated facts (world.ts, asOf per row) and an engine proven by exhaustive sweep.' },
+      { n: '3 · Accumulated history', h: 'Acts, seats, branches and lapses that actually happened', t: 'A record of what real people did in real seats — and what they didn’t do before a deadline — cannot be copied because it happened. Every day a World runs, the gap grows.', now: 'Begins the moment the Live World’s owner starts it. Nothing before that date exists.' }
+    ];
+    const bugs = [
+      { h: 'X1 · Denver’s side ignored.', t: 'Legal for Boston only: the board would let a team dump Tatum on Denver for a minimum contract — a false lesson.' },
+      { h: 'X1 · Apron status judged before the trade.', t: 'The 2023 CBA judges it after; one sequence counted legal that isn’t, twenty legal ones refused (no door changed).' },
+      { h: 'X2 · Existence leaks.', t: 'Gaps in fact numbers and a six-minute jump tell Boston that Denver wrote something private, and when.' },
+      { h: 'X2 · Guards display, not inference.', t: 'Laundering a value through an act or reading a module constant passes all 25 checks.' },
+      { h: 'X3 · Lapse leaves a phantom charge.', t: 'Letting the call-up lapse keeps $2.4M on the books and silently puts Boston over the second apron.' },
+      { h: 'X3 · Not tied to real time.', t: 'Every visitor opens at World day 0; “runs while you’re away” is only the slider.' },
+      { h: 'X4 · 32-bit verification and no anchor.', t: 'Verify compares 8 hex digits (a 6-digit collision took 68 s); the record is a constant inside the same page, so a doctored page verifies itself.' }
+    ];
+    const next = [
+      { n: 'A · built', h: 'Run one World for real', t: 'Built, awaiting the founder’s go to publish. The Live World: shared store, seats by first-come lease, private boards the platform keeps private (even from the owner), everyone’s hash compared live, history from day one.' },
+      { n: 'B', h: 'Both sides of every trade', t: 'Move the rules into BOW Economics Live’s engine: post-trade apron status, real matching brackets, hard caps for both teams; add 10–15 real, dated, sourced 2023–26 trades it must rule on correctly.' },
+      { n: 'C', h: 'A record someone signs', t: 'Sign the record head and the World seed; carry a branch in its link; verify the full 64-character hash; append corrections, never edit.' },
+      { n: 'D', h: 'Secrecy that survives inference', t: 'Taint every fact derived from a private one; hide existence and timing; test with thirty students making open-ended moves.' }
+    ];
+    return { rows: rows, moat: moat, bugs: bugs, next: next };
+  }
+}
+</script>
+</body>
+</html>

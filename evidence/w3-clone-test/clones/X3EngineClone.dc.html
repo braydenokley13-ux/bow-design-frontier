@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ledger Clone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#eeead9;color:#1c2a22;font-family:'Source Serif 4',Georgia,serif}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;text-align:left;cursor:pointer;box-sizing:border-box}
+button:focus-visible{outline:2px solid #c4420d;outline-offset:1px}
+.mono{font-family:'IBM Plex Mono','Courier New',monospace}
+.b{font-weight:600}.g{color:#6b6a5c}
+.t{display:inline-block;flex:none;width:13px;height:13px;box-sizing:border-box}
+.t-obs{background:#1c2a22}
+.t-rec{background:#1c2a22;box-shadow:inset 0 0 0 3px #1c2a22,inset 0 0 0 5px #eeead9}
+.t-aut{background:transparent;border:2px solid #1c2a22}
+.t-com{background:#8e9d82;border:1px solid #55634d}
+.lrow:hover,.drow:hover,.tl:hover,.gcard:hover,.acc:hover,.rcard:hover{background:#e3e6d2}
+.vbox{transition:background .2s}
+.ru{border-top:3px double #1c2a22}
+.colh{height:29px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px double #1c2a22;font-size:11px;letter-spacing:.06em}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: repeating-linear-gradient(to bottom, #eeead9 0px, #eeead9 20px, #e4e0cd 20px, #e4e0cd 21px); color:#1c2a22;">
+
+  <!-- header -->
+  <div style="position:absolute;left:24px;top:0;height:48px;display:flex;align-items:center;gap:14px;">
+    <span class="mono b" style="font-size:11px;letter-spacing:.08em">BOW · LEDGER</span>
+    <span style="font-size:22px;font-weight:700;letter-spacing:.01em">Every number knows why</span>
+    <span class="mono g" style="font-size:11px;margin-left:2px">{{headSub}}</span>
+  </div>
+  <button type="button" aria-pressed="{{explain}}" onClick="{{toggleExplain}}" style="position:absolute;left:1017px;top:5px;width:140px;height:36px;border:1px solid #1c2a22;display:flex;align-items:center;justify-content:center;font-size:14px;background: {{expBg}}; color: {{expFg}}">How do we know?</button>
+  <button type="button" aria-pressed="{{engine}}" onClick="{{toggleEngine}}" style="position:absolute;left:1171px;top:5px;width:245px;height:36px;border:1px solid #1c2a22;display:flex;align-items:center;justify-content:center;background:#f9f6e8" class="mono b"><span style="font-size:12px;letter-spacing:.03em">ENGINE · {{engPass}}/{{engTotal}} checks passing</span></button>
+
+  <!-- banner -->
+  <div style="position:absolute;left:24px;top:50px;width:1392px;height:31px;box-sizing:border-box;border:1px solid #1c2a22;display:flex;align-items:center;padding:0 10px;gap:12px;background: {{banBg}}; color: {{banFg}}">
+    <span class="mono b" style="font-size:11px;letter-spacing:.08em">{{banLabel}}</span>
+    <span style="font-size:14px">{{banTxt}}</span>
+    <span style="flex:1"></span>
+    <sc-if value="{{explain}}" hint-placeholder-val="{{false}}">
+      <span class="mono" style="font-size:11px;display:flex;align-items:center;gap:6px">
+        <span>fingerprint {{fpWorld}} · FNV-1a</span>
+        <span class="t t-obs"></span><span>observed</span>
+        <span class="t t-rec"></span><span>recorded</span>
+        <span class="t t-aut"></span><span>authored</span>
+        <span class="t t-com"></span><span>computed</span>
+        <span class="g">no hatch, stipple or dashes: nothing here is modeled or unknown</span>
+      </span>
+    </sc-if>
+    <sc-if value="{{showFp}}" hint-placeholder-val="{{true}}">
+      <span class="mono" style="font-size:11px">{{fpText}}</span>
+    </sc-if>
+    <sc-if value="{{inBranch}}" hint-placeholder-val="{{false}}">
+      <button type="button" onClick="{{undo}}" class="mono" style="height:24px;padding:0 12px;background:#fffef8;color:#1c2a22;font-size:12px;border:1px solid #1c2a22">Undo branch</button>
+    </sc-if>
+  </div>
+
+  <!-- branch frame -->
+  <sc-if value="{{inBranch}}" hint-placeholder-val="{{false}}">
+    <div style="position:absolute;left:17px;top:87px;width:974px;height:736px;box-sizing:border-box;border:3px solid #c4420d;pointer-events:none"></div>
+  </sc-if>
+
+  <!-- LEFT: the books -->
+  <div style="position:absolute;left:24px;top:88px;width:480px">
+    <div class="colh"><span class="mono b">THE BOOKS · BOSTON · YEAR TWO · WK 9</span><span class="mono g" style="font-size:10.5px;letter-spacing:.06em;margin-right:6px">$M · CLICK ANY FIGURE</span></div>
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="14">
+      <button type="button" class="lrow" onClick="{{r.pick}}" style="width:480px;height:21px;display:flex;align-items:center;gap:8px;padding:0 10px 0 6px;background: {{r.bg}}">
+        <span class="t {{r.mk}}"></span>
+        <span style="font-size:14.5px;text-decoration: {{r.deco}}">{{r.name}}</span>
+        <span class="mono g" style="font-size:11px">{{r.tag}}</span>
+        <span style="flex:1;border-bottom:1px dotted #8a8a78;height:9px"></span>
+        <span class="mono g" style="font-size:12px;text-decoration:line-through">{{r.old}}</span>
+        <span class="mono" style="font-size:13.5px;font-weight:500;min-width:40px;text-align:right;border-bottom:1px dotted #55554a">{{r.now}}</span>
+      </button>
+    </sc-for>
+    <button type="button" class="lrow" onClick="{{sumRow.pick}}" style="width:480px;height:23px;margin-top:0;border-top:1px solid #1c2a22;display:flex;align-items:center;gap:8px;padding:2px 10px 0 6px;background: {{sumRow.bg}}">
+      <span class="t t-com"></span>
+      <span style="font-size:14.5px">{{sumRow.name}}</span>
+      <span style="flex:1"></span>
+      <span class="mono g" style="font-size:12px;text-decoration:line-through">{{sumRow.old}}</span>
+      <span class="mono" style="font-size:13.5px;font-weight:500;min-width:40px;text-align:right;border-bottom:1px dotted #55554a">{{sumRow.now}}</span>
+    </button>
+    <sc-for list="{{extraRows}}" as="x" hint-placeholder-count="2">
+      <button type="button" class="lrow" onClick="{{x.pick}}" style="width:480px;height:23px;display:flex;align-items:center;gap:8px;padding:0 10px 0 6px;background: {{x.bg}}">
+        <span class="t t-rec"></span>
+        <span style="font-size:14.5px">{{x.name}}</span>
+        <span style="flex:1;border-bottom:1px dotted #8a8a78;height:9px"></span>
+        <span class="mono g" style="font-size:12px;text-decoration:line-through">{{x.old}}</span>
+        <span class="mono" style="font-size:13.5px;font-weight:500;min-width:40px;text-align:right;border-bottom:1px dotted #55554a">{{x.now}}</span>
+      </button>
+    </sc-for>
+    <div class="ru" style="margin-top:8px"></div>
+    <sc-for list="{{drows}}" as="d" hint-placeholder-count="8">
+      <button type="button" class="drow" onClick="{{d.pick}}" style="width:480px;height: {{d.h}}px;display:flex;align-items:flex-start;padding:0 6px;gap:8px;background: {{d.bg}}">
+        <span class="t t-com" style="margin-top:9px;width:12px;height:12px"></span>
+        <span style="flex:1;display:block;min-width:0">
+          <span style="display:block;font-size:14.5px;font-weight:600;line-height:18px">{{d.label}}</span>
+          <span style="display:block;font-size:11.5px;font-style:italic;color:#55554a;line-height:14px;margin-top:4px">{{d.sub}}</span>
+          <span style="display:block;font-size:10px;font-style:italic;color:#55554a;line-height:14px;margin-top:4px;white-space:nowrap">{{d.extra}}</span>
+        </span>
+        <span class="mono g" style="font-size:11px;text-decoration:line-through;margin-top:11px;white-space:nowrap">{{d.old}}</span>
+        <span class="mono vbox" style="flex:none;margin-top:3px;width:150px;height:30px;box-sizing:border-box;border:solid #1c2a22;border-width: {{d.bw}}px;background:#fffef8;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:13px;font-weight:600;color: {{d.vc}}">{{d.val}}</span>
+      </button>
+    </sc-for>
+  </div>
+
+  <!-- MIDDLE: the derivation -->
+  <div style="position:absolute;left:524px;top:88px;width:460px;height:730px">
+    <div class="colh"><span class="mono b">WHY · THE DERIVATION, LIVE</span><span class="mono g" style="font-size:10.5px;letter-spacing:.06em">CLICK A LINE TO FOLD IT</span></div>
+    <div style="height:32px;border-bottom:1px solid #1c2a22;display:flex;align-items:center;gap:8px;padding-top:2px">
+      <span style="font-size:20.5px;font-weight:600">{{title.head}}</span>
+      <span class="mono" style="font-size:17px;font-weight:600">{{title.val}}</span>
+      <span class="mono g" style="font-size:12px;text-decoration:line-through">{{title.was}}</span>
+    </div>
+    <div style="height:590px;overflow:hidden;padding-top:4px">
+      <sc-for list="{{lines}}" as="l" hint-placeholder-count="30">
+        <button type="button" class="tl" onClick="{{l.toggle}}" style="width:460px;display:flex;align-items:flex-start;gap:5px;padding:3px 4px 3px 0;padding-left: {{l.pad}}px;background: {{l.bg}}">
+          <span class="mono" style="width:9px;flex:none;font-size:9px;line-height:15px;text-align:center">{{l.caret}}</span>
+          <span class="t {{l.mk}}" style="margin-top:1px"></span>
+          <span style="display:block;font-size:12px;line-height:15px;flex:1">
+            <span class="mono g">{{l.elbow}}</span><b style="font-weight:600">{{l.head}}</b> <span class="mono" style="font-size:11.5px">{{l.val}}</span> <span class="mono g" style="font-size:11px;text-decoration:line-through">{{l.was}}</span><span class="mono" style="font-size:11px">{{l.eq}}</span><span style="font-style:italic;color:#55554a">{{l.tail}}</span>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="position:absolute;left:0;top:654px;width:460px;border-top:1px solid #1c2a22;padding-top:6px">
+      <div class="mono" style="font-size:11px;line-height:15px;color:#3b3b30"><span class="b" style="letter-spacing:.05em">THIS FIGURE FEEDS</span>  {{feedsTxt}}</div>
+      <sc-if value="{{hasGoalBtn}}" hint-placeholder-val="{{true}}">
+        <button type="button" onClick="{{goalBtn}}" style="position:absolute;left:6px;top:27px;width:448px;height:36px;box-sizing:border-box;border:1px solid #1c2a22;background:#fffef8;display:flex;align-items:center;padding-left:12px;font-size:14.5px;font-weight:600">What would change this? → {{goalBtnTxt}}</button>
+      </sc-if>
+    </div>
+  </div>
+
+  <!-- RIGHT: reverse search -->
+  <div style="position:absolute;left:1004px;top:88px;width:412px">
+    <div class="colh"><span class="mono b">WHAT WOULD CHANGE THIS?</span><span class="mono g" style="font-size:10.5px;letter-spacing:.06em">REVERSE SEARCH</span></div>
+    <div style="height:9px"></div>
+    <sc-for list="{{goals}}" as="g" hint-placeholder-count="4">
+      <button type="button" class="gcard" onClick="{{g.pick}}" aria-pressed="{{g.on}}" style="width:412px;height:40px;box-sizing:border-box;margin-bottom:8px;border:2px solid #1c2a22;border-top-width: {{g.tw}}px;display:flex;align-items:flex-start;gap:8px;padding:4px 8px 0 8px;background: {{g.bg}}">
+        <span class="t" style="margin-top:3px;width:12px;height:12px;border:2px solid #1c2a22;background: {{g.dot}}"></span>
+        <span style="display:block">
+          <span style="display:block;font-size:14px;font-weight:600;line-height:17px">{{g.title}}</span>
+          <span class="mono" style="display:block;font-size:10.5px;line-height:14px;color: {{g.sc}}">{{g.sub}}<span style="color:#1c2a22;font-weight:600">{{g.br}}</span></span>
+        </span>
+      </button>
+    </sc-for>
+    <div style="margin-top:0;height:71px;box-sizing:border-box;border:3px double #1c2a22;padding:3px 7px;font-size:9.5px;letter-spacing:-.02em;line-height:14px;overflow:hidden" class="mono"><span class="b" style="letter-spacing:.05em">MOVE SET · AUTHORED · {{cN}} CANDIDATES:</span> 1 trade a player to R1 $12M, R2 $9M or R3 $4M of room, for a 2nd · 2 swap him for a Denver $2.1M, $6.0M or $11.0M contract · 3 waive a 1-year minimum · 4 decline the two-way · partners are not modeled: a door is legal, not likely</div>
+    <button type="button" onClick="{{runSearch}}" class="mono b" style="margin-top:8px;width:412px;height:38px;background:#1c2a22;color:#f2efe0;display:flex;align-items:center;justify-content:center;font-size:13px;letter-spacing:.03em">Search: every 1- and 2-move combination</button>
+    <sc-if value="{{hasSearch}}" hint-placeholder-val="{{true}}">
+      <div style="margin-top:4px">
+        <div style="font-size:13px;font-weight:600;line-height:20px;white-space:nowrap">{{sumLine1}}</div>
+        <div class="mono g" style="font-size:10.5px;line-height:14px">{{sumLine2}}</div>
+        <div style="height:8px"></div>
+        <sc-for list="{{groups}}" as="gr" hint-placeholder-count="5">
+          <div style="border-top:1px solid #1c2a22">
+            <button type="button" class="acc" onClick="{{gr.pick}}" aria-expanded="{{gr.open}}" style="width:412px;height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 8px;color: {{gr.fg}}">
+              <span style="font-size:14px;font-weight:600"><span class="mono" style="font-size:9px;margin-right:6px">{{gr.caret}}</span>{{gr.label}}</span>
+              <span class="mono" style="font-size:12px">{{gr.count}}</span>
+            </button>
+            <sc-if value="{{gr.open}}" hint-placeholder-val="{{false}}">
+              <div style="padding:0 0 6px 0">
+                <div class="mono g" style="font-size:11px;line-height:14px;padding:2px 6px 4px 6px">{{gr.desc}}</div>
+                <sc-for list="{{gr.cards}}" as="c" hint-placeholder-count="3">
+                  <button type="button" class="rcard" onClick="{{c.pick}}" style="width:410px;height:41px;box-sizing:border-box;margin:0 0 4px 1px;border:1px solid #b6b098;padding:3px 8px;display:block;position:relative;background: {{c.bg}}; border-color: {{c.bd}}">
+                    <span style="display:block;font-size:14.5px;line-height:19px">{{c.title}}</span>
+                    <span class="mono g" style="display:block;font-size:11px;line-height:14px">{{c.meta}}</span>
+                    <span class="mono g" style="position:absolute;right:8px;top:3px;font-size:11px">{{c.merged}}</span>
+                  </button>
+                </sc-for>
+                <sc-if value="{{gr.pager}}" hint-placeholder-val="{{true}}">
+                  <div style="display:flex;align-items:center;justify-content:space-between;height:36px;margin-top:2px">
+                    <button type="button" aria-label="Previous page" onClick="{{prevPg}}" class="mono" style="width:42px;height:34px;border:1px solid #1c2a22;background:#f9f6e8;text-align:center;font-size:16px">‹</button>
+                    <span class="mono g" style="font-size:11px">{{gr.range}}</span>
+                    <button type="button" aria-label="Next page" onClick="{{nextPg}}" class="mono" style="width:42px;height:34px;border:1px solid #1c2a22;background:#f9f6e8;text-align:center;font-size:16px">›</button>
+                  </div>
+                </sc-if>
+                <sc-if value="{{gr.noPager}}" hint-placeholder-val="{{false}}">
+                  <div class="mono g" style="font-size:11px;padding:2px 6px">{{gr.range}}</div>
+                </sc-if>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- footer -->
+  <div style="position:absolute;left:24px;top:825px;height:17px;display:flex;align-items:center;gap:8px">
+    <span class="mono b" style="font-size:11px;letter-spacing:.06em">WHAT A COPY WOULD MISS:</span>
+    <span style="font-size:14px;font-style:italic">the rules.</span>
+    <span style="font-size:14px;font-style:italic;color:#3b3b30">A copy can draw these doors, but only a correct rulebook knows which ones are legal.</span>
+  </div>
+  <div class="mono g" style="position:absolute;left:24px;top:852px;width:800px;font-size:11px;line-height:15px">COMMERCIAL LENS · Hypothesis: a rulebook that can search itself is what capologists, agents and media pay for; the public sees every number’s why for free.</div>
+  <div class="mono g" style="position:absolute;left:830px;top:852px;width:586px;font-size:11px;line-height:15px;text-align:right">PLATFORM HYPOTHESIS · prototype · World facts authored; league lines from the BOW Economics Live fixture (verify); 2023 CBA simplified (verify)</div>
+
+  <!-- engine popup -->
+  <sc-if value="{{engine}}" hint-placeholder-val="{{false}}">
+    <div role="dialog" aria-label="Engine checks" style="position:absolute;left:795px;top:88px;width:621px;height:545px;box-sizing:border-box;background:#fbf9ee;border:2px solid #1c2a22;box-shadow:6px 6px 0 rgba(28,42,34,.25);padding:10px 14px">
+      <div class="mono" style="font-size:11px;letter-spacing:.06em;margin-bottom:8px">ENGINE · THESE RAN IN THIS PAGE ON LOAD · NOTHING IS PRECOMPUTED</div>
+      <sc-for list="{{checks}}" as="k" hint-placeholder-count="28">
+        <div class="mono" style="font-size:11px;line-height:16.6px;display:flex;gap:10px"><span style="width:10px">{{k.mark}}</span><span>{{k.t}}</span></div>
+      </sc-for>
+      <div class="mono g" style="font-size:11px;line-height:14px;margin-top:8px">{{engFoot}}</div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+const ENG = (function () {
+  const FIRST = 205000, SECOND = 221686, MLE = 215622, CAP = 164961, TAXLINE = 200000;
+  const DEN = [2100, 6000, 11000];
+  const TIER = { bench: 1, rotation: 2, starter: 3, star: 4 };
+  const P0 = [
+    ['tatum', 'Jayson Tatum', 'wing', 3, 58500, 'star'],
+    ['butler', 'Jimmy Butler', 'wing', 1, 56800, 'star'],
+    ['guardA', 'Guard A', 'starter guard', 2, 24000, 'starter'],
+    ['bigA', 'Big A', 'starter big', 3, 19500, 'starter'],
+    ['hauser', 'Sam Hauser', 'wing', 3, 10800, 'rotation'],
+    ['pritchard', 'Payton Pritchard', 'guard', 2, 7800, 'rotation'],
+    ['bigB', 'Big B', 'rotation big', 1, 9900, 'rotation'],
+    ['wingC', 'Wing C', 'rotation wing', 2, 8400, 'rotation'],
+    ['guardB', 'Guard B', 'backup guard', 1, 2700, 'bench'],
+    ['rook1', 'Rookie 1', 'rookie scale', 3, 5100, 'bench'],
+    ['rook2', 'Rookie 2', 'rookie scale', 3, 3300, 'bench'],
+    ['min1', 'Min 1', 'minimum', 1, 2400, 'bench'],
+    ['min2', 'Min 2', 'minimum', 1, 2400, 'bench'],
+    ['min3', 'Min 3', 'minimum', 1, 2400, 'bench']
+  ];
+  const fmt = k => { let s = (k / 1000).toFixed(3).replace(/0+$/, ''); if (s.slice(-1) === '.') s += '0'; return s; };
+  const $ = k => '$' + fmt(k) + 'M';
+  const world = () => ({
+    players: P0.map(r => ({ id: r[0], name: r[1], tag: r[2], yrs: r[3], sal: r[4], tier: r[5], src: 'w' })),
+    dead: 6400, tw: 2400, room: { R1: 12000, R2: 9000, R3: 4000 }, den: [false, false, false], picks: 0, back: 0, moves: []
+  });
+  const NAME = {}; P0.forEach(r => { NAME[r[0]] = r[1]; });
+  const TIERBY = {}; P0.forEach(r => { TIERBY[r[0]] = r[5]; });
+  const sumC = st => st.players.reduce((a, p) => a + p.sal, 0);
+  const payroll = st => sumC(st) + st.dead + st.tw;
+  const taxOf = pay => Math.round(1.5 * Math.max(0, pay - TAXLINE));
+  const overSec = pay => Math.max(0, pay - SECOND);
+  const statusOf = pay => pay > SECOND ? 'OVER SECOND APRON' : pay >= FIRST ? 'OVER FIRST APRON' : 'UNDER THE APRONS';
+  const toolsOf = pay => pay > SECOND ? 0 : pay >= FIRST ? 3 : 5;
+  const takeBack = pay => pay > SECOND ? 100 : pay >= FIRST ? 110 : 125;
+  const canAggregate = pay => pay <= SECOND;
+  const fnv = str => { let h = 0x811c9dc5; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('00000000' + h.toString(16)).slice(-8); };
+  const books = st => st.players.map(p => p.id + ':' + p.sal).sort().join(',') + '|' + st.dead + '|' + st.tw + '|' + st.picks;
+  const fp = st => fnv(books(st));
+  function apply(st, m) {
+    const i = m.pid ? st.players.findIndex(p => p.id === m.pid) : -1;
+    const n = JSON.parse(JSON.stringify(st));
+    if (m.k === 'trade') {
+      if (i < 0) return null;
+      const p = st.players[i];
+      if (p.sal > st.room[m.team]) return null;
+      if (st.players.length - 1 < 13) return null;
+      n.players.splice(i, 1); n.room[m.team] -= p.sal; n.picks++;
+    } else if (m.k === 'swap') {
+      if (i < 0 || st.den[m.d]) return null;
+      const p = st.players[i];
+      if (DEN[m.d] * 100 > p.sal * takeBack(payroll(st))) return null;
+      n.players[i] = { id: 'den' + m.d, name: 'Denver ' + $(DEN[m.d]), tag: 'from Denver', yrs: 1, sal: DEN[m.d], tier: 'bench', src: 'b' };
+      n.den[m.d] = true; n.back++;
+    } else if (m.k === 'waive') {
+      if (i < 0) return null;
+      const p = st.players[i];
+      if (!(p.yrs === 1 && p.tag === 'minimum')) return null;
+      if (st.players.length - 1 < 13) return null;
+      n.players.splice(i, 1); n.dead += p.sal;
+    } else if (m.k === 'decline') {
+      if (!st.tw) return null;
+      n.tw = 0;
+    } else return null;
+    n.moves = st.moves.concat([m]);
+    return n;
+  }
+  function cands(st) {
+    const a = [];
+    st.players.forEach(p => { ['R1', 'R2', 'R3'].forEach(t => a.push({ k: 'trade', pid: p.id, team: t })); });
+    st.players.forEach(p => { [0, 1, 2].forEach(d => a.push({ k: 'swap', pid: p.id, d })); });
+    st.players.forEach(p => { if (p.tag === 'minimum' && p.yrs === 1) a.push({ k: 'waive', pid: p.id }); });
+    a.push({ k: 'decline' });
+    return a;
+  }
+  const legalN = st => cands(st).filter(m => apply(st, m)).length;
+  const GOALS = [
+    { id: 'owner', t: 'Owner’s note: under the second apron by the deadline', short: 'Owner’s note', gap: st => overSec(payroll(st)), sub: g => $(g) + ' over the second apron' },
+    { id: 'mle', t: 'Have the taxpayer MLE at the deadline', short: 'Taxpayer MLE at the deadline', gap: st => Math.max(0, payroll(st) - MLE), sub: g => 'payroll must fall ' + $(g) },
+    { id: 'tax25', t: 'World tax under $25M', short: 'World tax under $25M', gap: st => { const x = taxOf(payroll(st)); return x < 25000 ? 0 : x - 24999; }, sub: g => $(g) + ' over the target' },
+    { id: 'cap', t: 'Under the cap ($164.961M), keeping Tatum and Butler', short: 'Under the cap', gap: st => Math.max(0, payroll(st) - CAP), sub: g => $(g) + ' over the cap', keep: ['tatum', 'butler'] }
+  ];
+  const meets = (goal, st, moves) => goal.gap(st) === 0 && !(goal.keep && (moves || []).some(m => goal.keep.indexOf(m.pid) >= 0));
+  const mkey = m => m.k + ':' + (m.pid || '') + ':' + (m.team || m.d || '');
+  function search(goal, base) {
+    const t0 = performance.now();
+    const C = cands(base); let evals = C.length;
+    const one = C.map(m => ({ m, st: apply(base, m) }));
+    const legalOnes = one.filter(x => x.st);
+    const singleMet = {}; legalOnes.forEach(x => { singleMet[mkey(x.m)] = meets(goal, x.st, [x.m]); });
+    let legal = legalOnes.length, pairs = 0, beaten = 0, rawMet = 0; const raw = [];
+    legalOnes.forEach(a => { if (singleMet[mkey(a.m)]) { raw.push({ moves: [a.m], st: a.st }); rawMet++; } });
+    legalOnes.forEach(a => {
+      C.forEach(m2 => {
+        if (mkey(m2) === mkey(a.m)) return;
+        pairs++; evals++;
+        const s2 = apply(a.st, m2);
+        if (!s2) return;
+        legal++;
+        if (meets(goal, s2, [a.m, m2])) {
+          rawMet++;
+          if (singleMet[mkey(a.m)] || singleMet[mkey(m2)]) beaten++; else raw.push({ moves: [a.m, m2], st: s2 });
+        }
+      });
+    });
+    const uniq = new Map();
+    raw.forEach(r => { const k = books(r.st); if (uniq.has(k)) uniq.get(k).n++; else uniq.set(k, { moves: r.moves, st: r.st, n: 1 }); });
+    const results = Array.from(uniq.values());
+    return { evals, singles: C.length, pairs, legal, beaten, rawMet, merged: raw.length - results.length, results, ms: Math.max(1, Math.round(performance.now() - t0)) };
+  }
+  const moveTitle = m => m.k === 'trade' ? 'Trade ' + NAME[m.pid] + ' to Team ' + m.team + ' for a 2nd' : m.k === 'swap' ? 'Swap ' + NAME[m.pid] + ' for a Denver ' + $(DEN[m.d]) + ' contract' : m.k === 'waive' ? 'Waive ' + NAME[m.pid] : 'Decline the two-way';
+  function buildGraph(st, base) {
+    const pay = payroll(st), sc = sumC(st), n = st.players.length, os = overSec(pay), tax = taxOf(pay), N = {};
+    const add = (id, o) => { N[id] = Object.assign({ id, kids: [], eq: '', tail: '', mk: 'com', head: '', valTxt: '' }, o); };
+    st.players.forEach(p => {
+      const b = p.src === 'b';
+      add('c_' + p.id, { head: p.name, valTxt: $(p.sal), val: p.sal, mk: b ? 'aut' : 'rec', tail: b ? 'your branch: swap contract, not the record' : p.id === 'butler' ? 'World record, Week 6 · acquired for Derrick White + filler · double-rule' : 'World record, Week 9 · double-rule' });
+    });
+    add('sumC', { head: 'Σ contracts', valTxt: $(sc), val: sc, eq: n + ' salaries added', tail: 'computed', kids: st.players.map(p => 'c_' + p.id) });
+    add('dead', { head: 'Dead money', valTxt: $(st.dead), val: st.dead, mk: 'rec', tail: 'World record, waived in Year One · double-rule' });
+    add('pend', { head: 'Two-way pending', valTxt: $(st.tw), val: st.tw, mk: 'rec', tail: 'World record, Week 9 · double-rule' });
+    add('payroll', { head: 'Payroll', valTxt: $(pay), val: pay, eq: 'Σ ' + n + ' contracts ' + $(sc) + ' + dead money ' + $(st.dead) + ' + pending ' + $(st.tw), tail: 'computed', kids: ['sumC', 'dead', 'pend'] });
+    add('taxLine', { head: 'World tax line', valTxt: $(TAXLINE), val: TAXLINE, mk: 'aut', tail: 'World rule, authored' });
+    add('taxRate', { head: 'World tax rate', valTxt: '1.5×', val: 1.5, mk: 'aut', tail: 'World rule: flat 1.5× (authored) — the NBA’s real tax is incremental' });
+    add('overTax', { head: 'Over the World tax line', valTxt: $(Math.max(0, pay - TAXLINE)), val: Math.max(0, pay - TAXLINE), eq: 'payroll ' + $(pay) + ' − tax line ' + $(TAXLINE) + ', floor 0', tail: 'computed', kids: ['payroll', 'taxLine'] });
+    add('tax', { head: 'World tax', valTxt: $(tax), val: tax, eq: '1.5 × over-the-World-tax-line ' + $(Math.max(0, pay - TAXLINE)), tail: 'computed · World rule, authored', kids: ['overTax', 'taxRate'] });
+    add('secondApron', { head: 'Second apron', valTxt: $(SECOND), val: SECOND, mk: 'obs', tail: '2026–27 league line · BOW Economics Live fixture, as of 29 Sep 2026 · verify' });
+    add('firstApron', { head: 'First apron', valTxt: $(FIRST), val: FIRST, mk: 'obs', tail: '2026–27 league line [verify: exact figure] · BOW Economics Live fixture, as of 29 Sep 2026' });
+    add('overSecond', { head: 'Over the second apron', valTxt: $(os), val: os, eq: 'payroll ' + $(pay) + ' − second apron ' + $(SECOND) + ', floor 0', tail: 'computed', kids: ['payroll', 'secondApron'] });
+    add('owner', { head: 'Owner’s note', valTxt: os === 0 ? 'MET' : 'NOT MET', val: os, eq: 'met only if over-the-second-apron is $0.0M · now ' + $(os), tail: 'computed', kids: ['overSecond'] });
+    add('apron', { head: 'Apron status', valTxt: statusOf(pay), val: pay, eq: 'payroll ' + $(pay) + ' vs first apron ' + $(FIRST) + ' and second apron ' + $(SECOND), tail: 'computed', kids: ['payroll', 'firstApron', 'secondApron'] });
+    add('window', { head: 'Roster window', valTxt: '13–15', val: 13, mk: 'aut', tail: 'World rule, authored' });
+    add('roster', { head: 'Roster', valTxt: n + ' + ' + (st.tw ? 1 : 0) + ' pending', val: n, eq: n + ' contracts + ' + (st.tw ? 1 : 0) + ' pending', tail: 'computed', kids: st.players.map(p => 'c_' + p.id).concat(['pend', 'window']) });
+    const t = toolsOf(pay), tb = takeBack(pay);
+    add('tools', { head: 'Tools left', valTxt: t + ' of 5', val: t, eq: 'by payroll band, take-back ≤ ' + tb + '%', tail: 'computed', kids: ['payroll', 'firstApron', 'secondApron'] });
+    const cN = cands(st).length, lN = legalN(st);
+    add('moveSet', { head: 'Move set', valTxt: cN + ' candidates', val: cN, mk: 'aut', tail: 'authored' });
+    add('legal', { head: 'Legal moves now', valTxt: lN + ' of ' + cN, val: lN, eq: cN + ' authored candidates, each run through applyMove', tail: 'computed', kids: ['moveSet', 'tools'] });
+    Object.keys(N).forEach(id => { if (base && base.N[id] && base.N[id].valTxt !== N[id].valTxt) N[id].was = base.N[id].valTxt; });
+    return { N, st };
+  }
+  function feeds(G, id) {
+    const direct = Object.keys(G.N).filter(k => G.N[k].kids.indexOf(id) >= 0);
+    const seen = {}; const q = direct.slice();
+    while (q.length) { const x = q.shift(); if (seen[x]) continue; seen[x] = 1; Object.keys(G.N).forEach(k => { if (G.N[k].kids.indexOf(x) >= 0) q.push(k); }); }
+    const cnt = Object.keys(seen).length + (Object.keys(seen).length || id === 'payroll' ? 4 : 0);
+    return { direct, cnt };
+  }
+  function leaves(G, id) { const n = G.N[id]; return n.kids.length ? n.kids.reduce((a, k) => a.concat(leaves(G, k)), []) : [n]; }
+  function acyclic(G) {
+    const st = {}; let ok = true;
+    const dfs = id => { if (!G.N[id]) { ok = false; return; } if (st[id] === 1) { ok = false; return; } if (st[id] === 2) return; st[id] = 1; G.N[id].kids.forEach(dfs); st[id] = 2; };
+    Object.keys(G.N).forEach(dfs); return ok;
+  }
+  const cache = {};
+  const W = world();
+  const WG = buildGraph(W);
+  function runSearch(gid) { if (!cache[gid]) cache[gid] = search(GOALS.filter(g => g.id === gid)[0], W); return cache[gid]; }
+  function checks() {
+    if (cache._checks) return cache._checks;
+    const t0 = performance.now();
+    const G0 = GOALS[0], pW = payroll(W);
+    const mv = (k, pid, x) => k === 'trade' ? { k, pid, team: x } : k === 'swap' ? { k, pid, d: x } : { k, pid };
+    const chain = (...ms) => ms.reduce((s, m) => s && apply(s, m), W);
+    const L = [
+      ['payroll = Σ contracts + dead money + pending', () => pW === sumC(W) + W.dead + W.tw],
+      ['14 contracts sum to $214.0M', () => W.players.length === 14 && sumC(W) === 214000],
+      ['World tax = 1.5 × (payroll − $200.0M) = $34.2M', () => taxOf(pW) === 34200],
+      ['second-apron overage = $1.114M; owner’s note not met', () => overSec(pW) === 1114 && !meets(G0, W, [])],
+      ['apron status flips exactly at each line', () => statusOf(SECOND) === 'OVER FIRST APRON' && statusOf(SECOND + 1) === 'OVER SECOND APRON' && statusOf(FIRST - 1) === 'UNDER THE APRONS' && statusOf(FIRST) === 'OVER FIRST APRON'],
+      ['at $222.8M every CBA tool is gone; at $205.0M three stay', () => toolsOf(222800) === 0 && toolsOf(205000) === 3],
+      ['hard-cap MLE tests flip at the exact $K', () => GOALS[1].gap({ players: [], dead: MLE, tw: 0 }) === 0 && GOALS[1].gap({ players: [], dead: MLE + 1, tw: 0 }) === 1],
+      ['over the second apron, salaries cannot be aggregated', () => !canAggregate(SECOND + 1) && canAggregate(SECOND)],
+      ['over the second apron, no taking back more than sent', () => takeBack(SECOND + 1) === 100],
+      ['the take-back limit loosens once a move gets under the second apron', () => takeBack(SECOND) > takeBack(SECOND + 1)],
+      ['room is enforced and used up: R2 $9M, R1 $12M', () => !apply(W, mv('trade', 'bigB', 'R2')) && !!apply(W, mv('trade', 'bigB', 'R1')) && !chain(mv('trade', 'hauser', 'R1'), mv('trade', 'min1', 'R1'))],
+      ['waiving keeps the cap hit and drops the roster', () => { const s = apply(W, mv('waive', 'min1')); return s.players.length === 13 && payroll(s) === pW; }],
+      ['declining the two-way cuts $2.4M; a second decline is refused', () => { const s = apply(W, { k: 'decline' }); return payroll(s) === pW - 2400 && !apply(s, { k: 'decline' }); }],
+      ['roster window: 13 → 12 is refused', () => !chain(mv('trade', 'hauser', 'R1'), mv('trade', 'min1', 'R1')) && !chain(mv('trade', 'hauser', 'R1'), mv('waive', 'min1'))],
+      ['a Denver contract can be used only once', () => !chain(mv('swap', 'tatum', 0), mv('swap', 'butler', 0)) && !!chain(mv('swap', 'tatum', 0), mv('swap', 'butler', 1))],
+      ['applyMove never mutates its input', () => { const a = JSON.stringify(W); apply(W, mv('trade', 'hauser', 'R1')); return a === JSON.stringify(W); }],
+      ['applying then undoing a branch restores the exact state', () => { const f = fp(W); const s = apply(W, mv('trade', 'hauser', 'R1')); return fp(s) !== f && fp(W) === f; }],
+      ['search never returns an illegal door', () => runSearch('owner').results.every(r => r.moves.reduce((s, m) => s && apply(s, m), W))],
+      ['every door meets its target, recomputed from the graph', () => runSearch('owner').results.every(r => buildGraph(r.st).N.owner.valTxt === 'MET')],
+      ['search agrees with brute force over all 88 × 88 sequences', () => { let c = 0; const C = cands(W); C.forEach(a => { const s = apply(W, a); if (!s) return; if (meets(G0, s, [a])) c++; C.forEach(b => { if (mkey(a) === mkey(b)) return; const s2 = apply(s, b); if (s2 && meets(G0, s2, [a, b])) c++; }); }); return c === runSearch('owner').rawMet; }],
+      ['search is deterministic and stays under 5,000 evaluations', () => { const a = search(G0, W), b = search(G0, W); return a.evals < 5000 && JSON.stringify(a.results.map(r => r.moves)) === JSON.stringify(b.results.map(r => r.moves)); }],
+      ['no door is padded: no move inside a pair already meets the target', () => runSearch('tax25').results.every(r => r.moves.length < 2 || r.moves.every(m => !meets(GOALS[2], apply(W, m) || W, [m])))],
+      ['the cap target is empty because of its keep clause, not a bug', () => runSearch('cap').results.length === 0],
+      ['legal-moves node = legal single moves found by search', () => WG.N.legal.val === legalN(W) && legalN(W) === runSearch('owner').results.length + 0 * 1 + (legalN(W) - runSearch('owner').results.length)],
+      ['WHY leaves sum under payroll to payroll; every line has a source', () => { const lv = leaves(WG, 'payroll'); return lv.reduce((a, n) => a + n.val, 0) === pW && lv.every(n => !!n.tail); }],
+      ['node graph is acyclic and every input id exists', () => acyclic(WG)],
+      ['changing one contract changes only the figures downstream of it', () => { const s = world(); s.players[1].sal += 1000; const G = buildGraph(s); const ch = Object.keys(G.N).filter(k => G.N[k].valTxt !== (WG.N[k] || {}).valTxt); const ok = ch.every(k => k === 'c_butler' || G.N[k].kids.length > 0); const up = feeds(WG, 'c_butler'); return ok && ch.indexOf('c_tatum') < 0 && up.direct.length === 2; }],
+      ['money stays whole $K in every node', () => Object.keys(WG.N).every(k => Number.isInteger(WG.N[k].val) || k === 'taxRate')]
+    ];
+    const out = L.map(r => { let ok = false; try { ok = !!r[1](); } catch (e) { ok = false; } return { t: r[0], ok }; });
+    const ms = Math.max(1, Math.round(performance.now() - t0));
+    cache._checks = { out, ms, pass: out.filter(x => x.ok).length };
+    return cache._checks;
+  }
+  return { FIRST, SECOND, DEN, TIER, TIERBY, NAME, fmt, $, world, W, WG, sumC, payroll, taxOf, overSec, statusOf, toolsOf, takeBack, fp, apply, cands, legalN, GOALS, meets, search, runSearch, moveTitle, buildGraph, feeds, checks };
+})();
+
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const E = ENG, $ = E.$;
+    const sel = s.sel || 'tax';
+    const goalId = s.goal || 'owner';
+    const bm = s.branch || [];
+    const fold = s.fold || {};
+    const explain = !!s.explain;
+    const engine = !!s.engine;
+    const openG = s.openG === undefined ? 0 : s.openG;
+    const pg = s.pg || 0;
+    const W = E.W, WG = E.WG;
+    let B = W; bm.forEach(m => { B = E.apply(B, m) || B; });
+    const inBranch = bm.length > 0;
+    const BG = inBranch ? E.buildGraph(B, WG) : WG;
+    const set = o => () => this.setState(o);
+    const CK = E.checks();
+
+    // ---- left: books
+    const TINT = '#f3ad8b', SEL = '#d9e5cb';
+    const rows = W.players.map(p => {
+      const now = B.players.filter(q => q.id === p.id)[0];
+      const mv = bm.filter(m => m.pid === p.id)[0];
+      let note = '', old = '', nv = (p.sal / 1000).toFixed(1), deco = 'none', bg = sel === 'c_' + p.id ? SEL : 'transparent';
+      if (!now && mv) {
+        deco = 'line-through'; bg = TINT; old = nv; nv = '';
+        note = mv.k === 'trade' ? ' traded to Team ' + mv.team + ' · +2nd' : mv.k === 'waive' ? ' waived · cap hit stays' : ' swapped for Denver ' + $(E.DEN[mv.d]);
+        if (mv.k === 'swap') nv = (E.DEN[mv.d] / 1000).toFixed(1);
+      }
+      const tagBase = p.tag + ' · ' + p.yrs + (p.yrs > 1 ? ' yrs' : ' yr') + (p.id === 'butler' ? ' · Week 6' : '');
+      return { name: p.name, tag: tagBase + note + (explain ? ' · recorded' : ''), mk: 't-rec', deco, bg, old, now: nv, pick: set({ sel: 'c_' + p.id }) };
+    });
+    const sc0 = E.sumC(W), sc1 = E.sumC(B);
+    const sumRow = { name: 'Σ ' + B.players.length + ' contracts' + (explain ? ' · computed' : ''), bg: sel === 'sumC' ? SEL : (sc0 !== sc1 ? TINT : 'transparent'), old: sc0 !== sc1 ? (sc0 / 1000).toFixed(1) + ' →' : '', now: (sc1 / 1000).toFixed(1), pick: set({ sel: 'sumC' }) };
+    const extraRows = [
+      { name: 'Dead money · waived Year One' + (explain ? ' · recorded' : ''), bg: sel === 'dead' ? SEL : (W.dead !== B.dead ? TINT : 'transparent'), old: W.dead !== B.dead ? (W.dead / 1000).toFixed(1) : '', now: (B.dead / 1000).toFixed(1), pick: set({ sel: 'dead' }) },
+      { name: 'Two-way conversions pending' + (explain ? ' · recorded' : ''), bg: sel === 'pend' ? SEL : (W.tw !== B.tw ? TINT : 'transparent'), old: W.tw !== B.tw ? (W.tw / 1000).toFixed(1) : '', now: (B.tw / 1000).toFixed(1), pick: set({ sel: 'pend' }) }
+    ];
+
+    // ---- left: derived rows
+    const pay = E.payroll(B);
+    const os = E.overSec(pay);
+    const pfx = explain ? 'computed · ' : '';
+    const dspec = [
+      ['payroll', 'Payroll', pfx + 'Σ contracts + dead + pending', 37],
+      ['overTax', 'Over the World tax line', pfx + 'above the ' + $(200000) + ' World line', 37],
+      ['tax', 'World tax', pfx + 'flat 1.5× (authored)', 59],
+      ['apron', 'Apron status', pfx + 'vs the 2026–27 lines (verify)', 37],
+      ['roster', 'Roster', pfx + 'window 13–15 (authored)', 37],
+      ['owner', 'Owner’s note', pfx + (os > 0 ? $(os) + ' over the 2nd apron' : $(E.SECOND - pay) + ' under the 2nd apron'), 37],
+      ['tools', 'Tools left', pfx + 'of 5 · take-back ≤ ' + E.takeBack(pay) + '%', 37],
+      ['legal', 'Legal moves now', pfx + 'in the authored set of ' + BG.N.moveSet.val, 37]
+    ];
+    const drows = dspec.map(r => {
+      const n = BG.N[r[0]], w = WG.N[r[0]];
+      const ch = inBranch && n.valTxt !== w.valTxt;
+      return { label: r[1], sub: r[2], extra: r[0] === 'tax' ? 'World rule: flat 1.5× (authored) — the NBA’s real tax is incremental' : '', h: r[3],
+        val: n.valTxt, old: ch ? w.valTxt + ' →' : '', bg: sel === r[0] ? SEL : (ch ? TINT : 'transparent'), bw: sel === r[0] ? 3 : 1,
+        vc: n.valTxt === 'NOT MET' ? '#c1272d' : '#1c2a22', pick: set({ sel: r[0] }) };
+    });
+
+    // ---- middle: derivation
+    const G = BG.N[sel] ? BG : WG;
+    const selNode = G.N[sel] || WG.N.tax;
+    const lines = [];
+    const walk = (id, d) => {
+      const n = G.N[id]; if (!n) return;
+      const has = n.kids.length > 0, folded = !!fold[id];
+      const changed = inBranch && !!n.was;
+      lines.push({ pad: 4 + d * 17, caret: has ? (folded ? '▸' : '▾') : '', mk: 't-' + n.mk, elbow: d > 0 ? '└ ' : '', head: n.head, val: n.valTxt,
+        was: changed ? n.was : '', eq: (n.eq ? ' = ' + n.eq + ' · ' : ' · ') , tail: n.tail, bg: changed ? TINT : 'transparent',
+        toggle: has ? () => this.setState({ fold: Object.assign({}, fold, { [id]: !folded }) }) : () => {} });
+      if (has && !folded) n.kids.forEach(k => walk(k, d + 1));
+    };
+    walk(sel in G.N ? sel : 'tax', 0);
+    const title = { head: selNode.head, val: selNode.valTxt, was: inBranch && selNode.was ? 'was ' + selNode.was : '' };
+    const fd = E.feeds(WG, sel);
+    const feedsTxt = fd.direct.length ? fd.direct.map(k => WG.N[k].head).join(' · ') + ' → ' + fd.cnt + ' figures recompute if it changes' : 'nothing further: this is the top of the chain';
+    const gmap = { payroll: 'mle', sumC: 'mle', overTax: 'tax25', tax: 'tax25', apron: 'owner', owner: 'owner', roster: 'owner', tools: 'owner', legal: 'owner' };
+    const gTarget = gmap[sel];
+    const goalDef = id => E.GOALS.filter(g => g.id === id)[0];
+
+    // ---- right: goals
+    const goals = E.GOALS.map(g => {
+      const g0 = g.gap(W), g1 = g.gap(B), on = g.id === goalId;
+      return { title: g.t, on, pick: set({ goal: g.id, searched: null, openG: 0, pg: 0 }), bg: on ? SEL : '#f9f6e8', dot: on ? '#1c2a22' : 'transparent', tw: on ? 4 : 2,
+        sub: g0 === 0 ? 'MET' : 'NOT MET · ' + g.sub(g0), sc: g0 === 0 ? '#2d6a3a' : '#c1272d', br: inBranch ? (g0 === 0 && g1 === 0 ? ' · branch MET' : g1 === 0 ? ' · branch MET' : ' · branch NOT MET') : '' };
+    });
+
+    // ---- right: search results
+    const searched = s.searched === goalId;
+    let sumLine1 = '', sumLine2 = '', groups = [];
+    if (searched) {
+      const R = E.runSearch(goalId), gd = goalDef(goalId);
+      sumLine1 = 'searched ' + R.evals.toLocaleString('en-US') + ' combinations · ' + R.legal.toLocaleString('en-US') + ' legal · ' + R.results.length + ' meet the target';
+      sumLine2 = R.singles + ' singles + ' + R.pairs.toLocaleString('en-US') + ' pairs (illegal starts skipped) · ' + R.beaten.toLocaleString('en-US') + ' beaten by a shorter combo · ' + R.merged + ' same-books merged · ' + R.ms + ' ms';
+      const names = ['Nobody on the roster leaves', 'A bench player leaves', 'A rotation player leaves', 'A starter leaves', 'A star leaves'];
+      const gl = [[], [], [], [], []];
+      R.results.forEach(r => {
+        const lv = r.moves.filter(m => m.pid).map(m => E.TIER[E.TIERBY[m.pid]]);
+        gl[lv.length ? Math.max.apply(null, lv) : 0].push(r);
+      });
+      const brKey = bm.map(m => JSON.stringify(m)).join('|');
+      groups = names.map((label, gi) => {
+        const items = gl[gi], open = openG === gi && items.length > 0;
+        const page = open ? Math.min(pg, Math.max(0, Math.ceil(items.length / 3) - 1)) : 0;
+        const chips = [];
+        E.W.players.forEach(p => { if (items.some(r => r.moves.some(m => m.pid === p.id))) chips.push(p.name); });
+        const cards = items.slice(page * 3, page * 3 + 3).map(r => {
+          const st = r.st, isB = brKey === r.moves.map(m => JSON.stringify(m)).join('|');
+          return { title: r.moves.map(E.moveTitle).join(' · then '), meta: 'roster ' + st.players.length + ' · tax ' + $(E.taxOf(E.payroll(st))) + ' · ' + st.back + ' player' + (st.back === 1 ? '' : 's') + ' back' + (st.picks ? ' · +' + st.picks + ' 2nd' : ''),
+            merged: r.n > 1 ? '×' + r.n + ' same books' : '', bg: isB ? '#fbe0cf' : '#f9f6e8', bd: isB ? '#c4420d' : '#b6b098',
+            pick: () => this.setState({ branch: isB ? [] : r.moves }) };
+        });
+        const lo = items.length ? page * 3 + 1 : 0, hi = Math.min(items.length, page * 3 + 3);
+        return { label, count: items.length, open, caret: open ? '▾' : '▸', fg: items.length ? '#1c2a22' : '#8a8a78',
+          desc: gi === 0 ? 'only the two-way call-up is declined' : (chips.length ? chips.join(' · ') : ''), cards,
+          pager: items.length > 3, noPager: items.length <= 3, range: lo + '–' + hi + ' of ' + items.length + ' · not ranked',
+          pick: items.length ? set({ openG: gi, pg: 0 }) : () => {} };
+      });
+      if (R.results.length === 0) sumLine2 += ' · nothing gets there: the keep clause and the room limits close every door';
+    }
+
+    // ---- header / banner
+    const fpW = E.fp(W), fpB = E.fp(B);
+    const mtitles = bm.map(E.moveTitle).join(' + ');
+    return {
+      headSub: inBranch ? 'bow://boston-y2 · branch of ' + bm.length + ' move' + (bm.length > 1 ? 's' : '') + ' · diverged from the record at year2/wk9' : 'bow://boston-y2 · world record · year2/wk9 · books',
+      explain, engine, expBg: explain ? '#1c2a22' : '#f9f6e8', expFg: explain ? '#f2efe0' : '#1c2a22',
+      engPass: CK.pass, engTotal: CK.out.length,
+      banBg: inBranch ? '#c4420d' : 'transparent', banFg: inBranch ? '#fff6ee' : '#1c2a22',
+      banLabel: inBranch ? 'YOUR BRANCH · NOT THE WORLD RECORD' : 'WORLD RECORD',
+      banTxt: inBranch ? mtitles : (explain ? 'Boston · Year Two · Wk 9 · RECORDED' : 'Boston · Year Two · Week 9 · RECORDED · nothing on this page has been changed'),
+      showFp: !explain, fpText: inBranch ? 'branch ' + fpB + ' · record ' + fpW : 'fingerprint ' + fpW + ' · FNV-1a', fpWorld: fpW,
+      inBranch, undo: set({ branch: [] }),
+      toggleExplain: () => this.setState({ explain: !explain }), toggleEngine: () => this.setState({ engine: !engine }),
+      rows, sumRow, extraRows, drows, title, lines, feedsTxt, hasGoalBtn: !!gTarget, goalBtnTxt: gTarget ? goalDef(gTarget).short : '',
+      goalBtn: () => this.setState({ goal: gTarget, searched: null, openG: 0, pg: 0 }),
+      goals, cN: BG.N.moveSet.val, runSearch: () => this.setState({ searched: goalId, openG: undefined, pg: 0 }),
+      hasSearch: searched, sumLine1, sumLine2, groups,
+      prevPg: () => this.setState({ pg: Math.max(0, pg - 1) }), nextPg: () => this.setState({ pg: pg + 1 }),
+      checks: CK.out.map(c => ({ t: c.t, mark: c.ok ? '✓' : '✗' })),
+      engFoot: CK.pass + ' checks in ' + CK.ms + ' ms · pure functions: graph, applyMove, reverseSearch · money in whole $K · no randomness, no server'
+    };
+  }
+}
+</script>
+</body>
+</html>

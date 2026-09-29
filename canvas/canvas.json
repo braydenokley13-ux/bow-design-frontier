@@ -1,784 +1,847 @@
 {
-  "v": 3,
-  "attachments": {},
-  "boards": {
-    "Agent.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "sweep",
-      "title": "P9 \u00b7 Agent \u2014 the seat and its warrant",
-      "w": 1440,
-      "x": 1520,
-      "y": 1020
-    },
-    "ApushBalance.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "apush",
-      "title": "APUSH C \u00b7 The Arithmetic of Union",
-      "w": 1440,
-      "x": 3040,
-      "y": 0
-    },
-    "ApushNotes.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "apush",
-      "title": "APUSH B \u00b7 The Notes",
-      "w": 1440,
-      "x": 1520,
-      "y": 0
-    },
-    "ApushRoom.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "apush",
-      "title": "APUSH A \u00b7 The Room",
-      "w": 1440,
-      "x": 0,
-      "y": 0
-    },
-    "Archaeology.dc.html": {
-      "h": 2180,
-      "page": "thesis",
-      "title": "02 \u00b7 Repository archaeology",
-      "w": 1440,
-      "x": 3040,
-      "y": 0
-    },
-    "Biology.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "sweep",
-      "title": "P4 \u00b7 Biology \u2014 the scale spine",
-      "w": 1440,
-      "x": 0,
-      "y": 0
-    },
-    "BrowserFocus.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "browser",
-      "title": "Browser C \u00b7 The Focus",
-      "w": 1440,
-      "x": 3040,
-      "y": 0
-    },
-    "BrowserRiver.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "browser",
-      "title": "Browser B \u00b7 The River",
-      "w": 1440,
-      "x": 1520,
-      "y": 0
-    },
-    "BrowserSeat.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "browser",
-      "title": "Browser D \u00b7 The Seat",
-      "w": 1440,
-      "x": 4560,
-      "y": 0
-    },
-    "BrowserSentence.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "browser",
-      "title": "Browser A \u00b7 The Sentence",
-      "w": 1440,
-      "x": 0,
-      "y": 0
-    },
-    "Chemistry.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "views",
-      "title": "P3 \u00b7 Equilibrium \u2014 one state, five views",
-      "w": 1440,
-      "x": 0,
-      "y": 0
-    },
-    "Enterprise.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "sweep",
-      "title": "P8 \u00b7 Enterprise \u2014 promise threads",
-      "w": 1440,
-      "x": 0,
-      "y": 1020
-    },
-    "Fork.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "fork",
-      "title": "P5 \u00b7 WHAT IF? \u2014 the 2017 pick",
-      "w": 1440,
-      "x": 0,
-      "y": 0
-    },
-    "Foundry.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "sweep",
-      "title": "P7 \u00b7 Foundry \u2014 the proofing desk",
-      "w": 1440,
-      "x": 3040,
-      "y": 0
-    },
-    "Lens.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "sweep",
-      "title": "P6 \u00b7 Lens / Lab \u2014 the light table",
-      "w": 1440,
-      "x": 1520,
-      "y": 0
-    },
-    "Main.dc.html": {
-      "h": 2260,
-      "is_interactive": true,
-      "page": "thesis",
-      "title": "00 \u00b7 The medium",
-      "w": 1440,
-      "x": 0,
-      "y": 0
-    },
-    "Map.dc.html": {
-      "h": 1500,
-      "is_interactive": true,
-      "page": "thesis",
-      "title": "03 \u00b7 Frontier map",
-      "w": 1440,
-      "x": 4560,
-      "y": 0
-    },
-    "Network.dc.html": {
-      "h": 900,
-      "is_interactive": true,
-      "page": "sweep",
-      "title": "P10 \u00b7 Network \u2014 the clearinghouse",
-      "w": 1440,
-      "x": 3040,
-      "y": 1020
-    },
-    "Packet.dc.html": {
-      "h": 3340,
-      "is_interactive": true,
-      "page": "packet",
-      "title": "Founder tournament packet \u00b7 Wave 1",
-      "w": 1440,
-      "x": 0,
-      "y": 0
-    },
-    "Problems.dc.html": {
-      "h": 1500,
-      "page": "thesis",
-      "title": "01 \u00b7 The hardest problems",
-      "w": 1440,
-      "x": 1520,
-      "y": 0
-    },
-    "SportsProof.dc.html": {
-      "x": 0,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "W2 \u00b7 Boston basketball \u2014 entering the system",
-      "page": "w2sports",
-      "is_interactive": true
-    },
-    "Research.dc.html": {
-      "x": 0,
-      "y": 0,
-      "w": 1440,
-      "h": 2340,
-      "title": "W2 \u00b7 Medium research \u2014 twenty paradigms",
-      "page": "w2research",
-      "is_interactive": true
-    },
-    "Commercial.dc.html": {
-      "x": 1520,
-      "y": 0,
-      "w": 1440,
-      "h": 1320,
-      "title": "W2 K \u00b7 Commercial lens on every frontier",
-      "page": "w2research",
-      "is_interactive": true
-    },
-    "WhatIfPull.dc.html": {
-      "x": 0,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "W1 \u00b7 The Pull",
-      "page": "w2whatif",
-      "is_interactive": true
-    },
-    "WhatIfCouncil.dc.html": {
-      "x": 1520,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "W2 \u00b7 The Council",
-      "page": "w2whatif",
-      "is_interactive": true
-    },
-    "Browser2Clocks.dc.html": {
-      "x": 0,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "B2-1 \u00b7 The Clocks",
-      "page": "w2browser",
-      "is_interactive": true
-    },
-    "Browser2Arrive.dc.html": {
-      "x": 3040,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "B2-3 \u00b7 Arrive",
-      "page": "w2browser",
-      "is_interactive": true
-    },
-    "Browser2Floor.dc.html": {
-      "x": 6080,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "B2-5 \u00b7 The Floor",
-      "page": "w2browser",
-      "is_interactive": true
-    },
-    "EnterNarrowing.dc.html": {
-      "x": 0,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "E1 \u00b7 The Narrowing",
-      "page": "w2enter",
-      "is_interactive": true
-    },
-    "EnterHandover.dc.html": {
-      "x": 1520,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "E2 \u00b7 The Handover",
-      "page": "w2enter",
-      "is_interactive": true
-    },
-    "EnterClock.dc.html": {
-      "x": 3040,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "E3 \u00b7 The Clock Starts",
-      "page": "w2enter",
-      "is_interactive": true
-    },
-    "EnterDescent.dc.html": {
-      "x": 4560,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "E4 \u00b7 The Descent",
-      "page": "w2enter",
-      "is_interactive": true
-    },
-    "WhatIfFan.dc.html": {
-      "x": 3040,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "W3 \u00b7 The Fan",
-      "page": "w2whatif",
-      "is_interactive": true
-    },
-    "AtlasMechanism.dc.html": {
-      "x": 0,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "A1 \u00b7 Mechanism",
-      "page": "w2atlas",
-      "is_interactive": true
-    },
-    "Browser2Specimen.dc.html": {
-      "x": 1520,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "B2-2 \u00b7 The Specimen",
-      "page": "w2browser",
-      "is_interactive": true
-    },
-    "Browser2Tracks.dc.html": {
-      "x": 4560,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "B2-4 \u00b7 Tracks",
-      "page": "w2browser",
-      "is_interactive": true
-    },
-    "Browser2Borders.dc.html": {
-      "x": 7600,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "B2-6 \u00b7 Borders",
-      "page": "w2browser",
-      "is_interactive": true
-    },
-    "WhatIfLiving.dc.html": {
-      "x": 4560,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "W4 \u00b7 The Living Fork",
-      "page": "w2whatif",
-      "is_interactive": true
-    },
-    "AtlasDynamics.dc.html": {
-      "x": 1520,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "A2 \u00b7 Field guide of dynamics",
-      "page": "w2atlas",
-      "is_interactive": true
-    },
-    "TextbookChapter.dc.html": {
-      "x": 0,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "J1 \u00b7 The chapter is a route",
-      "page": "w2textbook",
-      "is_interactive": true
-    },
-    "TextbookReveal.dc.html": {
-      "x": 1520,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "J2 \u00b7 The class reveal",
-      "page": "w2textbook",
-      "is_interactive": true
-    },
-    "TextbookTransfer.dc.html": {
-      "x": 3040,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "J3 \u00b7 The exercise is a door",
-      "page": "w2textbook",
-      "is_interactive": true
-    },
-    "EnterTransfer1787.dc.html": {
-      "x": 0,
-      "y": 1020,
-      "w": 1440,
-      "h": 900,
-      "title": "ENTER transfer \u00b7 Philadelphia 1787",
-      "page": "w2enter",
-      "is_interactive": true
-    },
-    "EnterTransferHarrow.dc.html": {
-      "x": 1520,
-      "y": 1020,
-      "w": 1440,
-      "h": 900,
-      "title": "ENTER transfer \u00b7 Harrow Medical",
-      "page": "w2enter",
-      "is_interactive": true
-    },
-    "PubStoryDoor.dc.html": {
-      "x": 0,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "PB1 \u00b7 Story with a door",
-      "page": "w2publisher",
-      "is_interactive": true
-    },
-    "PubExplainer.dc.html": {
-      "x": 1520,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "PB2 \u00b7 Explainer instrument",
-      "page": "w2publisher",
-      "is_interactive": true
-    },
-    "PubMomentCard.dc.html": {
-      "x": 3040,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "PB4 \u00b7 Moment card",
-      "page": "w2publisher",
-      "is_interactive": true
-    },
-    "DevWorldtools.dc.html": {
-      "x": 0,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "H \u00b7 World tools (developer)",
-      "page": "w2platform",
-      "is_interactive": true
-    },
-    "NetworkHandshake.dc.html": {
-      "x": 1520,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "I \u00b7 The Handshake",
-      "page": "w2platform",
-      "is_interactive": true
-    },
-    "BrowserProposed.dc.html": {
-      "x": 0,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "The BOW Browser, proposed after Wave 2",
-      "page": "w2proposed",
-      "is_interactive": true
-    },
-    "AtlasExcavation.dc.html": {
-      "x": 3040,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "A3 \u00b7 Excavation",
-      "page": "w2atlas",
-      "is_interactive": true
-    },
-    "AtlasModels.dc.html": {
-      "x": 4560,
-      "y": 0,
-      "w": 1440,
-      "h": 900,
-      "title": "A4 \u00b7 Model landscape",
-      "page": "w2atlas",
-      "is_interactive": true
-    },
-    "Packet2.dc.html": {
-      "x": 0,
-      "y": 0,
-      "w": 1440,
-      "h": 5720,
-      "title": "Founder packet \u00b7 Wave 2 (M\u2013Q)",
-      "page": "w2packet",
-      "is_interactive": true
-    }
+ "v": 3,
+ "attachments": {},
+ "boards": {
+  "Agent.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "sweep",
+   "title": "P9 · Agent — the seat and its warrant",
+   "w": 1440,
+   "x": 1520,
+   "y": 1020
   },
-  "createdOnFiles": {
-    "at": "2026-09-29T03:20:00Z",
-    "v": 1
+  "ApushBalance.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "apush",
+   "title": "APUSH C · The Arithmetic of Union",
+   "w": 1440,
+   "x": 3040,
+   "y": 0
   },
-  "designSystems": [],
-  "launch": {
-    "page": "thesis",
-    "view": "canvas"
+  "ApushNotes.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "apush",
+   "title": "APUSH B · The Notes",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
   },
-  "notes": {
-    "t_apush": {
-      "kind": "title1",
-      "maxW": 4480,
-      "page": "apush",
-      "text": "P2 \u00b7 Philadelphia, 16 July 1787 \u2014 the place, the record, the mechanism",
-      "w": 240,
-      "x": 0,
-      "y": -300
-    },
-    "t_browser": {
-      "kind": "title1",
-      "maxW": 6000,
-      "page": "browser",
-      "text": "P1 \u00b7 Browser \u2014 which dimension is the front door? Time, scale, role, or all of them as a sentence",
-      "w": 240,
-      "x": 0,
-      "y": -300
-    },
-    "t_fork": {
-      "kind": "title1",
-      "maxW": 1440,
-      "page": "fork",
-      "text": "P5 \u00b7 WHAT IF? \u2014 Reality, the fork, the compare",
-      "w": 240,
-      "x": 0,
-      "y": -300
-    },
-    "t_packet": {
-      "kind": "title1",
-      "maxW": 1440,
-      "page": "packet",
-      "text": "Founder tournament packet",
-      "w": 240,
-      "x": 0,
-      "y": -300
-    },
-    "t_sweep": {
-      "kind": "title1",
-      "maxW": 4480,
-      "page": "sweep",
-      "text": "Frontier sweep \u2014 one interaction hypothesis per family",
-      "w": 240,
-      "x": 0,
-      "y": -300
-    },
-    "t_thesis": {
-      "kind": "title1",
-      "maxW": 6000,
-      "page": "thesis",
-      "text": "BOW Design Frontier \u00b7 Wave 1 \u2014 what medium are we inventing?",
-      "w": 240,
-      "x": 0,
-      "y": -300
-    },
-    "t_views": {
-      "kind": "title1",
-      "maxW": 1440,
-      "page": "views",
-      "text": "P3 \u00b7 One truth, many representations",
-      "w": 240,
-      "x": 0,
-      "y": -300
-    },
-    "t_w2sports": {
-      "x": 0,
-      "y": -300,
-      "text": "Wave 2 \u00b7 Sports medium proof \u2014 Browser \u2192 the Boston system \u2192 seat \u2192 consequential act \u2192 Court \u2192 Lens / WHAT IF? \u2192 history",
-      "kind": "title1",
-      "maxW": 1440,
-      "page": "w2sports",
-      "w": 240
-    },
-    "t_w2research": {
-      "x": 0,
-      "y": -300,
-      "text": "Wave 2 \u00b7 What already works (and must not be copied) \u00b7 who pays, for what, and what must stay free",
-      "kind": "title1",
-      "maxW": 2960,
-      "page": "w2research",
-      "w": 240
-    },
-    "t_w2whatif": {
-      "x": 0,
-      "y": -300,
-      "text": "Wave 2 \u00b7 WHAT IF? \u2014 five mental models for forking a system without pretending to know",
-      "kind": "title1",
-      "maxW": 7520,
-      "page": "w2whatif",
-      "w": 240
-    },
-    "t_w2browser": {
-      "x": 0,
-      "y": -300,
-      "text": "Wave 2 \u00b7 Browser Frontier 2 \u2014 six new mental models, against the Wave 1 composite (River \u2192 seat \u2192 arrival, the address, the scale lens)",
-      "kind": "title1",
-      "maxW": 9040,
-      "page": "w2browser",
-      "w": 240
-    },
-    "t_w2enter": {
-      "x": 0,
-      "y": -300,
-      "text": "Wave 2 \u00b7 ENTER \u2014 what changes when you stop observing and occupy a seat? Same Boston morning, four models",
-      "kind": "title1",
-      "maxW": 6000,
-      "page": "w2enter",
-      "w": 240
-    },
-    "t_w2atlas": {
-      "x": 0,
-      "y": -300,
-      "text": "Wave 2 \u00b7 Search / Atlas \u2014 finding systems by what they do, not by keywords; no node graphs",
-      "kind": "title1",
-      "maxW": 6000,
-      "page": "w2atlas",
-      "w": 240
-    },
-    "t_w2textbook": {
-      "x": 0,
-      "y": -300,
-      "text": "Wave 2 \u00b7 Native textbook \u2014 a chapter you live in, a class that is the dataset, an exercise that is a door",
-      "kind": "title1",
-      "maxW": 4480,
-      "page": "w2textbook",
-      "w": 240
-    },
-    "t_w2publisher": {
-      "x": 0,
-      "y": -300,
-      "text": "Wave 2 \u00b7 Publisher \u2014 executable media forms and how they travel",
-      "kind": "title1",
-      "maxW": 4480,
-      "page": "w2publisher",
-      "w": 240
-    },
-    "t_w2platform": {
-      "x": 0,
-      "y": -300,
-      "text": "Wave 2 \u00b7 Cloud primitives for developers, and one real cross-institution interaction",
-      "kind": "title1",
-      "maxW": 2960,
-      "page": "w2platform",
-      "w": 240
-    },
-    "t_w2proposed": {
-      "x": 0,
-      "y": -300,
-      "text": "Wave 2 \u00b7 The Browser, proposed \u2014 one path composed from the critics\u2019 picks: home keeps time, a question places you, a seat is signed for, leaving is an act, following is keeping",
-      "kind": "title1",
-      "maxW": 1440,
-      "page": "w2proposed",
-      "w": 240
-    },
-    "t_w2packet": {
-      "x": 0,
-      "y": -300,
-      "text": "Wave 2 founder packet \u2014 the answer, the tournaments, grammar matrix, canon candidates, kill list, open questions, Wave 3",
-      "kind": "title1",
-      "maxW": 1440,
-      "page": "w2packet",
-      "w": 240
-    }
+  "ApushRoom.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "apush",
+   "title": "APUSH A · The Room",
+   "w": 1440,
+   "x": 0,
+   "y": 0
   },
-  "order": [
-    "Main.dc.html",
-    "Problems.dc.html",
-    "Archaeology.dc.html",
-    "Map.dc.html",
-    "BrowserSentence.dc.html",
-    "BrowserRiver.dc.html",
-    "BrowserFocus.dc.html",
-    "BrowserSeat.dc.html",
-    "ApushRoom.dc.html",
-    "ApushNotes.dc.html",
-    "ApushBalance.dc.html",
-    "Chemistry.dc.html",
-    "Fork.dc.html",
-    "Biology.dc.html",
-    "Lens.dc.html",
-    "Foundry.dc.html",
-    "Enterprise.dc.html",
-    "Agent.dc.html",
-    "Network.dc.html",
-    "Packet.dc.html",
-    "SportsProof.dc.html",
-    "Research.dc.html",
-    "Commercial.dc.html",
-    "WhatIfPull.dc.html",
-    "WhatIfCouncil.dc.html",
-    "Browser2Clocks.dc.html",
-    "Browser2Arrive.dc.html",
-    "Browser2Floor.dc.html",
-    "EnterNarrowing.dc.html",
-    "EnterHandover.dc.html",
-    "EnterClock.dc.html",
-    "EnterDescent.dc.html",
-    "WhatIfFan.dc.html",
-    "AtlasMechanism.dc.html",
-    "Browser2Specimen.dc.html",
-    "Browser2Tracks.dc.html",
-    "Browser2Borders.dc.html",
-    "WhatIfLiving.dc.html",
-    "AtlasDynamics.dc.html",
-    "TextbookChapter.dc.html",
-    "TextbookReveal.dc.html",
-    "TextbookTransfer.dc.html",
-    "EnterTransfer1787.dc.html",
-    "EnterTransferHarrow.dc.html",
-    "PubStoryDoor.dc.html",
-    "PubExplainer.dc.html",
-    "PubMomentCard.dc.html",
-    "DevWorldtools.dc.html",
-    "NetworkHandshake.dc.html",
-    "BrowserProposed.dc.html",
-    "AtlasExcavation.dc.html",
-    "AtlasModels.dc.html",
-    "Packet2.dc.html"
-  ],
-  "pages": [
-    {
-      "id": "thesis",
-      "name": "00 \u00b7 Thesis, problems, archaeology, map"
-    },
-    {
-      "id": "browser",
-      "name": "P1 \u00b7 Browser tournament"
-    },
-    {
-      "id": "apush",
-      "name": "P2 \u00b7 Native APUSH, Philadelphia 1787"
-    },
-    {
-      "id": "views",
-      "name": "P3 \u00b7 One truth, many representations"
-    },
-    {
-      "id": "fork",
-      "name": "P5 \u00b7 WHAT IF? Reality and the fork"
-    },
-    {
-      "id": "sweep",
-      "name": "P4, P6\u2013P10 \u00b7 Frontier sweep"
-    },
-    {
-      "id": "packet",
-      "name": "Founder tournament packet"
-    },
-    {
-      "id": "w2sports",
-      "name": "W2 \u00b7 Sports medium proof"
-    },
-    {
-      "id": "w2research",
-      "name": "W2 \u00b7 Research & commercial lens"
-    },
-    {
-      "id": "w2whatif",
-      "name": "W2 D \u00b7 WHAT IF? tournament 2"
-    },
-    {
-      "id": "w2browser",
-      "name": "W2 B \u00b7 Browser Frontier 2"
-    },
-    {
-      "id": "w2enter",
-      "name": "W2 C \u00b7 ENTER tournament"
-    },
-    {
-      "id": "w2atlas",
-      "name": "W2 F \u00b7 Search / Atlas"
-    },
-    {
-      "id": "w2textbook",
-      "name": "W2 J \u00b7 Native textbook"
-    },
-    {
-      "id": "w2publisher",
-      "name": "W2 G \u00b7 Publisher"
-    },
-    {
-      "id": "w2platform",
-      "name": "W2 H/I \u00b7 Cloud and Network"
-    },
-    {
-      "id": "w2proposed",
-      "name": "W2 \u00b7 The Browser, proposed"
-    },
-    {
-      "id": "w2packet",
-      "name": "W2 \u00b7 Founder packet (M\u2013Q)"
-    }
-  ],
-  "title": "BOW Design Frontier"
+  "Archaeology.dc.html": {
+   "h": 2180,
+   "page": "thesis",
+   "title": "02 · Repository archaeology",
+   "w": 1440,
+   "x": 3040,
+   "y": 0
+  },
+  "AtlasDynamics.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2atlas",
+   "title": "A2 · Field guide of dynamics",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "AtlasExcavation.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2atlas",
+   "title": "A3 · Excavation",
+   "w": 1440,
+   "x": 3040,
+   "y": 0
+  },
+  "AtlasMechanism.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2atlas",
+   "title": "A1 · Mechanism",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "AtlasModels.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2atlas",
+   "title": "A4 · Model landscape",
+   "w": 1440,
+   "x": 4560,
+   "y": 0
+  },
+  "Biology.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "sweep",
+   "title": "P4 · Biology — the scale spine",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Browser2Arrive.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2browser",
+   "title": "B2-3 · Arrive",
+   "w": 1440,
+   "x": 3040,
+   "y": 0
+  },
+  "Browser2Borders.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2browser",
+   "title": "B2-6 · Borders",
+   "w": 1440,
+   "x": 7600,
+   "y": 0
+  },
+  "Browser2Clocks.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2browser",
+   "title": "B2-1 · The Clocks",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Browser2Floor.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2browser",
+   "title": "B2-5 · The Floor",
+   "w": 1440,
+   "x": 6080,
+   "y": 0
+  },
+  "Browser2Specimen.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2browser",
+   "title": "B2-2 · The Specimen",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "Browser2Tracks.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2browser",
+   "title": "B2-4 · Tracks",
+   "w": 1440,
+   "x": 4560,
+   "y": 0
+  },
+  "BrowserFocus.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "browser",
+   "title": "Browser C · The Focus",
+   "w": 1440,
+   "x": 3040,
+   "y": 0
+  },
+  "BrowserProposed.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2proposed",
+   "title": "The BOW Browser, proposed after Wave 2",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "BrowserRiver.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "browser",
+   "title": "Browser B · The River",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "BrowserSeat.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "browser",
+   "title": "Browser D · The Seat",
+   "w": 1440,
+   "x": 4560,
+   "y": 0
+  },
+  "BrowserSentence.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "browser",
+   "title": "Browser A · The Sentence",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Chemistry.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "views",
+   "title": "P3 · Equilibrium — one state, five views",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Commercial.dc.html": {
+   "h": 1320,
+   "is_interactive": true,
+   "page": "w2research",
+   "title": "W2 K · Commercial lens on every frontier",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "DevWorldtools.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2platform",
+   "title": "H · World tools (developer)",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "EnterClock.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2enter",
+   "title": "E3 · The Clock Starts",
+   "w": 1440,
+   "x": 3040,
+   "y": 0
+  },
+  "EnterDescent.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2enter",
+   "title": "E4 · The Descent",
+   "w": 1440,
+   "x": 4560,
+   "y": 0
+  },
+  "EnterHandover.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2enter",
+   "title": "E2 · The Handover",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "EnterNarrowing.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2enter",
+   "title": "E1 · The Narrowing",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "EnterTransfer1787.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2enter",
+   "title": "ENTER transfer · Philadelphia 1787",
+   "w": 1440,
+   "x": 0,
+   "y": 1020
+  },
+  "EnterTransferHarrow.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2enter",
+   "title": "ENTER transfer · Harrow Medical",
+   "w": 1440,
+   "x": 1520,
+   "y": 1020
+  },
+  "Enterprise.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "sweep",
+   "title": "P8 · Enterprise — promise threads",
+   "w": 1440,
+   "x": 0,
+   "y": 1020
+  },
+  "Fork.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "fork",
+   "title": "P5 · WHAT IF? — the 2017 pick",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Foundry.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "sweep",
+   "title": "P7 · Foundry — the proofing desk",
+   "w": 1440,
+   "x": 3040,
+   "y": 0
+  },
+  "Lens.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "sweep",
+   "title": "P6 · Lens / Lab — the light table",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "Main.dc.html": {
+   "h": 2260,
+   "is_interactive": true,
+   "page": "thesis",
+   "title": "00 · The medium",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Map.dc.html": {
+   "h": 1500,
+   "is_interactive": true,
+   "page": "thesis",
+   "title": "03 · Frontier map",
+   "w": 1440,
+   "x": 4560,
+   "y": 0
+  },
+  "Network.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "sweep",
+   "title": "P10 · Network — the clearinghouse",
+   "w": 1440,
+   "x": 3040,
+   "y": 1020
+  },
+  "NetworkHandshake.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2platform",
+   "title": "I · The Handshake",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "Packet.dc.html": {
+   "h": 3340,
+   "is_interactive": true,
+   "page": "packet",
+   "title": "Founder tournament packet · Wave 1",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Packet2.dc.html": {
+   "h": 5720,
+   "is_interactive": true,
+   "page": "w2packet",
+   "title": "Founder packet · Wave 2 (M–Q)",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Problems.dc.html": {
+   "h": 1500,
+   "page": "thesis",
+   "title": "01 · The hardest problems",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "PubExplainer.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2publisher",
+   "title": "PB2 · Explainer instrument",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "PubMomentCard.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2publisher",
+   "title": "PB4 · Moment card",
+   "w": 1440,
+   "x": 3040,
+   "y": 0
+  },
+  "PubStoryDoor.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2publisher",
+   "title": "PB1 · Story with a door",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Research.dc.html": {
+   "h": 2340,
+   "is_interactive": true,
+   "page": "w2research",
+   "title": "W2 · Medium research — twenty paradigms",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "SportsProof.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2sports",
+   "title": "W2 · Boston basketball — entering the system",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "TextbookChapter.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2textbook",
+   "title": "J1 · The chapter is a route",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "TextbookReveal.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2textbook",
+   "title": "J2 · The class reveal",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "TextbookTransfer.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2textbook",
+   "title": "J3 · The exercise is a door",
+   "w": 1440,
+   "x": 3040,
+   "y": 0
+  },
+  "WhatIfCouncil.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2whatif",
+   "title": "W2 · The Council",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "WhatIfFan.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2whatif",
+   "title": "W3 · The Fan",
+   "w": 1440,
+   "x": 3040,
+   "y": 0
+  },
+  "WhatIfLiving.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2whatif",
+   "title": "W4 · The Living Fork",
+   "w": 1440,
+   "x": 4560,
+   "y": 0
+  },
+  "WhatIfPull.dc.html": {
+   "h": 900,
+   "is_interactive": true,
+   "page": "w2whatif",
+   "title": "W1 · The Pull",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "X3Engine.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "X1 · Every number knows why — causal engine + reverse search",
+   "page": "w3execute",
+   "is_interactive": true
+  },
+  "X3Seats.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "X2 · Knowledge is a property of the seat — epistemic engine",
+   "page": "w3execute",
+   "is_interactive": true
+  },
+  "X3Lockstep.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "X3 · The same World for everyone, without a server — lockstep engine",
+   "page": "w3execute",
+   "is_interactive": true
+  },
+  "X3Proof.dc.html": {
+   "x": 4560,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "X4 · The record can prove itself — hash-chained record and forks",
+   "page": "w3execute",
+   "is_interactive": true
+  },
+  "CloneVerdict.dc.html": {
+   "x": 6080,
+   "y": 0,
+   "w": 1440,
+   "h": 2200,
+   "title": "W3 verdict · Copyable in a day? The clone test, and what a copy cannot be",
+   "page": "w3execute",
+   "is_interactive": false
+  }
+ },
+ "createdOnFiles": {
+  "at": "2026-09-29T03:20:00Z",
+  "v": 1
+ },
+ "designSystems": [],
+ "launch": {
+  "page": "thesis",
+  "view": "canvas"
+ },
+ "notes": {
+  "t_apush": {
+   "kind": "title1",
+   "maxW": 4480,
+   "page": "apush",
+   "text": "P2 · Philadelphia, 16 July 1787 — the place, the record, the mechanism",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_browser": {
+   "kind": "title1",
+   "maxW": 6000,
+   "page": "browser",
+   "text": "P1 · Browser — which dimension is the front door? Time, scale, role, or all of them as a sentence",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_fork": {
+   "kind": "title1",
+   "maxW": 1440,
+   "page": "fork",
+   "text": "P5 · WHAT IF? — Reality, the fork, the compare",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_packet": {
+   "kind": "title1",
+   "maxW": 1440,
+   "page": "packet",
+   "text": "Founder tournament packet",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_sweep": {
+   "kind": "title1",
+   "maxW": 4480,
+   "page": "sweep",
+   "text": "Frontier sweep — one interaction hypothesis per family",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_thesis": {
+   "kind": "title1",
+   "maxW": 6000,
+   "page": "thesis",
+   "text": "BOW Design Frontier · Wave 1 — what medium are we inventing?",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_views": {
+   "kind": "title1",
+   "maxW": 1440,
+   "page": "views",
+   "text": "P3 · One truth, many representations",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_w2atlas": {
+   "kind": "title1",
+   "maxW": 6000,
+   "page": "w2atlas",
+   "text": "Wave 2 · Search / Atlas — finding systems by what they do, not by keywords; no node graphs",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_w2browser": {
+   "kind": "title1",
+   "maxW": 8000,
+   "page": "w2browser",
+   "text": "Wave 2 · Browser Frontier 2 — six new mental models, against the Wave 1 composite (River → seat → arrival, the address, the scale lens)",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_w2enter": {
+   "kind": "title1",
+   "maxW": 6000,
+   "page": "w2enter",
+   "text": "Wave 2 · ENTER — what changes when you stop observing and occupy a seat? Same Boston morning, four models",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_w2packet": {
+   "kind": "title1",
+   "maxW": 1440,
+   "page": "w2packet",
+   "text": "Wave 2 founder packet — the answer, the tournaments, grammar matrix, canon candidates, kill list, open questions, Wave 3",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_w2platform": {
+   "kind": "title1",
+   "maxW": 2960,
+   "page": "w2platform",
+   "text": "Wave 2 · Cloud primitives for developers, and one real cross-institution interaction",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_w2proposed": {
+   "kind": "title1",
+   "maxW": 1440,
+   "page": "w2proposed",
+   "text": "Wave 2 · The Browser, proposed — one path composed from the critics’ picks: home keeps time, a question places you, a seat is signed for, leaving is an act, following is keeping",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_w2publisher": {
+   "kind": "title1",
+   "maxW": 4480,
+   "page": "w2publisher",
+   "text": "Wave 2 · Publisher — executable media forms and how they travel",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_w2research": {
+   "kind": "title1",
+   "maxW": 2960,
+   "page": "w2research",
+   "text": "Wave 2 · What already works (and must not be copied) · who pays, for what, and what must stay free",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_w2sports": {
+   "kind": "title1",
+   "maxW": 1440,
+   "page": "w2sports",
+   "text": "Wave 2 · Sports medium proof — Browser → the Boston system → seat → consequential act → Court → Lens / WHAT IF? → history",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_w2textbook": {
+   "kind": "title1",
+   "maxW": 4480,
+   "page": "w2textbook",
+   "text": "Wave 2 · Native textbook — a chapter you live in, a class that is the dataset, an exercise that is a door",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_w2whatif": {
+   "kind": "title1",
+   "maxW": 7520,
+   "page": "w2whatif",
+   "text": "Wave 2 · WHAT IF? — five mental models for forking a system without pretending to know",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t_w3execute": {
+   "x": 0,
+   "y": -300,
+   "text": "Wave 3 · EXECUTE — a screen can be copied in a day; an engine that computes correctly cannot. Each board runs its own tests in the page.",
+   "kind": "title1",
+   "maxW": 5920,
+   "page": "w3execute",
+   "w": 240
+  }
+ },
+ "order": [
+  "Main.dc.html",
+  "Problems.dc.html",
+  "Archaeology.dc.html",
+  "Map.dc.html",
+  "BrowserSentence.dc.html",
+  "BrowserRiver.dc.html",
+  "BrowserFocus.dc.html",
+  "BrowserSeat.dc.html",
+  "ApushRoom.dc.html",
+  "ApushNotes.dc.html",
+  "ApushBalance.dc.html",
+  "Chemistry.dc.html",
+  "Fork.dc.html",
+  "Biology.dc.html",
+  "Lens.dc.html",
+  "Foundry.dc.html",
+  "Enterprise.dc.html",
+  "Agent.dc.html",
+  "Network.dc.html",
+  "Packet.dc.html",
+  "SportsProof.dc.html",
+  "Research.dc.html",
+  "Commercial.dc.html",
+  "WhatIfPull.dc.html",
+  "WhatIfCouncil.dc.html",
+  "Browser2Clocks.dc.html",
+  "Browser2Arrive.dc.html",
+  "Browser2Floor.dc.html",
+  "EnterNarrowing.dc.html",
+  "EnterHandover.dc.html",
+  "EnterClock.dc.html",
+  "EnterDescent.dc.html",
+  "WhatIfFan.dc.html",
+  "AtlasMechanism.dc.html",
+  "Browser2Specimen.dc.html",
+  "Browser2Tracks.dc.html",
+  "Browser2Borders.dc.html",
+  "WhatIfLiving.dc.html",
+  "AtlasDynamics.dc.html",
+  "TextbookChapter.dc.html",
+  "TextbookReveal.dc.html",
+  "TextbookTransfer.dc.html",
+  "EnterTransfer1787.dc.html",
+  "EnterTransferHarrow.dc.html",
+  "PubStoryDoor.dc.html",
+  "PubExplainer.dc.html",
+  "PubMomentCard.dc.html",
+  "DevWorldtools.dc.html",
+  "NetworkHandshake.dc.html",
+  "BrowserProposed.dc.html",
+  "AtlasExcavation.dc.html",
+  "AtlasModels.dc.html",
+  "Packet2.dc.html",
+  "X3Engine.dc.html",
+  "X3Seats.dc.html",
+  "X3Lockstep.dc.html",
+  "X3Proof.dc.html",
+  "CloneVerdict.dc.html"
+ ],
+ "pages": [
+  {
+   "id": "thesis",
+   "name": "00 · Thesis, problems, archaeology, map"
+  },
+  {
+   "id": "browser",
+   "name": "P1 · Browser tournament"
+  },
+  {
+   "id": "apush",
+   "name": "P2 · Native APUSH, Philadelphia 1787"
+  },
+  {
+   "id": "views",
+   "name": "P3 · One truth, many representations"
+  },
+  {
+   "id": "fork",
+   "name": "P5 · WHAT IF? Reality and the fork"
+  },
+  {
+   "id": "sweep",
+   "name": "P4, P6–P10 · Frontier sweep"
+  },
+  {
+   "id": "packet",
+   "name": "Founder tournament packet"
+  },
+  {
+   "id": "w2sports",
+   "name": "W2 · Sports medium proof"
+  },
+  {
+   "id": "w2research",
+   "name": "W2 · Research & commercial lens"
+  },
+  {
+   "id": "w2whatif",
+   "name": "W2 D · WHAT IF? tournament 2"
+  },
+  {
+   "id": "w2browser",
+   "name": "W2 B · Browser Frontier 2"
+  },
+  {
+   "id": "w2enter",
+   "name": "W2 C · ENTER tournament"
+  },
+  {
+   "id": "w2atlas",
+   "name": "W2 F · Search / Atlas"
+  },
+  {
+   "id": "w2textbook",
+   "name": "W2 J · Native textbook"
+  },
+  {
+   "id": "w2publisher",
+   "name": "W2 G · Publisher"
+  },
+  {
+   "id": "w2platform",
+   "name": "W2 H/I · Cloud and Network"
+  },
+  {
+   "id": "w2proposed",
+   "name": "W2 · The Browser, proposed"
+  },
+  {
+   "id": "w2packet",
+   "name": "W2 · Founder packet (M–Q)"
+  },
+  {
+   "id": "w3execute",
+   "name": "W3 · EXECUTE — engines, not screens"
+  }
+ ],
+ "title": "BOW Design Frontier"
 }

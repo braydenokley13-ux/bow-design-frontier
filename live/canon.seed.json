@@ -1,0 +1,169 @@
+{
+ "name": "Boston · Year Two",
+ "version": 1,
+ "epoch": "REPLACE_WITH_START_TIME_ISO",
+ "pace": "1 World day = 1 real hour",
+ "paceMs": 3600000,
+ "seed": 2026,
+ "skewMs": 10000,
+ "lines": {
+  "cap": 164.961,
+  "tax": 200.428,
+  "apron1": 209.015,
+  "apron2": 221.686
+ },
+ "worldTaxRule": {
+  "base": 200,
+  "rate": 1.5,
+  "label": "World rule: flat 1.5× (authored)"
+ },
+ "base": {
+  "w": 14,
+  "l": 10,
+  "rating": 56
+ },
+ "roster": [
+  {
+   "id": "tatum",
+   "name": "Jayson Tatum",
+   "role": "wing",
+   "salary": 58.5,
+   "contract": "3 yrs left"
+  },
+  {
+   "id": "butler",
+   "name": "Jimmy Butler",
+   "role": "wing",
+   "salary": 56.8,
+   "contract": "1 yr left · acquired Week 6 for Derrick White + filler"
+  },
+  {
+   "id": "guard-a",
+   "name": "Guard A",
+   "role": "starter guard",
+   "salary": 24,
+   "contract": "2 yrs"
+  },
+  {
+   "id": "big-a",
+   "name": "Big A",
+   "role": "starter big",
+   "salary": 19.5,
+   "contract": "3 yrs"
+  },
+  {
+   "id": "hauser",
+   "name": "Sam Hauser",
+   "role": "wing",
+   "salary": 10.8,
+   "contract": "3 yrs"
+  },
+  {
+   "id": "pritchard",
+   "name": "Payton Pritchard",
+   "role": "guard",
+   "salary": 7.8,
+   "contract": "2 yrs"
+  },
+  {
+   "id": "big-b",
+   "name": "Big B",
+   "role": "rotation big",
+   "salary": 9.9,
+   "contract": "1 yr"
+  },
+  {
+   "id": "wing-c",
+   "name": "Wing C",
+   "role": "rotation wing",
+   "salary": 8.4,
+   "contract": "2 yrs"
+  },
+  {
+   "id": "guard-b",
+   "name": "Guard B",
+   "role": "backup guard",
+   "salary": 2.7,
+   "contract": "1 yr"
+  },
+  {
+   "id": "rookie-1",
+   "name": "Rookie 1",
+   "role": "rookie scale",
+   "salary": 5.1,
+   "contract": "3 yrs"
+  },
+  {
+   "id": "rookie-2",
+   "name": "Rookie 2",
+   "role": "rookie scale",
+   "salary": 3.3,
+   "contract": "3 yrs"
+  },
+  {
+   "id": "min-1",
+   "name": "Min 1",
+   "role": "minimum",
+   "salary": 2.4,
+   "contract": "1 yr"
+  },
+  {
+   "id": "min-2",
+   "name": "Min 2",
+   "role": "minimum",
+   "salary": 2.4,
+   "contract": "1 yr"
+  },
+  {
+   "id": "min-3",
+   "name": "Min 3",
+   "role": "minimum",
+   "salary": 2.4,
+   "contract": "1 yr"
+  }
+ ],
+ "extra": {
+  "deadMoney": 6.4,
+  "pendingTwoWay": 2.4
+ },
+ "denver": {
+  "contracts": [
+   {
+    "id": "den-2.1",
+    "salary": 2.1
+   },
+   {
+    "id": "den-6.0",
+    "salary": 6
+   },
+   {
+    "id": "den-11.0",
+    "salary": 11
+   }
+  ],
+  "picks": [
+   "2028 2nd",
+   "2029 2nd"
+  ]
+ },
+ "matters": [
+  {
+   "id": "denver-call",
+   "title": "Denver called about your backup guard",
+   "deadlineDay": 2,
+   "seat": "boston-gm"
+  },
+  {
+   "id": "two-way",
+   "title": "Two-way call-up pending",
+   "deadlineDay": 1.5,
+   "seat": "boston-gm"
+  },
+  {
+   "id": "owner-note",
+   "title": "Under the second apron by the deadline",
+   "deadlineDay": 5,
+   "seat": "boston-gm"
+  }
+ ]
+}

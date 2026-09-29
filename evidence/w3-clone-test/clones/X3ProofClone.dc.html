@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Celtics Sealed Record</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=EB+Garamond:ital,wght@0,400;0,600;1,400&amp;family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#eee8d5;color:#1c1b18;font-family:'EB Garamond',Georgia,serif}
+.paper{background-color:#eee8d5;background-image:repeating-linear-gradient(180deg,rgba(70,55,30,.055) 0 1px,transparent 1px 5px)}
+.mono{font-family:'Courier Prime','Courier New',monospace}
+.serif{font-family:'EB Garamond',Georgia,serif}
+.disp{font-family:'Libre Caslon Text',Georgia,serif}
+.lab{font-family:'Courier Prime','Courier New',monospace;font-size:11px;letter-spacing:.1em;color:#5e594b}
+.btn{font-family:'Courier Prime','Courier New',monospace;font-weight:700;font-size:12px;letter-spacing:.04em;color:#1c1b18;background:#f6f1e1;border:2px solid #1c1b18;cursor:pointer;padding:0;box-sizing:border-box}
+.btn:hover:not(:disabled){background:#1c1b18;color:#f6f1e1}
+.btn:focus-visible,.rowbtn:focus-visible,input:focus-visible{outline:3px solid #c4451c;outline-offset:1px}
+.btn:disabled{cursor:default}
+.rowbtn{font-family:'EB Garamond',Georgia,serif;font-size:18px;line-height:19px;text-align:left;background:transparent;border:0;padding:0;margin:0;color:#1c1b18;cursor:pointer}
+.opt{font-family:'EB Garamond',Georgia,serif;font-size:17px;text-align:left;color:#c4451c;background:#f6f1e1;border:1.5px solid #c4451c;padding:0 12px;cursor:pointer;box-sizing:border-box}
+.opt:hover{background:#c4451c;color:#f6f1e1}
+input{font-family:'EB Garamond',Georgia,serif;font-size:16px;box-sizing:border-box;background:#f6f1e1;color:#1c1b18;border:1.5px solid #1c1b18;padding:0 10px}
+.wrap{word-break:break-all}
+</style>
+</helmet>
+<div class="paper" style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden;">
+
+  <!-- header -->
+  <div class="lab" style="position:absolute;left:32px;top:12px;">BOW REALITY · REGISTER OF RECORDED MOMENTS</div>
+  <div style="position:absolute;left:32px;top:24px;white-space:nowrap;line-height:44px;">
+    <span class="disp" style="font-size:32px;font-weight:700;">Boston Celtics</span>
+    <span class="disp" style="font-size:22px;font-style:italic;"> — the record, sealed line by line</span>
+  </div>
+  <div class="mono" style="position:absolute;left:32px;top:67px;font-size:11px;display:flex;gap:14px;align-items:center;white-space:nowrap;">
+    <span style="display:inline-flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;background:#1c1b18;display:inline-block;"></span>OBSERVED · outside reporting, source named per line</span>
+    <span style="display:inline-flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border:1.5px dotted #a3302b;border-radius:50%;display:inline-block;box-sizing:border-box;"></span>COMPUTED · a seal, recomputed in this page</span>
+    <span style="display:inline-flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border:2px solid #c4451c;display:inline-block;box-sizing:border-box;"></span>AUTHORED · a branch’s assumption, in its own ink</span>
+  </div>
+
+  <div class="lab" style="position:absolute;left:700px;top:12px;">ADDRESS OF THE RECORD</div>
+  <div class="mono" style="position:absolute;left:700px;top:30px;width:477px;height:28px;border:1.5px solid #1c1b18;background:#f6f1e1;box-sizing:border-box;font-size:12px;line-height:25px;padding-left:10px;white-space:nowrap;">{{addrLine}}</div>
+  <button type="button" class="btn" aria-pressed="{{howPressed}}" onClick="{{toggleHow}}" style="position:absolute;left:1236px;top:22px;width:172px;height:36px;background:{{howBg}};color:{{howFg}};">How do we know?</button>
+
+  <div style="position:absolute;left:32px;top:88px;width:1376px;height:3px;border-top:1px solid #1c1b18;border-bottom:1px solid #1c1b18;box-sizing:border-box;"></div>
+
+  <!-- timeline -->
+  <div style="position:absolute;left:32px;top:100px;width:840px;height:530px;">
+    <div style="position:absolute;left:32px;top:16px;width:3px;height:490px;background:#1c1b18;"></div>
+    <div style="position:absolute;left:26px;top:9px;width:14px;height:14px;border-radius:50%;background:#1c1b18;"></div>
+    <div style="position:absolute;left:25px;top:498px;width:16px;height:16px;background:#1c1b18;transform:rotate(45deg);"></div>
+    <div class="mono" style="position:absolute;left:76px;top:9px;font-size:11px;letter-spacing:.03em;white-space:nowrap;color:#4a4638;">GENESIS · SHA-256(“bow:celtics:reality”) = <b style="color:#1c1b18;">{{genesis8}}</b> · every seal below is chained from this</div>
+    <div class="mono" style="position:absolute;left:76px;top:500px;font-size:11px;letter-spacing:.03em;white-space:nowrap;color:#4a4638;">RECORD HEAD · <b style="color:#1c1b18;">{{head8}}</b> · a branch is cut from an entry and never writes on this line</div>
+
+    <div style="position:absolute;left:0;top:34px;width:840px;">
+      <sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+        <div style="position:relative;height:58px;width:840px;box-sizing:border-box;border-bottom:1px solid rgba(60,50,30,.35);background:{{r.bg}};">
+          <div class="mono" style="position:absolute;left:10px;top:-9px;width:46px;height:18px;box-sizing:border-box;border:1.5px solid #1c1b18;background:#f2ecda;font-size:11px;line-height:15px;text-align:center;justify-content:center;align-items:center;z-index:2;display:{{r.railDisp}};">{{r.railText}}</div>
+          <!-- stamp -->
+          <div class="mono" style="position:absolute;left:69px;top:3px;width:52px;height:52px;border-radius:50%;box-sizing:border-box;border:2px solid {{r.stampBorder}};background:{{r.stampBg}};color:{{r.stampFg}};box-shadow:inset 0 0 0 3px {{r.stampGap}},inset 0 0 0 4px {{r.stampBorder}};font-size:11px;font-weight:700;line-height:12px;text-align:center;padding-top:14px;display:{{r.stampDisp}};">{{r.sA}}<br>{{r.sB}}</div>
+          <div class="serif" style="position:absolute;left:69px;top:3px;width:52px;height:52px;border-radius:50%;box-sizing:border-box;border:2px dashed #a3302b;color:#a3302b;font-style:italic;font-size:12px;text-align:center;padding-top:15px;display:{{r.sealingDisp}};">sealing<br>…</div>
+          <div class="mono" style="position:absolute;left:134px;top:5px;font-size:11px;color:#5e594b;white-space:nowrap;"><span style="display:inline-block;width:8px;height:8px;background:#1c1b18;margin-right:6px;"></span>{{r.meta}}</div>
+          <div class="mono" style="position:absolute;right:157px;top:5px;font-size:11px;color:#5e594b;white-space:nowrap;">{{r.was}}</div>
+          <button type="button" class="rowbtn" onClick="{{r.select}}" style="position:absolute;left:134px;top:20px;width:548px;height:38px;overflow:hidden;">{{r.pre}}<span style="background:{{r.mark}};text-decoration:{{r.under}};">{{r.text}}</span></button>
+          <button type="button" class="btn" disabled="{{r.forkOff}}" onClick="{{r.fork}}" style="position:absolute;left:690px;top:13px;width:88px;height:35px;opacity:{{r.forkOp}};">Fork here</button>
+          <button type="button" class="btn" onClick="{{r.alter}}" style="position:absolute;left:784px;top:13px;width:56px;height:35px;border-style:dashed;">Alter</button>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- entry detail -->
+  <div class="mono" style="position:absolute;left:32px;top:634px;width:840px;height:78px;box-sizing:border-box;border:1px solid #1c1b18;padding:6px 12px;font-size:11px;line-height:16px;overflow:hidden;">
+    <div>ENTRY {{dNum}} · FULL SEAL <b style="color:#a3302b;">{{dSeal}}</b></div>
+    <div>= SHA-256( PREVIOUS SEAL <span style="color:#a3302b;">{{dPrev}}</span> + JSON )</div>
+    <div class="wrap">JSON, KEYS SORTED {{dJson}}</div>
+  </div>
+
+  <!-- engine -->
+  <div class="mono" style="position:absolute;left:32px;top:724px;font-size:13px;font-weight:700;letter-spacing:.08em;">ENGINE · {{engPass}}/{{engTotal}} checks passing</div>
+  <div class="mono" style="position:absolute;left:472px;top:725px;width:400px;text-align:right;font-size:11px;color:#5e594b;">SHA-256 via crypto.subtle · run in this page on load</div>
+  <div style="position:absolute;left:32px;top:746px;width:840px;height:84px;column-count:3;column-gap:8px;column-fill:auto;overflow:hidden;">
+    <sc-for list="{{checks}}" as="c" hint-placeholder-count="15">
+      <div class="serif" style="font-size:13.5px;line-height:16px;height:16px;white-space:nowrap;break-inside:avoid;"><span style="color:{{c.col}};">{{c.mark}}</span> {{c.label}}</div>
+    </sc-for>
+  </div>
+
+  <!-- footer -->
+  <div style="position:absolute;left:32px;top:840px;width:1376px;white-space:nowrap;"><span class="mono" style="font-size:11px;font-weight:700;letter-spacing:.06em;">WHAT A COPY WOULD MISS: </span><span class="serif" style="font-size:14.5px;font-style:italic;">the proof. A copy can draw seals; only a real chain lets a stranger check that your branch came from the real record.</span></div>
+  <div class="mono" style="position:absolute;left:32px;top:862px;width:700px;font-size:11px;line-height:15px;color:#4a4638;"><b style="color:#1c1b18;">COMMERCIAL LENS</b> · Hypothesis: verifiable branches are what list publishers, schools and courts of public opinion trust shared WHAT IFs — the record stays free; verification at scale is a service.</div>
+  <div class="mono" style="position:absolute;left:748px;top:862px;width:660px;font-size:11px;line-height:15px;color:#4a4638;text-align:right;"><b style="color:#1c1b18;">PLATFORM HYPOTHESIS</b> · entries: the shared Boston fixture, dated, [verify] flags kept · seals: real SHA-256 computed in this page · branch texts: authored</div>
+
+  <!-- right column -->
+  <div class="mono" style="position:absolute;left:892px;top:100px;font-size:11px;letter-spacing:.06em;white-space:nowrap;"><b style="color:#c4451c;">BRANCH REGISTERS</b> · <span style="color:#5e594b;">your hand, not the record’s · {{regCount}}/2</span></div>
+
+  <div style="position:absolute;left:892px;top:122px;width:516px;height:{{cardH}}px;box-sizing:border-box;border:2px {{cardStyle}} #c4451c;background:#f6f1e1;">
+
+    <sc-if value="{{showNone}}" hint-placeholder-val="{{true}}">
+      <div class="mono" style="position:absolute;left:16px;top:16px;font-size:11px;font-weight:700;color:#c4451c;letter-spacing:.06em;">NO BRANCH YET · UNKNOWN</div>
+      <div class="serif" style="position:absolute;left:16px;top:38px;width:480px;font-size:16px;line-height:22px;">Press <i>Fork here</i> on any entry. The branch is sealed to that entry’s seal, so anyone can check which record it came from.</div>
+    </sc-if>
+
+    <sc-if value="{{showCut}}" hint-placeholder-val="{{false}}">
+      <div class="mono" style="position:absolute;left:12px;top:17px;font-size:11px;font-weight:700;color:#c4451c;letter-spacing:.06em;">NEW BRANCH · cut at {{cutDate}}</div>
+      <button type="button" class="btn" onClick="{{cancelCut}}" style="position:absolute;left:424px;top:6px;width:76px;height:36px;color:#c4451c;border-color:#c4451c;">Cancel</button>
+      <div class="mono" style="position:absolute;left:12px;top:44px;font-size:11px;color:#c4451c;">will be sealed to the record at {{cutSeal8}}</div>
+      <sc-for list="{{opts}}" as="o" hint-placeholder-count="3">
+        <button type="button" class="opt" onClick="{{o.pick}}" style="position:absolute;left:12px;top:{{o.top}}px;width:488px;height:36px;">{{o.text}}</button>
+      </sc-for>
+      <input type="text" value="{{draft}}" onChange="{{onDraft}}" placeholder="or declare one assumption, one line" aria-label="Declare one assumption" style="position:absolute;left:12px;top:190px;width:362px;height:36px;border-color:#c4451c;font-size:17px;">
+      <button type="button" class="btn" disabled="{{cutOff}}" onClick="{{cutTyped}}" style="position:absolute;left:380px;top:190px;width:120px;height:36px;color:#c4451c;border-color:#c4451c;border-style:dashed;opacity:{{cutOp}};">Cut the branch</button>
+      <div class="mono" style="position:absolute;left:12px;top:232px;font-size:11px;color:#c4451c;">rule F-1: a branch declares at least one assumption. Pick one or type it.</div>
+    </sc-if>
+
+    <sc-if value="{{showBranch}}" hint-placeholder-val="{{false}}">
+      <div class="mono" style="position:absolute;left:12px;top:12px;height:20px;padding:0 6px;border:1.5px solid #c4451c;color:#c4451c;font-size:11px;font-weight:700;letter-spacing:.06em;line-height:17px;">YOUR BRANCH · NOT THE RECORD</div>
+      <button type="button" class="btn" onClick="{{doShare}}" style="position:absolute;left:356px;top:5px;width:68px;height:36px;background:#c4451c;border-color:#c4451c;color:#f6f1e1;">Share</button>
+      <button type="button" class="btn" onClick="{{doDiscard}}" style="position:absolute;left:428px;top:5px;width:76px;height:36px;color:#c4451c;border-color:#c4451c;">Discard</button>
+      <svg width="34" height="34" viewBox="0 0 34 34" style="position:absolute;left:12px;top:47px;"><circle cx="17" cy="17" r="15" fill="none" stroke="#c4451c" stroke-width="1.6" stroke-dasharray="{{brDash}}"></circle><path d="{{brIcon}}" fill="none" stroke="#c4451c" stroke-width="2.2"></path></svg>
+      <div class="mono" style="position:absolute;left:60px;top:42px;font-size:11px;color:#c4451c;white-space:nowrap;display:{{brSealedDisp}};">sealed to the record at {{brP8}} · {{brDate}}</div>
+      <div class="serif" style="position:absolute;left:60px;top:59px;font-size:18px;font-style:italic;color:#c4451c;white-space:nowrap;">Assumes: {{brText}}</div>
+      <div class="serif" style="position:absolute;left:12px;top:88px;width:492px;font-size:14px;line-height:15px;color:#c4451c;">{{brNote}}</div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{showAddr}}" hint-placeholder-val="{{true}}">
+    <div style="position:absolute;left:892px;top:257px;width:516px;height:91px;box-sizing:border-box;border:1.5px solid #1c1b18;background:#f6f1e1;padding:10px 12px;">
+      <div class="mono" style="font-size:11px;font-weight:700;letter-spacing:.06em;">HOW AN ADDRESS CARRIES THE PROOF</div>
+      <div class="mono" style="font-size:11px;margin-top:6px;white-space:nowrap;">bow://celtics@<u>date</u>#<u>hash8</u>/branch:<u>author-slug</u>?head=<u>hash8</u></div>
+      <div class="serif" style="font-size:14.5px;line-height:18px;margin-top:2px;">The first hash8 is the record’s seal at that entry. The last is the seal of the branch’s own last step. Change either side by one letter and the check fails.</div>
+    </div>
+  </sc-if>
+
+  <div class="mono" style="position:absolute;left:892px;top:383px;font-size:11px;letter-spacing:.06em;white-space:nowrap;"><b>SHARE · VERIFY</b> <span style="color:#5e594b;">— recomputed from genesis; nothing is looked up</span></div>
+  <div style="position:absolute;left:892px;top:410px;width:516px;">
+    <sc-for list="{{shareItems}}" as="it" hint-placeholder-count="4">
+      <div style="position:relative;height:50px;width:516px;">
+        <div class="mono" style="position:absolute;left:0;top:0;width:336px;font-size:11px;line-height:14px;"><b style="color:{{it.hc}};">{{it.head}}</b> <span style="color:{{it.hc2}};">{{it.head2}}</span></div>
+        <div class="mono wrap" style="position:absolute;left:0;top:14px;width:336px;font-size:10.5px;line-height:13px;color:{{it.ac}};">{{it.addr}}</div>
+        <div class="mono" style="position:absolute;left:342px;top:1px;width:84px;height:37px;box-sizing:border-box;border:{{it.sBorder}};display:flex;align-items:center;justify-content:center;gap:4px;font-size:11px;font-weight:{{it.sWeight}};line-height:12px;text-align:center;color:{{it.sColor}};">
+          <svg width="16" height="16" viewBox="0 0 16 16" style="flex:none;display:{{it.iconDisp}};"><path d="{{it.iconD}}" fill="none" stroke="{{it.iconCol}}" stroke-width="2"></path></svg>
+          <span>{{it.sLine1}}<br>{{it.sLine2}}</span>
+        </div>
+        <button type="button" class="btn" disabled="{{it.vOff}}" onClick="{{it.verify}}" style="position:absolute;left:432px;top:1px;width:84px;height:37px;opacity:{{it.vOp}};">Verify</button>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="position:absolute;left:892px;top:610px;width:516px;height:72px;box-sizing:border-box;border:1.5px solid #1c1b18;background:#f6f1e1;">
+    <svg width="26" height="26" viewBox="0 0 26 26" style="position:absolute;left:10px;top:9px;"><circle cx="13" cy="13" r="11" fill="none" stroke="{{resCol}}" stroke-width="1.6" stroke-dasharray="{{resDash}}"></circle><path d="{{resIcon}}" fill="none" stroke="{{resCol}}" stroke-width="2"></path></svg>
+    <div class="mono" style="position:absolute;left:41px;top:6px;font-size:11px;font-weight:700;letter-spacing:.04em;">{{resTitle}}</div>
+    <div class="serif" style="position:absolute;left:41px;top:20px;width:464px;font-size:14px;line-height:15px;">{{resBody}}</div>
+  </div>
+
+  <div style="position:absolute;left:892px;top:690px;width:516px;height:1px;background:#1c1b18;"></div>
+  <div class="mono" style="position:absolute;left:892px;top:694px;font-size:11px;letter-spacing:.06em;white-space:nowrap;"><b>TAMPER WITH THE RECORD (DEMO)</b> <span style="color:#5e594b;">— edit one past entry</span></div>
+  <div style="position:absolute;left:892px;top:715px;width:516px;height:36px;display:flex;gap:4px;">
+    <sc-for list="{{presets}}" as="p" hint-placeholder-count="3">
+      <button type="button" class="btn" onClick="{{p.pick}}" style="flex:1;height:36px;border-style:dashed;font-weight:400;font-size:10.5px;letter-spacing:0;">{{p.label}}</button>
+    </sc-for>
+  </div>
+  <div class="mono" style="position:absolute;left:892px;top:768px;font-size:12px;color:#5e594b;">entry {{altNum}}</div>
+  <input type="text" value="{{altInput}}" onChange="{{onAlt}}" disabled="{{altInputOff}}" placeholder="press Alter on an entry, or pick a preset" aria-label="Edited entry text" style="position:absolute;left:962px;top:755px;width:283px;height:36px;">
+  <button type="button" class="btn" disabled="{{alterOff}}" onClick="{{doAlter}}" style="position:absolute;left:1252px;top:755px;width:156px;height:36px;opacity:{{alterOp}};">Alter the record</button>
+  <div class="serif" style="position:absolute;left:892px;top:796px;width:350px;font-size:14px;line-height:15px;">{{tamperMsg}}</div>
+  <button type="button" class="btn" disabled="{{restoreOff}}" onClick="{{doRestore}}" style="position:absolute;left:1252px;top:795px;width:156px;height:36px;opacity:{{restoreOp}};">Restore the record</button>
+
+  <!-- how do we know -->
+  <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+    <div style="position:absolute;left:892px;top:98px;width:516px;height:167px;box-sizing:border-box;border:2px solid #1c1b18;background:#f6f1e1;padding:8px 14px;z-index:6;">
+      <div class="mono" style="font-size:11px;font-weight:700;letter-spacing:.06em;">HOW DO WE KNOW?</div>
+      <div class="serif" style="font-size:14px;line-height:18px;margin-top:1px;"><b>Entries</b> are OBSERVED: outside reporting, one source per line where the fixture names one, every line still flagged [verify]. <b>Seals</b> are COMPUTED: SHA-256 of the previous seal plus the entry’s canonical JSON, calculated by this page with crypto.subtle. Nothing is looked up and nothing is stored: change a letter and every later seal changes. <b>Orange</b> is a branch: someone’s declared assumptions in their own ink, sealed to the record at one point. It never writes on the record. Dashed means not yet checked.</div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.t = setInterval(() => {
+      const n = (this.state && this.state.sealN) || 0;
+      if (n >= 8) { clearInterval(this.t); return; }
+      this.setState({ sealN: n + 1 });
+    }, 110);
+    try {
+      crypto.subtle.digest('SHA-256', new TextEncoder().encode('bow:celtics:reality')).then((b) => {
+        const hx = Array.from(new Uint8Array(b)).map((x) => x.toString(16).padStart(2, '0')).join('');
+        this.setState({ subtle: hx });
+      }).catch(() => this.setState({ subtle: 'na' }));
+    } catch (e) { this.setState({ subtle: 'na' }); }
+  }
+  componentWillUnmount() { clearInterval(this.t); }
+
+  ents() {
+    const P = '[source to cite]';
+    return [
+      { d: '17 Jun 2017', k: '2017-06-17', src: P, t: 'Boston and Philadelphia agree to trade the No. 1 pick.', o: ['Boston keeps the No. 1 pick', 'The trade is rejected by the league', 'Boston trades down again'] },
+      { d: '19 Jun 2017', k: '2017-06-19', src: P, t: 'The trade is completed.', o: ['Philadelphia backs out at the last minute', 'The trade is completed a week later', 'Boston asks for a second pick'] },
+      { d: '22 Jun 2017', k: '2017-06-22', src: P, t: 'Boston drafts Jayson Tatum at No. 3.', o: ['Boston drafts Markelle Fultz at No. 1', 'Tatum is gone before pick 3', 'Boston trades the pick for a veteran'] },
+      { d: '12 May 2025', k: '2025-05-12', src: P, t: 'Tatum ruptures his right Achilles, Game 4 vs New York.', o: ['Tatum stays healthy in Game 4', 'Tatum misses only two months', 'Boston rests Tatum in Game 3'] },
+      { d: 'Late Jun 2025', k: '2025-06-late.1', src: 'NBA.com / Hoops Rumors', t: 'Jrue Holiday to Portland for Anfernee Simons and two 2nds.', o: ['Boston keeps Jrue Holiday', 'Holiday goes somewhere else', 'Boston asks for a first-round pick'] },
+      { d: 'Late Jun 2025', k: '2025-06-late.2', src: 'NBA.com / Hoops Rumors', t: 'Kristaps Porziņģis to Atlanta; Boston receives Georges Niang and a 2031 2nd, and sends a 2026 2nd.', o: ['Boston keeps Porziņģis', 'Boston gets a better pick back', 'Atlanta passes on the deal'] },
+      { d: '5 Feb 2026', k: '2026-02-05', src: 'ESPN / NBC Sports Boston', t: 'Simons to Chicago for Nikola Vučević.', o: ['Simons stays in Boston', 'Chicago wants more for Vučević', 'Boston waits until the deadline'] },
+      { d: '6 Mar 2026', k: '2026-03-06', src: 'NBA.com', t: 'Tatum returns vs Dallas.', o: ['Tatum returns a month later', 'Tatum sits out the season', 'Tatum returns for the playoffs'] }
+    ];
+  }
+
+  sha(msg) {
+    const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+    const u = new TextEncoder().encode(msg);
+    const l = u.length;
+    const n = ((l + 9 + 63) >> 6) << 6;
+    const buf = new Uint8Array(n);
+    buf.set(u);
+    buf[l] = 0x80;
+    const dv = new DataView(buf.buffer);
+    dv.setUint32(n - 8, Math.floor((l * 8) / 4294967296));
+    dv.setUint32(n - 4, (l * 8) >>> 0);
+    let h = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+    const w = new Array(64);
+    for (let o = 0; o < n; o += 64) {
+      for (let i = 0; i < 16; i++) w[i] = dv.getUint32(o + i * 4);
+      for (let i = 16; i < 64; i++) {
+        const a = w[i - 15], b = w[i - 2];
+        const s0 = ((a >>> 7) | (a << 25)) ^ ((a >>> 18) | (a << 14)) ^ (a >>> 3);
+        const s1 = ((b >>> 17) | (b << 15)) ^ ((b >>> 19) | (b << 13)) ^ (b >>> 10);
+        w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0;
+      }
+      let a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], hh = h[7];
+      for (let i = 0; i < 64; i++) {
+        const S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+        const ch = (e & f) ^ (~e & g);
+        const t1 = (hh + S1 + ch + K[i] + w[i]) >>> 0;
+        const S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+        const mj = (a & b) ^ (a & c) ^ (b & c);
+        const t2 = (S0 + mj) >>> 0;
+        hh = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+      }
+      h = [(h[0] + a) >>> 0, (h[1] + b) >>> 0, (h[2] + c) >>> 0, (h[3] + d) >>> 0, (h[4] + e) >>> 0, (h[5] + f) >>> 0, (h[6] + g) >>> 0, (h[7] + hh) >>> 0];
+    }
+    return h.map((x) => x.toString(16).padStart(8, '0')).join('');
+  }
+  canon(o) { return JSON.stringify(o, Object.keys(o).sort()); }
+
+  buildChain(alt) {
+    const E = this.ents();
+    const seals = [this.sha('bow:celtics:reality')];
+    const jsons = [];
+    E.forEach((e, i) => {
+      const t = (alt && alt.idx === i) ? alt.text : e.t;
+      const j = this.canon({ d: e.d, k: e.k, src: e.src, t: t, v: '[verify]' });
+      jsons.push(j);
+      seals.push(this.sha(seals[i] + j));
+    });
+    return { seals: seals, jsons: jsons };
+  }
+  chainOf(alt) {
+    const key = alt ? alt.idx + '|' + alt.text : 'base';
+    this._cc = this._cc || {};
+    if (!this._cc[key]) this._cc[key] = this.buildChain(alt);
+    return this._cc[key];
+  }
+  slugOf(text) {
+    return text.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean).slice(0, 3).join('-');
+  }
+  mkBranch(c, idx, author, text, over) {
+    const E = this.ents();
+    const parentFull = c.seals[idx + 1];
+    const head = this.sha(parentFull + this.canon({ a: text, by: author }));
+    const b = { idx: idx, k: E[idx].k, d: E[idx].d, text: text, author: author, slug: author + '-' + this.slugOf(text), claimParent8: parentFull.slice(0, 8), claimHead8: head.slice(0, 8) };
+    return Object.assign(b, over || {});
+  }
+  addrOf(b) { return 'bow://celtics@' + b.k + '#' + b.claimParent8 + '/branch:' + b.slug + '?head=' + b.claimHead8; }
+  verifyBranch(c, b) {
+    const rec = c.seals[b.idx + 1];
+    const rec8 = rec.slice(0, 8);
+    if (rec8 !== b.claimParent8) return { r: 'rec', rec8: rec8 };
+    const h = this.sha(rec + this.canon({ a: b.text, by: b.author })).slice(0, 8);
+    if (h !== b.claimHead8) return { r: 'bad', rec8: rec8, h: h };
+    return { r: 'ok', rec8: rec8, h: h };
+  }
+  guests() {
+    const base = this.chainOf(null);
+    return {
+      a: this.mkBranch(base, 3, 'guest-a', 'Tatum stays healthy in Game 4'),
+      b: this.mkBranch(base, 6, 'guest-b', 'Simons in Chicago', { claimParent8: 'b8499438', claimHead8: 'e18f106b', slug: 'guest-b-simons-in' }),
+      c: this.mkBranch(base, 4, 'guest-c', 'Boston keeps Jrue', { claimHead8: '8ca3b6c7', slug: 'guest-c-boston-keeps-jrue' })
+    };
+  }
+  message(name, b, v, altered) {
+    if (v.r === 'rec') return { kind: 'bad', title: 'RECORD MISMATCH · ' + name, body: 'the record this branch claims (' + b.claimParent8 + ') is not the record (' + v.rec8 + ') — either the record was altered, or the branch was.' + (altered ? ' Your copy is altered (demo): restore it, then check again.' : '') };
+    if (v.r === 'bad') return { kind: 'bad', title: 'BRANCH ALTERED AFTER SHARING · ' + name, body: 'the record matches (' + v.rec8 + '), but the branch’s own steps chain to ' + v.h + ', not the ' + b.claimHead8 + ' in its address.' };
+    return { kind: 'ok', title: 'VALID · ' + name, body: 'the record seals to ' + v.rec8 + ' at this entry, and the branch’s own steps chain to head ' + v.h + '.' };
+  }
+
+  engine() {
+    if (this._eng) return this._eng;
+    const base = this.chainOf(null);
+    const E = this.ents();
+    const ok = (f) => { try { return !!f(); } catch (e) { return false; } };
+    const G = this.guests();
+    const same = (x, y) => x.seals.join() === y.seals.join();
+    const mine = this.mkBranch(base, 3, 'you', 'Tatum stays healthy in Game 4');
+    const res = [
+      ['SHA-256 matches the FIPS vector for “abc”', ok(() => this.sha('abc') === 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad')],
+      ['genesis matches an independent SHA-256', null],
+      ['canonical JSON: key order never matters', ok(() => this.canon({ b: 1, a: 2, c: 'x' }) === this.canon({ c: 'x', a: 2, b: 1 }))],
+      ['chain recompute is deterministic', ok(() => same(this.buildChain(null), this.buildChain(null)))],
+      ['seal i = SHA-256(seal i-1 + JSON i)', ok(() => base.jsons.every((j, i) => this.sha(base.seals[i] + j) === base.seals[i + 1]))],
+      ['link label i = first 4 of seal i-1', ok(() => base.seals.every((s, i) => s.slice(0, 4) === base.seals[i].slice(0, 4)) && E.length === 8)],
+      ['tamper at k changes seals k…8, none before', ok(() => E.every((e, k) => { const c2 = this.buildChain({ idx: k, text: e.t + 'x' }); return base.seals.every((s, j) => (j <= k) === (s === c2.seals[j])); }))],
+      ['restoring the text restores the exact seals', ok(() => E.every((e, k) => same(this.buildChain({ idx: k, text: e.t }), base)))],
+      ['fork stores parentHash; address has hash8', ok(() => mine.claimParent8 === base.seals[4].slice(0, 8) && this.addrOf(mine).indexOf('#' + base.seals[4].slice(0, 8)) > 0)],
+      ['a fork never changes any record seal', ok(() => { const before = base.seals.join(); this.mkBranch(base, 2, 'you', 'x'); return before === this.buildChain(null).seals.join(); })],
+      ['a fork’s own events chain from parentHash', ok(() => mine.claimHead8 === this.sha(base.seals[4] + this.canon({ a: mine.text, by: 'you' })).slice(0, 8))],
+      ['verify accepts the valid received branch', ok(() => this.verifyBranch(base, G.a).r === 'ok')],
+      ['verify rejects the record-altered received branch', ok(() => this.verifyBranch(base, G.b).r === 'rec' && this.verifyBranch(this.buildChain({ idx: 2, text: 'x' }), G.a).r === 'rec')],
+      ['verify rejects the altered-branch received branch', ok(() => this.verifyBranch(base, G.c).r === 'bad')],
+      ['tamper after a cut spares it; before it breaks it', ok(() => this.verifyBranch(this.buildChain({ idx: 5, text: 'x' }), mine).r === 'ok' && this.verifyBranch(this.buildChain({ idx: 2, text: 'x' }), mine).r === 'rec')]
+    ];
+    this._eng = res;
+    return res;
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const sealN = s.sealN || 0;
+    const sel = (s.sel === undefined || s.sel === null) ? 3 : s.sel;
+    const alt = s.alt || null;
+    const mode = s.mode || 'idle';
+    const cutAt = (s.cutAt === undefined || s.cutAt === null) ? 3 : s.cutAt;
+    const branch = s.branch || null;
+    const st = s.st || {};
+    const res = s.res || null;
+    const how = !!s.how;
+    const msgMode = s.msgMode || 'intact';
+    const altIdx = (s.altIdx === undefined || s.altIdx === null) ? -1 : s.altIdx;
+    const altInput = s.altInput || '';
+    const draft = s.draft || '';
+    const shared = !!s.shared;
+    const E = this.ents();
+    const base = this.chainOf(null);
+    const cur = this.chainOf(alt);
+    const altered = !!alt;
+    const upd = (o) => this.setState(o);
+
+    // rows
+    const rows = E.map((e, i) => {
+      const sealed = i < sealN;
+      const sl = cur.seals[i + 1];
+      const changed = altered && i >= alt.idx;
+      const isAlt = altered && i === alt.idx;
+      const num = String(i + 1).padStart(2, '0');
+      let pre = '';
+      let text = isAlt ? alt.text : e.t;
+      return {
+        bg: i === sel ? '#e2d9bd' : 'transparent',
+        railDisp: i <= sealN + 1 ? 'flex' : 'none',
+        railText: i <= sealN ? cur.seals[i].slice(0, 4) : '....',
+        stampDisp: sealed ? 'block' : 'none',
+        sealingDisp: sealed ? 'none' : 'block',
+        stampBorder: '#a3302b',
+        stampBg: changed ? '#8f2a26' : '#f2ecda',
+        stampFg: changed ? '#f6f1e1' : '#a3302b',
+        stampGap: changed ? '#8f2a26' : '#f2ecda',
+        sA: sl.slice(0, 4), sB: sl.slice(4, 8),
+        meta: num + ' · ' + e.d.toUpperCase() + ' · ' + (isAlt ? 'ALTERED IN THIS PAGE (demo)' : e.src + ' [verify]'),
+        was: changed ? 'was ' + base.seals[i + 1].slice(0, 8) + ' → ' + sl.slice(0, 8) : '',
+        pre: pre,
+        text: text,
+        mark: isAlt ? '#eadb9a' : 'transparent',
+        under: isAlt ? 'underline' : 'none',
+        forkOff: !sealed,
+        forkOp: sealed ? 1 : 0.42,
+        select: () => upd({ sel: i }),
+        fork: () => upd({ sel: i, mode: 'cut', cutAt: i, draft: '' }),
+        alter: () => { if (alt) upd({ sel: i }); else upd({ sel: i, altIdx: i, altInput: e.t }); }
+      };
+    });
+
+    // detail
+    const dNum = String(sel + 1).padStart(2, '0');
+
+    // branch card
+    const showCut = mode === 'cut';
+    const showBranch = !showCut && !!branch;
+    const showNone = !showCut && !branch;
+    const brBroken = branch ? this.verifyBranch(cur, branch).r === 'rec' : false;
+    const cutE = E[cutAt] || E[3];
+    const opts = cutE.o.map((t, i) => ({ text: t, top: 68 + i * 40, pick: () => this.cut(t) }));
+    const typed = draft.trim();
+
+    // share / verify list
+    const G = this.guests();
+    const names = { you: 'you', a: 'guest-a', b: 'guest-b', c: 'guest-c' };
+    const mkItem = (key, b, head, head2, hc, addr) => {
+      const v = st[key] || 'unk';
+      const isOk = v === 'ok', isRec = v === 'rec', isBad = v === 'bad';
+      const disabledYou = key === 'you' && !shared;
+      const l1 = v === 'unk' ? 'not' : (isOk ? 'VALID' : (isRec ? 'RECORD' : 'BRANCH'));
+      const l2 = v === 'unk' ? 'checked' : (isOk ? '' : (isRec ? 'MISMATCH' : 'ALTERED'));
+      return {
+        head: head, head2: head2, hc: hc, hc2: hc === '#c4451c' ? '#c4451c' : '#1c1b18',
+        addr: addr, ac: disabledYou ? '#5e594b' : '#1c1b18',
+        sBorder: v === 'unk' ? '1.5px dashed #1c1b18' : '2px solid #1c1b18',
+        sWeight: v === 'unk' ? 400 : 700, sColor: v === 'unk' ? '#3d392e' : '#1c1b18',
+        sLine1: l1, sLine2: l2,
+        iconDisp: v === 'unk' ? 'none' : 'block',
+        iconD: isOk ? 'M2 8 L6 12 L14 3' : 'M3 3 L13 13 M13 3 L3 13',
+        iconCol: isOk ? '#a3302b' : '#c4451c',
+        vOff: disabledYou, vOp: disabledYou ? 0.42 : 1,
+        verify: () => this.verify(key)
+      };
+    };
+    const shareItems = [
+      shared && branch
+        ? mkItem('you', branch, 'YOU', '· sharing your branch', '#c4451c', this.addrOf(branch))
+        : mkItem('you', null, 'YOU', '· nothing shared yet', '#c4451c', 'Press Share on a branch to see its address here.'),
+      mkItem('a', G.a, 'RECEIVED', '· guest-a', '#1c1b18', this.addrOf(G.a)),
+      mkItem('b', G.b, 'RECEIVED', '· guest-b', '#1c1b18', this.addrOf(G.b)),
+      mkItem('c', G.c, 'RECEIVED', '· guest-c', '#1c1b18', this.addrOf(G.c))
+    ];
+
+    // result box
+    const rk = res ? res.kind : 'unk';
+    const resTitle = res ? res.title : 'NOT CHECKED YET';
+    const resBody = res ? res.body : 'Verify recomputes the chain from genesis up to the divergence entry and compares hashes. It reads no server.';
+
+    // tamper
+    const mkPreset = (label, idx, from, to) => ({
+      label: label,
+      pick: () => upd({ sel: idx, altIdx: idx, altInput: E[idx].t.replace(from, to) })
+    });
+    const presets = [
+      mkPreset('Game 4→5 · entry 4', 3, 'Game 4', 'Game 5'),
+      mkPreset('2031→2030 · entry 6', 5, '2031', '2030'),
+      mkPreset('No. 3→2 · entry 3', 2, 'No. 3', 'No. 2')
+    ];
+    const canAlter = !altered && altIdx >= 0 && altInput.trim() !== '' && altInput !== E[altIdx].t;
+    let tamperMsg = 'The record is intact: every seal matches its original.';
+    if (altered) {
+      const brokenN = (branch && brBroken) ? 1 : 0;
+      tamperMsg = 'ALTERED (demo) · entry ' + (alt.idx + 1) + ' · ' + (8 - alt.idx) + ' of 8 seals changed, ' + (alt.idx === 0 ? 'no earlier entry' : (alt.idx === 1 ? 'entry 1' : 'entries 1–' + alt.idx)) + ' identical · ' + brokenN + ' branch' + (brokenN === 1 ? '' : 'es') + ' broken';
+    } else if (msgMode === 'restored') {
+      tamperMsg = 'Restored · all 8 seals equal the originals, compared hash by hash.';
+    }
+
+    // engine
+    const eng = this.engine().map((r) => r.slice());
+    eng[1][1] = s.subtle ? s.subtle === base.seals[0] : null;
+    const checks = eng.map((r) => ({ label: r[0], mark: r[1] === null ? '…' : (r[1] ? '✓' : '✕'), col: r[1] === false ? '#c4451c' : '#a3302b' }));
+    const engPass = eng.filter((r) => r[1] === true).length;
+
+    const done = sealN >= 8;
+    const head8 = done ? cur.seals[8].slice(0, 8) : 'sealing…';
+
+    return {
+      rows: rows,
+      genesis8: base.seals[0].slice(0, 8) + '…',
+      head8: head8,
+      addrLine: 'bow://celtics/reality#head:' + head8 + ' · 8 entries',
+      how: how, howPressed: how, howBg: how ? '#1c1b18' : '#f6f1e1', howFg: how ? '#f6f1e1' : '#1c1b18',
+      toggleHow: () => upd({ how: !how }),
+      dNum: dNum, dSeal: cur.seals[sel + 1], dPrev: cur.seals[sel], dJson: cur.jsons[sel],
+      checks: checks, engPass: engPass, engTotal: 15,
+      regCount: branch ? 1 : 0,
+      cardH: showCut ? 252 : 123,
+      cardStyle: showNone ? 'dashed' : 'solid',
+      showNone: showNone, showCut: showCut, showBranch: showBranch, showAddr: !showCut,
+      cutDate: cutE.d, cutSeal8: cur.seals[cutAt + 1].slice(0, 8),
+      opts: opts, draft: draft,
+      onDraft: (e) => upd({ draft: e.target.value }),
+      cutOff: typed === '', cutOp: typed === '' ? 0.5 : 1,
+      cutTyped: () => this.cut(typed),
+      cancelCut: () => upd({ mode: 'idle', draft: '' }),
+      brDash: brBroken ? '3 3' : '0',
+      brIcon: brBroken ? 'M11 11 L23 23 M23 11 L11 23' : 'M10 17 L15 22 L24 11',
+      brSealedDisp: brBroken ? 'none' : 'block',
+      brP8: branch ? branch.claimParent8 : '',
+      brDate: branch ? branch.d : '',
+      brText: branch ? branch.text : '',
+      brNote: branch
+        ? (brBroken
+          ? 'parent no longer matches — the record changed after this branch was cut (the record now seals to ' + cur.seals[branch.idx + 1].slice(0, 8) + ' here).'
+          : 'the record still seals to ' + branch.claimParent8 + ' at this entry · branch head ' + branch.claimHead8)
+        : '',
+      doShare: () => upd({ shared: true }),
+      doDiscard: () => upd({ branch: null, shared: false, st: Object.assign({}, st, { you: 'unk' }), res: null }),
+      shareItems: shareItems,
+      resCol: rk === 'bad' ? '#c4451c' : '#a3302b',
+      resDash: rk === 'unk' ? '3 3' : '0',
+      resIcon: rk === 'ok' ? 'M7 13 L11 17 L19 8' : (rk === 'bad' ? 'M8 8 L18 18 M18 8 L8 18' : ''),
+      resTitle: resTitle, resBody: resBody,
+      presets: presets,
+      altNum: altIdx >= 0 ? String(altIdx + 1) : '–',
+      altInput: altInput,
+      onAlt: (e) => upd({ altInput: e.target.value }),
+      altInputOff: altIdx < 0 || altered,
+      alterOff: !canAlter, alterOp: canAlter ? 1 : 0.42,
+      doAlter: () => upd({ alt: { idx: altIdx, text: altInput }, sel: altIdx, msgMode: 'altered', st: {}, res: null }),
+      restoreOff: !altered, restoreOp: altered ? 1 : 0.42,
+      doRestore: () => upd({ alt: null, altIdx: -1, altInput: '', msgMode: 'restored', st: {}, res: null }),
+      tamperMsg: tamperMsg
+    };
+  }
+
+  cut(text) {
+    const s = this.state || {};
+    const t = (text || '').trim();
+    if (!t) return;
+    const c = this.chainOf(s.alt || null);
+    const i = (s.cutAt === undefined || s.cutAt === null) ? 3 : s.cutAt;
+    const st = Object.assign({}, s.st || {});
+    delete st.you;
+    this.setState({ branch: this.mkBranch(c, i, 'you', t), mode: 'idle', draft: '', shared: false, st: st, res: null, sel: i });
+  }
+
+  verify(key) {
+    const s = this.state || {};
+    const cur = this.chainOf(s.alt || null);
+    const G = this.guests();
+    const b = key === 'you' ? s.branch : G[key];
+    if (!b) return;
+    const v = this.verifyBranch(cur, b);
+    const name = key === 'you' ? 'you' : 'guest-' + key;
+    const m = this.message(name, b, v, !!s.alt);
+    const st = Object.assign({}, s.st || {});
+    st[key] = v.r;
+    this.setState({ st: st, res: m });
+  }
+}
+</script>
+</body>
+</html>

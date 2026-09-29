@@ -1,0 +1,1183 @@
+<title>Live World</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap');
+:root{
+--bg:#F7F7F4; --fg:#111111; --muted:#5C5C56; --faint:#8C8C85; --rule:#D8D8D0; --wash:#EFEFEA;
+--computed:#2B3FD6; --branch:#C2410C; --yours:#007A33; --clock:#E8A317; --clock-ink:#111111; --bad:#B3261E;
+--sans:"Inter Tight","Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+--mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+}
+@media (prefers-color-scheme: dark){
+:root:not([data-theme="light"]){
+--bg:#121212; --fg:#EDEDED; --muted:#A5A59E; --faint:#787872; --rule:#34342F; --wash:#1C1C1A;
+--computed:#8E9BFF; --branch:#FB923C; --yours:#3ED07E; --clock:#E8A317; --clock-ink:#111111; --bad:#FF8A80;
+color-scheme: dark;
+}
+}
+:root[data-theme="dark"]{
+--bg:#121212; --fg:#EDEDED; --muted:#A5A59E; --faint:#787872; --rule:#34342F; --wash:#1C1C1A;
+--computed:#8E9BFF; --branch:#FB923C; --yours:#3ED07E; --clock:#E8A317; --clock-ink:#111111; --bad:#FF8A80;
+color-scheme: dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-bottom:72px}
+.banner{background:var(--fg);color:var(--bg);font:500 12px/1.4 var(--mono);padding:6px 16px;text-align:center}
+.banner.warn{background:var(--bad);color:#fff}
+.mono{font-family:var(--mono)}
+.muted{color:var(--muted)}
+.comp{color:var(--computed)}
+.mine{color:var(--yours)}
+.bad{color:var(--bad)}
+h1{font:700 clamp(26px,5.2vw,40px)/1.08 var(--sans);letter-spacing:-.02em;margin:26px 0 8px}
+h2{margin:0 0 12px;font:600 11px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+p{margin:0 0 10px}
+.clk{font:500 clamp(16px,3.6vw,22px)/1.3 var(--mono);margin:0 0 4px}
+.sub{font:400 13px/1.5 var(--mono);color:var(--muted);margin:0}
+.sec{border-top:1px solid var(--rule);padding:20px 0 22px}
+.agree{border-top:1px solid var(--fg);border-bottom:1px solid var(--rule);margin-top:18px;padding:14px 0}
+.agree .line{font:500 15px/1.45 var(--sans);margin:0}
+.agree .line b{font-family:var(--mono);font-weight:600}
+.peers{list-style:none;margin:10px 0 0;padding:0;font:400 13px/1.4 var(--mono)}
+.peers li{display:flex;flex-wrap:wrap;gap:2px 14px;padding:4px 0;border-top:1px dotted var(--rule)}
+.peers .who{min-width:9ch;font-family:var(--sans);font-weight:600;font-size:14px}
+.hashfull{display:block;font:400 12px/1.4 var(--mono);word-break:break-all;color:var(--computed);margin-top:8px}
+.linkbtn{background:none;border:0;padding:0;font:500 13px var(--mono);color:var(--muted);text-decoration:underline;cursor:pointer;text-underline-offset:3px}
+.cols{display:flex;flex-direction:column}
+.colA,.colB{display:contents}
+#place{order:1}#now{order:2}#act{order:3}#board{order:4}#record{order:5}
+@media (min-width:940px){
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);column-gap:56px;align-items:start}
+.colA,.colB{display:block}
+}
+.btn{display:block;width:100%;text-align:left;font:600 15px/1.3 var(--sans);padding:11px 14px;min-height:44px;background:transparent;border:1px solid var(--fg);cursor:pointer;margin:0 0 8px}
+.btn small{display:block;font:400 12px/1.3 var(--mono);color:var(--muted);margin-top:3px}
+.btn:hover:not(:disabled){background:var(--wash)}
+.btn.go{background:var(--fg);color:var(--bg)}
+.btn.go small{color:inherit;opacity:.8}
+.btn.go:hover:not(:disabled){background:var(--fg);opacity:.9}
+.btn.own{border-color:var(--yours);color:var(--yours)}
+.btn:disabled{opacity:.42;cursor:not-allowed}
+.btn.own:disabled{opacity:1;cursor:default}
+.btn.slim{display:inline-block;width:auto;font-size:14px;padding:8px 12px;min-height:38px;margin-right:8px}
+:focus-visible{outline:2px solid var(--computed);outline-offset:2px}
+input[type=text],textarea{width:100%;background:transparent;border:1px solid var(--fg);padding:9px 10px;border-radius:0;font:400 15px/1.4 var(--sans)}
+textarea{min-height:120px;resize:vertical;font-family:var(--sans)}
+label.f{display:block;font:500 12px/1.3 var(--mono);color:var(--muted);margin:10px 0 5px}
+.bar{position:relative;height:16px;border:1px solid var(--fg);margin:26px 2px 8px;background:var(--wash)}
+.bar>i{position:absolute;left:0;top:0;bottom:0;background:var(--computed)}
+.bar>b{position:absolute;top:-7px;bottom:-7px;width:0;border-left:1px solid var(--fg)}
+.bar>b>u{position:absolute;top:-17px;left:-6px;font:600 10px/1 var(--mono);text-decoration:none}
+.lines{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 16px;font:400 12px/1.5 var(--mono);color:var(--muted);margin:0 0 12px}
+.kv{display:flex;flex-wrap:wrap;gap:0 12px;align-items:baseline;margin:0 0 8px}
+.kv .k{font:500 12px var(--mono);color:var(--muted);min-width:8.5ch}
+.kv .v{font:600 20px var(--mono)}
+.aut{outline:1px solid var(--faint);outline-offset:1px;padding:0 5px;font-size:13px;color:var(--muted)}
+.gen{background-image:radial-gradient(circle at 1px 1px,var(--faint) .8px,transparent 1.1px);background-size:5px 5px;padding:1px 5px}
+.matter{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:9px 0;border-top:1px dotted var(--rule);align-items:start}
+.chip{font:600 13px/1 var(--mono);padding:6px 8px;min-width:8ch;text-align:center;background:var(--rule);color:var(--muted)}
+.chip.amber{background:var(--clock);color:var(--clock-ink)}
+.chip.closed{background:transparent;border:1px solid var(--rule)}
+.matter .t{font-weight:600;font-size:15px}
+.matter .d{grid-column:2;font-size:13px;color:var(--muted)}
+.sinceb{border-left:2px solid var(--computed);padding:4px 0 4px 12px;margin:14px 0 0}
+.sinceb p{margin:0 0 4px;font-size:14px}
+.note{font-size:13px;color:var(--muted)}
+.ruleline{font:400 12px/1.5 var(--mono);color:var(--muted);margin:2px 0 8px}
+.confirm{border:1px solid var(--fg);padding:10px 12px;margin:0 0 8px}
+.confirm p{font-size:14px;margin:0 0 8px}
+ol.rec{list-style:none;margin:0;padding:0}
+.rec>li{display:grid;grid-template-columns:104px minmax(0,1fr) auto;gap:2px 12px;padding:10px 0;border-top:1px dotted var(--rule);align-items:baseline}
+.rec .tm{font:400 12px/1.4 var(--mono);color:var(--muted)}
+.rec .what{font-size:15px}
+.rec .who{font-weight:600}
+.rec .seal{font:500 12px var(--mono);color:var(--computed);text-align:right}
+.rec .st{grid-column:2 / 4;font:400 12px/1.4 var(--mono);color:var(--muted)}
+.rec .st.no{color:var(--bad)}
+.rec .st.ok{color:var(--computed)}
+.rec li.nc .what{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--faint)}
+.rec li.noact{border:1px dashed var(--faint);padding:9px 10px;margin:6px 0;background:transparent}
+.tag{display:inline-block;font:600 10px/1 var(--mono);letter-spacing:.08em;padding:3px 5px;border:1px solid var(--fg);margin-right:6px;vertical-align:1px}
+details.how{border-top:1px solid var(--rule);padding:16px 0}
+details.how summary{cursor:pointer;font:600 11px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:6px 0}
+details.how h3{font:600 14px var(--sans);margin:16px 0 6px}
+details.how ul{margin:0 0 8px;padding-left:20px}
+details.how li{margin:0 0 4px;font-size:14px}
+table.rl{border-collapse:collapse;font:400 12px/1.5 var(--mono);width:100%}
+table.rl td{border-top:1px dotted var(--rule);padding:3px 8px 3px 0;vertical-align:top}
+table.rl td:first-child{white-space:nowrap;font-weight:600}
+.tests{list-style:none;padding:0;margin:8px 0 0;font:400 12px/1.5 var(--mono)}
+.tests li{padding:1px 0}
+.foot{border-top:1px solid var(--rule);padding:16px 0 0;font:400 12px/1.5 var(--mono);color:var(--muted)}
+.dev{margin-top:28px;border:1px dashed var(--branch);padding:14px}
+.dev h2{color:var(--branch)}
+.devrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 10px}
+.devgrid{display:grid;grid-template-columns:1fr;gap:0 32px}
+@media (min-width:940px){.devgrid{grid-template-columns:1fr 1fr}}
+.dev .btn.slim{margin:0}
+.dev input[type=number]{width:72px;background:transparent;border:1px solid var(--fg);padding:6px;font:400 13px var(--mono)}
+.empty{padding:26px 0;color:var(--muted)}
+.live{position:absolute;left:-9999px}
+@media (max-width:520px){
+.rec>li{grid-template-columns:minmax(0,1fr) auto}
+.rec .tm{grid-column:1 / 3}
+.rec .st{grid-column:1 / 3}
+.lines{grid-template-columns:1fr}
+}
+</style>
+
+<div id="banner" class="banner" hidden></div>
+<div class="wrap" id="app">
+  <div id="hdr"><h1>Live World</h1><p class="sub">Connecting to the World&#x2026;</p></div>
+  <section id="agree" class="agree" aria-live="polite"></section>
+  <div id="gate"></div>
+  <div class="cols" id="cols" hidden>
+    <div class="colA">
+      <section id="place" class="sec"></section>
+      <section id="act" class="sec"></section>
+      <section id="board" class="sec"></section>
+    </div>
+    <div class="colB">
+      <section id="now" class="sec"></section>
+      <section id="record" class="sec"></section>
+    </div>
+  </div>
+  <details class="how" id="how"></details>
+  <div class="foot">A persistent BOW World &#xb7; prototype &#xb7; World facts authored, not NBA history &#xb7; figures: league lines 2026&#x2013;27 (verify)</div>
+  <section id="dev" class="dev" hidden></section>
+  <div id="live" class="live" aria-live="polite"></div>
+</div>
+
+<script>
+(function () {
+'use strict';
+const $ = (s, r) => (r || document).querySelector(s);
+function el(tag, attrs) {
+const e = document.createElement(tag);
+if (attrs) for (const k in attrs) {
+const v = attrs[k];
+if (v == null || v === false) continue;
+if (k === 'class') e.className = v;
+else if (k === 'text') e.textContent = v;
+else if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), v);
+else if (k === 'dataset') Object.assign(e.dataset, v);
+else e.setAttribute(k, v === true ? '' : v);
+}
+for (let i = 2; i < arguments.length; i++) {
+const kids = [].concat(arguments[i]);
+for (const c of kids) { if (c == null || c === false) continue; e.append(c.nodeType ? c : document.createTextNode(String(c))); }
+}
+return e;
+}
+const isObj = (x) => !!x && typeof x === 'object' && !Array.isArray(x);
+const clean = (s, n) => (typeof s === 'string' ? s.replace(/[\u0000-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2066-\u2069]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, n || 140) : '');
+function deepMerge(a, b) {
+const o = Object.assign({}, a);
+for (const k in b) o[k] = isObj(b[k]) && isObj(o[k]) ? deepMerge(o[k], b[k]) : b[k];
+return o;
+}
+const clone = (x) => JSON.parse(JSON.stringify(x));
+function canonJSON(v) {
+if (v === null || typeof v !== 'object') { const s = JSON.stringify(v); return s === undefined ? 'null' : s; }
+if (Array.isArray(v)) return '[' + v.map(canonJSON).join(',') + ']';
+return '{' + Object.keys(v).filter((k) => v[k] !== undefined).sort().map((k) => JSON.stringify(k) + ':' + canonJSON(v[k])).join(',') + '}';
+}
+const PR = []; for (let n = 2; PR.length < 64; n++) if (PR.every((p) => n % p)) PR.push(n);
+const K256 = PR.map((p) => Math.floor((Math.cbrt(p) % 1) * 4294967296));
+const IV256 = PR.slice(0, 8).map((p) => Math.floor((Math.sqrt(p) % 1) * 4294967296));
+function sha256js(str) {
+const msg = new TextEncoder().encode(str), l = msg.length, nb = ((l + 9 + 63) >> 6) << 6;
+const buf = new Uint8Array(nb); buf.set(msg); buf[l] = 0x80;
+const dv = new DataView(buf.buffer);
+dv.setUint32(nb - 8, Math.floor((l * 8) / 4294967296)); dv.setUint32(nb - 4, (l * 8) >>> 0);
+const H = IV256.slice(), w = new Uint32Array(64);
+for (let i = 0; i < nb; i += 64) {
+for (let j = 0; j < 16; j++) w[j] = dv.getUint32(i + j * 4);
+for (let j = 16; j < 64; j++) {
+const a = w[j - 15], b = w[j - 2];
+const s0 = ((a >>> 7) | (a << 25)) ^ ((a >>> 18) | (a << 14)) ^ (a >>> 3);
+const s1 = ((b >>> 17) | (b << 15)) ^ ((b >>> 19) | (b << 13)) ^ (b >>> 10);
+w[j] = (w[j - 16] + s0 + w[j - 7] + s1) | 0;
+}
+let a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+for (let j = 0; j < 64; j++) {
+const S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+const t1 = (h + S1 + ((e & f) ^ (~e & g)) + K256[j] + w[j]) | 0;
+const S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+const t2 = (S0 + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+}
+H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
+H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+}
+return H.map((x) => (x >>> 0).toString(16).padStart(8, '0')).join('');
+}
+const subtleOk = () => typeof crypto !== 'undefined' && !!crypto.subtle && typeof crypto.subtle.digest === 'function';
+async function sha256hex(str) {
+if (subtleOk()) {
+try {
+const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+return Array.from(new Uint8Array(b)).map((x) => x.toString(16).padStart(2, '0')).join('');
+} catch (e) {  }
+}
+return sha256js(str);
+}
+function mulberry32(a) {
+return function () {
+a |= 0; a = (a + 0x6D2B79F5) | 0;
+let t = Math.imul(a ^ (a >>> 15), 1 | a);
+t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+}
+function fnv1a(s) { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193); } return h >>> 0; }
+const seedFor = (seed, day) => fnv1a(seed + ':' + day);
+function fmtM(k) { const m = k / 1000; return '$' + (k % 100 === 0 ? m.toFixed(1) : k % 10 === 0 ? m.toFixed(2) : m.toFixed(3)) + 'M'; }
+const plural = (n, w, pl) => n + ' ' + (n === 1 ? w : pl || w + 's');
+const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const pad2 = (n) => (n < 10 ? '0' : '') + n;
+function worldClock(tick, paceMs) {
+const total = 540 + Math.floor((tick * 1000 * 1440) / paceMs);
+return DOW[(2 + Math.floor(total / 1440)) % 7] + ' ' + pad2(Math.floor((total % 1440) / 60)) + ':' + pad2(total % 60);
+}
+const dayOfTick = (tick, paceMs) => (Math.floor((tick * 100000) / paceMs) / 100).toFixed(2);
+const localHMS = (ms) => { const d = new Date(ms); return pad2(d.getHours()) + ':' + pad2(d.getMinutes()) + ':' + pad2(d.getSeconds()); };
+const localDT = (ms) => new Date(ms).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+function hms(ms) { const s = Math.max(0, Math.floor(ms / 1000)); return Math.floor(s / 3600) + ':' + pad2(Math.floor((s % 3600) / 60)) + ':' + pad2(s % 60); }
+const errMsg = (e) => (e && e.code ? e.code + (e.message ? ': ' + e.message : '') : String((e && e.message) || e));
+const SEATS = ['boston-gm', 'denver-gm'];
+const SEAT_LABEL = { 'boston-gm': 'Boston GM', 'denver-gm': 'Denver GM', observer: 'Observer' };
+const KINDS = ['claim-seat', 'leave-seat', 'offer', 'counter', 'accept', 'decline', 'call-up', 'hold', 'note-public'];
+const GENESIS8 = '00000000';
+const RULES = {
+'R-1': 'A known kind of act, from a seat that exists.',
+'R-2': 'Nothing counts from before the World began.',
+'R-3': 'An act needs an actor.',
+'R-4': 'A public note needs words.',
+'S-1': 'An act from a seat counts only if the actor held that seat at that moment, derived from the claim and leave acts in this record.',
+'S-2': 'A seat can be claimed only while vacant.',
+'S-3': 'One person, one seat: a negotiation needs two people.',
+'M-1': 'A matter takes moves only while open (an offer counts only while the Denver call is open).',
+'M-2': 'That move belongs to the other seat.',
+'M-3': 'Counter, accept and decline need a standing offer or counter.',
+'M-4': 'A seat cannot answer its own offer or counter.',
+'T-own': 'Everything in a trade must still be on the seller\u2019s books.',
+'T-agg': 'Over the second apron: no aggregating salaries in a trade.',
+'T-match': 'Take-back limit: 125% under the first apron, 110% over it, 100% over the second (2023 CBA, simplified, verify).',
+'P-1': 'Denver can give a pick only while it holds it.',
+'P-2': 'A Denver contract can be used once.',
+'R-15': 'No more than 15 standard contracts.'
+};
+const OPP = [{ n: 'Miami', r: 52 }, { n: 'Toronto', r: 47 }, { n: 'Denver', r: 57 }, { n: 'Chicago', r: 50 }, { n: 'Atlanta', r: 49 }, { n: 'Orlando', r: 51 }, { n: 'Detroit', r: 45 }];
+function makeCanon(epochISO) {
+const P = (id, name, role, salary, contract) => ({ id, name, role, salary, contract });
+return {
+name: 'Boston \u00b7 Year Two', version: 1, epoch: epochISO,
+pace: '1 World day = 1 real hour', paceMs: 3600000, seed: 2026, skewMs: 10000,
+lines: { cap: 164.961, tax: 200.428, apron1: 209.015, apron2: 221.686 },
+worldTaxRule: { base: 200.0, rate: 1.5, label: 'World rule: flat 1.5\u00d7 (authored)' },
+base: { w: 14, l: 10, rating: 56 },
+roster: [
+P('tatum', 'Jayson Tatum', 'wing', 58.5, '3 yrs left'),
+P('butler', 'Jimmy Butler', 'wing', 56.8, '1 yr left \u00b7 acquired Week 6 for Derrick White + filler'),
+P('guard-a', 'Guard A', 'starter guard', 24.0, '2 yrs'),
+P('big-a', 'Big A', 'starter big', 19.5, '3 yrs'),
+P('hauser', 'Sam Hauser', 'wing', 10.8, '3 yrs'),
+P('pritchard', 'Payton Pritchard', 'guard', 7.8, '2 yrs'),
+P('big-b', 'Big B', 'rotation big', 9.9, '1 yr'),
+P('wing-c', 'Wing C', 'rotation wing', 8.4, '2 yrs'),
+P('guard-b', 'Guard B', 'backup guard', 2.7, '1 yr'),
+P('rookie-1', 'Rookie 1', 'rookie scale', 5.1, '3 yrs'),
+P('rookie-2', 'Rookie 2', 'rookie scale', 3.3, '3 yrs'),
+P('min-1', 'Min 1', 'minimum', 2.4, '1 yr'),
+P('min-2', 'Min 2', 'minimum', 2.4, '1 yr'),
+P('min-3', 'Min 3', 'minimum', 2.4, '1 yr')
+],
+extra: { deadMoney: 6.4, pendingTwoWay: 2.4 },
+denver: { contracts: [{ id: 'den-2.1', salary: 2.1 }, { id: 'den-6.0', salary: 6.0 }, { id: 'den-11.0', salary: 11.0 }], picks: ['2028 2nd', '2029 2nd'] },
+matters: [
+{ id: 'denver-call', title: 'Denver called about your backup guard', deadlineDay: 2, seat: 'boston-gm' },
+{ id: 'two-way', title: 'Two-way call-up pending', deadlineDay: 1.5, seat: 'boston-gm' },
+{ id: 'owner-note', title: 'Under the second apron by the deadline', deadlineDay: 5, seat: 'boston-gm' }
+]
+};
+}
+const payrollK = (S) => S.roster.reduce((a, p) => a + p.salaryK, 0) + S.deadK + S.pendingK;
+function apronStatus(pK, L) { return pK > L.apron2 ? 'over the second apron' : pK > L.apron1 ? 'over the first apron' : pK > L.tax ? 'over the tax line' : 'under the tax line'; }
+const takeBackPct = (status) => (status === 'over the second apron' ? 100 : status === 'over the first apron' ? 110 : 125);
+const worldTaxK = (pK, rule) => Math.round(rule.rate * Math.max(0, pK - Math.round(rule.base * 1000)));
+function apronPhrase(pK, L) { return pK <= L.apron2 ? 'under the second apron by ' + fmtM(L.apron2 - pK) : 'over the second apron by ' + fmtM(pK - L.apron2); }
+function gameResult(seed, day, rating) {
+const r = mulberry32(seedFor(seed, day)), u = [r(), r(), r()];
+const oi = (Math.floor(day / 2) - 1) % OPP.length, home = oi % 2 === 0;
+const pct = Math.min(92, Math.max(8, 50 + Math.round((rating - OPP[oi].r + (home ? 3 : 0)) * 2)));
+const win = Math.floor(u[0] * 100) < pct, wp = 100 + Math.floor(u[1] * 18), lp = wp - 1 - Math.floor(u[2] * 12);
+return { day, opp: OPP[oi].n, home, win, pts: win ? [wp, lp] : [lp, wp], pct };
+}
+function gamesBetween(canon, fromMs, toMs) {
+const epoch = Date.parse(canon.epoch), out = [];
+for (let d = 2; epoch + d * canon.paceMs <= toMs && d < 100000; d += 2) if (epoch + d * canon.paceMs > fromMs) out.push(gameResult(canon.seed, d, canon.base.rating));
+return out;
+}
+const normList = (x) => Array.from(new Set((Array.isArray(x) ? x : []).filter((s) => typeof s === 'string').map((s) => clean(s, 40)).filter(Boolean))).sort().slice(0, 5);
+function normGet(g) { g = isObj(g) ? g : {}; return { picks: normList(g.picks), contracts: normList(g.contracts) }; }
+function normTerms(p) { p = isObj(p) ? p : {}; return { give: normList(p.give), get: normGet(p.get) }; }
+function termsText(canon, t) {
+const nm = {}; canon.roster.forEach((p) => { nm[p.id] = p.name + ' (' + fmtM(Math.round(p.salary * 1000)) + ')'; });
+const give = t.give.map((id) => nm[id] || id).join(' + ') || 'nothing';
+const get = t.get.picks.map((p) => 'Denver\u2019s ' + p).concat(t.get.contracts.map((c) => { const d = canon.denver.contracts.find((x) => x.id === c); return 'Denver\u2019s ' + (d ? fmtM(Math.round(d.salary * 1000)) : c) + ' contract'; })).join(' + ') || 'nothing';
+return give + ' for ' + get;
+}
+function checkTrade(S, t, L) {
+const out = t.give.map((id) => S.roster.find((p) => p.id === id));
+if (!t.give.length || out.some((x) => !x)) return ['T-own', 'a player in the deal is no longer on Boston\u2019s books'];
+for (const pk of t.get.picks) if (S.picks.denver.indexOf(pk) < 0) return ['P-1', 'Denver no longer holds the ' + pk];
+for (const c of t.get.contracts) if (!S.denverContracts.find((d) => d.id === c)) return ['P-2', 'that Denver contract is no longer available'];
+const status = apronStatus(payrollK(S), L);
+if (status === 'over the second apron' && t.give.length > 1) return ['T-agg', 'over the second apron, salaries cannot be aggregated in a trade'];
+const outK = out.reduce((a, p) => a + p.salaryK, 0), inK = t.get.contracts.reduce((a, c) => a + S.denverContracts.find((d) => d.id === c).salaryK, 0), pct = takeBackPct(status);
+if (inK * 100 > outK * pct) return ['T-match', 'incoming ' + fmtM(inK) + ' is more than ' + pct + '% of outgoing ' + fmtM(outK) + ' (' + status + ')'];
+return null;
+}
+function executeTrade(S, t) {
+S.roster = S.roster.filter((p) => t.give.indexOf(p.id) < 0);
+t.get.contracts.forEach((c) => {
+const d = S.denverContracts.find((x) => x.id === c);
+S.roster.push({ id: c, name: 'Denver ' + fmtM(d.salaryK) + ' contract', role: 'from Denver', salaryK: d.salaryK, contract: 'acquired in the deal' });
+S.denverContracts = S.denverContracts.filter((x) => x.id !== c);
+});
+t.get.picks.forEach((pk) => { S.picks.denver = S.picks.denver.filter((x) => x !== pk); S.picks.boston.push(pk); });
+}
+function tickOf(canon, nowMs) { return Math.max(0, Math.floor((nowMs - Date.parse(canon.epoch)) / 1000)); }
+function fold(canon, actsIn, nowISO) {
+const epochMs = Date.parse(canon.epoch), paceMs = canon.paceMs || 3600000, skewMs = canon.skewMs == null ? 10000 : canon.skewMs;
+const nowMs = typeof nowISO === 'number' ? nowISO : Date.parse(nowISO);
+const tick = tickOf(canon, nowMs), tau = epochMs + tick * 1000;
+const L = {}; Object.keys(canon.lines).forEach((k) => { L[k] = Math.round(canon.lines[k] * 1000); });
+const S = {
+engine: 1, world: { name: canon.name, version: canon.version, seed: canon.seed, epoch: canon.epoch },
+tick, day: Math.floor((tick * 100000) / paceMs) / 100,
+seats: { 'boston-gm': { holder: null, since: null, note: null }, 'denver-gm': { holder: null, since: null, note: null } },
+roster: canon.roster.map((p) => ({ id: p.id, name: p.name, role: p.role || '', salaryK: Math.round(p.salary * 1000), contract: p.contract || '' })),
+deadK: Math.round(canon.extra.deadMoney * 1000), pendingK: Math.round(canon.extra.pendingTwoWay * 1000),
+picks: { boston: [], denver: canon.denver.picks.slice() },
+denverContracts: canon.denver.contracts.map((c) => ({ id: c.id, salaryK: Math.round(c.salary * 1000) })),
+matters: {}, order: canon.matters.map((m) => m.id), record: [], lapses: [], games: [], events: [], w: canon.base.w, l: canon.base.l
+};
+const seatOf = (uid) => (uid && SEATS.find((s) => S.seats[s].holder === uid)) || null;
+const turnSeat = (m) => (m.id === 'denver-call' ? (m.status === 'offered' ? 'denver-gm' : 'boston-gm') : m.seat);
+const items = [];
+canon.matters.forEach((m, i) => {
+const dl = epochMs + Math.round(m.deadlineDay * paceMs);
+S.matters[m.id] = { id: m.id, title: m.title, seat: m.seat, dl, dlDay: m.deadlineDay, status: 'open', terms: null, from: null };
+if (dl <= tau) items.push({ t: dl, rank: 0, seq: i, k: 'deadline', m });
+});
+for (let d = 2; epochMs + d * paceMs <= tau && d < 100000; d += 2) items.push({ t: epochMs + d * paceMs, rank: 2, seq: d, k: 'game', day: d });
+const acts = [];
+(actsIn || []).forEach((a) => {
+const tMs = a && Date.parse(a.t);
+if (!a || typeof a.id !== 'string' || typeof tMs !== 'number' || isNaN(tMs) || tMs > tau + skewMs) return;
+acts.push({ id: a.id, t: a.t, tMs, by: typeof a.by === 'string' ? a.by : '', seat: typeof a.seat === 'string' ? a.seat : '', kind: typeof a.kind === 'string' ? a.kind : '', payload: isObj(a.payload) ? a.payload : {}, prev: typeof a.prev === 'string' ? a.prev : '' });
+});
+acts.sort((x, y) => x.tMs - y.tMs || (x.id < y.id ? -1 : x.id > y.id ? 1 : 0));
+acts.forEach((a, i) => items.push({ t: a.tMs, rank: 1, seq: i, k: 'act', a }));
+items.sort((x, y) => x.t - y.t || x.rank - y.rank || x.seq - y.seq);
+function onDeadline(m, t) {
+const q = S.matters[m.id];
+if (m.id === 'owner-note') {
+const p = payrollK(S); q.status = p <= L.apron2 ? 'met' : 'missed'; q.payrollK = p;
+S.events.push({ t, kind: 'check', matter: m.id, status: q.status, payrollK: p }); return;
+}
+if (q.status === 'open' || q.status === 'offered' || q.status === 'countered') {
+const seat = turnSeat(q), holder = S.seats[seat].holder, lapse = { matter: m.id, t, seat, holder };
+q.status = 'lapsed';
+if (m.id === 'two-way') { lapse.effect = 'pending ' + fmtM(S.pendingK) + ' \u2192 $0.0M'; S.pendingK = 0; }
+S.lapses.push(lapse); S.events.push({ t, kind: 'lapse', matter: m.id, seat, holder });
+}
+}
+function onAct(a) {
+const rec = { id: a.id, t: a.t, by: a.by, seat: a.seat, kind: a.kind, payload: a.payload, prev: a.prev, counted: false };
+S.record.push(rec);
+const no = (rule, why) => { rec.rule = rule; rec.why = why; };
+const ok = (effect) => { rec.counted = true; if (effect) rec.effect = effect; S.events.push({ t: a.tMs, kind: 'act', id: a.id, act: a.kind, by: a.by }); };
+if (KINDS.indexOf(a.kind) < 0) return no('R-1', 'unknown kind of act');
+if (!a.by) return no('R-3', 'no actor on the act');
+if (a.tMs < epochMs) return no('R-2', 'made before the World began');
+if (a.seat !== 'observer' && SEATS.indexOf(a.seat) < 0) return no('R-1', 'no such seat');
+const mine = seatOf(a.by), P = a.payload, sl = SEAT_LABEL[a.seat];
+if (a.kind === 'claim-seat') {
+if (a.seat === 'observer') return no('R-1', 'observer is not a seat');
+if (mine) return no('S-3', 'that person already holds the ' + SEAT_LABEL[mine] + ' seat');
+if (S.seats[a.seat].holder) return no('S-2', 'the ' + sl + ' seat was already held');
+S.seats[a.seat] = { holder: a.by, since: a.t, note: S.seats[a.seat].note };
+return ok();
+}
+if (a.kind === 'leave-seat') {
+if (mine !== a.seat) return no('S-1', 'that person did not hold the ' + sl + ' seat at that moment');
+S.seats[a.seat] = { holder: null, since: a.t, note: clean(P.note, 140) || null };
+return ok();
+}
+if (a.kind === 'note-public') {
+if (a.seat === 'observer' ? !!mine : mine !== a.seat) return no('S-1', a.seat === 'observer' ? 'a seat holder posts as the seat, not as an observer' : 'that person did not hold the ' + sl + ' seat at that moment');
+if (!clean(P.text, 140)) return no('R-4', 'the note is empty');
+return ok();
+}
+if (mine !== a.seat) return no('S-1', a.seat === 'observer' ? 'observers have no moves on a matter' : 'that person did not hold the ' + sl + ' seat at that moment');
+const D = S.matters['denver-call'], W = S.matters['two-way'];
+if (a.kind === 'offer') {
+if (a.seat !== 'boston-gm') return no('M-2', 'only the Boston seat can open an offer');
+if (!D || D.status !== 'open') return no('M-1', 'the Denver call is ' + (D ? D.status : 'not on the books') + ', not open');
+const t = normTerms(P), bad = checkTrade(S, t, L); if (bad) return no(bad[0], bad[1]);
+D.status = 'offered'; D.terms = t; D.from = 'boston-gm';
+return ok('offer stands: ' + termsText(canon, t));
+}
+if (a.kind === 'counter') {
+if (a.seat !== 'denver-gm') return no('M-2', 'only the Denver seat can counter');
+if (!D || D.status !== 'offered') return no('M-3', 'there is no standing offer to counter');
+const t = { give: D.terms.give.slice(), get: normGet(P.get) }, bad = checkTrade(S, t, L); if (bad) return no(bad[0], bad[1]);
+D.status = 'countered'; D.terms = t; D.from = 'denver-gm';
+return ok('counter stands: ' + termsText(canon, t));
+}
+if (a.kind === 'accept' || a.kind === 'decline') {
+if (!D || (D.status !== 'offered' && D.status !== 'countered')) return no('M-3', 'there is no standing offer or counter to ' + a.kind);
+if (a.seat === D.from) return no('M-4', 'a seat cannot ' + a.kind + ' its own ' + (D.status === 'offered' ? 'offer' : 'counter'));
+if (a.kind === 'decline') { D.status = 'declined'; return ok('no deal'); }
+const bad = checkTrade(S, D.terms, L); if (bad) return no(bad[0], bad[1]);
+const before = payrollK(S), txt = termsText(canon, D.terms);
+executeTrade(S, D.terms); D.status = 'done';
+return ok('deal: ' + txt + ' \u00b7 payroll ' + fmtM(before) + ' \u2192 ' + fmtM(payrollK(S)));
+}
+if (a.kind === 'call-up') {
+if (a.seat !== 'boston-gm') return no('M-2', 'only the Boston seat can call up the two-way');
+if (!W || W.status !== 'open') return no('M-1', 'the call-up is ' + (W ? W.status : 'not on the books') + ', not open');
+if (S.roster.length + 1 > 15) return no('R-15', 'the roster would be ' + (S.roster.length + 1));
+const k = S.pendingK;
+S.roster.push({ id: 'two-way-call-up', name: 'Two-way call-up', role: 'two-way', salaryK: k, contract: 'called up' });
+S.pendingK = 0; W.status = 'called';
+return ok('pending ' + fmtM(k) + ' becomes a contract \u00b7 roster ' + S.roster.length);
+}
+if (a.kind === 'hold') {
+if (a.seat !== 'boston-gm') return no('M-2', 'only the Boston seat can hold');
+if (P.matter === 'two-way') {
+if (!W || W.status !== 'open') return no('M-1', 'the call-up is ' + (W ? W.status : 'not on the books') + ', not open');
+const k = S.pendingK; S.pendingK = 0; W.status = 'held';
+return ok('pending ' + fmtM(k) + ' \u2192 $0.0M');
+}
+if (!D || (D.status !== 'open' && D.status !== 'countered')) return no('M-1', 'the Denver call is ' + (D ? D.status : 'not on the books') + ', nothing to hold');
+D.status = 'held'; return ok('no deal \u00b7 Guard B stays');
+}
+}
+for (const it of items) {
+if (it.k === 'deadline') onDeadline(it.m, it.t);
+else if (it.k === 'game') {
+const g = gameResult(canon.seed, it.day, canon.base.rating);
+if (g.win) S.w++; else S.l++;
+S.games.push(g); if (S.games.length > 6) S.games.shift();
+} else { try { onAct(it.a); } catch (e) { const r = S.record[S.record.length - 1]; if (r && r.id === it.a.id) { r.counted = false; r.rule = 'R-1'; r.why = 'malformed act'; } } }
+}
+const p = payrollK(S), status = apronStatus(p, L);
+S.linesK = L;
+S.calc = { payrollK: p, apron: status, worldTaxK: worldTaxK(p, canon.worldTaxRule), rosterCount: S.roster.length, overSecondK: p - L.apron2, takeBackPct: takeBackPct(status) };
+return S;
+}
+async function hashState(S) { const o = Object.assign({}, S); delete o.tick; return sha256hex(canonJSON(o)); }
+const SEAL_CACHE = new Map();
+async function sealChain(recs) {
+let prev = GENESIS8; const out = [];
+for (const r of recs) {
+const key = prev + canonJSON({ t: r.t, by: r.by, seat: r.seat, kind: r.kind, payload: r.payload });
+let s = SEAL_CACHE.get(key);
+if (!s) { s = (await sha256hex(key)).slice(0, 8); if (SEAL_CACHE.size > 20000) SEAL_CACHE.clear(); SEAL_CACHE.set(key, s); }
+out.push(s); prev = s;
+}
+return out;
+}
+function peerVerdict(mine, theirs) {
+if (mine.hash.slice(0, 12) === theirs.hash12) return 'same';
+return mine.n !== theirs.n ? 'catching' : 'diverged';
+}
+function nextActTime(canon, acts, nowMs) {
+const skew = canon.skewMs == null ? 10000 : canon.skewMs; let mx = 0;
+acts.forEach((a) => { const t = Date.parse(a.t); if (!isNaN(t) && t <= nowMs + skew && t > mx) mx = t; });
+return Math.min(Math.max(nowMs, mx + 1), nowMs + skew - 1000);
+}
+function previewAct(canon, acts, nowMs, uid, seat, kind, payload) {
+const hyp = { id: '~preview', t: new Date(nextActTime(canon, acts, nowMs)).toISOString(), by: uid, seat, kind, payload, prev: '' };
+return fold(canon, acts.concat([hyp]), nowMs).record.find((r) => r.id === '~preview');
+}
+function turnOf(m) { return m.id === 'denver-call' ? (m.status === 'offered' ? 'denver-gm' : m.status === 'open' || m.status === 'countered' ? 'boston-gm' : null) : m.status === 'open' ? m.seat : null; }
+function actOptions(canon, S, seat) {
+const D = S.matters['denver-call'], W = S.matters['two-way'], out = [];
+if (seat === 'boston-gm') {
+if (D.status === 'open') out.push({ id: 'offer', kind: 'offer', label: 'Offer Denver the backup guard ($2.7M) for their 2029 2nd', payload: { matter: 'denver-call', give: ['guard-b'], get: { picks: ['2029 2nd'], contracts: [] } } });
+if (D.status === 'countered') out.push({ id: 'accept', kind: 'accept', label: 'Accept Denver\u2019s counter', sub: termsText(canon, D.terms), payload: { matter: 'denver-call' } });
+if (D.status === 'open' || D.status === 'countered') out.push({ id: 'hold-deal', kind: 'hold', label: 'Hold \u2014 keep the guard, close the Denver call', payload: { matter: 'denver-call' } });
+if (W.status === 'open') {
+out.push({ id: 'call-up', kind: 'call-up', label: 'Call up the two-way', sub: 'the pending ' + fmtM(S.pendingK) + ' becomes a contract; payroll does not change', payload: { matter: 'two-way' } });
+out.push({ id: 'hold-two-way', kind: 'hold', label: 'Hold \u2014 do not call up the two-way', sub: 'pending ' + fmtM(S.pendingK) + ' goes to $0.0M', payload: { matter: 'two-way' } });
+}
+} else if (seat === 'denver-gm' && D.status === 'offered') {
+const other = S.picks.denver.find((p) => D.terms.get.picks.indexOf(p) < 0);
+if (other) out.push({ id: 'counter', kind: 'counter', label: 'Counter: ' + other, sub: 'Denver gives its ' + other + ' instead', payload: { matter: 'denver-call', get: { picks: [other], contracts: [] } } });
+out.push({ id: 'accept', kind: 'accept', label: 'Accept', sub: termsText(canon, D.terms), payload: { matter: 'denver-call' } });
+out.push({ id: 'decline', kind: 'decline', label: 'Decline', payload: { matter: 'denver-call' } });
+}
+return out;
+}
+function outcomeLine(S) {
+const D = S.matters['denver-call'], c = S.calc, L = S.linesK;
+const tail = ' \u00b7 payroll ' + fmtM(c.payrollK) + ' \u00b7 roster ' + c.rosterCount + (S.pendingK ? ' + two-way pending' : '') + ' \u00b7 ' + apronPhrase(c.payrollK, L) + ' (computed)';
+if (D.status === 'done') return 'Deal done' + tail;
+if (D.status === 'declined') return 'Denver declined \u2014 no deal' + tail;
+if (D.status === 'held') return 'Boston held \u2014 no deal' + tail;
+if (D.status === 'lapsed') { const l = S.lapses.find((x) => x.matter === 'denver-call'); return 'Lapsed \u2014 NO ACT against the ' + SEAT_LABEL[l.seat] + ' seat' + tail; }
+return null;
+}
+function sinceLines(S, canon, fromMs, uid, nameOf, nothing) {
+const tau = Date.parse(canon.epoch) + S.tick * 1000, out = [];
+const acts = S.events.filter((e) => e.kind === 'act' && e.t > fromMs && e.by !== uid).length;
+if (acts) out.push(plural(acts, 'act') + ' by other people');
+S.lapses.filter((l) => l.t > fromMs).forEach((l) => out.push('NO ACT \u00b7 ' + S.matters[l.matter].title + ' closed \u00b7 ' + SEAT_LABEL[l.seat] + ' seat \u00b7 ' + (l.holder ? nameOf(l.holder) : 'vacant')));
+S.events.filter((e) => e.kind === 'check' && e.t > fromMs).forEach((e) => out.push('Owner\u2019s note ' + (e.status === 'met' ? 'MET' : 'NOT MET') + ' \u00b7 payroll ' + fmtM(e.payrollK)));
+const g = gamesBetween(canon, fromMs, tau);
+if (g.length) out.push(plural(g.length, 'game') + ' (toy model): ' + g.filter((x) => x.win).length + 'W\u2013' + g.filter((x) => !x.win).length + 'L');
+return out.length ? out : [nothing || 'Nothing has happened since you last looked.'];
+}
+function describeAct(canon, r, S) {
+const P = r.payload || {}, sl = SEAT_LABEL[r.seat] || r.seat;
+switch (r.kind) {
+case 'claim-seat': return 'took the ' + sl + ' seat';
+case 'leave-seat': { const n = clean(P.note, 140); return 'left the ' + sl + ' seat' + (n ? ' \u2014 handover note: \u201c' + n + '\u201d' : ' \u2014 vacated'); }
+case 'offer': return 'offered ' + termsText(canon, normTerms(P));
+case 'counter': return 'countered: ' + normGet(P.get).picks.concat(normGet(P.get).contracts).join(' + ') + ' instead';
+case 'accept': return 'accepted the standing ' + (S && S.matters['denver-call'] && S.matters['denver-call'].from === 'boston-gm' && r.seat === 'denver-gm' ? 'offer' : 'terms');
+case 'decline': return 'declined the standing terms';
+case 'call-up': return 'called up the two-way';
+case 'hold': return P.matter === 'two-way' ? 'held \u2014 did not call up the two-way' : 'held \u2014 kept Guard B, closed the Denver call';
+case 'note-public': return 'said: \u201c' + clean(P.text, 140) + '\u201d';
+default: return r.kind;
+}
+}
+const TEST_EPOCH = '2026-09-29T09:00:00.000Z', TE = Date.parse(TEST_EPOCH);
+const atS = (s) => new Date(TE + s * 1000).toISOString();
+let actN = 0;
+const mkAct = (s, by, seat, kind, payload) => ({ id: 'a' + String(++actN).padStart(3, '0'), t: atS(s), by, seat, kind, payload: payload || {}, prev: '' });
+const OFFER = { matter: 'denver-call', give: ['guard-b'], get: { picks: ['2029 2nd'], contracts: [] } };
+const ACCEPT = { matter: 'denver-call' };
+const F = (acts, s) => fold(makeCanon(TEST_EPOCH), acts, atS(s));
+const B1 = () => mkAct(5, 'u1', 'boston-gm', 'claim-seat'), D2 = () => mkAct(6, 'u2', 'denver-gm', 'claim-seat');
+const HR = 3600;
+const TESTS = [
+['canonical JSON orders keys and drops undefined', () => canonJSON({ b: 1, a: { d: [2, { z: 1, y: undefined }], c: null } }) === '{"a":{"c":null,"d":[2,{"z":1}]},"b":1}'],
+['SHA-256 matches the vector for \u201cabc\u201d, and the JS copy matches crypto.subtle on a long string', async () => { const s = 'World '.repeat(500); return (await sha256hex('abc')) === 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad' && sha256js(s) === (await sha256hex(s)); }],
+['mulberry32(1) begins 0.6270739405881613 in every browser', () => mulberry32(1)() === 0.6270739405881613],
+['the same (canon, acts, now) folds to the same hash twice', async () => { const a = [B1()]; return (await hashState(F(a, 60))) === (await hashState(F(a.slice(), 60))); }],
+['acts after now are ignored and change no hash', async () => { const s = F([mkAct(HR, 'u1', 'boston-gm', 'claim-seat')], 60); return s.record.length === 0 && (await hashState(s)) === (await hashState(F([], 60))); }],
+['input order does not matter: acts sort by (t, id)', () => { const a = [B1(), D2(), mkAct(9, 'u1', 'boston-gm', 'offer', OFFER)]; return canonJSON(F(a, 60)) === canonJSON(F(a.slice().reverse(), 60)); }],
+['claim and leave derive the seat holder and the public handover note', () => {
+const a = [B1(), mkAct(20, 'u1', 'boston-gm', 'leave-seat', { note: 'watch the apron' }), mkAct(30, 'u2', 'boston-gm', 'claim-seat')], h = (n) => F(a.slice(0, n), 60).seats['boston-gm'];
+return h(1).holder === 'u1' && h(2).holder === null && h(2).note === 'watch the apron' && h(3).holder === 'u2' && h(3).note === 'watch the apron';
+}],
+['one person, one seat (S-3); a held seat cannot be claimed (S-2)', () => { const r = F([B1(), mkAct(6, 'u1', 'denver-gm', 'claim-seat'), mkAct(7, 'u2', 'boston-gm', 'claim-seat')], 60).record; return r[1].rule === 'S-3' && r[2].rule === 'S-2' && !r[1].counted && !r[2].counted; }],
+['an act from a non-holder is not counted (S-1) and changes nothing', () => { const s = F([mkAct(5, 'u9', 'boston-gm', 'offer', OFFER)], 60); return !s.record[0].counted && s.record[0].rule === 'S-1' && s.matters['denver-call'].status === 'open'; }],
+['accept without an offer is not counted (M-3); a seat cannot accept its own offer (M-4)', () => {
+const r = F([D2(), mkAct(9, 'u2', 'denver-gm', 'accept', ACCEPT)], 60).record, q = F([B1(), mkAct(9, 'u1', 'boston-gm', 'offer', OFFER), mkAct(10, 'u1', 'boston-gm', 'accept', ACCEPT)], 60);
+return r[1].rule === 'M-3' && q.record[1].counted && q.record[2].rule === 'M-4' && q.matters['denver-call'].status === 'offered';
+}],
+['the deal math is 222.8 \u2192 220.1: under the second apron, World tax 34.2 \u2192 30.15', () => {
+const s0 = F([], 60), s1 = F([B1(), D2(), mkAct(10, 'u1', 'boston-gm', 'offer', OFFER), mkAct(12, 'u2', 'denver-gm', 'accept', ACCEPT)], 60);
+return s0.calc.payrollK === 222800 && s0.calc.worldTaxK === 34200 && s0.calc.overSecondK === 1114 && s1.calc.payrollK === 220100 && s1.calc.worldTaxK === 30150 && s1.calc.overSecondK < 0 && s1.matters['denver-call'].status === 'done' && s1.picks.boston[0] === '2029 2nd';
+}],
+['over the second apron: no aggregation (T-agg), no taking back more than sent (T-match)', () => {
+const r = (p) => F([B1(), mkAct(9, 'u1', 'boston-gm', 'offer', p)], 60).record[1];
+return r({ give: ['guard-b', 'min-1'], get: { picks: ['2029 2nd'] } }).rule === 'T-agg' && r({ give: ['guard-b'], get: { contracts: ['den-6.0'] } }).rule === 'T-match' && r({ give: ['guard-b'], get: { contracts: ['den-2.1'] } }).counted;
+}],
+['an offer counts only while the Denver call is open (M-1)', () => { const s = F([B1(), mkAct(2 * HR + 100, 'u1', 'boston-gm', 'offer', OFFER)], 2 * HR + 200); return s.record[1].rule === 'M-1' && s.matters['denver-call'].status === 'lapsed'; }],
+['a lapse is recorded once, against the holder at that moment, and zeroes pending', () => {
+const s = F([B1()], 6 * HR), lp = s.lapses.filter((l) => l.matter === 'two-way'), v = F([], 6 * HR);
+return lp.length === 1 && lp[0].holder === 'u1' && s.pendingK === 0 && s.calc.payrollK === 220400 && F([B1()], 30 * HR).lapses.length === 2 && v.lapses.every((l) => l.holder === null);
+}],
+['hold and lapse both zero the pending $2.4M; call-up keeps it as a contract; the owner\u2019s note follows', () => {
+const h = F([B1(), mkAct(9, 'u1', 'boston-gm', 'hold', { matter: 'two-way' })], 60), u = F([B1(), mkAct(9, 'u1', 'boston-gm', 'call-up', { matter: 'two-way' })], 6 * HR);
+return h.calc.payrollK === 220400 && h.roster.length === 14 && u.calc.payrollK === 222800 && u.roster.length === 15 && u.matters['owner-note'].status === 'missed' && F([], 6 * HR).matters['owner-note'].status === 'met';
+}],
+['the act chain is deterministic; changing one act changes every later seal', async () => {
+const a = [B1(), D2(), mkAct(9, 'u1', 'boston-gm', 'offer', OFFER)], a2 = a.slice(); a2[1] = Object.assign({}, a[1], { by: 'u3' });
+const s1 = await sealChain(F(a, 60).record), s2 = await sealChain(F(a.slice(), 60).record), s3 = await sealChain(F(a2, 60).record);
+return s1.join() === s2.join() && s1[0] === s3[0] && s1[1] !== s3[1] && s1[2] !== s3[2] && s1.every((x) => /^[0-9a-f]{8}$/.test(x));
+}],
+['toy games are seeded, and land on World days 2, 4, 6 \u2026', () => { let d = 0; for (let k = 2; k < 40; k += 2) if (canonJSON(gameResult(2026, k, 56)) !== canonJSON(gameResult(2027, k, 56))) d++; const n = (s) => { const x = F([], s); return x.w + x.l; }; return d > 10 && n(1.99 * HR) === 24 && n(2 * HR) === 25 && n(6.5 * HR) === 27; }],
+['a peer\u2019s hash is judged at the peer\u2019s own tick: same, catching up, or different', () => { const m = { hash: 'a'.repeat(64), n: 3 }; return peerVerdict(m, { hash12: 'a'.repeat(12), n: 3 }) === 'same' && peerVerdict(m, { hash12: 'b'.repeat(12), n: 2 }) === 'catching' && peerVerdict(m, { hash12: 'b'.repeat(12), n: 3 }) === 'diverged'; }],
+['a new act is stamped after every act its author has seen, and within the skew allowance', () => { const c = makeCanon(TEST_EPOCH), now = TE + 100000; return nextActTime(c, [mkAct(103, 'u2', 'denver-gm', 'claim-seat')], now) === TE + 103001 && nextActTime(c, [mkAct(99999999, 'u2', 'denver-gm', 'claim-seat')], now) === now && nextActTime(c, [], now) === now; }],
+['the fold reads no Math.random and no wall clock', () => [fold, gameResult, checkTrade, executeTrade, tickOf, gamesBetween].every((f) => !/Math\.random|Date\.now|new Date\(\)|performance\./.test(f.toString()))]
+];
+const testResults = [];
+async function runTests() {
+for (const [name, fn] of TESTS) {
+let ok = false, msg = '';
+try { ok = (await fn()) === true; } catch (e) { msg = String((e && e.message) || e); }
+testResults.push({ name, ok, msg });
+}
+if (window.__world) window.__world.renderEngine();
+}
+async function cap(name) {
+try { if (!window.claude || typeof window.claude.use !== 'function') return null; return (await window.claude.use(name)) || null; } catch (e) { return null; }
+}
+const LOCAL_NAMES = { 'local-1': 'Local tester', 'local-2': 'Simulated person' };
+function makeHub() {
+const store = new Map(), leases = new Map(), listeners = new Set(), peers = new Map();
+let seq = 0, pend = false, roomFns = new Set(), owner = 'local-1';
+const dberr = (code, message) => ({ code, message });
+const vis = (uid, path) => { const m = /^data\/users\/([^/]+)/.exec(path); return !m || m[1] === uid; };
+const segs = (p) => p.split('/');
+const flush = () => { if (pend) return; pend = true; setTimeout(() => { pend = false; listeners.forEach((l) => l.run()); }, 0); };
+function snapOf(uid, path) {
+const e = store.get(path), ex = !!e && vis(uid, path);
+return Object.freeze({ id: segs(path).pop(), exists: ex, data: () => (ex ? clone(e.data) : undefined), metadata: { fromCache: false, hasPendingWrites: false } });
+}
+function colDocs(uid, path, ord, lim) {
+const n = segs(path).length + 1;
+let ds = [...store.keys()].filter((k) => k.startsWith(path + '/') && segs(k).length === n && vis(uid, k)).sort();
+if (ord) ds.sort((a, b) => { const x = store.get(a).data[ord.f], y = store.get(b).data[ord.f]; return (x === y ? 0 : x === undefined ? 1 : y === undefined ? -1 : x < y ? -1 : 1) * (ord.d === 'desc' ? -1 : 1); });
+if (lim) ds = ds.slice(0, lim);
+return ds.map((k) => snapOf(uid, k));
+}
+function write(uid, path, fn) {
+if (!vis(uid, path)) throw dberr('invalid_argument', 'that subtree is private to another viewer');
+if (/^world(\/|$)/.test(path) && uid !== owner) throw dberr('invalid_argument', 'only the owner may write here');
+const e = store.get(path), r = fn(e && e.data);
+store.set(path, { data: clone(r), version: ((e && e.version) || 0) + 1 }); flush();
+}
+function dbFor(uid) {
+const mkDoc = (path) => ({
+id: segs(path).pop(), path,
+get: async () => snapOf(uid, path),
+set: async (d) => { write(uid, path, () => d); },
+update: async (d) => { if (!store.has(path) || !vis(uid, path)) throw dberr('invalid_argument', 'document does not exist'); write(uid, path, (cur) => deepMerge(cur, d)); },
+delete: async () => { if (!vis(uid, path)) throw dberr('invalid_argument', 'private'); store.delete(path); flush(); },
+acquire: async (o) => {
+const now = Date.now(), l = leases.get(path);
+if (l && l.exp > now && l.holder !== o.holder) return { acquired: false, expiresAt: new Date(l.exp).toISOString() };
+const ttl = Math.min(600000, Math.max(1000, o.ttlMs || 30000));
+leases.set(path, { holder: o.holder, exp: now + ttl });
+return { acquired: true, version: (store.get(path) || {}).version || 0, expiresAt: new Date(now + ttl).toISOString(), holder: o.holder };
+},
+onSnapshot: (next) => { let last; const l = { run: () => { const s = snapOf(uid, path), j = s.exists ? JSON.stringify(s.data()) : '~'; if (j !== last) { last = j; next(s); } } }; listeners.add(l); setTimeout(l.run, 0); return () => listeners.delete(l); },
+collection: (p) => mkCol(path + '/' + p)
+});
+const mkQ = (path, ord, lim) => ({
+path,
+orderBy: (f, d) => mkQ(path, { f, d }, lim), limit: (n) => mkQ(path, ord, n),
+get: async () => { const docs = colDocs(uid, path, ord, lim); return { docs, size: docs.length, empty: !docs.length, docChanges: () => [], metadata: { fromCache: false, hasPendingWrites: false } }; },
+onSnapshot: (next) => { let last; const l = { run: () => { const docs = colDocs(uid, path, ord, lim), j = docs.map((d) => d.id + JSON.stringify(d.data())).join('|'); if (j !== last) { last = j; next({ docs, size: docs.length, empty: !docs.length, docChanges: () => [], metadata: { fromCache: false, hasPendingWrites: false } }); } } }; listeners.add(l); setTimeout(l.run, 0); return () => listeners.delete(l); }
+});
+const mkCol = (path) => Object.assign(mkQ(path), {
+doc: (id) => mkDoc(path + '/' + (id || 'd' + Math.random().toString(36).slice(2, 9) + (++seq))),
+add: async (d) => { const r = mkCol(path).doc(); await r.set(d); return r; }
+});
+return { doc: mkDoc, collection: mkCol };
+}
+function roomFor(pid) {
+peers.set(pid, { peer: pid, presence: {}, updatedAt: Date.now() });
+const snap = () => [...peers.values()].map((p) => Object.freeze({ peer: p.peer, by: null, isMe: p.peer === pid, sameTab: p.peer === pid, kind: 'viewer', presence: p.presence, updatedAt: p.updatedAt }));
+return {
+presence: async (patch) => { const c = peers.get(pid), p = Object.assign({}, c.presence); for (const k in patch) { if (patch[k] === null) delete p[k]; else p[k] = patch[k]; } peers.set(pid, { peer: pid, presence: Object.freeze(p), updatedAt: Date.now() }); roomFns.forEach((f) => f()); },
+peers: snap,
+onPeers: (fn) => { const w = () => fn({ peers: snap(), joined: [], left: [], updated: [] }); roomFns.add(w); setTimeout(w, 0); return () => roomFns.delete(w); },
+connected: () => true, onConnection: (fn) => { setTimeout(() => fn(true), 0); return () => {}; },
+emit: async () => {}, on: () => () => {}
+};
+}
+function userFor(uid) {
+const prof = (i) => ({ id: i, name: LOCAL_NAMES[i] || '', avatarUrl: '', color: '#888', email: null, isMe: i === uid });
+return {
+id: async () => uid, isOwner: async () => uid === owner, canEdit: async () => uid === owner, can: async () => null,
+me: async () => Object.assign(prof(uid), { isOwner: uid === owner, canEdit: uid === owner }),
+name: async () => LOCAL_NAMES[uid] || '',
+profiles: async (ids) => { const o = {}; [].concat(ids).forEach((i) => { o[i] = prof(i); }); return o; }
+};
+}
+return { dbFor, roomFor, userFor, clear: () => { store.clear(); leases.clear(); flush(); }, peerIds: () => [...peers.keys()] };
+}
+const DEBUG = { offsetMs: 0 };
+const APP = { primary: null, sim: null, local: false, hub: null, names: {}, showHash: false, showTests: false, agreeTok: 0 };
+class Client {
+constructor(o) {
+Object.assign(this, o);
+this.canon = null; this.acts = []; this.priv = null; this.privLoaded = false; this.peers = [];
+this.state = null; this.hash = ''; this.hash12 = ''; this.seals = []; this.head = ''; this.tick = -1;
+this.ver = 0; this.tok = 0; this.memo = new Map(); this.pubKey = ''; this.pubAt = 0; this.subs = [];
+this.ui = { arming: null, leaving: false, drafts: {}, msg: '', busy: false, boardStatus: '' };
+this.sinceFrom = null; this.sinceDismissed = false; this.canonLoaded = false; this.err = '';
+}
+now() { return Date.now() + (this.local ? DEBUG.offsetMs + (this.skewMs || 0) : 0); }
+mySeat() { const s = this.state; return s && this.uid ? SEATS.find((x) => s.seats[x].holder === this.uid) || null : null; }
+start() {
+const fail = (what) => (e) => { this.err = what + ' \u2014 ' + errMsg(e); this.changed(true); };
+this.subs.push(this.db.doc('world/canon').onSnapshot((s) => { this.canon = s.exists ? s.data() : null; this.canonLoaded = true; this.bump(); }, fail('the World')));
+this.subs.push(this.db.collection('acts').onSnapshot((qs) => { this.acts = qs.docs.map((d) => Object.assign({ id: d.id }, d.data())); this.bump(); }, fail('the record')));
+if (this.uid) this.subs.push(this.db.doc('data/users/' + this.uid + '/private').onSnapshot((s) => {
+this.priv = s.exists ? s.data() : {};
+if (!this.privLoaded) { this.privLoaded = true; const ls = this.priv.lastSeen ? Date.parse(this.priv.lastSeen) : NaN; this.sinceFrom = isNaN(ls) ? null : ls; this.changed(true); }
+}, fail('your private board')));
+else this.privLoaded = true;
+if (this.room) {
+this.peers = this.room.peers();
+this.subs.push(this.room.onPeers((ch) => { this.peers = ch.peers; if (this.onPeers) this.onPeers(); }, () => { this.roomDead = true; if (this.onPeers) this.onPeers(); }));
+}
+}
+bump() { this.ver++; this.memo.clear(); this.recompute(); }
+async recompute() {
+if (!this.canon) { this.state = null; this.changed(true); return; }
+if (this.canon.version !== 1) { this.err = 'this World runs engine version ' + this.canon.version + '; this page reads version 1'; this.state = null; this.changed(true); return; }
+const tok = ++this.tok, S = fold(this.canon, this.acts, this.now());
+let h, seals;
+try { [h, seals] = await Promise.all([hashState(S), sealChain(S.record)]); } catch (e) { return; }
+if (tok !== this.tok) return;
+const first = !this.state, changed = h !== this.hash || first;
+this.state = S; this.tick = S.tick; this.hash = h; this.hash12 = h.slice(0, 12); this.seals = seals; this.head = seals.length ? seals[seals.length - 1] : '';
+this.publish(changed);
+this.changed(changed);
+}
+changed(force) { if (this.onChange) this.onChange(force); }
+pulse() {
+if (!this.canon) return;
+if (tickOf(this.canon, this.now()) !== this.tick) this.recompute();
+else this.publish(false);
+}
+publish(force) {
+if (!this.room || !this.uid || !this.state || this.roomDead) return;
+const seat = this.mySeat() || 'observer', key = this.hash12 + '|' + seat + '|' + this.head, t = performance.now();
+if (!force && key === this.pubKey && t - this.pubAt < 5000) return;
+this.pubKey = key; this.pubAt = t;
+try { this.room.presence({ id: this.uid, tick: this.tick, hash12: this.hash12, seat, lastAct: this.head, n: this.state.record.length }).catch(() => {}); } catch (e) {  }
+}
+stateAt(tick) {
+const key = 'st' + tick;
+if (!this.memo.has(key)) {
+const S = fold(this.canon, this.acts, Date.parse(this.canon.epoch) + tick * 1000);
+this.memo.set(key, hashState(S).then((hash) => ({ hash, n: S.record.length, day: S.day })));
+}
+return this.memo.get(key);
+}
+async startWorld() {
+const canon = makeCanon(new Date(this.now()).toISOString());
+await this.db.doc('world/canon').set(canon);
+for (const s of SEATS) await this.db.doc('seats/' + s).set({ holder: null, since: canon.epoch, note: null });
+}
+async act(kind, seat, payload) {
+const t = Math.max(nextActTime(this.canon, this.acts, this.now()), (this.lastT || 0) + 1);
+this.lastT = t;
+const a = JSON.parse(JSON.stringify({ t: new Date(t).toISOString(), by: this.uid, seat, kind, payload: payload || {}, prev: this.head || GENESIS8 }));
+return this.db.collection('acts').add(a);
+}
+async claimSeat(seat) {
+if (!this.uid) return 'Your identity is not available here, so you can watch but not take a seat.';
+if (this.mySeat()) return 'You already hold a seat.';
+const ref = this.db.doc('seats/' + seat);
+const lease = await ref.acquire({ holder: this.uid, ttlMs: 5000 });
+if (!lease.acquired) return 'Someone is claiming this seat right now \u2014 try again in a moment.';
+const snap = await ref.get(), d = snap.exists ? snap.data() : null;
+const folded = this.state.seats[seat];
+if (folded.holder) return 'That seat is already taken.';
+if (d && d.holder && !(Date.now() - Date.parse(d.since || 0) > 30000)) return 'That seat is already taken.';
+await this.act('claim-seat', seat, {});
+await ref.set({ holder: this.uid, since: new Date(this.now()).toISOString(), note: d && d.note ? d.note : (folded.note || null) });
+return '';
+}
+async leaveSeat(note) {
+const seat = this.mySeat(); if (!seat) return 'You do not hold a seat.';
+const n = clean(note, 140) || null;
+await this.act('leave-seat', seat, { note: n });
+await this.db.doc('seats/' + seat).set({ holder: null, since: new Date(this.now()).toISOString(), note: n });
+return '';
+}
+savePriv(patch) {
+if (!this.uid) return Promise.resolve();
+this.priv = deepMerge(this.priv || {}, patch);
+return this.db.doc('data/users/' + this.uid + '/private').set(this.priv);
+}
+}
+function nameOf(id) {
+if (!id) return 'vacant';
+const P = APP.primary;
+if (P && id === P.uid) return P.myName || 'You';
+return APP.names[id] || 'Someone';
+}
+async function ensureNames(ids) {
+const want = ids.filter((i) => i && !APP.names[i]);
+if (!want.length) return;
+const user = (APP.primary && APP.primary.user) || null;
+if (!user) return;
+try {
+const ps = await user.profiles(Array.from(new Set(want)));
+let any = false;
+for (const i in ps) if (ps[i] && ps[i].name && APP.names[i] !== ps[i].name) { APP.names[i] = ps[i].name; any = true; }
+if (any) renderAll();
+} catch (e) {  }
+}
+function keepFocus(box, fn) {
+const a = document.activeElement, key = a && box.contains(a) && a.dataset ? a.dataset.key : null;
+const s = key && a.selectionStart != null ? [a.selectionStart, a.selectionEnd] : null;
+fn();
+if (key) { const n = box.querySelector('[data-key="' + key + '"]'); if (n) { n.focus(); if (s) try { n.setSelectionRange(s[0], s[1]); } catch (e) {  } } }
+}
+function textField(C, key, ph, max, tag) {
+const f = el(tag || 'input', { type: tag ? null : 'text', maxlength: max, placeholder: ph, dataset: { key: C.label + '-' + key }, 'aria-label': ph });
+f.value = C.ui.drafts[key] || '';
+f.addEventListener('input', () => { C.ui.drafts[key] = f.value; if (key === 'board') boardInput(C); else if (C.ui.onDraft) C.ui.onDraft(key); });
+return f;
+}
+function engineBadge() {
+const bad = testResults.filter((t) => !t.ok), done = testResults.length === TESTS.length;
+return el('button', { class: 'linkbtn' + (bad.length ? ' bad' : ''), onclick: () => { APP.showTests = !APP.showTests; renderEngine(); const d = $('#how'); if (d) d.open = true; }, 'aria-label': 'Engine self-tests' },
+!done ? 'ENGINE \u00b7 running ' + testResults.length + '/' + TESTS.length + '\u2026' : 'ENGINE \u00b7 ' + (testResults.length - bad.length) + '/' + testResults.length + (bad.length ? ' \u00b7 FAILING: ' + bad[0].name.slice(0, 40) + '\u2026' : ' checks passing'));
+}
+function renderEngine() {
+const b = $('#engineSlot'); if (b) b.replaceChildren(engineBadge());
+const t = $('#howTests'); if (t) t.replaceChildren(...testResults.map((r) => el('li', { class: r.ok ? '' : 'bad' }, (r.ok ? '\u2713 ' : '\u2717 ') + r.name + (r.msg ? ' \u2014 ' + r.msg : ''))));
+const c = $('#howCount'); if (c) c.textContent = testResults.filter((r) => r.ok).length + '/' + TESTS.length;
+}
+function renderAll() {
+const C = APP.primary; if (!C) return;
+renderBanner(); renderHeader(C);
+const started = !!(C.canon && C.state);
+$('#cols').hidden = !started;
+renderGate(C);
+if (started) {
+keepFocus($('#place'), () => renderPlace(C, $('#place')));
+keepFocus($('#now'), () => renderNow(C));
+keepFocus($('#act'), () => renderAct(C, $('#act')));
+renderBoard(C);
+renderRecord(C);
+ensureNames(C.state.record.map((r) => r.by).concat(C.state.lapses.map((l) => l.holder), Object.keys(C.state.seats).map((s) => C.state.seats[s].holder)).concat(C.peers.map((p) => p.presence && p.presence.id)));
+}
+renderAgreement();
+renderHow(C);
+renderDev();
+}
+function renderBanner() {
+const b = $('#banner'), C = APP.primary;
+if (APP.local) { b.hidden = false; b.className = 'banner'; b.textContent = 'Local mode \u2014 not connected to the shared World. Open the published page to join it.'; }
+else if (C && C.err) { b.hidden = false; b.className = 'banner warn'; b.textContent = 'Connection problem: ' + C.err; }
+else b.hidden = true;
+}
+function renderHeader(C) {
+const box = $('#hdr'), S = C.state, canon = C.canon;
+if (!S) { box.replaceChildren(el('h1', { text: canon ? canon.name : 'Live World' }), el('p', { class: 'sub' }, C.canonLoaded ? 'This World has not started.' : 'Connecting to the World\u2026', ' ', el('span', { id: 'engineSlot' }, engineBadge()))); return; }
+box.replaceChildren(
+el('h1', { text: canon.name + ' \u2014 a live World' }),
+el('p', { class: 'clk' }, 'World day ', el('b', { class: 'comp', text: S.day.toFixed(2) }), ' \u00b7 ', worldClock(S.tick, canon.paceMs), ' (World time)'),
+el('p', { class: 'sub' }, 'Started ' + localDT(Date.parse(canon.epoch)) + ' \u00b7 ' + plural(S.record.length, 'act') + ' recorded \u00b7 ' + canon.pace + ' \u00b7 ', el('span', { id: 'engineSlot' }, engineBadge())));
+}
+function renderGate(C) {
+const g = $('#gate');
+if (C.canon && C.state) { g.replaceChildren(); return; }
+if (!C.canonLoaded) { g.replaceChildren(el('p', { class: 'empty', text: 'Connecting to the World\u2026' })); return; }
+const kids = [el('p', { class: 'empty' }, 'This World has not started yet.')];
+if (C.isOwner) {
+const msg = el('p', { class: 'note' });
+kids.push(el('p', { class: 'note', text: 'You own this page, so only you can found the World. Starting it writes the founding record (world/canon); nobody else can change it.' }),
+el('button', { class: 'btn go slim', onclick: async (ev) => { ev.target.disabled = true; try { await C.startWorld(); } catch (e) { msg.textContent = 'Could not start the World: ' + errMsg(e); ev.target.disabled = false; } } }, 'Start this World'), msg);
+} else kids.push(el('p', { class: 'note', text: 'Only the page\u2019s owner can start it. Come back soon.' }));
+g.replaceChildren(...kids);
+}
+async function renderAgreement() {
+const box = $('#agree'), C = APP.primary, tok = ++APP.agreeTok;
+box.hidden = !C || !C.state;
+if (!C || !C.state) { box.replaceChildren(); return; }
+if (!C.room || C.roomDead) {
+box.replaceChildren(el('p', { class: 'line' }, 'Presence unavailable \u2014 your hash is ', el('b', { class: 'comp', text: C.hash.slice(0, 4) + '\u2026' }), '.'), hashToggle(C));
+return;
+}
+const ps = C.peers.filter((p) => p.kind === 'viewer'), rows = [];
+for (const p of ps) {
+const pr = p.presence || {};
+if (p.isMe && p.sameTab) { rows.push({ me: true, id: C.uid, seat: C.mySeat() || 'observer', tick: C.tick, verdict: 'me', hash12: C.hash12 }); continue; }
+if (!pr.hash12 || typeof pr.tick !== 'number') { rows.push({ id: pr.id, seat: pr.seat, verdict: 'joining' }); continue; }
+const mine = await C.stateAt(pr.tick);
+rows.push({ id: pr.id, seat: pr.seat, tick: pr.tick, hash12: pr.hash12, other: p.isMe, verdict: peerVerdict(mine, { hash12: pr.hash12, n: pr.n }), mineN: mine.n, theirN: pr.n });
+}
+if (tok !== APP.agreeTok) return;
+const n = rows.length, good = rows.filter((r) => r.verdict === 'same' || r.verdict === 'me'), all = good.length === n;
+const minTick = Math.min(...good.map((r) => r.tick).filter((t) => typeof t === 'number'));
+const at = isFinite(minTick) ? await C.stateAt(minTick) : { hash: C.hash, day: C.state.day };
+if (tok !== APP.agreeTok) return;
+const lead = el('p', { class: 'line' }, plural(n, 'person', 'people'), ' here \u00b7 ');
+if (all) lead.append('all ' + n + ' see the same World at World day ' + at.day.toFixed(2) + ' \u00b7 ', el('b', { class: 'comp', text: at.hash.slice(0, 12) }));
+else {
+const bad = rows.filter((r) => r.verdict !== 'same' && r.verdict !== 'me');
+lead.append(good.length + ' of ' + n + ' confirmed at World day ' + at.day.toFixed(2) + ' \u00b7 ', el('b', { class: 'comp', text: at.hash.slice(0, 12) }), ' \u00b7 ', bad.some((r) => r.verdict === 'diverged') ? el('b', { class: 'bad', text: 'a viewer sees a different World' }) : 'the rest are catching up');
+}
+const list = el('ul', { class: 'peers', 'aria-label': 'Here now' }, rows.map((r) => el('li', null,
+el('span', { class: 'who' + (r.me ? ' mine' : '') }, r.me ? nameOf(C.uid) + ' (you)' : r.other ? nameOf(r.id) + ' (you, other tab)' : r.id ? nameOf(r.id) : 'Someone'),
+el('span', { text: r.seat ? SEAT_LABEL[r.seat] || r.seat : '' }),
+r.verdict === 'joining' ? el('span', { class: 'muted', text: 'joining\u2026' }) : el('span', { class: r.verdict === 'diverged' ? 'bad' : r.verdict === 'catching' ? 'muted' : 'comp' },
+(r.verdict === 'me' ? 'day ' : r.verdict === 'same' ? '\u2713 day ' : '\u2260 day ') + (r.tick != null ? dayOfTick(r.tick, C.canon.paceMs) : '') + ' \u00b7 ' + (r.hash12 || '').slice(0, 12) + (r.verdict === 'catching' ? ' \u00b7 catching up (' + r.theirN + ' vs ' + r.mineN + ' acts)' : r.verdict === 'diverged' ? ' \u00b7 different World' : '')))));
+box.replaceChildren(lead, el('p', { class: 'sub', style: 'margin-top:10px', text: 'Here now:' }), list, hashToggle(C));
+}
+function hashToggle(C) {
+const w = el('div', { style: 'margin-top:8px' }, el('button', { class: 'linkbtn', onclick: () => { APP.showHash = !APP.showHash; renderAgreement(); } }, APP.showHash ? 'Hide full hash' : 'Show full hash'));
+if (APP.showHash) w.append(el('code', { class: 'hashfull', text: 'SHA-256 of canonical state at World day ' + C.state.day.toFixed(2) + ' (tick ' + C.tick + '): ' + C.hash }));
+return w;
+}
+function renderPlace(C, box) {
+const S = C.state, seat = C.mySeat(), kids = [el('h2', { text: C === APP.sim ? 'Person 2 \u00b7 place' : 'Your place' })];
+const nm = nameOf(C.uid);
+if (!C.uid) kids.push(el('p', {}, 'Your identity is not available on this view, so you can watch the World but not take a seat.'));
+else kids.push(el('p', {}, 'You are ', el('b', { class: 'mine', text: C.label === 'you' ? (C.myName || nm) : nm }), ' \u00b7 ', seat ? el('b', { class: 'mine', text: SEAT_LABEL[seat] + ' seat' }) : el('b', { text: 'Observer' })));
+SEATS.forEach((s) => {
+const h = S.seats[s], held = !!h.holder, mineNow = h.holder === C.uid && !!C.uid;
+const b = el('button', { class: 'btn' + (mineNow ? ' own' : ''), disabled: !C.uid || held || !!seat || C.ui.busy, onclick: async () => {
+C.ui.busy = true; C.ui.msg = ''; renderAll();
+try { C.ui.msg = await C.claimSeat(s); } catch (e) { C.ui.msg = 'Could not take the seat: ' + errMsg(e); }
+C.ui.busy = false; renderAll();
+} }, 'Take the ' + SEAT_LABEL[s] + ' seat', el('small', { text: held ? 'held by ' + nameOf(h.holder) + (mineNow ? ' (you)' : '') : 'vacant' + (h.note ? ' \u00b7 handover note: \u201c' + h.note + '\u201d' : '') }));
+kids.push(b);
+if (held && h.note) kids.push(el('p', { class: 'note', style: 'margin:-2px 0 8px' }, 'Public handover note on this seat: \u201c' + h.note + '\u201d'));
+});
+if (C.ui.msg) kids.push(el('p', { class: 'note bad', role: 'status', text: C.ui.msg }));
+if (seat) {
+if (!C.ui.leaving) kids.push(el('button', { class: 'btn slim', onclick: () => { C.ui.leaving = true; renderAll(); } }, 'Leave the seat'));
+else {
+const f = textField(C, 'handover', 'One line for whoever takes the seat next (public)', 140);
+const busy = () => C.ui.busy;
+const go = (withNote) => async () => {
+C.ui.busy = true;
+try { C.ui.msg = await C.leaveSeat(withNote ? C.ui.drafts.handover : ''); } catch (e) { C.ui.msg = 'Could not leave the seat: ' + errMsg(e); }
+C.ui.busy = false; C.ui.leaving = false; C.ui.drafts.handover = ''; renderAll();
+};
+kids.push(el('div', { class: 'confirm' },
+el('p', { text: 'Leaving is recorded for everyone. Hand over with a one-line note, or just vacate. The note is public; your private board stays yours.' }),
+el('label', { class: 'f' }, 'Handover note (public)'), f,
+el('div', { style: 'margin-top:10px' },
+el('button', { class: 'btn slim go', disabled: busy(), onclick: () => { if (clean(C.ui.drafts.handover, 140)) go(true)(); else { C.ui.msg = 'Write a line first, or choose \u201cVacate without a note\u201d.'; renderAll(); } } }, 'Hand over with this note'),
+el('button', { class: 'btn slim', disabled: busy(), onclick: go(false) }, 'Vacate without a note'),
+el('button', { class: 'btn slim', onclick: () => { C.ui.leaving = false; renderAll(); } }, 'Cancel'))));
+}
+}
+box.replaceChildren(...kids);
+}
+function barPos(k) { return Math.max(0, Math.min(100, ((k - 160000) / 70000) * 100)); }
+function renderNow(C) {
+const box = $('#now'), S = C.state, c = S.calc, L = S.linesK, canon = C.canon, seat = C.mySeat();
+const kids = [el('h2', { text: 'The World now' })];
+kids.push(el('div', { class: 'kv' }, el('span', { class: 'k', text: 'Payroll' }), el('span', { class: 'v comp', text: fmtM(c.payrollK) }), el('span', { class: 'comp', style: 'font-size:14px', text: apronPhrase(c.payrollK, L) + (c.payrollK > L.apron2 ? '' : ' \u00b7 ' + c.apron) + ' (computed)' })));
+const bar = el('div', { class: 'bar', role: 'img', 'aria-label': 'Payroll against the four league lines' }, el('i', { style: 'width:' + barPos(c.payrollK) + '%' }));
+[['C', L.cap], ['T', L.tax], ['1', L.apron1], ['2', L.apron2]].forEach((t) => bar.append(el('b', { style: 'left:' + barPos(t[1]) + '%' }, el('u', { text: t[0] }))));
+kids.push(bar);
+kids.push(el('div', { class: 'lines' }, el('span', { text: 'C \u00b7 cap ' + fmtM(L.cap) }), el('span', { text: 'T \u00b7 tax line ' + fmtM(L.tax) }), el('span', { text: '1 \u00b7 first apron ' + fmtM(L.apron1) }), el('span', { text: '2 \u00b7 second apron ' + fmtM(L.apron2) })));
+kids.push(el('div', { class: 'kv' }, el('span', { class: 'k', text: 'World tax' }), el('span', { class: 'v comp', text: fmtM(c.worldTaxK) }), el('span', { class: 'aut', text: canon.worldTaxRule.label }), el('span', { class: 'note', text: 'the NBA\u2019s real tax is incremental' })));
+kids.push(el('div', { class: 'kv' }, el('span', { class: 'k', text: 'Roster' }), el('span', { class: 'v', text: String(c.rosterCount) }), el('span', { class: 'note', text: 'standard contracts' + (S.pendingK ? ' + a two-way call-up pending (' + fmtM(S.pendingK) + ')' : '') + ' \u00b7 dead money ' + fmtM(S.deadK) })));
+const gl = S.games.slice().reverse().slice(0, 3);
+kids.push(el('div', { class: 'kv' }, el('span', { class: 'k', text: 'Record' }), el('span', { class: 'v', text: S.w + '\u2013' + S.l }), el('span', { class: 'note' }, '14\u201310 authored, then ', el('span', { class: 'gen' }, 'toy model \u00b7 seed ' + canon.seed))));
+if (gl.length) kids.push(el('p', { class: 'note' }, gl.map((g) => el('span', { class: 'gen', style: 'margin-right:8px;display:inline-block' }, 'day ' + g.day + ' \u00b7 ' + (g.win ? 'W ' : 'L ') + g.pts[0] + '\u2013' + g.pts[1] + (g.home ? ' vs ' : ' at ') + g.opp))));
+if (S.picks.boston.length) kids.push(el('p', { class: 'note', text: 'Picks acquired: ' + S.picks.boston.map((p) => p + ' (from Denver)').join(', ') }));
+const oc = outcomeLine(S);
+if (oc) kids.push(el('p', { class: 'comp', style: 'font-weight:600;margin:10px 0' }, oc));
+kids.push(el('h2', { style: 'margin-top:20px', text: 'Open matters' }));
+S.order.forEach((id) => {
+const m = S.matters[id], turn = turnOf(m);
+if (m.status === 'open' || m.status === 'offered' || m.status === 'countered') {
+const yours = !!seat && (id === 'owner-note' ? seat === 'boston-gm' : turn === seat);
+const holder = id === 'owner-note' ? S.seats['boston-gm'].holder : S.seats[turn].holder;
+let d;
+if (id === 'owner-note') d = 'Right now payroll is ' + fmtM(c.payrollK) + ': ' + (c.overSecondK > 0 ? fmtM(c.overSecondK) + ' over the second apron, so it would be NOT MET' : 'under the second apron, so it would be MET') + ' (computed).';
+else if (id === 'denver-call') d = m.status === 'open' ? 'Waiting on the Boston seat (' + nameOf(holder) + ').' : m.status === 'offered' ? 'Boston offered ' + termsText(canon, m.terms) + '. Waiting on the Denver seat (' + nameOf(holder) + ').' : 'Denver countered: ' + termsText(canon, m.terms) + '. Waiting on the Boston seat (' + nameOf(holder) + ').';
+else d = 'Pending ' + fmtM(S.pendingK) + ' on the books. Waiting on the Boston seat (' + nameOf(holder) + ').';
+kids.push(el('div', { class: 'matter' }, el('span', { class: 'chip ' + (yours ? 'amber' : ''), dataset: { dl: String(m.dl) }, text: hms(m.dl - C.now()) }), el('span', { class: 't' }, m.title, yours ? el('span', { class: 'mine', text: ' \u00b7 your seat' }) : ''), el('span', { class: 'd', text: d })));
+} else {
+const lapse = S.lapses.find((l) => l.matter === id);
+const txt = id === 'owner-note' ? 'Owner\u2019s note ' + (m.status === 'met' ? 'MET' : 'NOT MET') + ' at World day ' + m.dlDay + ' \u00b7 payroll ' + fmtM(m.payrollK) + ' (computed)'
+: lapse ? 'NO ACT \u00b7 closed at World day ' + m.dlDay + ' \u00b7 ' + SEAT_LABEL[lapse.seat] + ' seat \u00b7 ' + (lapse.holder ? nameOf(lapse.holder) : 'vacant') + (lapse.effect ? ' \u00b7 ' + lapse.effect : '')
+: m.status === 'called' ? 'Called up' : m.status === 'held' ? 'Held' : m.status === 'done' ? 'Deal done' : 'Closed: ' + m.status;
+kids.push(el('div', { class: 'matter' }, el('span', { class: 'chip closed', text: 'closed' }), el('span', { class: 't muted', text: m.title }), el('span', { class: 'd', text: txt })));
+}
+});
+const seen = C.sinceDismissed ? C.sinceMark : C.sinceFrom, from = seen != null ? seen : Date.parse(canon.epoch);
+if (C.uid) {
+kids.push(el('div', { class: 'sinceb' }, el('h2', { style: 'margin-bottom:6px', text: seen != null ? 'Since you last looked' : 'Since the World started' }),
+sinceLines(S, canon, from, C.uid, nameOf, seen != null ? null : 'Nothing has happened yet.').map((t) => el('p', { text: t })),
+el('button', { class: 'linkbtn', onclick: () => { C.sinceMark = C.now(); C.sinceDismissed = true; C.savePriv({ lastSeen: new Date(C.sinceMark).toISOString() }).catch(() => {}); renderAll(); } }, 'Mark as seen')));
+}
+kids.push(el('details', { style: 'margin-top:14px' }, el('summary', { class: 'linkbtn', text: 'The books: ' + S.roster.length + ' contracts (authored World facts)' }),
+el('ul', { class: 'tests' }, S.roster.map((p) => el('li', {}, p.name + ' \u00b7 ' + fmtM(p.salaryK) + (p.role ? ' \u00b7 ' + p.role : '') + (p.contract ? ' \u00b7 ' + p.contract : ''))), el('li', {}, 'Dead money \u00b7 waived Year One \u00b7 ' + fmtM(S.deadK)), el('li', {}, 'Two-way conversions pending \u00b7 ' + fmtM(S.pendingK)))));
+box.replaceChildren(...kids);
+}
+function renderAct(C, box) {
+const S = C.state, seat = C.mySeat(), canon = C.canon, kids = [el('h2', { text: C === APP.sim ? 'Person 2 \u00b7 act' : 'Act' })];
+if (!C.uid) { box.replaceChildren(...kids, el('p', { class: 'note', text: 'Acting needs an identity.' })); return; }
+const now = C.now();
+if (!seat) kids.push(el('p', { class: 'note', text: 'Observers watch and can leave a public note. Take a seat to make moves.' }));
+else {
+const opts = actOptions(canon, S, seat);
+if (C.ui.arming && !opts.some((o) => o.id === C.ui.arming)) C.ui.arming = null;
+if (!opts.length) kids.push(el('p', { class: 'note', text: seat === 'denver-gm' ? 'Nothing for the Denver seat to do right now. It moves when Boston offers.' : 'Nothing for the Boston seat to do right now.' }));
+opts.forEach((o) => {
+const pv = previewAct(canon, C.acts, now, C.uid, seat, o.kind, o.payload), okNow = !!(pv && pv.counted);
+const send = async () => {
+C.ui.busy = true; C.ui.arming = null;
+try { await C.act(o.kind, seat, o.payload); C.ui.msg = ''; } catch (e) { C.ui.msg = 'Could not record the act: ' + errMsg(e); }
+C.ui.busy = false; renderAll();
+};
+const rule = el('p', { class: 'ruleline ' + (okNow ? 'comp' : 'bad') }, okNow ? 'Engine check: this would count' + (pv.effect ? ' \u2014 ' + pv.effect : '') + '.' : 'Engine check: this would not count \u00b7 rule ' + (pv && pv.rule) + ' \u2014 ' + (pv && pv.why) + '.');
+if (C.ui.arming === o.id && !C.noConfirm) {
+kids.push(el('div', { class: 'confirm' }, el('p', { text: o.label + '. This goes on the record for everyone, and nobody can edit or delete it.' }),
+el('button', { class: 'btn slim go', disabled: C.ui.busy, onclick: send }, okNow ? 'Send it' : 'Send anyway \u2014 it will be recorded as not counted'),
+el('button', { class: 'btn slim', onclick: () => { C.ui.arming = null; renderAll(); } }, 'Cancel')), rule);
+} else kids.push(el('button', { class: 'btn', disabled: C.ui.busy, onclick: () => { if (C.noConfirm) send(); else { C.ui.arming = o.id; renderAll(); } } }, o.label, o.sub ? el('small', { text: o.sub }) : null), rule);
+});
+}
+const nf = textField(C, 'pubnote', 'A public note for the record', 140);
+kids.push(el('label', { class: 'f' }, seat ? 'Or say something on the record (public)' : 'Leave a public note'), nf,
+el('button', { class: 'btn slim', style: 'margin-top:8px', onclick: async () => {
+const t = clean(C.ui.drafts.pubnote, 140); if (!t) return;
+try { await C.act('note-public', seat || 'observer', { text: t }); C.ui.drafts.pubnote = ''; C.ui.msg = ''; } catch (e) { C.ui.msg = 'Could not record the note: ' + errMsg(e); }
+renderAll();
+} }, 'Put it on the record'));
+if (C.ui.msg && !seat) kids.push(el('p', { class: 'note bad', text: C.ui.msg }));
+const oc = outcomeLine(S);
+if (oc) kids.push(el('p', { class: 'comp', style: 'font-weight:600;margin-top:14px', text: oc }));
+box.replaceChildren(...kids);
+}
+function boardInput(C) {
+const seat = C.mySeat(); if (!seat) return;
+const v = (C.ui.drafts.board || '').slice(0, 500), cnt = $('#boardCount'), st = $('#boardStatus');
+if (cnt) cnt.textContent = v.length + ' / 500';
+if (st) st.textContent = 'Saving\u2026';
+clearTimeout(C.boardTimer);
+C.boardTimer = setTimeout(async () => {
+try { await C.savePriv({ boards: { [seat]: v } }); C.ui.boardStatus = 'Saved ' + localHMS(Date.now()); } catch (e) { C.ui.boardStatus = 'Not saved \u2014 ' + errMsg(e); }
+const s2 = $('#boardStatus'); if (s2) s2.textContent = C.ui.boardStatus;
+}, 700);
+}
+function renderBoard(C) {
+const box = $('#board'), seat = C.mySeat();
+if (!seat || !C.uid) { box.hidden = true; box.replaceChildren(); return; }
+box.hidden = false;
+if (C.ui.drafts.board === undefined || C.ui.boardSeat !== seat) { C.ui.boardSeat = seat; C.ui.drafts.board = ((C.priv && C.priv.boards && C.priv.boards[seat]) || '').slice(0, 500); }
+keepFocus(box, () => {
+const ta = textField(C, 'board', 'Your internal board for the ' + SEAT_LABEL[seat] + ' seat', 500, 'textarea');
+ta.id = 'boardText';
+box.replaceChildren(el('h2', { text: SEAT_LABEL[seat] + ' seat \u00b7 your private board' }),
+el('p', { class: 'note', text: 'Only you can read this \u2014 not the other GM, not the page\u2019s owner. Enforced by the platform, not by this page.' + (APP.local ? ' (In local mode it lives in memory only.)' : '') }),
+ta, el('p', { class: 'ruleline' }, el('span', { id: 'boardCount', text: (C.ui.drafts.board || '').length + ' / 500' }), ' \u00b7 ', el('span', { id: 'boardStatus', text: C.ui.boardStatus || 'Saved to your private document as you type.' })));
+});
+}
+function renderRecord(C) {
+const box = $('#record'), S = C.state, canon = C.canon, epoch = Date.parse(canon.epoch), rows = [];
+S.record.forEach((r, i) => rows.push({ t: Date.parse(r.t), k: 'act', r, i }));
+S.lapses.forEach((l, i) => rows.push({ t: l.t, k: 'lapse', l, i }));
+S.events.filter((e) => e.kind === 'check').forEach((e, i) => rows.push({ t: e.t, k: 'check', e, i }));
+rows.sort((a, b) => b.t - a.t || (b.k === 'act' ? b.i : 0) - (a.k === 'act' ? a.i : 0));
+const dayOf = (ms) => 'day ' + ((ms - epoch) / canon.paceMs).toFixed(2);
+const kids = [el('h2', { text: 'The record \u00b7 ' + plural(S.record.length, 'act') })];
+kids.push(el('p', { class: 'note', text: 'Every act, newest first, each sealed to the one before. This is the World\u2019s history; nobody can edit it, and a copy of this page has none of it.' }));
+if (!rows.length) kids.push(el('p', { class: 'empty', text: 'Nothing has been recorded yet. The first act will be the first line of this World\u2019s history.' }));
+const ol = el('ol', { class: 'rec' });
+rows.forEach((x) => {
+if (x.k === 'act') {
+const r = x.r, mine = r.by === C.uid, who = nameOf(r.by);
+ol.append(el('li', { class: r.counted ? '' : 'nc' },
+el('span', { class: 'tm' }, dayOf(x.t), el('br'), localHMS(x.t)),
+el('span', { class: 'what' }, el('span', { class: 'who' + (mine ? ' mine' : ''), text: who + (mine ? ' (you)' : '') }), el('span', { class: 'muted', text: ' \u00b7 ' + SEAT_LABEL[r.seat] + ' \u00b7 ' }), describeAct(canon, r, S)),
+el('span', { class: 'seal', title: 'seal of this act: first 8 of SHA-256(previous seal + the act)' }, C.seals[x.i] || ''),
+el('span', { class: 'st ' + (r.counted ? 'ok' : 'no') }, r.counted ? 'counted' + (r.effect ? ' \u00b7 ' + r.effect : '') : 'not counted \u00b7 rule ' + r.rule + ' \u2014 ' + r.why,
+r.prev && x.i > 0 && r.prev !== C.seals[x.i - 1] ? el('span', { class: 'muted', text: ' \u00b7 made without seeing the act before it (concurrent)' }) : null)));
+} else if (x.k === 'lapse') {
+const l = x.l;
+ol.append(el('li', { class: 'noact' }, el('span', { class: 'tm' }, dayOf(x.t), el('br'), localHMS(x.t)),
+el('span', { class: 'what' }, el('span', { class: 'tag hollow', text: 'NO ACT' }), S.matters[l.matter].title + ' \u2014 closed with no counted move \u00b7 ' + SEAT_LABEL[l.seat] + ' seat \u00b7 ', el('b', { text: l.holder ? nameOf(l.holder) : 'vacant' })),
+el('span', { class: 'seal muted', text: 'computed' }), el('span', { class: 'st', text: l.effect || 'recorded once, at the deadline' })));
+} else {
+ol.append(el('li', {}, el('span', { class: 'tm' }, dayOf(x.t), el('br'), localHMS(x.t)),
+el('span', { class: 'what' }, el('span', { class: 'tag', text: 'CHECK' }), 'Owner\u2019s note: under the second apron by the deadline \u2014 ', el('b', { class: 'comp', text: x.e.status === 'met' ? 'MET' : 'NOT MET' }), ' at payroll ' + fmtM(x.e.payrollK)),
+el('span', { class: 'seal muted', text: 'computed' })));
+}
+});
+kids.push(ol);
+box.replaceChildren(...kids);
+}
+function renderHow(C) {
+const d = $('#how'); if (!d || d.dataset.built) { renderEngine(); return; }
+d.dataset.built = '1';
+d.append(el('summary', { text: 'How do we know?' }),
+el('h3', { text: 'What is real here' }),
+el('ul', {}, el('li', { text: 'The shared store: every act is one document in a database all viewers read and write. Reload and it is still there.' }),
+el('li', { text: 'Platform-enforced privacy: your private board lives where the platform lets only you read it \u2014 not the other GM, not the page\u2019s owner.' }),
+el('li', { text: 'Seat leases: taking a seat first takes a short lease on the seat, so two people cannot both win the same one.' }),
+el('li', { text: 'An identical fold in every browser: the same code turns (founding record, acts, time) into the same state \u2014 payroll, seats, matters, lapses, games.' }),
+el('li', { text: 'SHA-256 over canonical state: each viewer hashes their own state and publishes 12 characters. You are told \u201csame World\u201d only when your own copy, folded at their moment, hashes to the same thing.' })),
+el('h3', { text: 'What is not' }),
+el('ul', {}, el('li', { text: 'No cryptographic signature by BOW. The founding record\u2019s authority is the platform\u2019s access rule: only the page\u2019s owner can write it.' }),
+el('li', { text: 'Act times come from each actor\u2019s own clock. A new act is stamped after any act its author has seen, and the fold allows 10 seconds of skew; anything beyond is not yet counted.' }),
+el('li', { text: 'The games are a toy model (seeded, \u201ctoy model \u00b7 seed 2026\u201d), not basketball.' }),
+el('li', { text: 'World facts are authored, not NBA history. League lines are 2026\u201327 figures to verify. The World tax is a flat 1.5\u00d7 rule, authored; the NBA\u2019s real tax is incremental.' })),
+el('h3', {}, 'Engine self-tests \u00b7 ', el('span', { id: 'howCount' })),
+el('ul', { class: 'tests', id: 'howTests' }),
+el('h3', { text: 'The rulebook (a refused act stays on the record, marked with its rule)' }),
+el('table', { class: 'rl' }, Object.keys(RULES).map((k) => el('tr', {}, el('td', { text: k }), el('td', { text: RULES[k] })))));
+renderEngine();
+}
+function renderDev() {
+const box = $('#dev'); if (!APP.local || !APP.sim) { box.hidden = true; return; }
+box.hidden = false;
+const P = APP.primary, Q = APP.sim, off = DEBUG.offsetMs / 3600000;
+const jump = (h) => () => { DEBUG.offsetMs += h * 3600000; APP.primary.bump(); APP.sim.bump(); };
+const sub = el('div', { class: 'devgrid' }, el('div', { id: 'simPlace' }), el('div', { id: 'simAct' }));
+keepFocus(box, () => {
+box.replaceChildren(el('h2', { text: 'Dev \u00b7 local mode only \u00b7 Simulate a second person' }),
+el('p', { class: 'note', text: 'Person 2 is \u201clocal-2\u201d. It has its own copy of the data, its own fold and its own hash, and publishes its own presence. It is not the owner and cannot read your private board.' }),
+el('div', { class: 'devrow' }, el('span', { class: 'mono', style: 'font-size:12px', text: 'Pretend it is later:' }),
+[0.25, 1, 2, 6, 24].map((h) => el('button', { class: 'btn slim', onclick: jump(h) }, '+' + (h < 1 ? h * 60 + ' min' : h + ' h'))),
+el('button', { class: 'btn slim', onclick: () => { DEBUG.offsetMs = 0; P.bump(); Q.bump(); } }, 'Back to now'),
+el('span', { class: 'mono', style: 'font-size:12px', id: 'devOff', text: 'offset ' + off.toFixed(2) + ' h = ' + off.toFixed(2) + ' World days' })),
+el('div', { class: 'devrow' }, el('label', { class: 'mono', style: 'font-size:12px', for: 'skewIn' }, 'Person 2 clock skew (s):'),
+el('input', { id: 'skewIn', type: 'number', value: String((Q.skewMs || 0) / 1000), onchange: (e) => { Q.skewMs = (+e.target.value || 0) * 1000; Q.bump(); } }),
+el('button', { class: 'btn slim', onclick: () => { APP.hub.clear(); DEBUG.offsetMs = 0; [P, Q].forEach((c) => { c.ui.drafts = {}; c.ui.arming = null; c.ui.leaving = false; c.ui.msg = ''; }); } }, 'Reset the local World')),
+el('p', { class: 'mono', style: 'font-size:12px', id: 'simHash' }), sub);
+});
+const sp = $('#simPlace'), sa = $('#simAct');
+if (Q.state) {
+renderPlace(Q, sp); renderAct(Q, sa);
+const v = P.state ? (Q.hash12 === P.hash12 ? 'same hash as you at this tick' : 'hash differs from yours at this tick (ticks may differ by skew)') : '';
+$('#simHash').textContent = 'Person 2 sees World day ' + Q.state.day.toFixed(2) + ' \u00b7 ' + Q.hash12 + ' \u00b7 ' + plural(Q.state.record.length, 'act') + ' \u00b7 ' + v;
+} else sp.append(el('p', { class: 'note', text: 'Waiting for the World to start.' }));
+}
+function tickClocks() {
+const C = APP.primary; if (!C) return;
+document.querySelectorAll('[data-dl]').forEach((n) => { const ms = +n.dataset.dl - C.now(); n.textContent = ms > 0 ? hms(ms) : 'closing'; });
+const o = $('#devOff'); if (o) { const h = DEBUG.offsetMs / 3600000; o.textContent = 'offset ' + h.toFixed(2) + ' h = ' + h.toFixed(2) + ' World days'; }
+}
+window.__world = { renderEngine, TESTS, testResults, fold, makeCanon, APP, DEBUG, sha256js, canonJSON, makeHub, sinceLines };
+async function boot() {
+runTests();
+renderHeader({ state: null, canon: null, canonLoaded: false });
+const [db, room, user] = await Promise.all([cap('db'), cap('room'), cap('user')]);
+if (!db) {
+APP.local = true; APP.hub = makeHub();
+const mk = (label, uid, owner, pid, extra) => new Client(Object.assign({ label, uid, db: APP.hub.dbFor(uid), room: APP.hub.roomFor(pid), user: APP.hub.userFor(uid), isOwner: owner, local: true }, extra));
+APP.primary = mk('you', 'local-1', true, 'p1', { myName: LOCAL_NAMES['local-1'] });
+APP.sim = mk('p2', 'local-2', false, 'p2', { noConfirm: true, skewMs: 0 });
+APP.names['local-1'] = LOCAL_NAMES['local-1']; APP.names['local-2'] = LOCAL_NAMES['local-2'];
+} else {
+let uid = null, me = null, owner = false;
+if (user) { try { uid = await user.id(); me = await user.me(); owner = await user.isOwner(); } catch (e) {  } }
+APP.primary = new Client({ label: 'you', uid, db, room, user, isOwner: owner, myName: (me && me.name) || '' });
+}
+const P = APP.primary;
+P.onChange = (force) => { if (force) renderAll(); };
+P.onPeers = () => renderAgreement();
+if (APP.sim) { APP.sim.onChange = (force) => { if (force) { renderDev(); renderAgreement(); } }; APP.sim.onPeers = () => renderAgreement(); }
+P.start(); if (APP.sim) APP.sim.start();
+renderAll();
+setInterval(() => { P.pulse(); if (APP.sim) APP.sim.pulse(); tickClocks(); }, 1000);
+setInterval(() => { renderAgreement(); if (P.uid && P.privLoaded && !document.hidden) P.savePriv({ lastSeen: new Date(P.now()).toISOString() }).catch(() => {}); }, 30000);
+document.addEventListener('visibilitychange', () => { if (document.hidden && P.uid) P.savePriv({ lastSeen: new Date(P.now()).toISOString() }).catch(() => {}); });
+}
+boot();
+})();
+</script>

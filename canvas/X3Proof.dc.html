@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Register</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F0E6;color:#1D1B18;font-family:'Libre Caslon Text',Georgia,serif}
+.mono{font-family:'IBM Plex Mono',monospace}
+.btn{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;min-height:36px;padding:0 10px;border-radius:0;cursor:pointer;border:1.5px solid #1D1B18;background:transparent;color:#1D1B18;box-sizing:border-box;white-space:nowrap;transition:background .2s,color .2s,opacity .2s}
+.btn:hover:not(:disabled){background:#1D1B18;color:#F4F0E6}
+.btn:disabled{opacity:.38;cursor:not-allowed}
+.btn:focus-visible,.sealbtn:focus-visible,.obtn:focus-visible{outline:3px solid #C2410C;outline-offset:2px}
+.dash{border-style:dashed}
+.obtn{font-family:'Libre Caslon Text',Georgia,serif;font-size:14px;min-height:36px;padding:0 10px;border-radius:0;cursor:pointer;border:1.5px solid #C2410C;background:#FCF8F0;color:#C2410C;box-sizing:border-box;text-align:left;transition:background .2s,color .2s}
+.obtn:hover:not(:disabled){background:#C2410C;color:#FCF8F0}
+.obtn:disabled{opacity:.4;cursor:not-allowed}
+.obtn.mono{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;text-align:center;padding:0 8px}
+.sealbtn{background:none;border:0;padding:0;margin:0;cursor:pointer;border-radius:50%}
+.regrow{transition:background .25s}
+.in{font-family:'Libre Caslon Text',Georgia,serif;font-size:14px;height:36px;box-sizing:border-box;border:1.5px solid #C2410C;background:#FFFFFF;color:#1D1B18;padding:0 8px;border-radius:0}
+.in.ink{border-color:#1D1B18}
+.in:focus-visible{outline:3px solid #C2410C;outline-offset:1px}
+.chip{transition:border-color .3s,background .3s}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background-color: #F4F0E6; background-image: repeating-linear-gradient(0deg, rgba(29,27,24,.03) 0 1px, transparent 1px 5px); color: #1D1B18; font-family: 'Libre Caslon Text', Georgia, serif">
+
+  <!-- HEADER -->
+  <span class="mono" style="position: absolute; left: 32px; top: 11px; font-size: 11px; letter-spacing: .14em; color: #5A554C; white-space: nowrap">BOW REALITY · REGISTER OF RECORDED MOMENTS</span>
+  <div style="position: absolute; left: 32px; top: 27px; font-size: 32px; font-weight: 700; line-height: 38px; white-space: nowrap">Boston Celtics <span style="font-weight: 400; font-style: italic; font-size: 22px">— the record, sealed line by line</span></div>
+  <div class="mono" style="position: absolute; left: 32px; top: 68px; display: flex; gap: 22px; align-items: center; font-size: 11px; color: #3A362F; white-space: nowrap">
+    <span style="display: flex; gap: 6px; align-items: center"><span style="display: inline-block; width: 10px; height: 10px; background: #1D1B18"></span>OBSERVED · outside reporting, source named per line</span>
+    <span style="display: flex; gap: 6px; align-items: center"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="5.5" fill="none" stroke="#9E2A2B" stroke-width="2" stroke-dasharray="1.6 1.6"></circle></svg>COMPUTED · a seal, recomputed in this page</span>
+    <span style="display: flex; gap: 6px; align-items: center"><span style="display: inline-block; width: 10px; height: 10px; box-sizing: border-box; border: 2px solid #C2410C"></span>AUTHORED · a branch’s assumption, in its own ink</span>
+  </div>
+  <div style="position: absolute; left: 700px; top: 12px; width: 478px; display: flex; flex-direction: column; gap: 3px">
+    <span class="mono" style="font-size: 11px; letter-spacing: .12em; color: #5A554C">ADDRESS OF THE RECORD</span>
+    <span class="mono" style="font-size: 12px; padding: 6px 10px; border: 1px solid #1D1B18; background: #FBF8F0; white-space: nowrap">bow://celtics/reality#head:{{head8}} · {{count}} entries</span>
+  </div>
+  <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="position: absolute; right: 32px; top: 22px; width: 172px; background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+  <div style="position: absolute; left: 32px; top: 90px; width: 1376px; height: 0; border-top: 3px double #1D1B18"></div>
+
+  <!-- THE RECORD -->
+  <section aria-label="The record" style="position: absolute; left: 32px; top: 100px; width: 840px; height: 528px">
+    <div style="position: absolute; left: 32px; top: 17px; width: 2px; height: 490px; background: #1D1B18"></div>
+    <div style="position: absolute; left: 26px; top: 10px; width: 14px; height: 14px; border-radius: 50%; background: #1D1B18"></div>
+    <div class="mono" style="position: absolute; left: 76px; top: 9px; font-size: 11px; letter-spacing: .04em; color: #5A554C; white-space: nowrap">GENESIS · SHA-256(“bow:celtics:reality”) = <span style="color: #1D1B18; font-weight: 600">{{gen8}}</span>… · every seal below is chained from this</div>
+
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+      <div class="regrow" style="position: absolute; left: 0; top: {{r.top}}px; width: 840px; height: 58px; box-sizing: border-box; background: {{r.bg}}; border-top: 1px solid rgba(29,27,24,.22)">
+        <span class="mono" style="position: absolute; left: 11px; top: -9px; width: 44px; height: 17px; box-sizing: border-box; text-align: center; font-size: 11px; line-height: 15px; border: 1px solid #1D1B18; background: #F4F0E6; color: #1D1B18">{{r.link}}</span>
+        <button type="button" class="sealbtn" onClick="{{r.pick}}" aria-label="{{r.sealLabel}}" style="position: absolute; left: 68px; top: 2px; width: 54px; height: 54px">
+          <svg width="54" height="54" viewBox="0 0 54 54" aria-hidden="true">
+            <circle cx="27" cy="27" r="25.5" style="fill: {{r.sealFill}}; stroke: #9E2A2B; stroke-width: 1.5; stroke-dasharray: {{r.outerDash}}; transition: fill .4s"></circle>
+            <circle cx="27" cy="27" r="22" fill="none" stroke-width="2.2" stroke-dasharray="1.3 2.1" style="stroke: {{r.ringInk}}; transition: stroke .4s"></circle>
+          </svg>
+          <span style="position: absolute; left: 0; top: 0; width: 54px; height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: {{r.sealFont}}; font-style: {{r.sealStyle}}; font-size: 11px; line-height: 12px; font-weight: 500; color: {{r.sealInk}}; transition: color .4s"><span>{{r.h1}}</span><span>{{r.h2}}</span></span>
+        </button>
+        <div style="position: absolute; left: 134px; top: 5px; width: 548px; height: 50px; overflow: hidden">
+          <div class="mono" style="display: flex; justify-content: space-between; gap: 8px; font-size: 11px; line-height: 14px; color: #5A554C">
+            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><span style="display: inline-block; width: 8px; height: 8px; background: #1D1B18; margin-right: 6px"></span>{{r.num}} · {{r.dateUp}} · {{r.src}} {{r.v}}</span>
+            <span style="white-space: nowrap; color: #1D1B18; font-weight: 600">{{r.was}}</span>
+          </div>
+          <div style="font-size: 15px; line-height: 19px; margin-top: 2px"><span style="text-decoration: {{r.deco}}; background: {{r.tbg}}">{{r.t}}</span></div>
+        </div>
+        <div style="position: absolute; left: 690px; top: 11px; display: flex; gap: 6px">
+          <button type="button" class="btn" disabled="{{r.forkOff}}" onClick="{{r.fork}}" style="width: 88px">Fork here</button>
+          <button type="button" class="btn dash" onClick="{{r.alter}}" aria-label="Alter entry {{r.num}} (demo)" style="width: 54px">Alter</button>
+        </div>
+      </div>
+    </sc-for>
+
+    <div style="position: absolute; left: 26px; top: 499px; width: 14px; height: 14px; background: #1D1B18; transform: rotate(45deg)"></div>
+    <div class="mono" style="position: absolute; left: 76px; top: 500px; font-size: 11px; letter-spacing: .04em; color: #5A554C; white-space: nowrap">RECORD HEAD · <span style="color: #1D1B18; font-weight: 600">{{head8}}</span> · a branch is cut from an entry and never writes on this line</div>
+  </section>
+
+  <!-- FULL SEAL ON REQUEST -->
+  <div style="position: absolute; left: 32px; top: 634px; width: 840px; height: 78px; box-sizing: border-box; border: 1px solid #1D1B18; background: #FBF8F0; padding: 5px 12px; overflow: hidden">
+    <div class="mono" style="font-size: 11px; line-height: 16px; white-space: nowrap"><span style="color: #5A554C">ENTRY {{strip.num}} · FULL SEAL </span><span style="color: #9E2A2B; font-weight: 600; font-size: 12px">{{strip.full}}</span></div>
+    <div class="mono" style="font-size: 11px; line-height: 16px; white-space: nowrap"><span style="color: #5A554C">= SHA-256( PREVIOUS SEAL </span><span style="font-size: 12px">{{strip.prev}}</span><span style="color: #5A554C"> + JSON )</span></div>
+    <div class="mono" style="font-size: 11px; line-height: 16px; word-break: break-all; max-height: 34px; overflow: hidden"><span style="color: #5A554C">JSON, KEYS SORTED </span>{{strip.json}}</div>
+  </div>
+
+  <!-- ENGINE -->
+  <section aria-label="Engine checks" style="position: absolute; left: 32px; top: 718px; width: 840px; height: 112px; border-top: 1px solid #1D1B18">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; padding-top: 4px">
+      <span class="mono" style="font-size: 13px; font-weight: 600; letter-spacing: .04em; color: {{engine.color}}">{{engine.line}}</span>
+      <span class="mono" style="font-size: 11px; color: #5A554C">{{engine.detail}}</span>
+    </div>
+    <div style="display: grid; grid-auto-flow: column; grid-template-rows: repeat(5, 16px); grid-template-columns: repeat(3, 280px); margin-top: 6px">
+      <sc-for list="{{testRows}}" as="tr" hint-placeholder-count="15">
+        <div style="display: flex; gap: 5px; align-items: center; height: 16px; font-size: 12px; white-space: nowrap; width: 274px; overflow: hidden">
+          <svg width="12" height="12" viewBox="0 0 12 12" style="flex: none" aria-hidden="true"><path d="M2 6.5 L5 9.5 L10.5 2.5" fill="none" stroke="#9E2A2B" stroke-width="1.8" style="opacity: {{tr.okOp}}"></path><path d="M2 2 L10 10 M10 2 L2 10" fill="none" stroke="#9E2A2B" stroke-width="1.8" style="opacity: {{tr.badOp}}"></path></svg>
+          <span style="overflow: hidden; text-overflow: ellipsis; color: {{tr.color}}">{{tr.n}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- BRANCH REGISTERS -->
+  <section aria-label="Branch registers" style="position: absolute; left: 892px; top: 100px; width: 516px; height: 276px">
+    <div class="mono" style="height: 20px; font-size: 11px; letter-spacing: .1em; color: #C2410C; font-weight: 600; white-space: nowrap">{{branchTitle}}</div>
+
+    <sc-if value="{{drafting}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: 0; top: 22px; width: 516px; height: 252px; box-sizing: border-box; border: 2px dashed #C2410C; background: #FCF8F0; padding: 6px 12px 8px">
+        <div style="display: flex; justify-content: space-between; align-items: center; height: 36px">
+          <span class="mono" style="font-size: 11px; letter-spacing: .08em; color: #C2410C; font-weight: 600">NEW BRANCH · cut at {{draft.date}}</span>
+          <button type="button" class="obtn mono" onClick="{{cancelDraft}}" style="width: 76px">Cancel</button>
+        </div>
+        <div class="mono" style="font-size: 12px; color: #C2410C; height: 20px; white-space: nowrap">will be sealed to the record at <strong>{{draft.parent8}}</strong></div>
+        <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 4px">
+          <sc-for list="{{draft.suggs}}" as="g" hint-placeholder-count="3">
+            <button type="button" class="obtn" onClick="{{g.pick}}" aria-pressed="{{g.on}}" style="width: 100%; background: {{g.bg}}; color: {{g.fg}}">{{g.t}}</button>
+          </sc-for>
+        </div>
+        <div style="display: flex; gap: 6px; margin-top: 8px">
+          <input class="in" value="{{draft.text}}" onChange="{{onDraft}}" maxlength="60" placeholder="or declare one assumption, one line" aria-label="Declared assumption" style="flex: 1; min-width: 0">
+          <button type="button" class="obtn mono" disabled="{{draft.cutOff}}" onClick="{{cutBranch}}" style="width: 120px">Cut the branch</button>
+        </div>
+        <div style="font-size: 12px; margin-top: 5px; color: #3A362F; line-height: 15px">{{draft.hint}}</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{notDrafting}}" hint-placeholder-val="{{true}}">
+      <div style="position: absolute; left: 0; top: 22px; width: 516px; height: 252px">
+        <sc-if value="{{noForks}}" hint-placeholder-val="{{true}}">
+          <div style="position: absolute; left: 0; top: 0; width: 516px; height: 122px; box-sizing: border-box; border: 2px dashed #C2410C; padding: 12px 16px; font-size: 14px; line-height: 20px; color: #3A362F">
+            <span class="mono" style="font-size: 11px; letter-spacing: .08em; color: #C2410C; font-weight: 600">NO BRANCH YET · UNKNOWN</span><br>
+            Press <em>Fork here</em> on any entry. The branch is sealed to that entry’s seal, so anyone can check which record it came from.
+          </div>
+        </sc-if>
+        <sc-if value="{{roomForMore}}" hint-placeholder-val="{{true}}">
+          <div style="position: absolute; left: 0; top: 134px; width: 516px; box-sizing: border-box; border: 1.5px solid #1D1B18; padding: 8px 12px; font-size: 13px; line-height: 18px; background: #FBF8F0">
+            <span class="mono" style="font-size: 11px; letter-spacing: .08em; font-weight: 600">HOW AN ADDRESS CARRIES THE PROOF</span><br>
+            <span class="mono" style="font-size: 12px">bow://celtics@<u>date</u>#<u>hash8</u>/branch:<u>author-slug</u>?head=<u>hash8</u></span><br>
+            The first hash8 is the record’s seal at that entry. The last is the seal of the branch’s own last step. Change either side by one letter and the check fails.
+          </div>
+        </sc-if>
+        <sc-for list="{{forks}}" as="f" hint-placeholder-count="1">
+          <div style="position: absolute; left: 0; top: {{f.top}}px; width: 516px; height: 122px; box-sizing: border-box; border: 2px solid #C2410C; background: #FCF8F0; padding: 4px 10px 0">
+            <div style="display: flex; justify-content: space-between; align-items: center; height: 36px">
+              <span class="mono" style="font-size: 11px; letter-spacing: .06em; color: #C2410C; font-weight: 600; border: 1.5px solid #C2410C; padding: 3px 7px; white-space: nowrap">YOUR BRANCH · NOT THE RECORD</span>
+              <span style="display: flex; gap: 6px">
+                <button type="button" class="obtn mono" onClick="{{f.share}}" aria-pressed="{{f.shared}}" style="width: 66px; background: {{f.shBg}}; color: {{f.shFg}}">Share</button>
+                <button type="button" class="obtn mono" onClick="{{f.drop}}" style="width: 76px">Discard</button>
+              </span>
+            </div>
+            <div style="position: relative; height: 44px">
+              <svg width="38" height="38" viewBox="0 0 38 38" style="position: absolute; left: 0; top: 3px" aria-hidden="true">
+                <circle cx="19" cy="19" r="17" fill="none" stroke="#C2410C" stroke-width="1.5" style="stroke-dasharray: {{f.ringDash}}"></circle>
+                <circle cx="19" cy="19" r="13" fill="none" stroke="#C2410C" stroke-width="2" stroke-dasharray="1.2 2"></circle>
+                <path d="M12 19.5 L17 24.5 L26.5 13.5" fill="none" stroke="#9E2A2B" stroke-width="2.4" style="opacity: {{f.okOp}}; transition: opacity .3s"></path>
+                <path d="M12 12 L26 26 M26 12 L12 26" fill="none" stroke="#9E2A2B" stroke-width="2.4" style="opacity: {{f.badOp}}; transition: opacity .3s"></path>
+                <path d="M15 3 L20 12 L16 19 L22 27 L19 35" fill="none" stroke="#9E2A2B" stroke-width="1.4" style="opacity: {{f.badOp}}; transition: opacity .3s"></path>
+              </svg>
+              <div class="mono" style="position: absolute; left: 48px; top: 0; font-size: 12px; color: #C2410C; white-space: nowrap">{{f.sealedTo}}</div>
+              <div style="position: absolute; left: 48px; top: 20px; width: 440px; font-size: 14px; font-style: italic; color: #C2410C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Assumes: {{f.text}}</div>
+            </div>
+            <div style="font-size: 13px; line-height: 16px; color: {{f.vColor}}; max-height: 32px; overflow: hidden">{{f.verdict}}</div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+  </section>
+
+  <!-- SHARE AND VERIFY -->
+  <section aria-label="Share and verify" style="position: absolute; left: 892px; top: 384px; width: 516px; height: 298px">
+    <div class="mono" style="height: 20px; font-size: 11px; letter-spacing: .1em; font-weight: 600; white-space: nowrap">SHARE · VERIFY <span style="font-weight: 400; color: #5A554C">— recomputed from genesis; nothing is looked up</span></div>
+    <sc-for list="{{vrows}}" as="v" hint-placeholder-count="4">
+      <div style="position: absolute; left: 0; top: {{v.top}}px; width: 516px; height: 46px; border-bottom: 1px solid rgba(29,27,24,.22)">
+        <div style="position: absolute; left: 0; top: 2px; width: 334px">
+          <div class="mono" style="font-size: 11px; line-height: 13px; color: {{v.lc}}; font-weight: 600; white-space: nowrap">{{v.label}}</div>
+          <div class="mono" style="font-size: 11px; line-height: 14px; word-break: break-all; color: {{v.ac}}; max-height: 28px; overflow: hidden">{{v.address}}</div>
+        </div>
+        <div style="position: absolute; left: 342px; top: 5px; width: 84px; height: 36px; box-sizing: border-box; border: {{v.chipBorder}}; display: flex; align-items: center; gap: 4px; padding: 0 4px">
+          <svg width="16" height="16" viewBox="0 0 16 16" style="flex: none" aria-hidden="true"><path d="M3 8.5 L6.5 12 L13 4" fill="none" stroke="#9E2A2B" stroke-width="2.2" style="opacity: {{v.okOp}}"></path><path d="M3 3 L13 13 M13 3 L3 13" fill="none" stroke="#9E2A2B" stroke-width="2.2" style="opacity: {{v.badOp}}"></path></svg>
+          <span class="mono" style="font-size: 11px; line-height: 12px; color: {{v.chipInk}}; font-weight: 600">{{v.c1}}<br>{{v.c2}}</span>
+        </div>
+        <button type="button" class="btn" disabled="{{v.off}}" onClick="{{v.verify}}" aria-label="{{v.aria}}" style="position: absolute; left: 432px; top: 5px; width: 84px">Verify</button>
+      </div>
+    </sc-for>
+    <div style="position: absolute; left: 0; top: 226px; width: 516px; height: 72px; box-sizing: border-box; border: 1.5px solid #1D1B18; background: #FBF8F0; padding: 5px 10px 0 40px">
+      <svg width="24" height="24" viewBox="0 0 24 24" style="position: absolute; left: 9px; top: 8px" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="none" stroke="#9E2A2B" stroke-width="1.5" stroke-dasharray="{{verdict.dash}}"></circle><path d="M6.5 12.5 L10.5 16.5 L17.5 7.5" fill="none" stroke="#9E2A2B" stroke-width="2.2" style="opacity: {{verdict.okOp}}"></path><path d="M7 7 L17 17 M17 7 L7 17" fill="none" stroke="#9E2A2B" stroke-width="2.2" style="opacity: {{verdict.badOp}}"></path></svg>
+      <div class="mono" style="font-size: 12px; font-weight: 600; line-height: 15px; color: {{verdict.ink}}">{{verdict.name}}</div>
+      <div style="font-size: 12.5px; line-height: 15px; color: #1D1B18">{{verdict.msg}}</div>
+    </div>
+  </section>
+
+  <!-- TAMPER -->
+  <section aria-label="Tamper with the record" style="position: absolute; left: 892px; top: 690px; width: 516px; height: 140px; border-top: 1px solid #1D1B18">
+    <div class="mono" style="height: 18px; padding-top: 3px; font-size: 11px; letter-spacing: .1em; font-weight: 600; white-space: nowrap">TAMPER WITH THE RECORD (DEMO) <span style="font-weight: 400; color: #5A554C">— edit one past entry</span></div>
+    <div style="display: flex; gap: 6px; margin-top: 3px">
+      <sc-for list="{{presets}}" as="p" hint-placeholder-count="3">
+        <button type="button" class="btn dash" onClick="{{p.pick}}" style="flex: 1; min-width: 0; padding: 0 4px; font-size: 11px">{{p.label}}</button>
+      </sc-for>
+    </div>
+    <div style="display: flex; gap: 6px; margin-top: 4px; align-items: center">
+      <span class="mono" style="width: 62px; flex: none; font-size: 11px; color: #5A554C">{{td.label}}</span>
+      <input class="in ink" value="{{td.text}}" onChange="{{onTd}}" aria-label="Edited text of the entry" placeholder="press Alter on an entry, or pick a preset" style="flex: 1; min-width: 0">
+      <button type="button" class="btn" disabled="{{td.off}}" onClick="{{applyTamper}}" style="width: 156px">Alter the record</button>
+    </div>
+    <div style="display: flex; gap: 6px; margin-top: 4px; align-items: center">
+      <div style="flex: 1; font-size: 12px; line-height: 14px; color: #1D1B18; max-height: 30px; overflow: hidden">{{tamperStatus}}</div>
+      <button type="button" class="btn" disabled="{{restoreOff}}" onClick="{{restore}}" style="width: 156px">Restore the record</button>
+    </div>
+  </section>
+
+  <!-- HOW DO WE KNOW -->
+  <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 892px; top: 98px; width: 516px; box-sizing: border-box; padding: 10px 14px; background: #FFFFFF; border: 1.5px solid #1D1B18; z-index: 5; font-size: 13px; line-height: 18px">
+      <strong class="mono" style="font-size: 11px; letter-spacing: .1em">HOW DO WE KNOW?</strong><br>
+      <strong>Entries</strong> are OBSERVED: outside reporting, one source per line where the fixture names one, every line still flagged [verify]. <strong>Seals</strong> are COMPUTED: SHA-256 of the previous seal plus the entry’s canonical JSON, calculated by this page with crypto.subtle. Nothing is looked up and nothing is stored: change a letter and every later seal changes. <strong>Orange</strong> is a branch: someone’s declared assumptions in their own ink, sealed to the record at one point. It never writes on the record. Dashed means not yet checked.
+    </div>
+  </sc-if>
+
+  <!-- QUIET LINES -->
+  <div style="position: absolute; left: 32px; top: 838px; width: 1376px; white-space: nowrap; overflow: hidden"><span class="mono" style="font-size: 11px; letter-spacing: .08em; font-weight: 600">CLONE TEST, 29 SEP: </span><span style="font-size: 13px; font-style: italic">copied in ~22 tool calls with identical seals — the page prints its own formula. What a copy can’t be is BOW’s record: nobody signs its head yet.</span></div>
+  <div class="mono" style="position: absolute; left: 32px; top: 862px; width: 690px; font-size: 11px; line-height: 15px; color: #3A362F">COMMERCIAL LENS · Hypothesis: verifiable branches are what let publishers, schools and courts of public opinion trust shared WHAT IFs — the record stays free; verification at scale is a service.</div>
+  <div class="mono" style="position: absolute; right: 32px; top: 862px; width: 660px; text-align: right; font-size: 11px; line-height: 15px; color: #3A362F">PLATFORM HYPOTHESIS · entries: the shared Boston fixture, dated, [verify] flags kept · seals: real SHA-256 computed in this page · branch texts: authored</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+// ==== ENGINE START · pure functions: state in, state out ====
+const GEN = 'bow:celtics:reality';
+const SEAL = '#9E2A2B';
+const MONO = 'IBM Plex Mono, monospace';
+const SERIF = 'Libre Caslon Text, Georgia, serif';
+const HASHER = (globalThis.crypto && globalThis.crypto.subtle) ? 'SHA-256 via crypto.subtle' : 'SHA-256 via JS fallback (crypto.subtle unavailable here)';
+const PV = '[verify]';
+const RECORD = [
+  { k: '2017-06-17', d: '17 Jun 2017', t: 'Boston and Philadelphia agree to trade the No. 1 pick.', src: '[source to cite]', v: PV },
+  { k: '2017-06-19', d: '19 Jun 2017', t: 'The trade is completed.', src: '[source to cite]', v: PV },
+  { k: '2017-06-22', d: '22 Jun 2017', t: 'Boston drafts Jayson Tatum at No. 3.', src: '[source to cite]', v: PV },
+  { k: '2025-05-12', d: '12 May 2025', t: 'Tatum ruptures his right Achilles, Game 4 vs New York.', src: '[source to cite]', v: PV },
+  { k: '2025-06-late.1', d: 'Late Jun 2025', t: 'Jrue Holiday to Portland for Anfernee Simons and two 2nds.', src: 'NBA.com / Hoops Rumors', v: PV },
+  { k: '2025-06-late.2', d: 'Late Jun 2025', t: 'Kristaps Porziņģis to Atlanta; Boston receives Georges Niang and a 2031 2nd, and sends a 2026 2nd.', src: 'NBA.com / Hoops Rumors', v: PV },
+  { k: '2026-02-05', d: '5 Feb 2026', t: 'Simons to Chicago for Nikola Vučević.', src: 'ESPN / NBC Sports Boston', v: PV },
+  { k: '2026-03-06', d: '6 Mar 2026', t: 'Tatum returns vs Dallas.', src: 'NBA.com', v: PV }
+];
+const SUGG = [
+  ['Boston keeps the No. 1 pick and takes Fultz', 'Philadelphia pays a higher price', 'The deal waits a week'],
+  ['The deal falls through', 'The deal closes a week late', 'Boston asks for one more pick'],
+  ['Boston takes a guard at No. 3', 'Boston trades No. 3 as well', 'Boston takes a big at No. 3'],
+  ['Tatum stays healthy in Game 4', 'Tatum misses only two months', 'Boston rests Tatum in Game 3'],
+  ['Boston keeps Jrue Holiday', 'Holiday goes for a first-round pick', 'Boston takes back less salary'],
+  ['Boston keeps Porziņģis', 'Boston sends a 2027 2nd instead', 'Porziņģis goes somewhere else'],
+  ['Simons stays in Boston', 'Boston waits until the deadline', 'Chicago sends back less salary'],
+  ['Tatum returns a month later', 'Tatum returns on a minutes limit', 'Tatum sits until next season']
+];
+const PRESETS = [
+  { idx: 3, from: 'Game 4', to: 'Game 5', label: 'Game 4→5 · entry 4' },
+  { idx: 5, from: 'a 2031 2nd', to: 'a 2030 2nd', label: '2031→2030 · entry 6' },
+  { idx: 2, from: 'No. 3', to: 'No. 2', label: 'No. 3→2 · entry 3' }
+];
+
+function sha256js(str) {
+  const data = Array.from(new TextEncoder().encode(str));
+  const W = 4294967296, K = [], H = [];
+  for (let c = 2, p = 0; p < 64; c++) {
+    let pr = true;
+    for (let d = 2; d * d <= c; d++) if (c % d === 0) { pr = false; break; }
+    if (pr) { if (p < 8) H[p] = (Math.pow(c, 0.5) * W) | 0; K[p++] = (Math.pow(c, 1 / 3) * W) | 0; }
+  }
+  const bits = data.length * 8;
+  data.push(0x80);
+  while (data.length % 64 !== 56) data.push(0);
+  const hi = Math.floor(bits / W), lo = bits >>> 0;
+  for (let i = 3; i >= 0; i--) data.push((hi >>> (i * 8)) & 255);
+  for (let i = 3; i >= 0; i--) data.push((lo >>> (i * 8)) & 255);
+  const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+  for (let o = 0; o < data.length; o += 64) {
+    const w = [];
+    for (let t = 0; t < 16; t++) w[t] = (data[o + 4 * t] << 24) | (data[o + 4 * t + 1] << 16) | (data[o + 4 * t + 2] << 8) | data[o + 4 * t + 3];
+    for (let t = 16; t < 64; t++) {
+      const s0 = rotr(w[t - 15], 7) ^ rotr(w[t - 15], 18) ^ (w[t - 15] >>> 3);
+      const s1 = rotr(w[t - 2], 17) ^ rotr(w[t - 2], 19) ^ (w[t - 2] >>> 10);
+      w[t] = (w[t - 16] + s0 + w[t - 7] + s1) | 0;
+    }
+    let a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+    for (let t = 0; t < 64; t++) {
+      const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25), ch = (e & f) ^ (~e & g);
+      const t1 = (h + S1 + ch + K[t] + w[t]) | 0;
+      const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22), mj = (a & b) ^ (a & c) ^ (b & c);
+      const t2 = (S0 + mj) | 0;
+      h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+    }
+    H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
+    H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+  }
+  return H.map((x) => (x >>> 0).toString(16).padStart(8, '0')).join('');
+}
+async function sha(str) {
+  try {
+    if (globalThis.crypto && globalThis.crypto.subtle) {
+      const d = await globalThis.crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(d)).map((b) => b.toString(16).padStart(2, '0')).join('');
+    }
+  } catch (err) { /* fall through to the JS implementation */ }
+  return sha256js(str);
+}
+function canon(x) {
+  if (x === null || typeof x !== 'object') return JSON.stringify(x);
+  if (Array.isArray(x)) return '[' + x.map(canon).join(',') + ']';
+  return '{' + Object.keys(x).sort().map((k) => JSON.stringify(k) + ':' + canon(x[k])).join(',') + '}';
+}
+async function chainFrom(prev, evs) {
+  const out = [];
+  let h = prev;
+  for (let i = 0; i < evs.length; i++) { h = await sha(h + canon(evs[i])); out.push(h); }
+  return out;
+}
+async function recordChain(evs) { return chainFrom(await sha(GEN), evs); }
+function same(a, b) { return a.length === b.length && a.every((x, i) => x === b[i]); }
+function reverseKeys(o) { const r = {}; Object.keys(o).reverse().forEach((k) => { r[k] = o[k]; }); return r; }
+function tamperAt(evs, k, text) { return evs.map((e, i) => (i === k ? Object.assign({}, e, { t: text }) : e)); }
+function firstDiff(evs) { for (let i = 0; i < evs.length; i++) if (evs[i].t !== RECORD[i].t) return i; return -1; }
+function linkLabel(i, genesis, hashes) { return (i === 0 ? genesis : hashes[i - 1]).slice(0, 4); }
+function slugify(s, n) { return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').split('-').slice(0, n).join('-'); }
+function makeAddress(p) { return 'bow://celtics@' + p.date + '#' + p.parent8 + '/branch:' + p.author + '-' + p.slug + (p.head8 ? '?head=' + p.head8 : ''); }
+function parseAddress(a) {
+  const m = /^bow:\/\/celtics@([0-9a-z.\-]+)#([0-9a-f]{8})\/branch:([a-z0-9\-]+?)(?:\?head=([0-9a-f]{8}))?$/.exec(a);
+  return m ? { date: m[1], parent8: m[2], name: m[3], head8: m[4] || null } : null;
+}
+async function makeFork(evs, hashes, idx, author, text, id) {
+  const events = [{ kind: 'assumption', t: text, by: author, at: evs[idx].k }];
+  const chain = await chainFrom(hashes[idx], events);
+  const f = { id: id, author: author, slug: slugify(text, 3), idx: idx, dateLabel: evs[idx].d, dateKey: evs[idx].k, text: text, parentHash: hashes[idx], events: events, chain: chain, head: chain[chain.length - 1] };
+  f.address = makeAddress({ date: f.dateKey, parent8: f.parentHash.slice(0, 8), author: author, slug: f.slug, head8: f.head.slice(0, 8) });
+  return f;
+}
+async function verify(addr, body, evs) {
+  const p = parseAddress(addr);
+  if (!p) return { ok: false, code: 'malformed' };
+  const idx = evs.findIndex((e) => e.k === p.date);
+  if (idx < 0) return { ok: false, code: 'noentry' };
+  const chain = await recordChain(evs);
+  const actual = chain[idx];
+  const r = { idx: idx, date: evs[idx].d, claimed: p.parent8, actual: actual.slice(0, 8) };
+  if (actual.slice(0, 8) !== p.parent8) return Object.assign(r, { ok: false, code: 'record' });
+  if (p.head8) {
+    const bc = await chainFrom(actual, body);
+    const head = bc.length ? bc[bc.length - 1] : actual;
+    Object.assign(r, { headClaimed: p.head8, headActual: head.slice(0, 8), steps: body.length });
+    if (head.slice(0, 8) !== p.head8) return Object.assign(r, { ok: false, code: 'branch' });
+  }
+  return Object.assign(r, { ok: true, code: 'valid' });
+}
+function verdictOf(r, localAltered) {
+  if (r.code === 'valid') return { ok: true, name: 'VALID', msg: 'diverged from the record as of ' + r.date + ' · hash ' + r.claimed + ' matches' + (r.steps ? ' · its ' + r.steps + ' own step' + (r.steps > 1 ? 's' : '') + ' chain to head ' + r.headActual : '') };
+  if (r.code === 'record') return { ok: false, name: 'RECORD MISMATCH', msg: 'the record this branch claims (' + r.claimed + ') is not the record (' + r.actual + ') — either the record was altered, or the branch was.' + (localAltered ? ' Your copy is altered (demo): restore it, then check again.' : '') };
+  if (r.code === 'branch') return { ok: false, name: 'BRANCH ALTERED AFTER SHARING', msg: 'the record matches (' + r.claimed + '), but the branch’s own steps chain to ' + r.headActual + ', not the ' + r.headClaimed + ' in its address.' };
+  return { ok: false, name: 'CANNOT READ THIS ADDRESS', msg: 'rule A-1: an address reads bow://celtics@date#hash8/branch:name?head=hash8.' };
+}
+async function mkPackage(evs, chain, idx, author, steps) {
+  const body = steps.map((st) => ({ kind: st[0], t: st[1], by: author, at: evs[idx].k }));
+  const bc = await chainFrom(chain[idx], body);
+  const head8 = bc[bc.length - 1].slice(0, 8);
+  return { author: author, body: body, address: makeAddress({ date: evs[idx].k, parent8: chain[idx].slice(0, 8), author: author, slug: slugify(steps[0][1], 3), head8: head8 }) };
+}
+async function buildReceived() {
+  const base = await recordChain(RECORD);
+  const A = await mkPackage(RECORD, base, 3, 'guest-a', [['assumption', 'Tatum stays healthy in Game 4'], ['declared', 'Boston keeps Holiday through 2026']]);
+  const altRec = tamperAt(RECORD, 3, RECORD[3].t.replace('Game 4', 'Game 5'));
+  const altChain = await recordChain(altRec);
+  const B = await mkPackage(altRec, altChain, 6, 'guest-b', [['assumption', 'Simons stays in Boston'], ['declared', 'Chicago keeps Vučević']]);
+  const C0 = await mkPackage(RECORD, base, 4, 'guest-c', [['assumption', 'Boston keeps Jrue Holiday'], ['declared', 'Boston’s tax bill is higher']]);
+  const C = Object.assign({}, C0, { body: C0.body.map((st, i) => (i === 1 ? Object.assign({}, st, { t: 'Boston’s tax bill is lower' }) : st)) });
+  return [A, B, C];
+}
+async function runTests() {
+  const T = [];
+  const add = (n, ok) => T.push({ n: n, ok: !!ok });
+  const g = await sha(GEN);
+  const base = await recordChain(RECORD);
+  add('SHA-256 matches the FIPS vector for “abc”', (await sha('abc')) === 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad');
+  add('genesis matches an independent SHA-256', g === sha256js(GEN) && g.length === 64);
+  add('canonical JSON: key order never matters', canon({ b: 1, a: { d: 2, c: 3 } }) === '{"a":{"c":3,"d":2},"b":1}' && canon(RECORD[3]) === canon(reverseKeys(RECORD[3])));
+  const again = await recordChain(RECORD.map(reverseKeys));
+  add('chain recompute is deterministic', same(base, again) && same(base, await recordChain(RECORD)));
+  const h0 = await sha(g + canon(RECORD[0])), h5 = await sha(base[4] + canon(RECORD[5]));
+  add('seal i = SHA-256(seal i−1 + JSON i)', h0 === base[0] && h5 === base[5] && new Set(base).size === base.length);
+  add('link label i = first 4 of seal i−1', RECORD.every((e, i) => linkLabel(i, g, base) === (i ? base[i - 1] : g).slice(0, 4)));
+  let okT = true;
+  for (let k = 0; k < RECORD.length; k++) {
+    const c = await recordChain(tamperAt(RECORD, k, RECORD[k].t + '!'));
+    for (let i = 0; i < RECORD.length; i++) if ((i < k) !== (c[i] === base[i])) okT = false;
+  }
+  add('tamper at k changes seals k…8, none before', okT);
+  add('restoring the text restores the exact seals', same(await recordChain(tamperAt(tamperAt(RECORD, 3, 'x'), 3, RECORD[3].t)), base));
+  const f = await makeFork(RECORD, base, 3, 'you', 'Tatum stays healthy', 1);
+  const pa = parseAddress(f.address);
+  add('fork stores parentHash; address has hash8', f.parentHash === base[3] && pa && pa.parent8 === base[3].slice(0, 8) && pa.head8 === f.head.slice(0, 8));
+  add('a fork never changes any record seal', same(await recordChain(RECORD), base));
+  add('a fork’s own events chain from parentHash', f.chain[0] === await sha(base[3] + canon(f.events[0])) && f.head === f.chain[f.chain.length - 1]);
+  const rc = await buildReceived();
+  const vA = await verify(rc[0].address, rc[0].body, RECORD), vB = await verify(rc[1].address, rc[1].body, RECORD), vC = await verify(rc[2].address, rc[2].body, RECORD);
+  add('verify accepts the valid received branch', vA.ok && vA.code === 'valid');
+  add('verify rejects the altered-record branch', !vB.ok && vB.code === 'record');
+  add('verify rejects the altered-branch branch', !vC.ok && vC.code === 'branch' && vC.claimed === vC.actual);
+  const late = await verify(f.address, f.events, tamperAt(RECORD, 5, RECORD[5].t + '!'));
+  const early = await verify(f.address, f.events, tamperAt(RECORD, 1, RECORD[1].t + '!'));
+  add('tamper after a cut spares it; before it breaks it', late.ok && !early.ok && early.code === 'record');
+  return T;
+}
+// ==== ENGINE END ====
+
+class Component extends DCLogic {
+  componentDidMount() {
+    this.alive = true;
+    this.seq = 0;
+    this.boot();
+    this.timer = setInterval(() => {
+      const s = this.state || {};
+      const N = (s.ev || RECORD).length;
+      if (s.hashes && !s.hold && s.casc != null && s.casc < N) this.setState({ casc: s.casc + 1 });
+    }, 170);
+  }
+  componentWillUnmount() { this.alive = false; clearInterval(this.timer); }
+  async boot() {
+    const g = await sha(GEN);
+    const h = await recordChain(RECORD);
+    if (!this.alive) return;
+    this.setState({ genesis: g, hashes: h, pristine: h, pf: 0, casc: 0 });
+    const rc = await buildReceived();
+    if (!this.alive) return;
+    this.setState({ received: rc });
+    const t = await runTests();
+    if (!this.alive) return;
+    this.setState({ tests: t });
+  }
+  async recheck() {
+    const st = this.state || {};
+    const ev = st.ev || RECORD, v = st.ver || 0;
+    const out = {};
+    const fs = (st.forks || []).filter((f) => !f.sealing);
+    for (let i = 0; i < fs.length; i++) out[fs[i].id] = Object.assign({}, await verify(fs[i].address, fs[i].events, ev), { ver: v });
+    if (!this.alive || ((this.state || {}).ver || 0) !== v) return;
+    this.setState({ fchk: Object.assign({}, (this.state || {}).fchk || {}, out) });
+  }
+  async cutBranch() {
+    const s = this.state || {};
+    const d = s.draft;
+    if (!d || !s.hashes) return;
+    const text = (d.text || '').trim().slice(0, 60);
+    if (!text) return;
+    const ev = s.ev || RECORD, id = (s.fid || 0) + 1;
+    const stub = { id: id, sealing: true, idx: d.idx, dateLabel: ev[d.idx].d, text: text, author: 'you', parentHash: s.hashes[d.idx] };
+    this.setState({ forks: (s.forks || []).concat([stub]), fid: id, draft: null, note: null });
+    const f = await makeFork(ev, s.hashes, d.idx, 'you', text, id);
+    if (!this.alive) return;
+    this.setState({ forks: ((this.state || {}).forks || []).map((x) => (x.id === id ? f : x)) });
+    this.recheck();
+  }
+  async verifyKey(key) {
+    const s = this.state || {};
+    const ev = s.ev || RECORD, v = s.ver || 0;
+    let addr = null, body = [];
+    if (key === 'own') {
+      const f = (s.forks || []).find((x) => x.id === s.shareFid && !x.sealing);
+      if (f) { addr = f.address; body = f.events; }
+    } else if (s.received) { addr = s.received[key].address; body = s.received[key].body; }
+    if (!addr) return;
+    const res = Object.assign({}, await verify(addr, body, ev), { ver: v });
+    if (!this.alive) return;
+    this.setState({ vres: Object.assign({}, (this.state || {}).vres || {}, { [key]: res }), vsel: key });
+  }
+  applyTamper() {
+    const s = this.state || {};
+    const td = s.td;
+    const ev = s.ev || RECORD;
+    if (!td || !s.hashes || s.hold || !td.text.trim() || td.text === ev[td.idx].t) return;
+    const ev2 = tamperAt(ev, td.idx, td.text);
+    const d0 = firstDiff(ev);
+    const start = d0 < 0 ? td.idx : Math.min(td.idx, d0);
+    const mySeq = ++this.seq;
+    this.setState({ ev: ev2, pf: start, casc: start, hold: true, ver: (s.ver || 0) + 1, restored: false });
+    recordChain(ev2).then((h) => {
+      if (!this.alive || mySeq !== this.seq) return;
+      this.setState({ hashes: h, hold: false });
+      this.recheck();
+    });
+  }
+  restore() {
+    const s = this.state || {};
+    const ev = s.ev || RECORD;
+    const start = firstDiff(ev);
+    if (start < 0 || !s.hashes || s.hold) return;
+    const mySeq = ++this.seq;
+    this.setState({ ev: RECORD, pf: start, casc: start, hold: true, ver: (s.ver || 0) + 1, td: null });
+    recordChain(RECORD).then((h) => {
+      if (!this.alive || mySeq !== this.seq) return;
+      this.setState({ hashes: h, hold: false, restored: same(h, (this.state || {}).pristine || []) });
+      this.recheck();
+    });
+  }
+  renderVals() {
+    const s = this.state || {};
+    const ev = s.ev || RECORD, N = ev.length;
+    const hashes = s.hashes || null, pristine = s.pristine || null, gen = s.genesis || null;
+    const casc = s.casc == null ? N : s.casc, pf = s.pf == null ? N : s.pf;
+    const ver = s.ver || 0;
+    const pad2 = (n) => (n < 10 ? '0' : '') + n;
+    const pend = (i) => !hashes || (i >= pf && i >= casc);
+    const chg = (i) => !pend(i) && !!pristine && hashes[i] !== pristine[i];
+    const dI = firstDiff(ev), tampered = dI >= 0;
+    const sel = s.sel == null ? 3 : s.sel;
+    const forksRaw = s.forks || [];
+    const fchk = s.fchk || {};
+
+    const rows = ev.map((e, i) => {
+      const p = pend(i), c = chg(i);
+      const h = !p && hashes ? hashes[i] : '';
+      const prev = i === 0 ? gen : (hashes && !pend(i - 1) ? hashes[i - 1] : null);
+      const alt = e.t !== RECORD[i].t;
+      return {
+        top: 34 + 58 * i, num: pad2(i + 1), dateUp: e.d.toUpperCase(), src: alt ? 'ALTERED IN THIS PAGE (demo)' : e.src, v: alt ? '' : e.v, t: e.t,
+        link: prev ? linkLabel(i, gen, hashes || []) : '····',
+        bg: sel === i ? 'rgba(29,27,24,.075)' : 'transparent',
+        h1: p ? 'sealing' : h.slice(0, 4), h2: p ? '…' : h.slice(4, 8),
+        sealFill: c ? SEAL : 'rgba(158,42,43,0)', sealInk: c ? '#F4F0E6' : SEAL, ringInk: c ? '#F4F0E6' : SEAL,
+        outerDash: p ? '3 3' : '0', sealFont: p ? SERIF : MONO, sealStyle: p ? 'italic' : 'normal',
+        sealLabel: 'Entry ' + (i + 1) + ', seal ' + (p ? 'sealing' : h.slice(0, 8)) + '. Show the full seal',
+        was: c ? 'was ' + pristine[i].slice(0, 8) + ' → ' + h.slice(0, 8) : (p && tampered && i >= pf && hashes ? 'recomputing…' : ''),
+        deco: alt ? 'underline double' : 'none', tbg: alt ? '#E6D9B8' : 'transparent',
+        forkOff: p, pick: () => this.setState({ sel: i }),
+        fork: () => {
+          const st = this.state || {};
+          if ((st.forks || []).length >= 2) { this.setState({ note: 'REFUSED · rule F-3: this register holds two branches. Discard one to cut another.' }); return; }
+          this.setState({ draft: { idx: i, text: '' }, note: null, sel: i });
+        },
+        alter: () => this.setState({ td: { idx: i, text: ev[i].t }, sel: i })
+      };
+    });
+
+    const si = Math.min(sel, N - 1);
+    const strip = {
+      num: pad2(si + 1),
+      full: pend(si) ? 'sealing…' : hashes[si],
+      prev: si === 0 ? (gen || 'sealing…') : (pend(si - 1) ? 'sealing…' : hashes[si - 1]),
+      json: canon(ev[si])
+    };
+    const headP = pend(N - 1);
+    const head8 = headP ? 'sealing…' : hashes[N - 1].slice(0, 8);
+
+    // branches
+    const d = s.draft || null;
+    const draft = d ? {
+      date: ev[d.idx].d, parent8: pend(d.idx) ? 'sealing…' : hashes[d.idx].slice(0, 8),
+      text: d.text,
+      suggs: SUGG[d.idx].map((t) => ({ t: t, on: d.text === t, bg: d.text === t ? '#C2410C' : '#FCF8F0', fg: d.text === t ? '#FCF8F0' : '#C2410C', pick: () => this.setState({ draft: { idx: d.idx, text: t } }) })),
+      cutOff: !d.text.trim() || pend(d.idx),
+      hint: !d.text.trim() ? 'rule F-1: a branch declares at least one assumption. Pick one or type it.' : 'This is an authored assumption. The branch stays beside the record and never edits it.'
+    } : { date: '', parent8: '', text: '', suggs: [], cutOff: true, hint: '' };
+    const forks = forksRaw.map((f, i) => {
+      const c = fchk[f.id];
+      const fresh = c && c.ver === ver;
+      const wait = f.sealing || !hashes || pend(f.idx) || !fresh;
+      const bad = !wait && !c.ok;
+      const shared = s.shareFid === f.id;
+      return {
+        top: i * 128, text: f.text,
+        sealedTo: 'sealed to the record at ' + f.parentHash.slice(0, 8) + ' · ' + f.dateLabel,
+        ringDash: bad ? '5 5' : (wait ? '3 3' : '0'), okOp: !wait && !bad ? 1 : 0, badOp: bad ? 1 : 0,
+        verdict: f.sealing ? 'sealing…' : (wait ? 'checking against the record…' : (bad ? 'parent no longer matches — the record changed after this branch was cut (the record now seals to ' + c.actual + ' here)' : 'the record still seals to ' + c.claimed + ' at this entry · branch head ' + c.headActual)),
+        vColor: bad ? SEAL : '#1D1B18',
+        shared: shared, shBg: shared ? '#C2410C' : '#FCF8F0', shFg: shared ? '#FCF8F0' : '#C2410C',
+        share: () => this.setState({ shareFid: f.id }),
+        drop: () => { const st = this.state || {}; this.setState({ forks: (st.forks || []).filter((x) => x.id !== f.id), shareFid: st.shareFid === f.id ? null : st.shareFid, note: null }); }
+      };
+    });
+
+    // share and verify
+    const vres = s.vres || {};
+    const own = forksRaw.find((f) => f.id === s.shareFid && !f.sealing) || null;
+    const rc = s.received || null;
+    const defs = [
+      { key: 'own', who: 'your branch', label: own ? 'YOU · sharing your branch' : 'YOU · nothing shared yet', address: own ? own.address : 'Press Share on a branch to see its address here.', has: !!own },
+      { key: 0, who: 'guest-a', label: 'RECEIVED · guest-a', address: rc ? rc[0].address : 'sealing…', has: !!rc },
+      { key: 1, who: 'guest-b', label: 'RECEIVED · guest-b', address: rc ? rc[1].address : 'sealing…', has: !!rc },
+      { key: 2, who: 'guest-c', label: 'RECEIVED · guest-c', address: rc ? rc[2].address : 'sealing…', has: !!rc }
+    ];
+    const vrows = defs.map((df, i) => {
+      const r = vres[df.key];
+      const fr = r && r.ver === ver;
+      const vd = fr ? verdictOf(r, tampered) : null;
+      const two = { VALID: ['VALID', ''], 'RECORD MISMATCH': ['RECORD', 'MISMATCH'], 'BRANCH ALTERED AFTER SHARING': ['BRANCH', 'ALTERED'] };
+      const cc = vd ? (two[vd.name] || ['BAD', 'ADDRESS']) : ['not', 'checked'];
+      return {
+        top: 22 + i * 50, label: df.label, address: df.address, lc: df.key === 'own' ? '#C2410C' : '#1D1B18', ac: df.has ? '#1D1B18' : '#5A554C',
+        chipBorder: vd ? '1.5px solid #9E2A2B' : '1.5px dashed #5A554C', chipInk: vd ? '#1D1B18' : '#5A554C',
+        c1: cc[0], c2: cc[1], okOp: vd && vd.ok ? 1 : 0, badOp: vd && !vd.ok ? 1 : 0,
+        off: !df.has, aria: 'Verify ' + df.label, verify: () => this.verifyKey(df.key)
+      };
+    });
+    const vsr = s.vsel != null ? vres[s.vsel] : null;
+    const vv = vsr && vsr.ver === ver ? verdictOf(vsr, tampered) : null;
+    const verdict = vv ? { name: vv.name + ' · ' + (defs.find((x) => x.key === s.vsel) || { who: '' }).who, msg: vv.msg, ok: vv.ok, ink: '#1D1B18', dash: '0', okOp: vv.ok ? 1 : 0, badOp: vv.ok ? 0 : 1 }
+      : { name: 'NOT CHECKED YET', msg: 'Verify recomputes the chain from genesis up to the divergence entry and compares hashes. It reads no server.', ink: '#5A554C', dash: '3 3', okOp: 0, badOp: 0 };
+
+    // tamper
+    const td = s.td || null;
+    const changedN = ev.filter((e, i) => chg(i)).length;
+    const brokenN = forks.filter((f) => f.badOp === 1).length;
+    let tStatus;
+    if (s.hold) tStatus = 'Recomputing the chain…';
+    else if (tampered) tStatus = 'ALTERED (demo) · entry ' + (dI + 1) + ' · ' + changedN + ' of ' + N + ' seals changed' + (dI > 0 ? ', entries 1–' + dI + ' identical' : '') + ' · ' + brokenN + ' branch' + (brokenN === 1 ? '' : 'es') + ' broken';
+    else if (s.restored) tStatus = 'Restored · all ' + N + ' seals equal the originals, compared hash by hash.';
+    else tStatus = 'The record is intact: every seal matches its original.';
+    const presets = PRESETS.map((p) => ({ label: p.label, pick: () => this.setState({ td: { idx: p.idx, text: RECORD[p.idx].t.replace(p.from, p.to) }, sel: p.idx }) }));
+    const tdv = {
+      label: td ? 'entry ' + (td.idx + 1) : 'entry –', text: td ? td.text : '',
+      off: !td || !hashes || !!s.hold || !td.text.trim() || td.text === ev[td.idx].t
+    };
+
+    // engine
+    const tests = s.tests || null;
+    const pass = tests ? tests.filter((t) => t.ok).length : 0;
+    const fails = tests ? tests.filter((t) => !t.ok).map((t) => t.n) : [];
+    const engine = {
+      line: tests ? 'ENGINE · ' + pass + '/' + tests.length + ' checks passing' : 'ENGINE · running checks…',
+      color: fails.length ? SEAL : '#1D1B18',
+      detail: fails.length ? 'FAILED: ' + fails.join('; ') : HASHER + ' · run in this page on load'
+    };
+    const testRows = (tests || []).map((t) => ({ n: t.n, okOp: t.ok ? 1 : 0, badOp: t.ok ? 0 : 1, color: t.ok ? '#1D1B18' : SEAL }));
+
+    const how = !!s.how;
+    return {
+      how: how, howPressed: how, howBg: how ? '#1D1B18' : 'transparent', howFg: how ? '#F4F0E6' : '#1D1B18',
+      toggleHow: () => this.setState({ how: !(this.state && this.state.how) }),
+      head8: head8, count: N, gen8: gen ? gen.slice(0, 8) : 'sealing…',
+      rows: rows, strip: strip,
+      roomForMore: forksRaw.length < 2, drafting: !!d, notDrafting: !d, noForks: forksRaw.length === 0, forks: forks, forkCount: forksRaw.length,
+      draft: draft,
+      onDraft: (e) => this.setState({ draft: Object.assign({}, (this.state || {}).draft, { text: e.target.value }) }),
+      cancelDraft: () => this.setState({ draft: null }),
+      cutBranch: () => this.cutBranch(),
+      vrows: vrows, verdict: verdict,
+      td: tdv, onTd: (e) => this.setState({ td: Object.assign({}, (this.state || {}).td, { text: e.target.value }) }),
+      presets: presets, applyTamper: () => this.applyTamper(), restore: () => this.restore(),
+      restoreOff: !tampered || !!s.hold,
+      tamperStatus: tStatus,
+      branchTitle: s.note ? s.note : 'BRANCH REGISTERS · your hand, not the record’s · ' + forksRaw.length + '/2',
+      engine: engine, testRows: testRows
+    };
+  }
+}
+</script>
+</body>
+</html>
