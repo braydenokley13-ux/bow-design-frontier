@@ -79,6 +79,7 @@ Harmful or costly when:
 
 - W-3D:docs/campaign/opus55-worlds-aaa-visual-frontier/ARCHITECTURE_REQUESTS.md:13-27,32,61,95
 - W-3D:docs/campaign/opus55-worlds-aaa-visual-frontier/VISUAL_OWNERSHIP.md
+- W-3D:docs/campaign/opus55-worlds-aaa-visual-frontier/CAMPAIGN_STATE.json#selectedArtDirection (morning-glass)
 - W-3D:docs/campaign/opus55-worlds-aaa-visual-frontier/ART_DIRECTION.md:70-82
 - W-3D:docs/campaign/opus55-worlds-aaa-visual-frontier/VISUAL_EVIDENCE.md:389-408
 - W-3D:docs/campaign/opus55-worlds-aaa-visual-frontier/PERFORMANCE_LEDGER.md
@@ -103,7 +104,7 @@ Harmful or costly when:
 - W-3D:runtime/src/test/nbaActorRoleProjection.test.ts:16-40
 - W-3D:runtime/src/test/bostonArena.test.ts:49,69
 - W-3D:runtime/src/test/bostonGodView.test.ts:126
-- W:docs/campaign/bow-worlds-complete-ultra-20260925/SPATIAL_WORLD.md:5
+- W:docs/campaign/bow-worlds-complete-ultra-20260925/SPATIAL_WORLD.md:5 and section "Next source pass: work seen along a walk" (4.1 m arrivals)
 - W:docs/campaign/bow-worlds-complete-ultra-20260925/3D_CHALLENGER.md:20,38
 - W:docs/campaign/bow-worlds-complete-ultra-20260925/ENVIRONMENTAL_MEMORY.md (Limits)
 - W:runtime/src/client/world/harborPlaceTopology.ts:1-29
