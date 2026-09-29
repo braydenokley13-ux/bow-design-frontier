@@ -577,7 +577,7 @@ SCENE.article = function () {
     '<div class="stagectl">Underlined numbers are BOW’s marks (a hairline). Press one; nothing else on the page changes.</div>';
 };
 ACTS.mark = id => { S.art.mark = id; S.art.door = null; S.art.moment = null; log('you', 'pressed the mark ' + MARKS[id].txt + ' in The Harbour Ledger', { hist: 'Reality (read only)', k: MARKS[id].none ? 'UNKNOWN' : MARKS[id].f.k }); say(MARKS[id].none ? 'No record for that figure.' : 'Provenance for ' + MARKS[id].txt); };
-ACTS.door = d => { S.art.door = S.art.door === d ? null : d; S.art.moment = null; if (S.art.door) log('you', 'opened the door ' + d.toUpperCase() + ' on ' + MARKS[S.art.mark].txt + ' (traced to recorded causes)', { hist: 'Reality (read only)', k: 'OBSERVED' }); };
+ACTS.door = d => { S.art.door = S.art.door === d ? null : d; S.art.moment = null; if (S.art.door) log('you', 'opened the door “' + DOORS.find(x => x[0] === d)[1] + '” on ' + MARKS[S.art.mark].txt + ' (traced to recorded causes)', { hist: 'Reality (read only)', k: 'OBSERVED' }); };
 ACTS['moment-back'] = () => { S.art.moment = null; };
 ACTS.moment = id => { S.art.moment = id; log('you', 'opened a door named by its question: ' + FX.moments.find(x => x.id === id).question, { hist: 'Reality (read only)', k: 'OBSERVED' }); };
 

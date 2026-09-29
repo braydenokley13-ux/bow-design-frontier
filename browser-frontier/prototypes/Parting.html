@@ -956,8 +956,8 @@ function taxRange(){ var t=lineageWorlds().map(function(w){ return w.tax9; }); r
 function pageLineage(){
   var L=S.lin, W=lineageWorlds(), sw=lworld(L.seamWorld), verd=seamFor(sw, L.arrived), i, k;
   var mine = L.mine, s1=SUB1;
-  var head = '<div class="ch cy"></div><div class="ch" data-kn="OBSERVED · Reality’s recorded moments, from the shared fixture, dated, verify">Reality<small>solid black</small></div>' +
-    '<div class="ch" style="--ink2:var(--a1);color:var(--a1)" data-kn="AUTHORED · the author’s story, illustrative">'+esc(FORK.name)+'<small>by '+esc(FORK.author)+' · diverged '+esc(FORK.diverged)+'</small></div>' +
+  var head = '<div class="ch cy"></div><div class="ch">Reality<small>solid black</small></div>' +
+    '<div class="ch" style="--ink2:var(--a1);color:var(--a1)">'+esc(FORK.name)+'<small>by '+esc(FORK.author)+' · diverged '+esc(FORK.diverged)+'</small></div>' +
     '<div class="ch" style="color:var(--a2)">'+esc(s1.name)+'<small>by '+esc(s1.by)+' · from Year '+s1.start+'</small></div>' +
     (mine ? '<div class="ch" style="color:var(--you)">'+esc(mine.name)+'<small>by you · from Year '+mine.start+'</small></div>' : '<div class="ch slot">your fork would hang here</div>');
   var rows='';
@@ -986,7 +986,7 @@ function pageLineage(){
   }
   var pub = '<div class="pubstamp" data-cap="'+cap('S',null,'forks that live for years, with runnable archived rulebooks')+'">PUBLIC · ANYONE MAY READ IT · ANYONE MAY FORK IT<br>no popularity number is drawn</div>';
   return shelfHTML('l') +
-    '<div class="cover"><div><p class="eyebrow">A FORK THAT LIVES · A LINEAGE, NOT A FILE</p><h1>'+esc(FORK.name)+'</h1><p class="by">by '+esc(FORK.author)+' · diverged '+esc(FORK.diverged)+' · its own clock: Year 9 of 9 · REPLAY: Reality arrives when you let it</p></div>'+pub+'</div>' +
+    '<div class="cover"><div><p class="eyebrow">A FORK THAT LIVES · A LINEAGE, NOT A FILE</p><h1>'+esc(FORK.name)+'</h1><p class="by" data-kn="black ticks: OBSERVED, from the shared fixture, dated, verify · the fork’s bands: AUTHORED, the author’s story, illustrative">by '+esc(FORK.author)+' · diverged '+esc(FORK.diverged)+' · its own clock: Year 9 of 9 · REPLAY: Reality arrives when you let it</p></div>'+pub+'</div>' +
     '<div class="core" role="group" aria-label="The lineage: one band per season; Reality in solid black at the left" data-cap="'+cap('P',0)+'">'+head+rows+'</div>';
 }
 function subCell(k, id, start, text, ink, glyphs, isMine){

@@ -219,10 +219,16 @@ tr.ref td{background:rgba(179,30,20,.08);border-bottom:2px solid var(--red);font
 .ledger.wide{flex-direction:row}
 .ledger.wide .mbox{flex:1.5 1 0}
 .ledger.wide .ctable{flex:1 1 0;border-top:0;border-left:2px solid var(--ink);overflow:auto}
+#tools{display:flex;gap:6px;align-items:center}
+#tools .tg{border:1px solid var(--paper);color:var(--paper);padding:0 8px;min-height:24px;font:600 11.5px var(--mono);text-decoration:none}
+#tools .tg[aria-pressed=true]{background:var(--brass);color:var(--ink);border-color:var(--brass)}
+#tools .sep{width:1px;height:16px;background:var(--paper);opacity:.5;margin:0 4px}
+#tools .tg:focus-visible{outline-color:var(--paper)}
+#topstrip{height:30px}
 </style>
 </head>
 <body>
-<div id="topstrip"><button type="button" id="declare" data-act="declare" aria-pressed="false">Use Direct for screen readers and keyboard — remember it</button><span>PROTOTYPE · design evidence, not product</span></div>
+<div id="topstrip"><button type="button" id="declare" data-act="declare" aria-pressed="false">Use Direct for screen readers and keyboard — remember it</button><span id="tools" data-cap="PROPOSED" data-ai="NO AI REQUIRED"></span></div>
 <header id="hdr">
   <div class="brand"><span class="wm">CONCORDANCE</span><span class="sub">one ledger · every view</span></div>
   <div id="addr" class="addr" role="group" aria-label="Address"></div>
@@ -277,7 +283,7 @@ function stamp(S){
   S.hash=sha256(JSON.stringify(core));S.h4=S.hash.slice(0,4);return S;
 }
 function applyE(S,e){
-  const T=JSON.parse(JSON.stringify(S));
+  const T=JSON.parse(JSON.stringify(S));delete T._sf;delete T._sm;
   if(e.kind==='sign'){const f=FILES[e.file];T.payroll+=delta(f);T.files[e.file]={status:'signed',act:e.n,via:e.via};T.ticks.push({n:e.n,w:6,p:T.payroll,file:e.file,kind:'sign'});T.n=e.n;T.refusal=null;T.last={n:e.n,kind:'sign',file:e.file}}
   else if(e.kind==='decline'){T.files[e.file]={status:'declined',act:e.n,via:e.via};T.ticks.push({n:e.n,w:6,p:T.payroll,file:e.file,kind:'decline'});T.n=e.n;T.refusal=null;T.last={n:e.n,kind:'decline',file:e.file}}
   else if(e.kind==='refused'){T.refusal={file:e.file,at:e.at,rule:e.rule,text:e.text,allow:e.allow,after:e.after}}
@@ -653,7 +659,7 @@ function vVoice(SRC,S){
   if(SRC.refusal)cur1.push(B('refusal.last')+' What would allow it: '+B('refusal.allow')+'.');
   let pend='';
   if(A.pending&&SRC.files[A.pending]&&SRC.files[A.pending].status==='unsigned'){
-    pend='<p class="vl now">Read-back. Send Derrick White, get Jimmy Butler. '+B('file.'+A.pending+'.after')+' Say “confirm”.</p>';
+    pend='<p class="vl now">Read-back. Send Derrick White, get Jimmy Butler; '+B('file.'+A.pending+'.after')+'. Say “confirm”.</p>';
   }
   const btns=[];
   if(SRC.files.gsw.status==='unsigned'){
@@ -911,7 +917,7 @@ function vLedger(SRC,S){
   svg+='<path d="M'+X(rw)+' '+(LY.plant-9)+' l8 9 l-8 9 l-8 -9 z" fill="#F7F4EB" stroke="#15140F" stroke-width="2.5"/>';
   svg+='</svg>';
   let m='';
-  m+=B('event.fire',X(0)-4,12,'ar','Fab fire · '+esc(sm['event.fire'].text));
+  m+=B('event.fire',X(0)-4,12,'ar',esc(sm['event.fire'].text));
   m+=B('ship.1',X(-15.5),34,'','ship 1 · '+esc(sm['ship.1'].text));
   m+=B('ship.2',X(1),34,'','ship 2 · '+esc(sm['ship.2'].text));
   m+=B('ship.3',X(8),82,'','ship 3 · '+esc(sm['ship.3'].text));
@@ -920,7 +926,7 @@ function vLedger(SRC,S){
   m+=B('restart',X(9),LY.plant-30,'','Kaito restart · '+esc(sm['restart'].text));
   const rows=HARROW.promises.map(p=>'<tr><td class="nw">Promise '+p.id+'</td><td>'+mkBtn(reg,sm,'Ledger','ledger','promise.'+p.id,'cellbtn',null)+'</td><td>'+mkBtn(reg,sm,'Ledger','ledger','cover.'+p.id,'cellbtn',null)+'</td></tr>').join('');
   const html='<div class="ledger'+(wide?' wide':'')+'"><div class="mbox" id="mbox"><div class="tlwrap" id="mwrap">'+svg+m+'</div></div><div class="ctable">'+(ST.ui.open.includes('room')?'':'<button type="button" class="btn sm brass" data-act="compile" style="margin:3px 0">Step onto the floor: compile a Room</button>')+'<table><caption class="sr">Customer promises against the runway</caption><thead><tr><th>Commitment</th><th>Due</th><th>Against the runway</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
-  return {html:html,reg:reg,mount:function(el){const w=$('#mwrap',el),pb=$('#mbox',el);if(!w||!pb)return;const bw=pb.clientWidth,bh=pb.clientHeight,r=640/290;let ww=Math.min(bw,bh*r),hh=ww/r;w.style.width=ww+'px';w.style.height=hh+'px';w.style.fontSize=Math.max(11.5,ww/640*13)+'px';noteSize('ledger',el.clientWidth,el.clientHeight)}};
+  return {html:html,reg:reg,mount:function(el){const w=$('#mwrap',el),pb=$('#mbox',el);if(!w||!pb)return;const bw=pb.clientWidth,bh=pb.clientHeight,r=640/290;let ww=Math.min(bw,bh*r),hh=ww/r;w.style.width=ww+'px';w.style.height=hh+'px';w.style.fontSize=Math.min(13.5,Math.max(11.5,ww/640*13))+'px';noteSize('ledger',el.clientWidth,el.clientHeight)}};
 }
 /* ---------------------------------------------------------------- a Room compiled from a schema nobody drew a view for */
 function compileHarrow(SRC){
@@ -932,32 +938,30 @@ function compileHarrow(SRC){
 }
 function drawHarrowRoom(c,C,A){
   const g=c.getContext('2d'),W2=c.width,H2=c.height,hl=p=>A.follow&&A.follow.path===p;
-  g.fillStyle='#DCD5C2';g.fillRect(0,0,W2,H2*.62);g.fillStyle='#BFB59B';g.fillRect(0,H2*.62,W2,H2*.38);
-  const plantW=W2*.5;g.strokeStyle=INK;g.lineWidth=4;g.strokeRect(6,H2*.1,plantW,H2*.8);
+  g.fillStyle='#DCD5C2';g.fillRect(0,0,W2,H2*.66);g.fillStyle='#BFB59B';g.fillRect(0,H2*.66,W2,H2*.34);
+  const plantW=W2*.5,pad=10;g.strokeStyle=INK;g.lineWidth=4;g.strokeRect(6,H2*.08,plantW,H2*.8);
   /* stock -> shelves */
-  const perRow=5,rows=Math.ceil(C.n/perRow),sw=(plantW-30)/perRow,sh=Math.min(58,(H2*.34)/rows);
-  for(let i=0;i<C.n;i++){const r=Math.floor(i/perRow),k=i%perRow,x=18+k*sw,y=H2*.2+r*(sh+10);const isFull=i<C.full;
+  const perRow=5,rows=Math.ceil(C.n/perRow),sw=(plantW-30)/perRow,sh=Math.min(46,(H2*.3)/rows),y0=H2*.2;
+  for(let i=0;i<C.n;i++){const r=Math.floor(i/perRow),k=i%perRow,x=18+k*sw,y=y0+r*(sh+8);const isFull=i<C.full;
     tokPaint(g,'AUTHORED',x,y,sw-6,sh);g.fillStyle=INK;for(let l=1;l<3;l++)g.fillRect(x+3,y+l*sh/3,sw-12,2);
-    if(isFull){g.fillStyle=TONE;for(let l=0;l<3;l++)g.fillRect(x+8,y+l*sh/3+4,sw-22,sh/3-9)}else{g.fillStyle=TONE;g.fillRect(x+8,y+4,(sw-22)*.5,sh/3-9)}
-    if(C.stock&&hl(C.stock.path)&&i===0){}}
-  if(C.stock){const w=fitTx(g,C.stock.text,20,H2*.16,16,700,INK,'left',MONO,plantW-30);if(hl(C.stock.path)){g.strokeStyle=BRASS;g.lineWidth=5;g.strokeRect(14,H2*.1,plantW-14,H2*.4)}}
-  tx(g,'shelves drawn from a count, not observed',20,H2*.2+rows*(sh+10)+14,12,500,INK2,'left',MONO);
-  if(C.burn){fitTx(g,'the line uses '+C.burn.text,20,H2*.6,14,600,INK,'left',MONO,plantW-30)}
+    g.fillStyle=TONE;if(isFull){for(let l=0;l<3;l++)g.fillRect(x+8,y+l*sh/3+4,sw-22,sh/3-9)}else g.fillRect(x+8,y+4,(sw-22)*.5,sh/3-9)}
+  if(C.stock){fitTx(g,C.stock.text,18,H2*.15,15,700,INK,'left',MONO,plantW*.62);if(hl(C.stock.path)){g.strokeStyle=BRASS;g.lineWidth=5;g.strokeRect(12,H2*.08+4,plantW-12,y0+rows*(sh+8)-H2*.08)}}
+  const ny=y0+rows*(sh+8)+12;tx(g,'shelves drawn from a count, not observed',18,ny,11,500,INK2,'left',MONO);
+  if(C.burn)fitTx(g,'the line uses '+C.burn.text,18,ny+18,12,600,INK,'left',MONO,plantW-30);
   /* wall clock -> runway */
-  if(C.clock){g.beginPath();g.arc(plantW-38,H2*.2,30,0,7);g.fillStyle=TONE;g.fill();g.strokeStyle=INK;g.lineWidth=3;g.stroke();fitTx(g,C.clock.text.replace('about ',''),plantW-38,H2*.2+5,14,700,INK,'center',MONO,52);if(hl(C.clock.path)){g.strokeStyle=BRASS;g.lineWidth=5;g.beginPath();g.arc(plantW-38,H2*.2,36,0,7);g.stroke()}}
+  if(C.clock){const cx=plantW-34,cy=H2*.2;g.beginPath();g.arc(cx,cy,28,0,7);g.fillStyle=TONE;g.fill();g.strokeStyle=INK;g.lineWidth=3;g.stroke();fitTx(g,C.clock.text.replace('about ','').replace(' days','d'),cx,cy+5,14,700,INK,'center',MONO,46);if(hl(C.clock.path)){g.strokeStyle=BRASS;g.lineWidth=5;g.beginPath();g.arc(cx,cy,34,0,7);g.stroke()}}
   /* commitments -> papers on a desk */
-  g.fillStyle='#A9814F';g.fillRect(14,H2*.7,plantW-16,H2*.16);
-  C.papers.forEach((p,i)=>{const w=(plantW-40)/5,x=22+i*w,y=H2*.72;tokPaint(g,p.cov&&p.cov.text==='covered by stock on hand'?'COMPUTED':'UNKNOWN',x,y,w-8,H2*.11);fitTx(g,'P'+p.id,x+(w-8)/2,y+16,13,700,INK,'center',MONO,w-12);if(p.due)fitTx(g,p.due.text.replace('due ',''),x+(w-8)/2,y+H2*.11-8,11,600,INK,'center',MONO,w-12)});
+  g.fillStyle='#A9814F';g.fillRect(14,H2*.7,plantW-16,H2*.15);
+  C.papers.forEach((p,i)=>{const w=(plantW-40)/5,x=22+i*w,y=H2*.72;tokPaint(g,p.cov&&p.cov.text==='covered by stock on hand'?'COMPUTED':'UNKNOWN',x,y,w-8,H2*.1);fitTx(g,'P'+p.id+' · '+(p.due?p.due.text.replace('due day ','d'):''),x+(w-8)/2,y+H2*.1*.62,11,700,INK,'center',MONO,w-14)});
   /* lead time -> distance; single source -> one thread; the supplier's fab -> a covered building */
-  const px=6+plantW,fabX=W2-W2*.2,fy=H2*.5;
-  g.strokeStyle=INK;g.lineWidth=3;g.setLineDash([]);g.beginPath();g.moveTo(px,fy);g.lineTo(fabX,fy);g.stroke();
-  g.fillStyle=INK;g.fillRect(px-3,fy-8,6,16);
-  if(C.lead)fitTx(g,C.lead.text,(px+fabX)/2,fy-12,13,600,INK,'center',MONO,fabX-px-6);
-  if(C.src)fitTx(g,'Kaito is '+C.src.text,(px+fabX)/2,fy+24,12,500,INK2,'center',MONO,fabX-px);
-  g.fillStyle='#6F6A5C';g.fillRect(fabX,H2*.22,W2*.18,H2*.56);g.strokeStyle=INK;g.lineWidth=4;g.setLineDash([9,6]);g.strokeRect(fabX,H2*.22,W2*.18,H2*.56);g.setLineDash([]);
-  g.strokeStyle='rgba(247,244,235,.35)';g.lineWidth=2;for(let i=-H2;i<W2*.18;i+=14){g.beginPath();g.moveTo(fabX+i,H2*.78);g.lineTo(fabX+i+H2*.56,H2*.22);g.stroke()}
-  if(C.inside){const w=W2*.18;g.fillStyle=PAPER;g.fillRect(fabX+6,H2*.44,w-12,44);g.setLineDash([6,4]);g.strokeStyle=INK;g.lineWidth=2;g.strokeRect(fabX+6,H2*.44,w-12,44);g.setLineDash([]);fitTx(g,C.inside.text,fabX+w/2,H2*.44+27,12,700,INK,'center',MONO,w-20)}
-  if(C.fire){g.fillStyle=RED;g.fillRect(fabX+W2*.09-4,H2*.22-26,8,26);fitTx(g,C.fire.text,fabX+W2*.09,H2*.22-32,12,700,RED,'center',MONO,W2*.2)}
+  const px=6+plantW,fabX=W2*.76,fabW=W2*.21,fy=H2*.5;
+  g.strokeStyle=INK;g.lineWidth=3;g.beginPath();g.moveTo(px,fy);g.lineTo(fabX,fy);g.stroke();g.fillStyle=INK;g.fillRect(px-3,fy-8,6,16);
+  if(C.lead)fitTx(g,C.lead.text.split(' from')[0],(px+fabX)/2,fy-10,12,600,INK,'center',MONO,fabX-px-4);
+  if(C.src)fitTx(g,'one source',(px+fabX)/2,fy+20,11,500,INK2,'center',MONO,fabX-px-4);
+  g.fillStyle='#6F6A5C';g.fillRect(fabX,H2*.24,fabW,H2*.54);g.strokeStyle=INK;g.lineWidth=4;g.setLineDash([9,6]);g.strokeRect(fabX,H2*.24,fabW,H2*.54);g.setLineDash([]);
+  g.strokeStyle='rgba(247,244,235,.3)';g.lineWidth=2;for(let i=-H2;i<fabW;i+=14){g.beginPath();g.moveTo(fabX+i,H2*.78);g.lineTo(fabX+i+H2*.54,H2*.24);g.stroke()}
+  if(C.inside){g.fillStyle=PAPER;g.fillRect(fabX+5,H2*.42,fabW-10,50);g.setLineDash([6,4]);g.strokeStyle=INK;g.lineWidth=2;g.strokeRect(fabX+5,H2*.42,fabW-10,50);g.setLineDash([]);tx(g,'no view',fabX+fabW/2,H2*.42+21,12,700,INK,'center',MONO);tx(g,'inside',fabX+fabW/2,H2*.42+38,12,700,INK,'center',MONO)}
+  if(C.fire){g.fillStyle=RED;g.fillRect(fabX+fabW/2-4,H2*.24-14,8,14);tx(g,C.fire.text,W2-8,H2*.24-20,12,700,RED,'right',MONO)}
   tx(g,'no people drawn: nothing here records who is where',10,H2-10,11,500,INK2,'left',MONO);
 }
 function vRoomHarrow(SRC,S){
@@ -1102,13 +1106,15 @@ function noticesHTML(S){
   if(A.tierNote)o.push('<div class="notice dn"><b>STEPPED DOWN</b><span class="grow">'+esc(A.tierNote)+'</span></div>');
   return o.join('');
 }
+function toolsHTML(){
+  const A=ST.ui,tg=(act,label,on,al)=>'<button type="button" class="tg" data-act="'+act+'" aria-pressed="'+(!!on)+'"'+(al?' aria-label="'+al+'"':'')+'>'+label+'</button>';
+  return tg('how','How do we know?',A.how)+tg('real','What’s real?',A.real)+(ST.sys==='boston'?'<span class="sep"></span>'+tg('inject','Inject a stale binding',!!A.inject)+'<button type="button" class="tg" data-act="restart" aria-label="Start over at act 41">Start over</button>':'');
+}
 function rigHTML(){
-  const A=ST.ui,pb=(act,v,label,on)=>'<button type="button" class="btn" data-act="'+act+'"'+(v?' data-v="'+v+'"':'')+' aria-pressed="'+(!!on)+'">'+label+'</button>';
+  const A=ST.ui,pb=(act,v,label,on,al)=>'<button type="button" class="btn" data-act="'+act+'"'+(v?' data-v="'+v+'"':'')+' aria-pressed="'+(!!on)+'"'+(al?' aria-label="'+al+'"':'')+'>'+label+'</button>';
   return '<div class="g"><span class="gl">ARRIVE AS</span>'+pb('arrive','newcomer','Newcomer',A.who==='newcomer')+pb('arrive','operator','Operator',A.who==='operator')+'</div>'+
    '<div class="g"><span class="gl">DEVICE</span>'+pb('device','desktop','Desktop 3D',A.device==='desktop')+pb('device','chromebook','Chromebook',A.device==='chromebook')+pb('device','phone','Phone',A.device==='phone')+pb('device','voice','Voice',A.device==='voice')+'</div>'+
-   '<div class="g"><span class="gl">SYSTEM</span>'+pb('sys','boston','Boston · Year Two',ST.sys==='boston')+pb('sys','harrow','Harrow Medical',ST.sys==='harrow')+'</div>'+
-   '<div class="g" data-cap="PROPOSED" data-ai="NO AI REQUIRED"><span class="gl">LAYERS</span>'+pb('how','','How do we know?',A.how)+pb('real','','What’s real?',A.real)+'</div>'+
-   (ST.sys==='boston'?'<div class="g"><span class="gl">BUILDER</span>'+pb('inject','','Inject a stale binding',!!A.inject)+pb('restart','','Start over at act 41',false)+'</div>':'');
+   '<div class="g"><span class="gl">SYSTEM</span>'+pb('sys','boston','Boston',ST.sys==='boston','Boston · Year Two')+pb('sys','harrow','Harrow',ST.sys==='harrow','Harrow Medical')+'</div>';
 }
 function cmpLabel(s){let x=s.split('{t}');let l=(x[0]||'').trim()||(x[1]||'').trim();l=l.replace(/[,:]$/,'').trim();return l?l[0].toUpperCase()+l.slice(1):s}
 function compareHTML(){
@@ -1163,7 +1169,7 @@ function render(){
   /* DOM order: Direct first when it leads (screen-reader order), else after the panes */
   if(A.direct==='lead')B.insertBefore(D,panes);else if(D.previousElementSibling!==panes)B.appendChild(D);
   $('#notices').innerHTML=noticesHTML(S);$('#notices').setAttribute('aria-live','polite');
-  $('#rig').innerHTML=rigHTML();
+  $('#rig').innerHTML=rigHTML();$('#tools').innerHTML=toolsHTML();
   mounts.forEach(m=>{const el=$('#pb-'+m[0]);if(el)m[1](el)});
   /* focus: keep the user's place; a followed fact takes Direct's focus */
   if(ST._focusFollow){ST._focusFollow=false;const li=$('#dbody li[data-p="'+(A.follow&&A.follow.path)+'"]');if(li){li.focus();try{li.scrollIntoView({block:'nearest'})}catch(_){}}}

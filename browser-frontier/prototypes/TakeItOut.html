@@ -49,7 +49,7 @@ header .sub{font-style:italic;color:var(--muted);font-size:13px;white-space:nowr
 .tog[aria-pressed=true]::before{background:var(--ink);box-shadow:inset 0 0 0 2px var(--paper)}
 
 /* ---------- layout */
-main{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 340px;grid-template-rows:auto minmax(0,1fr);gap:8px 18px;padding:8px 20px 6px;min-height:0}
+main{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 340px;grid-template-rows:auto minmax(200px,1fr);gap:8px 18px;padding:8px 20px 6px;min-height:0}
 #stick{grid-column:1;grid-row:1;min-width:0;position:relative}
 #bench{grid-column:1;grid-row:2;min-width:0;min-height:0;display:flex;flex-direction:column}
 #present{grid-column:2;grid-row:1/3;min-width:0;border-left:1px solid var(--ink);padding-left:16px;position:relative}
@@ -67,7 +67,7 @@ footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .wk.now{color:var(--ink);font-weight:500}
 .knee{grid-row:2/5;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;border-radius:0}
 .knee span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;white-space:nowrap}
-.slot{grid-row:3;display:flex;flex-direction:column;gap:4px;padding-top:4px;min-height:150px;min-width:0}
+.slot{grid-row:3;display:flex;flex-direction:column;gap:4px;padding-top:4px;min-height:140px;min-width:0}
 .slug{position:relative;display:flex;flex-direction:column;flex:1 1 auto;min-width:0;padding:9px 8px 8px;background:var(--face);border:1.5px solid var(--ink);color:var(--ink);font-family:var(--serif);overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
 .slug::before{content:"";position:absolute;top:0;left:50%;width:14px;height:5px;margin-left:-7px;background:var(--paper);border:1.5px solid var(--ink);border-top:0;border-radius:0 0 6px 6px}
 .slug .when{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.85;margin-top:3px}
@@ -118,7 +118,7 @@ footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .game .opp{font-size:10px;color:var(--muted);letter-spacing:.05em}
 .game .res{font-weight:500}
 .game .was{font-size:10px;color:var(--muted);text-decoration:none}
-.game.k-RECORDED{background:var(--ink);color:var(--paper);box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 3px var(--paper),inset 0 0 0 4.5px var(--ink),inset 0 0 0 5.5px var(--paper);padding:6px 8px}
+.game.k-RECORDED{background:var(--ink);color:var(--paper);box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 3px var(--paper),inset 0 0 0 4.5px var(--ink),inset 0 0 0 5.5px var(--paper);padding:5px 7px}
 .game.k-RECORDED .opp,.game.k-RECORDED .was,.game.k-RECORDED .kn{color:var(--paper);opacity:.9}
 .game.chg{border-color:var(--warm);border-width:2px;color:var(--warm2)}
 .game.chg .opp,.game.chg .was{color:var(--warm2)}
@@ -132,7 +132,7 @@ footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ghost .g{display:inline-flex;align-items:baseline;gap:5px}
 .ghost .gs{display:inline-block;padding:0 6px;border:1px dashed var(--muted);font-size:11.5px}
 .ghost .gs.off{border-style:dotted;text-decoration:line-through}
-.frameBr{border:2px solid var(--warm);outline:1px solid var(--warm);outline-offset:3px;padding:5px 8px 8px;margin:2px 3px 0}
+.frameBr{border:2px solid var(--warm);outline:1px solid var(--warm);outline-offset:3px;padding:4px 8px 6px;margin:4px 3px 0}
 .stamp{color:var(--warm2);font-weight:700;font-size:14px;display:flex;flex-wrap:wrap;gap:0 10px;align-items:baseline}
 .stamp .as{font-weight:400;font-size:11.5px;color:var(--warm2);font-family:var(--serif)}
 .stampTray{display:block;width:100%}
@@ -168,6 +168,7 @@ footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dial .val,.dial .sub{display:block}
 .dial .val{font-family:var(--mono);font-size:17px;font-weight:500;text-align:center;line-height:1.05;margin-top:-1px}
 .dial .sub{font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center;min-height:13px;line-height:1.25;margin-top:2px}
+.dial .sub span{white-space:nowrap}
 .dial .sub.chg{color:var(--warm2)}
 .band-fill{fill:none;stroke-width:8}
 .band-edge{fill:none;stroke:var(--ink);stroke-width:1.2}
@@ -288,6 +289,9 @@ header .sub{display:none}
   .panel{padding:8px 12px}
 }
 
+.snap{border-left:6px solid var(--ink);background:var(--paper2);padding:4px 10px;font-family:var(--mono);font-size:12px;line-height:1.35;margin-bottom:4px}
+.snap b{font-weight:500}
+
 </style>
 </head>
 <body>
@@ -324,6 +328,8 @@ var TAX_LINE = WD.taxLine.v;
 var TAX_RATE = parseFloat(WD.taxRule.v.match(/([\d.]+)\s*×/)[1]);      // "Flat 1.5× over the line"
 var START = WD.payrollStartYearTwo.v;
 var MIN_SIGN = FX.league.season2627.exceptions.minimum.v;
+var W9REC = WD.acts.filter(function (a) { return /Denver/.test(a.what); })[0].what.match(/Denver (\d+)\u2013(\d+)/);   // the World's recorded Week 9: read, not pasted
+var W9B = +W9REC[1], W9O = +W9REC[2];
 var ANALYTICS = WD.departments.filter(function (d) { return d.id === 'analytics'; })[0];
 var BASE_SEATS = 1780, CAP_SEATS = 1800, FORM = 0.012, DARK_PENALTY = 1.0;   // authored, illustrative
 var STRENGTH = { 'w1-minimum': 0.8, 'w6-trade': 2.0, 'w7-rotation': 1.2 };  // points of margin, authored
@@ -352,7 +358,7 @@ WD.record.forEach(function (a) {
 var OPTIONS = [
   { id: 'reopen-analytics', what: 'Reopened Analytics', price: ANALYTICS.opensFor, effects: { cash: -ANALYTICS.opensFor, analytics: 'lit' }, needsDark: true },
   { id: 'sign-vet', what: 'Signed a veteran to a minimum deal', price: MIN_SIGN, effects: { payroll: MIN_SIGN }, strength: 0.8 },
-  { id: 'partner-2', what: 'Booked another partner night', price: 0, effects: { cash: 600000 } }
+  { id: 'partner-2', what: 'Booked another partner night', price: 0, effects: { cash: WD.record.filter(function (a) { return a.id === 'w2-partner'; })[0].effects.cash } }
 ];
 
 function strengthAt(on, g) {
@@ -366,12 +372,12 @@ function strengthAt(on, g) {
   });
   return m - (dark ? DARK_PENALTY : 0);
 }
-var CAL9 = null;   // Week 9 is RECORDED (112–115): its luck is fitted once so the full record reproduces it
+var CAL9 = null;   // Week 9 is RECORDED (read from the World record): its luck is fitted once so the full record reproduces it
 (function () {
   var st = {}, on = [];
   ACTS.forEach(function (a) { on.push(a); });
   var m = strengthAt(on, 9);
-  CAL9 = { b: 112.05 - 108 - m / 2, o: 114.95 - 108 + m / 2 };
+  CAL9 = { b: (W9B + 0.05) - 108 - m / 2, o: (W9O - 0.05) - 108 + m / 2 };
 })();
 
 function status(env) {
@@ -470,6 +476,7 @@ const KW = { OBSERVED: 'measured or reported from outside BOW', RECORDED: 'writt
 const OPPN = { CHA: 'Charlotte', NYK: 'New York', ATL: 'Atlanta', TOR: 'Toronto', MIA: 'Miami', PHI: 'Philadelphia', CLE: 'Cleveland', MIL: 'Milwaukee', DEN: 'Denver', PHX: 'Phoenix' };
 const LBL = { 'y1-business': 'Year One funding', 'w1-minimum': 'Week 1 signing', 'w2-partner': 'Week 2 partner night', 'w3-denver': 'Week 3 Denver call', 'w4-prices': 'Week 4 prices', 'w6-league': 'the League’s approval', 'w6-trade': 'Week 6 trade', 'w7-rotation': 'Week 7 rotation', 'w8-extension': 'Week 8 extension meeting',
   'r-holiday': 'the Jun 2025 Holiday trade', 'r-simons': 'the Feb 2026 Simons trade', 'r-sale': 'the sale approval' };
+const REC_W = parseInt(FX.reality.realRecord2526.v, 10);   // read from the store: '56–26'
 const REALITY_NAME = FX.reality.name, WORLD_NAME = WD.name;
 
 /* ---- the six facts (dials) */
@@ -487,7 +494,7 @@ const FM = {
 };
 const WORLD_DIALS = ['payroll', 'tax', 'cash', 'seats', 'wins', 'score'];
 const REAL_DIALS = ['rtax', 'rcap', 'rrec'];
-const rawOf = (k, f) => k === 'score' ? f.last.b - f.last.o : k === 'rtax' ? f.ts : k === 'rcap' ? f.cp : k === 'rrec' ? 56 : f[k];
+const rawOf = (k, f) => k === 'score' ? f.last.b - f.last.o : k === 'rtax' ? f.ts : k === 'rcap' ? f.cp : k === 'rrec' ? REC_W : f[k];
 const toRaw = (k, disp) => (k === 'payroll' || k === 'tax' || k === 'cash' || k === 'rtax' || k === 'rcap') ? disp * 1e6 : disp;
 const toDisp = (k, raw) => (k === 'payroll' || k === 'tax' || k === 'cash' || k === 'rtax' || k === 'rcap') ? raw / 1e6 : raw;
 function valText(k, f) {
@@ -515,12 +522,13 @@ let CUR = null;
 
 /* ---- reality engine (rules-derived only) */
 const R_FIX = id => FX.moments.filter(m => m.id === id)[0];
+const MQ = id => R_FIX(id).question.split(' · ')[0];
 const RACTS = [
-  { id: 'r-injury', when: '12 May 2025', what: 'Tatum ruptures his right Achilles in Game 4 against New York', type: 'outcome', k: 'OBSERVED', fx: 'm2025-05-12' },
-  { id: 'r-holiday', when: 'Late Jun 2025', what: 'Boston trades Jrue Holiday to Portland for Anfernee Simons and two second-round picks', type: 'act', seat: 'boston', k: 'OBSERVED', needs: [], fx: 'm2025-06' },
-  { id: 'r-sale', when: '13 Aug 2025', what: 'The NBA approves the sale to Bill Chisholm’s group', type: 'act', seat: 'league', k: 'OBSERVED', needs: [] },
-  { id: 'r-simons', when: '5 Feb 2026', what: 'Boston trades Anfernee Simons to Chicago for Nikola Vučević', type: 'act', seat: 'boston', k: 'OBSERVED', needs: ['r-holiday'], fx: 'm2026-02-05' },
-  { id: 'r-return', when: '6 Mar 2026', what: 'Tatum returns against Dallas', type: 'outcome', k: 'OBSERVED', fx: 'm2026-03-06' }
+  { id: 'r-injury', when: MQ('m2025-05-12'), what: 'Tatum ruptures his right Achilles in Game 4 against New York', type: 'outcome', k: 'OBSERVED', fx: 'm2025-05-12' },
+  { id: 'r-holiday', when: MQ('m2025-06'), what: 'Boston trades Jrue Holiday to Portland for Anfernee Simons and two second-round picks', type: 'act', seat: 'boston', k: 'OBSERVED', needs: [], fx: 'm2025-06' },
+  { id: 'r-sale', when: (FX.reality.owner.v.match(/sale approved (\d+ \w+ \d+)/) || [0, '[verify: date]'])[1], what: 'The NBA approves the sale to Bill Chisholm’s group', type: 'act', seat: 'league', k: 'OBSERVED', needs: [] },
+  { id: 'r-simons', when: MQ('m2026-02-05'), what: 'Boston trades Anfernee Simons to Chicago for Nikola Vučević', type: 'act', seat: 'boston', k: 'OBSERVED', needs: ['r-holiday'], fx: 'm2026-02-05' },
+  { id: 'r-return', when: MQ('m2026-03-06'), what: 'Tatum returns against Dallas', type: 'outcome', k: 'OBSERVED', fx: 'm2026-03-06' }
 ];
 const rAct = id => RACTS.filter(a => a.id === id)[0];
 function foldR(re) {
@@ -562,8 +570,8 @@ const KSRC = {
   tax: () => 'World rule, authored: ' + WD.taxRule.v.toLowerCase() + ' ' + money(TAX_LINE) + ' (the NBA’s real tax is incremental)',
   cash: () => 'authored, illustrative: one-off deltas + a per-night delta on home nights',
   seats: () => 'toy engine (authored): base ' + num(BASE_SEATS) + ' × price shift × form, capped at ' + num(CAP_SEATS) + '; illustrative',
-  wins: () => 'toy engine (authored): strength + a fixed draw per game; Week 9 fitted to the recorded 112–115',
-  score: () => CUR.F.weeks === 9 && CUR.F.last.b === RECORD.last.b ? 'World record (Week 9, lost to Denver 112–115)' : 'toy engine output (authored), not the record',
+  wins: () => 'toy engine (authored): strength + a fixed draw per game; Week 9 fitted to the recorded result',
+  score: () => CUR.F.weeks === 9 && CUR.F.last.b === RECORD.last.b ? 'World record (Week 9, lost to Denver ' + W9B + EN + W9O + ')' : 'toy engine output (authored), not the record',
   rtax: () => CUR.R.lifted ? 'COMPUTED, simplified: observed tax salary reversed by a stand-in you can set (illustrative, not real contracts)' : FX.reality.taxSalary.src + ', ' + FX.reality.taxSalary.asOf + ' [verify]',
   rcap: () => CUR.R.lifted ? 'COMPUTED, simplified, from the same stand-in' : FX.reality.capPayroll.src + ', ' + FX.reality.capPayroll.asOf + ' [verify]',
   rrec: () => CUR.R.unk ? 'UNKNOWN: results are not derived from rules' : FX.reality.realRecord2526.src + ' [verify]'
@@ -586,6 +594,7 @@ function act(kind, p) {
   const E0 = S.sys === 'world' ? env() : null;
   const log = (what) => { S.log.push({ n: ++S.seq, who: 'you', what: what, clock: clockNow(), hist: histNow() }); };
   let msg = '';
+  if (kind !== 'putback') S.flash = null;
   if (['select', 'tab', 'sys', 'fact', 'factall', 'putback', 'putbackAll', 'keep', 'toRecord', 'toBranch', 'reset', 'playOn', 'pair', 'forkSeat'].indexOf(kind) >= 0) S.notice = null;
   switch (kind) {
     case 'sys':
@@ -658,6 +667,7 @@ function doPutBack(p, log) {
   const E = env(); E.lifted.delete(p.id); delete S.liftInfo[p.id]; S.notice = null;
   log('put ' + labelOf(p.id) + ' back');
   const F = fold(E), same = F.hash === RECORD.hash;
+  S.flash = { text: 'Snapped back in: ' + labelOf(p.id) + '.', hash: F.hash, same: same, rec: RECORD.hash };
   return 'Put back ' + labelOf(p.id) + '. ' + (same ? 'The present hash is ' + F.hash + ', the record’s again.' : 'Hash ' + F.hash + '; the record’s is ' + RECORD.hash + '.');
 }
 function doPutBackAll(log) {
@@ -679,7 +689,7 @@ function doKeep(log) {
   const ids = Array.from(E.lifted), names = ids.map(i => LBL[i] ? LBL[i].replace(/^Week (\d+) (\w+)/, 'Week $1 $2') : labelOf(i));
   const short = names.join(' + ') + ' omitted';
   const be = { lifted: new Set(ids), assume: Object.assign({}, E.assume), appended: [], weeks: 9 };
-  S.branch = { env: be, short: short, stamp: 'Your branch · ' + short + ' · cut with hindsight · by you', stampShort: short, base: RECORD.hash, kept: fold(be).hash, then: weigh(be), assumptions: ['Luck is held fixed: every game keeps its own draw.', 'Acts that needed a lifted act are dashed, not re-decided.', 'Everyone else’s acts are as recorded.', 'Engine ' + ENGINE + ': illustrative, authored.'] };
+  S.branch = { env: be, short: short, stamp: 'Your branch · ' + short + ' · cut with hindsight · by you', stampShort: short, base: RECORD.hash, kept: fold(be).hash, then: weigh(be), assumptions: ['Luck fixed: same draw per game.', 'Acts that needed a lifted act are dashed, not re-decided.', 'Others’ acts as recorded.', 'Engine ' + ENGINE + ', illustrative.'] };
   S.rec = newEnv(); S.at = 'branch'; S.sel = null; S.liftInfo = {}; S.tab = 'act'; S.weigh = false; S.notice = null;
   log('kept the world without ' + names.join(' and ') + ' as a branch (base ' + RECORD.hash + ')');
   return 'Kept. ' + S.branch.stamp + '. The record is untouched beside it.';
@@ -687,7 +697,7 @@ function doKeep(log) {
 function doForkSeat(log) {
   const be = { lifted: new Set(), assume: { league: 'declined' }, appended: [], weeks: 9 };
   const short = 'League seat set to “does not approve”';
-  S.branch = { env: be, short: short, stamp: 'Your branch · ' + short + ' · cut with hindsight · by you', stampShort: short, base: RECORD.hash, kept: fold(be).hash, then: weigh(be), assumptions: ['The League’s answer is set by you (authored). It is not the League’s act.', 'Luck is held fixed: every game keeps its own draw.', 'The Week 6 trade needed the approval: it and what needed it are dashed.', 'Engine ' + ENGINE + ': illustrative, authored.'] };
+  S.branch = { env: be, short: short, stamp: 'Your branch · ' + short + ' · cut with hindsight · by you', stampShort: short, base: RECORD.hash, kept: fold(be).hash, then: weigh(be), assumptions: ['The League’s answer is set by you (authored), not its act.', 'Luck fixed: same draw per game.', 'The trade and what needed it are dashed.', 'Engine ' + ENGINE + ', illustrative.'] };
   S.rec = newEnv(); S.at = 'branch'; S.sel = null; S.tab = 'act'; S.weigh = false; S.notice = null; S.liftInfo = {};
   log('forked with the League’s seat set to does-not-approve (base ' + RECORD.hash + ')');
   return 'Forked with the League’s seat set. ' + S.branch.stamp + '.';
@@ -771,7 +781,7 @@ const CAPS = {
 /* ---- the stick */
 function timeCols(F, E) {
   const cols = [{ key: 'y1', label: 'Year One', week: 0, w: 1.2 }, { key: 'w1', label: 'Week 1', week: 1, w: 1 }, { key: 'w2', label: 'Week 2', week: 2, w: 1 }, { key: 'w3', label: 'Week 3', week: 3, w: 1 }, { key: 'w4', label: 'Week 4', week: 4, w: 1 },
-    { key: 'w5', label: 'Wk 5', week: 5, w: 0.9 }, { key: 'w6', label: 'Week 6', week: 6, w: 1.4 }, { key: 'w7', label: 'Week 7', week: 7, w: 1 }, { key: 'w8', label: 'Week 8', week: 8, w: 1 }, { key: 'w9', label: 'Week 9 ◂ now', week: 9, w: 0.9, now: true }];
+    { key: 'w5', label: 'Wk 5', week: 5, w: 0.9 }, { key: 'w6', label: 'Week 6', week: 6, w: 1.4 }, { key: 'w7', label: 'Week 7', week: 7, w: 1 }, { key: 'w8', label: 'Week 8', week: 8, w: 1 }, { key: 'w9', label: 'Week 9 ◂ now', week: 9, w: 1, now: true }];
   if (E.weeks >= 10) cols.push({ key: 'w10', label: 'Week 10', week: 10, w: 1 });
   cols.forEach(c => { c.acts = F.acts.filter(a => a.week === c.week); });
   return cols;
@@ -785,7 +795,7 @@ function weighCols(F, E, W) {
     return (B.reach - A.reach) || (totalMag(B) - totalMag(A)) || (a.week - b.week);
   });
   const dashed = F.acts.filter(a => F.status[a.id] === 'dashed'), lifted = F.acts.filter(a => F.status[a.id] === 'lifted' || F.status[a.id] === 'declined'), lg = F.acts.filter(a => a.seat === 'league' && F.status[a.id] === 'in');
-  return live.concat(dashed, lifted, lg).map((a, i) => ({ key: a.id, label: F.status[a.id] === 'in' && W[a.id] ? (W[a.id].reach ? W[a.id].reach + ' of 6 facts' : 'none reached') : (a.seat === 'league' ? 'not yours' : F.status[a.id]), acts: [a], w: 1, wk: whenShort(a) }));
+  return live.concat(dashed, lifted, lg).map((a, i) => ({ key: a.id, label: F.status[a.id] === 'in' && W[a.id] ? (W[a.id].reach ? W[a.id].reach + ' of 6' : 'none') : (a.seat === 'league' ? 'not yours' : F.status[a.id]), acts: [a], w: 1, wk: whenShort(a) }));
 }
 const magScale = k => { const m = FM[k]; return k === 'score' ? 20 : (m.hi - m.lo); };
 const totalMag = r => FACTS.reduce((s, k) => s + (r.f[k].ch ? r.f[k].mag / magScale(k) : 0), 0);
@@ -815,7 +825,7 @@ function slugHTML(a, F, W, E) {
     let thn = '';
     if (S.branch && S.at === 'branch' && S.branch.then && S.branch.then[a.id] && S.branch.then[a.id].reach !== w.reach) thn = '<span class="thn">then ' + S.branch.then[a.id].reach + ' now ' + w.reach + '</span>';
     else if (S.branch && S.at === 'branch' && S.branch.then && S.branch.then[a.id]) thn = '<span class="thn">then ' + S.branch.then[a.id].reach + ' now ' + w.reach + '</span>';
-    wt = '<span class="wt"><span class="pips">' + pips + '</span>' + line + thn + '</span>';
+    wt = '<span class="wt"><span class="pips">' + pips + '</span>' + line + thn + '<span class="kn">COMPUTED · replay of each lift</span></span>';
   }
   const foot = '<span class="foot"><i class="sw k-' + kind + '"></i><span class="sr">' + kind + '</span></span>';
   const kn = '<span class="kn">' + kindNote(a) + '</span>';
@@ -857,13 +867,13 @@ function renderStick() {
   // tray
   const held = cols.map((c, i) => c.acts.filter(a => F.status[a.id] === 'lifted' && !br && a.seat !== 'league').map(a => ({ a: a, i: i }))).reduce((x, y) => x.concat(y), []);
   if (br) {
-    h += '<div class="tray" style="grid-column:2/-1"><div class="stampTray"><div class="stamp">' + esc(S.branch.stamp) + '</div><div class="assume"><b>Assumptions:</b> ' + S.branch.assumptions.map(esc).join(' ') + '</div>' + '<span class="kn">The fork is a frame in its own ink; the record stays readable beside it (hash ' + RECORD.hash + ').</span></div></div>';
+    h += '<div class="tray" style="grid-column:2/-1"><div class="stampTray"><div class="stamp">' + esc(S.branch.stamp) + '</div><div class="assume"><b>Assumptions:</b> ' + S.branch.assumptions.map(esc).join(' · ') + '</div>' + '<span class="kn">The fork is a frame in its own ink; the record stays readable beside it (hash ' + RECORD.hash + ').</span></div></div>';
   } else if (!held.length) {
     h += '<div class="tray" style="grid-column:2/-1"><div class="prompt">' + (S.weigh ? 'What counted: acts set in the order of what they reached.' : 'Hold an act to lift it out.') + '<small>' + (S.weigh ? 'Tap a dial to order them by what they did to that fact. Grey means nothing changed — a zero is a finding.' : 'You are ' + WD.seat.name + ': you may lift only what this seat did. Tap one first to guess what it did.') + '</small></div></div>';
   } else {
     held.forEach(x => {
-      const a = x.a, kind = a.branch ? 'RECORDED' : a.k;
-      h += '<button type="button" class="held k-' + kind + '" style="grid-column:' + (x.i + 2) + ';grid-row:1" data-do="select" data-id="' + a.id + '" data-fk="held-' + a.id + '" aria-label="Held out: ' + esc(whenShort(a)) + '. ' + esc(a.what) + '. Press to select."><span class="when">held out · ' + esc(whenShort(a)) + '</span><span class="what">' + esc(a.what) + '</span></button>';
+      const a = x.a, kind = a.branch ? 'RECORDED' : a.k, nextHeld = held.some(y => y.i === x.i + 1), span = (!nextHeld && x.i + 3 <= cols.length + 1) ? 2 : 1;
+      h += '<button type="button" class="held k-' + kind + '" style="grid-column:' + (x.i + 2) + ' / span ' + span + ';grid-row:1" data-do="select" data-id="' + a.id + '" data-fk="held-' + a.id + '" aria-label="Held out: ' + esc(whenShort(a)) + '. ' + esc(a.what) + '. Press to select."><span class="when">held out · ' + esc(whenShort(a)) + '</span><span class="what">' + esc(a.what) + '</span></button>';
     });
   }
   h += '<div class="knee" style="grid-column:1;grid-row:2/' + (lastRow + 1) + '"><span>YEAR 0 · LEFT REALITY</span></div>';
@@ -900,7 +910,7 @@ function renderStick() {
     });
   }
   const recLabels = ACTS.filter(a => a.seat !== 'league').map(a => { const off = E.lifted.has(a.id); return '<span class="gs' + (off ? ' off' : '') + '">' + esc(whenShort(a).replace('Year One', 'Yr 1').replace('Week ', 'W')) + '</span>'; }).join(' ');
-  h += '<div class="ghost" style="grid-row:' + (lastRow + 1) + '"><span class="g">Reality, ghosted — its own calendar:<span class="gs">Late Jun 2025 · Holiday trade</span><span class="gs">5 Feb 2026 · Simons trade</span></span>' + (br ? '<span class="g">The record, untouched:' + recLabels + '</span>' : '') + '</div>';
+  h += '<div class="ghost" style="grid-row:' + (lastRow + 1) + '"><span class="g">Reality, ghosted — its own calendar:<span class="gs">' + esc(rAct('r-holiday').when) + ' · Holiday trade</span><span class="gs">' + esc(rAct('r-simons').when) + ' · Simons trade</span></span>' + (br ? '<span class="g">The record, untouched:' + recLabels + '</span>' : '') + '</div>';
   h += '</div>' + (br ? '</div>' : '');
   $('#stick').innerHTML = h;
 }
@@ -985,7 +995,7 @@ function updatePresent(animate) {
   // static parts
   $('#clockTxt').textContent = world ? (S.at === 'branch' ? 'your branch · ' : '') + 'Year Two · Week ' + F.weeks : 'Reality · as of ' + FX.meta.now;
   const rh = world ? RECORD.hash : R0.hash, same = F.hash === rh;
-  $('#seal').innerHTML = '<span>present hash</span><span class="hx' + (world && S.at === 'branch' ? ' br' : '') + '">' + F.hash + '</span><span class="' + (same ? 'ok' : 'no') + '">' + (same ? 'matches ' + (world ? 'the record' : 'Reality as recorded') + ' (' + rh + ')' : (world ? 'the record is ' : 'as recorded: ') + rh + ' — differs') + '</span><span class="kn">COMPUTED · small hash of the folded state</span>';
+  $('#seal').innerHTML = '<span>present hash</span><span class="hx' + (world && S.at === 'branch' ? ' br' : '') + (S.flash && same ? ' hilite' : '') + '">' + F.hash + '</span><span class="' + (same ? 'ok' : 'no') + '">' + (same ? 'matches ' + (world ? 'the record' : 'Reality as recorded') + ' (' + rh + ')' : (world ? 'the record is ' : 'as recorded: ') + rh + ' — differs') + '</span><span class="kn">COMPUTED · small hash of the folded state</span>';
   ks.forEach(k => {
     const el = DIAL[k], kd = kindOfDial(k);
     el.className = 'dial k-' + kd + (S.fact === k && S.weigh ? ' foc' : '') + (S.clamps.some(c => c.fact === k && c.at === S.at && world) ? ' clamped' : '') + (S.sys === 'reality' && k === 'rrec' && F.unk ? ' unk' : '');
@@ -994,12 +1004,12 @@ function updatePresent(animate) {
     const differs = world ? (k === 'score' ? (F.last.b !== RECORD.last.b || F.last.o !== RECORD.last.o || F.weeks !== 9) : Math.abs(rawOf(k, F) - rawOf(k, RECORD)) > (k === 'wins' || k === 'seats' ? 0.4 : 5000)) : (F.unk && k === 'rrec') || (k !== 'rrec' && Math.abs(rawOf(k, F) - rawOf(k, R0)) > 5000);
     sub.className = 'sub' + (differs ? ' chg' : '');
     let subTxt = '';
-    if (differs) { subTxt = 'record ' + recTxt; if (!(k === 'wins' || k === 'score' || k === 'rrec')) subTxt += ' \u00b7 ' + deltaTxtRaw(k, rawOf(k, F) - rawOf(k, world ? RECORD : R0)); }
+    if (differs) { subTxt = '<span>record ' + esc(recTxt) + '</span>'; if (!(k === 'wins' || k === 'score' || k === 'rrec')) subTxt += ' <span>' + deltaTxtRaw(k, rawOf(k, F) - rawOf(k, world ? RECORD : R0)) + '</span>'; }
     else if (k === 'seats' && F.capped) subTxt = 'sold out: capped at ' + num(CAP_SEATS);
     else if (k === 'tax' && world && F.over === 0) subTxt = 'under the line: no tax';
-    sub.textContent = subTxt;
-    if (k === 'rtax') { const d = FX.league.season2627.tax.v - F.ts; sub.textContent = (differs ? 'record ' + recTxt + ' · ' : '') + (d >= 0 ? money(d, 1) + ' under the line' : money(-d, 1) + ' over the line'); sub.className = 'sub' + (differs ? ' chg' : ''); }
-    if (k === 'rcap') { const d = FX.league.season2627.apron1.v - F.cp; sub.textContent = (differs ? 'record ' + recTxt + ' · ' : '') + (d >= 0 ? money(d, 1) + ' under 1st apron' : money(-d, 1) + ' over 1st apron'); sub.className = 'sub' + (differs ? ' chg' : ''); }
+    sub.innerHTML = subTxt;
+    if (k === 'rtax') { const d = FX.league.season2627.tax.v - F.ts; sub.innerHTML = (differs ? '<span>record ' + recTxt + '</span> ' : '') + '<span>' + (d >= 0 ? money(d, 1) + ' under the line' : money(-d, 1) + ' over the line') + '</span>'; sub.className = 'sub' + (differs ? ' chg' : ''); }
+    if (k === 'rcap') { const d = FX.league.season2627.apron1.v - F.cp; sub.innerHTML = (differs ? '<span>record ' + recTxt + '</span> ' : '') + '<span>' + (d >= 0 ? money(d, 1) + ' under 1st apron' : money(-d, 1) + ' over 1st apron') + '</span>'; sub.className = 'sub' + (differs ? ' chg' : ''); }
     $('.kn', el).textContent = kd + ' · ' + KSHORT[k]();
     el.title = kd + ' · ' + KSRC[k]();
     el.setAttribute('aria-label', FM[k].name + ': ' + nowTxt + (differs ? ' (the record says ' + recTxt + ')' : '') + '. Press to order the acts by what they did to it.');
@@ -1074,6 +1084,11 @@ function chipRow(sel, kindDo, includeAll) {
 function noticeHTML(id) { if (!S.notice || (S.notice.for || null) !== (id || null)) return ''; const n = S.notice; return '<div class="refuse" role="alert"><b>' + esc(n.title) + '</b><div class="rule">' + esc(n.rule) + '</div></div>'; }
 
 function panelAct() {
+  const b = panelActInner();
+  if (!S.flash || S.sys !== 'world') return b;
+  return '<div class="snap" style="grid-column:1/-1"><b>' + esc(S.flash.text) + '</b> Present hash <b>' + S.flash.hash + '</b> ' + (S.flash.same ? '= the record’s <b>' + S.flash.rec + '</b>. The world is the record again.' : 'and the record’s is ' + S.flash.rec + ': something else is still lifted.') + '</div>' + b;
+}
+function panelActInner() {
   const F = CUR.F, E = CUR.E, sel = S.sel;
   if (!sel) {
     const n = noticeHTML(null);
@@ -1112,10 +1127,10 @@ function panelLifted(a, head) {
   const dashed = Object.keys(F.status).filter(id => F.status[id] === 'dashed' && Fb.status[id] === 'in');
   let foot;
   if (!rows.length && !gch && !dashed.length) foot = '<p class="verdict">Nothing changed.<small>The present is the same without this act. It is still in your record; it reached no fact.</small></p>';
-  else foot = '<h4>What it reached</h4><table class="tbl"><tr><th>Fact</th><th class="r">Before</th><th class="r">Now</th></tr>' + rows.map(r => '<tr><td>' + esc(FM[r.k].name) + '</td><td class="r">' + esc(r.a) + '</td><td class="r chg">' + esc(r.b) + '</td></tr>').join('') + '</table>' + (gch ? '<p class="small" style="margin-top:3px">' + gch + ' of ' + F.games.length + ' game scores are different. The others kept their draws and their results.</p>' : '') + (dashed.length ? '<p class="small">Dashed now: ' + dashed.map(id => esc(labelOf(id))).join(', ') + '.</p>' : '');
+  else foot = '<h4>What it reached</h4><table class="tbl"><tr><th>Fact</th><th class="r">Before</th><th class="r">Now</th></tr>' + rows.map(r => '<tr><td>' + esc(FM[r.k].name) + '</td><td class="r">' + esc(r.a) + '</td><td class="r chg">' + esc(r.b) + '</td></tr>').join('') + '</table>' + ((gch || dashed.length) ? '<p class="small" style="margin-top:3px">' + (gch ? gch + ' of ' + F.games.length + ' game scores are different; the others kept their draws and results.' : '') + (dashed.length ? ' Dashed now: ' + dashed.map(id => esc(labelOf(id))).join(', ') + '.' : '') + '</p>' : '');
   const said = li.pred != null ? 'You said <b>' + m.f(li.pred) + '</b>. Without it: <b>' + valText(fk, F) + '</b>.<br>The record says ' + valText(fk, Fb) + '.' : 'You did not guess. Without it: <b>' + valText(fk, F) + '</b>. The record says ' + valText(fk, Fb) + '.';
   const twice = S.ledger[lkey(E)];
-  return '<div><h3>' + kindSwatch(a.branch ? 'RECORDED' : a.k) + ' Lifted out</h3><p style="font-size:16px;margin:0 0 4px"><i>' + esc(whenShort(a)) + ' · ' + esc(a.what) + '</i></p><div class="btns"><button type="button" class="btn pri" data-do="putback" data-id="' + a.id + '" data-fk="putback">Put it back</button>' + (S.at === 'record' ? '<button type="button" class="btn brf" data-do="keep" data-fk="keep">Keep this world</button>' : '') + '</div>' + foot + '<p class="small">A lift removes an act. It does not choose the other side.' + (twice && twice.n > 1 ? ' You have lifted this exact set ' + twice.n + ' times: same present ' + twice.hash + ' each time.' : '') + '</p></div>' +
+  return '<div><h3>' + kindSwatch(a.branch ? 'RECORDED' : a.k) + ' Lifted out</h3><p style="font-size:16px;margin:0 0 4px"><i>' + esc(whenShort(a)) + ' · ' + esc(a.what) + '</i></p><div class="btns"><button type="button" class="btn pri" data-do="putback" data-id="' + a.id + '" data-fk="putback">Put it back</button>' + (S.at === 'record' ? '<button type="button" class="btn brf" data-do="keep" data-fk="keep">Keep this world</button>' : '') + '</div>' + foot + '<p class="small">' + (twice && twice.n > 1 ? ' You have lifted this exact set ' + twice.n + ' times: same present ' + twice.hash + ' each time.' : '') + '</p></div>' +
     '<div class="dialbox"><h4 style="margin-top:0">' + esc(m.name) + ': your guess and the result</h4><div class="big" id="big" data-k="' + fk + '" data-lifted="1">' + gaugeSVG(fk) + '</div><p class="said">' + said + '</p><p class="small" style="text-align:center;margin:0">Luck held fixed: every game kept its own draw.</p>' + '' + '</div>';
 }
 function panelGame(g) {
@@ -1123,8 +1138,8 @@ function panelGame(g) {
   const kind = (g === 9 && same) ? 'RECORDED' : 'AUTHORED';
   const rows = [];
   F.acts.forEach(a => { if (F.status[a.id] !== 'in' || a.seat === 'league') return; const alt = fold(withLift(E, [a.id])), x = alt.games[g - 1]; if (x && (x.b !== gm.b || x.o !== gm.o)) rows.push({ a: a, x: x }); });
-  const nt = noticeHTML('game:' + g);
-  return '<div><h3>' + kindSwatch(kind) + ' Week ' + g + ' · ' + (gm.win ? 'won' : 'lost') + ' ' + gm.b + EN + gm.o + (gm.home ? ' at home against ' : ' away at ') + esc(OPPN[gm.opp]) + '</h3>' + (nt || '<p>This is a result, not something a seat did.</p><div class="btns"><button type="button" class="btn" data-do="lift" data-id="game:' + g + '" data-fk="try-lift">Try to lift it</button></div>') + '<p class="small">' + (kind === 'RECORDED' ? 'RECORDED in the World: the one result that is not the toy engine’s.' : 'AUTHORED: the toy engine’s output for this game. Its draw is fixed: ' + gm.uB.toFixed(2) + ' and ' + gm.uO.toFixed(2) + '.') + '</p></div><div><h4>Which acts reached this score</h4>' + (rows.length ? '<table class="tbl"><tr><th>Lift only…</th><th class="r">Score becomes</th></tr>' + rows.map(r => '<tr><td>' + esc(whenShort(r.a)) + '</td><td class="r chg">' + r.x.b + EN + r.x.o + '</td></tr>').join('') + '</table><p class="small" style="margin-top:4px">Each row lifts one act alone and replays with the same draws.</p>' : '<p>No single act moves this score.</p>') + '</div>';
+  const nt = noticeHTML('game:' + g), w9 = WD.acts.filter(a => /Denver/.test(a.what))[0];
+  return '<div><h3>' + kindSwatch(kind) + ' Week ' + g + ' · ' + (gm.win ? 'won' : 'lost') + ' ' + gm.b + EN + gm.o + (gm.home ? ' at home against ' : ' away at ') + esc(OPPN[gm.opp]) + '</h3>' + (nt || '<p>This is a result, not something a seat did.</p><div class="btns"><button type="button" class="btn" data-do="lift" data-id="game:' + g + '" data-fk="try-lift">Try to lift it</button></div>') + '<p class="small">' + (kind === 'RECORDED' ? 'RECORDED in the World: the one result that is not the toy engine’s.' : 'AUTHORED: the toy engine’s output for this game. Its draw is fixed: ' + gm.uB.toFixed(2) + ' and ' + gm.uO.toFixed(2) + '.') + '</p>' + (g === 9 ? '<p class="small">As recorded: ' + esc(w9.what) + ' <span class="kn">RECORDED · World record</span></p>' : '') + '</div><div><h4>Which acts reached this score</h4>' + (rows.length ? '<table class="tbl"><tr><th>Lift only…</th><th class="r">Score becomes</th></tr>' + rows.map(r => '<tr><td>' + esc(whenShort(r.a)) + '</td><td class="r chg">' + r.x.b + EN + r.x.o + '</td></tr>').join('') + '</table><p class="small" style="margin-top:4px">Each row lifts one act alone and replays with the same draws.</p>' : '<p>No single act moves this score.</p>') + '</div>';
 }
 function traceHTML(k) {
   const F = CUR.F, lab = id => id === 'start' ? 'Year Two starts at' : whenShort(findAct(id) || { when: id });
@@ -1269,7 +1284,7 @@ document.addEventListener('DOMContentLoaded', () => { });
 
 /* ---- boot */
 function boot() {
-  const ok = RECORD.payroll === WD.payroll.v && RECORD.tax === WD.projectedTax.v && RECORD.last.b === 112 && RECORD.last.o === 115;
+  const ok = RECORD.payroll === WD.payroll.v && RECORD.tax === WD.projectedTax.v && RECORD.last.b === W9B && RECORD.last.o === W9O;
   S.selfcheck = ok;
   buildPresent(); render();
   if (!ok) say('Engine does not reproduce the record: ' + RECORD.payroll + ' ' + RECORD.tax);

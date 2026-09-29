@@ -135,6 +135,12 @@
   "click": "Put it back"
  },
  {
+  "expectText": "Snapped back in"
+ },
+ {
+  "shot": "put-back-snaps-in"
+ },
+ {
   "click": "Compare",
   "exact": true
  },
@@ -174,6 +180,12 @@
  },
  {
   "click": "Lift it out"
+ },
+ {
+  "expectText": "exact set"
+ },
+ {
+  "shot": "lifted-again-same-present"
  },
  {
   "click": "Keep this world"
@@ -238,6 +250,12 @@
  },
  {
   "shot": "return-to-record"
+ },
+ {
+  "click": "Log"
+ },
+ {
+  "shot": "log"
  },
  {
   "click": "Boston Celtics · Reality"

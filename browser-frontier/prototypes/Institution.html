@@ -634,6 +634,969 @@ document.addEventListener('keydown', e => {
   else if (k === 'Escape') { if (S.why) act('whyEnd'); else if (S.paper) act('put'); else if (S.mode === 'schedule') act('mode', { m: 'room' }); }
 });
 /*__ROOM__*/
+/* ===== 5. THE ROOM — a projection of S. three.js r160, procedural geometry, canvas textures only. ===== */
+(async function initRoom() {
+  const fail = m => { const l = $('#loading'); if (l) l.textContent = m; };
+  let THREE, renderer;
+  try { THREE = await import('three'); } catch (e) { console.info('three unavailable', e); fail('The Room needs three.js. The Schedule (key S) is the same building as text.'); return; }
+  try { renderer = new THREE.WebGLRenderer({ canvas: $('#gl'), antialias: true, powerPreference: 'high-performance' }); } catch (e) { console.info('no WebGL', e); fail('The Room needs WebGL. The Schedule (key S) is the same building as text.'); return; }
+  try {
+    await Promise.race([Promise.all([document.fonts.load('600 32px Archivo'), document.fonts.load('700 32px Archivo'), document.fonts.load('400 32px Newsreader'), document.fonts.load('italic 400 32px Newsreader')]), new Promise(r => setTimeout(r, 2500))]);
+  } catch (e) { /* fonts optional */ }
+  try {
+    /* ---------- renderer, scene ---------- */
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.02;
+    renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, 1.2, 0.1, 600);
+    const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
+    const F_SANS = '"Archivo","Franklin Gothic Medium","Trebuchet MS",sans-serif', F_SERIF = '"Newsreader",Georgia,"Times New Roman",serif';
+    const INK = { rec: '#2b241c', you: '#1d4c99', br: '#c8701c', brText: '#7a3d05' };
+
+    /* ---------- tiny helpers ---------- */
+    const rng = seed => { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
+    const cv = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
+    const mkTex = (c, rep) => { const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; if (rep) t.wrapS = t.wrapT = THREE.RepeatWrapping; return t; };
+    const wrap = (g, text, x, y, maxW, lh) => {
+      const words = String(text).split(/\s+/); let line = '';
+      for (const w of words) { const t = line ? line + ' ' + w : w; if (g.measureText(t).width > maxW && line) { g.fillText(line, x, y); y += lh; line = w; } else line = t; }
+      if (line) { g.fillText(line, x, y); y += lh; } return y;
+    };
+    const wrapLines = (g, text, maxW) => { const words = String(text).split(/\s+/); const out = []; let line = ''; for (const w of words) { const t = line ? line + ' ' + w : w; if (g.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t; } if (line) out.push(line); return out; };
+
+    /* ---------- procedural materials (canvas) ---------- */
+    function oakCanvas() {
+      const c = cv(512, 512), g = c.getContext('2d'), r = rng(7);
+      const tones = [[226, 196, 146], [216, 182, 128], [230, 202, 154], [208, 174, 118], [222, 190, 136]]; const pw = 32;
+      for (let j = 0; j < 16; j++) {
+        let x = -r() * 220;
+        while (x < 512) {
+          const len = 190 + r() * 270, t = tones[(r() * tones.length) | 0], k = 0.95 + r() * 0.09;
+          g.fillStyle = `rgb(${t[0] * k | 0},${t[1] * k | 0},${t[2] * k | 0})`; g.fillRect(x, j * pw, len, pw);
+          for (let q = 0; q < 8; q++) { g.strokeStyle = `rgba(${100 + r() * 40 | 0},${66 + r() * 30 | 0},34,${0.05 + r() * 0.09})`; g.lineWidth = 0.8 + r(); g.beginPath(); const yy = j * pw + 3 + r() * (pw - 6); g.moveTo(x, yy); for (let xx = x; xx < x + len; xx += 20) g.lineTo(xx, yy + Math.sin(xx * 0.05 + q) * 1.6); g.stroke(); }
+          g.fillStyle = 'rgba(88,60,30,.6)'; g.fillRect(x, j * pw, 1.6, pw); x += len;
+        }
+        g.fillStyle = 'rgba(88,60,30,.5)'; g.fillRect(0, j * pw, 512, 1.5);
+      }
+      return c;
+    }
+    function brickCanvas() {
+      const c = cv(512, 512), g = c.getContext('2d'), r = rng(11);
+      g.fillStyle = '#cbbfa7'; g.fillRect(0, 0, 512, 512);
+      const cols = 4, rows = 12, bw = 512 / cols, bh = 512 / rows, gap = 3.2;
+      for (let j = 0; j < rows; j++) {
+        const off = (j % 2) * bw / 2;
+        for (let i = -1; i < cols + 1; i++) {
+          const x = i * bw + off, y = j * bh, dk = r() < 0.14 ? 0.78 : 1, lt = r() < 0.1 ? 1.12 : 1, k = dk * lt;
+          const R = (156 + r() * 34) * k, G = (86 + r() * 22) * k, B = (60 + r() * 16) * k;
+          g.fillStyle = `rgb(${R | 0},${G | 0},${B | 0})`; g.fillRect(x + gap / 2, y + gap / 2, bw - gap, bh - gap);
+          g.fillStyle = 'rgba(255,240,220,.08)'; g.fillRect(x + gap / 2, y + gap / 2, bw - gap, 3);
+          for (let s = 0; s < 22; s++) { g.fillStyle = `rgba(${r() < .5 ? '60,30,20' : '230,200,170'},${0.05 + r() * 0.1})`; g.fillRect(x + gap / 2 + r() * (bw - gap), y + gap / 2 + r() * (bh - gap), 1 + r() * 3, 1 + r() * 2); }
+        }
+      }
+      return c;
+    }
+    function plasterCanvas(base, seed) {
+      const c = cv(256, 256), g = c.getContext('2d'), r = rng(seed || 3); g.fillStyle = base || '#f3efe3'; g.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 40; i++) { const x = r() * 256, y = r() * 256, rad = 30 + r() * 70, gr = g.createRadialGradient(x, y, 0, x, y, rad); gr.addColorStop(0, `rgba(${r() < .5 ? '120,100,70' : '255,255,250'},${0.03 + r() * 0.04})`); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(x - rad, y - rad, rad * 2, rad * 2); }
+      for (let i = 0; i < 500; i++) { g.fillStyle = `rgba(90,80,60,${r() * 0.06})`; g.fillRect(r() * 256, r() * 256, 1 + r() * 2, 1 + r() * 2); }
+      return c;
+    }
+    function timberCanvas() {
+      const c = cv(256, 256), g = c.getContext('2d'), r = rng(19); g.fillStyle = '#6a4626'; g.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 90; i++) { const x = r() * 256, w = 1 + r() * 4; g.fillStyle = `rgba(${r() < .5 ? '40,24,10' : '150,104,58'},${0.08 + r() * 0.14})`; g.fillRect(x, 0, w, 256); }
+      for (let i = 0; i < 6; i++) { g.strokeStyle = 'rgba(30,18,8,.35)'; g.lineWidth = 1.2; g.beginPath(); const x = r() * 256, y = r() * 256; g.ellipse(x, y, 3 + r() * 4, 10 + r() * 14, 0, 0, 7); g.stroke(); }
+      return c;
+    }
+    function concreteCanvas() {
+      const c = cv(256, 256), g = c.getContext('2d'), r = rng(23); g.fillStyle = '#bdb8ab'; g.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 1400; i++) { g.fillStyle = `rgba(${r() < .5 ? '70,66,58' : '245,242,232'},${r() * 0.16})`; g.fillRect(r() * 256, r() * 256, 1 + r() * 3, 1 + r() * 3); }
+      g.fillStyle = 'rgba(60,56,48,.35)'; g.fillRect(0, 0, 256, 2); g.fillRect(0, 0, 2, 256); return c;
+    }
+    function waterCanvas() {
+      const c = cv(1024, 1024), g = c.getContext('2d'), r = rng(29); const gr = g.createLinearGradient(0, 0, 0, 1024); gr.addColorStop(0, '#7fa3a8'); gr.addColorStop(.5, '#8db1b3'); gr.addColorStop(1, '#7b9ea6'); g.fillStyle = gr; g.fillRect(0, 0, 1024, 1024);
+      for (let i = 0; i < 700; i++) { const x = r() * 1024, y = r() * 1024, w = 20 + r() * 120; g.fillStyle = `rgba(${r() < .55 ? '235,240,230' : '40,70,80'},${0.05 + r() * 0.12})`; g.fillRect(x, y, w, 1.2 + r() * 2.2); if (x + w > 1024) g.fillRect(x - 1024, y, w, 2); }
+      return c;
+    }
+    function skyCanvas() {
+      const c = cv(1024, 512), g = c.getContext('2d'), r = rng(31); const gr = g.createLinearGradient(0, 0, 0, 512);
+      gr.addColorStop(0, '#86aac6'); gr.addColorStop(.28, '#b9d0dc'); gr.addColorStop(.44, '#e6e6dc'); gr.addColorStop(.5, '#f2e2c4'); gr.addColorStop(.52, '#d9ccb4'); gr.addColorStop(1, '#bfb49f'); g.fillStyle = gr; g.fillRect(0, 0, 1024, 512);
+      for (let i = 0; i < 26; i++) { const x = r() * 1024, y = 60 + r() * 130, w = 60 + r() * 150; const rg = g.createRadialGradient(x, y, 0, x, y, w); rg.addColorStop(0, 'rgba(255,255,255,.34)'); rg.addColorStop(1, 'rgba(255,255,255,0)'); g.save(); g.translate(x, y); g.scale(1, .22); g.translate(-x, -y); g.fillStyle = rg; g.fillRect(x - w, y - w, w * 2, w * 2); g.restore(); }
+      return c;
+    }
+    function sheetCanvas() {
+      const c = cv(256, 256), g = c.getContext('2d'), r = rng(37); g.fillStyle = '#e9e4d5'; g.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 14; i++) { const x = r() * 256, w = 8 + r() * 26; const gr = g.createLinearGradient(x, 0, x + w, 0); gr.addColorStop(0, 'rgba(90,80,60,0)'); gr.addColorStop(.5, `rgba(90,80,60,${0.10 + r() * 0.10})`); gr.addColorStop(1, 'rgba(255,255,255,.12)'); g.fillStyle = gr; g.fillRect(x, 0, w, 256); }
+      for (let i = 0; i < 300; i++) { g.fillStyle = `rgba(80,70,50,${r() * 0.05})`; g.fillRect(r() * 256, r() * 256, 2, 2); }
+      return c;
+    }
+    function frostCanvas() {
+      const c = cv(256, 256), g = c.getContext('2d'), r = rng(41); g.fillStyle = '#dfe6e4'; g.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 2500; i++) { g.fillStyle = `rgba(${r() < .5 ? '255,255,255' : '150,170,168'},${r() * 0.16})`; g.fillRect(r() * 256, r() * 256, 1 + r() * 4, 1 + r() * 4); }
+      return c;
+    }
+    function tapeCanvas() {
+      const c = cv(64, 64), g = c.getContext('2d'); g.fillStyle = '#ffffff'; g.fillRect(0, 0, 64, 64); g.fillStyle = '#7a7a7a';
+      for (let i = -64; i < 128; i += 16) { g.beginPath(); g.moveTo(i, 64); g.lineTo(i + 8, 64); g.lineTo(i + 72, 0); g.lineTo(i + 64, 0); g.closePath(); g.fill(); } return c;
+    }
+    const T = {
+      oak: mkTex(oakCanvas(), 1), brick: mkTex(brickCanvas(), 1), plaster: mkTex(plasterCanvas('#f3efe3', 3), 1), timber: mkTex(timberCanvas(), 1),
+      conc: mkTex(concreteCanvas(), 1), water: mkTex(waterCanvas(), 1), sheet: mkTex(sheetCanvas(), 1), frost: mkTex(frostCanvas(), 1), tape: mkTex(tapeCanvas(), 1)
+    };
+    T.sky = mkTex(skyCanvas()); T.sky.mapping = THREE.EquirectangularReflectionMapping;
+
+    /* ---------- materials ---------- */
+    const L = (o) => new THREE.MeshLambertMaterial(o), S_ = (o) => new THREE.MeshStandardMaterial(o);
+    const MAT = {
+      oak: S_({ map: T.oak, roughness: 0.5, metalness: 0 }), deck: S_({ map: T.oak, color: 0xe6d3ae, roughness: 0.55, metalness: 0 }),
+      brick: L({ map: T.brick }), plaster: L({ map: T.plaster }), timber: S_({ map: T.timber, roughness: 0.72, metalness: 0 }),
+      steel: S_({ color: 0x25231f, roughness: 0.5, metalness: 0.55 }), brass: S_({ color: 0xb8912e, roughness: 0.34, metalness: 0.85 }),
+      glass: new THREE.MeshStandardMaterial({ color: 0xdcecee, roughness: 0.04, metalness: 0, transparent: true, opacity: 0.13, depthWrite: false, side: THREE.DoubleSide }),
+      conc: L({ map: T.conc }), water: S_({ map: T.water, roughness: 0.22, metalness: 0.05 }),
+      vc: L({ vertexColors: true }), vc2: L({ vertexColors: true, side: THREE.DoubleSide }), emis: new THREE.MeshBasicMaterial({ vertexColors: true }),
+      sheet: L({ map: T.sheet }), infill: L({ map: T.brick, color: 0xf6e2d2 }), tape: L({ map: T.tape, vertexColors: true }),
+      frost: new THREE.MeshLambertMaterial({ map: T.frost, transparent: true, opacity: 0.94 }), paperW: L({ color: 0xf6f2e6 })
+    };
+
+    /* ---------- geometry accumulators: everything merges per material ---------- */
+    const ACC = {}; const acc = n => ACC[n] || (ACC[n] = { p: [], n: [], u: [], c: [], i: [] });
+    function quadTo(g, P, N, UV, C) {
+      const o = g.p.length / 3;
+      for (let k = 0; k < 4; k++) { g.p.push(P[k][0], P[k][1], P[k][2]); g.n.push(N[0], N[1], N[2]); g.u.push(UV[k][0], UV[k][1]); const cc = Array.isArray(C[0]) ? C[k] : C; g.c.push(cc[0], cc[1], cc[2]); }
+      g.i.push(o, o + 1, o + 2, o, o + 2, o + 3);
+    }
+    const FACE = {
+      '+x': (x0, y0, z0, x1, y1, z1) => [[[x1, y0, z1], [x1, y0, z0], [x1, y1, z0], [x1, y1, z1]], [1, 0, 0], p => [p[2], p[1]]],
+      '-x': (x0, y0, z0, x1, y1, z1) => [[[x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0]], [-1, 0, 0], p => [p[2], p[1]]],
+      '+y': (x0, y0, z0, x1, y1, z1) => [[[x0, y1, z1], [x1, y1, z1], [x1, y1, z0], [x0, y1, z0]], [0, 1, 0], p => [p[0], p[2]]],
+      '-y': (x0, y0, z0, x1, y1, z1) => [[[x0, y0, z0], [x1, y0, z0], [x1, y0, z1], [x0, y0, z1]], [0, -1, 0], p => [p[0], p[2]]],
+      '+z': (x0, y0, z0, x1, y1, z1) => [[[x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1]], [0, 0, 1], p => [p[0], p[1]]],
+      '-z': (x0, y0, z0, x1, y1, z1) => [[[x1, y0, z0], [x0, y0, z0], [x0, y1, z0], [x1, y1, z0]], [0, 0, -1], p => [p[0], p[1]]]
+    };
+    function face(name, k, x0, y0, z0, x1, y1, z1, o = {}) {
+      const g = acc(name), t = o.tile || 1, col = o.col || [1, 1, 1], [P, N, f] = FACE[k](x0, y0, z0, x1, y1, z1);
+      const bot = o.ao ? col.map(v => v * (1 - o.ao)) : col; const C = o.ao && k[1] !== 'y' ? [bot, bot, col, col] : col;
+      quadTo(g, P, N, P.map(p => { const uv = f(p); return o.swap ? [uv[1] / t, uv[0] / t] : [uv[0] / t, uv[1] / t]; }), C);
+    }
+    function box(name, x0, y0, z0, x1, y1, z1, o = {}) { const sk = o.skip || ''; for (const k of ['+x', '-x', '+y', '-y', '+z', '-z']) if (!sk.includes(k)) face(name, k, x0, y0, z0, x1, y1, z1, o); }
+    function addGeo(name, geo, o = {}) {
+      const g = acc(name), gg = geo.index ? geo.toNonIndexed() : geo, P = gg.attributes.position, N = gg.attributes.normal, n = P.count, base = g.p.length / 3, col = o.col || [1, 1, 1], t = o.tile || 1;
+      for (let k = 0; k < n; k++) {
+        const x = P.getX(k), y = P.getY(k), z = P.getZ(k), nx = N.getX(k), ny = N.getY(k), nz = N.getZ(k), ax = Math.abs(nx), ay = Math.abs(ny), az = Math.abs(nz);
+        g.p.push(x, y, z); g.n.push(nx, ny, nz);
+        if (az >= ax && az >= ay) g.u.push(x / t, y / t); else if (ax >= ay) g.u.push(z / t, y / t); else g.u.push(x / t, z / t);
+        g.c.push(col[0], col[1], col[2]); g.i.push(base + k);
+      }
+    }
+    function beam(name, p0, p1, w, h, o = {}) {
+      const a = V3(...p0), b = V3(...p1), len = a.distanceTo(b), geo = new THREE.BoxGeometry(w, h, len);
+      const q = new THREE.Quaternion().setFromUnitVectors(V3(0, 0, 1), b.clone().sub(a).normalize()); geo.applyMatrix4(new THREE.Matrix4().compose(a.clone().add(b).multiplyScalar(0.5), q, V3(1, 1, 1))); addGeo(name, geo, o);
+    }
+    function cyl(name, cx, y0, cz, r, h, seg, o = {}) { const geo = new THREE.CylinderGeometry(r, r, h, seg || 10, 1, true); geo.translate(cx, y0 + h / 2, cz); addGeo(name, geo, o); }
+    function geoOf(name) {
+      const g = ACC[name]; const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(g.p, 3)); geo.setAttribute('normal', new THREE.Float32BufferAttribute(g.n, 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute(g.u, 2)); geo.setAttribute('color', new THREE.Float32BufferAttribute(g.c, 3));
+      geo.setIndex(new THREE.BufferAttribute(g.p.length / 3 > 65535 ? new Uint32Array(g.i) : new Uint16Array(g.i), 1)); geo.computeBoundingSphere(); return geo;
+    }
+    const PARTS = {}; /* named parts the runtime toggles */
+    function bake(name, mat, o = {}) {
+      if (!ACC[name] || !ACC[name].p.length) return null;
+      const m = new THREE.Mesh(geoOf(name), mat); m.name = name; m.castShadow = !!o.cast; m.receiveShadow = !!o.recv; (o.parent || scene).add(m); return m;
+    }
+    const HITS = [], ANCH = {};
+    function hit(id, x0, y0, z0, x1, y1, z1) { const m = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, y1 - y0, z1 - z0), new THREE.MeshBasicMaterial({ visible: false })); m.position.set((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2); m.userData.fixtureId = id; scene.add(m); HITS.push(m); ANCH[id] = m.position.clone(); return m; }
+    /*__END_A__*/
+
+    /* ---------- the plate atlas: every small sign, plaque and tag is one rect of one texture ---------- */
+    const AT = { c: cv(2048, 2048), items: {}, x: 3, y: 3, rowH: 0, dirty: true }; AT.g = AT.c.getContext('2d');
+    const PLATES = {};
+    function plate(id, wm, hm, ppm, pos, right, up, accName) {
+      const w = Math.round(wm * ppm), h = Math.round(hm * ppm);
+      if (AT.x + w > 2045) { AT.x = 3; AT.y += AT.rowH + 4; AT.rowH = 0; }
+      const it = { x: AT.x, y: AT.y }; AT.x += w + 4; AT.rowH = Math.max(AT.rowH, h);
+      const c = V3(...pos), r = V3(...right).normalize().multiplyScalar(wm / 2), u = V3(...up).normalize().multiplyScalar(hm / 2);
+      const P = [c.clone().sub(r).sub(u), c.clone().add(r).sub(u), c.clone().add(r).add(u), c.clone().sub(r).add(u)], n = r.clone().cross(u).normalize();
+      const u0 = it.x / 2048, u1 = (it.x + w) / 2048, v0 = 1 - (it.y + h) / 2048, v1 = 1 - it.y / 2048;
+      quadTo(acc(accName || 'atlas'), P.map(p => [p.x, p.y, p.z]), [n.x, n.y, n.z], [[u0, v0], [u1, v0], [u1, v1], [u0, v1]], [1, 1, 1]);
+      PLATES[id] = { it, wm, hm, w, h, pos: c }; ANCH[id] = ANCH[id] || c; return PLATES[id];
+    }
+    const FXP = { r: [0, 0, -1], u: [0, 1, 0] }, FXM = { r: [0, 0, 1], u: [0, 1, 0] }, FZP = { r: [1, 0, 0], u: [0, 1, 0] }, FZM = { r: [-1, 0, 0], u: [0, 1, 0] }, FLAT = { r: [1, 0, 0], u: [0, 0, -1] };
+    const pl = (id, wm, hm, ppm, pos, F, an) => plate(id, wm, hm, ppm, pos, F.r, F.u, an);
+    function drawPlate(id, fn) { const p = PLATES[id]; if (!p) return; const g = AT.g; g.save(); g.beginPath(); g.rect(p.it.x, p.it.y, p.w, p.h); g.clip(); g.clearRect(p.it.x, p.it.y, p.w, p.h); g.translate(p.it.x, p.it.y); fn(g, p.w, p.h); g.restore(); AT.dirty = true; }
+    /* textured planes for the big boards (own canvas, own draw call) */
+    function panelMesh(w, h, wm, hm, pos, F, o = {}) {
+      const c = cv(w, h), g = c.getContext('2d'), tex = mkTex(c);
+      const cc = V3(...pos), r = V3(...F.r).multiplyScalar(wm / 2), u = V3(...F.u).multiplyScalar(hm / 2), n = r.clone().cross(u).normalize();
+      const geo = new THREE.BufferGeometry(); const P = [cc.clone().sub(r).sub(u), cc.clone().add(r).sub(u), cc.clone().add(r).add(u), cc.clone().sub(r).add(u)];
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(P.flatMap(p => [p.x, p.y, p.z]), 3)); geo.setAttribute('normal', new THREE.Float32BufferAttribute([0, 1, 2, 3].flatMap(() => [n.x, n.y, n.z]), 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 1], 2)); geo.setIndex([0, 1, 2, 0, 2, 3]);
+      const mat = o.basic ? new THREE.MeshBasicMaterial({ map: tex, transparent: !!o.alpha }) : new THREE.MeshLambertMaterial({ map: tex, emissive: 0xffffff, emissiveMap: tex, emissiveIntensity: o.glow == null ? 0.16 : o.glow, transparent: !!o.alpha });
+      const m = new THREE.Mesh(geo, mat); m.receiveShadow = !!o.recv; (o.parent || scene).add(m); m.userData = { c, g, tex, w, h }; ANCH[o.id || 'x'] = ANCH[o.id || 'x'] || cc; return m;
+    }
+
+    /* ---------- the building: a converted harbour warehouse (authored) ---------- */
+    const X0 = -13, X1 = 13, Z0 = -8, Z1 = 8, WH = 7.6, RIDGE = 9.7, DECK = 3.3, RX = 6, RH = 3.3, RXF = -8.4, RW = 1.6, TIMB = 1;
+    const RZ = { analytics: 4.8, scouting: 1.6, ticketing: -1.6, partnerships: -4.8 };
+    const GRP = {}; const mkGrp = n => (GRP[n] = new THREE.Group(), scene.add(GRP[n]), GRP[n]);
+    mkGrp('cut'); mkGrp('maqOnly'); mkGrp('roomOnly');
+    /* floors */
+    box('oak', X0 - .5, -.4, Z0 - 2.9, X1 + .5, 0, Z1 + .5, { tile: 2, skip: '-y+x-x+z-z' });
+    box('conc', X0 - 1, -1.7, Z0 - 3.4, X1 + 1, -.4, Z0 - 2.9, { tile: 2 });
+    box('deck', RX, DECK - .18, Z0, X1, DECK, Z1, { tile: 2, skip: '-y' });
+    box('plaster', RX, DECK - .22, Z0, X1, DECK - .18, Z1, { tile: 2, skip: '+y' });
+    box('timber', RX - .06, DECK - .62, Z0, RX + .12, DECK, Z1, { tile: 1, swap: true });
+    for (const z of [-6, -2, 2, 6]) box('timber', RX - .15, 0, z - .15, RX + .15, DECK - .22, z + .15, { tile: 1, skip: '-y' });
+    /* north wall: brick sill, steel-framed glazing, brick head, NE pier */
+    box('brick', X0 - .5, -.4, Z0 - .5, X1 + .5, .9, Z0, { tile: .9, skip: '-y' }); box('brick', X0 - .5, 6.5, Z0 - .5, X1 + .5, WH, Z0, { tile: .9 }); box('brick', 11.8, .9, Z0 - .5, X1 + .5, 6.5, Z0, { tile: .9 });
+    const gz0 = Z0 - .32, gz1 = Z0 - .14;
+    box('steel', X0, .9, gz0, 11.8, .98, gz1); box('steel', X0, 6.42, gz0, 11.8, 6.5, gz1);
+    for (let x = X0; x < 11.81; x += 1.6) box('steel', x - .03, .98, gz0, x + .03, 6.42, gz1); box('steel', 11.77, .98, gz0, 11.83, 6.42, gz1);
+    for (const y of [2.7, 4.6]) box('steel', X0, y - .025, gz0, 11.8, y + .025, gz1);
+    quadTo(acc('glass'), [[X0, .98, Z0 - .22], [11.8, .98, Z0 - .22], [11.8, 6.42, Z0 - .22], [X0, 6.42, Z0 - .22]], [0, 0, 1], [[0, 0], [1, 0], [1, 1], [0, 1]], [1, 1, 1]);
+    /* west, east walls (east with the entrance), gables: the near walls are cut away in the maquette */
+    box('brick', X0 - .5, -.4, Z0 - .5, X0, WH, Z1 + .5, { tile: .9, skip: '-y' });
+    box('brick', X1, -.4, Z0 - .5, X1 + .5, WH, .3, { tile: .9, skip: '-y', }); box('brick', X1, -.4, 2.3, X1 + .5, WH, Z1 + .5, { tile: .9, skip: '-y' }); box('brick', X1, 2.7, .3, X1 + .5, WH, 2.3, { tile: .9 });
+    box('timber', X1 - .1, 0, .2, X1 + .1, 2.7, .34, { tile: 1 }); box('timber', X1 - .1, 0, 2.26, X1 + .1, 2.7, 2.4, { tile: 1 }); box('timber', X1 - .1, 2.6, .2, X1 + .1, 2.74, 2.4, { tile: 1 });
+    box('timber', X1 + .12, 0, .38, X1 + .3, 2.62, 2.22, { tile: 1 });
+    for (const sx of [X0 - .5, X1]) { const tri = new THREE.Shape(); tri.moveTo(-8.5, WH); tri.lineTo(8.5, WH); tri.lineTo(0, RIDGE + .05); tri.lineTo(-8.5, WH); const eg = new THREE.ExtrudeGeometry(tri, { depth: .5, bevelEnabled: false }); eg.rotateY(Math.PI / 2); eg.translate(sx, 0, 0); addGeo('brickCut', eg, { tile: .9 }); }
+    /* south wall with four arches (the doors) */
+    const AX = [-10.2, -7.2, -4.2, -1.2], AWH = 1.1, AH = 2.4;
+    const archPath = (cx, r, path) => { const h = path || new THREE.Path(); h.moveTo(cx - r, -.01); h.lineTo(cx - r, AH); h.absarc(cx, AH, r, Math.PI, 0, true); h.lineTo(cx + r, -.01); h.lineTo(cx - r, -.01); return h; };
+    { const sh = new THREE.Shape(); sh.moveTo(X0 - .5, -.4); sh.lineTo(X1 + .5, -.4); sh.lineTo(X1 + .5, WH); sh.lineTo(X0 - .5, WH); sh.lineTo(X0 - .5, -.4);
+      for (const cx of AX) sh.holes.push(archPath(cx, AWH));
+      const eg = new THREE.ExtrudeGeometry(sh, { depth: .5, bevelEnabled: false, curveSegments: 16 }); eg.translate(0, 0, Z1); addGeo('brickCut', eg, { tile: .9 });
+      for (const cx of AX) { const ring = new THREE.Shape(); archPath(cx, AWH + .24, ring); ring.holes.push(archPath(cx, AWH)); const rg = new THREE.ExtrudeGeometry(ring, { depth: .07, bevelEnabled: false, curveSegments: 16 }); rg.translate(0, 0, Z1 - .07); addGeo('plasterCut', rg, { tile: 1.4 }); } }
+    /* roof, trusses (also cut away) */
+    for (let x = -12; x <= 12; x += 3) {
+      const y0 = WH - .05; beam('truss', [x, y0, Z0 + .1], [x, y0, Z1 - .1], .22, .36, { tile: 1 });
+      beam('truss', [x, y0, Z0 + .1], [x, RIDGE - .1, 0], .17, .26); beam('truss', [x, y0, Z1 - .1], [x, RIDGE - .1, 0], .17, .26); box('truss', x - .09, y0, -.09, x + .09, RIDGE - .12, .09);
+      beam('truss', [x, y0, -3.6], [x, WH + 1.15, -.6], .12, .16); beam('truss', [x, y0, 3.6], [x, WH + 1.15, .6], .12, .16);
+    }
+    for (const s of [-1, 1]) for (const f of [.35, .65]) { const zz = s * 8.3 * f, yy = WH + (RIDGE - WH) * (1 - f) + .0; box('truss', X0, yy - .06, zz - .07, X1, yy + .1, zz + .07); }
+    box('truss', X0, RIDGE - .16, -.11, X1, RIDGE - .02, .11);
+    for (const s of [-1, 1]) { const g = new THREE.BoxGeometry(27.4, .12, 8.9); g.rotateX(s * Math.atan2(RIDGE - WH, 8.5)); g.translate(0, (RIDGE + WH) / 2 + .08, s * 4.3); addGeo('roof', g, { tile: 2 }); }
+    /* columns and girder along the north side of the floor */
+    for (const x of [-6.6, -1.6, 3.4]) { box('timber', x - .19, 0, -3.99, x + .19, 6.2, -3.61, { tile: 1, skip: '-y' }); box('steel', x - .27, 5.3, -4.07, x + .27, 5.36, -3.53); box('steel', x - .27, .0, -4.07, x + .27, .12, -3.53); }
+    box('timber', -7, 6.2, -4.12, 4, 6.55, -3.48, { tile: 1, swap: true });
+    /* the mezzanine rail and the stair */
+    { const yb = DECK, zt = 6.1; box('steel', RX - .05, yb + 1.0, Z0 + .1, RX + .05, yb + 1.07, zt, { tile: 1 }); box('steel', RX - .02, yb + .5, Z0 + .1, RX + .02, yb + .54, zt);
+      for (let z = Z0 + .1; z <= zt + .01; z += .26) box('steel', RX - .015, yb, z - .015, RX + .015, yb + 1.0, z + .015);
+      for (let z = Z0 + .1; z <= zt + .01; z += 1.6) box('steel', RX - .05, yb, z - .05, RX + .05, yb + 1.07, z + .05);
+      const n = 18, run = (RX - .4) / n, rise = DECK / n;
+      for (let i = 0; i < n; i++) { const xa = .4 + i * run; box('oak', xa, 0, 6.5, xa + run, rise * (i + 1), 7.9, { tile: 1, skip: '-y' }); }
+      box('steel', .4, 0, 6.42, RX, .1, 6.5); beam('steel', [.4, 1.02, 6.46], [RX, DECK + 1.02, 6.46], .05, .05);
+      for (let i = 0; i <= n; i += 3) { const xa = .4 + i * run; box('steel', xa - .02, rise * i, 6.44, xa + .02, rise * i + 1.0, 6.48); }
+      beam('steel', [.4, .56, 6.46], [RX, DECK + .56, 6.46], .03, .03); }
+    /* the four department rooms behind glass, along the west wall (sides, back and floors are baked with lit/dark colours) */
+    const RANGE = {}, ROOMKEYS = Object.keys(RZ);
+    const SHC = { lit: { floor: [.93, .8, .58], wall: [.97, .93, .84], ceil: [.99, .96, .88] }, dark: { floor: [.36, .31, .24], wall: [.40, .385, .35], ceil: [.27, .265, .25] } };
+    function roomShell(id, cz) {
+      const g = acc('shell'), e = acc('emis'), s0 = g.p.length / 3, e0 = e.p.length / 3, x0 = X0 + .04, x1 = RXF - .04, z0 = cz - RW + .075, z1 = cz + RW - .075, C = SHC.lit;
+      face('shell', '+y', x0, .012, z0, x1, .012, z1, { col: C.floor }); face('shell', '-y', x0, RH - .03, z0, x1, RH - .03, z1, { col: C.ceil }); face('shell', '+x', x0, 0, z0, x0, RH - .03, z1, { col: C.wall });
+      face('shell', '+z', x0, 0, z0, x1, RH - .03, z0, { col: C.wall }); face('shell', '-z', x0, 0, z1, x1, RH - .03, z1, { col: C.wall });
+      const sn = g.p.length / 3; face('emis', '-y', x0 + .9, RH - .035, z0 + .5, x1 - .9, RH - .035, z1 - .5, { col: [1, .94, .78] });
+      RANGE[id] = { s: [s0, sn], e: [[e0, e.p.length / 3]] };
+    }
+    for (const id of ROOMKEYS) roomShell(id, RZ[id]);
+    box('roomRoof', X0, RH - .03, -6.4, RXF + .05, RH + .16, 6.4, { tile: 2 });
+    for (const id of ROOMKEYS) {
+      const cz = RZ[id], zl = cz - RW, zr = cz + RW;
+      box('steel', RXF - .04, 0, zl - .04, RXF + .04, .15, zr + .04); box('steel', RXF - .04, RH - .16, zl - .04, RXF + .04, RH, zr + .04);
+      for (const z of [zl, cz - .53, cz + .53, zr]) box('steel', RXF - .04, .15, z - .035, RXF + .04, RH - .16, z + .035);
+      box('steel', RXF - .03, 1.05, zl, RXF + .03, 1.09, zr);
+      quadTo(acc('glass'), [[RXF, .15, zr], [RXF, .15, zl], [RXF, RH - .16, zl], [RXF, RH - .16, zr]], [1, 0, 0], [[0, 0], [1, 0], [1, 1], [0, 1]], [1, 1, 1]);
+    }
+    /* furniture: one lit variant and one dark variant per room, swapped alone */
+    const C_OAK = [.8, .62, .4], C_ST = [.2, .22, .21], C_CREAM = [.96, .93, .84], C_SHEET = [.86, .84, .77];
+    for (const id of ROOMKEYS) {
+      const cz = RZ[id], L_ = 'furn:' + id + ':lit', D_ = 'furn:' + id + ':dark';
+      for (const dz of [-.75, .75]) {
+        const zc = cz + dz;
+        box(L_, -12.55, .72, zc - .5, -11.7, .77, zc + .5, { col: C_OAK }); for (const [ax, az] of [[-12.5, -.46], [-11.75, -.46], [-12.5, .46], [-11.75, .46]]) box(L_, ax - .025, 0, zc + az - .025, ax + .025, .72, zc + az + .025, { col: C_ST });
+        box(L_, -12.1, .77, zc - .18, -11.85, .775, zc + .12, { col: C_CREAM }); box(L_, -12.3, .77, zc + .2, -12.1, .8, zc + .4, { col: [.95, .9, .78] });
+        box(L_, -11.3, .43, zc - .21, -10.85, .47, zc + .21, { col: [.24, .27, .25] }); box(L_, -10.9, .47, zc - .21, -10.85, .98, zc + .21, { col: [.24, .27, .25] }); for (const [a, b] of [[-11.3, -.19], [-11.3, .19], [-10.85, -.19], [-10.85, .19]]) box(L_, a - .015, 0, zc + b - .015, a + .015, .43, zc + b + .015, { col: C_ST });
+        box(D_, -12.65, 0, zc - .55, -11.6, .9, zc + .55, { col: C_SHEET, ao: .28 }); box(D_, -12.5, .9, zc - .4, -11.75, 1.02, zc + .4, { col: [.88, .86, .8] });
+      }
+      if (id !== 'scouting') { box(L_, -12.9, 1.5, cz - .9, -12.86, 2.5, cz + .9, { col: [.74, .58, .36] }); for (const q of [-.6, -.1, .4]) box(L_, -12.86, 1.8 + q * .2, cz + q - .1, -12.83, 2.05 + q * .2, cz + q + .12, { col: C_CREAM }); box(D_, -12.9, 1.5, cz - .9, -12.82, 2.5, cz + .9, { col: [.82, .8, .74] }); }
+      for (const dz of [-1.05, 1.05]) {
+        for (let k = 0; k < 5; k++) box(D_, -12.5 + k * .012, .07 + k * .17, cz + dz - .21, -12.08 + k * .012, .12 + k * .17, cz + dz + .21, { col: [.25, .27, .26] });
+        for (const [a, b] of [[-12.5, -.2], [-12.5, .2], [-12.1, -.2], [-12.1, .2]]) box(D_, a - .015, 0, cz + dz + b - .015, a + .015, .96, cz + dz + b + .015, { col: [.21, .23, .22] });
+        box(D_, -12.52, .5, cz + dz - .21, -12.47, 1.32, cz + dz + .21, { col: [.25, .27, .26] });
+      }
+      const e = acc('emis'), e0 = e.p.length / 3; for (const dz of [-.75, .75]) { const zc = cz + dz - .36; box('emis', -12.5, 1.08, zc - .09, -12.3, 1.2, zc + .09, { col: [1, .93, .74] }); box('brass', -12.42, .77, zc - .02, -12.38, 1.08, zc + .02); } RANGE[id].e.push([e0, e.p.length / 3]);
+    }
+    /*__END_B1__*/
+
+    /* ---------- the ops floor: money wall, room signs, film room, practice court ---------- */
+    const BX = X0 + .115, MWY = 5.85, MWH = 2.9, BRD = {};
+    const frameBoard = (z, wm, hm, y) => box('steel', X0, y - hm / 2 - .07, z - wm / 2 - .07, X0 + .1, y + hm / 2 + .07, z + wm / 2 + .07);
+    frameBoard(3.6, 5.2, MWH, MWY); frameBoard(-1.2, 3.9, MWH, MWY); frameBoard(-4.1, 1.4, MWH, MWY); frameBoard(-5.85, 1.1, .55, 6.55);
+    BRD.roster = panelMesh(1024, 640, 5.2, MWH, [BX, MWY, 3.6], FXP, { id: 'board.roster' });
+    BRD.cap = panelMesh(860, 640, 3.9, MWH, [BX, MWY, -1.2], FXP, { id: 'board.cap' });
+    BRD.tax = panelMesh(494, 1024, 1.4, MWH, [BX, MWY, -4.1], FXP, { id: 'board.tax' });
+    BRD.cash = panelMesh(440, 220, 1.1, .55, [BX, 6.55, -5.85], FXP, { id: 'plate.cash' });
+    hit('board.roster', X0, MWY - MWH / 2, 1.0, X0 + .45, MWY + MWH / 2, 6.2); hit('board.cap', X0, MWY - MWH / 2, -3.15, X0 + .45, MWY + MWH / 2, .75); hit('board.tax', X0, MWY - MWH / 2, -4.8, X0 + .45, MWY + MWH / 2, -3.4); hit('plate.cash', X0, 6.25, -6.4, X0 + .45, 6.85, -5.3);
+    for (const id of ROOMKEYS) { pl('sign.' + id, 2.9, .62, 240, [X0 + .05, 3.98, RZ[id]], FXP); hit('dept.' + id, X0, 0, RZ[id] - RW, RXF, 4.4, RZ[id] + RW); }
+    /* draft board inside Scouting */
+    BRD.draft = panelMesh(512, 380, 1.7, 1.25, [-12.925, 1.85, RZ.scouting], FXP, { id: 'board.draft', glow: .05 });
+    box('sheetDraft', -12.93, 1.2, RZ.scouting - .9, -12.85, 2.5, RZ.scouting + .9, { tile: .8 });
+    pl('tag.draft', .5, .3, 300, [-12.84, 1.12, RZ.scouting + .58], FXP); hit('board.draft', -13, 1.1, RZ.scouting - .9, -12.6, 2.5, RZ.scouting + .9);
+    /* film room */
+    const FR = { x0: -8.0, x1: -4.0, z0: -7.6, z1: -4.2, h: 3.0 }, FRM = (FR.z0 + FR.z1) / 2;
+    box('plaster', FR.x0 - .12, 0, FR.z0 - .12, FR.x0, FR.h, FR.z1 + .12, { tile: 2, skip: '-y' }); box('plaster', FR.x0, 0, FR.z0 - .12, FR.x1, FR.h, FR.z0, { tile: 2, skip: '-y' }); box('plaster', FR.x0, 0, FR.z1, FR.x1, FR.h, FR.z1 + .12, { tile: 2, skip: '-y' }); box('plaster', FR.x0 - .12, FR.h, FR.z0 - .12, FR.x1 + .1, FR.h + .14, FR.z1 + .12, { tile: 2 });
+    { const g = 'shell', a = FR.x0 + .005, b = FR.x1 - .05; face(g, '+x', a, 0, FR.z0, a, FR.h, FR.z1, { col: [.5, .48, .45] }); face(g, '+z', a, 0, FR.z0 + .005, b, FR.h, FR.z0 + .005, { col: [.5, .48, .45] }); face(g, '-z', a, 0, FR.z1 - .005, b, FR.h, FR.z1 - .005, { col: [.5, .48, .45] }); face(g, '+y', a, .012, FR.z0, b, .012, FR.z1, { col: [.24, .22, .2] }); face(g, '-y', a, FR.h, FR.z0, b, FR.h, FR.z1, { col: [.32, .31, .3] }); }
+    for (const z of [FR.z0, FRM - .57, FRM + .57, FR.z1]) box('steel', FR.x1 - .04, 0, z - .035, FR.x1 + .04, FR.h, z + .035); box('steel', FR.x1 - .04, FR.h - .12, FR.z0, FR.x1 + .04, FR.h, FR.z1); box('steel', FR.x1 - .04, 0, FR.z0, FR.x1 + .04, .12, FR.z1);
+    quadTo(acc('glass'), [[FR.x1, .12, FR.z1], [FR.x1, .12, FR.z0], [FR.x1, FR.h - .12, FR.z0], [FR.x1, FR.h - .12, FR.z1]], [1, 0, 0], [[0, 0], [1, 0], [1, 1], [0, 1]], [1, 1, 1]);
+    for (const x of [-5.3, -4.65]) for (const z of [-6.9, -5.9, -4.9]) { box('furn:film', x, .42, z - .21, x + .42, .47, z + .21, { col: [.2, .21, .22] }); box('furn:film', x + (x < -5 ? .38 : .38), .47, z - .21, x + .42, .95, z + .21, { col: [.2, .21, .22] }); box('furn:film', x + .04, 0, z - .18, x + .07, .42, z - .15, { col: C_ST }); box('furn:film', x + .04, 0, z + .15, x + .07, .42, z + .18, { col: C_ST }); }
+    BRD.film = panelMesh(640, 370, 2.8, 1.6, [FR.x0 + .04, 1.7, FRM], FXP, { id: 'film.room', glow: .8 });
+    pl('film.sign', 1.5, .34, 300, [FR.x1 + .07, FR.h - .34, FRM], FXP); hit('film.room', FR.x0, 0, FR.z0, FR.x1 + .3, FR.h + .1, FR.z1);
+    /* practice court: painted floor and one hoop */
+    BRD.court = panelMesh(720, 540, 8, 6, [-3.4, .014, 4.6], FLAT, { id: 'court', glow: 0, alpha: true, recv: true });
+    BRD.court.material.polygonOffset = true; BRD.court.material.polygonOffsetFactor = -3; BRD.court.material.depthWrite = false;
+    box('steel', 1.05, 0, 4.52, 1.19, 3.2, 4.68); box('steel', .62, 3.0, 4.57, 1.2, 3.07, 4.63); box('hall', .58, 2.75, 3.7, .64, 3.85, 5.5, { col: [.94, .94, .9] }); box('hall', .56, 2.75, 3.7, .58, 3.85, 3.74, { col: [.3, .3, .3] }); box('hall', .56, 2.75, 5.46, .58, 3.85, 5.5, { col: [.3, .3, .3] }); box('hall', .56, 2.75, 3.7, .58, 2.79, 5.5, { col: [.3, .3, .3] }); box('hall', .56, 3.81, 3.7, .58, 3.85, 5.5, { col: [.3, .3, .3] });
+    { const g = new THREE.TorusGeometry(.23, .014, 6, 20); g.rotateX(Math.PI / 2); g.translate(.36, 3.05, 4.6); addGeo('hall', g, { col: [.85, .38, .1] }); }
+    hit('court', -7.4, 0, 1.6, 1.4, 3.9, 7.6);
+    /* ---------- the owner's desk on the mezzanine ---------- */
+    const DY = DECK + .77;
+    box('oak', 9.35, DY - .05, -3.05, 11.25, DY, -2.15, { tile: 1 }); box('timber', 9.36, DECK, -3.03, 9.86, DY - .05, -2.17, { tile: 1 }); box('timber', 10.9, DECK, -3.03, 11.24, DY - .05, -2.17, { tile: 1 }); box('timber', 9.86, DECK + .1, -3.03, 10.9, DY - .05, -3.0, { tile: 1 });
+    box('brass', 9.5, DECK + .5, -2.17, 9.7, DECK + .53, -2.15); box('brass', 11.05, DECK + .5, -2.17, 11.25, DECK + .53, -2.15);
+    box('furn:desk', 10.4 - .48, DY, -2.6 - .34, 10.4 + .48, DY + .012, -2.6 + .34, { col: [.2, .27, .22] });
+    BRD.blot = panelMesh(1000, 680, .9, .612, [10.4, DY + .0135, -2.6], FLAT, { id: 'desk.blotter', glow: .05 });
+    hit('desk.blotter', 9.9, DY - .05, -2.95, 10.9, DY + .2, -2.25);
+    /* trade file (cover thickness here; its top is an atlas plate so the branch can turn it into a ghost) */
+    box('furn:tf', 9.52, DY, -2.75, 9.8, DY + .03, -2.35, { col: [.16, .42, .26] }); pl('tf.top', .28, .4, 800, [9.66, DY + .0315, -2.55], FLAT);
+    hit('desk.tradefile', 9.45, DY - .02, -2.85, 9.9, DY + .12, -2.25);
+    /* pen */
+    beam('brass', [11.02, DY + .012, -2.42], [10.9, DY + .012, -2.62], .014, .014); beam('furn:pen', [10.9, DY + .012, -2.62], [10.84, DY + .012, -2.72], .016, .016, { col: [.1, .1, .12] }); hit('desk.pen', 10.78, DY - .01, -2.78, 11.08, DY + .06, -2.36);
+    /* two clocks on brass stands */
+    for (const [id, x] of [['clock.world', 10.16], ['clock.you', 10.64]]) { box('brass', x - .1, DY, -3.0, x + .1, DY + .02, -2.92); box('brass', x - .015, DY + .02, -2.99, x + .015, DY + .07, -2.96); pl(id, .21, .21, 900, [x, DY + .17, -2.955], FZP); }
+    hit('desk.clocks', 10.02, DY, -3.05, 10.8, DY + .3, -2.9);
+    /* in-tray: three tiers, folders named by their question (filled when you sign) */
+    for (let k = 0; k < 3; k++) { const y0 = DY + k * .105; box('oak', 10.88, y0, -2.86, 11.22, y0 + .014, -2.58, { tile: .5 }); box('oak', 10.88, y0, -2.86, 10.9, y0 + .06, -2.58, { tile: .5 }); box('oak', 11.2, y0, -2.86, 11.22, y0 + .06, -2.58, { tile: .5 }); box('furn:tray', 10.905, y0 + .014, -2.85, 11.195, y0 + .07, -2.61, { col: [.87, .73, .45] }); pl('fold.' + ['callup', 'denver', 'owner'][k], .29, .056, 900, [11.05, y0 + .042, -2.608], FZP); }
+    hit('desk.tray', 10.85, DY, -2.9, 11.25, DY + .35, -2.55);
+    /* desk lamp */
+    box('brass', 9.45, DY, -3.02, 9.6, DY + .02, -2.9); beam('brass', [9.52, DY + .02, -2.96], [9.62, DY + .38, -2.86], .012, .012); beam('brass', [9.62, DY + .38, -2.86], [9.78, DY + .4, -2.76], .012, .012); box('emis', 9.74, DY + .33, -2.79, 9.86, DY + .41, -2.66, { col: [1, .9, .66] });
+    /* purchase order animates off the blotter (only exists after act 43) */
+    BRD.po = panelMesh(300, 420, .21, .3, [10.4, DY + .02, -2.55], FLAT, { id: 'desk.po', glow: .1 }); BRD.po.visible = false; hit('desk.po', 10.75, DY, -2.7, 11.15, DY + .08, -2.3);
+    /* the credenza: glass onto other seats' material */
+    const CRX0 = 9.0, CRX1 = 12.2, CRZ0 = -7.75, CRZ1 = -7.15;
+    box('oak', CRX0, DECK, CRZ0, CRX1, DECK + .12, CRZ1, { tile: 1 }); box('oak', CRX0 - .02, DECK + .95, CRZ0 - .02, CRX1 + .02, DECK + 1.02, CRZ1 + .03, { tile: 1 }); box('oak', CRX0, DECK + .12, CRZ0, CRX0 + .05, DECK + .95, CRZ1, { tile: 1 }); box('oak', CRX1 - .05, DECK + .12, CRZ0, CRX1, DECK + .95, CRZ1, { tile: 1 }); box('oak', CRX0 + .05, DECK + .12, CRZ0, CRX1 - .05, DECK + .95, CRZ0 + .05, { tile: 1 }); box('oak', CRX0 + .05, DECK + .5, CRZ0 + .05, CRX1 - .05, DECK + .53, CRZ1 - .05, { tile: 1 });
+    for (const x of [CRX0, 10.07, 11.13, CRX1]) box('steel', x - .02, DECK + .12, CRZ1 - .03, x + .02, DECK + .95, CRZ1);
+    quadTo(acc('glass'), [[CRX0 + .05, DECK + .12, CRZ1 - .01], [CRX1 - .05, DECK + .12, CRZ1 - .01], [CRX1 - .05, DECK + .95, CRZ1 - .01], [CRX0 + .05, DECK + .95, CRZ1 - .01]], [0, 0, 1], [[0, 0], [1, 0], [1, 1], [0, 1]], [1, 1, 1]);
+    quadTo(acc('frost'), [[CRX0 + .05, DECK + .12, CRZ1 + .004], [CRX1 - .05, DECK + .12, CRZ1 + .004], [CRX1 - .05, DECK + .95, CRZ1 + .004], [CRX0 + .05, DECK + .95, CRZ1 + .004]], [0, 0, 1], [[0, 0], [3, 0], [3, 1.4], [0, 1.4]], [1, 1, 1]);
+    [[9.55, [.2, .35, .28]], [10.6, [.87, .73, .45]], [11.65, [.55, .6, .66]]].forEach(([x, c]) => box('credF', x - .3, DECK + .53, CRZ0 + .1, x + .3, DECK + .88, CRZ1 - .2, { col: c }));
+    ['owner', 'scout', 'offer'].forEach((k, i) => pl('cred.' + k, .96, .24, 560, [[9.55, 10.6, 11.65][i], DECK + .3, CRZ1 - .015], FZP));
+    hit('glass.doors', CRX0, DECK, CRZ0, CRX1, DECK + 1.05, CRZ1 + .05);
+    /* maquette inset: the building, scaled, on a plinth by the rail */
+    const MC = [7.9, DECK + .96, -6.2], MS = 1 / 22, mx = x => MC[0] + x * MS, my = y => MC[1] + y * MS, mz = z => MC[2] + z * MS;
+    box('oak', 7.25, DECK, -6.64, 8.55, DECK + .95, -5.76, { tile: 1 });
+    box('furn:mini', mx(X0) - .01, MC[1] - .01, mz(Z0) - .01, mx(X1) + .01, MC[1] + .008, mz(Z1) + .01, { col: [.97, .95, .9] });
+    box('furn:mini', mx(X0) - .01, MC[1], mz(Z0) - .01, mx(X0) + .006, my(WH), mz(Z1) + .01, { col: [.7, .42, .32] }); box('furn:mini', mx(X0), MC[1], mz(Z0) - .01, mx(X1), my(WH), mz(Z0) + .004, { col: [.7, .42, .32] }); box('furn:mini', mx(RX), my(DECK - .3), mz(Z0), mx(X1), my(DECK), mz(Z1), { col: [.86, .74, .55] });
+    const MINI = {}; for (const id of ROOMKEYS) { const a = acc('mini'), n0 = a.p.length / 3; box('mini', mx(X0) + .006, MC[1] + .008, mz(RZ[id] - RW) + .004, mx(RXF), my(RH), mz(RZ[id] + RW) - .004, { col: [.98, .92, .7] }); MINI[id] = [n0, a.p.length / 3]; }
+    box('sheetMaq', 7.2, DECK + .95, -6.68, 8.6, DECK + 1.36, -5.72, { tile: .7 }); box('sheetMaq', 7.4, DECK + 1.36, -6.5, 8.4, DECK + 1.44, -5.9, { tile: .7 }); hit('hall.maquette', 7.2, DECK, -6.7, 8.6, DECK + 1.5, -5.7);
+    /* weeks-ahead rack on the NE brick pier */
+    box('oak', 11.9, 4.4, -7.985, 12.9, 5.95, -7.95, { tile: 1 }); box('brass', 11.9, 5.95, -7.99, 12.9, 6.0, -7.93); box('brass', 11.9, 4.36, -7.99, 12.9, 4.4, -7.93);
+    [[5.6, 10], [5.2, 11], [4.8, 12]].forEach(([y, w]) => { pl('slip.' + w, .8, .32, 520, [12.4, y, -7.945], FZP); box('shut', 11.94, y - .18, -7.935, 12.86, y + .18, -7.895, { tile: 1 }); for (const q of [-.09, 0, .09]) box('shut', 11.94, y + q - .006, -7.895, 12.86, y + q + .006, -7.885, { tile: 1 }); });
+    hit('later.rack', 11.85, 4.3, -8, 12.95, 6.05, -7.5);
+    /* door vestibule: a table with the door plate and one dusty folder */
+    box('oak', 8.55, .8, .2, 9.25, .85, 2.0, { tile: 1 }); for (const [x, z] of [[8.6, .25], [9.2, .25], [8.6, 1.95], [9.2, 1.95]]) box('timber', x - .03, 0, z - .03, x + .03, .8, z + .03, { tile: 1, skip: '-y' });
+    box('brass', 8.78, .85, .65, 8.96, 1.0, .68); box('brass', 8.78, .85, 1.02, 8.96, 1.0, 1.05);
+    plate('door.plate', 1.0, .56, 520, [8.9, 1.15, .85], [0, 0, -1], [-.5, .87, 0]); pl('door.folder', .36, .26, 720, [8.92, .866, 1.55], { r: [0, 0, -1], u: [-1, 0, 0] });
+    box('furn:df', 8.74, .85, 1.37, 9.1, .866, 1.73, { col: [.82, .68, .42] }); box('furn:df', 8.98, .866, 1.0, 9.05, .872, 1.3, { col: [.95, .93, .88] });
+    hit('door.plate', 8.6, .85, .3, 9.05, 1.5, 1.05); hit('door.folder', 8.7, .8, 1.33, 9.15, 1.0, 1.77);
+    plate('plate.rail', .9, .32, 520, [6.03, DECK + 1.17, -1.8], [0, 0, -1], [-.35, .94, 0]); plate('branch.plate', .9, .32, 520, [6.03, DECK + 1.17, 0.4], [0, 0, -1], [-.35, .94, 0]);
+    hit('plate.rail', 5.85, DECK + 1.0, -2.4, 6.2, DECK + 1.4, -1.2);
+    /* ---------- arches: doors named by their question (south wall) ---------- */
+    const AM = {}, ARK = ['y1', 'w6', 'w9', 'w10'];
+    const archShape = (cx, r) => { const s = new THREE.Shape(); archPath(cx, r, s); return s; };
+    ARK.forEach((id, i) => {
+      const cx = AX[i];
+      const fill = new THREE.ExtrudeGeometry(archShape(cx, AWH), { depth: .22, bevelEnabled: false, curveSegments: 14 }); fill.translate(0, 0, Z1 + .14);
+      const shut = new THREE.ExtrudeGeometry(archShape(cx, AWH), { depth: .08, bevelEnabled: false, curveSegments: 14 }); shut.translate(0, 0, Z1 + .05);
+      /* passage: an interior box seen from inside */
+      const pa = 'pass:' + id; const c1 = [.62, .56, .48], c2 = [.74, .69, .6], c3 = [.5, .46, .4];
+      face(pa, '+y', cx - AWH, 0, Z1 + .5, cx + AWH, 0, Z1 + 2.3, { col: [.5, .42, .32] }); face(pa, '-y', cx - AWH, AH + AWH, Z1 + .5, cx + AWH, AH + AWH, Z1 + 2.3, { col: c3 });
+      face(pa, '+x', cx - AWH, 0, Z1 + .5, cx - AWH, AH + AWH, Z1 + 2.3, { col: c1 }); face(pa, '-x', cx + AWH, 0, Z1 + .5, cx + AWH, AH + AWH, Z1 + 2.3, { col: c1 }); face(pa, '-z', cx - AWH, 0, Z1 + 2.3, cx + AWH, AH + AWH, Z1 + 2.3, { col: c2 });
+      AM[id] = { cx, fill, shut, pass: geoOf(pa) };
+      const m = new THREE.Mesh(AM[id].fill, MAT.infill); m.receiveShadow = true; m.userData.arch = id; GRP.cut.add(m); AM[id].mesh = m;
+      /* tape ring in your ink (or the branch's) on the stone surround */
+      const ring = new THREE.Shape(); archPath(cx, AWH + .16, ring); ring.holes.push(archPath(cx, AWH + .07)); const tg = new THREE.ExtrudeGeometry(ring, { depth: .012, bevelEnabled: false, curveSegments: 14 }); tg.translate(0, 0, Z1 - .09);
+      const tc = new Float32Array(tg.attributes.position.count * 3).fill(1); tg.setAttribute('color', new THREE.BufferAttribute(tc, 3));
+      const tu = tg.attributes.position, uv = new Float32Array(tu.count * 2); for (let k = 0; k < tu.count; k++) { uv[k * 2] = (tu.getX(k) + tu.getY(k)) * 1.6; uv[k * 2 + 1] = (tu.getY(k) - tu.getX(k)) * 1.6; } tg.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+      const tm = new THREE.Mesh(tg, MAT.tape); tm.visible = false; GRP.cut.add(tm); AM[id].tape = tm;
+      pl('arch.' + id, 2.7, .92, 250, [cx, 4.46, Z1 - .085], FZM, 'atlasS');
+      /* hinged brass cover over the answer strip */
+      const pv = new THREE.Group(); pv.position.set(cx, 4.32, Z1 - .11); const cm = new THREE.Mesh(new THREE.BoxGeometry(2.5, .29, .02), MAT.brass); cm.position.y = -.15; pv.add(cm); GRP.cut.add(pv); AM[id].cover = pv;
+      hit('arch.' + id, cx - 1.3, 0, Z1 - .7, cx + 1.3, 4.95, Z1);
+    });
+    /* scaffold that rises at the Week 6 arch when you cut a branch */
+    { const cx = AX[1]; for (const dx of [-1.7, 1.7]) for (const dz of [.4, 1.1]) box('scaf', cx + dx - .025, 0, Z1 - dz - .025, cx + dx + .025, 3.9, Z1 - dz + .025);
+      for (const y of [1.2, 2.4, 3.6]) { box('scaf', cx - 1.72, y - .025, Z1 - 1.12, cx + 1.72, y + .025, Z1 - 1.08); box('scaf', cx - 1.72, y - .025, Z1 - .42, cx + 1.72, y + .025, Z1 - .38); box('scaf', cx - 1.72, y - .025, Z1 - 1.12, cx - 1.68, y + .025, Z1 - .38); box('scaf', cx + 1.68, y - .025, Z1 - 1.12, cx + 1.72, y + .025, Z1 - .38); }
+      beam('scaf', [cx - 1.7, 0, Z1 - .4], [cx + 1.7, 2.4, Z1 - .4], .03, .03); beam('scaf', [cx + 1.7, 0, Z1 - .4], [cx - 1.7, 2.4, Z1 - .4], .03, .03);
+      box('scafPl', cx - 1.7, 2.4, Z1 - 1.1, cx + 1.7, 2.44, Z1 - .4, { tile: 1 }); box('scafPl', cx - 1.7, 3.6, Z1 - 1.1, cx + 1.7, 3.64, Z1 - .4, { tile: 1 }); }
+    /* history wall on the mezzanine's south wall: accretion, and one empty frame */
+    box('plasterCut', 6.4, 3.75, Z1 - .05, 12.95, 7.3, Z1, { tile: 1.4, skip: '+z-y' });
+    [7.2, 8.5, 9.8, 11.1, 12.4].forEach((x, i) => { const y = 5.3; box('oakCut', x - .56, y - .7, Z1 - .11, x + .56, y - .64, Z1 - .05, { tile: 1 }); box('oakCut', x - .56, y + .64, Z1 - .11, x + .56, y + .7, Z1 - .05, { tile: 1 }); box('oakCut', x - .56, y - .64, Z1 - .11, x - .5, y + .64, Z1 - .05, { tile: 1 }); box('oakCut', x + .5, y - .64, Z1 - .11, x + .56, y + .64, Z1 - .05, { tile: 1 });
+      pl('hist.' + ['y1', 'w6', 'w9', 'mine', 'untraced'][i], 1.0, 1.28, 260, [x, y, Z1 - .075], FZM, 'atlasS'); hit('hist.' + ['y1', 'w6', 'w9', 'mine', 'untraced'][i], x - .56, y - .7, Z1 - .6, x + .56, y + .7, Z1); });
+    /*__END_C1__*/
+
+    /* ---------- outside: the slip, the far quay, the League counter, the arena, the record building ---------- */
+    box('conc', -220, -1.7, Z1 + .5, 220, -.02, 140, { tile: 6, skip: '-y' }); box('conc', X1 + .5, -1.7, Z0 - 2.9, 220, -.02, Z1 + .5, { tile: 6, skip: '-y-z' }); box('conc', -220, -1.7, Z0 - 2.9, X0 - .5, -.02, Z1 + .5, { tile: 6, skip: '-y-z' });
+    box('conc', -220, -1.7, Z0 - 3.2, 220, -.02, Z0 - 2.9, { tile: 6 }); box('conc', -220, -1.7, -260, 220, -.02, -22.6, { tile: 6, skip: '-y' });
+    face('water', '+y', -220, -1.0, -22.6, 220, -1.0, Z0 - 3.2, { tile: 24 });
+    /* League office: one lit counter window (a neighbouring system: observed, never actionable here) */
+    box('brickOut', -25, -.02, -31, -14, 7.2, -22.6, { tile: .9, skip: '-y' }); box('conc', -25.3, 7.1, -31.3, -13.7, 7.5, -22.3, { tile: 2 });
+    for (const x of [-22.1, -19.5, -16.9]) box('steel', x - .05, 1.3, -22.66, x + .05, 3.8, -22.56); for (const y of [1.3, 3.75]) box('steel', -22.1, y - .05, -22.66, -16.9, y + .05, -22.56); box('conc', -22.3, 1.2, -22.75, -16.7, 1.3, -22.4, { tile: 1 });
+    BRD.league = panelMesh(1024, 450, 5.0, 2.2, [-19.5, 2.55, -22.585], FZP, { basic: true, id: 'win.league' });
+    pl('league.sign', 3.4, .5, 240, [-19.5, 4.8, -22.57], FZP); hit('win.league', -22.3, 1.2, -22.9, -16.7, 5.1, -22.3);
+    /* the record building (or your branch), across the slip */
+    const NB = { x0: -8.5, x1: 4.5, z0: -31, z1: -24, zm: -27.5 }; mkGrp('nbr'); mkGrp('bridge');
+    box('nbrBrick', NB.x0, -.02, NB.z0, NB.x1, 5.6, NB.z1, { tile: .9, skip: '-y' });
+    for (const s of [-1, 1]) { const g = new THREE.BoxGeometry(14.2, .14, 4.3); g.rotateX(s * Math.atan2(2.2, 3.6)); g.translate((NB.x0 + NB.x1) / 2, 6.75, NB.zm + s * 1.85); addGeo('nbrRoof', g, { col: [.52, .5, .48] }); }
+    for (const sx of [NB.x0 - .3, NB.x1]) { const tri = new THREE.Shape(); tri.moveTo(-3.6, 5.6); tri.lineTo(3.6, 5.6); tri.lineTo(0, 7.85); tri.lineTo(-3.6, 5.6); const eg = new THREE.ExtrudeGeometry(tri, { depth: .3, bevelEnabled: false }); eg.rotateY(Math.PI / 2); eg.translate(sx, 0, NB.zm); addGeo('nbrBrick', eg, { tile: .9 }); }
+    BRD.nbr = panelMesh(1024, 260, 12.6, 3.2, [-2, 3.3, NB.z1 + .015], FZP, { basic: true, id: 'win.record', parent: GRP.nbr });
+    pl('nbr.plaque', 3.0, .95, 260, [-2, 1.1, NB.z1 + .02], FZP); hit('win.record', NB.x0, 0, NB.z0, NB.x1, 6, NB.z1 + .5);
+    for (let x = NB.x0; x <= NB.x1 + .01; x += 2.6) box('nbrScaf', x - .03, 0, NB.z1 + .25, x + .03, 6.5, NB.z1 + .31); for (const y of [2.1, 4.2, 6.3]) { box('nbrScaf', NB.x0, y - .03, NB.z1 + .25, NB.x1, y + .03, NB.z1 + .31); box('nbrScaf', NB.x0, y - .03, NB.z1 + .9, NB.x1, y + .03, NB.z1 + .96); box('nbrScafPl', NB.x0, y, NB.z1 + .2, NB.x1, y + .05, NB.z1 + .95, { tile: 1 }); }
+    for (let x = NB.x0; x <= NB.x1 + .01; x += 2.6) box('nbrScaf', x - .03, 0, NB.z1 + .9, x + .03, 6.5, NB.z1 + .96);
+    /* footbridge across the slip (exists once a branch does) */
+    box('bridgeDeck', -2.6, .02, -22.6, -1.4, .2, Z0 - 2.9, { tile: 1 }); for (const x of [-2.62, -1.42]) { box('bridgeRail', x, .2, -22.6, x + .04, 1.1, Z0 - 2.9); for (let z = -22.5; z < Z0 - 2.85; z += 1.6) box('bridgeRail', x - .02, .0, z - .04, x + .06, 1.1, z + .04); }
+    /* the arena: an open bowl model, seat rows on steps; the state of the next home night is painted on the treads */
+    const AC = { x: 24, z: -48 }, R0 = 7.5, TIERS = 6, TW = 1.75, RMAX = R0 + TIERS * TW, HT = t => .5 + t * .55;
+    const bowlGeo = (() => {
+      const pos = [], nor = [], uv = [], idx = [], SEG = 72, P = (r, a, y) => [AC.x + r * Math.cos(a), y, AC.z + r * Math.sin(a)], UVp = p => [(p[0] - AC.x) / RMAX * .5 + .5, .5 - (p[2] - AC.z) / RMAX * .5];
+      const quad4 = (A, B, C, D, N, planar) => { const o = pos.length / 3; for (const p of [A, B, C, D]) { pos.push(...p); nor.push(...(typeof N === 'function' ? N(p) : N)); const u = planar ? UVp(p) : [.01, .01]; uv.push(u[0], u[1]); } idx.push(o, o + 1, o + 2, o, o + 2, o + 3); };
+      for (let k = 0; k < SEG; k++) {
+        const a0 = k / SEG * Math.PI * 2, a1 = (k + 1) / SEG * Math.PI * 2, am = (a0 + a1) / 2, inw = [-Math.cos(am), 0, -Math.sin(am)];
+        for (let t = 0; t < TIERS; t++) { const r0 = R0 + t * TW, r1 = r0 + TW, h = HT(t), hp = t ? HT(t - 1) : .25;
+          quad4(P(r0, a0, h), P(r0, a1, h), P(r1, a1, h), P(r1, a0, h), [0, 1, 0], true);
+          quad4(P(r0, a0, hp), P(r0, a1, hp), P(r0, a1, h), P(r0, a0, h), inw, false); }
+        const c = [AC.x, .25, AC.z]; { const o = pos.length / 3; for (const p of [c, P(R0, a1, .25), P(R0, a0, .25)]) { pos.push(...p); nor.push(0, 1, 0); const u = UVp(p); uv.push(u[0], u[1]); } idx.push(o, o + 1, o + 2); }
+        const hh = HT(TIERS - 1), rr = RMAX; quad4(P(rr, a1, -.02), P(rr, a0, -.02), P(rr, a0, hh), P(rr, a1, hh), [Math.cos(am), 0, Math.sin(am)], false);
+      }
+      const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(new THREE.BufferAttribute(new Uint32Array(idx), 1)); g.computeBoundingSphere(); return g;
+    })();
+    hit('win.arena', AC.x - RMAX, 0, AC.z - RMAX, AC.x + RMAX, 4, AC.z + RMAX);
+    { const r = rng(5); for (let i = 0; i < 34; i++) { const x = -200 + i * 12.5 + r() * 6, z = -120 - r() * 70, w = 8 + r() * 14, d = 8 + r() * 12, h = 16 + r() * 46 * (r() < .2 ? 1.5 : 1), k = .78 + r() * .12; box('sky', x, -.02, z, x + w, h, z + d, { col: [k, k * .98, k * .93], skip: '-y' }); }
+      for (const [x0, x1, z0, h] of [[-90, -50, -70, 9], [-60, -30, -50, 7], [50, 90, -80, 11], [45, 70, -30, 6], [-150, -100, -60, 12]]) box('sky', x0, -.02, z0, x1, h, z0 + 22, { col: [.8, .76, .7], skip: '-y' }); }
+    /* the paper-white site the maquette stands on (maquette only) */
+    box('paper', -38, -2.4, Z0 - 3.2, 38, -.03, 22, { tile: 8, skip: '-y' }); box('paper', -38, -2.4, -60, 38, -.03, -22.6, { tile: 8, skip: '-y' }); box('paper', -38, -2.4, -22.6, 38, -1.05, Z0 - 3.2, { tile: 8, skip: '-y' });
+    face('maqWater', '+y', -38, -.9, -22.6, 38, -.9, Z0 - 3.2, { tile: 24 });
+    /*__END_D1__*/
+
+    /* ---------- bake: one draw call per material, toggled parts kept apart ---------- */
+    const slatCanvas = (() => { const c = cv(64, 128), g = c.getContext('2d'); g.fillStyle = '#8a8d8c'; g.fillRect(0, 0, 64, 128); for (let y = 0; y < 128; y += 16) { g.fillStyle = 'rgba(30,32,32,.55)'; g.fillRect(0, y, 64, 2.5); g.fillStyle = 'rgba(255,255,255,.14)'; g.fillRect(0, y + 3, 64, 3); } return c; })();
+    T.slat = mkTex(slatCanvas, 1); T.slat.repeat.set(1, 1 / 1.2);
+    const BOWL = { c: cv(1024, 1024) }; BOWL.g = BOWL.c.getContext('2d'); T.bowl = mkTex(BOWL.c); T.atlas = mkTex(AT.c);
+    Object.assign(MAT, {
+      atlas: L({ map: T.atlas, alphaTest: .03 }), roofM: S_({ map: T.timber, color: 0xd6b88c, roughness: .8, metalness: 0 }), scaf: S_({ color: 0xa8a8a0, roughness: .45, metalness: .7 }),
+      slat: L({ map: T.slat }), paper: L({ color: 0xf7f4ea }), maqWater: L({ color: 0xc7d4d4 }), brassD: S_({ color: 0x8d6d22, roughness: .4, metalness: .8 }), bowl: L({ map: T.bowl })
+    });
+    const M = {}; const bk = (name, mat, o = {}) => { const m = bake(name, mat, o); if (m) M[name] = m; return m; };
+    const mergeAcc = (into, names) => { const t = acc(into); for (const n of names) { const a = ACC[n]; if (!a) continue; const off = t.p.length / 3; for (const v of a.p) t.p.push(v); for (const v of a.n) t.n.push(v); for (const v of a.u) t.u.push(v); for (const v of a.c) t.c.push(v); for (const v of a.i) t.i.push(v + off); delete ACC[n]; } };
+    mergeAcc('props', ['furn:film', 'furn:desk', 'furn:df', 'furn:pen', 'hall', 'furn:mini']);
+    bk('oak', MAT.oak, { cast: true, recv: true }); bk('deck', MAT.deck, { cast: true, recv: true }); bk('brick', MAT.brick, { cast: true, recv: true }); bk('plaster', MAT.plaster, { cast: true, recv: true }); bk('timber', MAT.timber, { cast: true, recv: true });
+    bk('steel', MAT.steel, { cast: true }); bk('brass', MAT.brass); bk('conc', MAT.conc, { recv: true, parent: GRP.roomOnly }); bk('water', MAT.water, { parent: GRP.roomOnly }); bk('sky', MAT.vc, { parent: GRP.roomOnly });
+    bk('shell', MAT.vc); bk('emis', MAT.emis); bk('atlas', MAT.atlas); bk('props', MAT.vc, { cast: true }); bk('brickOut', MAT.brick, { recv: true }); bk('vcOut', MAT.vc, { recv: true });
+    bk('brickCut', MAT.brick, { parent: GRP.cut, cast: true, recv: true }); bk('plasterCut', MAT.plaster, { parent: GRP.cut, recv: true }); bk('truss', MAT.timber, { parent: GRP.cut }); bk('roof', MAT.roofM, { parent: GRP.cut }); bk('roomRoof', MAT.plaster, { parent: GRP.cut }); bk('oakCut', MAT.oak, { parent: GRP.cut }); bk('atlasS', MAT.atlas, { parent: GRP.cut });
+    bk('paper', MAT.paper, { parent: GRP.maqOnly, recv: true }); bk('maqWater', MAT.maqWater, { parent: GRP.maqOnly });
+    const glassMesh = bk('glass', MAT.glass); glassMesh.renderOrder = 6;
+    PARTS.furn = {}; for (const id of ROOMKEYS) PARTS.furn[id] = { lit: bk('furn:' + id + ':lit', MAT.vc), dark: bk('furn:' + id + ':dark', MAT.vc) };
+    PARTS.mini = bk('mini', MAT.vc); PARTS.trayF = bk('furn:tray', MAT.vc); PARTS.tfileBox = bk('furn:tf', MAT.vc); PARTS.credF = bk('credF', MAT.vc);
+    PARTS.sheetMaq = bk('sheetMaq', MAT.sheet, { cast: true }); PARTS.sheetDraft = bk('sheetDraft', MAT.sheet); PARTS.frost = bk('frost', MAT.frost); PARTS.frost.renderOrder = 7; PARTS.shut = bk('shut', MAT.brassD);
+    bk('nbrBrick', MAT.brick, { parent: GRP.nbr }); bk('nbrRoof', MAT.vc, { parent: GRP.nbr });
+    for (const id of ROOMKEYS) box('sheetRooms', X0 + .12, 0, RZ[id] - RW + .12, RXF - .1, RH - .25, RZ[id] + RW - .12, { tile: .8 });
+    PARTS.sheetRooms = bk('sheetRooms', MAT.sheet); PARTS.sheetRooms.visible = false;
+    PARTS.scaf = bk('scaf', MAT.scaf, { parent: GRP.cut }); PARTS.scafPl = bk('scafPl', MAT.timber, { parent: GRP.cut }); PARTS.nbrScaf = bk('nbrScaf', MAT.scaf, { parent: GRP.nbr }); PARTS.nbrScafPl = bk('nbrScafPl', MAT.timber, { parent: GRP.nbr }); PARTS.bridgeDeck = bk('bridgeDeck', MAT.deck, { parent: GRP.bridge }); PARTS.bridgeRail = bk('bridgeRail', MAT.steel, { parent: GRP.bridge });
+    PARTS.bowl = new THREE.Mesh(bowlGeo, MAT.bowl); PARTS.bowl.receiveShadow = false; scene.add(PARTS.bowl);
+    AM.w10.shutMat = MAT.slat; for (const id of ARK) AM[id].mesh.material = MAT.infill;
+    /* the sheet cloths never cast; the roof never casts (the sun comes through the window wall) */
+    /* ---------- light: low warm sun through the window wall, cool sky fill, one warm interior fill. No bloom, no vignette. ---------- */
+    const hemi = new THREE.HemisphereLight(0xdde8f0, 0xb99a68, .95); scene.add(hemi);
+    const sun = new THREE.DirectionalLight(0xffe0b2, 2.7); sun.position.set(15, 15, -44); sun.target.position.set(0, 0, 0); scene.add(sun, sun.target);
+    sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); { const c = sun.shadow.camera; c.left = -26; c.right = 26; c.top = 15; c.bottom = -15; c.near = 10; c.far = 120; } sun.shadow.bias = -.0005; sun.shadow.normalBias = .04;
+    const fill = new THREE.PointLight(0xffe4c0, .55, 46, 1.2); fill.position.set(-1, 6.6, 0); scene.add(fill);
+    const door = new THREE.PointLight(0xffe0b8, .7, 9, 1.6); door.position.set(10, 2.6, 1.2); scene.add(door);
+    const pm = new THREE.PMREMGenerator(renderer); const ENV = pm.fromEquirectangular(T.sky).texture;
+    for (const k of ['oak', 'deck', 'timber', 'steel', 'brass', 'water', 'glass', 'roofM', 'scaf', 'brassD']) { MAT[k].envMap = ENV; MAT[k].envMapIntensity = k === 'glass' || k === 'water' ? 1 : .5; }
+    scene.background = T.sky; scene.fog = new THREE.Fog(0xe8e0cf, 110, 470);
+    const PAPERBG = new THREE.Color(0xf4f1e8);
+    /* recolour helpers for the four rooms (baked lit/dark colours swap alone) */
+    const shellAttr = M.shell.geometry.attributes.color, emisAttr = M.emis.geometry.attributes.color, miniAttr = PARTS.mini.geometry.attributes.color;
+    const SHBASE = Float32Array.from(shellAttr.array), EMBASE = Float32Array.from(emisAttr.array);
+    function setRoom(id, lit) {
+      const [a, b] = RANGE[id].s, k = lit ? 1 : 0;
+      for (let v = a; v < b; v++) { const face = Math.floor((v - a) / 4); const cs = face === 0 ? SHC[k ? 'lit' : 'dark'].floor : face === 1 ? SHC[k ? 'lit' : 'dark'].ceil : SHC[k ? 'lit' : 'dark'].wall; shellAttr.setXYZ(v, cs[0], cs[1], cs[2]); }
+      for (const [a2, b2] of RANGE[id].e) for (let v = a2; v < b2; v++) { const j = v * 3, m = lit ? 1 : .2; emisAttr.array[j] = EMBASE[j] * m; emisAttr.array[j + 1] = EMBASE[j + 1] * m; emisAttr.array[j + 2] = EMBASE[j + 2] * m; }
+      const [ma, mb] = MINI[id]; for (let v = ma; v < mb; v++) { const c = lit ? [.98, .92, .7] : [.42, .4, .37]; miniAttr.setXYZ(v, c[0], c[1], c[2]); }
+      shellAttr.needsUpdate = emisAttr.needsUpdate = miniAttr.needsUpdate = true;
+    }
+    /*__END_E1__*/
+
+    /* ---------- painters: every surface is drawn from S. The truth grammar is a finish, not a colour. ---------- */
+    const P = { paper: '#f6f1e2', cream: '#f3ecd7', ink: '#26221b', soft: '#5a5347', green: '#1f6a45', greenD: '#15553a', brass: '#b8912e', brassL: '#e0c36e', brassD: '#6d5110', you: '#1d4c99', br: '#c8701c', brD: '#8a4a0a' };
+    const fnt = (wt, px, fam) => wt + ' ' + px + 'px ' + (fam || F_SANS), MONO = 'ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace';
+    const money = mm, m1 = M1;
+    function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+    function hatch(g, x, y, w, h, col, gap, lw, ang) { g.save(); g.beginPath(); g.rect(x, y, w, h); g.clip(); g.strokeStyle = col; g.lineWidth = lw || 1.4; const d = w + h; for (let i = -d; i < d; i += gap) { g.beginPath(); if (ang === 45) { g.moveTo(x + i, y + h); g.lineTo(x + i + h, y); } else { g.moveTo(x + i, y); g.lineTo(x + i + h, y + h); } g.stroke(); } g.restore(); }
+    function stipple(g, x, y, w, h, col, n, seed) { const r = rng(seed || 9); g.fillStyle = col; for (let i = 0; i < n; i++) g.fillRect(x + r() * w, y + r() * h, 1.6, 1.6); }
+    function dashedRect(g, x, y, w, h, col, lw, dash) { g.save(); g.strokeStyle = col; g.lineWidth = lw || 3; g.setLineDash(dash || [12, 9]); g.strokeRect(x, y, w, h); g.restore(); }
+    function kindFrame(g, kind, w, h, col, inset) {
+      const i = inset == null ? 5 : inset; g.save(); g.strokeStyle = col || P.ink; g.fillStyle = col || P.ink;
+      if (kind === 'OBSERVED') { g.lineWidth = 8; g.strokeRect(i + 4, i + 4, w - 2 * i - 8, h - 2 * i - 8); }
+      else if (kind === 'RECORDED') { g.lineWidth = 3; g.strokeRect(i, i, w - 2 * i, h - 2 * i); g.lineWidth = 2; g.strokeRect(i + 8, i + 8, w - 2 * i - 16, h - 2 * i - 16); }
+      else if (kind === 'AUTHORED') { g.lineWidth = 5; g.strokeRect(i + 2, i + 2, w - 2 * i - 4, h - 2 * i - 4); }
+      else if (kind === 'COMPUTED') { g.globalAlpha = .12; g.fillRect(0, 0, w, h); g.globalAlpha = 1; g.lineWidth = 3; g.strokeRect(i, i, w - 2 * i, h - 2 * i); }
+      else if (kind === 'MODELED') { hatch(g, 0, 0, w, h, col || P.ink, 12, 1.2); g.lineWidth = 3; g.strokeRect(i, i, w - 2 * i, h - 2 * i); }
+      else if (kind === 'GENERATED') { stipple(g, 0, 0, w, h, col || P.ink, Math.round(w * h / 90), 4); g.lineWidth = 3; g.strokeRect(i, i, w - 2 * i, h - 2 * i); }
+      else { g.lineWidth = 5; g.setLineDash([16, 10]); g.strokeRect(i + 2, i + 2, w - 2 * i - 4, h - 2 * i - 4); }
+      g.restore();
+    }
+    function brassPlate(g, w, h) { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#dcc06a'); gr.addColorStop(.5, '#bf9a3a'); gr.addColorStop(1, '#a37f27'); g.fillStyle = gr; g.fillRect(0, 0, w, h); const r = rng(w + h); for (let i = 0; i < 60; i++) { g.fillStyle = `rgba(${r() < .5 ? '255,240,180' : '90,60,10'},${r() * .1})`; g.fillRect(0, r() * h, w, 1); } }
+    function enamel(g, w, h, col) { g.fillStyle = col || '#f5f0df'; g.fillRect(0, 0, w, h); }
+    function tapeBand(g, x, y, w, h, ink) { g.save(); g.beginPath(); g.rect(x, y, w, h); g.clip(); g.fillStyle = ink || P.br; g.fillRect(x, y, w, h); g.strokeStyle = 'rgba(38,34,27,.55)'; g.lineWidth = 6; for (let i = -h; i < w + h; i += 18) { g.beginPath(); g.moveTo(x + i, y + h); g.lineTo(x + i + h, y); g.stroke(); } g.restore(); }
+    const lit = (id, br_) => (br_ ? S.branch.funded : S.funded)[id];
+    /* dept signs */
+    function paintSign(id, isLit, byYou, br_, reality) {
+      const d = DEPT[id];
+      drawPlate('sign.' + id, (g, w, h) => {
+        if (reality) { enamel(g, w, h, '#eee8d6'); kindFrame(g, 'UNKNOWN', w, h, P.ink); g.fillStyle = P.ink; g.font = fnt(700, 54); g.fillText(d.name.toUpperCase(), 30, 74); g.font = fnt(600, 33); g.fillStyle = P.soft; g.fillText('Sheeted · funding not known outside', 30, 122); return; }
+        if (isLit) { enamel(g, w, h, byYou ? '#e9d48f' : '#f3edd8'); } else { enamel(g, w, h, '#b5b0a3'); hatch(g, 0, 0, w, h, 'rgba(70,64,52,.12)', 10, 1); }
+        kindFrame(g, 'RECORDED', w, h, isLit ? P.ink : '#4a453b');
+        g.fillStyle = isLit ? P.ink : '#4a453b'; g.font = fnt(700, 54); g.textBaseline = 'alphabetic'; g.fillText(d.name.toUpperCase(), 30, 74);
+        g.font = fnt(600, 33); g.fillStyle = byYou ? P.brassD : (isLit ? P.soft : '#3f3a30');
+        g.fillText(isLit ? (byYou ? 'Funded · Week 9 · ' + money(d.opensFor) : 'Funded · Year One') : 'Not funded · ' + money(d.opensFor) + ' would open it', 30, 122);
+        if (br_ && byYou) tapeBand(g, w - 150, 12, 140, 22, P.br);
+      });
+    }
+    /* door plate, folder, rail plates */
+    function paintDoor() {
+      const lapsed = 1 + S.lapsedExtra;
+      drawPlate('door.plate', (g, w, h) => {
+        brassPlate(g, w, h); kindFrame(g, 'RECORDED', w, h, P.brassD, 8);
+        g.fillStyle = P.brassD; g.font = fnt(700, 22); g.fillText('THE SEAT · GENERAL MANAGER · BOSTON', 30, 52);
+        g.fillStyle = '#231b08'; g.font = fnt(700, 70); g.fillText('Owed: ' + WD.openMatters.length, 30, 132);
+        g.font = fnt(600, 33); g.fillText('Lapsed while you were away: ' + lapsed, 30, 186);
+        g.font = fnt(500, 24); g.fillStyle = P.brassD; g.fillText(S.signed ? 'Held by you since ' + hm(S.seatStart) + '.' : S.left ? 'Seat ' + S.left + '.' : 'Nobody holds the seat.', 30, 232);
+        g.fillText('World · ' + AUTH.week, 30, 266);
+      });
+      drawPlate('door.folder', (g, w, h) => {
+        g.fillStyle = '#d8c28d'; g.fillRect(0, 0, w, h); g.fillStyle = '#e6d3a0'; g.fillRect(0, 0, w, h * .12);
+        g.fillStyle = P.ink; g.font = fnt(700, 21); g.fillText('LAPSED', 14, 38); g.font = fnt(400, 18, F_SERIF); wrap(g, AUTH.lapsed, 14, 64, w - 28, 22);
+        const r = rng(3); for (let i = 0; i < 700; i++) { g.fillStyle = `rgba(150,146,134,${.12 + r() * .35})`; g.fillRect(r() * w, r() * h, 1 + r() * 2.5, 1 + r() * 2); }
+        for (let i = 0; i < 8; i++) { const gr = g.createRadialGradient(r() * w, r() * h, 0, r() * w, r() * h, 40); g.fillStyle = 'rgba(160,156,146,.12)'; g.fillRect(0, 0, w, h); }
+        g.save(); g.translate(w * .58, h * .68); g.rotate(-.24); g.strokeStyle = P.ink; g.lineWidth = 4; g.strokeRect(-74, -27, 148, 54); g.lineWidth = 1.5; g.strokeRect(-68, -21, 136, 42); g.font = fnt(700, 34); g.lineWidth = 1.6; g.textAlign = 'center'; g.strokeText('NO ACT', 0, 12); g.restore();
+      });
+    }
+    function paintRailPlates() {
+      drawPlate('plate.rail', (g, w, h) => { brassPlate(g, w, h); kindFrame(g, 'AUTHORED', w, h, P.brassD, 7); g.fillStyle = '#231b08'; g.font = fnt(700, 30); g.fillText('READING THE RECORD', 26, 60); g.font = fnt(500, 27); g.fillText('Nothing here is yours.', 26, 102); g.font = fnt(500, 18); g.fillStyle = P.brassD; g.fillText('BOSTON · MEZZANINE RAIL', 26, 140); });
+      drawPlate('branch.plate', (g, w, h) => { if (S.history !== 'branch') return; enamel(g, w, h, '#f4e3c2'); tapeBand(g, 0, 0, w, 26, P.br); tapeBand(g, 0, h - 26, w, 26, P.br); g.fillStyle = P.brD; g.font = fnt(700, 27); g.fillText('YOUR BRANCH', 24, 68); g.fillStyle = P.ink; g.font = fnt(500, 21); g.fillText('Week 6 trade not made · diverged Week 6', 24, 98); g.fillText('cut with hindsight', 24, 124); });
+    }
+    /* clocks: the World's and yours */
+    function clockFace(g, w, h, hh, mmn, ink, label, stopped) {
+      const cx = w / 2, cy = h / 2, r = w * .46; const gr = g.createRadialGradient(cx, cy, r * .2, cx, cy, r); gr.addColorStop(0, '#fbf6e6'); gr.addColorStop(1, '#efe6cc'); g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, r, 0, 7); g.fill();
+      g.strokeStyle = P.brass; g.lineWidth = w * .04; g.stroke(); g.strokeStyle = ink; g.lineWidth = 2;
+      for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; g.beginPath(); g.moveTo(cx + Math.sin(a) * r * .82, cy - Math.cos(a) * r * .82); g.lineTo(cx + Math.sin(a) * r * .95, cy - Math.cos(a) * r * .95); g.stroke(); }
+      const hand = (a, len, lw) => { g.lineWidth = lw; g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + Math.sin(a) * len, cy - Math.cos(a) * len); g.stroke(); };
+      if (stopped) { g.setLineDash([6, 6]); g.strokeStyle = P.soft; g.lineWidth = 2; g.beginPath(); g.arc(cx, cy, r * .55, 0, 7); g.stroke(); g.setLineDash([]); }
+      else { g.strokeStyle = ink; hand(((hh % 12) + mmn / 60) / 12 * Math.PI * 2, r * .5, 5); hand(mmn / 60 * Math.PI * 2, r * .76, 3); }
+      g.fillStyle = ink; g.beginPath(); g.arc(cx, cy, 5, 0, 7); g.fill(); g.font = fnt(700, 15); g.textAlign = 'center'; g.fillText(label, cx, cy + r * .42); g.textAlign = 'left';
+    }
+    function paintClocks() {
+      drawPlate('clock.world', (g, w, h) => clockFace(g, w, h, Math.floor(S.clock / 60), S.clock % 60, P.ink, 'WORLD', false));
+      drawPlate('clock.you', (g, w, h) => { if (S.signed) clockFace(g, w, h, Math.floor(S.seatStart / 60), S.clock % 60, P.you, 'YOURS', false); else clockFace(g, w, h, 0, 0, P.soft, 'YOURS', true); });
+    }
+    /* in-tray folders, credenza doors, later slips */
+    function paintTray() {
+      const names = WD.openMatters.map(m => AUTH.q[m.id]);
+      ['callup', 'denver', 'owner'].forEach((k, i) => drawPlate('fold.' + k, (g, w, h) => { if (!S.signed) return; g.fillStyle = '#ecd9a6'; g.fillRect(0, 0, w, h); g.fillStyle = P.ink; g.font = fnt(600, 21, F_SANS); g.textBaseline = 'middle'; g.fillText(names[i], 12, h / 2 + 1); g.textBaseline = 'alphabetic'; }));
+      const fs = S.history === 'branch' ? S.branch.funded : S.funded;
+      const rows = [['Owner’s budget folder', 'opens: never — it is the owner’s'], ['Scouting board', fs.scouting ? 'opens: now — Scouting is funded' : 'opens: if Scouting is funded'], ['Pending offer', 'opens: when signed and delivered']];
+      ['owner', 'scout', 'offer'].forEach((k, i) => drawPlate('cred.' + k, (g, w, h) => { if (!S.signed) return; brassPlate(g, w, h); kindFrame(g, 'AUTHORED', w, h, P.brassD, 6); g.fillStyle = '#231b08'; g.font = fnt(700, 30); g.fillText(rows[i][0], 18, 50); g.font = fnt(500, 25); g.fillText(rows[i][1], 18, 92); }));
+      const sl = [['WEEK 10', WD.openMatters[1].what], ['WEEK 11', 'Nothing scheduled.'], ['WEEK 12', 'Nothing scheduled.']];
+      [10, 11, 12].forEach((w_, i) => drawPlate('slip.' + w_, (g, w, h) => { enamel(g, w, h, '#f5efdc'); kindFrame(g, 'AUTHORED', w, h, P.ink, 5); g.fillStyle = P.ink; g.font = fnt(700, 27); g.fillText(sl[i][0], 18, 42); g.font = fnt(400, 21, F_SERIF); wrap(g, sl[i][1], 18, 72, w - 36, 24); }));
+    }
+    /* trade file top, plaques */
+    function paintFile() {
+      const br_ = S.history === 'branch';
+      drawPlate('tf.top', (g, w, h) => {
+        if (br_) { g.strokeStyle = P.br; g.lineWidth = 4; g.setLineDash([16, 10]); g.strokeRect(6, 6, w - 12, h - 12); g.setLineDash([]); g.font = fnt(700, 20); g.fillStyle = P.brD; g.fillText('NOT MADE', 20, h - 22); return; }
+        g.fillStyle = '#2e7d4f'; g.fillRect(0, 0, w, h); g.strokeStyle = '#eee7cf'; g.lineWidth = 3; g.strokeRect(14, 14, w - 28, h - 28);
+        g.fillStyle = '#eee7cf'; g.textAlign = 'center'; g.font = fnt(700, 46); g.fillText('TRADE', w / 2, h * .33); g.fillText('FILE', w / 2, h * .33 + 46); g.fillStyle = P.brassL; g.fillRect(34, h * .55, w - 68, 3); g.fillStyle = '#eee7cf'; g.font = fnt(600, 20); g.fillText('FRONT OFFICE', w / 2, h * .55 + 34);
+        g.font = fnt(500, 17); g.fillText(TF.with + ' · Week 6', w / 2, h * .55 + 60);
+        g.save(); g.translate(w * .5, h * .86); g.rotate(-.12); g.strokeStyle = '#eee7cf'; g.lineWidth = 3; g.strokeRect(-58, -18, 116, 36); g.lineWidth = 1.2; g.strokeRect(-53, -13, 106, 26); g.font = fnt(700, 21); g.fillText('SIGNED', 0, 7); g.restore(); g.textAlign = 'left';
+      });
+    }
+    function paintArches() {
+      const br_ = S.history === 'branch';
+      for (const a of ARCHES()) {
+        const cov = S.arch[a.id].cover, q = a.name.split(' · '), yours = a.state === 'bricked' || a.state === 'passage';
+        drawPlate('arch.' + a.id, (g, w, h) => {
+          enamel(g, w, h, '#f4efdf'); kindFrame(g, a.state === 'shutter' ? 'UNKNOWN' : a.state === 'open' ? 'AUTHORED' : 'RECORDED', w, h, P.ink, 5);
+          g.fillStyle = P.soft; g.font = fnt(700, 20); g.fillText((q[0] || '').toUpperCase(), 24, 38);
+          g.fillStyle = P.ink; g.font = fnt(600, 33); const ex = wrap(g, q.slice(1).join(' · ') || '', 24, 78, w - 48, 36);
+          g.font = fnt(700, 17); g.fillStyle = a.state === 'passage' ? P.brD : yours ? P.you : P.soft; g.textAlign = 'right';
+          g.fillText(a.state === 'bricked' ? 'BRICKED · BY YOUR ACT' : a.state === 'passage' ? 'OPEN · YOUR BRANCH WENT THROUGH' : a.state === 'open' ? 'OPEN · STILL LIVE' : 'SHUTTER · OPENS ON ITS DATE', w - 24, 38); g.textAlign = 'left';
+          const sy = h * .69; g.fillStyle = 'rgba(38,34,27,.08)'; g.fillRect(14, sy, w - 28, h - sy - 14); g.strokeStyle = 'rgba(38,34,27,.4)'; g.lineWidth = 1; g.strokeRect(14, sy, w - 28, h - sy - 14);
+          if (cov && a.answer) { g.fillStyle = P.ink; g.font = fnt(400, 21, F_SERIF); wrap(g, a.answer, 24, sy + 30, w - 48, 24); }
+          else { g.fillStyle = P.soft; g.font = fnt(500, 17); g.fillText(a.state === 'open' || a.state === 'shutter' ? 'Sealed until the seat acts.' : 'Answer under the brass cover.', 24, sy + 36); }
+          if (a.id === 'w6' && S.branch) { g.save(); g.translate(w - 150, h * .58); g.rotate(-.1); g.strokeStyle = P.br; g.lineWidth = 3; g.strokeRect(-118, -22, 236, 44); g.font = fnt(700, 20); g.fillStyle = P.brD; g.textAlign = 'center'; g.fillText('CUT WITH HINDSIGHT', 0, 7); g.restore(); g.textAlign = 'left'; }
+        });
+      }
+    }
+    function paintHistory() {
+      const br_ = S.history === 'branch';
+      const pq = (id, k, head, body, ink, dashed) => drawPlate('hist.' + id, (g, w, h) => {
+        if (dashed) { g.fillStyle = 'rgba(255,255,255,.0)'; g.strokeStyle = dashed === 'br' ? P.br : P.ink; g.lineWidth = 4; g.setLineDash([14, 10]); g.strokeRect(8, 8, w - 16, h - 16); g.setLineDash([]); g.fillStyle = P.soft; g.font = fnt(600, 20); g.fillText(head, 20, h - 26); if (body) { g.font = fnt(400, 19, F_SERIF); wrap(g, body, 20, 50, w - 40, 24); } return; }
+        brassPlate(g, w, h); kindFrame(g, k, w, h, P.brassD, 8); g.fillStyle = ink || '#231b08'; g.font = fnt(700, 22); g.fillText(head, 20, 46); g.font = fnt(500, 25, F_SERIF); wrap(g, body, 20, 88, w - 40, 30);
+      });
+      pq('y1', 'RECORDED', 'YEAR ONE', 'Funded Business over Basketball Ops.');
+      pq('w6', 'RECORDED', 'ACT ' + W6.no + ' · WEEK 6', br_ ? '' : 'Traded ' + P_OUT + ' for ' + P_IN + '.', null, br_ ? 'br' : null);
+      if (br_) drawPlate('hist.w6', (g, w, h) => { g.strokeStyle = P.br; g.lineWidth = 4; g.setLineDash([14, 10]); g.strokeRect(8, 8, w - 16, h - 16); g.setLineDash([]); g.fillStyle = P.brD; g.font = fnt(700, 20); g.fillText('NOT MADE', 20, 46); g.fillStyle = P.soft; g.font = fnt(400, 19, F_SERIF); wrap(g, 'Week 6 · the trade was not made in this branch.', 20, 82, w - 40, 24); });
+      pq('w9', 'RECORDED', 'WEEK 9', br_ ? '' : LOSS + '.', null, br_ ? 'ink' : null);
+      if (br_) drawPlate('hist.w9', (g, w, h) => { g.strokeStyle = P.ink; g.lineWidth = 4; g.setLineDash([14, 10]); g.strokeRect(8, 8, w - 16, h - 16); g.setLineDash([]); g.fillStyle = P.soft; g.font = fnt(700, 20); g.fillText('SEALED', 20, 46); g.font = fnt(400, 19, F_SERIF); wrap(g, 'Week 9 has not been played in this branch.', 20, 82, w - 40, 24); });
+      drawPlate('hist.mine', (g, w, h) => { if (!S.po) return; brassPlate(g, w, h); kindFrame(g, 'RECORDED', w, h, P.you, 8); g.fillStyle = P.you; g.font = fnt(700, 22); g.fillText('ACT ' + S.po.no + ' · WEEK 9', 20, 46); g.font = fnt(600, 25, F_SERIF); wrap(g, 'Funded ' + DEPT[S.po.dept].name + ' · ' + money(S.po.price) + '.', 20, 88, w - 40, 30); g.font = fnt(600, 17); g.fillText(br_ ? 'HELD IN YOUR BRANCH' : 'YOUR INK', 20, h - 24); });
+      drawPlate('hist.untraced', (g, w, h) => { g.strokeStyle = P.ink; g.lineWidth = 4; g.setLineDash([14, 10]); g.strokeRect(8, 8, w - 16, h - 16); g.setLineDash([]); g.fillStyle = P.soft; g.font = fnt(600, 21); g.fillText('No record found.', 20, h - 28); });
+    }
+    function paintTags() {
+      const g = TG.g; g.clearRect(0, 0, TG.c.width, TG.c.height);
+      for (let i = 0; i < 5; i++) {
+        const cx = i * 256 + 128, cy = 128, active = S.why === i + 1, r = active ? 118 : 100;
+        g.fillStyle = 'rgba(30,20,5,.35)'; g.beginPath(); g.arc(cx + 5, cy + 7, r, 0, 7); g.fill();
+        const gr = g.createRadialGradient(cx - 30, cy - 30, 10, cx, cy, r); gr.addColorStop(0, '#f0d47c'); gr.addColorStop(.6, '#c39d3d'); gr.addColorStop(1, '#8f6c1a'); g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, r, 0, 7); g.fill();
+        g.strokeStyle = '#3c2c07'; g.lineWidth = active ? 9 : 5; g.stroke(); g.fillStyle = '#231b08'; g.font = fnt(700, 130); g.textAlign = 'center'; g.fillText(String(i + 1), cx, cy + 45); g.textAlign = 'left';
+      }
+      TG.tex.needsUpdate = true;
+    }
+    /* the big boards */
+    function paintUnseen(m, head, lines) { const { g, w, h } = m.userData; g.fillStyle = '#eee8d6'; g.fillRect(0, 0, w, h); kindFrame(g, 'OBSERVED', w, h, P.ink, 10); g.fillStyle = P.ink; g.font = fnt(700, Math.round(h * .075)); g.fillText(head, 40, h * .17); g.font = fnt(400, Math.round(h * .056), F_SERIF); let y = h * .32; for (const t of lines) y = wrap(g, t, 40, y, w - 80, h * .075) + h * .025; m.userData.tex.needsUpdate = true; }
+    const RTAX = REAL_TAXSAL.toLocaleString('en-US');
+    function paintRoster(reality) {
+      if (reality) return paintUnseen(BRD.roster, 'BOSTON · REALITY', ['Observed from outside.', 'Boston’s real roster is not drawn in this authored building.']);
+      const m = BRD.roster, { g, w, h } = m.userData, br_ = S.history === 'branch', b = books(br_ ? 'branch' : 'record'), why = S.why > 0 && !br_;
+      g.fillStyle = P.green; g.fillRect(0, 0, w, h); const r = rng(4); for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(255,255,255,${r() * .03})`; g.fillRect(r() * w, r() * h, 2 + r() * 8, 1); }
+      kindFrame(g, 'RECORDED', w, h, '#efe7cb', 14);
+      g.fillStyle = '#f3ecd3'; g.font = fnt(700, 50); g.fillText('BOSTON · WHO WE PAY', 52, 96); g.font = fnt(500, 25); g.globalAlpha = .85; g.fillText((br_ ? 'Your branch · Year Two · Week 9 · computed' : 'The World’s roster · Year Two · Week 9 · recorded'), 52, 134); g.globalAlpha = 1;
+      const k = 500 / TF_IN, x0 = 52;
+      const bar = (y, wv, fill, txt, txt2, dashed) => { if (dashed) { g.save(); g.strokeStyle = '#f3ecd3'; g.lineWidth = 3; g.setLineDash([12, 9]); g.strokeRect(x0, y, wv * k, 54); g.restore(); g.fillStyle = '#f3ecd3'; g.font = fnt(600, 26); g.fillText(txt, x0 + 14, y + 36); g.font = fnt(500, 23); g.fillText(txt2, x0 + wv * k + 16, y + 35); } else { g.fillStyle = fill; g.fillRect(x0, y, wv * k, 54); g.fillStyle = '#231b08'; g.font = fnt(700, 27); g.fillText(txt, x0 + 14, y + 36); g.fillStyle = '#f3ecd3'; g.font = fnt(500, 23); g.fillText(txt2, x0 + wv * k + 16, y + 35); } };
+      if (!br_) { g.fillStyle = '#f3ecd3'; g.font = fnt(600, 25); g.fillText(P_IN, x0, 186); bar(196, TF_IN, P.brassL, money(TF_IN), 'arrived by trade · Week 6'); if (why) bar(258, TF_OUT, '', money(TF_OUT), P_OUT + ' · left in Week 6', true); }
+      else { g.fillStyle = '#f3ecd3'; g.font = fnt(600, 25); g.fillText(P_OUT, x0, 186); bar(196, TF_OUT, '#f3ecd3', money(TF_OUT), 'stays'); g.fillText(P_IN, x0, 284); bar(294, TF_IN, '', '—', 'not on the board · trade not made', true); }
+      g.fillStyle = '#f3ecd3'; g.font = fnt(500, 25); g.globalAlpha = .9; g.fillText('All other contracts (not itemised in this prototype): ' + money(PAY - TF_IN), x0, br_ ? 384 : why ? 372 : 322); g.globalAlpha = 1;
+      g.font = fnt(600, 21); g.fillText('PAYROLL', 52, 448); g.font = fnt(700, 112); g.fillText(money(b.pay), 48, 545);
+      g.font = fnt(600, 33); g.fillText(b.over > 0 ? money(b.over) + ' over the World’s ' + money(LINE) + ' line' : money(-b.over) + ' under the World’s ' + money(LINE) + ' line', 452, 500); g.fillText('Projected tax ' + money(b.tax), 452, 544);
+      g.font = fnt(500, 27); g.fillText(br_ ? 'No one arrived by trade.' : 'Arrived by trade: ' + P_IN, 452, 596);
+      if (br_) { tapeBand(g, 0, 0, w, 20, P.br); tapeBand(g, 0, h - 20, w, 20, P.br); }
+      m.userData.tex.needsUpdate = true;
+    }
+    function paintCap(reality) {
+      if (reality) return paintUnseen(BRD.cap, 'BOSTON · REALITY', ['Cap payroll ≈ ' + money(REAL_CAPPAY) + '.', 'Tax salary $' + RTAX + ': about ' + money(REALTAX - REAL_TAXSAL) + ' under the ' + money(REALTAX) + ' line.', 'Two numbers, side by side. [verify]']);
+      const m = BRD.cap, { g, w, h } = m.userData, br_ = S.history === 'branch', b = books(br_ ? 'branch' : 'record'), why = S.why > 0 && !br_, before = PAY - TF_DELTA;
+      g.fillStyle = '#f1ead6'; g.fillRect(0, 0, w, h); const r = rng(6); for (let i = 0; i < 600; i++) { g.fillStyle = `rgba(90,80,60,${r() * .04})`; g.fillRect(r() * w, r() * h, 2 + r() * 6, 1); }
+      kindFrame(g, 'RECORDED', w, h, P.ink, 12);
+      g.fillStyle = P.ink; g.font = fnt(700, 46); g.fillText('CAP WALL', 48, 86); g.font = fnt(500, 23); g.fillStyle = P.soft; g.fillText('Payroll against the World’s lines · authored, not the NBA’s', 48, 120);
+      const X0_ = 60, k = 740 / 250e6, y0 = 250, bh = 84; g.fillStyle = '#ddd4bb'; g.fillRect(X0_, y0, 250e6 * k, bh);
+      const fillTo = (v, col) => { g.fillStyle = col; g.fillRect(X0_, y0, Math.min(v, LINE) * k, bh); };
+      fillTo(b.pay, P.green);
+      if (b.over > 0) { g.save(); g.beginPath(); g.rect(X0_ + LINE * k, y0, b.over * k, bh); g.clip(); g.fillStyle = P.brassL; g.fillRect(X0_ + LINE * k, y0, b.over * k, bh); hatch(g, X0_ + LINE * k, y0, b.over * k, bh, P.ink, 9, 2); g.restore(); }
+      g.strokeStyle = P.ink; g.lineWidth = 2; g.strokeRect(X0_, y0, 250e6 * k, bh);
+      for (let v = 0; v <= 250; v += 50) { const x = X0_ + v * 1e6 * k; g.beginPath(); g.moveTo(x, y0 + bh); g.lineTo(x, y0 + bh + 12); g.stroke(); g.fillStyle = P.soft; g.font = fnt(500, 19); g.textAlign = 'center'; g.fillText(v + 'M', x, y0 + bh + 34); g.textAlign = 'left'; }
+      g.fillStyle = P.brass; g.fillRect(X0_ + LINE * k - 3, y0 - 44, 6, bh + 88); g.fillStyle = P.brassD; g.font = fnt(700, 21); g.textAlign = 'right'; g.fillText('WORLD TAX LINE ' + money(LINE), X0_ + LINE * k - 12, y0 - 24); g.textAlign = 'left';
+      g.save(); g.strokeStyle = P.ink; g.lineWidth = 3; g.setLineDash([3, 6]); g.beginPath(); g.moveTo(X0_ + HARD * k, y0 - 30); g.lineTo(X0_ + HARD * k, y0 + bh + 10); g.stroke(); g.restore(); g.fillStyle = P.soft; g.font = fnt(600, 17); g.textAlign = 'right'; g.fillText('HARD LIMIT ' + money(HARD), X0_ + HARD * k + 4, y0 - 44); g.textAlign = 'left';
+      if (why) { g.save(); g.strokeStyle = P.ink; g.lineWidth = 3; g.setLineDash([12, 8]); g.strokeRect(X0_ + 2, y0 + bh + 48, before * k - 2, 38); g.restore(); g.fillStyle = P.ink; g.font = fnt(600, 21); g.fillText('ghost ' + money(before) + ' · computed: ' + m1(PAY) + ' − (' + m1(TF_IN) + ' − ' + m1(TF_OUT) + ')', X0_ + 12, y0 + bh + 74); }
+      if (br_) { g.save(); g.strokeStyle = P.ink; g.lineWidth = 3; g.setLineDash([12, 8]); g.strokeRect(X0_ + 2, y0 + bh + 48, PAY * k - 2, 38); g.restore(); g.fillStyle = P.ink; g.font = fnt(600, 21); g.fillText('the record: ' + money(PAY) + ' (ghost)', X0_ + 12, y0 + bh + 74); }
+      g.fillStyle = P.ink; g.font = fnt(700, 92); g.fillText(money(b.pay), 48, 566); g.font = fnt(700, 40); g.fillStyle = b.over > 0 ? P.brassD : P.green; g.fillText(b.over > 0 ? money(b.over) + ' over' : money(-b.over) + ' under', 470, 566);
+      if (br_) { tapeBand(g, 0, 0, w, 20, P.br); tapeBand(g, 0, h - 20, w, 20, P.br); }
+      m.userData.tex.needsUpdate = true;
+    }
+    function paintTax(reality) {
+      if (reality) return paintUnseen(BRD.tax, 'REALITY', ['Not shown.', 'The real tax is charged on tax salary, in rising brackets.']);
+      const m = BRD.tax, { g, w, h } = m.userData, br_ = S.history === 'branch', b = books(br_ ? 'branch' : 'record');
+      g.fillStyle = '#e6e2d5'; g.fillRect(0, 0, w, h); const r = rng(8); for (let i = 0; i < 700; i++) { g.fillStyle = `rgba(70,64,50,${r() * .05})`; g.fillRect(r() * w, r() * h, 1 + r() * 3, 1); }
+      g.fillStyle = 'rgba(38,34,27,.1)'; g.fillRect(0, 0, w, h); g.strokeStyle = P.ink; g.lineWidth = 3; g.strokeRect(10, 10, w - 20, h - 20);
+      g.fillStyle = P.ink; g.textAlign = 'center'; g.font = '700 38px ' + MONO; g.fillText('TAX LEDGER', w / 2, 84); g.font = '500 20px ' + MONO; g.fillText('Boston · Year Two · Wk 9', w / 2, 116); g.textAlign = 'left';
+      const row = (y, a, v, big) => { g.font = (big ? '700 ' : '500 ') + (big ? 30 : 26) + 'px ' + MONO; g.fillText(a, 30, y); g.textAlign = 'right'; g.font = (big ? '700 ' : '500 ') + (big ? 60 : 44) + 'px ' + MONO; g.fillText(v, w - 30, y + (big ? 56 : 44)); g.textAlign = 'left'; };
+      g.setLineDash([6, 6]); g.beginPath(); g.moveTo(30, 138); g.lineTo(w - 30, 138); g.stroke(); g.setLineDash([]);
+      row(178, br_ ? 'OVER THE LINE' : 'OVER THE LINE', br_ ? '—' : m1(b.over)); row(268, '× RATE', String(MULT)); g.fillRect(30, 350, w - 60, 3); row(390, 'PROJECTED TAX', m1(b.tax), true);
+      g.font = fnt(400, 24, F_SERIF); g.fillStyle = P.ink; const y1 = wrap(g, br_ ? 'Under the line, so nothing is charged. World rule, authored: flat ' + MULT + '×.' : 'World rule, authored: a flat ' + MULT + '× over the line.', 30, 530, w - 60, 30); g.font = fnt(600, 24, F_SERIF); wrap(g, 'The NBA’s real tax is incremental.', 30, y1 + 12, w - 60, 30);
+      g.font = fnt(700, 18); g.fillStyle = P.soft; g.fillText('COMPUTED · $ millions', 30, h - 40);
+      g.fillStyle = 'rgba(0,0,0,.25)'; for (let x = 10; x < w - 10; x += 14) { g.beginPath(); g.moveTo(x, h - 10); g.lineTo(x + 7, h - 22); g.lineTo(x + 14, h - 10); g.fill(); }
+      if (br_) { tapeBand(g, 0, 0, w, 18, P.br); }
+      m.userData.tex.needsUpdate = true;
+    }
+    function paintCash(reality) {
+      if (reality) return paintUnseen(BRD.cash, 'CASH', ['Not known outside.']);
+      const m = BRD.cash, { g, w, h } = m.userData; brassPlate(g, w, h); kindFrame(g, 'AUTHORED', w, h, P.brassD, 8);
+      g.fillStyle = '#231b08'; g.font = fnt(700, 26); g.fillText('CASH', 26, 46); g.font = fnt(700, 84); g.fillText(money(S.cash), 22, 142); g.font = fnt(500, 21); g.fillStyle = P.brassD; g.fillText('illustrative · tax is projected, not yet due', 26, 190);
+      if (S.history === 'branch') tapeBand(g, 0, 0, w, 14, P.br); m.userData.tex.needsUpdate = true;
+    }
+    function paintFilm(reality) {
+      if (reality) return paintUnseen(BRD.film, 'REALITY', ['Live event:', '[next preseason game · from the Reality feed]']);
+      const m = BRD.film, { g, w, h } = m.userData, br_ = S.history === 'branch';
+      g.fillStyle = '#f2ecd9'; g.fillRect(0, 0, w, h);
+      if (br_) { dashedRect(g, 24, 24, w - 48, h - 48, P.br, 5, [16, 10]); g.fillStyle = P.brD; g.font = fnt(700, 34); g.textAlign = 'center'; g.fillText('SEALED', w / 2, h / 2 - 12); g.font = fnt(500, 25); g.fillStyle = P.ink; g.fillText('Not played in this branch.', w / 2, h / 2 + 30); g.textAlign = 'left'; m.userData.tex.needsUpdate = true; return; }
+      kindFrame(g, 'RECORDED', w, h, P.ink, 10); g.fillStyle = P.soft; g.font = fnt(700, 21); g.fillText('LAST GAME · AT HOME · WEEK 9', 34, 62);
+      g.fillStyle = P.ink; g.font = fnt(700, 92); g.fillText('LOST ' + LOSS.match(/\d+–\d+/)[0], 34, 170); g.font = fnt(600, 33); g.fillText('vs Denver', 34, 216); g.font = fnt(400, 21, F_SERIF); wrap(g, 'Recorded. The tape shows the game; it does not say why.', 34, 262, S.why === 5 ? 350 : w - 68, 26);
+      if (S.why === 5) { g.save(); g.strokeStyle = P.ink; g.lineWidth = 3; g.setLineDash([12, 8]); rr(g, w - 232, 88, 196, 214, 14); g.stroke(); g.setLineDash([]); g.fillStyle = P.soft; g.font = fnt(700, 76); g.textAlign = 'center'; g.fillText('?', w - 134, 220); g.font = fnt(700, 17); g.fillText('NOT DETERMINED', w - 134, 330); g.restore(); g.textAlign = 'left'; }
+      m.userData.tex.needsUpdate = true;
+    }
+    function paintDraft() {
+      const m = BRD.draft, { g, w, h } = m.userData; g.fillStyle = '#e9e2cd'; g.fillRect(0, 0, w, h); kindFrame(g, 'AUTHORED', w, h, P.ink, 8); g.fillStyle = P.ink; g.font = fnt(700, 30); g.fillText('DRAFT BOARD', 24, 52);
+      for (let r_ = 0; r_ < 2; r_++) for (let c = 0; c < 5; c++) dashedRect(g, 24 + c * 94, 84 + r_ * 130, 78, 110, P.soft, 2, [8, 6]); m.userData.tex.needsUpdate = true;
+    }
+    function paintBlot() {
+      const m = BRD.blot, { g, w, h } = m.userData, sg = S.signed;
+      g.fillStyle = '#f6f0dc'; g.fillRect(0, 0, w, h); const r = rng(12); for (let i = 0; i < 700; i++) { g.fillStyle = `rgba(120,100,60,${r() * .05})`; g.fillRect(r() * w, r() * h, 1 + r() * 4, 1); }
+      kindFrame(g, sg ? 'RECORDED' : 'AUTHORED', w, h, P.ink, 12);
+      g.fillStyle = P.soft; g.font = fnt(700, 22); g.fillText('BOSTON · YEAR TWO · WEEK 9 · THE SEAT', 50, 66); g.fillStyle = P.ink; g.font = fnt(500, 50, F_SERIF); g.fillText(sg ? 'Signed. You hold the seat.' : 'The ledger of the seat', 50, 128);
+      g.strokeStyle = P.ink; g.lineWidth = 2; g.beginPath(); g.moveTo(50, 148); g.lineTo(w - 50, 148); g.stroke();
+      const col = (x, head, items) => { g.fillStyle = P.soft; g.font = fnt(700, 22); g.fillText(head, x, 196); g.fillStyle = P.ink; g.font = fnt(400, 34, F_SERIF); let y = 246; for (const t of items) { y = wrap(g, '· ' + t, x, y, 400, 40) + 8; } };
+      col(50, sg ? 'GAVE UP' : 'YOU GIVE UP', LEDGER.gave.map(x => x.text)); col(540, sg ? 'GOT' : 'YOU GET', LEDGER.got);
+      g.strokeStyle = P.ink; g.lineWidth = 2; g.setLineDash([3, 5]); g.beginPath(); g.moveTo(50, 540); g.lineTo(560, 540); g.stroke(); g.setLineDash([]);
+      g.fillStyle = P.soft; g.font = fnt(500, 21); g.fillText(sg ? 'signed ' + hm(S.seatStart) + ' · your clock started' : 'Sitting is free. Signing is the act.', 50, 578);
+      if (sg) { g.strokeStyle = P.you; g.lineWidth = 5; g.lineCap = 'round'; g.beginPath(); g.moveTo(70, 520); g.bezierCurveTo(120, 440, 150, 590, 200, 500); g.bezierCurveTo(230, 450, 260, 560, 310, 500); g.bezierCurveTo(350, 460, 380, 540, 440, 505); g.stroke(); g.lineCap = 'butt';
+        g.save(); g.translate(760, 560); g.rotate(-.08); g.strokeStyle = P.you; g.lineWidth = 4; g.strokeRect(-130, -42, 260, 84); g.lineWidth = 2; g.strokeRect(-122, -34, 244, 68); g.fillStyle = P.you; g.font = fnt(700, 36); g.textAlign = 'center'; g.fillText('RECORDED', 0, 12); g.restore(); g.textAlign = 'left'; }
+      if (S.history === 'branch') tapeBand(g, 0, 0, w, 20, P.br);
+      m.userData.tex.needsUpdate = true;
+    }
+    function paintPO() {
+      const m = BRD.po, { g, w, h } = m.userData; if (!S.po) return; g.fillStyle = '#f7f2df'; g.fillRect(0, 0, w, h); kindFrame(g, 'RECORDED', w, h, P.you, 8);
+      g.fillStyle = P.you; g.font = fnt(700, 22); g.textAlign = 'center'; g.fillText('PURCHASE ORDER', w / 2, 52); g.font = fnt(700, 78); g.fillText('' + S.po.no, w / 2, 140); g.font = fnt(600, 30); g.fillText('Fund ' + DEPT[S.po.dept].name, w / 2, 200); g.font = fnt(700, 52); g.fillText(money(S.po.price), w / 2, 270); g.font = fnt(500, 21); g.fillText('Week 9 · ' + fmtClock(S.po.clock), w / 2, 320); g.font = fnt(700, 20); g.fillText('YOUR INK', w / 2, 372); g.textAlign = 'left'; m.userData.tex.needsUpdate = true;
+    }
+    function paintCourt() {
+      const m = BRD.court, { g, w, h } = m.userData; g.clearRect(0, 0, w, h); const ppm = 90, lx = w, laneW = 2.4 * ppm, laneL = 3.7 * ppm, cy = h / 2;
+      g.fillStyle = 'rgba(31,106,69,.86)'; g.fillRect(lx - laneL, cy - laneW / 2, laneL, laneW); g.strokeStyle = 'rgba(250,246,232,.95)'; g.lineWidth = 4; g.strokeRect(lx - laneL, cy - laneW / 2, laneL, laneW);
+      g.beginPath(); g.arc(lx - laneL, cy, 1.2 * ppm, 0, 7); g.stroke(); g.beginPath(); g.arc(lx - .5 * ppm, cy, 5.1 * ppm, Math.PI * .68, Math.PI * 1.32); g.stroke();
+      g.strokeRect(6, 6, w - 12, h - 12); g.lineWidth = 3; g.beginPath(); g.moveTo(lx - laneL, cy - laneW / 2); g.lineTo(lx - laneL, cy + laneW / 2); g.stroke(); m.userData.tex.needsUpdate = true;
+    }
+    /* the arena bowl: the state of the next home night is drawn on the treads */
+    function paintBowl() {
+      const g = BOWL.g, W = 1024, cxp = W / 2, ppm = W / (2 * RMAX), known = S.funded.ticketing || (S.branch && S.history === 'branch' && S.branch.funded.ticketing);
+      g.fillStyle = known ? '#ebe4d2' : '#a9a69d'; g.fillRect(0, 0, W, W);
+      /* court floor in the middle */
+      g.fillStyle = '#d9b984'; g.beginPath(); g.arc(cxp, cxp, R0 * ppm, 0, 7); g.fill(); g.strokeStyle = 'rgba(255,255,255,.85)'; g.lineWidth = 3; g.strokeRect(cxp - 5.2 * ppm, cxp - 2.6 * ppm, 10.4 * ppm, 5.2 * ppm); g.beginPath(); g.moveTo(cxp, cxp - 2.6 * ppm); g.lineTo(cxp, cxp + 2.6 * ppm); g.stroke(); g.beginPath(); g.arc(cxp, cxp, 1.2 * ppm, 0, 7); g.stroke();
+      /* rows and aisles */
+      g.strokeStyle = known ? 'rgba(90,80,60,.35)' : 'rgba(40,38,34,.5)'; g.lineWidth = 1.2;
+      for (let r_ = R0 + .45; r_ < RMAX; r_ += .45) { g.beginPath(); g.arc(cxp, cxp, r_ * ppm, 0, 7); g.stroke(); }
+      g.lineWidth = 2; for (let a = 0; a < 16; a++) { const an = a / 16 * Math.PI * 2; g.beginPath(); g.moveTo(cxp + Math.cos(an) * R0 * ppm, cxp + Math.sin(an) * R0 * ppm); g.lineTo(cxp + Math.cos(an) * RMAX * ppm, cxp + Math.sin(an) * RMAX * ppm); g.stroke(); }
+      if (known) { g.save(); g.beginPath(); g.arc(cxp, cxp, RMAX * ppm, 0, 7); g.arc(cxp, cxp, R0 * ppm, 0, 7, true); g.clip(); g.fillStyle = 'rgba(240,235,220,.5)'; g.fillRect(0, 0, W, W); g.strokeStyle = 'rgba(48,44,38,.72)'; g.lineWidth = 2.4; for (let i = -W; i < W * 2; i += 15) { g.beginPath(); g.moveTo(i, W); g.lineTo(i + W, 0); g.stroke(); } g.restore(); }
+      else { g.fillStyle = 'rgba(30,30,28,.28)'; for (let i = 0; i < 1600; i++) { const an = Math.random() * 0, x = Math.floor(i * 37 % W), y = Math.floor(i * 91 % W); g.fillRect(x, y, 3, 2); } }
+      T.bowl.needsUpdate = true;
+    }
+    /* League counter and the record building */
+    function paintLeague() {
+      const m = BRD.league, { g, w, h } = m.userData; g.fillStyle = '#f6e7c8'; g.fillRect(0, 0, w, h); const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, 'rgba(255,240,200,.6)'); gr.addColorStop(1, 'rgba(210,160,90,.25)'); g.fillStyle = gr; g.fillRect(0, 0, w, h);
+      g.fillStyle = '#efe3c4'; g.fillRect(560, 40, 400, 170); g.strokeStyle = '#8a6a2a'; g.lineWidth = 4; g.strokeRect(560, 40, 400, 170); g.fillStyle = P.ink; g.font = fnt(700, 22); g.fillText('PUBLIC BOARD · signed facts only', 580, 74); for (let i = 0; i < 5; i++) { g.fillStyle = '#fffaf0'; g.fillRect(580 + i * 76, 96, 62, 88); g.strokeStyle = 'rgba(60,50,30,.5)'; g.lineWidth = 1.5; g.strokeRect(580 + i * 76, 96, 62, 88); g.fillStyle = 'rgba(60,50,30,.35)'; for (let l = 0; l < 4; l++) g.fillRect(588 + i * 76, 110 + l * 14, 46, 3); }
+      g.fillStyle = '#5b3d1f'; g.fillRect(0, 300, w, 150); g.fillStyle = '#7b5730'; g.fillRect(0, 290, w, 20);
+      ['OFFER', 'SIGNED', 'DELIVERED'].forEach((t, i) => { const x = 60 + i * 300; g.fillStyle = '#a9812c'; g.fillRect(x, 226, 240, 64); g.fillStyle = '#231b08'; g.font = fnt(700, 26); g.textAlign = 'center'; g.fillText(t, x + 120, 268); g.textAlign = 'left'; g.fillStyle = '#d7c79a'; g.fillRect(x + 8, 208, 224, 20); });
+      for (let i = 0; i < 6; i++) { const x = 92 + i * 92, y = 150 + (i % 2) * 6; g.fillStyle = 'rgba(255,255,255,.72)'; g.fillRect(x, y, 66, 90); g.strokeStyle = 'rgba(90,80,60,.6)'; g.lineWidth = 2; g.strokeRect(x, y, 66, 90); g.fillStyle = 'rgba(150,140,120,.5)'; g.fillRect(x + 6, y + 8, 54, 6); g.strokeStyle = '#a9812c'; g.beginPath(); g.moveTo(x + 33, y); g.lineTo(x + 33, y - 26); g.stroke(); }
+      g.save(); g.beginPath(); g.rect(70, 130, 560, 110); g.clip(); g.fillStyle = 'rgba(232,238,236,.62)'; g.fillRect(70, 130, 560, 110); const r = rng(77); for (let i = 0; i < 1500; i++) { g.fillStyle = `rgba(${r() < .5 ? '255,255,255' : '150,170,168'},${r() * .35})`; g.fillRect(70 + r() * 560, 130 + r() * 110, 1 + r() * 4, 1 + r() * 3); } g.restore();
+      g.fillStyle = P.ink; g.font = fnt(600, 21); g.fillText('terms between other clubs — not shown', 96, 122);
+      g.strokeStyle = '#25231f'; g.lineWidth = 8; g.strokeRect(0, 0, w, h); g.beginPath(); g.moveTo(w / 2, 0); g.lineTo(w / 2, h); g.stroke(); m.userData.tex.needsUpdate = true;
+      drawPlate('league.sign', (g2, w2, h2) => { enamel(g2, w2, h2, '#e9e1cb'); kindFrame(g2, 'OBSERVED', w2, h2, P.ink, 6); g2.fillStyle = P.ink; g2.font = fnt(700, 40); g2.fillText('THE LEAGUE OFFICE · COUNTER', 26, 62); });
+    }
+    function paintNeighbour() {
+      const m = BRD.nbr, { g, w, h } = m.userData, br_ = S.history === 'branch', has = !!S.branch;
+      g.fillStyle = br_ ? '#8b5a3e' : '#8b5a3e'; g.fillRect(0, 0, w, h);
+      for (let i = 0; i < 8; i++) { const x = 40 + i * 122; g.fillStyle = '#26221b'; g.fillRect(x - 6, 30, 88, 200); g.fillStyle = has && ((br_) || false) ? '#ffe7b0' : (has ? '#c8cfcb' : '#8a9694'); g.fillRect(x, 36, 76, 188); g.strokeStyle = '#26221b'; g.lineWidth = 3; g.beginPath(); g.moveTo(x + 38, 36); g.lineTo(x + 38, 224); g.moveTo(x, 130); g.lineTo(x + 76, 130); g.stroke(); }
+      m.userData.tex.needsUpdate = true;
+      drawPlate('nbr.plaque', (g2, w2, h2) => {
+        if (!has) return;
+        if (br_) { enamel(g2, w2, h2, '#f4efdf'); kindFrame(g2, 'RECORDED', w2, h2, P.ink, 7); g2.fillStyle = P.ink; g2.font = fnt(700, 34); g2.fillText('THE RECORD', 26, 62); g2.font = fnt(500, 25); g2.fillText('Boston · Year Two · Week 9', 26, 102); g2.fillStyle = P.soft; g2.font = fnt(400, 23, F_SERIF); g2.fillText('Never overwritten by a branch.', 26, 142); }
+        else { enamel(g2, w2, h2, '#f6e6c6'); tapeBand(g2, 0, 0, w2, 22, P.br); tapeBand(g2, 0, h2 - 22, w2, 22, P.br); g2.fillStyle = P.brD; g2.font = fnt(700, 30); g2.fillText('YOUR BRANCH', 26, 76); g2.fillStyle = P.ink; g2.font = fnt(500, 23); g2.fillText('Week 6 trade not made · diverged Week 6', 26, 112); g2.fillText('cut with hindsight · scaffolded, still yours', 26, 142); g2.fillText('Footbridge to the record: yes', 26, 172); }
+      });
+    }
+    /* the paper brought to the camera */
+    const PAPER = { c: cv(1024, 768) }; PAPER.g = PAPER.c.getContext('2d'); PAPER.tex = mkTex(PAPER.c);
+    function paintPaper(fx, S_, why) {
+      const g = PAPER.g, w = 1024, h = 768; g.clearRect(0, 0, w, h); g.fillStyle = '#f8f3e3'; g.fillRect(0, 0, w, h); const r = rng(fx.id.length * 13); for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(120,100,60,${r() * .05})`; g.fillRect(r() * w, r() * h, 1 + r() * 4, 1); }
+      const isBr = S_.history === 'branch' && ['board.roster', 'board.cap', 'desk.tradefile', 'hist.w6', 'film.room', 'hist.w9'].includes(fx.id);
+      kindFrame(g, fx.k, w, h, P.ink, 12); if (isBr) tapeBand(g, 0, 0, w, 20, P.br);
+      g.fillStyle = P.soft; g.font = fnt(700, 22); g.fillText((fx.way ? fx.way.toUpperCase() + ' · ' : '') + fx.k + '  ·  ' + fx.mark, 56, 78);
+      g.fillStyle = P.ink; g.font = fnt(500, 52, F_SERIF); let y = wrap(g, fx.name, 56, 148, w - 112, 60);
+      g.font = fnt(400, 35, F_SERIF); const lead = fx.cause ? fx.cause : ''; const rest = fx.cause ? fx.text.replace(fx.cause, '').trim() : fx.line;
+      if (lead) { g.font = fnt(600, 35, F_SERIF); y = wrap(g, lead, 56, y + 16, w - 112, 44); g.font = fnt(400, 33, F_SERIF); }
+      y = wrap(g, rest, 56, y + (lead ? 4 : 18), w - 112, 43);
+      g.fillStyle = P.soft; g.font = fnt(400, 28, F_SERIF); for (const b of fx.body.slice(0, 2)) y = wrap(g, b, 56, y + 14, w - 112, 36);
+      if (why) { const yy = h - 150; g.strokeStyle = P.ink; g.lineWidth = 1.5; g.beginPath(); g.moveTo(56, yy); g.lineTo(w - 56, yy); g.stroke(); g.fillStyle = P.ink; g.font = fnt(700, 21); g.fillText('KIND', 56, yy + 34); g.font = fnt(400, 21); g.fillText(fx.k + ' — ' + KW_SRC(fx.k), 150, yy + 34); g.font = fnt(700, 21); g.fillText('SOURCE', 56, yy + 66); g.font = fnt(400, 21); g.fillText(String(fx.src).slice(0, 84), 150, yy + 66); g.font = fnt(700, 21); g.fillText('AS OF', 56, yy + 98); g.font = fnt(400, 21); g.fillText(String(fx.asof), 150, yy + 98); }
+      else { g.fillStyle = P.soft; g.font = fnt(500, 19); g.fillText(fx.addr, 56, h - 40); }
+      PAPER.tex.needsUpdate = true;
+    }
+    const TG = { c: cv(1280, 256) }; TG.g = TG.c.getContext('2d'); TG.tex = mkTex(TG.c);
+    /*__END_F1__*/
+
+    /* ---------- tags, paper, camera stations ---------- */
+    { const tg = [[X0 + .17, 7.0, 5.5, .8], [X0 + .17, 7.0, -2.6, .8], [X0 + .17, 7.0, -4.1, .8], [X0 + .17, 6.7, -6.55, .7], [FR.x1 + .12, 2.35, FRM, .8]];
+      tg.forEach(([x, y, z, s], i) => { const c = V3(x, y, z), r = V3(0, 0, -s / 2), u = V3(0, s / 2, 0), a = acc('tags'); quadTo(a, [c.clone().sub(r).sub(u), c.clone().add(r).sub(u), c.clone().add(r).add(u), c.clone().sub(r).add(u)].map(p => [p.x, p.y, p.z]), [1, 0, 0], [[i / 5, 0], [(i + 1) / 5, 0], [(i + 1) / 5, 1], [i / 5, 1]], [1, 1, 1]); ANCH['tag' + (i + 1)] = c; }); }
+    PARTS.tags = bk('tags', new THREE.MeshBasicMaterial({ map: TG.tex, transparent: true, alphaTest: .05 })); PARTS.tags.visible = false; PARTS.tags.renderOrder = 8;
+    scene.add(camera);
+    const paperGrp = new THREE.Group(); camera.add(paperGrp); paperGrp.visible = false;
+    const shTex = (() => { const c = cv(128, 128), g = c.getContext('2d'), gr = g.createRadialGradient(64, 64, 20, 64, 64, 64); gr.addColorStop(0, 'rgba(0,0,0,.55)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, 128, 128); return mkTex(c); })();
+    const paperMesh = new THREE.Mesh(new THREE.PlaneGeometry(.86, .645), new THREE.MeshBasicMaterial({ map: PAPER.tex, depthTest: false, depthWrite: false, transparent: true })); paperMesh.renderOrder = 100;
+    const paperShadow = new THREE.Mesh(new THREE.PlaneGeometry(1.2, .98), new THREE.MeshBasicMaterial({ map: shTex, depthTest: false, depthWrite: false, transparent: true, opacity: .7 })); paperShadow.renderOrder = 99; paperShadow.position.set(.02, -.03, -.002);
+    paperGrp.add(paperShadow, paperMesh);
+    const POSES = {
+      door: { eye: [11.7, 1.62, 1.45], at: [8.5, 1.02, 1.05] }, rail: { eye: [6.9, 4.95, .6], at: [-6, 2.3, -.4] },
+      desk: { eye: [10.4, 4.5, -1.5], at: [9.95, 3.9, -6.6] }, 'desk-file': { eye: [10.4, 4.5, -1.5], at: [9.72, 3.95, -2.6] },
+      'desk-league': { eye: [10.4, 4.5, -1.5], at: [-17, 2.8, -22.6] }, 'desk-bowl': { eye: [10.4, 4.5, -1.5], at: [24, 1.4, -46] },
+      'desk-analytics': { eye: [10.4, 4.5, -1.5], at: [-10.7, 1.7, 4.4] }, 'desk-history': { eye: [10.4, 4.5, -1.5], at: [9.8, 5.0, 8] },
+      money: { eye: [.8, 1.65, .4], at: [-12.9, 5.3, -.3] }, court: { eye: [4.5, 1.65, -.6], at: [-3.2, .4, 4.4] },
+      analytics: { eye: [-1.5, 1.65, 1.0], at: [-10.8, 1.5, 3.2] }, ticketing: { eye: [-1.5, 1.65, -1.0], at: [-10.8, 1.5, -3.2] },
+      film: { eye: [.8, 1.65, -3.2], at: [-5.2, 1.4, -5.9] }, arches: { eye: [-4.4, 1.65, -4.5], at: [-4.6, 2.5, 8] },
+      history: { eye: [9.6, 4.95, .6], at: [9.6, 5.2, 8] }, window: { eye: [9.0, 4.95, -4.5], at: [0, 2.8, -32] },
+      why1: { eye: [-3.0, 1.65, 3.2], at: [-12.9, 5.5, 3.6] }, why2: { eye: [-3.0, 1.65, -1.2], at: [-12.9, 5.4, -1.4] }, why3: { eye: [-4.6, 1.65, -3.0], at: [-12.9, 5.4, -4.2] },
+      why4: { eye: [-5.0, 1.65, -3.6], at: [-12.9, 5.2, -5.9] }, why5: { eye: [.8, 1.65, -3.0], at: [-5.6, 1.6, -5.9] }
+    };
+    const MQ = { az: 35 * Math.PI / 180, el: 30 * Math.PI / 180, R: 112, tgt: V3(0, 1.5, -3) };
+    const poseOf = name => { if (name === 'maquette') { const ce = Math.cos(MQ.el); return { eye: MQ.tgt.clone().add(V3(Math.sin(MQ.az) * ce, Math.sin(MQ.el), Math.cos(MQ.az) * ce).multiplyScalar(MQ.R)), at: MQ.tgt.clone(), fov: 20 }; } const p = POSES[name] || POSES.rail; return { eye: V3(...p.eye), at: V3(...p.at), fov: 50 }; };
+    const CAM = { cur: { eye: V3(0, 5, 20), at: V3(), fov: 20 }, from: null, to: null, t0: 0, dur: 0, name: null };
+    const LOOK = { yaw: 0, pitch: 0 };
+    function applyCam() {
+      const { eye, at, fov } = CAM.cur; camera.position.copy(eye); if (Math.abs(camera.fov - fov) > .01) { camera.fov = fov; camera.updateProjectionMatrix(); }
+      const d = at.clone().sub(eye); if (LOOK.yaw || LOOK.pitch) { d.applyAxisAngle(V3(0, 1, 0), LOOK.yaw); const right = d.clone().cross(V3(0, 1, 0)).normalize(); d.applyAxisAngle(right, LOOK.pitch); }
+      camera.lookAt(eye.clone().add(d)); camera.updateMatrixWorld();
+    }
+    function setPose(name, instant) {
+      const to = poseOf(name); const first = CAM.name === null; CAM.name = name; LOOK.yaw = LOOK.pitch = 0;
+      if (instant || REDUCED || first) { CAM.cur.eye.copy(to.eye); CAM.cur.at.copy(to.at); CAM.cur.fov = to.fov; CAM.dur = 0; }
+      else { CAM.from = { eye: CAM.cur.eye.clone(), at: CAM.cur.at.clone(), fov: CAM.cur.fov }; CAM.to = to; CAM.t0 = performance.now(); CAM.dur = 430; }
+      invalidate();
+    }
+    function stepCamera(now) {
+      if (CAM.dur > 0) { const k = Math.min(1, (now - CAM.t0) / CAM.dur), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; CAM.cur.eye.lerpVectors(CAM.from.eye, CAM.to.eye, e); CAM.cur.at.lerpVectors(CAM.from.at, CAM.to.at, e); CAM.cur.fov = CAM.from.fov + (CAM.to.fov - CAM.from.fov) * e; if (k >= 1) CAM.dur = 0; applyCam(); return k < 1; }
+      if (CAM.name === 'maquette') { const to = poseOf('maquette'); CAM.cur.eye.copy(to.eye); CAM.cur.at.copy(to.at); CAM.cur.fov = to.fov; }
+      applyCam(); return false;
+    }
+    /* ---------- animation, render on demand ---------- */
+    const ANIMS = []; const ease = k => k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+    function tween(dur, delay, fn, done) { if (REDUCED) { fn(1); if (done) done(); invalidate(); return; } ANIMS.push({ t0: performance.now() + (delay || 0), dur, fn, done }); invalidate(); }
+    function stepAnims(now) { let busy = false; for (let i = ANIMS.length - 1; i >= 0; i--) { const a = ANIMS[i]; if (now < a.t0) { busy = true; continue; } const k = Math.min(1, (now - a.t0) / a.dur); a.fn(ease(k)); if (k >= 1) { ANIMS.splice(i, 1); if (a.done) a.done(); } else busy = true; } return busy; }
+    let dirty = true, raf = 0, lastFXS = [];
+    function invalidate() { dirty = true; if (!raf) raf = requestAnimationFrame(frame); }
+    function frame() {
+      raf = 0; const now = performance.now(); let busy = stepCamera(now); busy = stepAnims(now) || busy; busy = stepPaper(now) || busy;
+      if ((dirty || busy) && S.mode !== 'schedule') { renderer.render(scene, camera); STATS.calls = renderer.info.render.calls; STATS.tris = renderer.info.render.triangles; dirty = false; updateChips(); }
+      if (busy) raf = requestAnimationFrame(frame);
+    }
+    const STATS = { calls: 0, tris: 0 };
+    /* paper: brought to the camera from where it lay */
+    const PP = { id: null, t0: 0, dur: 300, from: V3(), out: false };
+    const REST = V3(-.14, -.02, -1.26);
+    function stepPaper(now) {
+      if (!paperGrp.visible) return false; const k = Math.min(1, (now - PP.t0) / PP.dur), e = ease(PP.out ? 1 - k : k);
+      paperGrp.position.lerpVectors(PP.from, REST, e); paperGrp.scale.setScalar(.3 + .7 * e); paperGrp.rotation.z = (1 - e) * .5 + .012; if (k >= 1 && PP.out) { paperGrp.visible = false; return false; } return k < 1;
+    }
+    function showPaper(fx) {
+      camera.updateMatrixWorld(); const inv = camera.matrixWorld.clone().invert(); const a = (ANCH[fx.id] || V3(0, 0, 0)).clone().applyMatrix4(inv); PP.from.copy(a.z < -.4 ? a : V3(.3, -.5, -.8));
+      paintPaper(fx, S, S.layers.know); paperGrp.visible = true; PP.id = fx.id; PP.out = false; PP.t0 = performance.now(); if (REDUCED) PP.dur = 1; else PP.dur = 300; invalidate();
+    }
+    function hidePaper() { if (!paperGrp.visible) return; PP.id = null; if (REDUCED) { paperGrp.visible = false; invalidate(); return; } PP.out = true; PP.t0 = performance.now(); PP.dur = 180; PP.from.set(.2, -.55, -.9); invalidate(); }
+    /* ---------- update: S -> scene ---------- */
+    const SIGS = {}; const once = (k, sig, fn) => { const s = JSON.stringify(sig); if (SIGS[k] !== s) { SIGS[k] = s; fn(); } };
+    const ROOMK = {}; let prev = { branch: false, po: null, maq: null, paper: null, funded: {} }, closingT = 0;
+    const mixC = (a, b, k) => [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k];
+    function setRoomK(id, k) {
+      ROOMK[id] = k; const [a, b] = RANGE[id].s;
+      for (let v = a; v < b; v++) { const f = Math.floor((v - a) / 4), key = f === 0 ? 'floor' : f === 1 ? 'ceil' : 'wall', c = mixC(SHC.dark[key], SHC.lit[key], k); shellAttr.setXYZ(v, c[0], c[1], c[2]); }
+      for (const [a2, b2] of RANGE[id].e) for (let v = a2; v < b2; v++) { const j = v * 3, m = .2 + .8 * k; emisAttr.array[j] = EMBASE[j] * m; emisAttr.array[j + 1] = EMBASE[j + 1] * m; emisAttr.array[j + 2] = EMBASE[j + 2] * m; }
+      const [ma, mb] = MINI[id]; for (let v = ma; v < mb; v++) { const c = mixC([.42, .4, .37], [.98, .92, .7], k); miniAttr.setXYZ(v, c[0], c[1], c[2]); }
+      shellAttr.needsUpdate = emisAttr.needsUpdate = miniAttr.needsUpdate = true; PARTS.furn[id].lit.visible = k >= .5; PARTS.furn[id].dark.visible = k < .5;
+    }
+    const BRICKM = new THREE.Mesh(new THREE.BoxGeometry(.22, .075, .11), MAT.brick); BRICKM.visible = false; scene.add(BRICKM);
+    let maqMode = true;
+    function setMaqMode(m) {
+      maqMode = m; GRP.maqOnly.visible = m; GRP.roomOnly.visible = !m; GRP.cut.visible = !m; scene.background = m ? PAPERBG : T.sky; scene.fog.near = m ? 9000 : 110; scene.fog.far = m ? 9500 : 470;
+      hemi.intensity = m ? 1.05 : .95; renderer.toneMappingExposure = m ? .98 : 1.02; door.visible = !m; fill.visible = !m;
+    }
+    setMaqMode(true);
+    function poseFor(Sx) { return Sx.posture === 'maquette' ? 'maquette' : Sx.pose; }
+    function update(Sx, fxs) {
+      lastFXS = fxs; const br_ = Sx.history === 'branch', fund = br_ ? Sx.branch.funded : Sx.funded, inMaq = Sx.posture === 'maquette', reality = inMaq && Sx.maq === 'reality';
+      /* rooms lit or dark (Reality: sheeted, nobody outside knows their funding) */
+      for (const id of ROOMKEYS) { const want = fund[id] ? 1 : 0; if (ROOMK[id] == null) setRoomK(id, want); else if (ROOMK[id] !== want && !ANIMS.some(a => a.room === id)) { const a0 = ROOMK[id]; tween(650, 250, k => setRoomK(id, a0 + (want - a0) * k)); ANIMS[ANIMS.length - 1].room = id; } }
+      PARTS.sheetRooms.visible = reality;
+      /* the five things signing changes, drawn from the same ledger */
+      PARTS.sheetMaq.visible = Sx.signed; PARTS.shut.visible = Sx.signed; PARTS.trayF.visible = Sx.signed; PARTS.credF.visible = Sx.signed; PARTS.frost.visible = !Sx.signed;
+      PARTS.tfileBox.visible = !br_; PARTS.sheetDraft.visible = !fund.scouting;
+      GRP.nbr.visible = !!Sx.branch; GRP.bridge.visible = !!Sx.branch; PARTS.nbrScaf.visible = PARTS.nbrScafPl.visible = !!Sx.branch && !br_;
+      /* branch: the Week 6 arch is open with scaffold; otherwise bricked */
+      for (const a of ARCHES()) { const A = AM[a.id], st = a.state; A.mesh.geometry = st === 'bricked' ? A.fill : st === 'shutter' ? A.shut : A.pass; A.mesh.material = st === 'bricked' ? MAT.infill : st === 'shutter' ? MAT.slat : MAT.vc2; if (!A.animating) A.cover.rotation.x = Sx.arch[a.id].cover ? 1.9 : 0;
+        A.tape.visible = st === 'bricked' || st === 'passage'; const ink = st === 'passage' ? [.78, .44, .11] : [.11, .3, .6], col = A.tape.geometry.attributes.color; for (let v = 0; v < col.count; v++) col.setXYZ(v, ink[0], ink[1], ink[2]); col.needsUpdate = true; }
+      const scafOn = br_ && !!Sx.branch; if (!AM.w6.scafAnim) { PARTS.scaf.visible = PARTS.scafPl.visible = scafOn; PARTS.scaf.scale.y = PARTS.scafPl.scale.y = 1; } BRICKM.visible = br_ && !AM.w6.scafAnim;
+      if (br_) BRICKM.position.set(AM.w6.cx + .5, .04, Z1 - 1.5);
+      /* paint every dynamic surface (each only when its inputs changed) */
+      once('door', [Sx.signed, Sx.left, Sx.lapsedExtra, Sx.seatStart], paintDoor); once('rail', Sx.history, paintRailPlates); once('clocks', [Sx.clock, Sx.signed, Sx.seatStart], paintClocks);
+      once('tray', [Sx.signed, fund.scouting, Sx.history], paintTray); once('file', Sx.history, paintFile); once('arches', [Sx.arch, Sx.history, !!Sx.branch], paintArches);
+      once('hist', [Sx.history, Sx.po && Sx.po.no, !!Sx.branch], paintHistory); once('tags', Sx.why, paintTags);
+      once('roster', [Sx.history, Sx.why > 0, reality], () => paintRoster(reality)); once('cap', [Sx.history, Sx.why > 0, reality], () => paintCap(reality)); once('tax', [Sx.history, reality], () => paintTax(reality));
+      once('cash', [Sx.cash, Sx.history, reality], () => paintCash(reality)); once('film', [Sx.history, Sx.why === 5, reality], () => paintFilm(reality)); once('draft', 1, paintDraft);
+      once('blot', [Sx.signed, Sx.seatStart, Sx.history], paintBlot); once('po', Sx.po && Sx.po.no, paintPO); once('court', 1, paintCourt); once('league', 1, paintLeague); once('nbr', [Sx.history, !!Sx.branch], paintNeighbour);
+      once('bowl', [Sx.funded.ticketing, br_ && Sx.branch.funded.ticketing], paintBowl);
+      for (const id of ROOMKEYS) once('sign' + id, [fund[id], Sx.fundedBy[id], br_, reality], () => paintSign(id, fund[id], !!Sx.fundedBy[id], br_, reality));
+      once('tagdraft', fund.scouting, () => drawPlate('tag.draft', (g, w, h) => { if (!fund.scouting) return; brassPlate(g, w, h); kindFrame(g, 'AUTHORED', w, h, P.brassD, 5); g.fillStyle = '#231b08'; g.font = fnt(700, 21); g.fillText('First report', 10, 34); g.fillText('due ' + AUTH.reportWeek, 10, 62); g.font = fnt(500, 15); g.fillText('pending', 10, 82); }));
+      if (AT.dirty) { T.atlas.needsUpdate = true; AT.dirty = false; }
+      /* WHY: the room drops to work light; the touched boards keep their glow */
+      const wk = Sx.why ? .42 : 1; sun.intensity = 2.7 * wk; hemi.intensity = (maqMode ? 1.05 : .95) * (Sx.why ? .55 : 1); fill.intensity = .55 * (Sx.why ? .5 : 1);
+      for (const k of ['roster', 'cap', 'tax', 'cash', 'film']) BRD[k].material.emissiveIntensity = Sx.why ? .62 : .16; PARTS.tags.visible = Sx.why > 0;
+      /* posture and place: the cut, the camera */
+      const want = poseFor(Sx);
+      if (want !== CAM.name) {
+        clearTimeout(closingT);
+        if (maqMode && !inMaq) { if (!REDUCED) { GRP.cut.visible = true; closingT = setTimeout(() => { setMaqMode(false); setPose(want, true); renderer.shadowMap.needsUpdate = true; invalidate(); }, 260); } else { setMaqMode(false); setPose(want, true); } }
+        else if (!maqMode && inMaq) { setMaqMode(true); setPose('maquette', true); }
+        else setPose(want, false);
+      }
+      /* the paper */
+      if (Sx.paper) { const fx = fxs.find(f => f.id === Sx.paper); if (fx) { if (prev.paper !== Sx.paper || prev.know !== Sx.layers.know || prev.sig !== fx.line) showPaper(fx); prev.sig = fx.line; } } else if (prev.paper) hidePaper();
+      prev.paper = Sx.paper; prev.know = Sx.layers.know;
+      /* consequences that happen once: the order slides off the blotter; the cut is made */
+      if (Sx.po && (!prev.po || prev.po !== Sx.po.no)) { prev.po = Sx.po.no; BRD.po.visible = true; const x0 = 10.4, x1 = 10.98; if (!REDUCED) tween(700, 0, k => { BRD.po.position.set(x0 + (x1 - x0) * k, DY + .02, -2.55 + .25 * k); BRD.po.rotation.z = -.18 * k; }); else BRD.po.position.set(x1, DY + .02, -2.3); }
+      if (!Sx.po) { BRD.po.visible = false; prev.po = null; }
+      if (Sx.branch && !prev.branch) { runFork(); } if (!Sx.branch) prev.branch = false; else prev.branch = true;
+      BRD.po.visible = !!Sx.po && !br_;
+      renderer.shadowMap.needsUpdate = true; invalidate(); updateChips();
+    }
+    function runFork() {
+      const A = AM.w6; A.animating = true; A.scafAnim = true; A.cover.rotation.x = 0; tween(520, 0, k => { A.cover.rotation.x = 1.9 * k; }, () => { A.animating = false; });
+      BRICKM.visible = true; tween(700, 380, k => { BRICKM.position.set(A.cx, 1.3 - 1.25 * k * k, Z1 + .14 - 1.6 * k); BRICKM.rotation.set(k * 2.2, k * .6, k * .9); }, () => { BRICKM.rotation.set(0, .3, 0); BRICKM.position.set(A.cx + .5, .04, Z1 - 1.5); });
+      PARTS.scaf.visible = PARTS.scafPl.visible = true; PARTS.scaf.scale.y = PARTS.scafPl.scale.y = .02; tween(950, 700, k => { PARTS.scaf.scale.y = PARTS.scafPl.scale.y = .02 + .98 * k; }, () => { A.scafAnim = false; });
+    }
+    function coveredIds() { return [PARTS.sheetMaq.visible && 'maquette', PARTS.shut.visible && 'later'].filter(Boolean); }
+    /*__END_G1__*/
+
+    /* ---------- chips (What's real? / How do we know?), picking, resize ---------- */
+    const canvas = renderer.domElement, stage = $('#stage'), chipsEl = $('#chips');
+    function updateChips() {
+      if (!S.layers.real && !S.layers.know) { if (chipsEl.firstChild) chipsEl.textContent = ''; return; }
+      const r = canvas.getBoundingClientRect(), items = [], maq = S.posture === 'maquette';
+      for (const f of lastFXS) {
+        if (maq && !/^(dept\.|board\.roster|board\.cap|win\.league|win\.arena|hall\.maquette)/.test(f.id)) continue;
+        const a = ANCH[f.id]; if (!a) continue; const v = a.clone().project(camera);
+        if (v.z > 1 || Math.abs(v.x) > .93 || Math.abs(v.y) > .9) continue;
+        items.push({ f, x: (v.x * .5 + .5) * r.width, y: (-v.y * .5 + .5) * r.height, d: a.distanceTo(camera.position) });
+      }
+      items.sort((p, q) => p.d - q.d); const placed = [], out = [];
+      for (const it of items) {
+        if (placed.length >= 15) break; if (placed.some(p => Math.abs(p.x - it.x) < 178 && Math.abs(p.y - it.y) < 46)) continue; placed.push(it);
+        const cap = maq && !/^dept\.|board\./.test(it.f.id) ? 'PROPOSED' : it.f.cap;
+        out.push('<div class="chip ' + (S.layers.real ? cap : '') + '" style="left:' + Math.round(it.x) + 'px;top:' + Math.round(it.y) + 'px">' + (S.layers.real ? '<b>' + CAPTXT[cap] + ' · NO AI REQUIRED</b>' : '') + esc(it.f.name) + (S.layers.know ? '<br><span class="sw k-' + it.f.k + '"></span>' + it.f.k + ' · ' + esc(String(it.f.src).split(' · ')[0].slice(0, 46)) : '') + '</div>');
+      }
+      chipsEl.innerHTML = out.join('');
+    }
+    const ray = new THREE.Raycaster(), ptr = new THREE.Vector2(); let down = null;
+    function pickAt(cx, cy) { const r = canvas.getBoundingClientRect(); ptr.set(((cx - r.left) / r.width) * 2 - 1, -((cy - r.top) / r.height) * 2 + 1); ray.setFromCamera(ptr, camera); for (const h of ray.intersectObjects(HITS, false)) { const id = h.object.userData.fixtureId; if (lastFXS.some(f => f.id === id)) return id; } return null; }
+    canvas.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY, yaw: LOOK.yaw, pitch: LOOK.pitch, az: MQ.az, el: MQ.el, moved: false }; try { canvas.setPointerCapture(e.pointerId); } catch (_) {} });
+    canvas.addEventListener('pointermove', e => {
+      if (down) { const dx = e.clientX - down.x, dy = e.clientY - down.y; if (Math.abs(dx) + Math.abs(dy) > 6) down.moved = true;
+        if (down.moved && CAM.dur === 0) { if (CAM.name === 'maquette') { MQ.az = down.az - dx * .006; MQ.el = Math.max(.2, Math.min(1.1, down.el + dy * .004)); } else { LOOK.yaw = Math.max(-.5, Math.min(.5, down.yaw + dx * .0025)); LOOK.pitch = Math.max(-.25, Math.min(.25, down.pitch + dy * .0018)); } invalidate(); } }
+      else { const id = pickAt(e.clientX, e.clientY); canvas.style.cursor = id ? 'pointer' : 'grab'; const f = id && lastFXS.find(x => x.id === id); canvas.title = f ? f.name : ''; }
+    });
+    canvas.addEventListener('pointerup', e => { if (down && !down.moved) { const id = pickAt(e.clientX, e.clientY); if (id) act('pick', { id }); } down = null; });
+    function resize() { const r = stage.getBoundingClientRect(), w = Math.max(240, Math.floor(r.width)), h = Math.max(240, Math.floor(r.height)); renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); invalidate(); }
+    new ResizeObserver(resize).observe(stage); resize();
+    ROOM = { update, coveredIds, stats: () => ({ ...STATS }), pose: n => setPose(n, true), poses: POSES, MQ, camera, renderer, scene, invalidate, project: id => { const v = (ANCH[id] || V3()).clone().project(camera), r = canvas.getBoundingClientRect(); return [r.left + (v.x * .5 + .5) * r.width, r.top + (-v.y * .5 + .5) * r.height]; } };
+    const ld = $('#loading'); if (ld) ld.remove(); renderer.shadowMap.needsUpdate = true; paint();
+  } catch (e) { console.error('the Room failed to build', e); fail('The Room failed to build. The Schedule (key S) is the same building as text.'); }
+})();
 
 /*__ROOM_END__*/
 paint();

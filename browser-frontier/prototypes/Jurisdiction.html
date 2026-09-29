@@ -9,7 +9,7 @@
 <script src="_shared/boston-fixture.js"></script>
 <style>
 :root{
---ink:#1b2620;--paper:#faf6ea;--paper2:#f0e9d5;--mute:#556058;--hair:#cdc6ae;
+--ink:#1b2620;--paper:#faf6ea;--paper2:#f0e9d5;--mute:#454f48;--hair:#cdc6ae;
 --boston:#1e6a3e;--league:#454c55;--lpaper:#eceeec;--lrule:#b6bbc0;
 --denver:#2a6796;--dgold:#b98a22;--arena:#2b706a;--apaper:#f4f2e9;
 --news:#ece6d2;--nink:#26231b;--branch:#ad3517;--bpaper:#fbede8;
@@ -50,6 +50,7 @@ body.know #bot .lg{display:flex}
 #standing{position:relative;padding:6px 14px 7px;background:var(--gp);border-left:10px solid var(--gc);border-bottom:1px solid var(--hair);display:flex;gap:14px;align-items:flex-start}
 #standing .sb{flex:1;min-width:0}
 #standing .s1{font:700 11px/1.1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gc);margin-bottom:2px}
+#standing .vb{color:var(--mute);letter-spacing:.06em}
 #standing .s2{font-size:17px;line-height:1.2;font-weight:600}
 #standing .s3{font:12.5px/1.35 var(--mono);margin-top:1px}
 #standing .s3 b{font-weight:700}
@@ -500,7 +501,7 @@ function whyNeck(){
   '<p class="small" style="margin-top:6px">Which measure each apron uses: [verify]. The pin arrives on every sheet at the same height.</p><div class="rowb"><button type="button" class="btn sm" data-a="why" data-p="" data-f="why:close">Back to the sheet</button></div>';
 }
 function neckSheet(){
-  return '<section class="sheet rg" aria-label="Payroll sheet">'+sheetHead('neck','pin: Boston’s payroll')+'<div class="sh-b" style="height:'+DH()+'px">'+neckSvg()+'<div class="read">'+neckRead()+'</div></div>'+CB('PROPOSED',NOAI,'Sheets, the pin and the neck are not built; the dated fact store behind them is REAL CURRENT PRODUCT CAPABILITY.')+'</section>';
+  return '<section class="sheet rg" aria-label="Payroll sheet">'+sheetHead('neck','Live · '+RE.clock.now+' · '+RE.clock.phase.v+' [verify: dates]')+'<div class="sh-b" style="height:'+DH()+'px">'+neckSvg()+'<div class="read">'+neckRead()+'</div></div>'+CB('PROPOSED',NOAI,'Sheets, the pin and the neck are not built; the dated fact store behind them is REAL CURRENT PRODUCT CAPABILITY.')+'</section>';
 }
 /* PEERS */
 function peersSvg(){
@@ -656,7 +657,7 @@ function ledgerRead(){
   row('WORLD TAX LINE',cf(WD.taxLine,m1(WLINE)))+
   row('PROJECTED TAX',was(m3(wtax(pv)),cc(m3(wtax(p)),'computed under the World rule (flat 1.5×, authored), not what the NBA would charge')))+
   row('2ND APRON LINE',cf(L.apron2,m3(A2)))+
-  row('PAYROLL VS IT',p>A2?cc(m3(p-A2)+' over'):cc(m3(A2-p)+' under'))+
+  row('VS APRON 2',p>A2?cc(m3(p-A2)+' over'):cc(m3(A2-p)+' under'))+
   row('HARD LIMIT',cf(WD.hardLimit,m1(WHARD)))+
   row('ROOM TO LIMIT',cc(m1(WHARD-p)))+
   row('CASH',ca(fmtP(S.w.cash),'illustrative starting cash'))+
@@ -697,7 +698,7 @@ function stageW(){
 
 /* ---------------- standing line and address ---------------- */
 function standingHTML(){
-  var g=S.g,a='You are in',b,c,tag,extra='';
+  var g=S.g,a='You are in',b,c,tag,extra='',vb={front:'ASK',reality:'OBSERVE · FOLLOW · ENTER',desk:'DRAFT · SIGN · REHEARSE · SEND',league:'WAIT · GO THERE · RE-FORM',denver:'WAIT · GO THERE · RE-FORM',arena:'WAIT · GO THERE · RE-FORM'}[S.g];
   if(g==='front'){b='The registry · front desk · as visitor';c='your word counts for: <b>nothing yet</b>. Ask, and you are placed where the answer is held.';tag='front desk';}
   else if(g==='reality'){b='Boston Celtics · Reality · as observer';c='your word counts for: <b>nothing here</b> (you can observe, follow, enter a recorded moment)';tag='reading copy · live';}
   else if(g==='desk'){b='Boston · Year Two (your World) · seat: GM';c='your word counts for: <b>signing, trading, payroll</b> · not for: <b>approving trades, setting the tax line, scheduling the arena</b>';tag='your desk · Wk 9';
@@ -706,7 +707,7 @@ function standingHTML(){
   else if(g==='league'){a='Visiting';b='League Office';c='you can see: <b>queue count, this file’s status</b> · you cannot: <b>approve</b>. <span class="small">Your seat is still GM, Boston · Year Two.</span>';tag='League ledger';}
   else if(g==='denver'){a='Visiting';b='Denver’s desk';c='you can see: <b>the paper you sent, nothing else</b> · you cannot: <b>sign for Denver, read their board</b>. <span class="small">Your seat is still GM, Boston · Year Two.</span>';tag='Denver letterhead';}
   else if(g==='arena'){a='Visiting';b='the arena’s booking calendar';c='you can see: <b>free / busy</b> · you cannot: <b>book a slot, read what fills it</b>. <span class="small">Your seat is still GM, Boston · Year Two.</span>';tag='arena booking grid';}
-  return '<div class="sb"><div class="s1">'+a+'</div><div class="s2">'+b+'</div><div class="s3">'+c+(extra?'<br>'+extra:'')+'</div></div><span class="gt">'+tag+'</span>'+CB('PROPOSED',NOAI,'A standing line that states seat, warrant and disclosure is PROPOSED; the seat and pending-terms scoping it echoes exist in the NBA-World branch (REAL seed).');
+  return '<div class="sb"><div class="s1">'+a+' <span class="vb">· verbs here: '+vb+'</span></div><div class="s2">'+b+'</div><div class="s3">'+c+(extra?'<br>'+extra:'')+'</div></div><span class="gt">'+tag+'</span>'+CB('PROPOSED',NOAI,'A standing line that states seat, warrant and disclosure is PROPOSED; the seat and pending-terms scoping it echoes exist in the NBA-World branch (REAL seed).');
 }
 function address(){
   var g=S.g;
@@ -734,8 +735,8 @@ function frontHTML(){
 /* ---------------- desk views ---------------- */
 function deskHome(){
   var f1=S.f.f1,f2=S.f.f2;
-  var m1s=f1.st==='done'?'<span class="small">done · Week 9</span> <button type="button" class="btn sm" data-a="records" data-p="f1" data-f="rec:f1">Open the three records</button>':'<button type="button" class="btn pri" data-a="draft" data-p="f1" data-f="draft:f1">Draft: send the backup guard to Denver</button>';
-  var m2s=f2.st==='done'?'<span class="small">done · Week 10 Thu eve</span> <button type="button" class="btn sm" data-a="records" data-p="f2" data-f="rec:f2">Open the three records</button>':'<button type="button" class="btn pri" data-a="draft" data-p="f2" data-f="draft:f2">Add a home date for a partner night</button>';
+  var m1s=f1.st==='done'?'<span class="small">done · Week 9</span> <button type="button" class="btn sm" data-a="records" data-p="f1" data-f="rec:f1">Open the three records</button>':f1.st==='sent'?'<span class="small">in flight</span> <button type="button" class="btn sm" data-a="draft" data-p="f1" data-f="draft:f1">Open the paper</button>':'<button type="button" class="btn pri" data-a="draft" data-p="f1" data-f="draft:f1">Draft: send the backup guard to Denver</button>';
+  var m2s=f2.st==='done'?'<span class="small">done · Week 10 Thu eve</span> <button type="button" class="btn sm" data-a="records" data-p="f2" data-f="rec:f2">Open the three records</button>':f2.st==='sent'?'<span class="small">in flight</span> <button type="button" class="btn sm" data-a="draft" data-p="f2" data-f="draft:f2">Open the paper</button>':'<button type="button" class="btn pri" data-a="draft" data-p="f2" data-f="draft:f2">Add a home date for a partner night</button>';
   var om=WD.openMatters;
   return '<div class="dh"><span>Your desk · Boston · Year Two · Week 9</span><span>verbs here: DRAFT · SIGN · REHEARSE · SEND</span></div>'+
   '<h3 class="small" style="margin:2px 0 6px">OPEN MATTERS</h3>'+
@@ -814,9 +815,9 @@ function form1(){
   lineRow({p:'media',who:'Media',sub:'no line',yes:'KNOWING',car:'copy',cls:'none',what:'Media never says yes; it learns. <button type="button" class="lk" data-a="leak" data-f="leak" aria-pressed="'+S.leak+'">'+(S.leak?'Hide the leak':'What would a leak do?')+'</button>'+lk,st:'no line'});
   var ret=f.returned?'<div class="blk" role="alert"><b>The League returned the file.</b> '+f.returned.checks.filter(function(c){return c.v==='NO';}).map(function(c){return esc(c.t);}).join(' ')+'</div>':'';
   return '<div class="form rg"><div class="fh"><h2>Trade paper · Boston ⇄ Denver</h2><span class="stt">'+({draft:'draft · nothing crosses',sent:'sent · in flight',done:'signed three ways'}[f.st])+'</span></div>'+
-  '<div class="fs"><b>Boston sends</b> the backup guard (minimum deal '+cf(L.exceptions.minimum,m3(MINS))+', signed Week 1). <b>Boston gets</b> a future second-round pick from Denver.'+(f.sw?' <b>Plus $0.5M cash.</b>':'')+'</div>'+
+  '<div class="fs"><b>Boston sends</b> the backup guard (minimum deal '+cf(L.exceptions.minimum,m3(MINS))+', signed Week 1, '+ca('illustrative')+'). <b>Boston gets</b> a future second-round pick from Denver.'+(f.sw?' <b>Plus $0.5M cash.</b>':'')+'</div>'+
   ret+'<ul class="lns">'+lines+'</ul>'+
-  (dr?'<div class="rowb" style="margin:6px 10px 8px"><button type="button" class="btn" data-a="rehearse" data-p="f1" data-f="rehearse:f1">Trade call (dry run)</button><button type="button" class="btn sm" data-a="sweet" data-p="f1" data-f="sweet" aria-pressed="'+f.sw+'">Add $0.5M cash</button><button type="button" class="btn pri" data-a="send" data-p="f1" data-f="send:f1"'+(f.ln.boston?'':' disabled')+'>Send</button>'+(f.ln.boston?'':'<span class="small" style="align-self:center">Send needs line 1.</span>')+'</div>':'')+
+  (dr?'<div class="rowb" style="margin:6px 10px 8px"><button type="button" class="btn" data-a="rehearse" data-p="f1" data-f="rehearse:f1">Trade call (dry run)</button><button type="button" class="btn sm" data-a="sweet" data-p="f1" data-f="sweet" aria-pressed="'+f.sw+'">Add $0.5M cash</button><button type="button" class="btn pri" data-a="send" data-p="f1" data-f="send:f1"'+(f.ln.boston&&!S.flight?'':' disabled')+'>Send</button>'+(S.flight?'<span class="small" style="align-self:center">One paper in flight at a time.</span>':f.ln.boston?'':'<span class="small" style="align-self:center">Send needs line 1.</span>')+'</div>':'')+
   movesHTML('f1')+rehearsalBlock('f1')+kdots(f,[['boston','Boston'],['denver','Denver'],['league','League'],['player','Player'],['media','Media']])+legendStrip()+CB('PROPOSED',NOAI,'N-party forms with kinds of yes and dry runs are PROPOSED. RULE-yes uses the CBA rules engine (REAL). A WILL-yes played by a model: SMALL / CHEAP MODEL; an AI holding a seat: FRONTIER MODEL OCCASIONAL.')+'</div>';
 }
 function form2(){
@@ -831,7 +832,7 @@ function form2(){
   return '<div class="form rg"><div class="fh"><h2>Home date · partner night · Week 10</h2><span class="stt">'+({draft:'draft · nothing crosses',sent:'sent · in flight',done:'booked three ways'}[f.st])+'</span></div>'+
   '<ul class="lns">'+lines+'</ul>'+
   '<div style="padding:0 10px 4px"><div class="small" style="margin-bottom:2px"><b>ARENA BOOKING GRID</b> · the arena’s own register · '+ca('authored calendar','illustrative: not a real arena calendar')+' <span class="dk d-shape">shape only: free / busy</span></div>'+calGrid(dr)+'</div>'+ref+
-  (dr?'<div class="rowb" style="margin:6px 10px 8px"><button type="button" class="btn" data-a="rehearse" data-p="f2" data-f="rehearse:f2">Trade call (dry run)</button><button type="button" class="btn pri" data-a="send" data-p="f2" data-f="send:f2"'+(f.ln.boston&&f.cell?'':' disabled')+'>Send</button>'+(f.ln.boston&&f.cell?'':'<span class="small" style="align-self:center">Send needs a slot and line 1.</span>')+'</div>':'')+
+  (dr?'<div class="rowb" style="margin:6px 10px 8px"><button type="button" class="btn" data-a="rehearse" data-p="f2" data-f="rehearse:f2">Trade call (dry run)</button><button type="button" class="btn pri" data-a="send" data-p="f2" data-f="send:f2"'+(f.ln.boston&&f.cell&&!S.flight?'':' disabled')+'>Send</button>'+(S.flight?'<span class="small" style="align-self:center">One paper in flight at a time.</span>':f.ln.boston&&f.cell?'':'<span class="small" style="align-self:center">Send needs a slot and line 1.</span>')+'</div>':'')+
   movesHTML('f2')+rehearsalBlock('f2')+kdots(f,[['boston','Boston'],['arena','Arena'],['league','League'],['ticketing','Ticketing'],['media','Media']])+legendStrip()+CB('SPECULATIVE','NO AI REQUIRED','A live arena calendar is a third-party integration: SPECULATIVE FRONTIER. This calendar is AUTHORED. The schedule rule follows the same PROPOSED rulebook path.')+'</div>';
 }
 /* ---------------- visits: another system's ground ---------------- */
@@ -880,7 +881,7 @@ function recordsView(fid){
   if(fid==='f1'){
     cols='<div class="rc r-boston"><div class="rh"><span>Boston’s record</span><span>yours</span></div><div class="rb"><ul><li>Line 1 signed by you (GM warrant), Wk 9.</li><li>Sent the guard ('+m3(MINS)+'); got a future 2nd from Denver.</li><li><b>Payroll '+fmtP(S.w.prev)+' → '+fmtP(S.w.payroll)+'</b> · roster 15 → 14 · projected tax '+m3(wtax(S.w.prev))+' → '+m3(wtax(S.w.payroll))+' (World rule).</li></ul>'+sees('your books, the paper','Denver’s payroll and board')+'</div></div>'+
     '<div class="rc r-denver"><div class="rh"><span>Denver’s record</span><span>theirs</span></div><div class="rb"><ul><li>Got the guard on a minimum deal ('+m3(MINS)+'); sent a future 2nd.</li><li>Line 2 signed by Denver’s owner ('+ca('stand-in','AUTHORED stand-in for another seat')+').</li></ul><div class="hide h2">Denver’s payroll after: nothing shown to you</div>'+sees('the paper, their own books','Boston’s cash, roster, open matters')+'</div></div>'+
-    '<div class="rc r-league"><div class="rh"><span>League’s record</span><span>register</span></div><div class="rb"><ul><li>File approved · RULE-yes.</li><li><span class="stamp'+(S.stampNew?' in':'')+'" style="font-size:11px;padding:3px 6px">Rulebook<small>2026–27, BOW fixture 4 Sep 2026 [verify]</small></span></li><li>Count and result: '+cc((3)+' in review, '+(2+1+(S.f.f2.st==='done'?1:0))+' approved today','count and result only')+'.</li></ul>'+sees('the file’s shape, its result','Denver’s desk and Boston’s desk, even here')+'</div></div>';
+    '<div class="rc r-league"><div class="rh"><span>League’s record</span><span>register</span></div><div class="rb"><ul><li>File approved · RULE-yes.</li><li><span class="stamp'+(S.stampNew?' in':'')+'" style="font-size:11px;padding:3px 6px">Rulebook<small>2026–27, BOW fixture 4 Sep 2026 [verify]</small></span></li><li>Count and result: '+cc((3)+' in review, '+(2+1+(S.f.f2.st==='done'?1:0))+' approved today','count and result only')+'</li></ul>'+sees('the file’s shape, its result','Denver’s desk and Boston’s desk, even here')+'</div></div>';
   }else{
     cols='<div class="rc r-boston"><div class="rh"><span>Boston’s record</span><span>yours</span></div><div class="rb"><ul><li>Line 1 signed by Partnerships, Wk 9.</li><li>Partner night added: <b>'+cellName(f.cell)+'</b>.</li><li><b>Cash '+fmtP(S.w.cash+FEE)+' → '+fmtP(S.w.cash)+'</b> · home dates +1.</li></ul>'+sees('your books, the slot','the arena’s other bookings')+'</div></div>'+
     '<div class="rc r-arena"><div class="rh"><span>Arena’s record</span><span>theirs</span></div><div class="rb"><ul><li>Slot held: '+cellName(f.cell)+' · Boston partner night.</li><li>Event fee '+m3(FEE)+' received from Boston ('+ca('illustrative')+').</li></ul><div class="hide">Other bookings: busy blocks only</div>'+sees('their calendar, the fee','Boston’s cash and roster')+'</div></div>'+
@@ -889,9 +890,10 @@ function recordsView(fid){
   var f1d=S.f.f1.st==='done',f2d=S.f.f2.st==='done';
   var pick=(f1d&&f2d)?'<div class="seg" style="margin-bottom:6px"><button type="button" class="btn sm" data-a="records" data-p="f1" data-f="rec:f1" aria-pressed="'+(fid==='f1')+'">The Denver trade</button><button type="button" class="btn sm" data-a="records" data-p="f2" data-f="rec:f2" aria-pressed="'+(fid==='f2')+'">The partner night</button></div>':'';
   var media=fid==='f1'?'<div class="clip"><div class="ol"><span>[outlet: illustrative]</span><span>[verify: date]</span></div><h4>Boston sends reserve guard to Denver for a second-round pick</h4><span class="small">Media never said yes; it learned, after the stamp. In Reality a report may come before a signature. AUTHORED, illustrative.</span></div>':'';
+  var laws=fid==='f1'?'<p class="small" style="margin:6px 0 2px"><b>Four laws this act obeyed.</b> Information leaks: the player and the media were told after, and a copy cannot be recalled. Authority is countersigned: three lines joined, no act before the last. Money is conserved: '+m3(MINS)+' left your payroll and reached Denver’s, which is not shown to you. Time is local: Denver’s clock, then League hours.</p>':'<p class="small" style="margin:6px 0 2px"><b>Four laws this act obeyed.</b> Information leaks: ticketing and the media were told after. Authority is countersigned: the arena’s TIME-yes and the League’s RULE-yes joined yours. Money is conserved: '+m3(FEE)+' left Boston’s cash and reached the arena. Time is local: the arena’s clock, then League hours.</p>';
   var acts='<div class="rowb">'+(fid==='f1'?'<button type="button" class="btn" data-a="redline" data-f="redline">Redline the Denver form</button>':'')+'<button type="button" class="btn" data-a="why" data-p="payroll" data-f="why:payroll2">Why is payroll '+fmtP(S.w.payroll)+'?</button><button type="button" class="btn sm" data-a="home" data-f="home">Back to the desk</button></div>';
   return '<div class="dh"><span>Three records of one act · no god view</span><span>'+(fid==='f1'?'the Denver trade':'the partner night')+'</span></div>'+pick+'<div class="recs">'+cols+'</div>'+
-  kdots(f,fid==='f1'?[['boston','Boston'],['denver','Denver'],['league','League'],['player','Player'],['media','Media']]:[['boston','Boston'],['arena','Arena'],['league','League'],['ticketing','Ticketing'],['media','Media']])+media+
+  kdots(f,fid==='f1'?[['boston','Boston'],['denver','Denver'],['league','League'],['player','Player'],['media','Media']]:[['boston','Boston'],['arena','Arena'],['league','League'],['ticketing','Ticketing'],['media','Media']])+media+laws+
   (fid==='f1'?heldToggle('dsecond','Denver’s future second-round pick, owed to Boston','a new paper from this act · clock: Denver’s pick ledger, draft year '+cu('[verify]')):'')+acts+CB('PROPOSED',NOAI,'Each system holds its own record of one act. Two-owner papers with owner-scoped terms are REAL seeds; League record shows count and result.');
 }
 /* ---------------- WHY: traced to recorded causes ---------------- */
@@ -1016,14 +1018,14 @@ function act(kind,p){
     case 'enter':S.g='desk';S.seat=true;S.view='home';S.why=null;LOG('you','took the GM seat in Boston · Year Two, a World diverged from Reality at Year 0. Your word now counts for signing, trading, payroll.',{kind:'record',hist:'World record',clock:WD.clock.label});msg='You are in Boston, Year Two, as general manager.';break;
     case 'leave':S.g='reality';S.seat=false;if(!S.sheets.length)openSheet('neck');S.why=null;LOG('you','handed the seat back and returned to the reading copy of Reality. The World keeps its own calendar.');msg='Back in Reality, as an observer.';break;
     case 'openW':S.ws=p==='ledger'?'ledger':'rule';msg='Opened the '+(S.ws==='rule'?'rule':'ledger')+' sheet.';break;
-    case 'draft':S.g='desk';S.view=p==='f1'?'form1':'form2';LOG('you (GM seat)','opened a draft of the '+(p==='f1'?'Denver trade paper':'partner-night date request')+'. Nothing crosses until you send.',{kind:'rehearsal',hist:'draft · crosses nothing'});msg='Draft opened. Lines are derived from the rulebooks it touches.';break;
+    case 'draft':S.g='desk';S.view=p==='f1'?'form1':'form2';if(S.f[p].st!=='draft'){msg='Opened the paper in flight.';break;}LOG('you (GM seat)','opened a draft of the '+(p==='f1'?'Denver trade paper':'partner-night date request')+'. Nothing crosses until you send.',{kind:'rehearsal',hist:'draft · crosses nothing'});msg='Draft opened. Lines are derived from the rulebooks it touches.';break;
     case 'sweet':var f1=S.f.f1;f1.sw=!f1.sw;f1.last=null;LOG('you (GM seat)',(f1.sw?'added':'removed')+' $0.5M of cash in the Denver draft.',{kind:'rehearsal',hist:'draft · crosses nothing'});msg=f1.sw?'Added cash to the draft.':'Removed the cash.';break;
     case 'dnote':S.dnote=!S.dnote;msg=S.dnote?'Showing a stand-in for Denver’s side.':'Hidden.';break;
     case 'leak':S.leak=!S.leak;msg=S.leak?'Showing what a leak would do.':'Hidden.';break;
     case 'rehearse':var fr=S.f[p];fr.last=rulebook(p,true);LOG('you (GM seat)','ran the trade call (dry run): '+({YES:'YES',NO:'NO',CT:'CAN’T TELL'}[fr.last.v])+'. Recorded as a rehearsal; it crossed nothing.',{kind:'rehearsal',hist:'rehearsal · crosses nothing'});msg='Dry run: '+({YES:'yes',NO:'no',CT:'can’t tell'}[fr.last.v])+'.';break;
     case 'sign':var fs=S.f[p];fs.ln.boston=1;fs.returned=null;LOG('you (GM seat)','signed line 1 of the '+(p==='f1'?'Denver trade paper':'date request')+' (WILL-yes, your warrant). It is the only line you can fill.',{kind:'record',hist:'World record · paper not yet joined'});msg='Line 1 signed. The other lines are held elsewhere.';break;
     case 'cell':var f2=S.f.f2,b=CAL.busy[p];if(b){f2.refusal={cell:p,holder:b[0],why:b[1]};LOG('arena calendar','refused '+cellName(p)+': held on '+({arena:'the arena’s own calendar',league:'the League’s schedule'}[b[0]])+'.',{kind:'obs',hist:'refusal · nothing changed',clock:'Arena · its own clock'});msg='Refused: '+cellName(p)+' is held on '+({arena:'the arena’s calendar',league:'the League’s schedule'}[b[0]])+'.';}else{f2.cell=p;f2.refusal=null;f2.last=null;LOG('you (GM seat)','asked for '+cellName(p)+', free on the arena’s calendar.',{kind:'rehearsal',hist:'draft · crosses nothing'});msg='Asked for '+cellName(p)+'.';}break;
-    case 'send':var fd=S.f[p];if(!fd.ln.boston||(p==='f2'&&!fd.cell))return;fd.st='sent';S.flight=p;fd.turn=0;fd.last=null;fd.returned=null;
+    case 'send':var fd=S.f[p];if(S.flight||!fd.ln.boston||(p==='f2'&&!fd.cell))return;fd.st='sent';S.flight=p;fd.turn=0;fd.last=null;fd.returned=null;
       if(p==='f1'){fd.tell.league=1;S.g='league';}else{fd.ln.money=1;fd.tell.arena=1;fd.tell.league=1;S.g='arena';}
       flyEnv();LOG('you (GM seat)','sent the '+(p==='f1'?'Denver trade paper':'date request')+'. Notice copies went out and cannot be recalled. The page took '+(p==='f1'?'the League’s':'the arena’s')+' register.',{kind:'record',hist:'World record · in flight'});msg='Sent. You are now visiting '+(p==='f1'?'the League Office':'the arena’s calendar')+'; you cannot approve.';break;
     case 'wait':var fi=S.flight;if(!fi)return;var ff=S.f[fi],bl=blockedOn(fi);if(!bl)return;ff.turn++;
@@ -1076,6 +1078,7 @@ function render(){
   if(!t&&aid==='askq')t=$('#askq');
   if(!t&&lastG!==S.g&&S.g!=='front'){t=$('#standing');t.setAttribute('tabindex','-1');}
   if(!t&&ae&&ae!==document.body&&!document.body.contains(ae)){t=$('#work .btn.pri:not(:disabled)')||$('#work .btn:not(:disabled)');}
+  if(t&&t.disabled)t=$('#push')||$('#work .btn.pri:not(:disabled)')||$('#work .btn:not(:disabled)');
   if(t&&t!==ae){try{t.focus({preventScroll:true});}catch(e){}}
   lastG=S.g;
 }

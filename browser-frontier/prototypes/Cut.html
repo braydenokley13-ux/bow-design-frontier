@@ -184,7 +184,7 @@ body.showhow .how{display:block}
 .walltile .wd{font:600 19px/1.2 var(--mono);color:var(--br)}
 .walltile .wa{font-size:13.5px;line-height:1.25}
 .walltile .rt{grid-column:1 / -1;margin-top:2px}
-.walltile.ret{border-style:dashed;background:transparent;color:var(--ink2);box-shadow:none}
+.walltile.ret{border-style:dashed;border-left-style:solid;border-left-color:var(--ink3);background:transparent;color:var(--ink2);box-shadow:none}
 .walltile.ret .t,.walltile.ret .wd{color:var(--ink2)}
 .wallitem{display:block;width:100%;border:2px solid var(--br);border-left-width:10px;background:var(--brpaper);padding:5px 10px;margin-bottom:6px;color:var(--ink);font-size:14px}
 .wallitem:hover{background:var(--brtone)}
@@ -216,6 +216,8 @@ body.showhow .how{display:block}
 .plane h2 small{display:block;font:italic 400 13px/1.3 var(--serif);text-transform:none;letter-spacing:0;color:var(--ink2)}
 .plane.books{box-shadow:inset 0 0 0 4px var(--paper),inset 0 0 0 5.5px var(--ink);padding:10px 15px 8px}
 .plane.notyet{border-style:dashed;position:relative}
+.cds{display:flex;align-items:center;gap:6px;margin-top:6px}
+.cd{display:inline-block;width:34px;height:14px;border:1.5px dashed var(--ink);background:repeating-linear-gradient(90deg,transparent 0 4px,rgba(22,22,21,.28) 4px 5px)}
 .plane.notyet .slot{border:1.5px dashed var(--ink);padding:4px 8px;margin:5px 0;font-size:13.5px;line-height:1.3}
 .plane.notyet .slot .fl{display:block;margin:0 0 1px}
 .plane.notyet .noline{font:500 12px/1.35 var(--mono);margin-top:7px;padding-top:5px;border-top:1.5px dashed var(--ink)}
@@ -230,6 +232,8 @@ body.showhow .how{display:block}
 
 /* ---------- SEAT ---------- */
 .seat h1{font:700 26px/1.1 var(--serif)}
+.folded{display:flex;gap:16px;align-items:center;flex-wrap:wrap;border:2px solid var(--ink);box-shadow:inset 0 0 0 3px var(--paper),inset 0 0 0 4.5px var(--ink);padding:7px 14px;margin:6px 0 4px;font-size:13.5px}
+.folded .fi{white-space:nowrap}
 .cols2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:22px}
 .actbtn{display:block;width:100%;border:1.5px solid var(--ink);padding:8px 12px;margin:0 0 8px;background:var(--paper);min-height:64px}
 .actbtn b{display:block;font:700 14.5px/1.3 var(--serif)}
@@ -486,9 +490,9 @@ function ctx(){
   if (S.view === 'hist') return { clock: 'frozen · no NOW', hist: 'record 1985–86', who: 'you · observer' };
   return { clock: 'Reality NOW', hist: 'record', who: 'you · observer' };
 }
-function L(kind, text, signed){
+function L(kind, text, signed, label){
   var c = ctx();
-  S.log.push({ n: S.log.length + 1, kind: kind, text: text, clock: c.clock, hist: c.hist, who: c.who, signed: !!signed });
+  S.log.push({ n: S.log.length + 1, kind: kind, text: text, clock: c.clock, hist: c.hist, who: c.who, signed: !!signed, label: label || null });
   if (signed) S.sig++;
 }
 function trailPush(label){
@@ -644,7 +648,7 @@ function act(kind, p){
     var nb = { id: 'b' + S.nextN, n: 'b' + S.nextN, cutId: S.cutId, date: cut().date, act: S.seat.act, council: JSON.parse(JSON.stringify(S.seat.council)), hind: hindStamp(), status: 'walking' };
     S.nextN++; S.branches.push(nb); S.activeId = nb.id;
     S.view = 'branch'; S.overlay = null; S.newMarks = [];
-    L('keep', 'Kept: your branch ' + nb.n + ' — “' + ACTS[nb.act].label + '” · diverged ' + fd(nb.date) + ' · hindsight: ' + nb.hind + ' · coupling: PINNED', true);
+    L('keep', 'Kept: your branch ' + nb.n + ' — “' + ACTS[nb.act].label + '” · diverged ' + fd(nb.date) + ' · hindsight: ' + nb.hind + ' · coupling: PINNED', true, ACTS[nb.act].label);
     trailPush('Branch ' + nb.n + ' · diverged ' + fs(nb.date));
     announce('Branch kept. The cut is now the left frame in record ink. Your branch opens in its own ink. Reality is shuttered at the edge.'); break;
   case 'advance':
@@ -673,9 +677,9 @@ function act(kind, p){
   case 'forward':
     if (!S.fwd.length) break; var nx = S.fwd.pop(); S.trail.push(nx); applyTrail(nx); L('trail', 'Trail: forward to “' + nx.label + '”'); break;
   case 'rec-earlier':
-    if (S.recPtr > 0) S.recPtr--; L('observe', 'Record: earlier'); break;
+    S.recPtr = Math.min(S.recPtr, recMax()); if (S.recPtr > 0) S.recPtr--; L('observe', 'Record: earlier'); break;
   case 'rec-later':
-    var mx = recMax();
+    var mx = recMax(); S.recPtr = Math.min(S.recPtr, mx);
     if (S.recPtr >= mx) {
       if (S.view === 'cut' || S.view === 'seat') refuse('Nobody at this desk could know what comes next.', 'Later stops at the cut. The record beyond ' + fd(cut().date) + ' is sealed from this seat.');
       else refuse('Later stops at the horizon.', 'Nothing is recorded past “recorded through ' + fd(NOW) + '”. The future is not in the record.');
@@ -686,7 +690,7 @@ function act(kind, p){
     var ob = S.branches.filter(function (x) { return x.id === p.id; })[0]; if (!ob) break;
     ob.status = 'retired'; S.cutId = ob.cutId; S.seat = { act: null, council: { club: null, tatum: null } }; S.activeId = null;
     S.view = 'cut'; S.overlay = null;
-    L('retake', 'Re-take: forked from before “' + ACTS[ob.act].label + '”; retired branch ' + ob.n + ' (kept, not deleted)', true);
+    L('retake', 'Re-take: forked from before “' + ACTS[ob.act].label + '”; retired branch ' + ob.n + ' (kept, not deleted)', true, ACTS[ob.act].label);
     trailPush('Cut · ' + fd(cut().date) + ' (re-take)'); announce('Re-take. You are at the cut again. Branch ' + ob.n + ' is retired, still readable on the wall.'); break;
   case 'amend':
     var ab = S.branches.filter(function (x) { return x.id === p.id; })[0]; if (!ab) break;
@@ -703,7 +707,7 @@ function act(kind, p){
   }
   render();
 }
-function lastSigText(){ for (var i = S.log.length - 1; i >= 0; i--) if (S.log[i].signed) return S.log[i].text.split(' · ')[0].replace(/^Kept: /, ''); return 'an act'; }
+function lastSigText(){ for (var i = S.log.length - 1; i >= 0; i--) if (S.log[i].signed && S.log[i].label) return S.log[i].label; return 'an act'; }
 function histName(){ for (var i = 0; i < FX.historical.length; i++) if (FX.historical[i].id === S.histId) return FX.historical[i].name; return ''; }
 function applyTrail(e){ S.view = e.view; S.cutId = e.cutId || S.cutId; S.activeId = e.branchId; S.histId = e.hist; S.overlay = null; }
 function recMax(){
@@ -912,7 +916,7 @@ function vCut(){
     deskSrc +
     '<div class="fact"><span class="sw k-UNKNOWN" aria-hidden="true"></span><div class="fb"><span class="fl">Dated sources ≤ ' + fs(c.date) + '</span><span class="hole">[verify: two press sources on Boston’s tax bill]</span></div></div>' +
     '<div class="fact"><span class="sw k-UNKNOWN" aria-hidden="true"></span><div class="fb"><span class="fl">Reported talks</span><span class="hole">' + esc(findKnown(/other teams/).value.note.replace(' — do not invent rumors', '')) + '</span></div></div>' +
-    '<p class="rt" style="margin-top:6px"><b>Not shown:</b> the 2026–27 lines. They do not exist at this cut. Other clubs’ desks: closed.</p></section>';
+    '<p class="rt" style="margin-top:6px"><b>Not shown:</b> the 2026–27 lines. They do not exist at this cut.</p><div class="cds" role="img" aria-label="Other seats’ desks are drawn, closed"><span class="lbl">Other desks · drawn, closed</span><i class="cd"></i><i class="cd"></i><i class="cd"></i><i class="cd"></i></div></section>';
   var notyet = '<section class="plane notyet" data-cap="PROPOSED" data-capc="a sealed slot exists only if a source dated on or before the cut asked the question" data-cost="NO AI REQUIRED (hand-authored) · mining these: FRONTIER MODEL OCCASIONAL, human-reviewed · fully automatic: SPECULATIVE FRONTIER"><h2>Not yet<small>drawn, empty</small></h2>' +
     '<div class="slot"><span class="fl">The deadline’s closing hour</span>' + dow(DL.date) + ' ' + fs(DL.date) + ', ' + esc(DEADLINE_TIME) + ' · scheduled</div>' +
     '<div class="slot"><span class="fl">Games left</span><span class="hole">[verify: games left on the schedule]</span></div>' +
@@ -960,7 +964,12 @@ function vSeat(){
   if (a && !need) { var tmp = { act: S.seat.act, council: S.seat.council, cutId: S.cutId, date: c.date }; asm = '<div class="assump"><div class="lbl">Assumptions this branch will carry · Reality grades them later</div><ul class="plain">' + assumptions(tmp).map(function (x) { return '<li><span class="sw k-' + x.k + '" aria-hidden="true"></span> ' + esc(x.t) + '</li>'; }).join('') + '</ul></div>'; }
   var keepMsg = !a ? 'Choose an act' : need ? 'Blocked · ' + need + ' seat' + (need > 1 ? 's' : '') + ' unset' : 'Ready';
   var slip = (S.refusal && S.refusal.keep) ? '<div class="refuse"><span class="stamp">Refused</span> <b>Rule:</b> ' + esc(S.refusal.rule) + ' ' + esc(S.refusal.text) + '</div>' : '';
-  return '<div class="seat"><div class="lbl">Seat · Boston’s decision-maker · at ' + fd(c.date) + ' · hindsight: ' + esc(hindStamp()) + '</div><h1>Choose from what the rules allow, not from what happened.</h1>' +
+  var fold = '<div class="folded" data-cap="PROPOSED" data-capc="the cut stays on the left in record ink while you decide" data-cost="NO AI REQUIRED"><span class="lbl">The cut · ' + fd(c.date) + ' · record ink · stays put</span>' +
+    '<span class="fi"><span class="sw k-' + TAXROW.value.k + '" aria-hidden="true"></span> Projected tax <b>≈ ' + M(TAX0) + '</b></span>' +
+    '<span class="fi"><span class="sw k-' + findState(/Tatum/).value.k + '" aria-hidden="true"></span> Tatum out, no return yet</span>' +
+    '<span class="fi"><span class="sw k-' + findState(/Simons/).value.k + '" aria-hidden="true"></span> Simons on the roster</span>' +
+    '<span class="fi"><span class="sw k-UNKNOWN" aria-hidden="true"></span> Not yet: sealed</span></div>';
+  return '<div class="seat"><div class="lbl">Seat · Boston’s decision-maker · at ' + fd(c.date) + ' · hindsight: ' + esc(hindStamp()) + '</div><h1>Choose from what the rules allow, not from what happened.</h1>' + fold +
     '<div class="cols2"><section data-cap="PROPOSED" data-capc="the legal action space, cut-versioned; the CBA engine that would compute it is REAL in BOW Economics Live" data-cost="NO AI REQUIRED"><h2 class="h2">The legal action space</h2>' + acts +
     '<p class="rt">Rules in force: the 2025–26 lines. The 2026–27 lines are not on this desk.</p></section>' +
     '<section data-cap="PROPOSED" data-capc="the Council: each touched actor is Recorded / Declared / Modeled / Unknown" data-cost="NO AI REQUIRED · a ‘Model’ seat would be FRONTIER MODEL OCCASIONAL"><h2 class="h2">The Council · seats this act touches</h2>' + council + asm + slip +
@@ -1000,7 +1009,7 @@ function vBranch(){
   var br = '<section class="frame branch" data-cap="PROPOSED" data-capc="a branch runs on its own clock, in its own ink, beside Reality" data-cost="NO AI REQUIRED"><h2>Your branch ' + b.n + ' · runs beside Reality</h2>' +
     '<div class="bstamp"><b>Your branch · diverged ' + fd(c.date) + ', ' + (c.knows ? 'after' : 'before') + ' the first report</b><br>by you · seat Boston · hindsight: <b>' + esc(b.hind) + '</b> · coupling: <span class="pin" title="Pinned: your dates are Reality’s dates, so Reality’s recorded events arrive at them. You set the pace.">PINNED</span></div>' +
     '<div class="clk"><span class="d">' + fd(b.date) + '</span><span class="rt">its own clock · ' + Math.abs(N.daysLeft) + (N.daysLeft >= 0 ? ' days to the deadline' : ' days after the deadline') + '</span></div>' +
-    taxRow + simRow + clubRow + tatRow + extra + dlRow + pace + '</section>';
+    taxRow + simRow + clubRow + tatRow + extra + dlRow + pace + ((S.refusal && S.refusal.view === 'branch') ? '<div class="refuse" style="margin-top:8px"><span class="stamp">Refused</span> <b>Rule:</b> ' + esc(S.refusal.rule) + ' ' + esc(S.refusal.text) + '</div>' : '') + '</section>';
   var marks;
   if (!sm) marks = '<div class="marks empty">Nothing has arrived. Reality has not spoken to anything your branch assumed. It will, at its own dates. Your assumptions: ' + assumptions(b).map(function (x) { return esc(x.t.replace(/\.$/, '')); }).join('; ') + '.</div>';
   else marks = '<div class="marks">' + ms.map(function (m) {
@@ -1010,7 +1019,7 @@ function vBranch(){
       '<div class="side b"><span class="lbl">Your branch assumed</span>' + esc(m.bt) + ' <i>' + esc(m.plain) + '</i><span class="how">' + esc(m.bk + ' · declared in the Council · your act') + '</span></div></div>';
   }).join('') + '</div>';
   var seamH = '<section class="seambar" data-cap="PROPOSED" data-capc="Reality arrives one way; the mark grades your assumption, never you" data-cost="NO AI REQUIRED (Council ‘Model’ seats: FRONTIER MODEL OCCASIONAL)"><div class="stitch"></div><h2>The seam <small>Reality arrives one way. It grades what your branch assumed. No score, no total.</small></h2>' + marks + '</section>';
-  return '<div class="bview"><div class="frames">' + rec + br + '</div>' + seamH + slipHTML() + '</div>';
+  return '<div class="bview"><div class="frames">' + rec + br + '</div>' + seamH + '</div>';
 }
 
 /* ----- HIST ----- */
@@ -1085,18 +1094,18 @@ function whyChain(of){
 function ovWhy(){
   var links = whyChain(S.whyOf);
   return '<div class="scrim" data-act="close-overlay"></div><section class="sheet" role="dialog" aria-modal="true" aria-label="Why: traced to recorded causes" data-cap="PROPOSED" data-capc="each computed number knows its cause; the causal engine exists only as a design" data-cost="NO AI REQUIRED"><div class="top"><div><div class="lbl">Why · traced to causes, not prose</div><h1>' + (S.whyOf === 'branch' ? 'Why your branch’s tax is what it is' : 'Why the tax is ≈ ' + M(TAX0)) + '</h1></div><button type="button" class="btn sm" data-act="close-overlay" data-fk="close">Close</button></div>' +
-    links.map(function (l) { return '<div class="whyl"><div class="t"><span class="id">' + esc(l.id) + '</span><span class="sw k-' + l.k + '" aria-hidden="true"></span> ' + esc(l.t) + '</div><div class="m">' + esc(l.k) + ' · ' + esc(l.m) + '</div></div>'; }).join('') +
+    links.map(function (l) { return '<div class="whyl"><div class="t"><span class="id">' + esc(l.id) + '</span><span class="sw k-' + l.k + '" aria-hidden="true"></span> ' + esc(l.t) + '</div><div class="m">' + (l.m.indexOf(l.k) === 0 ? '' : esc(l.k) + ' · ') + esc(l.m) + '</div></div>'; }).join('') +
     '<div class="whyl dash"><div class="t" style="color:var(--ink2)">What did this touch? · stops here</div><div class="m">Forward links end at the horizon in a dashed line. No model ran past it.</div></div></section>';
 }
 function ovBacks(){
   var prev = S.trail[S.trail.length - 2], nxt = S.fwd[S.fwd.length - 1];
   var trail = '<ul>' + S.trail.slice(-9).map(function (e, i, arr) { return '<li class="' + (i === arr.length - 1 ? 'cur' : '') + '">' + (i === arr.length - 1 ? '▸ ' : '') + esc(e.label) + '</li>'; }).join('') + '</ul>';
-  var mx = recMax();
+  var mx = recMax(), ptr = Math.min(S.recPtr, mx), atCut = (S.view === 'cut' || S.view === 'seat');
   var rec = '<ul>' + RECORD.map(function (r, i) {
-    var hid = i > mx && (S.view === 'cut' || S.view === 'seat');
-    if (i < S.recPtr - 2 || i > S.recPtr + 1) return '';
-    return '<li class="' + (i === S.recPtr ? 'cur' : '') + (hid ? ' hid' : '') + '">' + (hid ? '— sealed —' : fd(r.date) + ' · ' + esc(r.text)) + '</li>';
-  }).join('') + '<li class="hid" style="border:0">' + (S.recPtr >= RECORD.length - 1 ? '┈ the horizon: recorded through ' + fs(NOW) + ' [verify time] ┈' : '') + '</li></ul>';
+    var hid = i > mx && atCut;
+    if (i < ptr - 2 || i > ptr + 1) return '';
+    return '<li class="' + (i === ptr ? 'cur' : '') + (hid ? ' hid' : '') + '">' + (hid ? '— sealed —' : fd(r.date) + ' · ' + esc(r.text)) + '</li>';
+  }).join('') + '<li class="hid" style="border:0">' + (atCut ? '┈ the cut: ' + fs(cut().date) + ' · nothing later is shown ┈' : (ptr >= RECORD.length - 1 ? '┈ the horizon: recorded through ' + fs(NOW) + ' [verify time] ┈' : '')) + '</li></ul>';
   var sigs = S.log.filter(function (e) { return e.signed; });
   var acts = '<ul>' + (sigs.length ? sigs.map(function (e) { return '<li><em>' + esc(e.kind === 'keep' ? 'Kept:' : e.kind === 'retake' ? 'Re-taken:' : e.kind === 'amend' ? 'Amended:' : 'Followed:') + '</em> ' + esc(e.text.replace(/^(Kept: |Re-take: |Amend on |Followed )/, '')) + ' <span class="mono" style="font-size:10.5px">#' + e.n + '</span></li>'; }).join('') : '<li>No signed acts yet. Observing is not signing.</li>') + '</ul>';
   var walking = S.branches.filter(function (x) { return x.status === 'walking'; })[0];
@@ -1110,7 +1119,7 @@ function ovBacks(){
     '<div class="backcol bc-rec"><h2>Record · print</h2><p class="k">The system’s. Public. Never changed.</p>' + rec +
     '<div class="acts"><button type="button" class="btn sm" data-act="rec-earlier" data-fk="rec-e">Earlier</button><button type="button" class="btn sm" data-act="rec-later" data-fk="rec-l">Later</button></div><p class="rt" style="margin-top:6px">Later stops at the horizon.</p></div>' +
     '<div class="backcol bc-acts"><h2 style="color:var(--br)">Acts · signature</h2><p class="k">Mine. Attributable. Append-only. No Back, only acting.</p>' + acts +
-    '<div class="acts">' + retake + amend + '</div><p class="rt" style="margin-top:8px"><b>Reality has no Undo.</b> It accepts nothing; it arrives.</p></div></div></section>';
+    '<div class="acts">' + retake + amend + '</div><p class="rt" style="margin-top:8px"><b>Reality has no Undo.</b> It accepts nothing; it arrives.</p><p class="rt" style="margin-top:6px">Act-log fold · SHA-256 <span class="mono" id="loghash">…</span><br>Same clicks, same hash. REAL on the Live World page; prototype-grade here.</p></div></div></section>';
 }
 
 /* ================= render ================= */
@@ -1134,10 +1143,20 @@ function render(){
   document.getElementById('legend').innerHTML = legendHTML();
   document.getElementById('status').innerHTML = statusHTML();
   if (S.tog.real) tagCaps();
+  if (S.overlay === 'backs') logHash();
   var target = null;
   if (S.overlay) target = st.querySelector('.sheet [data-fk="close"]');
   if (!target && fk) target = document.querySelector('[data-fk="' + fk + '"]');
   if (target) target.focus({ preventScroll: true });
+}
+function logHash(){
+  try {
+    var data = new TextEncoder().encode(JSON.stringify(S.log.map(function (e) { return [e.kind, e.text, e.clock, e.hist, e.who, e.signed]; })));
+    crypto.subtle.digest('SHA-256', data).then(function (buf) {
+      var h = Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+      var el = document.getElementById('loghash'); if (el) el.textContent = h.slice(0, 24) + '…';
+    });
+  } catch (e) { var el = document.getElementById('loghash'); if (el) el.textContent = 'not available here'; }
 }
 function tagCaps(){
   var els = document.querySelectorAll('[data-cap]');

@@ -1179,10 +1179,11 @@ var LN={id:id,name:'THE LEVER',mat:'Instrument dial',blurb:'The page does not ch
    '<div style="display:flex;flex-direction:column;gap:10px;min-height:0;overflow:auto">'+probeBox(L)+clockBox(L)+'</div></div>';
  },
  onRange:function(L,v,commit){
-  if(!L.entered)return;
-  var o=v;if(v>MAXV){v=MAXV;var r=$('#lev');if(r)r.value=MAXV}
+  if(!L.entered||L.acted)return;
+  if(!commit)L.over=v>MAXV?v:0;
+  if(v>MAXV){v=MAXV;var r=$('#lev');if(r)r.value=MAXV}
   L.lever=v;var g=$('#et-gh'),t=$('#et-dt');if(g)g.innerHTML=ghost(L);if(t){t.textContent=draftTxt(L);t.style.color=v>0?'var(--fork)':'var(--ink2)'}
-  if(commit)act('e6.lever',{v:o});
+  if(commit){var o=L.over||v;L.over=0;act('e6.lever',{v:o})}
  },
  bar:function(L){
   var cmp=U('Compare all seven','go',{view:'compare'},'pri','data-primary');

@@ -1101,11 +1101,11 @@ function knowRows() {
    THE PLATE · turn the Loom over: parts with truth signatures, couplings, ports as tabs
    ===================================================================== */
 const KNOTS = [
-  { id: 'c1', name: 'c1 · LATE AIRCRAFT', claim: 'A late-arriving aircraft delays its next departure.', claimK: 'SOURCED', src: 'BTS lists late-arriving aircraft as a standard delay cause (verify).',
+  { id: 'c1', name: 'c1 · LATE AIRCRAFT', claim: 'A late-arriving aircraft delays its next departure.', claimK: 'SOURCED', src: 'BTS: late-arriving aircraft is a standard delay cause (verify).',
     inputs: () => [{ t: 'the wiring itself', k: 'GENERATED' }, { t: 'BTS delay-cause category', k: 'SOURCED' }] },
-  { id: 'c2', name: 'c2 · CLOCK', claim: 'Late minutes are minutes on the crew’s duty clock.', claimK: 'ASSERTED', src: 'Asserted: the limit is one authored number where the published table varies (verify 14 CFR 117 Table B).',
+  { id: 'c2', name: 'c2 · CLOCK', claim: 'Late minutes are minutes on the crew’s duty clock.', claimK: 'ASSERTED', src: 'Asserted: one authored limit where the published table varies (verify 14 CFR 117 Table B).',
     inputs: () => [{ t: 'the wiring itself', k: 'GENERATED' }, { t: 'crew report time', k: 'UNKNOWN' }, { t: 'one crew flies all four legs', k: 'ASSUMED' }, { t: '11.5 h limit, simplified', k: 'ASSUMED' }, { t: 'extension allowance, up to 2 h', k: S.plate.rule ? 'SOURCED' : 'ASSUMED' }] },
-  { id: 'c3', name: 'c3 · MISSED CONNECTION', claim: 'A late arrival can miss its onward flight.', claimK: 'ASSERTED', src: 'Asserted: the minimum connection time (' + SCHED.mct + ' min) has no public source for this carrier.',
+  { id: 'c3', name: 'c3 · MISSED CONNECTION', claim: 'A late arrival can miss its onward flight.', claimK: 'ASSERTED', src: 'Asserted: no public minimum connection time for this carrier (' + SCHED.mct + ' min is authored).',
     inputs: () => [{ t: 'the wiring itself', k: 'GENERATED' }, { t: 'minimum connection ' + SCHED.mct + ' min', k: 'ASSUMED' }, { t: 'passengers per onward flight', k: 'AUTHORED' }] }
 ];
 const UNSOUND = { GENERATED: 1, UNKNOWN: 1, ASSUMED: 1 };
@@ -1144,16 +1144,16 @@ ACTS.back = () => { S.view = 'plate'; S.plate.cloud = !!S.plate.rule; return { l
 function sigBar(sig) {
   const tot = Object.keys(sig).reduce((s, k) => s + sig[k], 0), order = ['OBSERVED', 'RECORDED', 'AUTHORED', 'COMPUTED', 'MODELED', 'GENERATED', 'UNKNOWN'];
   return '<span class="sig" role="img" aria-label="truth signature: ' + order.filter(k => sig[k]).map(k => sig[k] + ' ' + k.toLowerCase()).join(', ') + '">' + order.filter(k => sig[k]).map(k => '<i class="seg k-' + k + '" style="flex:' + sig[k] + '"></i>').join('') + '</span>' +
-    (S.know ? '<span class="sigw">' + order.filter(k => sig[k]).map(k => sig[k] + ' ' + k.toLowerCase()).join(' · ') + '</span>' : '');
+    '';
 }
 VIEWS.plate = () => {
   const E = envFor(), R = sim(REC, E), cl = S.plate.cloud && S.plate.rule, ports = PORTS(), top = knotScores()[0];
   const counts = { LIVE: 0, FIXTURE: 0, ASSUMED: 0, EMPTY: 0 }; ports.forEach(p => counts[p.st]++);
-  const tabBtn = p => '<button type="button" class="ptab' + (cl && p.id === 'rule' ? ' clouded' : '') + '" data-a="port" ' + dp({ id: p.id }) + ' aria-pressed="' + (S.plate.port === p.id) + '"><span class="pt-n">' + p.name + (p.id === 'rule' ? ' <i>steps out</i>' : '') + '</span><span class="pt-s">' + kc(p.st) + '</span><span class="pt-w">' + esc(p.what) + '</span></button>';
+  const tabBtn = p => '<button type="button" class="ptab' + (cl && p.id === 'rule' ? ' clouded' : '') + '" data-a="port" ' + dp({ id: p.id }) + ' aria-pressed="' + (S.plate.port === p.id) + '"><span class="pt-h"><span class="pt-n">' + p.name + (p.id === 'rule' ? ' <i>steps out</i>' : '') + '</span>' + kc(p.st) + '</span><span class="pt-w">' + esc(p.what) + '</span></button>';
   const P = ports;
   const partRows = PARTS.map(p => '<div class="prow' + (cl && p.id === 'duty' ? ' clouded' : '') + '"><div><b>' + p.name + '</b> <i>' + p.ver + '</i></div><div class="pr2">' + sigBar(sigOf(p)) + '</div><div class="pm">reviewed by [reviewer]' + (p.rule ? ' · from the fixture rule “' + esc(p.rule) + '”' : ' · not one of the fixture’s named rules') + '</div></div>').join('');
   const knotRows = KNOTS.map(k => { const ins = k.inputs(), sc = knotScores().find(x => x.id === k.id), mark = S.plate.distrust && top.id === k.id;
-    return '<div class="knot' + (mark ? ' mark' : '') + (cl && k.id === 'c2' ? ' clouded' : '') + '"><div class="kh"><b>' + k.name + '</b>' + (mark ? '<span class="dtag">DISTRUST HERE</span>' : '') + '</div><div class="kl">' + kc('GENERATED', 'wired by a generator') + kc(k.claimK, k.claimK.toLowerCase() + ' claim') + '</div><p class="kt">' + esc(k.claim) + '</p><p class="ks2">' + esc(k.src) + '</p><p class="ks3">' + sc.unsound + ' unsound input' + (sc.unsound === 1 ? '' : 's') + ' · ' + sc.sourced + ' sourced' + (S.know ? ' · ' + ins.map(i => esc(i.t) + ' (' + i.k.toLowerCase() + ')').join('; ') : '') + '</p></div>'; }).join('');
+    return '<div class="knot' + (mark ? ' mark' : '') + (cl && k.id === 'c2' ? ' clouded' : '') + '"><div class="kh"><b>' + k.name + '</b>' + (mark ? '<span class="dtag">DISTRUST HERE</span>' : '') + '</div><div class="kl">' + kc('GENERATED', 'wired by a generator') + kc(k.claimK, k.claimK.toLowerCase() + ' claim') + '</div><p class="kt">' + esc(k.claim) + '</p><p class="ks2">' + esc(k.src) + '</p><p class="ks3">' + sc.unsound + ' unsound input' + (sc.unsound === 1 ? '' : 's') + ' · ' + sc.sourced + ' sourced</p></div>'; }).join('');
   const note = S.plate.port && S.plate.port !== 'rule' ? '<p class="portnote" role="status"><b>' + P.find(p => p.id === S.plate.port).name + '</b> · ' + esc(P.find(p => p.id === S.plate.port).note) + '</p>' : '';
   const hash8 = hash(JSON.stringify([PARTS.map(p => p.id + p.ver), KNOTS.map(k => k.id), SCHED.legs.map(l => l.dep + '/' + l.block)])).slice(0, 12);
   return '<section class="sheet plate" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><header class="sh"><span class="no">SHEET D</span><h1 tabindex="-1">Plate</h1><span class="sub">the back of the mechanism: made of what, plugged into what</span><span class="grow"></span><button type="button" class="btn sm" data-a="go" ' + dp({ view: 'loom' }) + '>Turn it back over</button></header>' +
@@ -1171,7 +1171,8 @@ VIEWS.stub = () => {
     '<div class="benchbar"><button type="button" class="btn you" data-a="attach"' + (S.plate.rule ? ' disabled' : '') + '>Attach this sheet as the source for the extension</button>' + (S.plate.rule ? '<span class="note">Attached. The duty clock’s extension allowance now cites this stub, and the plate will say it is unreviewed.</span>' : '<span class="note">Nothing changes on the plate unless you attach it.</span>') + '</div></section>';
 };
 KNOW_MORE.plate = F => {
-  F('COMPUTED', 'Truth signatures', 'counted from each part’s own parameters (kinds as authored on the bench)', null);
+  F('COMPUTED', 'Truth signatures, in words', PARTS.map(p => p.short + ': ' + Object.keys(sigOf(p)).map(k => sigOf(p)[k] + ' ' + k.toLowerCase()).join(', ')).join(' · '), null);
+  KNOTS.forEach(k => F(k.claimK === 'SOURCED' ? 'SOURCED' : 'AUTHORED', k.name + ': inputs', k.inputs().map(i => i.t + ' (' + i.k.toLowerCase() + ')').join('; '), null));
   F('GENERATED', 'Couplings: wired by', 'a generator; none has been reviewed', null);
   F('OBSERVED', 'c1 claim: late aircraft is a delay cause', SPEC_FACTS.bts.src, SPEC_FACTS.bts.asOf, true);
   F('AUTHORED', 'c2 and c3 claims', 'asserted; no source names the values used', null);
