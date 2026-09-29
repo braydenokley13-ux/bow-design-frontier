@@ -6,13 +6,13 @@
 
 Open the layers a stranger needs in order to **check** a BOW record. Operate, and keep closed, the layers that carry **authority, history and licensed content**.
 
-The clone test says closing code protects almost nothing: four engines were rebuilt from screenshots in 12–22 calls. The same test says what a copy could not be: the canonical World, the sourced rulebook, the accumulated record. So the boundary must not defend code. It sits where *checking* ends and *authority* begins.
+The clone test says closing code protects almost nothing: four engines were rebuilt from screenshots in 12–22 calls. It also says what a copy could not be: the canonical World, the sourced rulebook, the accumulated record. So the boundary must not defend code. It sits where *checking* ends and *authority* begins.
 
 **Decision rule, per layer.** Open the **source** if (1) openness makes BOW's own claims more credible and (2) a third party reselling that layer would not consume BOW revenue. Open the **spec** if (1) holds and an independent second implementer is plausible within about 24 months. Otherwise close it, or mark it "not yet" with a trigger.
 
-Test (2) is the one Elastic, HashiCorp and Redis failed: each opened the thing it sold, then watched hyperscalers sell it. BOW sells authority and persistence, never the format (the economics board already says so).
+Test (2) is the one Elastic, HashiCorp and Redis failed: each opened the thing it sold, then watched hyperscalers sell it. BOW sells authority and persistence, never the format.
 
-Two guardrails. Open is not the same as inspectable: "How do we know?" is free inside every product, whether or not a rulebook is licensed for reuse. And an open format is not open data: no student record ever enters a public address space.
+Two guardrails. Open is not inspectable: "How do we know?" is free inside every product, whether or not a rulebook is licensed for reuse. And an open format is not open data: no student record enters a public address space.
 
 ## Per-layer call
 
@@ -52,47 +52,46 @@ Two guardrails. Open is not the same as inspectable: "How do we know?" is free i
 
 ## The required topics
 
-- **Adoption:** the product carries adoption; the spec is an option, not the thesis. Spec-level pull, if it comes, arrives through verification links and embeds first. Speculation: coding agents that can read a spec lower the cost of third-party tooling.
-- **Monetization** (not a price list): persistence, licensed data, district and enterprise licences with receipts, hosting, later marketplace take. The format is never charged for.
-- **Developer ecosystem:** spec, verifier, fold library, vectors, later authoring kit. No external developer exists today, so the first implementers are our own two products.
+- **Adoption:** the product carries adoption; the spec is an option, not the thesis. Spec pull, if it comes, arrives through verification links and embeds. Speculation: coding agents that read a spec cut the cost of third-party tooling.
+- **Monetization** (no price list): persistence, licensed data, district and enterprise licences with receipts, hosting, later marketplace take.
+- **Developer ecosystem:** spec, verifier, fold library, vectors, later an authoring kit. No outside developer exists, so the first implementers are our own two products.
 - **Moat:** instance, history, rulebook data, keys, trust operations, licences. Not code.
-- **Security:** Kerckhoffs applies: publishing hashing and formats is safe. The attack surface is the host and the projections, both closed. Today head authority is a platform ACL and comparisons are 32-bit; a full 64-hex signed head comes before any "verifiable" claim.
-- **Trust:** an operator cannot silently rewrite World One if signed heads are also published to a third-party log. That matters when students argue "our decision caused that?"
-- **Network effects:** zero today. The plausible ones: verification (the more places that can check a record, the more it is worth as evidence, as with PDF readers) and, much later, cross-World contracts. Classroom size is not a network.
+- **Security:** publishing formats and hashing is safe (Kerckhoffs). The attack surface is the host and the projections, both closed. Today head authority is a platform ACL and comparison is 32-bit; a full 64-hex signed head must precede any "verifiable" claim.
+- **Trust:** an operator cannot silently rewrite World One if signed heads also go to a third-party log. That matters when students ask "our decision caused that?"
+- **Network effects:** zero today. Plausible: verification (the more places can check a record, the more it is worth as evidence, as with PDF readers) and, much later, cross-World contracts. A classroom is not a network.
 
 ## Analogies, and what each teaches
 
-- **Android/AOSP vs GMS:** Apache-licensed code, but the moat was Google's services plus a compatibility definition and test suite. The lesson is BOW's L0-L2 plus "BOW Verified". The cautions: tying triggered the EU's 2018 fine, and in 2025 Google moved AOSP development behind closed doors.
-- **Git vs GitHub:** open protocol, clone-to-leave, the hosting and social layer captured the value. This is L0/L1 vs L3.
-- **PDF:** Adobe published it in 1993; ISO 32000-1 came in 2008. A free reader, a paid authoring tool, governance after adoption. Ours has no adoption yet.
-- **OpenUSD vs Omniverse:** Pixar opened code in 2016, the Alliance formed in 2023, a written Core Specification 1.0 landed in December 2025. Code-first, governance late, proprietary platform on top.
-- **Chromium vs Chrome, and VS Code vs its Marketplace:** open engine, closed distribution and services. Also the warning: one vendor steers an "open" thing, and Microsoft's April 2025 enforcement cut its C/C++ extension off from forks like Cursor. LSP shows a one-vendor spec can still win.
-- **Unity vs Unreal, Stripe, Figma:** Unity's 2023 Runtime Fee, cancelled in 2024, shows retroactive terms burn trust. Stripe documents its API openly and keeps the network and risk data. Figma won on a closed multiplayer runtime with documented APIs, so open format is not what won there.
+- **Android/AOSP vs GMS:** Apache code; the moat was Google's services plus a compatibility definition and test suite. That is L0–L2 plus "BOW Verified". Cautions: preinstall and tying deals drew the EU's 2018 fine, and in March 2025 Google moved AOSP development private.
+- **Git vs GitHub:** open protocol, clone-to-leave; hosting and the social layer captured the value. That is L0/L1 vs L3.
+- **PDF:** published 1993, ISO 32000-1 in 2008; free reader, paid authoring, governance after adoption. BOW has no adoption yet.
+- **OpenUSD vs Omniverse:** Pixar opened code in 2016, the Alliance formed August 2023, Core Specification 1.0 landed December 2025. Code first, governance late, proprietary platform on top.
+- **Chromium vs Chrome; VS Code vs Marketplace:** open engine, closed distribution and services. The warning: one vendor steers the "open" thing, and Microsoft's April 2025 enforcement cut its C/C++ extension off from forks like Cursor. LSP shows a one-vendor spec can still win.
+- **Unity, Stripe, Figma:** Unity's Runtime Fee (2023, cancelled 12 Sep 2024) shows retroactive terms burn trust. Stripe documents its API and keeps the network and risk data (my reading). Figma won with a closed multiplayer runtime plus documented APIs, so an open format is not what won there.
 
 ## Failure modes of my own strategy
 
-1. **Wrong boundary.** If verifiers or rulebooks turn out to be the value, commoditization takes it. Canary: track whether outsiders ask for hosting or for the record.
-2. **Sole-editor capture,** the OOXML and Chromium worry. Mitigation: T2, public vectors, patent non-assert.
-3. **Relicensing chill.** Even a rumor deters adopters. Mitigation: the Charter, decided now.
-4. **Fragmentation.** Doom demos desync across engine versions; our own repo has five `bow://` grammars. Vectors and a declared frame in every address from day one.
-5. **Attention tax on a small team with no users.** Label everything Experimental, promise nothing until T1.
-6. **Open side unproven.** A frozen wrong spec is worse than none. Versioned frames and dated deprecations.
-7. **Two constituencies, both irritated.**
+1. **Wrong boundary.** If verifiers or rulebooks are the value, commoditization takes it. Canary: do outsiders ask for hosting or for the record?
+2. **Sole-editor capture** (OOXML, Chromium). Mitigation: T2, public vectors, patent non-assert.
+3. **Relicensing chill.** Even a rumor deters adopters. Mitigation: the Charter, now.
+4. **Fragmentation.** Doom demos desync across engine versions; our repo has at least five `bow://` grammars. Vectors and a declared frame in every address.
+5. **Attention tax** on a small team with no users. Label everything Experimental; promise nothing before T1.
+6. **Frozen wrong spec.** Versioned frames, dated deprecations.
 
 ## Next 12 months, given today's facts
 
-1. **Months 0–2:** one canonical serialization and hash; L0 and L1 drafts written *from* Receipt v1 and X3Proof; collapse the five address grammars; publish the Charter and Experimental drafts with tamper-case vectors. The first job is to unify our own two products, so no outsider is required.
+1. **Months 0–2:** one canonical serialization and hash; L0 and L1 drafts written *from* Receipt v1 and X3Proof; collapse the address grammars; publish the Charter and Experimental drafts with tamper-case vectors. The first job is unifying our own two products, so no outsider is required.
 2. **Months 1–4:** run World One on a real shared store with a full signed head, anchored in an external log. The closed moat's clock starts here.
-3. **Months 3–6:** the **spec-only clone test**: an unrelated model gets only the spec and vectors and must build a verifier that agrees on every vector and rejects every tamper. Failure means the spec hides what screenshots hide. Then publish the verifier.
-4. **Months 4–9:** first real classes on both products; the first both-sides sourced rulebook. Student data stays only in the closed store.
-5. **Months 6–12:** one non-BOW author, unaided, ships a small World or embed. Publish a quarterly layer ledger recording which triggers moved.
+3. **Months 3–6:** the **spec-only clone test**. An unrelated model gets only the spec and vectors and must build a verifier that agrees on every vector and rejects every tamper. Failure means the spec omits what screenshots hide. Then publish the verifier.
+4. **Months 4–9:** first real classes on both products; first both-sides sourced rulebook; student data only in the closed store.
+5. **Months 6–12:** one non-BOW author ships a small World or embed unaided. Publish a quarterly layer ledger of which triggers moved.
 6. **Do not build** a marketplace, federation spec, rulebook language, foundation, or self-host release.
 
 ## Strongest objection, and my answer
 
-*"A hybrid is not choosing. With zero users and zero outside developers, openness is cost without benefit, and closure forecloses the standard. Go closed and ship, or go open and bet on becoming a standard. Your boundary is unfalsifiable."*
+*"A hybrid is not choosing. With zero users and no outside developers, openness is cost without benefit and closure forecloses the standard. Go closed and ship, or go open and bet. Your boundary is unfalsifiable."*
 
-Answer. The costs are asymmetric. Publishing an Experimental spec and a small verifier costs documentation and test vectors that BOW needs anyway, since its own record must outlive its tools and the assessment side already versions its rubric. It commits us to nothing. Closing L0-L2 would give away the credibility feature ("another browser verifies it") for protection the clone test shows we do not get. Going fully open would put L3 and the licensed data on the wrong side of test (2). And the boundary is falsifiable: T1, T2 and the spec-only clone test say when it is wrong, and the layer ledger records it. If no outsider ever implements L0, we have lost a few weeks of writing and kept a verifier that our own two products needed.
+The costs are asymmetric. An Experimental spec and a small verifier cost documentation and test vectors BOW needs anyway, since its record must outlive its tools and the assessment side already versions its rubric. Closing L0–L2 would give away the credibility feature ("another browser verifies it") for protection the clone test shows we do not get. Going fully open would put L3 and licensed data on the wrong side of test (2). And the boundary is falsifiable: T1, T2, the spec-only clone test and the layer ledger say when it is wrong. If no outsider ever implements L0, we lost a few weeks and kept a verifier our own products needed.
 
 ## Sources and analogies
 

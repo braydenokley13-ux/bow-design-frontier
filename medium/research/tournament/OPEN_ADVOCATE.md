@@ -4,7 +4,7 @@
 
 ## Thesis
 
-If BOW stays an education product, ignore this paper: close everything and ship. But the stated thesis is a medium where institutions, creators and AI agents make systems executable, and a medium cannot be closed. No institution puts records in a format it cannot exit, no agent vendor builds to a private protocol, and no district trusts a receipt only the vendor can check. So: **open the thin waist (record, address, execution contract, legend, conformance tests); keep canonical instances, data rights, trust roots and the best experience as the company.**
+If BOW stays an education product, ignore this paper: close everything and ship. But the stated thesis is a medium where institutions, creators and AI agents make systems executable, and a medium cannot be closed. Institutions resist putting records in a format they cannot exit, few agent vendors build to a private protocol, and a district has little reason to trust a receipt only the vendor can check. So: **open the thin waist (record, address, execution contract, legend, conformance tests); keep canonical instances, data rights, trust roots and the best experience as the company.**
 
 ## Why open, given today's facts
 
