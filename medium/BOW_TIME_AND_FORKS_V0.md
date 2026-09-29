@@ -39,7 +39,7 @@ A SYSTEM declares `clock: {kind, authority, resolution, horizon}`.
 
 | Kind | Meaning | Status |
 |---|---|---|
-| **ACT** | The label moves only by an accepted `advance` from a named seat. The effect is a pure function of state (it does not matter who presses or when). Refusal is fail-closed. | **EARNED ×4** |
+| **ACT** | The label moves only by an accepted `advance` from a named seat. The effect is *meant* to be a pure function of state (it does not matter who presses or when), **but W's draft stop reads the host's seat registry at the moment of pressing** (E35; Critic 1 A8). The law must therefore add: every host input is recorded, and window boundaries follow a declared policy or are sealed. Refusal is fail-closed. | **EARNED ×4** (act-advanced); "pure function" **not** EARNED |
 | **TICKED** | A clock seat (a system occupant) appends `tick(n→n′)` on a declared schedule. Wall time triggers the tick, but the fold sees only recorded ticks. The System declares its catch-up policy (coalesce, skip or pause) and a maximum jump. This is Temporal.io's pattern: timers are history events, replay reads history instead of waiting. | HYPOTHESIS |
 | **FEED** | The label is an external authority's time. Changes arrive as recorded inputs `{source, valid-time, ingest-position, licence}`, with a declared lateness and correction policy. A FEED joins an ACT clock only by an **adoption act** (for example, a teacher presses Advance when Reality passes). | HYPOTHESIS |
 
@@ -79,6 +79,8 @@ Parent answer: *yes for BOW, in a precise sense*. Opening a web page is opening 
 - under the rules in force then.
 
 Each ingredient has a precedent (Datomic `as-of`, bitemporal SQL, information sets). The combination as the *default read* is what BOW would make ordinary. HYPOTHESIS; one half is EARNED per product (DC's knowability cut, W's season-aware reads).
+
+**Correction after Critic 2 (S2).** The draft said no page, spreadsheet or *game* offers this combination. That is false for games. StarCraft II replays open any position, with one player's vision, in the game version the match was recorded under; poker hand replayers and Lichess do similar things. BOW's version is a **domain transfer to institutions and decisions**, not a new operation. It is also guaranteed only in record-bearing instances (Critic 1 A2).
 
 **Time kinds in the founder brief, mapped (T11):**
 
@@ -149,6 +151,19 @@ Derived local times pin their time-zone database version.
 ---
 
 # Part II: Forks (WHAT IF?)
+
+## 7a. Corrections after the adversarial critics
+
+- **Supersession (Critic 1, A1).** W's classroom Restore rolls a room back and "opens a new branch of the room's history" (E34). That is not a fork: it is the *authority* replacing what is in effect.
+  - It must be a recorded `supersede(to: cut)` act that opens a **supersession epoch**.
+  - Superseded entries stay readable as SUPERSEDED.
+  - "Delivered once" holds per epoch.
+  - Forks remain MODELED and never write back. Supersession is authority over one's *own* record, never over a parent or Reality.
+- **Branch sequencer (A9a).** An unpromoted branch is sequenced by the process that computes it, answerable to its creator, with no authority over its parent.
+- **Corrections to consumed facts (A16).** When an OBSERVED fact a rule already consumed is corrected, current state stays computed from the old value. Derivations must cite the input *entry*, and the correction affects only later transitions or a MODELED retrospective fork (refines T9).
+- **Precedent (Critic 2, S7).** Suffix policies, `redecide-required`, rule forks and Reality forks all have precedents: `git rebase`, the Lucas critique, PGN variations, Basketball GM Real Players leagues, Palantir Foundry Scenarios. They are hygiene BOW needs, not novelty.
+
+
 
 ## 7. What a fork is (and why it is not Save As)
 

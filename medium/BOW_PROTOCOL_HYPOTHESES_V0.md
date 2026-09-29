@@ -79,6 +79,26 @@ EXPORT{ref resolvable|opaque-pairwise, cut|sealed, basis?, before?, after?, mate
 | `limits` on exports | The bridge carries use limits, retention and non-claims ("not evidence") that no other field expresses. |
 | Per-system digest scope | One canonicalization can unify, but **digest scope cannot**: DC pins prose, while W's legacy replay strips prose keys. Scope must be a declared field set per SYSTEM. |
 
+### 2.1 Revisions after the adversarial critics (Contract §11)
+
+These changes apply to the envelope above. HYPOTHESIS.
+
+- **Record-bearing is a declared precondition** (Critic 1, A3): `INSTANCE.recordBearing: yes | no`. Entries, and any consistency claim about acts, exist only where acts are retained with a position assigned *before* acknowledgement. Snapshot publishers export state plus INVARIANTS, never ENTRYs.
+- **The basis is mandatory on every entry** (A4): `basis.cut{kind, token, seenAt}`, or `Unknown{not-recorded}`. The draft's "redundant on accepted entries" is withdrawn, because W auto-retries after a compare-and-set conflict.
+- **Supersession** (A1):
+  - a `supersede(to: cut)` verb by the authority;
+  - `INSTANCE.epochs[{from: pos, kind: rule | supersession, head}]`;
+  - a read result `Superseded{epoch}`;
+  - "in effect" means in effect on the current epoch.
+- **Commit-before-use inputs** (A7): `inputs[].derive{commit, reveal: pos | scheduled}`. A joint or beacon seed is required when the host is a stakeholder. **DRAWN** is a status.
+- **Host inputs recorded** (A8): any host-side value a transition reads (for example a seat registry) is an input on that entry.
+- **One head per position across audiences** (A5). Exports are projections of the same head. Unknown reasons cite a rule id that replay can check.
+- **Salted commitments** (A6): every digest over a small domain is salted. For private-information instances, a non-host export's consistency is CLAIMED beyond the first stripped act.
+- **Availability** (A13): `INSTANCE.availability{model, durableBeforeAck: true, failover: recorded-act}`.
+- **Meta-rules** (A10, A11): `INSTANCE.metaRules` digest (amendment, succession, seat repair), fixed per lineage.
+- **Cross-instance acts** (A12): a request/accept pair with a declared basis policy (strict or lookahead). Sagas carry deadlines with typed silence.
+- **Grounding references** (A17): salted per instance by default. Only an explicit public-place or public-figure namespace is joinable.
+
 **Known vocabulary defect to fix before any shared reader.** W's `private` status has **two opposite meanings**: "known to this seat only" (scouts' reads) and "hidden from this seat" (which club). It maps to nothing until split (W2-A §3e). This is added to the Kill List as K28.
 
 ## 3. Addressing: coordinates, not a URL

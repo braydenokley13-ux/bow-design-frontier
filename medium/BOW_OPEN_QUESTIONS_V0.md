@@ -79,3 +79,16 @@ They are ordered by how much they block.
 | G2 | What is BOW's killer genre, the incumbent artifact it makes instant (case study, cap sheet, game-film review)? | 06 H4: name one and test it |
 | G3 | Can a non-BOW author ship a World unaided, and can a stranger fork it? | 06 H8 kill test |
 | G4 | Does convergence among same-family models (workers, advocates, critics) hide shared bias? | One human expert review of this packet |
+
+## H. Raised by the adversarial critics (Contract §11)
+
+| # | Question | Source |
+|---|---|---|
+| H1 | Who may **supersede** a record (Restore), how far back, and must the superseded suffix be retained? W resets the log today. | Critic 1 A1 |
+| H2 | Should NBA World One become **record-bearing** (retain every accepted act before acknowledgement)? The critic calls it cheap: the reducer is pure and the action is in hand at the same fsync. | Critic 1 A3 |
+| H3 | What goes in a World's **meta-rules** (amendment, succession, seat repair), and who holds a succession key? | Critic 1 A10, A11 |
+| H4 | What **availability model** does a classroom World declare when the teacher device is offline or the host fails over? | Critic 1 A13 |
+| H5 | Can any **private-information World** be verified by a non-host reader without zero-knowledge machinery, or is that a permanent limit of the medium? | Critic 1 A6 |
+| H6 | Where does a **medium layer live**, given that both product constitutions forbid its test (non-specialist authoring, public citation, payload travel)? This is a founder charter question. | Critic 2 S10 |
+| H7 | Does the **reply-by-fork** behavior appear between strangers? This is the one live test for a genuinely new capability. | Critic 2 (constructive) |
+| H8 | Is the thesis "any system", or institutions and decisions? Does a natural-system model fork (B8) belong on the near-term plan at all? | Critic 2 S11 |

@@ -22,7 +22,9 @@ No single "portable World" exists, and no single file format should be assumed. 
 | **L3 FORK-EXECUTABLE** | parent head, cut, interventions, suffix policy, occupant requirements, validity envelope, MODELED and no-writeback markers | continue it as a modeled branch | REPLAYED prefix; the suffix is MODELED, or GENERATED where fresh occupants act | DC `decisionBranch`, W Lab; **in-tree only** |
 | **L4 HOSTABLE** | seat register (no keys), warrant versions, clock authority, rights terms, a migration act | stand up an authoritative instance with live occupants | ATTESTED by the new host | None |
 
-**L4 is a fork with authority transfer.** The receiving host rebinds seats and keys and records an acceptance act. That creates a **new instance** whose `lineage.parent` is the imported head. **Importing alone never confers authority.** HYPOTHESIS (W2-D §2.1).
+**Correction (Critic 1, A10):** L4 should not be a fork. A rescued World's future would then be MODELED forever. It is a **continuation authorized by a succession rule in the World's meta-rules** (for example an escrowed or threshold key held by seat-holders). The text below is kept for the record.
+
+~~L4 is a fork with authority transfer.~~ The receiving host rebinds seats and keys and records an acceptance act. That creates a **new instance** whose `lineage.parent` is the imported head. **Importing alone never confers authority.** HYPOTHESIS (W2-D §2.1).
 
 ## 2. What blocks REPLAY portability today
 
@@ -43,6 +45,11 @@ These are EARNED facts from W2-D.
 
 Even inside the deterministic profile, `memory.grow` and `table.grow` "technically remain non-deterministic", so memory caps belong in the pinned limits. DC caps bytes (1 MiB, 1,000 commands) but not compute, so a hostile loop is uncovered (08 P11).
 
+**Additional limits (Critic 1, A14):**
+- A Wasm build with a bundled libm is **not the V8 JavaScript that produced existing World One history**. Era-faithful L2 replay of that history is impossible; L2 applies only from the point a host begins executing the pinned artifact.
+- Fuel is engine-specific, so the **metering pass must be pinned inside the artifact**.
+- Digest scope must include the presentation text a reader saw, or consistency is reported per field set. Otherwise REPLAYED can pass while student-visible prose was altered.
+
 ## 3. What must never travel, and how a bundle degrades honestly
 
 | Item | What replaces it | What the reader sees |
@@ -52,6 +59,11 @@ Even inside the deterministic profile, `memory.grow` and `table.grow` "technical
 | Licensed feed payloads | Digest, licence reference and permitted uses (record / replay / fork / redistribute) | `Unknown{withheld-by-rights}` |
 | External authority, including writeback connectors | Nothing. A class marker forbids "actualizing" a fork. | Effect `Unknown` until confirmed |
 | Student identity and free text | Pairwise subject references. No whole-transcript inlining by default: DC's receipt warns the file holds "later actions and Avery's free text"; carry a prefix plus a head digest. | `Unknown{not-available-to-audience}` |
+
+**Limits added after Critic 1 (A6):**
+- **Salt every commitment.** A digest over a small domain can be guessed: a partner choice from four options falls in four tries.
+- **The dependence cascades.** Every later state in a fold depends on each stripped act. For a multi-seat instance with private information, a non-host reader's consistency is CLAIMED for everything after the first stripped act.
+- "Verification without the host" therefore holds for single-seat or all-public instances only, until zero-knowledge proofs or a trusted verifier exist.
 
 **The honesty rule:**
 - The manifest states the highest level verifiable **for this audience**.
@@ -112,7 +124,8 @@ Contents by level:
   - A cross-instance act names its basis in both instances (`A@head#n ↔ B@head#m`, full digests).
   - The heads form a **DAG of heads, never a merged chain** (08 P1).
   - There is no global order, only causal order through these references.
-- **C4: Cross-instance "transactions" are sagas.**
+- **C3a (Critic 1, A12).** Bilateral references cannot be written atomically: B's reciprocal entry comes after B has moved. So a cross-instance act is a **request/accept pair** with a declared basis policy (strict or lookahead). A composite cut is **CLAIMED** unless every member instance is readable by the verifier; opaque pairwise references and private books make it uncheckable.
+- **C4: Cross-instance "transactions" are sagas**, and **every saga carries a deadline with typed silence** (A12: compensation needs the other side's consent, so an unbounded saga may never end).
   - Each step is an act in one instance.
   - Compensation is itself an act.
   - Unconfirmed effects stay `Unknown`.

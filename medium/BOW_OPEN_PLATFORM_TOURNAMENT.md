@@ -57,8 +57,14 @@ These are the strongest signals the tournament produced. Each was argued indepen
 
 So the real choice is not open vs closed format. It is whether **BOW promises stability** (a compatibility obligation) and whether **BOW governs it alone**. On both, all three agree in substance: no stability promise before evidence (Open: "two implementations before v1"; Hybrid: T1; Closed: tripwires).
 
-**Parent call:**
-- Publish L0/L1 and the L2 determinism contract as **Experimental, with no compatibility promise, but with a public verifier and tamper vectors**, once the internal unification (C4) is done.
+**Parent call (revised after the Contract's critics, §11 S15 and A6):**
+- Publish L0/L1 and the L2 determinism contract as **Experimental, with no compatibility promise, but with a public verifier and tamper vectors**, and only after **all three** of these:
+  1. the internal unification (C4) is done;
+  2. the spec-only implementer test passes;
+  3. one user-level result exists (the Contract's reply-by-fork test).
+
+  The original call gated only on (1). Critic 2 showed that specifying before users repeats the VRML/OpenDoc/Xanadu failure this tournament itself cited.
+- **Limit on C3** ("verification without BOW's servers"), from Critic 1 (A6): for any instance with private information, a non-host reader cannot obtain REPLAYED consistency. Stripped acts leave the rest of the fold CLAIMED, and unsalted small-domain digests can be guessed. Verification-open therefore delivers its promise for single-seat or all-public instances only, until zero-knowledge proofs or a trusted verifier exist.
 - The Closed argument that this "manufactures compatible rivals" is answered by the moat structure itself (C1). A rival can mint records *shaped* like BOW's but cannot mint records *signed into BOW's canonical heads*. Shape-compatibility makes a rival's records legible and comparable, which a medium needs and which does not threaten authority.
 - Label: HYPOTHESIS.
 - Dissent preserved: Closed may be right that the spec's existence invites a better-distributed rival to standardize first (its failure mode 4). That risk exists under every option. Closed concedes it cannot rule it out either.
