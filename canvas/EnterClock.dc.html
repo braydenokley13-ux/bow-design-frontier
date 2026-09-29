@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Clock Starts</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Text:wght@400;600;700;800;900&amp;family=Work+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F8F8F6;color:#111;font-family:'Work Sans',sans-serif}
+.bs{font-family:'Big Shoulders Text',sans-serif}
+.btn{font-family:'Work Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;min-height:38px;padding:0 14px;border:2px solid #111;border-radius:0;background:#F8F8F6;color:#111;cursor:pointer;transition:background-color .25s,color .25s,opacity .25s}
+.btn:hover{background:#111;color:#F8F8F6}
+.btn:focus-visible{outline:3px solid #111;outline-offset:2px}
+.btn.amber{background:#E8A317;color:#111}
+.btn.amber:hover{background:#111;color:#E8A317}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:disabled:hover{background:#F8F8F6;color:#111}
+.dg{display:inline-flex;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cell{display:inline-block;text-align:center}
+.scrub{-webkit-appearance:none;appearance:none;background:transparent;margin:0;padding:0;border:0;outline:none}
+.scrub::-webkit-slider-runnable-track{height:256px;background:transparent}
+.scrub::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:2px;height:256px;background:transparent;border:0}
+.scrub::-moz-range-track{height:256px;background:transparent}
+.scrub::-moz-range-thumb{width:2px;height:256px;background:transparent;border:0;border-radius:0}
+.scrub:focus-visible ~ .pill{outline:3px solid #111;outline-offset:3px}
+.t-rec{background:#111;box-shadow:inset 0 0 0 2px #111,inset 0 0 0 4px #F8F8F6}
+.t-abs{background:transparent;border:2px solid #111;box-sizing:border-box;box-shadow:inset 0 0 0 2px #F8F8F6,inset 0 0 0 3.5px #111}
+.t-aut{background:transparent;border:2px solid #111;box-sizing:border-box}
+.t-com{background:#8A8A82}
+.t-mod{background:repeating-linear-gradient(135deg,#111 0 1.5px,transparent 1.5px 6px);border:1px solid #111;box-sizing:border-box}
+.t-unk{background:transparent;border:2px dashed #111;box-sizing:border-box}
+.sw{display:inline-block;width:16px;height:16px;flex:none}
+@keyframes e3blink{0%{opacity:1}50%{opacity:.35}100%{opacity:1}}
+@keyframes e3in{0%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:translateY(0)}}
+.rise{animation:e3in .45s ease both}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F8F8F6; color: #111; font-family: 'Work Sans', sans-serif">
+
+  <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 52px; box-sizing: border-box; padding: 0 40px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid #C9C8C2; z-index: 6; background: #F8F8F6">
+    <span class="bs" style="font-size: 26px; font-weight: 900; letter-spacing: .04em">BOW</span>
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase">Boston · Year Two · a World you run</span>
+    <span style="flex: 1"></span>
+    <span style="display: inline-flex; align-items: center; height: 30px; padding: 0 12px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border: 2px {{mode.bd}} #111; background: {{mode.bg}}; color: {{mode.fg}}">{{mode.t}}</span>
+    <sc-if value="{{skipOn}}" hint-placeholder-val="{{false}}">
+      <button type="button" class="btn amber" onClick="{{skip}}">Skip the transition</button>
+    </sc-if>
+    <sc-if value="{{inSeat}}" hint-placeholder-val="{{false}}">
+      <button type="button" class="btn" onClick="{{leave}}">Leave the seat</button>
+    </sc-if>
+    <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+  </header>
+
+  <!-- HERO: the observer numerals, locked at ENTER -->
+  <div style="position: absolute; left: 40px; top: 62px; width: 1000px; height: 140px; display: flex; align-items: flex-start; gap: 30px">
+    <div style="width: 118px">
+      <span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .14em; color: #57574F; height: 16px">WEEK</span>
+      <span class="bs dg" style="font-size: 104px; font-weight: 900; height: 96px; align-items: flex-end"><sc-for list="{{hero.wk}}" as="ch" hint-placeholder-count="2"><span class="cell" style="width: {{ch.w}}">{{ch.c}}</span></sc-for></span>
+    </div>
+    <div style="width: 178px">
+      <span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .14em; color: #57574F; height: 16px">DAY</span>
+      <span class="bs" style="display: block; font-size: 104px; font-weight: 900; line-height: 96px; height: 96px">{{hero.day}}</span>
+    </div>
+    <div style="flex: 1; padding-top: 4px; min-width: 0">
+      <span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .14em; color: #57574F; height: 16px">{{hero.kind}}</span>
+      <span class="rise" style="display: block; font-size: 22px; font-weight: 600; line-height: 1.2; max-width: 600px; margin-top: 4px">{{hero.caption}}</span>
+      <span style="display: block; font-size: 14px; line-height: 1.4; color: #57574F; max-width: 600px; margin-top: 8px">{{hero.help}}</span>
+    </div>
+  </div>
+
+  <!-- CORNER CLOCK: yours; the World's clock joins it after LEAVE -->
+  <div style="position: absolute; left: 1092px; top: 60px; width: 320px; height: {{clk.h}}px; box-sizing: border-box; padding: 8px 14px; background: {{clk.bg}}; color: {{clk.fg}}; border: 2px {{clk.bd}} #111; transition: height .8s ease, background-color .6s ease, color .6s ease">
+    <span style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; letter-spacing: .12em; height: 16px"><span>{{clk.label}}</span></span>
+    <span class="bs dg" style="font-size: {{clk.fs}}px; font-weight: 800; margin-top: 4px; opacity: {{clk.op}}; transition: font-size .8s ease"><sc-for list="{{clk.chars}}" as="ch" hint-placeholder-count="8"><span class="cell" style="width: {{ch.w}}">{{ch.c}}</span></sc-for></span>
+  </div>
+  <div style="position: absolute; left: 1092px; top: 130px; width: 320px; height: 38px; box-sizing: border-box; padding: 4px 14px; background: #111; color: #F8F8F6; opacity: {{wclk.op}}; transition: opacity .6s ease; display: flex; align-items: center; justify-content: space-between">
+    <span style="font-size: 11px; font-weight: 700; letter-spacing: .12em; line-height: 1.3">WORLD CLOCK<br>{{wclk.day}} · running</span>
+    <span class="bs dg" style="font-size: 28px; font-weight: 800"><sc-for list="{{wclk.chars}}" as="ch" hint-placeholder-count="8"><span class="cell" style="width: {{ch.w}}">{{ch.c}}</span></sc-for></span>
+  </div>
+  <sc-if value="{{speedOn}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 1092px; top: 168px; width: 320px; height: 38px; display: flex; align-items: center; gap: 8px; justify-content: flex-end">
+      <span style="font-size: 11px; color: #57574F; letter-spacing: .04em; white-space: nowrap">prototype toggle</span>
+      <button type="button" class="btn" onClick="{{toggleSpeed}}" aria-pressed="{{fastPressed}}" style="min-height: 36px; padding: 0 10px; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; background: {{fastBg}}; color: {{fastFg}}">×60 speed <span style="font-size: 11px; padding: 1px 5px; border: 1.5px solid currentColor">AUTHORED</span></button>
+    </div>
+  </sc-if>
+
+  <!-- TIMELINE -->
+  <svg width="1440" height="256" viewBox="0 0 1440 256" style="position: absolute; left: 0; top: 208px" aria-hidden="true">
+    <defs>
+      <pattern id="e3hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" style="stroke: #111; stroke-width: 1.5"></line></pattern>
+    </defs>
+    <path d="{{tl.ticks}}" style="stroke: #111; stroke-width: 1; fill: none"></path>
+    <rect x="40" y="60" width="{{tl.pastW}}" height="32" style="fill: #111"></rect>
+    <rect x="43" y="63" width="{{tl.pastInW}}" height="26" style="fill: none; stroke: #F8F8F6; stroke-width: 1.5"></rect>
+    <path d="{{tl.seps}}" style="stroke: #F8F8F6; stroke-width: 1; fill: none; opacity: .5"></path>
+    <rect x="{{tl.nowX}}" y="60" width="{{tl.futW}}" height="32" style="fill: url(#e3hatch); stroke: #111; stroke-width: 1; opacity: {{tl.hatchOp}}; transition: opacity .8s"></rect>
+    <rect x="{{tl.nowX}}" y="61" width="{{tl.futW}}" height="30" style="fill: none; stroke: #111; stroke-width: 2; stroke-dasharray: 7 5; opacity: {{tl.sealOp}}; transition: opacity .8s"></rect>
+    <line x1="40" y1="{{tl.yTax}}" x2="1400" y2="{{tl.yTax}}" style="stroke: #8A8A82; stroke-width: 1.5"></line>
+    <line x1="40" y1="{{tl.yApron}}" x2="1400" y2="{{tl.yApron}}" style="stroke: #8A8A82; stroke-width: 1.5"></line>
+    <path d="{{tl.env}}" style="fill: url(#e3hatch); stroke: #111; stroke-width: 1; opacity: {{tl.hatchOp}}; transition: opacity .8s"></path>
+    <rect x="{{tl.nowX}}" y="175" width="{{tl.futW}}" height="78" style="fill: none; stroke: #111; stroke-width: 2; stroke-dasharray: 7 5; opacity: {{tl.sealOp}}; transition: opacity .8s"></rect>
+    <line x1="{{tl.tradeX}}" y1="{{tl.yPay}}" x2="{{tl.nowX}}" y2="{{tl.yPay}}" style="stroke: #111; stroke-width: 7"></line>
+    <line x1="{{tl.tradeX}}" y1="{{tl.yPay}}" x2="{{tl.nowX}}" y2="{{tl.yPay}}" style="stroke: #F8F8F6; stroke-width: 2"></line>
+    <line x1="{{tl.tradeX}}" y1="92" x2="{{tl.tradeX}}" y2="126" style="stroke: #111; stroke-width: 1.5"></line>
+    <rect x="{{tl.tradeXm4}}" y="72" width="8" height="8" style="fill: #F8F8F6"></rect>
+    <line x1="{{tl.lossX}}" y1="92" x2="{{tl.lossX}}" y2="160" style="stroke: #111; stroke-width: 1.5"></line>
+    <rect x="{{tl.lossXm4}}" y="72" width="8" height="8" style="fill: #F8F8F6"></rect>
+    <line x1="{{tl.nowX}}" y1="92" x2="{{tl.nowX}}" y2="132" style="stroke: #111; stroke-width: 2"></line>
+    <rect x="{{tl.deadXm4}}" y="54" width="8" height="44" style="fill: #F8F8F6; stroke: #111; stroke-width: 2"></rect>
+  </svg>
+
+  <sc-for list="{{tl.weeks}}" as="w" hint-placeholder-count="26">
+    <span class="bs" style="position: absolute; left: {{w.x}}px; top: 238px; width: 30px; height: 20px; margin-left: -15px; text-align: center; font-size: 16px; font-weight: 700; line-height: 20px; background: {{w.bg}}; color: {{w.fg}}">{{w.n}}</span>
+  </sc-for>
+
+  <sc-if value="{{tl.hasPastTag}}" hint-placeholder-val="{{false}}"><span style="position: absolute; left: 50px; top: 276px; height: 16px; padding: 0 5px; background: #111; font-size: 11px; font-weight: 700; letter-spacing: .12em; line-height: 16px; color: #F8F8F6; white-space: nowrap">{{tl.pastTag}}</span></sc-if>
+  <sc-if value="{{tl.hasFutTag}}" hint-placeholder-val="{{false}}">
+    <span style="position: absolute; left: {{tl.futTagX}}px; top: 276px; height: 16px; padding: 0 6px; background: #F8F8F6; border: 1px solid #111; font-size: 11px; font-weight: 700; letter-spacing: .08em; line-height: 14px; white-space: nowrap">{{tl.futTag}}</span>
+  </sc-if>
+
+  <div style="position: absolute; left: 110px; top: 300px; width: 200px; text-align: right; z-index: 2; background: #F8F8F6; font-size: 13px; line-height: 1.25"><span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #57574F">WEEK 6</span>Accepted White + a backup big for Butler</div>
+  <div style="position: absolute; left: 218px; top: 352px; width: 240px; text-align: right; z-index: 2; background: #F8F8F6; font-size: 13px; line-height: 1.25; white-space: nowrap"><span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #57574F">MON · WEEK 9</span>Lost to Denver 112–115, at home</div>
+  <div style="position: absolute; left: 758px; top: 306px; width: 250px; z-index: 2; background: #F8F8F6; font-size: 13px; line-height: 1.25"><span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #57574F">TRADE DEADLINE · on the calendar</span>Week 14 · Thu 15:00 [authored placeholder]</div>
+  <span style="position: absolute; left: 44px; top: 390px; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #57574F">2ND APRON · $221.7M</span>
+  <span style="position: absolute; left: 44px; top: 410px; font-size: 11px; font-style: italic; color: #57574F">[earlier weeks: World record]</span>
+  <span style="position: absolute; left: 44px; top: 432px; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #57574F">TAX LINE · $200M</span>
+  <span style="position: absolute; left: 200px; top: 416px; width: 264px; text-align: right; font-size: 12px; font-weight: 600">Payroll ≈ $222.8M · $1.1M over the 2nd apron</span>
+
+  <div style="position: absolute; left: 1040px; top: 306px; width: 360px; opacity: {{tl.sealOp}}; transition: opacity .8s; pointer-events: none">
+    <span style="display: block; font-size: 19px; font-weight: 600">Sealed: you’ll find out by living it.</span>
+    <span style="display: block; font-size: 12px; line-height: 1.3; color: #57574F; margin-top: 3px">The World’s own projection is not shown to whoever holds the seat. The two lines stay: they are rules, not forecasts.</span>
+  </div>
+
+  <!-- NOW flag and the act of entering, on the timeline itself -->
+  <sc-if value="{{nowBtnOn}}" hint-placeholder-val="{{true}}">
+    <button type="button" class="btn amber" onClick="{{enter}}" style="position: absolute; left: {{tl.nowBtnX}}px; top: 304px; height: 40px; z-index: 4; font-size: 14px">{{nowBtnLabel}}</button>
+  </sc-if>
+  <span style="position: absolute; left: {{tl.nowBtnX}}px; top: 350px; font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #111; white-space: nowrap">NOW · WK 9 · TUE 09:00</span>
+  <span style="position: absolute; left: {{tl.nowBtnX}}px; top: 366px; width: 200px; font-size: 12px; line-height: 1.3; color: #57574F">{{nowNote}}</span>
+
+  <!-- playhead, pill, and the scrubber input -->
+  <input class="scrub" type="range" min="0" max="182" step="0.125" value="{{scrubVal}}" onChange="{{onScrub}}" disabled="{{scrubOff}}" aria-label="Scrub the World calendar, Week 1 to Week 26" aria-valuetext="{{hd.text}}" style="position: absolute; left: 40px; top: 208px; width: 1360px; height: 256px; opacity: 0; cursor: ew-resize; z-index: 3; pointer-events: {{scrubPe}}">
+  <div style="position: absolute; left: {{hd.x}}px; top: 236px; width: 2px; height: 226px; margin-left: -1px; background: #111; transition: left .9s cubic-bezier(.6,0,.2,1)"></div>
+  <div class="pill bs" style="position: absolute; left: {{hd.pillX}}px; top: 208px; width: {{hd.pillW}}px; height: 28px; box-sizing: border-box; background: {{hd.bg}}; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 17px; font-weight: 800; letter-spacing: .04em; transition: left .9s cubic-bezier(.6,0,.2,1), width .6s ease, background-color .5s ease; pointer-events: none; color: {{hd.fg}}">
+    <sc-if value="{{hd.lock}}" hint-placeholder-val="{{false}}"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="6" width="10" height="7" style="fill: none; stroke: #111; stroke-width: 1.8"></rect><path d="M4.5 6 V4 A2.5 2.5 0 0 1 9.5 4 V6" style="fill: none; stroke: #111; stroke-width: 1.8"></path></svg></sc-if>
+    <span>{{hd.text}}</span>
+  </div>
+
+  <!-- LOWER LEFT: the observer's readout, then the record tape -->
+  <div style="position: absolute; left: 660px; top: 476px; width: 1px; height: 340px; background: #C9C8C2"></div>
+  <div style="position: absolute; left: 40px; top: 472px; width: 600px; height: 350px">
+    <div style="position: absolute; left: 0; top: 0; width: 600px; height: 350px; opacity: {{ro.op}}; transition: opacity .5s ease; pointer-events: {{ro.pe}}">
+      <span style="display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 700; letter-spacing: .14em; height: 22px"><span class="sw {{rd.cls}}"></span>AS OF · {{rd.title}}</span>
+      <sc-for list="{{rd.rows}}" as="r" hint-placeholder-count="3">
+        <div style="display: flex; align-items: baseline; gap: 14px; padding: 9px 0; border-top: 1px solid #C9C8C2; margin-top: 2px">
+          <span style="width: 132px; flex: none; font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #57574F">{{r.k}}</span>
+          <span class="bs" style="font-size: 26px; font-weight: 700; line-height: 1; flex: none">{{r.v}}</span>
+          <span style="font-size: 12px; color: #57574F; line-height: 1.3">{{r.n}}</span>
+        </div>
+      </sc-for>
+      <div style="border-top: 1px solid #C9C8C2; padding-top: 10px; margin-top: 2px; font-size: 15px; line-height: 1.4; max-width: 560px">{{rd.text}}</div>
+      <sc-if value="{{awayOn}}" hint-placeholder-val="{{false}}">
+        <div style="position: absolute; left: 0; top: 270px; width: 580px; box-sizing: border-box; padding: 10px 14px; border: 2px dashed #111">
+          <span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .12em">SINCE YOU LEFT · your clock stopped at {{away.stopped}}</span>
+          <span style="display: block; font-size: 14px; line-height: 1.35; margin-top: 4px">The World’s clock reads {{away.now}}. {{away.n}} sealed until you return.</span>
+        </div>
+      </sc-if>
+    </div>
+    <div style="position: absolute; left: 0; top: 0; width: 600px; height: 350px; opacity: {{tp.op}}; transition: opacity .5s ease; pointer-events: none">
+      <span style="display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 700; letter-spacing: .14em; height: 22px"><span class="sw t-rec"></span>THE RECORD · your acts, and your absences</span>
+      <sc-if value="{{tp.more}}" hint-placeholder-val="{{false}}"><span style="display: block; font-size: 11px; color: #57574F; padding: 4px 0">+ {{tp.moreN}} earlier lines</span></sc-if>
+      <sc-for list="{{tp.items}}" as="e" hint-placeholder-count="4">
+        <div class="rise" style="display: flex; gap: 12px; padding: 8px 0; border-top: 1px solid #C9C8C2; margin-top: 2px">
+          <span class="sw {{e.cls}}" style="margin-top: 3px"></span>
+          <span style="flex: 1; min-width: 0"><span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #57574F">{{e.head}}</span><span style="display: block; font-size: 14px; line-height: 1.3; font-weight: {{e.fw}}">{{e.text}}</span></span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- LOWER RIGHT: the open matters, static for an observer, countdowns for an occupant -->
+  <div style="position: absolute; left: 680px; top: 472px; width: 720px; height: 350px">
+    <span style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 700; letter-spacing: .14em; height: 22px"><span>OPEN MATTERS · BOSTON · WEEK 9</span><span style="letter-spacing: .06em; color: #57574F">{{mx.note}}</span></span>
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="5">
+      <div style="position: relative; height: 63px; border-top: 1px solid #C9C8C2; margin-top: 2px">
+        <span style="position: absolute; left: 0; top: 8px; width: 284px; font-size: 14px; font-weight: 700; line-height: 1.2">{{r.title}}</span>
+        <span style="position: absolute; left: 0; top: 27px; width: 284px; font-size: 12px; line-height: 1.25; color: #57574F">{{r.sub}}</span>
+        <div style="position: absolute; left: 300px; top: 7px; width: 196px; height: 38px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px {{r.bd}} #111; background: {{r.bg}}; color: #111; transition: background-color .5s ease; animation: {{r.anim}}">
+          <span class="bs dg" style="font-size: 27px; font-weight: 800; opacity: {{r.dop}}"><sc-for list="{{r.chars}}" as="ch" hint-placeholder-count="8"><span class="cell" style="width: {{ch.w}}">{{ch.c}}</span></sc-for></span>
+        </div>
+        <div style="position: absolute; left: 300px; top: 50px; width: 196px; height: 6px; box-sizing: border-box; border: 1px solid #111; opacity: {{r.barOp}}"><div style="height: 4px; width: {{r.bar}}%; background: #E8A317; transition: width .9s ease"></div></div>
+        <sc-if value="{{r.hasActs}}" hint-placeholder-val="{{false}}">
+          <div style="position: absolute; left: 512px; top: 6px; width: 208px; display: flex; gap: 6px">
+            <sc-for list="{{r.acts}}" as="a" hint-placeholder-count="2">
+              <button type="button" class="btn" onClick="{{a.go}}" style="flex: 1; min-height: 38px; padding: 0 4px; font-size: 12px">{{a.label}}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <span style="position: absolute; left: 512px; top: {{r.stTop}}px; width: 208px; font-size: 12px; line-height: 1.3; color: #57574F">{{r.status}}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <!-- HOW DO WE KNOW -->
+  <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 32px; top: 464px; width: 616px; height: 362px; box-sizing: border-box; padding: 14px 18px; background: #F8F8F6; border: 2px solid #111; z-index: 7">
+      <span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .14em; margin-bottom: 8px">HOW DO WE KNOW?</span>
+      <sc-for list="{{legend}}" as="l" hint-placeholder-count="5">
+        <div style="display: flex; gap: 12px; padding: 7px 0; border-top: 1px solid #C9C8C2">
+          <span class="sw {{l.cls}}" style="margin-top: 2px; width: 22px"></span>
+          <span style="font-size: 13px; line-height: 1.3"><strong>{{l.k}}</strong> {{l.t}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <!-- bottom: thesis, then the two quiet lines -->
+  <div style="position: absolute; left: 40px; top: 830px; width: 1360px; font-size: 13px; line-height: 1.3; font-weight: 500; letter-spacing: .01em">ENTER, in this model, means the clock stops being yours to move: the future seals, the past locks, and every open matter starts counting down.</div>
+  <div style="position: absolute; left: 40px; top: 856px; width: 760px; font-size: 11px; line-height: 1.35; color: #57574F">COMMERCIAL LENS · Hypothesis: “live-time” seats (Worlds that run while you’re away) cost persistent compute; this is where subscription value and marginal cost both live.</div>
+  <div style="position: absolute; left: 860px; top: 856px; width: 540px; text-align: right; font-size: 11px; line-height: 1.35; color: #57574F">PROTOTYPE · DESIGN PROPOSAL · data: Boston · Year Two fixture as given; deadline times, deadline week, projection ranges and ×60 are authored; verify</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+const H = 3600000, DAY = 86400000;
+const X0 = 40, XW = 1360, ND = 182;
+const X = (d) => X0 + d * XW / ND;
+const NOW_D = 57.375;
+const NOW_X = X(NOW_D);
+const DEAD_D = 13 * 7 + 3 + 15 / 24;
+const TRADE_D = 5 * 7 + 3;
+const LOSS_D = 8 * 7 + 20 / 24;
+const DOW = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+const T = { seal: 700, ro: 900, rows: 1500, clock: 1900, line: 2600, end: 3200 };
+const CW = { ':': 0.3, ' ': 0.26, 'D': 0.56, '–': 0.5, '-': 0.5 };
+const chars = (str) => String(str).split('').map((c) => ({ c: c, w: (CW[c] || 0.5) + 'em' }));
+const CY = (v) => 178 + (233 - v) / 38 * 72;
+const half = (d) => 1.0 + 7.5 * Math.sqrt(Math.max(0, d - NOW_D) / (ND - NOW_D));
+const wkOf = (d) => Math.min(26, Math.floor(d / 7) + 1);
+const p2 = (n) => (n < 10 ? '0' : '') + n;
+const clockStr = (ms) => { const a = 9 * H + ms; const hh = Math.floor(a / H) % 24, mm = Math.floor(a / 60000) % 60, ss = Math.floor(a / 1000) % 60; return p2(hh) + ':' + p2(mm) + ':' + p2(ss); };
+const dayOf = (ms) => { const a = 9 * H + ms; return DOW[(1 + Math.floor(a / DAY)) % 7]; };
+const stamp = (ms) => dayOf(ms) + ' ' + clockStr(ms);
+const cdStr = (ms) => { const S = Math.max(0, Math.ceil(ms / 1000)); if (S >= 48 * 3600) { const d = Math.floor(S / 86400); const r = S - d * 86400; return d + 'D ' + p2(Math.floor(r / 3600)) + ':' + p2(Math.floor(r / 60) % 60) + ':' + p2(r % 60); } return p2(Math.floor(S / 3600)) + ':' + p2(Math.floor(S / 60) % 60) + ':' + p2(S % 60); };
+const MAT = [
+  { id: 'den', due: 2 * H, dueTxt: 'TUE 11:00', title: 'Denver’s GM called', sub: 'About your backup guard. Terms: [from the call]' },
+  { id: 'but', due: 5 * H, dueTxt: 'TUE 14:00', title: 'Butler’s agent wants a meeting', sub: 'His fourth-quarter role. Window closes 14:00 [authored]' },
+  { id: 'ros', due: 34.5 * H, dueTxt: 'WED 19:30', title: 'Roster 15 · call-up pending', sub: '15 at most by Wed 19:30 tip-off [authored], or the league refuses the lineup' },
+  { id: 'own', due: (DEAD_D - NOW_D) * DAY, dueTxt: 'WK 14 THU', title: 'Owner: stay under the second apron', sub: 'About $1.1M over today (computed). Deadline Wk 14 [authored]' },
+  { id: 'ana', due: null, dueTxt: 'NO CLOCK', title: 'Analytics room', sub: 'Unfunded since Year One (Business funded over Basketball Ops)' }
+];
+class Component extends DCLogic {
+  componentDidMount() {
+    this.last = Date.now();
+    this.timer = setInterval(() => this.tick(), 100);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  tick() {
+    const s = this.state || {};
+    const now = Date.now();
+    const dt = Math.min(500, now - (this.last || now));
+    this.last = now;
+    const phase = s.phase || 'observe';
+    const patch = {};
+    let enterMs = s.enterMs || 0;
+    let ph = phase;
+    if (phase === 'entering') {
+      enterMs += dt; patch.enterMs = enterMs;
+      if (enterMs >= T.end) { ph = 'occupy'; patch.phase = 'occupy'; patch.enterMs = T.end; }
+    }
+    const running = ph === 'occupy' || ph === 'left' || (ph === 'entering' && enterMs >= T.clock);
+    if (running) {
+      const w = (s.worldMs || 0) + dt * (s.speed || 1);
+      patch.worldMs = w;
+      const done = { ...(s.done || {}) };
+      let log = (s.log || []).slice();
+      let changed = false;
+      const away = ph === 'left';
+      MAT.forEach((m) => {
+        if (m.due == null || m.id === 'own' || done[m.id] === 'lapse' || done[m.id] === 'refused' || done[m.id] === 'ok') return;
+        if (w < m.due) return;
+        changed = true;
+        if (m.id === 'den' && !done.den) { done.den = 'lapse'; log.push({ at: m.due, k: 'lapse', text: 'No decision by 11:00 — Denver’s offer lapsed.', away: away }); }
+        else if (m.id === 'but' && !done.but) { done.but = 'lapse'; log.push({ at: m.due, k: 'lapse', text: 'No decision by 14:00 — the meeting request went unanswered.', away: away }); }
+        else if (m.id === 'ros') {
+          const n = s.roster == null ? 15 : s.roster;
+          if (n > 15) { done.ros = 'refused'; log.push({ at: m.due, k: 'consq', text: 'Roster at ' + n + ' at tip-off — the league refused the lineup (authored World rule).', away: away }); }
+          else if (!s.callup) { done.ros = 'lapse'; log.push({ at: m.due, k: 'lapse', text: 'No decision by Wed 19:30 — the two-way call-up lapsed.', away: away }); }
+          else { done.ros = 'ok'; log.push({ at: m.due, k: 'consq', text: 'Wed 19:30 — roster at ' + n + ': the league accepted the lineup.', away: away }); }
+        }
+      });
+      if (changed) { patch.done = done; patch.log = log; }
+    }
+    if (Object.keys(patch).length) this.setState(patch);
+  }
+  act(id, code) {
+    const s = this.state || {};
+    if ((s.phase || 'observe') !== 'occupy') return;
+    const w = s.worldMs || 0;
+    const done = { ...(s.done || {}) };
+    const stopAt = { ...(s.stopAt || {}) };
+    const log = (s.log || []).slice();
+    let roster = s.roster == null ? 15 : s.roster;
+    const patch = {};
+    if (id === 'den') {
+      if (done.den) return;
+      done.den = 'act'; stopAt.den = w;
+      if (code === 'yes') { roster -= 1; patch.roster = roster; patch.denChoice = 'yes'; log.push({ at: w, k: 'act', text: 'Accepted Denver’s offer for your backup guard. Roster now ' + roster + '.' }); }
+      else { patch.denChoice = 'no'; log.push({ at: w, k: 'act', text: 'Declined Denver’s offer. The backup guard stays.' }); }
+    } else if (id === 'but') {
+      if (done.but) return;
+      done.but = 'act'; stopAt.but = w;
+      if (code === 'yes') { patch.butChoice = 'yes'; log.push({ at: w, k: 'act', text: 'Took the meeting with Butler’s agent.' }); }
+      else { patch.butChoice = 'no'; log.push({ at: w, k: 'act', text: 'Told Butler’s agent: not today.' }); }
+    } else if (id === 'ros') {
+      if (done.ros) return;
+      if (code === 'call') { roster += 1; patch.roster = roster; patch.callup = 'signed'; log.push({ at: w, k: 'act', text: 'Signed the two-way call-up. Roster now ' + roster + (roster > 15 ? ' — over the limit until you clear a spot.' : '.') }); }
+      else if (code === 'hold') { patch.callup = 'held'; log.push({ at: w, k: 'act', text: 'Held the call-up. Roster stays ' + roster + '.' }); }
+      else if (code === 'waive') { roster -= 1; patch.roster = roster; log.push({ at: w, k: 'act', text: 'Waived a player. Roster now ' + roster + '.' }); }
+    }
+    patch.done = done; patch.stopAt = stopAt; patch.log = log;
+    this.setState(patch);
+  }
+  renderVals() {
+    const s = this.state || {};
+    const phase = s.phase || 'observe';
+    const enterMs = s.enterMs || 0;
+    const worldMs = s.worldMs || 0;
+    const speed = s.speed || 1;
+    const how = !!s.how;
+    const scrub = s.scrub == null ? 94 : s.scrub;
+    const log = s.log || [];
+    const done = s.done || {};
+    const stopAt = s.stopAt || {};
+    const roster = s.roster == null ? 15 : s.roster;
+    const callup = s.callup || null;
+    const leftAt = s.leftAt || 0;
+    const entering = phase === 'entering', inSeat = phase === 'occupy', away = phase === 'left';
+    const taken = entering || inSeat;
+    const sealed = inSeat || (entering && enterMs >= T.seal);
+    const ro = inSeat || (entering && enterMs >= T.ro);
+    const live = inSeat || (entering && enterMs >= T.rows);
+    const clockOn = inSeat || (entering && enterMs >= T.clock);
+    const lineOn = inSeat || (entering && enterMs >= T.line);
+
+    // ---- mode pill, hero
+    const mode = inSeat ? { t: 'In the seat · General Manager', bg: '#111', fg: '#F8F8F6', bd: 'solid' }
+      : entering ? { t: 'Taking the seat…', bg: '#E8A317', fg: '#111', bd: 'solid' }
+      : away ? { t: 'Away · the World is running', bg: 'transparent', fg: '#111', bd: 'dashed' }
+      : { t: 'Observer', bg: 'transparent', fg: '#111', bd: 'solid' };
+    const w0 = wkOf(scrub);
+    const k = entering ? Math.min(1, enterMs / 900) : 0;
+    const heroWeek = inSeat ? 9 : entering ? Math.round(w0 + (9 - w0) * k) : wkOf(scrub);
+    const heroDay = inSeat || (entering && k >= 0.5) ? 'TUE' : DOW[Math.floor(scrub % 7)];
+    let caption, help, kind;
+    if (inSeat || (entering && lineOn)) { caption = 'Occupant time: one direction, one speed, and it doesn’t wait.'; kind = 'OCCUPANT TIME · LOCKED AT NOW'; help = 'The past is read-only. The future is sealed. Every open matter counts down from this moment.'; }
+    else if (entering) { caption = enterMs < T.seal ? 'The scrubber is taken from you.' : enterMs < T.rows ? 'The future half seals. The past locks.' : 'Deadlines become countdowns.'; kind = 'TAKING THE SEAT'; help = 'Week 9, Tuesday 09:00. The seat has been vacant since 06:00.'; }
+    else if (away) { caption = 'The World goes on without you; you’ll see what happened when you return.'; kind = 'OBSERVER TIME'; help = 'Your clock has stopped. The World’s has not. You can scrub again, but what happened since you left is sealed.'; }
+    else { caption = 'Observer time: free, reversible, weightless.'; kind = 'OBSERVER TIME'; help = 'Drag anywhere on the calendar, past or future. Everything is available at once and nothing here is at stake.'; }
+    const hero = { wk: chars(String(heroWeek)), day: heroDay, caption, help, kind };
+
+    // ---- corner clocks
+    const showClock = clockOn || away;
+    const clkMs = away ? leftAt : worldMs;
+    const clk = {
+      h: away ? 64 : 104,
+      bg: clockOn && !away ? '#111' : 'transparent',
+      fg: clockOn && !away ? '#F8F8F6' : '#57574F',
+      bd: clockOn && !away ? 'solid' : 'dashed',
+      label: away ? 'YOUR CLOCK · STOPPED' : clockOn ? 'YOUR CLOCK · WEEK 9 · ' + dayOf(clkMs) : 'NO CLOCK FOR OBSERVERS',
+      tag: '',
+      fs: away ? 27 : 64,
+      op: showClock ? 1 : 0.45,
+      chars: chars(showClock ? clockStr(clkMs) : '––:––:––')
+    };
+    const wclk = { op: away ? 1 : 0, day: dayOf(worldMs), chars: chars(clockStr(worldMs)) };
+
+    // ---- timeline geometry
+    const ticks = [];
+    for (let i = 0; i <= ND; i++) { const x = X(i).toFixed(1); ticks.push('M ' + x + ' 58 L ' + x + ' ' + (i % 7 === 0 ? 50 : 54)); }
+    const seps = [];
+    for (let wv = 1; wv <= 8; wv++) { const x = X(wv * 7).toFixed(1); seps.push('M ' + x + ' 68 L ' + x + ' 84'); }
+    const EN = 24, up = [], lo = [];
+    for (let i = 0; i <= EN; i++) { const d = NOW_D + (ND - NOW_D) * i / EN; const h = half(d); up.push([X(d).toFixed(1), CY(222.8 + h).toFixed(1)]); lo.push([X(d).toFixed(1), CY(222.8 - h).toFixed(1)]); }
+    const env = 'M ' + NOW_X.toFixed(1) + ' ' + CY(222.8).toFixed(1) + ' ' + up.map((p) => 'L ' + p[0] + ' ' + p[1]).join(' ') + ' ' + lo.reverse().map((p) => 'L ' + p[0] + ' ' + p[1]).join(' ') + ' Z';
+    const hx = taken ? NOW_D : scrub;
+    const focusW = taken ? 9 : wkOf(scrub);
+    const weeks = [];
+    for (let wv = 1; wv <= 26; wv++) {
+      const on = wv === focusW;
+      weeks.push({ n: String(wv), x: Math.round(X((wv - 1) * 7 + 3.5)), bg: on ? (taken ? '#E8A317' : '#111') : 'transparent', fg: on && !taken ? '#F8F8F6' : '#111' });
+    }
+    const pastTag = [how ? 'RECORDED' : '', ro ? 'READ-ONLY' : ''].filter(Boolean).join(' · ');
+    const futTag = sealed ? (how ? 'SEALED · UNMODELED FUTURE' : 'SEALED') : (how ? 'MODELED · World projection v0.3 [verify] · ranges authored' : '');
+    const tl = {
+      ticks: ticks.join(' '), seps: seps.join(' '), env,
+      pastW: (NOW_X - 40).toFixed(1), pastInW: (NOW_X - 46).toFixed(1), nowX: NOW_X.toFixed(1), futW: (1400 - NOW_X).toFixed(1),
+      hatchOp: sealed ? 0 : 1, sealOp: sealed ? 1 : 0,
+      yTax: CY(200).toFixed(1), yApron: CY(221.686).toFixed(1), yPay: CY(222.8).toFixed(1),
+      tradeX: X(TRADE_D).toFixed(1), tradeXm4: (X(TRADE_D) - 4).toFixed(1), lossX: X(LOSS_D).toFixed(1), lossXm4: (X(LOSS_D) - 4).toFixed(1), deadXm4: (X(DEAD_D) - 4).toFixed(1),
+      weeks, pastTag, hasPastTag: !!pastTag, futTag, hasFutTag: !!futTag, futTagX: Math.round(NOW_X + 12), nowBtnX: Math.round(NOW_X + 8)
+    };
+    const pillW = taken ? 208 : 116;
+    const hd = {
+      x: X(hx).toFixed(1),
+      pillW,
+      pillX: Math.round(Math.max(40, Math.min(1400 - pillW, X(hx) - pillW / 2))),
+      bg: taken ? '#E8A317' : '#111', fg: taken ? '#111' : '#F8F8F6',
+      lock: taken,
+      text: taken ? 'NOW · WK 9 · TUE 09:00' : 'WK ' + wkOf(scrub) + ' · ' + DOW[Math.floor(scrub % 7)]
+    };
+
+    // ---- observer readout
+    const d = entering ? scrub + (NOW_D - scrub) * k : scrub;
+    const wk = wkOf(d), dow = Math.floor(d % 7);
+    const atNow = Math.abs(d - NOW_D) < 0.13;
+    const money = (v) => '$' + v.toFixed(1) + 'M';
+    let rd;
+    if (atNow) {
+      rd = { title: 'WEEK 9 · TUE 09:00 · NOW', cls: 't-rec', rows: [
+        { k: 'PAYROLL', v: '$222.8M', n: 'since the Week 6 trade' },
+        { k: 'PROJECTED TAX', v: '$34.2M', n: '1.5 × the $22.8M over the $200M line (computed)' },
+        { k: 'SECOND APRON', v: '$1.1M over', n: 'World line $221.7M (computed)' }
+      ], text: 'The seat is open. Five matters are waiting; the earliest expires at 11:00.' };
+    } else if (d < NOW_D) {
+      const post = d >= TRADE_D;
+      const rows = post ? [
+        { k: 'PAYROLL', v: '$222.8M', n: 'since the Week 6 trade' },
+        { k: 'PROJECTED TAX', v: '$34.2M', n: '1.5 × the $22.8M over the $200M line (computed)' },
+        { k: 'SECOND APRON', v: '$1.1M over', n: 'World line $221.7M (computed)' }
+      ] : [
+        { k: 'PAYROLL', v: '[World record]', n: 'before the Week 6 trade' },
+        { k: 'PROJECTED TAX', v: '[World record]', n: '' },
+        { k: 'SECOND APRON', v: '[World record]', n: '' }
+      ];
+      let text;
+      if (wk === 9 && d >= LOSS_D) text = 'Monday night: lost to Denver 112–115 at home. Twenty possessions are recorded, including “Butler for three” twice.';
+      else if (wk === 9) text = 'Week 9 begins. Payroll ≈ $222.8M.';
+      else if (wk === 6 && post) text = 'You accepted White, with a backup big as salary filler, for Jimmy Butler.';
+      else if (wk >= 7) text = 'Payroll has not moved since the trade. Games: [World record].';
+      else text = 'Week ' + wk + ': games and moves are in the World record [not reproduced here].';
+      rd = { title: 'WEEK ' + wk + ' · ' + DOW[dow], cls: 't-rec', rows, text };
+    } else {
+      const h = half(d), lo2 = 222.8 - h, hi2 = 222.8 + h;
+      const tlo = 1.5 * Math.max(0, lo2 - 200), thi = 1.5 * Math.max(0, hi2 - 200);
+      rd = { title: 'WEEK ' + wk + ' · ' + DOW[dow] + ' · PROJECTED', cls: 't-mod', rows: [
+        { k: 'PAYROLL', v: money(lo2) + ' – ' + money(hi2), n: 'range · illustrative, authored' },
+        { k: 'PROJECTED TAX', v: money(tlo) + ' – ' + money(thi), n: '1.5 × the amount over $200M · range illustrative, authored' },
+        { k: 'SECOND APRON', v: lo2 > 221.686 ? 'over' : hi2 < 221.686 ? 'under' : 'either side', n: 'World line $221.7M · the range ' + (lo2 > 221.686 ? 'stays above it' : hi2 < 221.686 ? 'stays below it' : 'straddles it') }
+      ], text: d >= DEAD_D - 3 && d <= DEAD_D + 4 ? 'The trade deadline falls this week [authored placeholder]. The World’s projection is a range, not a fact.' : 'The World’s own projection: a range, not a fact. What actually happens is not recorded anywhere yet.' };
+    }
+    const roOp = (inSeat || (entering && enterMs >= T.rows)) ? 0 : 1;
+    const roLayer = { op: roOp, pe: roOp ? 'auto' : 'none' };
+
+    // ---- record tape
+    const logs = log.filter((e) => !(e.away && away)).slice().sort((a, b) => a.at - b.at);
+    const seatLine = { at: 0, k: 'seat', text: 'Took the GM’s seat. Week 9, Tuesday 09:00. The clock started.' };
+    const allLogs = [seatLine].concat(logs);
+    const LAST = 6;
+    const shown = allLogs.slice(Math.max(0, allLogs.length - LAST));
+    const items = shown.map((e) => ({
+      head: stamp(e.at) + (e.k === 'lapse' ? ' · NO ACT' + (e.away ? ' · while you were away' : '') : e.k === 'consq' ? ' · COMPUTED FROM A WORLD RULE' : ''),
+      text: e.text,
+      cls: e.k === 'lapse' ? 't-abs' : e.k === 'consq' ? 't-com' : 't-rec',
+      fw: e.k === 'lapse' ? 500 : 600
+    }));
+    const tpOp = (inSeat || (entering && enterMs >= T.rows)) ? 1 : 0;
+    const tp = { op: tpOp, items, more: allLogs.length > LAST, moreN: allLogs.length - LAST };
+
+    // ---- open matters
+    const rows = MAT.map((m) => {
+      const dn = done[m.id];
+      const closed = dn === 'lapse' || dn === 'refused' || dn === 'ok' || dn === 'act';
+      const remain = m.due == null ? null : m.due - worldMs;
+      const r = { title: m.title, sub: m.sub, bd: 'solid', bg: 'transparent', dop: 1, anim: 'none', bar: 0, barOp: live ? 1 : 0, hasActs: false, acts: [], status: '', stTop: 12, chars: chars(m.dueTxt) };
+      if (m.id === 'ros') r.title = 'Roster ' + roster + ' · call-up ' + (callup === 'signed' ? 'signed' : callup === 'held' ? 'held' : 'pending');
+      if (!live) {
+        if (away) { r.bd = 'dashed'; r.chars = chars('SEALED'); r.dop = 0.6; r.status = 'held for your return'; }
+        else { r.dop = 0.9; r.status = m.due == null ? 'read only' : 'read only · no clock is running'; if (m.id === 'own') r.status = 'read only'; }
+        return r;
+      }
+      if (m.due == null) { r.bd = 'dashed'; r.chars = chars('NO CLOCK'); r.dop = 0.7; r.status = 'Nothing here expires. It stays unfunded until someone funds it.'; return r; }
+      if (dn === 'lapse' || dn === 'refused') { r.chars = chars(dn === 'refused' ? 'REFUSED' : 'LAPSED'); r.dop = 0.75; r.bar = 0; r.status = dn === 'refused' ? 'Lineup refused at tip-off. Recorded.' : 'Recorded as no decision, not as a choice.'; r.bd = 'dashed'; return r; }
+      if (dn === 'ok') { r.chars = chars('CLOSED'); r.bar = 0; r.status = 'Tip-off passed. Lineup accepted.'; return r; }
+      if (dn === 'act' && m.id !== 'ros') {
+        const left = m.due - (stopAt[m.id] || 0);
+        r.chars = chars(cdStr(left)); r.dop = 0.75; r.bar = Math.round(left / m.due * 100);
+        const ch = m.id === 'den' ? (s.denChoice === 'yes' ? 'Accepted' : 'Declined') : (s.butChoice === 'yes' ? 'Took the meeting' : 'Not today');
+        r.status = ch + ' at ' + clockStr(stopAt[m.id] || 0) + ' · ' + cdStr(left) + ' was left';
+        return r;
+      }
+      r.chars = chars(cdStr(remain));
+      r.bg = '#E8A317';
+      r.bar = Math.max(0, Math.round(remain / m.due * 100));
+      if (remain < 15 * 60000 && m.id !== 'own') r.anim = 'e3blink 1s ease-in-out infinite';
+      if (inSeat) {
+        if (m.id === 'den') { r.hasActs = true; r.acts = [{ label: 'Accept', go: () => this.act('den', 'yes') }, { label: 'Decline', go: () => this.act('den', 'no') }]; }
+        else if (m.id === 'but') { r.hasActs = true; r.acts = [{ label: 'Take meeting', go: () => this.act('but', 'yes') }, { label: 'Not today', go: () => this.act('but', 'no') }]; }
+        else if (m.id === 'ros') {
+          if (!callup) { r.hasActs = true; r.acts = [{ label: 'Call up', go: () => this.act('ros', 'call') }, { label: 'Hold him', go: () => this.act('ros', 'hold') }]; }
+          else if (roster > 15) { r.hasActs = true; r.acts = [{ label: 'Waive one', go: () => this.act('ros', 'waive') }]; r.status = ''; }
+          else { r.status = callup === 'signed' ? 'Call-up signed. Roster ' + roster + '. The clock still runs to tip-off.' : 'Call-up held. Roster ' + roster + '. The clock still runs to tip-off.'; }
+        } else if (m.id === 'own') { r.status = 'Not decided today. The clock is far, and it is still running.'; }
+      }
+      return r;
+    });
+    const anyLive = rows.some((r) => r.hasActs);
+    const mx = { note: inSeat ? 'clocks running · ' + (speed === 60 ? '×60 (authored)' : '×1') : away ? 'sealed while you are away' : entering ? 'clocks arming…' : 'observers can read every matter; none run on a clock' };
+
+    // ---- away report
+    const awayLogs = log.filter((e) => e.away && away);
+    const awayGame = (worldMs >= 34.5 * H && leftAt < 34.5 * H) ? 1 : 0;
+    const awayN = awayLogs.length + awayGame;
+    const awayView = { stopped: stamp(leftAt), now: stamp(worldMs), n: awayN === 0 ? 'Nothing has happened yet that needs you; anything that does is' : awayN + (awayN === 1 ? ' thing has happened, held' : ' things have happened, held') };
+
+    // ---- legend
+    const legend = [
+      { cls: 't-rec', k: 'RECORDED', t: 'Written into the World’s own history. Read-only once you are in the seat.' },
+      { cls: 't-mod', k: 'MODELED', t: 'The World’s projection, BOW model v0.3 [verify it exists]. A range, not a fact. The ranges drawn here are illustrative, authored: no model ran.' },
+      { cls: 't-unk', k: 'SEALED', t: 'The unmodeled future. Nothing computes it; you find out by living it.' },
+      { cls: 't-aut', k: 'AUTHORED', t: 'Deadline times, the deadline week, the 1.5 tax rate (inferred from $34.2M on $22.8M over) and the ×60 toggle were chosen by the prototype.' },
+      { cls: 't-abs', k: 'NO ACT', t: 'A recorded absence: the clock ran out and nobody decided. It is not logged as a choice.' }
+    ];
+
+    const skipOn = entering;
+    const nowBtnOn = !taken;
+    const nowNote = taken ? (inSeat ? 'This mark no longer moves.' : 'You are here.') : away ? 'The World kept going. Your seat is still yours to take.' : 'The seat opens here. Take it and this handle stops being yours.';
+    return {
+      mode, hero, clk, wclk, tl, hd, rd, rows, mx, tp, legend, how, ro: roLayer, away: awayView,
+      awayOn: away,
+      skipOn, inSeat, speedOn: clockOn || away,
+      skip: () => { const st = this.state || {}; this.setState({ phase: 'occupy', enterMs: T.end }); },
+      leave: () => { const st = this.state || {}; this.setState({ phase: 'left', leftAt: st.worldMs || 0, scrub: NOW_D }); },
+      enter: () => {
+        const st = this.state || {};
+        const wasAway = st.phase === 'left';
+        this.last = Date.now();
+        const log = (st.log || []).slice();
+        if (wasAway) log.push({ at: st.worldMs || 0, k: 'seat', text: 'Returned to the seat.' });
+        this.setState({ phase: 'entering', enterMs: 0, log: log });
+      },
+      nowBtnOn, nowBtnLabel: away ? 'Return to the seat' : 'Take the seat here', nowNote,
+      toggleHow: () => this.setState({ how: !((this.state || {}).how) }),
+      howPressed: how ? 'true' : 'false', howBg: how ? '#111' : '#F8F8F6', howFg: how ? '#F8F8F6' : '#111',
+      toggleSpeed: () => this.setState({ speed: ((this.state || {}).speed === 60 ? 1 : 60) }),
+      fastPressed: speed === 60 ? 'true' : 'false', fastBg: speed === 60 ? '#111' : '#F8F8F6', fastFg: speed === 60 ? '#E8A317' : '#111',
+      scrubVal: String(hx), scrubOff: taken, scrubPe: taken ? 'none' : 'auto',
+      onScrub: (e) => { const v = parseFloat(e.target.value); if (!isNaN(v) && !taken) this.setState({ scrub: v }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

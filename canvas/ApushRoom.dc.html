@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Assembly Room</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Work+Sans:wght@400;500;600&amp;family=Red+Hat+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#ECE6D8;color:#23261F;font-family:'Work Sans',sans-serif}
+a{color:#9C3F17}a:hover{color:#6E2A0E}
+.rm-btn{font-family:'Work Sans',sans-serif;cursor:pointer;border-radius:0;transition:background .2s,color .2s,border-color .2s,box-shadow .2s}
+.rm-btn:hover{box-shadow:inset 0 -3px 0 #23261F}
+.rm-btn:focus-visible,.rm-tab:focus-visible,.rm-dais:focus-visible{outline:2px solid #23261F;outline-offset:3px}
+.rm-tab{cursor:pointer;border-radius:0;transition:box-shadow .35s ease,border-color .35s ease,background .35s ease}
+.rm-tab:hover{outline:1px solid #23261F;outline-offset:3px}
+.rm-dais{cursor:pointer;border-radius:0}
+.rm-dais:hover{outline:1px dashed #23261F;outline-offset:2px}
+.sc{font-size:11px;font-weight:600;letter-spacing:.15em;color:#4A5A4F}
+.cg{font-family:'Cormorant Garamond',serif}
+.mono{font-family:'Red Hat Mono',monospace}
+.sw{display:inline-block;flex:none;width:14px;height:14px;box-sizing:border-box}
+.sw-rec{background:#23261F;box-shadow:inset 0 0 0 2px #23261F,inset 0 0 0 3px #ECE6D8}
+.sw-obs{background:#23261F}
+.sw-com{background:#BDB8A6}
+.sw-aut{background:transparent;border:2px solid #23261F}
+.sw-mod{background:repeating-linear-gradient(135deg,#23261F 0 1.2px,transparent 1.2px 5px);border:1px solid #23261F}
+.sw-gen{background:radial-gradient(circle,#23261F 1.1px,transparent 1.4px) 0 0/4px 4px;border:1px dotted #23261F}
+.sw-int{background:transparent;border:1px solid #23261F}
+.sw-unk{background:transparent;border:1.5px dashed #23261F}
+.sw-br{background:#9C3F17;box-shadow:inset 0 0 0 2px #9C3F17,inset 0 0 0 3px #ECE6D8}
+.t-rec{background:#23261F;box-shadow:inset 0 0 0 3px #23261F,inset 0 0 0 5px #ECE6D8}
+.hatch-sie{background:repeating-linear-gradient(135deg,#9C3F17 0 1.2px,transparent 1.2px 6px)}
+.fade{transition:opacity .5s ease}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #ECE6D8; color: #23261F; font-family: 'Work Sans', sans-serif">
+
+  <!-- TOP BAND: place line, or the fork stamp -->
+  <div style="position: absolute; left: 0; top: 0; width: 1440px; height: 64px; box-sizing: border-box; border-bottom: 1px solid #23261F">
+    <sc-if value="{{bandNormal}}" hint-placeholder-val="{{true}}">
+      <div style="position: absolute; left: 32px; top: 0; height: 63px; display: flex; align-items: center; gap: 14px">
+        <span class="sc" style="font-size: 12px; letter-spacing: .18em">PHILADELPHIA · PENNSYLVANIA STATE HOUSE · THE ASSEMBLY ROOM</span>
+      </div>
+      <div style="position: absolute; right: 24px; top: 0; height: 63px; display: flex; align-items: center">
+        <span class="sc" style="font-size: 12px; font-weight: 500; letter-spacing: .12em">YOU SIT IN CALEB STRONG’S CHAIR · YOU ARE NOT CALEB STRONG</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{bandBranch}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: 16px; right: 16px; top: 5px; height: 54px; box-sizing: border-box; border: 4px double #9C3F17; background: #ECE6D8; display: flex; align-items: center; gap: 20px; padding: 0 3px 0 18px; color: #9C3F17">
+        <span style="font-size: 13.5px; font-weight: 600; letter-spacing: .15em; white-space: nowrap">YOUR BRANCH · DIVERGED 16 JULY 1787, MASSACHUSETTS VOTE · NOT HISTORY</span>
+        <span style="font-size: 13px; color: #7A2E12; white-space: nowrap">Assumes every other state votes as recorded. The record underneath is untouched.</span>
+        <button type="button" class="rm-btn" onClick="{{onToRecord}}" style="margin-left: auto; height: 42px; padding: 0 18px; border: 1.5px solid #9C3F17; background: #ECE6D8; color: #9C3F17; font-size: 14px; font-weight: 600">Return to the record</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{bandRecord}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: 16px; right: 16px; top: 5px; height: 54px; box-sizing: border-box; border: 1px solid #23261F; display: flex; align-items: center; gap: 20px; padding: 0 3px 0 18px">
+        <span class="sc" style="font-size: 13px; color: #23261F; white-space: nowrap">THE RECORD · MADISON’S NOTES AND THE JOURNAL · 16 JULY 1787</span>
+        <span style="font-size: 13px; color: #9C3F17; white-space: nowrap">Your branch, diverged at the Massachusetts vote, is kept.</span>
+        <button type="button" class="rm-btn" onClick="{{onToBranch}}" style="margin-left: auto; height: 42px; padding: 0 18px; border: 1.5px solid #9C3F17; background: #ECE6D8; color: #9C3F17; font-size: 14px; font-weight: 600">Back to your branch</button>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- THRESHOLD LINE -->
+  <div style="position: absolute; left: 32px; top: 72px; width: 950px; height: 40px; display: flex; align-items: baseline; gap: 12px; white-space: nowrap">
+    <span class="cg" style="font-weight: 600; font-size: 30px; line-height: 1">Monday 16 July 1787, morning. The windows are shut for secrecy.</span>
+    <span style="font-size: 12px; color: #4A5A4F">[tradition, verify]</span>
+  </div>
+
+  <!-- THE PLAN -->
+  <div style="position: absolute; left: 24px; top: 116px; width: 968px; height: 730px">
+    <svg width="968" height="730" viewBox="0 0 968 730" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+      <defs>
+        <linearGradient id="rmLightS" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#FCFAF3" stop-opacity="0.95"></stop><stop offset="1" stop-color="#FCFAF3" stop-opacity="0"></stop></linearGradient>
+        <linearGradient id="rmLightN" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FAF7EE" stop-opacity="0.75"></stop><stop offset="1" stop-color="#FAF7EE" stop-opacity="0"></stop></linearGradient>
+        <clipPath id="rmInside"><rect x="152" y="24" width="664" height="664"></rect></clipPath>
+      </defs>
+      <g clip-path="url(#rmInside)">
+        <polygon points="816,118 816,174 666,284 666,228" fill="url(#rmLightS)"></polygon>
+        <polygon points="816,322 816,378 666,488 666,432" fill="url(#rmLightS)"></polygon>
+        <polygon points="816,526 816,582 666,692 666,636" fill="url(#rmLightS)"></polygon>
+        <polygon points="152,118 152,174 228,198 228,94" fill="url(#rmLightN)"></polygon>
+        <polygon points="152,322 152,378 228,402 228,298" fill="url(#rmLightN)"></polygon>
+        <polygon points="152,526 152,582 228,606 228,502" fill="url(#rmLightN)"></polygon>
+      </g>
+      <path d="M136 8 H832 V704 H136 Z M152 24 V688 H816 V24 Z" fill="#55665A" fill-rule="evenodd" stroke="#23261F" stroke-width="1"></path>
+      <rect x="135.5" y="118" width="17" height="56" fill="#ECE6D8"></rect>
+      <rect x="135.5" y="322" width="17" height="56" fill="#ECE6D8"></rect>
+      <rect x="135.5" y="526" width="17" height="56" fill="#ECE6D8"></rect>
+      <rect x="815.5" y="118" width="17" height="56" fill="#ECE6D8"></rect>
+      <rect x="815.5" y="322" width="17" height="56" fill="#ECE6D8"></rect>
+      <rect x="815.5" y="526" width="17" height="56" fill="#ECE6D8"></rect>
+      <path d="M136 118 H152 M136 174 H152 M136 322 H152 M136 378 H152 M136 526 H152 M136 582 H152 M816 118 H832 M816 174 H832 M816 322 H832 M816 378 H832 M816 526 H832 M816 582 H832" fill="none" stroke="#23261F" stroke-width="1"></path>
+      <path d="M142 118 V174 M146 118 V174 M142 322 V378 M146 322 V378 M142 526 V582 M146 526 V582 M822 118 V174 M826 118 V174 M822 322 V378 M826 322 V378 M822 526 V582 M826 526 V582" fill="none" stroke="#23261F" stroke-width="0.8"></path>
+      <rect x="240" y="24" width="64" height="12" fill="#55665A" stroke="#23261F" stroke-width="0.8"></rect>
+      <rect x="258" y="26" width="28" height="8" fill="#2E302A"></rect>
+      <rect x="248" y="36" width="48" height="14" fill="#DDD5C3" stroke="#23261F" stroke-width="0.6"></rect>
+      <rect x="664" y="24" width="64" height="12" fill="#55665A" stroke="#23261F" stroke-width="0.8"></rect>
+      <rect x="682" y="26" width="28" height="8" fill="#2E302A"></rect>
+      <rect x="672" y="36" width="48" height="14" fill="#DDD5C3" stroke="#23261F" stroke-width="0.6"></rect>
+      <rect x="412" y="24" width="144" height="72" fill="#E0D8C6" stroke="#23261F" stroke-width="1"></rect>
+      <line x1="412" y1="88" x2="556" y2="88" stroke="#23261F" stroke-width="0.6"></line>
+      <path d="M474 52 V38 Q484 31 494 38 V52 Z" fill="#CFC5AF" stroke="#23261F" stroke-width="0.8"></path>
+      <rect x="452" y="56" width="64" height="16" fill="#D3CAB5" stroke="#23261F" stroke-width="0.8"></rect>
+      <text x="484" y="83" text-anchor="middle" font-family="Work Sans, sans-serif" font-size="9.5" letter-spacing="1.6" fill="#23261F">PRESIDENT</text>
+      <rect x="464" y="102" width="40" height="12" fill="#D3CAB5" stroke="#23261F" stroke-width="0.8"></rect>
+      <rect x="454" y="687" width="60" height="18" fill="#ECE6D8"></rect>
+      <path d="M454 688 V704 M514 688 V704" fill="none" stroke="#23261F" stroke-width="1"></path>
+      <path d="M454 688 V658 M514 688 V658" fill="none" stroke="#23261F" stroke-width="1"></path>
+      <path d="M454 658 A30 30 0 0 1 484 688 M514 658 A30 30 0 0 0 484 688" fill="none" stroke="#23261F" stroke-width="0.6"></path>
+      <text x="484" y="722" text-anchor="middle" font-family="Work Sans, sans-serif" font-size="10" letter-spacing="1.6" fill="#4A5A4F">DOOR TO THE CENTRAL HALL</text>
+      <text transform="translate(46 356) rotate(-90)" text-anchor="middle" font-family="Work Sans, sans-serif" font-size="11" letter-spacing="3" fill="#4A5A4F">CHESTNUT STREET · NORTH</text>
+      <line x1="118" y1="8" x2="118" y2="704" stroke="#23261F" stroke-width="0.7"></line>
+      <path d="M112 14 L124 2 M112 710 L124 698 M112 8 H134 M112 704 H134" fill="none" stroke="#23261F" stroke-width="0.8"></path>
+      <text transform="translate(108 356) rotate(-90)" text-anchor="middle" font-family="Work Sans, sans-serif" font-size="10.5" fill="#23261F">approx. 40 ft · verify</text>
+      <text transform="translate(926 330) rotate(90)" text-anchor="middle" font-family="Work Sans, sans-serif" font-size="11" letter-spacing="3" fill="#4A5A4F">STATE HOUSE YARD · SOUTH</text>
+      <circle cx="898" cy="560" r="20" fill="none" stroke="#23261F" stroke-width="0.8"></circle>
+      <path d="M880 560 L908 552 L902 560 L908 568 Z" fill="#23261F"></path>
+      <text x="872" y="564" text-anchor="end" font-family="Cormorant Garamond, serif" font-size="15" font-weight="600" fill="#23261F">N</text>
+      <text x="899" y="622" text-anchor="middle" font-family="Work Sans, sans-serif" font-size="9.5" letter-spacing="1.4" fill="#4A5A4F">SCALE, APPROX.</text>
+      <rect x="858" y="630" width="41.5" height="5" fill="#23261F"></rect>
+      <rect x="899.5" y="630" width="41.5" height="5" fill="none" stroke="#23261F" stroke-width="0.8"></rect>
+      <text x="858" y="651" text-anchor="middle" font-family="Work Sans, sans-serif" font-size="10" fill="#23261F">0</text>
+      <text x="941" y="651" text-anchor="middle" font-family="Work Sans, sans-serif" font-size="10" fill="#23261F">5 ft</text>
+      <g style="opacity: {{whyOp}}; transition: opacity .45s ease" fill="none" stroke="#23261F" stroke-width="1">
+        <path d="M306 378 L280 282 M306 404 L280 466 M662 463 L688 182 M662 463 L688 277 M662 463 L688 372 M662 463 L688 466 M612 568 L612 590"></path>
+        <circle cx="280" cy="282" r="2.5" fill="#23261F"></circle>
+        <circle cx="280" cy="466" r="2.5" fill="#23261F"></circle>
+        <circle cx="688" cy="182" r="2.5" fill="#23261F"></circle>
+        <circle cx="688" cy="277" r="2.5" fill="#23261F"></circle>
+        <circle cx="688" cy="372" r="2.5" fill="#23261F"></circle>
+        <circle cx="688" cy="466" r="2.5" fill="#23261F"></circle>
+        <circle cx="612" cy="590" r="2.5" fill="#23261F"></circle>
+      </g>
+      <g style="opacity: {{promptOp}}; transition: opacity .3s ease" fill="none" stroke="#23261F" stroke-width="1.5">
+        <path d="M300 282 H284 M290 276 L283 282 L290 288"></path>
+      </g>
+    </svg>
+
+    <!-- second ink: your branch is a FRAME around the recorded room, never a fill over it -->
+    <div style="position: absolute; left: 0; top: 0; width: 968px; height: 730px; box-sizing: border-box; border: 4px double #9C3F17; opacity: {{ovOp}}; pointer-events: none; transition: opacity .6s ease"></div>
+
+    <button type="button" class="rm-dais" onClick="{{onDais}}" aria-label="The President’s chair: George Washington" style="position: absolute; left: 412px; top: 24px; width: 144px; height: 72px; padding: 0; margin: 0; background: transparent; border: 0"></button>
+
+    <!-- delegation tables -->
+    <sc-for list="{{tables}}" as="t" hint-placeholder-count="13">
+      <button type="button" class="rm-tab" onClick="{{t.pick}}" aria-pressed="{{t.pressed}}" aria-label="{{t.aria}}" style="position: absolute; left: {{t.x}}px; top: {{t.y}}px; width: 104px; height: {{t.h}}px; box-sizing: border-box; margin: 0; padding: 6px 8px; background: {{t.bg}}; border: {{t.bd}}; box-shadow: {{t.ring}}; color: #23261F; display: flex; flex-direction: column; align-items: stretch; gap: 6px; text-align: left; font-family: 'Work Sans', sans-serif">
+        <span style="display: flex; justify-content: space-between; align-items: baseline">
+          <span class="cg" style="font-weight: 600; font-size: 21px; line-height: 1">{{t.ab}}</span>
+          <span style="font-size: 11.5px; letter-spacing: .08em; color: {{t.sideC}}">{{t.side}}</span>
+        </span>
+        <span style="display: block; height: 20px; box-sizing: border-box; background: {{t.chitBg}}; border: {{t.chitBd}}; box-shadow: {{t.chitSh}}; color: {{t.chitFg}}; font-size: 10.5px; font-weight: 600; letter-spacing: .14em; line-height: 16px; text-align: center; transform: scaleY({{t.chitScale}}); transition: transform .35s ease, background .35s ease">{{t.chitText}}</span>
+        <sc-if value="{{t.isMA}}" hint-placeholder-val="{{false}}">
+          <span style="display: flex; gap: 4px">
+            <sc-for list="{{maSeats}}" as="m" hint-placeholder-count="4">
+              <span style="flex: 1; height: 24px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; letter-spacing: .04em; background: {{m.bg}}; color: {{m.fg}}; border: {{m.bd}}; transition: background .35s ease">{{m.ini}}</span>
+            </sc-for>
+          </span>
+        </sc-if>
+        <sc-if value="{{t.badgeOn}}" hint-placeholder-val="{{false}}">
+          <span style="position: absolute; right: -10px; top: -10px; min-width: 22px; height: 22px; padding: 0 5px; box-sizing: border-box; border-radius: 11px; background: #ECE6D8; border: 1.5px solid #23261F; font-size: 11px; font-weight: 600; line-height: 19px; text-align: center">{{t.badge}}</span>
+        </sc-if>
+      </button>
+    </sc-for>
+
+    <!-- the floor: the question, the roll, the result -->
+    <div style="position: absolute; left: 300px; top: 136px; width: 368px; height: 444px; box-sizing: border-box; background: {{floorBg}}; border: {{floorBd}}; transition: background .5s ease">
+      <sc-if value="{{fIdle}}" hint-placeholder-val="{{true}}">
+        <div style="padding: 6px 8px 0; display: flex; flex-direction: column; gap: 11px">
+          <span class="sc">THE QUESTION ON THE FLOOR</span>
+          <span class="cg" style="font-weight: 600; font-size: 31px; line-height: 1">The Committee’s compromise</span>
+          <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #23261F; padding-top: 10px">
+            <div style="display: flex; flex-direction: column; gap: 2px">
+              <span class="sc" style="font-size: 10.5px">FIRST BRANCH · THE FUTURE HOUSE</span>
+              <span style="font-size: 15px; line-height: 1.35">Seats by population, counting three-fifths of enslaved people.</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2px">
+              <span class="sc" style="font-size: 10.5px">SECOND BRANCH · THE FUTURE SENATE</span>
+              <span style="font-size: 15px; line-height: 1.35">Each state an equal vote.</span>
+            </div>
+          </div>
+          <span style="font-size: 13px; line-height: 1.4; color: #4A5A4F">Reported 5 July by a committee of one delegate per state.</span>
+          <div style="display: flex; gap: 10px; align-items: flex-start; padding: 9px 12px; border: 1px solid #23261F">
+            <span class="sw sw-aut" style="margin-top: 2px"></span>
+            <span style="font-size: 13.5px; line-height: 1.4">The rule: one vote per state. A majority of states present carries. <strong style="font-weight: 600">A tie fails.</strong></span>
+          </div>
+          <button type="button" class="rm-btn" onClick="{{onCall}}" style="height: 52px; border: 0; background: #23261F; color: #ECE6D8; font-size: 16px; font-weight: 600; letter-spacing: .03em">Call the states</button>
+          <span style="font-size: 13px; color: #4A5A4F">Visit any table first. The room will wait.</span>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{fRolling}}" hint-placeholder-val="{{false}}">
+        <div style="padding: 6px 8px 0; display: flex; flex-direction: column; gap: 14px">
+          <span class="sc">CALLING THE STATES · NORTH TO SOUTH</span>
+          <span class="cg" style="font-weight: 600; font-size: 44px; line-height: 1">{{curName}}</span>
+          <span style="font-size: 14px; color: #4A5A4F; min-height: 20px">{{lastLine}}</span>
+          <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid #23261F; border-bottom: 1px solid #23261F">
+            <sc-for list="{{tally}}" as="c" hint-placeholder-count="4">
+              <div style="padding: 10px 0 9px; display: flex; flex-direction: column; gap: 5px; align-items: flex-start">
+                <span style="display: block; width: 28px; height: 12px; box-sizing: border-box; background: {{c.bg}}; border: {{c.bd}}; box-shadow: {{c.sh}}"></span>
+                <span class="cg" style="font-weight: 600; font-size: 40px; line-height: 1">{{c.n}}</span>
+                <span class="sc" style="font-size: 10.5px">{{c.label}}</span>
+              </div>
+            </sc-for>
+          </div>
+          <span style="font-size: 13px; line-height: 1.4; color: #4A5A4F">One vote per state. A majority of states present carries. A tie fails.</span>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{fPaused}}" hint-placeholder-val="{{false}}">
+        <div style="padding: 6px 8px 0; display: flex; flex-direction: column; gap: 12px">
+          <span class="sc">MASSACHUSETTS IS CALLED</span>
+          <span style="font-size: 15px; line-height: 1.45">Gerry: aye. King: no. Gorham: no.<br>The fourth chair at the table is yours.</span>
+          <span class="cg" style="font-weight: 600; font-size: 33px; line-height: 1.02">You hold Caleb Strong’s vote. How does it go?</span>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+            <button type="button" class="rm-btn" onClick="{{onAye}}" style="min-height: 66px; border: 1.5px solid #23261F; background: #ECE6D8; color: #23261F; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 3px; padding: 8px 14px; text-align: left"><span style="font-size: 19px; font-weight: 600">Aye</span><span style="font-size: 12.5px; color: #4A5A4F">as recorded</span></button>
+            <button type="button" class="rm-btn" onClick="{{onNo}}" style="min-height: 66px; border: 1.5px solid #23261F; background: #ECE6D8; color: #23261F; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 3px; padding: 8px 14px; text-align: left"><span style="font-size: 19px; font-weight: 600">No</span><span style="font-size: 12.5px; color: #9C3F17">starts your branch</span></button>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start">
+            <span class="sw sw-com" style="margin-top: 3px"></span>
+            <span style="font-size: 13px; line-height: 1.45">Aye: Massachusetts splits 2–2 and casts no vote. No: 1–3, Massachusetts votes no.</span>
+          </div>
+          <span style="font-size: 13px; color: #4A5A4F">The room waits. Open any table before you vote.</span>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{fDoneRec}}" hint-placeholder-val="{{false}}">
+        <div style="position: absolute; left: 8px; top: 4px; right: 8px; display: flex; flex-direction: column; gap: 10px">
+          <div class="t-rec" style="padding: 13px 18px 13px; color: #ECE6D8; display: flex; flex-direction: column; gap: 3px">
+            <span style="font-size: 10.5px; font-weight: 600; letter-spacing: .16em; color: #ECE6D8">RECORDED · MADISON’S NOTES AND THE JOURNAL</span>
+            <span class="cg" style="font-weight: 600; font-size: 36px; line-height: 1.05">Carried, 5–4–1.</span>
+            <span style="font-size: 13px; color: #ECE6D8">5 aye · 4 no · Massachusetts divided · 3 absent</span>
+          </div>
+          <span class="cg" style="font-style: italic; font-weight: 500; font-size: 19px; line-height: 1.22">{{teachLine}}</span>
+          <button type="button" class="rm-btn" onClick="{{onWhy}}" aria-pressed="{{whyPressed}}" style="align-self: flex-start; height: 44px; padding: 0 18px; border: 1.5px solid #23261F; background: {{whyBg}}; color: {{whyFg}}; font-size: 14px; font-weight: 600">Why was this so close?</button>
+        </div>
+        <sc-if value="{{whyOn}}" hint-placeholder-val="{{false}}">
+          <div style="position: absolute; left: 6px; top: 222px; width: 356px; height: 66px; box-sizing: border-box; background: #ECE6D8; border: 1px solid #23261F; display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 9px; padding: 7px 10px 6px 8px">
+            <span style="width: 22px; height: 22px; box-sizing: border-box; border-radius: 11px; border: 1.5px solid #23261F; font-size: 11.5px; font-weight: 600; display: flex; align-items: center; justify-content: center">1</span>
+            <span style="display: flex; flex-direction: column; gap: 2px"><strong style="font-size: 13.5px; font-weight: 600">Small states against large</strong><span style="font-size: 12.5px; line-height: 1.33">Small states wanted equal votes; Va., Penn. and Mass. wanted votes by population.</span></span>
+          </div>
+          <div style="position: absolute; left: 6px; top: 294px; width: 356px; height: 66px; box-sizing: border-box; background: #ECE6D8; border: 1px solid #23261F; display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 9px; padding: 7px 10px 6px 8px">
+            <span style="width: 22px; height: 22px; box-sizing: border-box; border-radius: 11px; border: 1.5px solid #23261F; font-size: 11.5px; font-weight: 600; display: flex; align-items: center; justify-content: center">2</span>
+            <span style="display: flex; flex-direction: column; gap: 2px"><strong style="font-size: 13.5px; font-weight: 600">Madison: the deeper split was slavery</strong><span style="font-size: 12.5px; line-height: 1.33">On 30 June he put the line at “having or not having slaves” [verify: Farrand, vol. 1].</span></span>
+          </div>
+          <div style="position: absolute; left: 6px; top: 366px; width: 356px; height: 66px; box-sizing: border-box; background: #ECE6D8; border: 1px solid #23261F; display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 9px; padding: 7px 10px 6px 8px">
+            <span style="width: 22px; height: 22px; box-sizing: border-box; border-radius: 11px; border: 1.5px solid #23261F; font-size: 11.5px; font-weight: 600; display: flex; align-items: center; justify-content: center">3</span>
+            <span style="display: flex; flex-direction: column; gap: 2px"><strong style="font-size: 13.5px; font-weight: 600">Delaware’s hands were tied</strong><span style="font-size: 12.5px; line-height: 1.33">Its legislature told its delegates not to agree to any change in the equal vote [verify].</span></span>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{fDoneBr}}" hint-placeholder-val="{{false}}">
+        <div style="padding: 10px 12px 0; display: flex; flex-direction: column; gap: 12px">
+          <span class="sc" style="color: #9C3F17">YOUR BRANCH · COMPUTED FROM THE RULE</span>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: stretch">
+            <div class="t-rec" style="padding: 12px 14px; color: #ECE6D8; display: flex; flex-direction: column; gap: 6px">
+              <span class="cg" style="font-weight: 600; font-size: 40px; line-height: 1; color: #ECE6D8">5–4</span>
+              <span style="font-size: 13px; font-weight: 600; line-height: 1.35; color: #ECE6D8">RECORD · 16 Jul 1787 · 5–4, Massachusetts divided · carried</span>
+            </div>
+            <div style="border: 3px double #9C3F17; padding: 10px 12px; color: #9C3F17; display: flex; flex-direction: column; gap: 6px; box-sizing: border-box">
+              <span class="cg" style="font-weight: 600; font-size: 40px; line-height: 1; color: #9C3F17">5–5</span>
+              <span style="font-size: 13px; font-weight: 600; line-height: 1.35; color: #9C3F17">YOUR BRANCH · 5–5 · a tie fails</span>
+            </div>
+          </div>
+          <span style="font-size: 13px; line-height: 1.4; color: #6E2A0E">Massachusetts votes no, 1–3. Every other state as recorded.</span>
+          <span class="cg" style="font-style: italic; font-weight: 500; font-size: 19px; line-height: 1.22; color: #9C3F17">What you just voted down has a name: the Great Compromise.</span>
+          <span style="font-size: 13.5px; line-height: 1.45; color: #9C3F17">The record says it carried. Your branch says it did not. What might follow is on the right, and none of it is history.</span>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{floorTagOn}}" hint-placeholder-val="{{false}}">
+        <span class="mono" style="position: absolute; left: 8px; bottom: 2px; font-size: 12px; line-height: 16px; color: #23261F; background: #ECE6D8; padding: 0 3px">{{floorTag}}</span>
+      </sc-if>
+    </div>
+
+    <!-- how do we know: provenance on the drawing -->
+    <sc-if value="{{knowOn}}" hint-placeholder-val="{{false}}">
+      <sc-for list="{{ktags}}" as="k" hint-placeholder-count="13">
+        <span class="mono" style="position: absolute; left: {{k.x}}px; top: {{k.y}}px; width: 128px; padding: 0 2px; box-sizing: border-box; font-size: 12px; line-height: 16px; color: {{k.c}}; background: #ECE6D8; white-space: nowrap; overflow: hidden">{{k.t}}</span>
+      </sc-for>
+      <span class="mono" style="position: absolute; left: 560px; top: 56px; padding: 0 2px; font-size: 12px; line-height: 16px; color: #23261F; background: #ECE6D8">Chair: Washington<br>Journal, 25 May</span>
+      <span class="mono" style="position: absolute; left: 512px; top: 101px; padding: 0 2px; font-size: 12px; line-height: 16px; color: #23261F; background: #ECE6D8">Secretary: W. Jackson</span>
+      <span class="mono" style="position: absolute; left: 840px; top: 100px; padding: 0 2px; font-size: 12px; line-height: 16px; color: #23261F; background: #ECE6D8">Windows shut:<br>tradition,<br>verify</span>
+      <span class="mono" style="position: absolute; left: 140px; top: 709px; padding: 0 2px; font-size: 12px; line-height: 16px; color: #23261F; background: #ECE6D8">Plan: schematic, not a survey</span>
+      <span class="mono" style="position: absolute; left: 590px; top: 709px; width: 370px; padding: 0 2px; box-sizing: border-box; text-align: right; font-size: 12px; line-height: 16px; color: #23261F; background: #ECE6D8">Tables: BOW-placed · outline = AUTHORED</span>
+    </sc-if>
+  </div>
+
+  <!-- SIDE PANEL -->
+  <div style="position: absolute; left: 1000px; top: 72px; width: 416px; height: 774px; box-sizing: border-box; border-left: 1px solid #23261F; padding: 0 0 0 24px; overflow: hidden">
+
+    <sc-if value="{{pBefore}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; flex-direction: column; gap: 18px; padding-top: 4px">
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span class="sc">YOUR SEAT</span>
+          <span class="cg" style="font-weight: 600; font-size: 30px; line-height: 1.04">The Massachusetts table, Caleb Strong’s chair</span>
+          <span style="font-size: 15px; line-height: 1.5">You are in his seat. You are not Caleb Strong. Beside you: Elbridge Gerry, Rufus King, Nathaniel Gorham.</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #23261F; padding-top: 14px">
+          <span class="sc">THE LAST TIME · MONDAY 2 JULY</span>
+          <div style="display: flex; gap: 12px; align-items: flex-start">
+            <span class="sw sw-rec" style="margin-top: 4px"></span>
+            <span style="font-size: 15px; line-height: 1.5">The same question, an equal vote for each state in the second branch, tied: 5 aye, 5 no, Georgia divided. It went to a committee.</span>
+          </div>
+          <sc-if value="{{knowOn}}" hint-placeholder-val="{{false}}"><span class="mono" style="font-size: 12px; line-height: 1.35; color: #4A5A4F; padding-left: 26px">Journal; Madison’s notes, 2 July 1787 · verify</span></sc-if>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #23261F; padding-top: 14px">
+          <span class="sc">BEFORE YOU VOTE</span>
+          <span style="font-size: 15px; line-height: 1.5">Open any table: who sits there, how the state voted on 2 July, and, for seven delegates, an actor model you can question.</span>
+          <sc-if value="{{knowOn}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; line-height: 1.4; color: #4A5A4F; background: #ECE6D8">HOW: BOW placed the tables. No source gives the seating plan, so each table is drawn as an outline (AUTHORED), not a fact. The states’ votes are from the record.</span></sc-if>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 9px; border: 1px solid #23261F; padding: 13px 14px">
+          <span class="sc" style="color: #23261F">AN ACTOR MODEL IS NOT THE PERSON</span>
+          <span style="display: flex; gap: 10px; align-items: center; font-size: 13.5px"><span class="sw sw-gen"></span>actor model: a stand-in built from sources.</span>
+          <span style="display: flex; gap: 10px; align-items: center; font-size: 13.5px"><span class="sw sw-obs"></span>What a source says, with the source.</span>
+          <span style="display: flex; gap: 10px; align-items: center; font-size: 13.5px"><span class="sw sw-int"></span>INTERPRETATION: what historians generally infer.</span>
+          <span style="display: flex; gap: 10px; align-items: center; font-size: 13.5px"><span class="sw sw-unk"></span>What no source can tell us.</span>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{pAfter}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-direction: column; gap: 18px; padding-top: 4px">
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span class="sc">THE NEXT MORNING · TUESDAY 17 JULY</span>
+          <div style="display: flex; gap: 12px; align-items: flex-start">
+            <span class="sw sw-rec" style="margin-top: 5px"></span>
+            <span class="cg" style="font-weight: 500; font-size: 22px; line-height: 1.25">Large-state delegates met on their own to consider their response. They did not walk out.</span>
+          </div>
+          <sc-if value="{{knowOn}}" hint-placeholder-val="{{false}}"><span class="mono" style="font-size: 12px; line-height: 1.35; color: #4A5A4F; padding-left: 26px">Madison’s notes, 17 July 1787 · verify</span></sc-if>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #23261F; padding-top: 14px">
+          <span class="sc">STILL IN FORCE</span>
+          <div style="display: flex; gap: 12px; align-items: flex-start">
+            <span class="sw sw-obs" style="margin-top: 4px"></span>
+            <span style="font-size: 15px; line-height: 1.5">Article V of the Constitution: no state may lose its equal vote in the Senate without its consent.</span>
+          </div>
+          <sc-if value="{{knowOn}}" hint-placeholder-val="{{false}}"><span class="mono" style="font-size: 12px; line-height: 1.35; color: #4A5A4F; padding-left: 26px">U.S. Constitution, Art. V · paraphrase</span></sc-if>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #23261F; padding-top: 14px">
+          <span class="sc">YOUR SEAT</span>
+          <span style="font-size: 15px; line-height: 1.5">{{seatLine}}</span>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{pNext}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-direction: column; gap: 12px; padding-top: 4px; color: #9C3F17">
+        <span class="sc" style="color: #9C3F17">YOUR BRANCH · WHAT HAPPENS NEXT?</span>
+        <span class="cg" style="font-weight: 600; font-size: 29px; line-height: 1.05">The compromise has failed. Now what?</span>
+        <span style="font-size: 13.5px; line-height: 1.45; color: #7A2E12">Possibilities, each tied to a source. The model shows a spread; it will not pick one.</span>
+        <sc-for list="{{nextOpts}}" as="o" hint-placeholder-count="4">
+          <div style="display: grid; grid-template-columns: 12px minmax(0, 1fr); gap: 12px">
+            <span class="hatch-sie" style="border: 1px solid #9C3F17"></span>
+            <span style="display: flex; flex-direction: column; gap: 3px; padding: 2px 0 3px">
+              <span style="font-size: 15px; font-weight: 600; line-height: 1.3">{{o.title}}</span>
+              <span style="font-size: 13.5px; line-height: 1.42">{{o.body}}</span>
+              <span style="font-size: 12px; line-height: 1.35; color: #7A2E12">{{o.src}}</span>
+            </span>
+          </div>
+        </sc-for>
+        <div style="border: 1.5px dashed #9C3F17; padding: 11px 14px; display: flex; flex-direction: column; gap: 3px">
+          <span class="sc" style="color: #9C3F17">UNKNOWN</span>
+          <span style="font-size: 15px; line-height: 1.4">Whether the Convention survives this branch. The model will not pretend.</span>
+        </div>
+        <span style="font-size: 12.5px; line-height: 1.45; color: #7A2E12"><strong style="font-weight: 600">Assumes:</strong> every other state votes as recorded; the rules stay as adopted; nothing else in the room changes.</span>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{pDel}}" hint-placeholder-val="{{false}}">
+      <div style="position: relative; display: flex; flex-direction: column; gap: 12px; padding-top: 4px">
+        <button type="button" class="rm-btn" onClick="{{onClose}}" aria-label="Close this table" style="position: absolute; right: 0; top: 0; width: 44px; height: 44px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#23261F" stroke-width="1.6" aria-hidden="true"><path d="M2 2 L14 14 M14 2 L2 14"></path></svg></button>
+        <span class="sc">{{del.kicker}}</span>
+        <span class="cg" style="font-weight: 600; font-size: 36px; line-height: 1">{{del.name}}</span>
+        <div style="display: flex; flex-direction: column">
+          <sc-for list="{{del.rows}}" as="r" hint-placeholder-count="3">
+            <div style="display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 10px; align-items: center; border-top: 1px solid #BDB6A4; padding: 8px 0">
+              <span class="sc" style="font-size: 10.5px; text-transform: uppercase">{{r.label}}</span>
+              <span style="display: flex; flex-direction: column; gap: 3px; align-items: flex-start">
+                <span style="display: inline-block; height: 22px; box-sizing: border-box; padding: 0 10px; background: {{r.bg}}; border: {{r.bd}}; box-shadow: {{r.sh}}; color: {{r.fg}}; font-size: {{r.fs}}; font-weight: {{r.fw}}; letter-spacing: {{r.ls}}; line-height: 18px">{{r.val}}</span>
+                <sc-if value="{{knowOn}}" hint-placeholder-val="{{false}}"><span class="mono" style="font-size: 12px; line-height: 1.35; color: #4A5A4F">{{r.src}}</span></sc-if>
+              </span>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{del.hasNote}}" hint-placeholder-val="{{false}}">
+          <span style="font-size: 15px; line-height: 1.5; border-top: 1px solid #BDB6A4; padding-top: 12px">{{del.note}}</span>
+        </sc-if>
+        <sc-if value="{{del.hasPeople}}" hint-placeholder-val="{{true}}">
+          <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #23261F; padding-top: 12px">
+            <span class="sc">AT THE TABLE</span>
+            <span style="display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; line-height: 1.4; color: #4A5A4F"><span class="sw sw-unk" style="width: 12px; height: 12px; margin-top: 2px"></span>Who sat here that morning is not recorded name by name [verify].</span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px">
+              <sc-for list="{{del.people}}" as="p" hint-placeholder-count="4">
+                <button type="button" class="rm-btn" onClick="{{p.pick}}" style="min-height: 44px; padding: 5px 10px; margin: 0; text-align: left; border: 1px solid #23261F; background: {{p.bg}}; color: #23261F; display: flex; flex-direction: column; justify-content: center; gap: 2px">
+                  <span style="font-size: 14px; font-weight: 500; line-height: 1.2">{{p.name}}</span>
+                  <span style="display: flex; gap: 5px; align-items: center; font-size: 11px; font-weight: 600; letter-spacing: .12em; color: {{p.tagC}}"><span style="display: inline-block; flex: none; width: 11px; height: 11px; box-sizing: border-box; background: {{p.dot}}; border: {{p.dotBd}}"></span>{{p.tag}}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{pActor}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <button type="button" class="rm-btn" onClick="{{onBackDel}}" style="align-self: flex-start; height: 44px; padding: 0 12px 0 2px; margin: 0; border: 0; background: transparent; color: #23261F; font-size: 14px; display: flex; align-items: center; gap: 8px"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#23261F" stroke-width="1.6" aria-hidden="true"><path d="M9 2 L4 7 L9 12"></path></svg>{{act.back}}</button>
+        <div style="display: flex; align-items: center; gap: 8px">
+          <sc-if value="{{act.has}}" hint-placeholder-val="{{true}}"><span class="sw sw-gen"></span></sc-if>
+          <span class="sc">{{act.kicker}}</span>
+        </div>
+        <span class="cg" style="font-weight: 600; font-size: 34px; line-height: 1">{{act.name}}</span>
+        <span style="font-size: 14px; color: #4A5A4F">{{act.sub}}</span>
+
+        <sc-if value="{{act.has}}" hint-placeholder-val="{{true}}">
+          <div role="group" aria-label="Questions for the actor model" style="display: flex; flex-direction: column; gap: 6px; margin-top: 4px">
+            <sc-for list="{{act.qs}}" as="q" hint-placeholder-count="3">
+              <button type="button" class="rm-btn" onClick="{{q.pick}}" aria-pressed="{{q.pressed}}" style="min-height: 44px; padding: 0 14px; margin: 0; text-align: left; border: 1px solid #23261F; background: {{q.bg}}; color: {{q.fg}}; font-size: 15px">{{q.t}}</button>
+            </sc-for>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 6px">
+            <div style="display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 12px">
+              <span style="background: #23261F"></span>
+              <span style="display: flex; flex-direction: column; gap: 5px">
+                <span class="sc" style="color: #23261F">SOURCE-SUPPORTED</span>
+                <sc-if value="{{ans.isQuote}}" hint-placeholder-val="{{true}}"><span class="cg" style="font-style: italic; font-weight: 500; font-size: 19.5px; line-height: 1.28">{{ans.lead}}“{{ans.t}}”</span></sc-if>
+                <sc-if value="{{ans.notQuote}}" hint-placeholder-val="{{false}}"><span style="font-size: 15px; line-height: 1.45">{{ans.t}}</span></sc-if>
+                <span style="font-size: 12px; line-height: 1.4; color: #4A5A4F">{{ans.c}}</span>
+              </span>
+            </div>
+            <div style="display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 12px">
+              <span style="border: 1.5px solid #23261F; box-sizing: border-box"></span>
+              <span style="display: flex; flex-direction: column; gap: 4px">
+                <span class="sc" style="color: #23261F">INTERPRETATION</span>
+                <span style="font-size: 15px; line-height: 1.45">{{ans.interp}}</span>
+              </span>
+            </div>
+            <div style="border: 1.5px dashed #23261F; padding: 10px 13px; display: flex; flex-direction: column; gap: 3px">
+              <span class="sc" style="color: #23261F">UNKNOWN</span>
+              <span style="font-size: 15px; line-height: 1.45">{{ans.unk}}</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{act.none}}" hint-placeholder-val="{{false}}">
+          <div style="border: 1.5px dashed #23261F; padding: 12px 14px; font-size: 15px; line-height: 1.5; margin-top: 6px">No actor model has been built for this delegate yet. The room shows only what the record gives: the state’s vote.</div>
+        </sc-if>
+
+        <sc-if value="{{act.strong}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px">
+            <span class="cg" style="font-weight: 500; font-size: 22px; line-height: 1.28">This is your seat. His actor model is set aside while you sit in it: what this chair does now is your act, not his words.</span>
+            <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.45"><span class="sw sw-rec" style="margin-top: 3px"></span>In the record, Strong voted aye and Massachusetts split 2–2.</span>
+            <span style="font-size: 12px; color: #4A5A4F; padding-left: 24px">Madison’s notes, 16 July 1787 · verify</span>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div style="position: absolute; left: 0; top: 850px; width: 1440px; height: 50px; box-sizing: border-box; border-top: 1px solid #23261F; display: flex; align-items: center; gap: 10px; padding: 0 24px">
+    <button type="button" class="rm-btn" onClick="{{onKnow}}" aria-pressed="{{knowPressed}}" style="height: 44px; padding: 0 16px; margin: 0; border: 1.5px solid #23261F; background: {{knowBg}}; color: {{knowFg}}; font-size: 14px; font-weight: 600">How do we know?</button>
+    <button type="button" class="rm-btn" onClick="{{onReset}}" style="height: 44px; padding: 0 14px; margin: 0; border: 0; background: transparent; color: #23261F; font-size: 14px">Start again</button>
+    <sc-if value="{{knowOn}}" hint-placeholder-val="{{false}}">
+      <div style="display: grid; grid-template-columns: repeat(4, auto); column-gap: 18px; row-gap: 2px; align-items: center; margin-left: 12px; font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: .06em; color: #23261F">
+        <span style="display: flex; gap: 6px; align-items: center"><span class="sw sw-rec"></span>RECORDED</span>
+        <span style="display: flex; gap: 6px; align-items: center"><span class="sw sw-com"></span>COMPUTED</span>
+        <span style="display: flex; gap: 6px; align-items: center"><span class="sw sw-aut"></span>AUTHORED</span>
+        <span style="display: flex; gap: 6px; align-items: center"><span class="sw sw-mod"></span>MODELED</span>
+        <span style="display: flex; gap: 6px; align-items: center"><span class="sw sw-unk"></span>UNKNOWN</span>
+        <span style="display: flex; gap: 6px; align-items: center"><span class="sw sw-gen"></span>ACTOR MODEL</span>
+        <span style="display: flex; gap: 6px; align-items: center"><span class="sw sw-int"></span>INTERPRETATION</span>
+        <span style="display: flex; gap: 6px; align-items: center; color: #9C3F17"><span class="sw sw-br"></span>YOUR BRANCH</span>
+      </div>
+    </sc-if>
+    <div style="margin-left: auto; text-align: right; font-size: 10.5px; line-height: 1.45; letter-spacing: .08em; color: #4A5A4F">PROTOTYPE · DESIGN PROPOSAL<br>actor models: PLATFORM HYPOTHESIS · quotations: verify against Farrand</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+const INK = '#23261F', PAPER = '#ECE6D8', WALL = '#55665A', MUTE = '#4A5A4F', SIE = '#9C3F17', TABLE = '#E4DDCC';
+const FAR = 'verify against Farrand, Records of the Federal Convention (1911), vol. 1';
+const ORDER = ['NH', 'MA', 'RI', 'CT', 'NY', 'NJ', 'PA', 'DE', 'MD', 'VA', 'NC', 'SC', 'GA'];
+const ORD = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th', '13th'];
+const POS = {
+  NH: [176, 150, 64], MA: [176, 234, 96], RI: [176, 350, 64], CT: [176, 434, 64],
+  NY: [176, 590, 64], NJ: [304, 590, 64], PA: [432, 590, 64], DE: [560, 590, 64], MD: [688, 590, 64],
+  VA: [688, 434, 64], NC: [688, 340, 64], SC: [688, 245, 64], GA: [688, 150, 64]
+};
+const ST = {
+  NH: { ab: 'N.H.', name: 'New Hampshire', v: 'ABSENT', j2: 'ABSENT', pop: '142,000', note: 'No delegates yet. New Hampshire’s men take their seats on 23 July.', dels: [] },
+  MA: { ab: 'Mass.', name: 'Massachusetts', v: 'DIVIDED', j2: 'NO', pop: '379,000', dels: ['gerry', 'strong', 'king', 'gorham'] },
+  RI: { ab: 'R.I.', name: 'Rhode Island', v: 'ABSENT', j2: 'ABSENT', pop: '69,000', note: 'Rhode Island never sent delegates to the Convention.', dels: [] },
+  CT: { ab: 'Conn.', name: 'Connecticut', v: 'AYE', j2: 'AYE', pop: '238,000', dels: ['sherman', 'ellsworth', 'johnson'] },
+  NY: { ab: 'N.Y.', name: 'New York', v: 'ABSENT', j2: 'AYE', pop: '340,000', note: 'Robert Yates and John Lansing left on 10 July. Alexander Hamilton is away. New York cannot vote today.', dels: [] },
+  NJ: { ab: 'N.J.', name: 'New Jersey', v: 'AYE', j2: 'AYE', pop: '184,000', dels: ['paterson', 'brearley', 'dayton', 'livingston'] },
+  PA: { ab: 'Penn.', name: 'Pennsylvania', v: 'NO', j2: 'NO', pop: '434,000', dels: ['franklin', 'wilson', 'gmorris', 'rmorris', 'mifflin', 'clymer', 'fitzsimons', 'ingersoll'] },
+  DE: { ab: 'Del.', name: 'Delaware', v: 'AYE', j2: 'AYE', pop: '59,000', dels: ['bedford', 'read', 'dickinson', 'bassett', 'broom'] },
+  MD: { ab: 'Md.', name: 'Maryland', v: 'AYE', j2: 'AYE', pop: '320,000', dels: ['lmartin', 'jenifer', 'carroll'] },
+  VA: { ab: 'Va.', name: 'Virginia', v: 'NO', j2: 'NO', pop: '748,000', dels: ['washington', 'madison', 'randolph', 'mason', 'blair', 'mcclurg'] },
+  NC: { ab: 'N.C.', name: 'North Carolina', v: 'AYE', j2: 'NO', pop: '394,000', dels: ['davie', 'williamson', 'amartin', 'spaight'] },
+  SC: { ab: 'S.C.', name: 'South Carolina', v: 'NO', j2: 'NO', pop: '249,000', dels: ['rutledge', 'cpinckney', 'ccpinckney', 'butler'] },
+  GA: { ab: 'Ga.', name: 'Georgia', v: 'NO', j2: 'DIVIDED', pop: '83,000', dels: ['baldwin', 'houstoun', 'few'] }
+};
+const PEOPLE = {
+  gerry: 'Elbridge Gerry', strong: 'Caleb Strong', king: 'Rufus King', gorham: 'Nathaniel Gorham',
+  sherman: 'Roger Sherman', ellsworth: 'Oliver Ellsworth', johnson: 'William Samuel Johnson',
+  paterson: 'William Paterson', brearley: 'David Brearley', dayton: 'Jonathan Dayton', livingston: 'William Livingston',
+  franklin: 'Benjamin Franklin', wilson: 'James Wilson', gmorris: 'Gouverneur Morris', rmorris: 'Robert Morris',
+  mifflin: 'Thomas Mifflin', clymer: 'George Clymer', fitzsimons: 'Thomas FitzSimons', ingersoll: 'Jared Ingersoll',
+  bedford: 'Gunning Bedford Jr.', read: 'George Read', dickinson: 'John Dickinson', bassett: 'Richard Bassett', broom: 'Jacob Broom',
+  lmartin: 'Luther Martin', jenifer: 'Daniel of St. Thomas Jenifer', carroll: 'Daniel Carroll',
+  washington: 'George Washington', madison: 'James Madison', randolph: 'Edmund Randolph', mason: 'George Mason', blair: 'John Blair', mcclurg: 'James McClurg',
+  davie: 'William R. Davie', williamson: 'Hugh Williamson', amartin: 'Alexander Martin', spaight: 'Richard Dobbs Spaight',
+  rutledge: 'John Rutledge', cpinckney: 'Charles Pinckney', ccpinckney: 'Charles Cotesworth Pinckney', butler: 'Pierce Butler',
+  baldwin: 'Abraham Baldwin', houstoun: 'William Houstoun', few: 'William Few'
+};
+const QS = ['What do you want from this vote?', 'What will you do if you lose?', 'What did you privately believe?'];
+const A = (q, t, c, interp, unk, lead) => ({ isQuote: q, notQuote: !q, t, c, interp, unk, lead: lead || '' });
+const ACT = {
+  bedford: { name: 'Gunning Bedford Jr.', sub: 'Delaware · spoke on 30 June', a: [
+    A(false, 'He came bound: Delaware’s legislature told its delegates not to agree to any change in the equal vote of states.', 'Delaware credentials, early 1787 · verify', 'Historians generally read Bedford as speaking for small states that feared being outvoted on every question.', 'How far he would bend beyond those instructions: no source says.'),
+    A(true, 'The Large States dare not dissolve the confederation. If they do the small ones will find some foreign ally of more honor and good faith, who will take them by the hand and do them justice.', 'Madison’s notes, 30 June 1787 · ' + FAR, 'Historians generally read this as pressure on the large states, not a plan in motion.', 'Whether Delaware would really have looked abroad: UNKNOWN. No one can observe it.'),
+    A(true, 'I do not, gentlemen, trust you.', 'Robert Yates’s notes, 30 June 1787 · ' + FAR, 'Historians generally treat Yates’s and Madison’s versions as two witnesses to one speech. Neither is a transcript.', 'His private belief beyond what he said aloud: no surviving source records it.')
+  ] },
+  sherman: { name: 'Roger Sherman', sub: 'Connecticut', a: [
+    A(false, 'On 11 June he proposed votes by population in the first branch and one vote per state in the second.', 'Madison’s notes, 11 June 1787 · paraphrase · verify', 'Historians generally credit Sherman and Oliver Ellsworth with the idea at the heart of this report, which is why it is also called the Connecticut Compromise.', 'Who drafted the Committee’s report, line by line: not recorded.'),
+    A(false, 'On 2 July this question tied, 5–5, with Georgia divided. The Convention sent it to a committee rather than end.', 'Journal; Madison’s notes, 2 July 1787 · verify', 'Historians generally describe Sherman as a patient dealmaker who kept bringing back the same trade.', 'What he would have done if it failed today: UNKNOWN.'),
+    A(false, 'In September he and Ellsworth wrote to Connecticut’s governor that the equal Senate vote would protect the smaller states.', 'Sherman and Ellsworth to Gov. Huntington, 26 Sept 1787 · paraphrase · verify', 'Historians generally read the letter as a public case, written to win ratification.', 'His private view on the morning of 16 July: no surviving source records it.')
+  ] },
+  madison: { name: 'James Madison', sub: 'Virginia · keeping the fullest notes in the room', a: [
+    A(false, 'Votes by population in both branches, as the Virginia Plan proposed on 29 May. Virginia votes no today.', 'Journal, 29 May; Madison’s notes, 16 July 1787 · verify', 'Historians generally read Madison as seeing an equal state vote as the old Confederation’s weakness carried into the new government.', 'Whether any version of equal votes could have won him that morning: UNKNOWN.'),
+    A(false, 'The next morning, large-state delegates met on their own to consider their response. They did not walk out.', 'Madison’s notes, 17 July 1787 · paraphrase · verify', 'Historians generally read that meeting as the moment the large states chose an imperfect union over none.', 'What he would have done in a room where they walked out: UNKNOWN.'),
+    A(true, 'were divided into different interests not by their difference of size, but by other circumstances; the most material of which resulted partly from climate, but principally from the effects of their having or not having slaves.', 'Madison’s notes, 30 June 1787 · ' + FAR, 'Historians generally read this as Madison naming the North–South split that the fight over size covered.', 'He revised his notes for decades. What he said in the room, word for word: UNKNOWN.', 'The states ')
+  ] },
+  gerry: { name: 'Elbridge Gerry', sub: 'Massachusetts · chaired the Committee', a: [
+    A(false, 'He chaired the committee of one delegate per state that reported this compromise on 5 July. Today he votes aye.', 'Journal, 2 and 5 July; Madison’s notes, 16 July 1787 · verify', 'Historians generally read his aye as a vote to keep the Convention together, more than an embrace of equal votes.', 'What moved him most: no source settles it.'),
+    A(false, 'His own delegation is split: Gerry and Strong aye, King and Gorham no.', 'Madison’s notes, 16 July 1787 · verify', 'Historians generally read Gerry as fearing that a Convention without agreement would leave the union to come apart.', 'What he would have done if it failed: UNKNOWN.'),
+    A(false, 'On 17 September he refused to sign the finished Constitution.', 'Madison’s notes, 17 Sept 1787 · verify', 'Historians generally read his refusal as distrust of the whole plan, not of this vote alone.', 'His private view on 16 July: no surviving source records it.')
+  ] },
+  king: { name: 'Rufus King', sub: 'Massachusetts', a: [
+    A(false, 'Votes by population in both branches. Today he votes no, and Massachusetts is split.', 'Madison’s notes, 16 July 1787 · verify', 'Historians generally read King as holding that people, not states, should be counted.', 'Whether any version of equal votes could have won him: UNKNOWN.'),
+    A(false, 'On 30 June he answered Bedford: he was grieved such a thought had entered Bedford’s heart, and more grieved that it had escaped his lips.', 'Madison’s notes, 30 June 1787 · paraphrase · verify', 'Historians generally read that exchange as the Convention at its closest to breaking.', 'What he would have done if the small states had walked out: UNKNOWN.'),
+    A(false, 'He kept his own brief notes of the debates. They survive.', 'King’s notes, printed in Farrand (1911) · verify', 'Historians generally use them to check Madison’s, not to read King’s mind.', 'His private view on 16 July: no surviving source records it.')
+  ] },
+  franklin: { name: 'Benjamin Franklin', sub: 'Pennsylvania · the oldest delegate', a: [
+    A(true, 'When a broad table is to be made, and the edges of planks do not fit the artist takes a little from both, and makes a good joint.', 'Madison’s notes, 30 June 1787 · ' + FAR, 'Historians generally read him as pressing both sides to give something.', 'Pennsylvania votes no today. How Franklin voted inside his delegation: not recorded [verify].'),
+    A(false, 'He sat on the committee of one delegate per state that wrote this report.', 'Journal, 2 July 1787 · verify', 'Historians generally credit him with the report’s rule that money bills start in the first branch.', 'What he would have done if it failed: UNKNOWN.'),
+    A(false, 'On 17 September he said he did not approve every part of the Constitution, but doubted a better one could be had.', 'Madison’s notes, 17 Sept 1787 · paraphrase · verify', 'Historians generally read this as the broad-table argument again, eleven weeks later.', 'His private view of the 16 July vote: no surviving source records it.')
+  ] },
+  washington: { name: 'George Washington', sub: 'President of the Convention · Virginia', a: [
+    A(false, 'He presides from the chair on the dais. He almost never speaks in debate.', 'Journal, 25 May; Madison’s notes · verify', 'Historians generally read his silence as deliberate: the chair stays above the fight.', 'What he wanted from this vote: UNKNOWN.'),
+    A(false, 'His diary for these days is brief: where he attended, where he dined, the weather.', 'Washington’s diary, July 1787 · verify', 'Historians generally read his presence itself as one reason delegates stayed.', 'What he would have done if the Convention broke apart: UNKNOWN.'),
+    A(false, 'Virginia, his state, votes no today.', 'Madison’s notes, 16 July 1787 · verify', 'Historians generally decline to guess. The sources give them nothing to read.', 'What he privately thought of the compromise on 16 July: UNKNOWN. No surviving source records his private view.')
+  ] }
+};
+const NEXT = [
+  { title: 'The question goes back to a committee', body: 'On 2 July this same question tied and was sent to a committee of one delegate per state.', src: 'Journal, 2 July 1787 · verify' },
+  { title: 'Small states threaten to leave', body: 'Bedford warned on 30 June that the small states would find “some foreign ally.”', src: 'Madison’s notes, 30 June 1787 · ' + FAR },
+  { title: 'Delaware cannot move', body: 'Its delegates were instructed not to agree to any change in the equal vote of states.', src: 'Delaware credentials, early 1787 · verify' },
+  { title: 'The large states caucus', body: 'In the record, on 17 July, they met on their own after losing and did not walk out. Here they have won the vote but not a plan.', src: 'Madison’s notes, 17 July 1787 · verify' }
+];
+const BADGE = { MA: '1', CT: '1', GA: '2', SC: '2', NC: '2', VA: '2', DE: '3' };
+
+function chit(res) {
+  if (res === 'AYE') return { bg: INK, bd: '2px solid ' + INK, sh: 'inset 0 0 0 1px ' + PAPER, fg: PAPER, text: 'AYE' };
+  if (res === 'NO') return { bg: WALL, bd: '2px solid ' + WALL, sh: 'inset 0 0 0 1px ' + PAPER, fg: PAPER, text: 'NO' };
+  if (res === 'DIVIDED') return { bg: 'linear-gradient(90deg, ' + INK + ' 0 50%, ' + WALL + ' 50% 100%)', bd: '2px solid ' + INK, sh: 'inset 0 0 0 1px ' + PAPER, fg: PAPER, text: 'DIVIDED' };
+  if (res === 'ABSENT') return { bg: PAPER, bd: '1px solid ' + INK, sh: 'inset 0 0 0 2px ' + PAPER + ', inset 0 0 0 3px ' + INK, fg: INK, text: 'ABSENT' };
+  if (res === 'BNO') return { bg: SIE, bd: '2px solid ' + SIE, sh: 'inset 0 0 0 1px ' + PAPER, fg: PAPER, text: 'NO' };
+  return { bg: 'transparent', bd: '1px solid transparent', sh: 'none', fg: INK, text: '' };
+}
+
+class Component extends DCLogic {
+  componentDidMount() { this.t = setInterval(() => this.tick(), 700); }
+  componentWillUnmount() { clearInterval(this.t); }
+  tick() {
+    const s = this.state || {};
+    if (s.phase !== 'rolling') return;
+    const n = s.called || 0;
+    if (n >= 13) { this.setState({ phase: 'done' }); return; }
+    if (ORDER[n] === 'MA' && !s.choice) { this.setState({ phase: 'paused' }); return; }
+    const c = n + 1;
+    this.setState({ called: c, phase: c >= 13 ? 'done' : 'rolling' });
+  }
+  renderVals() {
+    const s = this.state || {};
+    const set = (o) => this.setState(o);
+    const phase = s.phase || 'idle';
+    const called = s.called || 0;
+    const choice = s.choice || '';
+    const viewRec = !!s.viewRec;
+    const know = !!s.know;
+    const why = !!s.why;
+    const sel = s.sel || '';
+    const actor = s.actor || '';
+    const q = s.q || 0;
+    const branch = choice === 'no';
+    const branchView = branch && !viewRec;
+    const done = phase === 'done';
+    const fDoneRec = done && !branchView;
+    const fDoneBr = done && branchView;
+    const callingIdx = (phase === 'rolling' || phase === 'paused') ? called : -1;
+
+    const resOf = (k, i) => {
+      if (i >= called) return '';
+      if (k === 'MA') return branchView ? 'BNO' : 'DIVIDED';
+      return ST[k].v;
+    };
+    const counts = { AYE: 0, NO: 0, DIVIDED: 0, ABSENT: 0 };
+    ORDER.forEach((k, i) => { const r = resOf(k, i); if (r) counts[r === 'BNO' ? 'NO' : r] += 1; });
+
+    const tables = ORDER.map((k, i) => {
+      const st = ST[k];
+      const p = POS[k];
+      const res = resOf(k, i);
+      const ch = chit(res);
+      const absent = st.v === 'ABSENT';
+      const isSel = sel === k;
+      const maB = k === 'MA' && branchView;
+      let bd = absent ? '1.5px dashed ' + WALL : '2px solid ' + INK;
+      if (isSel) bd = '3px solid ' + INK;
+      if (maB) bd = '3px solid ' + SIE;
+      const badge = (why && fDoneRec) ? (BADGE[k] || '') : '';
+      const word = res === 'BNO' ? 'no, in your branch' : (res ? res.toLowerCase() : 'not yet called');
+      return {
+        k, ab: st.ab, x: p[0], y: p[1], h: p[2],
+        bg: maB ? '#EBD2C0' : 'transparent',
+        bd,
+        ring: i === callingIdx ? '0 0 0 3px ' + PAPER + ', 0 0 0 5px ' + INK : (maB ? 'inset 0 0 0 3px ' + PAPER + ', inset 0 0 0 4px ' + SIE : '0 0 0 0 transparent'),
+        chitBg: ch.bg, chitBd: ch.bd, chitSh: ch.sh, chitFg: ch.fg, chitText: ch.text,
+        chitScale: res ? 1 : 0,
+        side: k === 'MA' ? 'you' : (absent ? 'empty' : ''),
+        sideC: k === 'MA' ? INK : MUTE,
+        isMA: k === 'MA',
+        badgeOn: !!badge, badge,
+        pressed: isSel ? 'true' : 'false',
+        aria: st.name + ' table, ' + word,
+        pick: () => set({ sel: k, actor: '' })
+      };
+    });
+
+    const maShown = phase === 'paused' || called >= 2;
+    const blank = { bg: 'transparent', fg: INK, bd: '1px solid #8F8878' };
+    const seatAye = { bg: INK, fg: PAPER, bd: '1px solid ' + INK };
+    const seatNo = { bg: WALL, fg: PAPER, bd: '1px solid ' + WALL };
+    let strongSeat = { bg: 'transparent', fg: INK, bd: '1.5px dashed ' + INK };
+    if (choice === 'aye' || (branch && viewRec)) strongSeat = seatAye;
+    if (branchView) strongSeat = { bg: SIE, fg: PAPER, bd: '1px solid ' + SIE };
+    const maSeats = [
+      Object.assign({ ini: 'EG' }, maShown ? seatAye : blank),
+      Object.assign({ ini: 'CS' }, strongSeat),
+      Object.assign({ ini: 'RK' }, maShown ? seatNo : blank),
+      Object.assign({ ini: 'NG' }, maShown ? seatNo : blank)
+    ];
+
+    const sw = (res) => { const c = chit(res); return { bg: c.bg, bd: c.bd, sh: c.sh }; };
+    const tally = [
+      Object.assign({ label: 'AYE', n: counts.AYE }, sw('AYE')),
+      Object.assign({ label: 'NO', n: counts.NO }, sw('NO')),
+      Object.assign({ label: 'DIVIDED', n: counts.DIVIDED }, sw('DIVIDED')),
+      Object.assign({ label: 'ABSENT', n: counts.ABSENT }, sw('ABSENT'))
+    ];
+    const curName = callingIdx >= 0 && callingIdx < 13 ? ST[ORDER[callingIdx]].name : '';
+    let lastLine = 'The Secretary’s tally begins.';
+    if (called > 0) {
+      const lk = ORDER[called - 1];
+      const lr = resOf(lk, called - 1);
+      lastLine = ST[lk].name + ': ' + (lr === 'BNO' ? 'no, in your branch' : lr.toLowerCase()) + '.';
+    }
+
+    const ktags = ORDER.map((k, i) => {
+      const p = POS[k];
+      const res = resOf(k, i);
+      let t = 'placed by BOW';
+      let c = INK;
+      if (res === 'BNO') { t = 'your branch'; c = SIE; }
+      else if (res === 'ABSENT') t = 'absent · Journal';
+      else if (res) t = 'Madison · Journal';
+      return { x: p[0], y: p[1] + p[2] + 3, t, c };
+    });
+
+    let floorTag = 'Rules adopted 28–29 May · Journal · verify';
+    if (fDoneRec) floorTag = 'Tally: Madison’s notes; Journal, 16 July';
+    if (fDoneBr) floorTag = 'Computed: a tie fails under the 28 May rule';
+
+    const pActor = !!actor;
+    const pDel = !actor && !!sel;
+    const pNext = !actor && !sel && branchView && done;
+    const pAfter = !actor && !sel && !pNext && done;
+    const pBefore = !actor && !sel && !pNext && !pAfter;
+
+    let del = { kicker: '', name: '', rows: [], hasNote: false, note: '', hasPeople: false, people: [] };
+    if (sel && ST[sel]) {
+      const st = ST[sel];
+      const i = ORDER.indexOf(sel);
+      const res = resOf(sel, i);
+      const chipRow = (label, r, src) => {
+        const c = chit(r);
+        return { label, val: r === 'BNO' ? 'NO · YOUR BRANCH' : c.text, bg: c.bg, bd: c.bd, sh: c.sh, fg: c.fg, fs: '11px', fw: '600', ls: '.14em', src };
+      };
+      const plainRow = (label, val, src) => ({ label, val, bg: 'transparent', bd: '1px solid transparent', sh: 'none', fg: INK, fs: '15px', fw: '500', ls: '0', src });
+      const rows = [
+        res ? chipRow('16 JULY · THIS VOTE', res, res === 'BNO' ? 'Your branch · not in any record' : 'Madison’s notes; Journal, 16 July 1787')
+            : plainRow('16 JULY · THIS VOTE', 'Not yet called', 'Waiting for the roll'),
+        chipRow('2 JULY · SAME QUESTION', st.j2, 'Journal; Madison’s notes, 2 July 1787 · verify'),
+        plainRow('1790 census (three years later)', 'approx. ' + st.pop, 'U.S. census, 1790, three years after this day · approx. · verify')
+      ];
+      del = {
+        kicker: 'CALLED ' + ORD[i].toUpperCase() + ' OF 13 · NORTH TO SOUTH',
+        name: st.name,
+        rows,
+        hasNote: !!st.note, note: st.note || '',
+        hasPeople: st.dels.length > 0,
+        people: st.dels.map((key) => {
+          const modeled = !!ACT[key];
+          const mine = key === 'strong';
+          return {
+            name: PEOPLE[key] + (key === 'washington' ? ' (in the chair)' : ''),
+            tag: modeled ? 'ACTOR MODEL' : (mine ? 'YOUR SEAT' : 'RECORD ONLY'),
+            tagC: modeled ? INK : (mine ? SIE : MUTE),
+            dot: modeled ? 'radial-gradient(circle, ' + INK + ' 1px, transparent 1.3px) 0 0/3px 3px' : (mine ? SIE : 'transparent'),
+            dotBd: modeled ? '1px dotted ' + INK : (mine ? '1px solid ' + SIE : '1px solid transparent'),
+            bg: 'transparent',
+            pick: () => set({ actor: key, q: 0 })
+          };
+        })
+      };
+    }
+
+    const emptyAns = { isQuote: false, notQuote: true, lead: '', t: '', c: '', interp: '', unk: '' };
+    let act = { back: '', kicker: '', name: '', sub: '', has: false, none: false, strong: false, qs: [] };
+    let ans = emptyAns;
+    if (actor) {
+      const backName = (ST[sel] ? ST[sel].name : 'Virginia') + ' table';
+      if (actor === 'strong') {
+        act = { back: backName, kicker: 'YOUR SEAT', name: 'Caleb Strong', sub: 'Massachusetts', has: false, none: false, strong: true, qs: [] };
+      } else if (ACT[actor]) {
+        const m = ACT[actor];
+        act = {
+          back: backName, kicker: 'ACTOR MODEL · BUILT FROM SOURCES · NOT THE PERSON', name: m.name, sub: m.sub,
+          has: true, none: false, strong: false,
+          qs: QS.map((t, j) => ({ t, pressed: j === q ? 'true' : 'false', bg: j === q ? INK : 'transparent', fg: j === q ? PAPER : INK, pick: () => set({ q: j }) }))
+        };
+        ans = m.a[q] || emptyAns;
+      } else {
+        act = { back: backName, kicker: 'NO ACTOR MODEL YET', name: PEOPLE[actor] || '', sub: ST[sel] ? ST[sel].name : '', has: false, none: true, strong: false, qs: [] };
+      }
+    }
+
+    return {
+      bandNormal: !branch, bandBranch: branchView, bandRecord: branch && viewRec,
+      onToRecord: () => set({ viewRec: true }),
+      onToBranch: () => set({ viewRec: false }),
+      ovOp: branchView ? 1 : 0,
+      whyOp: (why && fDoneRec) ? 1 : 0,
+      promptOp: phase === 'paused' ? 1 : 0,
+      onDais: () => set({ sel: 'VA', actor: 'washington', q: 0 }),
+      tables, maSeats, tally, curName, lastLine,
+      floorBg: branchView ? PAPER : 'transparent',
+      floorBd: branchView ? '1px solid ' + SIE : '1px solid transparent',
+      fIdle: phase === 'idle', fRolling: phase === 'rolling', fPaused: phase === 'paused', fDoneRec, fDoneBr,
+      onCall: () => { if ((this.state || {}).phase === 'idle' || !(this.state || {}).phase) set({ phase: 'rolling', called: 0 }); },
+      onAye: () => set({ choice: 'aye', phase: 'rolling' }),
+      onNo: () => set({ choice: 'no', phase: 'rolling', viewRec: false }),
+      teachLine: choice === 'no' ? 'What you voted down in your branch has a name: the Great Compromise.' : 'What you just decided has a name: the Great Compromise.',
+      whyOn: why, whyPressed: why ? 'true' : 'false', whyBg: why ? INK : 'transparent', whyFg: why ? PAPER : INK,
+      onWhy: () => set({ why: !why }),
+      knowOn: know, knowPressed: know ? 'true' : 'false', knowBg: know ? INK : 'transparent', knowFg: know ? PAPER : INK,
+      onKnow: () => set({ know: !know }),
+      ktags, floorTag, floorTagOn: know && !(fDoneRec && why),
+      pBefore, pAfter, pNext, pDel, pActor,
+      seatLine: choice === 'no'
+        ? 'In your branch you voted no. In the record, Strong voted aye and Massachusetts split 2–2.'
+        : 'You voted aye, as Caleb Strong did. Massachusetts split 2–2 and cast no vote.',
+      nextOpts: NEXT,
+      del, act, ans,
+      onClose: () => set({ sel: '', actor: '' }),
+      onBackDel: () => set({ actor: '' }),
+      onReset: () => set({ phase: 'idle', called: 0, choice: '', viewRec: false, why: false, sel: '', actor: '', q: 0 })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Foundry — The Proof</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F7F3EA;color:#26231F;font-family:'Spectral',serif}
+a{color:#B3261E}a:hover{color:#7E1A14}
+.mono{font-family:'IBM Plex Mono',monospace}
+.sw{display:inline-block;width:11px;height:11px;box-sizing:border-box;flex:none;transition:background .3s,border-color .3s}
+.p-src{background:#26231F;border:1.5px solid #26231F}
+.p-pro{background:radial-gradient(circle,#2E6A8F 1px,transparent 1.3px) 0 0/4px 4px;border:1px dotted #2E6A8F}
+.p-aut{background:transparent;border:1.5px solid #26231F}
+.p-unk{background:transparent;border:1.5px dashed #26231F}
+.p-com{background:#6B655B;border:1.5px solid #6B655B}
+.p-mod{background:repeating-linear-gradient(135deg,#26231F 0 1px,transparent 1px 4px);border:1px solid #26231F}
+.ln{transition:opacity .35s ease,transform .35s ease,top .35s ease,background-color 1.1s ease}
+.mk{transition:opacity .45s ease,transform .45s ease,top .35s ease,height .3s ease,background-color .3s}
+.btn{font-family:'IBM Plex Mono',monospace;cursor:pointer;border-radius:0}
+.btn:disabled{cursor:default}
+.btn:focus-visible,.opt:focus-visible,.mkb:focus-visible{outline:2px solid #2E6A8F;outline-offset:2px}
+.hit{position:relative}.hit::after{content:'';position:absolute;left:-4px;right:-4px;top:-11px;bottom:-11px}
+.mkb{display:block;width:100%;background:transparent;border:0;padding:6px 12px 4px 12px;margin:0;text-align:left;cursor:pointer;font:inherit;color:inherit;border-radius:0}
+.mt{display:block;margin-top:3px;font-style:italic;font-size:15px;line-height:1.27;color:#B3261E;text-decoration-color:#B3261E;text-decoration-thickness:1.5px}
+.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.opt{font-family:'Spectral',serif;font-size:14px;line-height:1.2;text-align:left;cursor:pointer;min-height:44px;padding:4px 12px;border:1.5px solid #B3261E;background:#F7F3EA;color:#26231F;border-radius:0;box-sizing:border-box;transition:background .2s,color .2s}
+.opt:hover{background:#F1E2D9}
+.opt[aria-pressed="true"]{background:#B3261E;color:#F7F3EA}
+.seg{transition:background .3s,box-shadow .3s}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F7F3EA; color: #26231F; font-family: 'Spectral', serif">
+
+  <header style="position: absolute; left: 28px; right: 28px; top: 12px; height: 60px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #26231F">
+    <div style="display: flex; align-items: baseline; gap: 16px">
+      <span style="font-size: 31px; font-weight: 600; letter-spacing: .01em">Foundry</span>
+      <span style="font-size: 17px; font-style: italic; color: #5E574D">Intent and sources in. A proposed world out, with every gap marked in red.</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px">
+      <span class="mono" style="font-size: 10.5px; line-height: 1.5; letter-spacing: .04em; color: #5E574D; text-align: right">PROTOTYPE · DESIGN PROPOSAL · PLATFORM HYPOTHESIS (general compiler)<br>case-level compilers EXIST TODAY in BOW repos · Cascade Regional is fictional</span>
+      <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="min-height: 44px; padding: 0 14px; font-size: 12px; letter-spacing: .04em; border: 1.5px solid #26231F; background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+    </div>
+  </header>
+
+  <section aria-label="Intent and sources" style="position: absolute; left: 28px; top: 86px; width: 300px; display: flex; flex-direction: column; gap: 9px">
+    <div class="mono" style="font-size: 10.5px; letter-spacing: .1em; color: #5E574D">INTENT · THE AUTHOR · 29 SEP</div>
+    <p style="margin: 0; font-size: 23px; line-height: 1.22">“Build a regional airline beginning with 20 aircraft.”</p>
+    <div class="mono" style="font-size: 10.5px; letter-spacing: .1em; color: #5E574D; margin-top: 8px">SOURCES · FICTIONAL EXCERPTS</div>
+    <sc-for list="{{sources}}" as="src" hint-placeholder-count="5">
+      <div style="position: relative; background: {{src.paper}}; border: 1px solid #CFC6B4; border-left: 3px solid {{src.edge}}; padding: 8px 12px 9px 12px; transition: border-color .3s">
+        <svg width="12" height="26" viewBox="0 0 12 26" style="position: absolute; right: 14px; top: -9px; display: {{src.clip}}" aria-hidden="true"><path d="M3.5 21 V6 a2.5 2.5 0 0 1 5 0 V19 a4 4 0 0 1 -8 0 V9" fill="none" stroke="#6B655B" stroke-width="1.3"></path></svg>
+        <div class="mono" style="font-size: 10px; letter-spacing: .08em; color: #5E574D; display: flex; gap: 8px"><span style="font-weight: 600; color: #26231F">{{src.id}}</span><span>{{src.kind}}</span></div>
+        <p style="margin: 3px 0 0 0; font-size: 14px; line-height: 1.36"><sc-for list="{{src.segs}}" as="sg" hint-placeholder-count="3"><span class="seg" style="background: {{sg.bg}}; box-shadow: {{sg.ul}}">{{sg.t}}</span></sc-for></p>
+      </div>
+    </sc-for>
+    <button type="button" class="btn" onClick="{{compile}}" disabled="{{compiledFlag}}" style="margin-top: 8px; min-height: 52px; font-size: 14px; letter-spacing: .06em; border: 1.5px solid #26231F; background: {{cBg}}; color: {{cFg}}; transition: background .3s, color .3s">{{cLabel}}</button>
+  </section>
+
+  <section aria-label="Compiled charter" style="position: absolute; left: 352px; top: 84px; width: 632px; height: 752px">
+    <div style="position: absolute; left: -12px; top: -6px; width: 8px; height: 8px; border-right: 1px solid #26231F; border-bottom: 1px solid #26231F"></div>
+    <div style="position: absolute; right: -12px; top: -6px; width: 8px; height: 8px; border-left: 1px solid #26231F; border-bottom: 1px solid #26231F"></div>
+    <div style="position: absolute; left: -12px; bottom: -6px; width: 8px; height: 8px; border-right: 1px solid #26231F; border-top: 1px solid #26231F"></div>
+    <div style="position: absolute; right: -12px; bottom: -6px; width: 8px; height: 8px; border-left: 1px solid #26231F; border-top: 1px solid #26231F"></div>
+    <div class="mono" style="position: absolute; left: 0; right: 0; top: 0; font-size: 10px; letter-spacing: .08em; color: #5E574D; display: flex; justify-content: space-between"><span>CASCADE REGIONAL · CHARTER · {{proofLabel}}</span><span>SET BY FOUNDRY · 29 SEP 2026</span></div>
+    <div style="position: absolute; left: 0; top: 16px; display: flex; align-items: baseline; gap: 14px">
+      <h2 style="margin: 0; font-size: 32px; line-height: 1.1; font-weight: 500">Charter</h2>
+      <span style="font-size: 15px; font-style: italic; color: #5E574D">{{charterSub}}</span>
+    </div>
+    <div class="mono" style="position: absolute; right: 0; top: 20px; padding: 4px 10px; border: 2px solid #B3261E; color: #B3261E; font-size: 12px; font-weight: 600; letter-spacing: .08em; opacity: {{stampOp}}; transition: opacity .4s ease">{{stampText}}</div>
+    <div class="mono" style="position: absolute; left: 0; top: 56px; display: {{legendDisp}}; gap: 16px; align-items: center; font-size: 10px; letter-spacing: .04em; color: #26231F">
+      <span style="display: flex; align-items: center; gap: 5px"><span class="sw p-src"></span>from a source</span>
+      <span style="display: flex; align-items: center; gap: 5px"><span class="sw p-pro"></span><span style="color: #2E6A8F">proposed by Foundry</span></span>
+      <span style="display: flex; align-items: center; gap: 5px"><span class="sw p-aut"></span>authored by you</span>
+      <span style="display: flex; align-items: center; gap: 5px"><span class="sw p-com"></span>computed</span>
+      <span style="display: flex; align-items: center; gap: 5px"><span class="sw p-unk"></span>unknown, marked</span>
+    </div>
+    <div style="position: absolute; left: 108px; top: 150px; width: 420px; opacity: {{emptyOp}}; transition: opacity .3s">
+      <p style="margin: 0; font-size: 22px; font-style: italic; color: #5E574D">Nothing set yet.</p>
+      <p style="margin: 8px 0 0 0; font-size: 16px; line-height: 1.45; color: #5E574D">Compile, and Foundry sets the intent and the sources as a charter — then marks in red every place where the world is missing, conflicting or unbounded. It does not fill those places in.</p>
+    </div>
+    <sc-for list="{{lines}}" as="l" hint-placeholder-count="24">
+      <div class="ln" style="position: absolute; left: 0; width: 632px; top: {{l.y}}px; height: 24px; display: flex; align-items: center; opacity: {{l.op}}; transform: translateY({{l.ty}}px); transition-delay: {{l.dl}}ms, {{l.dl}}ms, 0ms, 0ms; background-color: {{l.bg}}">
+        <span class="mono" style="width: 108px; flex: none; font-size: 10px; letter-spacing: .1em; color: #5E574D">{{l.sec}}</span>
+        <span class="sw {{l.sw}}" style="margin-right: 10px"></span>
+        <span style="font-size: 15px; line-height: 20px; white-space: nowrap; color: {{l.ink}}; background: {{l.band}}; box-shadow: {{l.ul}}; transition: color .3s">{{l.t}}</span>
+        <sup class="mono" style="font-size: 9.5px; margin-left: 2px; color: {{l.ink}}">{{l.cite}}</sup>
+        <sc-if value="{{l.hasVal}}" hint-placeholder-val="{{false}}"><span class="mono" style="margin-left: 8px; font-size: 11.5px; height: 18px; line-height: 15px; min-width: 64px; box-sizing: border-box; padding: 0 6px; white-space: nowrap; border: 1.5px {{l.vStyle}} #26231F; color: {{l.vInk}}">{{l.v}}</span></sc-if>
+        <span class="mono" style="margin-left: 8px; font-size: 10px; white-space: nowrap; color: #5E574D; display: {{l.stampDisp}}">{{l.stamp}}</span>
+        <span style="flex: 1"></span>
+        <sc-if value="{{l.canAccept}}" hint-placeholder-val="{{false}}"><button type="button" class="btn hit" onClick="{{l.accept}}" aria-label="{{l.acceptAria}}" style="height: 22px; padding: 0 9px; margin-left: 8px; font-size: 10.5px; letter-spacing: .04em; border: 1.5px solid #2E6A8F; color: #2E6A8F; background: #F7F3EA">Accept</button></sc-if>
+        <sc-if value="{{l.hasTag}}" hint-placeholder-val="{{false}}"><span class="mono" style="margin-left: 8px; font-size: 10px; letter-spacing: .03em; white-space: nowrap; padding: 1px 7px; border: 1.5px {{l.tagBorder}} {{l.tagLine}}; background: {{l.tagBg}}; color: {{l.tagFg}}; transition: background .3s, color .3s">{{l.tag}}</span></sc-if>
+        <span class="mono" style="margin-left: 8px; font-size: 9.5px; letter-spacing: .04em; white-space: nowrap; color: {{l.provInk}}; display: {{l.provDisp}}">{{l.prov}}</span>
+        <span style="width: 26px; flex: none; display: flex; justify-content: flex-end">
+          <span class="mono" style="display: {{l.mkDisp}}; width: 18px; height: 18px; box-sizing: border-box; border-radius: 50%; border: 1.5px {{l.mkStyle}} {{l.mkInk}}; color: {{l.mkInk}}; font-size: 10.5px; font-weight: 600; line-height: 15px; text-align: center">{{l.mkN}}</span>
+        </span>
+      </div>
+    </sc-for>
+  </section>
+
+  <section aria-label="Proof marks" style="position: absolute; left: 1024px; top: 84px; width: 388px; height: 752px">
+    <div class="mono" style="position: absolute; left: 0; right: 0; top: 0; font-size: 10px; letter-spacing: .08em; color: #B3261E; display: flex; justify-content: space-between"><span>EDITOR’S MARKS</span><span>{{marksCount}}</span></div>
+    <sc-for list="{{marks}}" as="m" hint-placeholder-count="6">
+      <div class="mk" style="position: absolute; left: 0; width: 388px; top: {{m.top}}px; height: {{m.h}}px; box-sizing: border-box; overflow: visible; opacity: {{m.op}}; transform: translateX({{m.tx}}px); transition-delay: {{m.dl}}ms, {{m.dl}}ms, 0ms, 0ms, 0ms; border-left: 2px solid {{m.edge}}; background-color: {{m.bg}}">
+        <svg width="40" height="2" viewBox="0 0 40 2" style="position: absolute; left: -42px; top: 0; overflow: visible; opacity: {{m.leadOp}}" aria-hidden="true"><path d="{{m.lead}}" fill="none" stroke="#B3261E" stroke-width="1.3" stroke-dasharray="{{m.dash}}"></path><circle cx="1" cy="{{m.ly}}" r="2.2" fill="#B3261E"></circle></svg>
+        <div style="height: {{m.h}}px; overflow: hidden">
+          <button type="button" class="mkb" onClick="{{m.pick}}" aria-expanded="{{m.expanded}}">
+            <span style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+              <span class="mono" style="font-size: 11.5px; font-weight: 600; letter-spacing: .06em; color: #B3261E">{{m.n}} · {{m.code}}</span>
+              <span class="mono" style="font-size: 9.5px; letter-spacing: .06em; padding: 1px 6px; border: 1.5px {{m.kindStyle}} {{m.kindLine}}; background: {{m.kindBg}}; color: {{m.kindFg}}">{{m.kind}}</span>
+            </span>
+            <span class="mt {{m.cls}}" style="display: {{m.textDisp}}; text-decoration-line: {{m.strike}}">{{m.text}}</span>
+            <span class="mono" style="display: {{m.noteDisp}}; margin-top: 3px; font-size: 10.5px; color: #26231F; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{m.note}}</span>
+          </button>
+          <sc-if value="{{m.isFare}}" hint-placeholder-val="{{false}}">
+            <div style="position: relative; height: 50px; padding: 0 12px; box-sizing: border-box">
+              <svg width="362" height="38" viewBox="0 0 362 38" role="img" aria-label="{{m.chartAria}}" style="overflow: visible; display: block">
+                <defs><pattern id="fhatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="#26231F" stroke-width="1"></line></pattern></defs>
+                <line x1="0" y1="26" x2="362" y2="26" stroke="#8C8578" stroke-width="1" stroke-dasharray="3 3"></line>
+                <text x="362" y="23" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5E574D">break-even</text>
+                <g style="opacity: {{m.chartU}}; transition: opacity .5s ease">
+                  <path d="M12 1 C 22 15, 80 22, 362 24" fill="none" stroke="#2E6A8F" stroke-width="2"></path>
+                  <path d="M7 7 L12 -1 L17 7" fill="none" stroke="#B3261E" stroke-width="1.5"></path>
+                  <text x="22" y="9" font-family="Spectral, serif" font-style="italic" font-size="12" fill="#B3261E">no ceiling</text>
+                </g>
+                <g style="opacity: {{m.chartB}}; transition: opacity .5s ease">
+                  <path d="M0 34 C 60 18, 120 3, 180 4 C 240 5, 300 18, 362 30 L362 36 C 300 25, 240 12, 180 11 C 120 10, 60 25, 0 38 Z" fill="url(#fhatch)" stroke="#26231F" stroke-width="1"></path>
+                </g>
+                <g style="opacity: {{m.chartX}}; transition: opacity .5s ease">
+                  <rect x="1" y="3" width="360" height="32" fill="none" stroke="#26231F" stroke-width="1.5" stroke-dasharray="5 4"></rect>
+                  <text x="181" y="23" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#5E574D">no demand model · fares UNKNOWN</text>
+                </g>
+              </svg>
+              <div class="mono" style="display: flex; justify-content: space-between; font-size: 9.5px; color: #5E574D; margin-top: 2px"><span>fare $19</span><span>{{m.chartCap}}</span><span>$249</span></div>
+            </div>
+          </sc-if>
+          <sc-if value="{{m.open}}" hint-placeholder-val="{{false}}">
+            <div role="group" aria-label="{{m.groupLabel}}" style="display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 12px 8px 12px">
+              <sc-for list="{{m.opts}}" as="o" hint-placeholder-count="3">
+                <button type="button" class="opt" onClick="{{o.pick}}" aria-pressed="{{o.pressed}}" aria-label="{{o.aria}}" style="width: {{o.w}}">{{o.label}}</button>
+              </sc-for>
+              <span style="display: {{m.optNoteDisp}}; font-size: 13px; font-style: italic; color: #5E574D">{{m.optNote}}</span>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-for>
+  </section>
+
+  <footer style="position: absolute; left: 28px; right: 28px; top: 844px; height: 50px; border-top: 1px solid #26231F; display: flex; align-items: center; gap: 14px">
+    <div style="position: relative; flex: 1; height: 50px">
+      <div style="position: absolute; left: 0; top: 0; height: 50px; display: flex; align-items: center; gap: 12px; opacity: {{preOp}}; transition: opacity .3s">
+        <span class="sw p-unk" style="width: 14px; height: 14px"></span>
+        <span style="font-size: 17px">Nothing compiled yet.</span>
+        <span style="font-size: 15px; font-style: italic; color: #5E574D">One intent, four sources and a public record attached.</span>
+      </div>
+      <div style="position: absolute; left: 0; top: 0; height: 50px; display: flex; align-items: center; gap: 12px; opacity: {{stOp}}; transition: opacity .4s ease {{stDl}}ms">
+        <span class="sw {{stSw}}" style="width: 14px; height: 14px"></span>
+        <span role="status" style="font-size: 19px; font-weight: 500">{{statusMain}}</span>
+        <span style="font-size: 15px; font-style: italic; line-height: 1.15; max-width: 600px; color: #5E574D">{{statusSub}}</span>
+        <span class="mono" style="font-size: 10.5px; color: #2E6A8F; display: {{propDisp}}">{{propNote}}</span>
+      </div>
+    </div>
+    <sc-if value="{{runs}}" hint-placeholder-val="{{false}}">
+      <span style="display: flex; align-items: center; gap: 8px">
+        <button type="button" class="btn" disabled="{{true}}" style="min-height: 40px; padding: 0 16px; font-size: 12.5px; letter-spacing: .04em; border: 1.5px solid #8C8578; background: transparent; color: #5E574D">Open in BOW</button>
+        <span class="mono" style="font-size: 9.5px; letter-spacing: .08em; padding: 2px 6px; border: 1.5px dashed #5E574D; color: #5E574D">PROTOTYPE</span>
+      </span>
+    </sc-if>
+    <sc-if value="{{compiledFlag}}" hint-placeholder-val="{{false}}">
+      <button type="button" class="btn" onClick="{{reset}}" style="min-height: 40px; padding: 0 14px; font-size: 12px; letter-spacing: .04em; border: 1.5px solid #26231F; background: transparent; color: #26231F">Start over</button>
+    </sc-if>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentWillUnmount() { clearTimeout(this.ft); clearTimeout(this.st); }
+
+  money(n) { return '$' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+  acts(s) {
+    const lim = s.limit;
+    const limOk = typeof lim === 'number';
+    const why = lim === 'unknown' ? 'limit UNKNOWN' : (lim === 'ask' ? 'awaiting S4 owner' : 'no spending limit');
+    const cap = limOk ? 'EXECUTABLE · up to ' + this.money(lim) : 'REFUSED · ' + why;
+    let engine = cap;
+    if (s.engine === 'unknown') engine = 'REFUSED · engine price UNKNOWN';
+    else if (limOk && s.engine === 'approval') engine = cap + '; above: approval';
+    let fare;
+    if (s.fareRule === 'major') fare = 'REFUSED · the major sets fares';
+    else if (s.fare === 'bound') fare = s.fareRule === 'own' ? 'EXECUTABLE · fares on flights it sells' : 'EXECUTABLE';
+    else if (s.fare === 'remove') fare = 'REFUSED · no demand model';
+    else fare = 'REFUSED · model unbounded';
+    return {
+      'a-engine': engine,
+      'a-fuel': cap,
+      'a-fare': fare,
+      'a-assign': s.fleet ? (s.fleet === 'branch' ? 'EXECUTABLE · in both branches' : 'EXECUTABLE') : 'REFUSED · fleet in dispute',
+      'a-crew': s.rest === 'rule' ? 'EXECUTABLE' : (s.rest === 'unknown' ? 'REFUSED · rest rule UNKNOWN' : 'REFUSED · no rest rule yet'),
+      'a-pay': s.lease === 'rule' ? 'EXECUTABLE' : 'EXECUTABLE · if late: UNKNOWN'
+    };
+  }
+
+  apply(patch, lineId) {
+    const s0 = this.state || {};
+    const a0 = this.acts(s0);
+    const a1 = this.acts(Object.assign({}, s0, patch));
+    const flash = Object.keys(a1).filter((k) => a1[k] !== a0[k]);
+    if (lineId) flash.push(lineId);
+    clearTimeout(this.ft);
+    this.setState(Object.assign({}, patch, { flash: flash }));
+    this.ft = setTimeout(() => this.setState({ flash: [] }), 1600);
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const compiled = !!s.compiled;
+    const settled = !!s.settled;
+    const how = !!s.how;
+    const sel = compiled ? (s.sel || null) : null;
+    const flash = s.flash || [];
+    const INK = '#26231F', BLUE = '#2E6A8F', RED = '#B3261E', GREY = '#5E574D';
+    const STIP = 'radial-gradient(circle, rgba(46,106,143,.30) .9px, transparent 1.2px) 0 0/4px 4px';
+    const YOU = 'authored by you, 29 Sep';
+    const A = this.acts(s);
+
+    // ---------- the marks (sheet order) ----------
+    const MK = [
+      { id: 'fleet', line: 'fleet', code: 'CONFLICTING SOURCES', blocking: true,
+        text: 'S1 says 20 × E175; S2 says 12 × E175 + 8 × ATR 72-600.', src: ['fleet'] },
+      { id: 'fare', line: 'fare', code: 'UNBOUNDED MODEL', blocking: true,
+        text: 'Proposed fare model lets a $19 fare fill every flight and profit rise without limit.', src: [] },
+      { id: 'limit', line: 'limit', code: 'MISSING AUTHORITY', blocking: true,
+        text: 'The purchasing manager can sign contracts, but no spending limit exists.', src: ['limit'] },
+      { id: 'rest', line: 'rest', code: 'MISSING RULE', blocking: true,
+        text: 'No pilot-rest rule. FAA Part 117 sets one (14 CFR 117.25, verify); this world has none.', src: ['rest'] },
+      { id: 'engine', line: 'a-engine', code: 'UNBOUNDED AUTHORITY', blocking: true,
+        text: '“Order a spare engine” at ' + (typeof s.limit === 'number' ? this.money(s.limit) : 'any limit')
+          + ': engines cost far more [verify]; higher limit or approval.', src: ['limit'] },
+      { id: 'fareconf', line: 'a-fare', code: 'CONFLICT · FARES', blocking: true,
+        text: 'The major sets fares (capacity-purchase deal): EXECUTABLE “Set a fare” conflicts with S1.', src: ['cpa'] },
+      { id: 'weather', line: 'weather', code: 'MISSING MODEL', blocking: false,
+        text: '‘Weather causes delays’ (S1) — no behaviour given.', src: ['weather'] },
+      { id: 'maint', line: 'maint', code: 'UNKNOWN', blocking: false,
+        text: 'Maintenance reserve rates: no source establishes them.', src: ['maint'] },
+      { id: 'lease', line: 'late', code: 'UNKNOWN CONSEQUENCE', blocking: false,
+        text: 'Late lease payment is mentioned; nothing says what happens next.', src: ['lease'] }
+    ];
+    // one complete line for a resolved mark, so nothing is cut off with an ellipsis
+    const SHORT = {
+      fleet: 'S1 and S2 disagreed on the fleet.', fare: 'The fare model had no ceiling.',
+      limit: 'No spending limit existed.', rest: 'No pilot-rest rule existed.',
+      engine: 'A spare engine outran the limit.', fareconf: 'The major sets fares; S1 conflicted.',
+      weather: '‘Weather causes delays’ had no behaviour.', maint: 'No source gave reserve rates.',
+      lease: 'Late lease payment had no consequence.'
+    };
+    const lim = s.limit;
+    const YOUS = 'you, 29 Sep';
+    const fareRuleDone = s.fareRule != null || s.fare === 'remove';
+    const engineDone = s.engine != null || lim === 'unknown' || lim === 'ask';
+    const RES = {
+      fleet: !s.fleet ? null : (s.fleet === 'branch'
+        ? { note: '→ both kept · the World branches on fleet mix', kind: 'BRANCHED', solid: true }
+        : { note: '→ ' + (s.fleet === 's1' ? 'S1' : 'S2') + ' wins · ' + YOU, kind: 'AUTHORED', solid: true }),
+      fare: !s.fare ? null : (s.fare === 'bound'
+        ? { note: '→ bounded by seats and a rival · ' + YOU, kind: 'AUTHORED', solid: true }
+        : { note: '→ model dropped · fares UNKNOWN, fare-setting refused', kind: 'KEPT UNKNOWN', solid: false }),
+      limit: lim == null ? null : (typeof lim === 'number'
+        ? { note: '→ ' + this.money(lim) + ' per contract · ' + YOU, kind: 'AUTHORED', solid: true }
+        : (lim === 'ask'
+          ? { note: '→ asked the S4 owner · refused until answered', kind: 'QUEUED', solid: false }
+          : { note: '→ declared UNKNOWN · 2 actions refused at runtime', kind: 'KEPT UNKNOWN', solid: false })),
+      weather: !s.weather ? null : (s.weather === 'rule'
+        ? { note: '→ delay rule ' + YOU, kind: 'AUTHORED', solid: true }
+        : { note: '→ kept UNKNOWN · visible to every visitor', kind: 'KEPT UNKNOWN', solid: false }),
+      maint: !s.maint ? null : (s.maint === 'ask'
+        ? { note: '→ asked the lessor · stays UNKNOWN until answered', kind: 'QUEUED', solid: false }
+        : { note: '→ kept UNKNOWN · visible to every visitor', kind: 'KEPT UNKNOWN', solid: false }),
+      lease: !s.lease ? null : (s.lease === 'rule'
+        ? { note: '→ consequence ' + YOU, kind: 'AUTHORED', solid: true }
+        : { note: '→ kept UNKNOWN · visible to every visitor', kind: 'KEPT UNKNOWN', solid: false }),
+      rest: !s.rest ? null : (s.rest === 'rule'
+        ? { note: '→ authored from 14 CFR 117.25 (verify) · ' + YOUS, kind: 'AUTHORED', solid: true }
+        : { note: '→ declared UNKNOWN · crew scheduling refused', kind: 'KEPT UNKNOWN', solid: false }),
+      engine: s.engine
+        ? (s.engine === 'approval'
+          ? { note: '→ orders above the limit need S4 owner · ' + YOUS, kind: 'AUTHORED', solid: true }
+          : { note: '→ declared UNKNOWN · engine orders refused', kind: 'KEPT UNKNOWN', solid: false })
+        : (engineDone ? { note: '→ moot · engine orders already refused', kind: 'MOOT', solid: false } : null),
+      fareconf: s.fareRule
+        ? (s.fareRule === 'major'
+          ? { note: '→ S1 wins · the major sets fares · ' + YOUS, kind: 'AUTHORED', solid: true }
+          : { note: '→ exception: Cascade sets fares it sells · ' + YOUS, kind: 'AUTHORED', solid: true })
+        : (fareRuleDone ? { note: '→ moot · fare-setting already refused', kind: 'MOOT', solid: false } : null)
+    };
+    const markByLine = {};
+    MK.forEach((m, i) => { m.n = i + 1; m.res = RES[m.id]; markByLine[m.line] = m; });
+    const selMark = MK.find((m) => m.id === sel) || null;
+
+    // ---------- the charter ----------
+    const rows = [];
+    const add = (sec, o) => rows.push(Object.assign({ sec: sec }, o));
+    add('ACTORS', { id: 'airline', t: 'Cascade Regional, a regional airline', cite: 'I', sw: 'p-src', stamp: '(fictional)', prov: 'FROM INTENT' });
+    add('', { id: 'buyer', t: 'Purchasing manager', cite: 'S4', sw: 'p-src', prov: 'FROM SOURCE' });
+    add('', { id: 'pilots', t: 'Major partner’s pilots, who hold the scope clause', cite: 'S3', sw: 'p-src', prov: 'FROM SOURCE' });
+    if (!s.fleet) add('ASSETS', { id: 'fleet', t: 'Fleet: 20 aircraft, mix', cite: 'S1 S2', sw: 'p-unk', v: 'in dispute', vk: 'unk', prov: 'UNKNOWN' });
+    else if (s.fleet === 's1') add('ASSETS', { id: 'fleet', t: 'Fleet: 20 × Embraer E175', cite: 'S1', sw: 'p-aut', stamp: 'S1 chosen by you, 29 Sep', prov: 'AUTHORED' });
+    else if (s.fleet === 's2') add('ASSETS', { id: 'fleet', t: 'Fleet: 12 × E175 + 8 × ATR 72-600', cite: 'S2', sw: 'p-aut', stamp: 'S2 chosen by you, 29 Sep', prov: 'AUTHORED' });
+    else add('ASSETS', { id: 'fleet', t: 'Fleet: 20 aircraft, mix branches', cite: 'S1 S2', sw: 'p-aut', stamp: 'see Uncertainty · you, 29 Sep', prov: 'AUTHORED' });
+    const mixed = s.fleet === 's2' || s.fleet === 'branch';
+    add('', { id: 'seats', t: mixed ? 'Seats: 76 per E175 · 70 per ATR 72-600' : 'Seats: 76 per E175', cite: s.fleet === 's1' ? 'S1' : (mixed ? 'S2' : 'S1 S2'), sw: 'p-src', prov: 'FROM SOURCE' });
+    if (!s.fare) add('MARKETS', { id: 'fare', t: 'Fare demand responds to price (proposed model)', sw: 'p-pro', ink: BLUE, band: STIP, prov: 'PROPOSED' });
+    else if (s.fare === 'bound') add('MARKETS', { id: 'fare', t: 'Demand responds to price, capped by seats and a rival', sw: 'p-aut', stamp: 'you, 29 Sep', prov: 'AUTHORED' });
+    else add('MARKETS', { id: 'fare', t: 'Fare demand', sw: 'p-unk', v: 'no model', vk: 'unk', stamp: 'declared by you', prov: 'UNKNOWN' });
+    add('RESOURCES', { id: 'supply', t: 'Fuel and parts, bought under contract', cite: 'S4', sw: 'p-src', prov: 'FROM SOURCE' });
+    add('AUTHORITY', { id: 'signs', t: 'Purchasing manager signs parts and fuel contracts', cite: 'S4', sw: 'p-src', prov: 'FROM SOURCE' });
+    if (lim == null) add('', { id: 'limit', t: 'Spending limit per contract', sw: 'p-unk', v: '', vk: 'unk', prov: 'UNKNOWN' });
+    else if (typeof lim === 'number') add('', { id: 'limit', t: 'Spending limit per contract', sw: 'p-aut', v: this.money(lim), vk: 'aut', stamp: YOU, prov: 'AUTHORED' });
+    else add('', { id: 'limit', t: 'Spending limit per contract', sw: 'p-unk', v: 'UNKNOWN', vk: 'unk', stamp: lim === 'ask' ? 'asked S4 owner · queued' : 'declared by you', prov: 'UNKNOWN' });
+    add('RULES', { id: 'scope', t: 'Partner flying: at most 76 seats', cite: 'S3', sw: 'p-src', stamp: 'major’s pilot contract', prov: 'FROM SOURCE',
+      tag: s.fleet ? 'all 20 comply' : 'awaits fleet', tagOk: !!s.fleet });
+    if (!s.rest) add('', { id: 'rest', t: 'Pilot rest rule — 14 CFR 117.25 (verify)', cite: 'R', sw: 'p-unk', v: '', vk: 'unk', prov: 'MISSING RULE' });
+    else if (s.rest === 'rule') add('', { id: 'rest', t: 'Pilot rest ≥ 10 h, incl. an 8 h sleep opportunity', cite: 'R', sw: 'p-aut', stamp: 'you · 14 CFR 117.25', prov: 'AUTHORED' });
+    else add('', { id: 'rest', t: 'Pilot rest rule', cite: 'R', sw: 'p-unk', v: 'UNKNOWN', vk: 'unk', stamp: 'declared by you', prov: 'UNKNOWN' });
+    const ACT = [['a-engine', 'Order a spare engine'], ['a-fuel', 'Sign a fuel contract'], ['a-fare', 'Set a fare on a route'],
+      ['a-assign', 'Assign an aircraft to partner flying'], ['a-crew', 'Schedule a pilot’s next duty'], ['a-pay', 'Pay the monthly lease']];
+    ACT.forEach((a, i) => {
+      const ok = A[a[0]].indexOf('REFUSED') !== 0;
+      add(i === 0 ? 'ACTIONS' : '', { id: a[0], t: a[1], sw: ok ? 'p-com' : 'p-unk', tag: A[a[0]], tagOk: ok, act: true });
+    });
+    if (!s.accStep) add('TIME', { id: 'step', t: 'One step = one operating day', sw: 'p-pro', ink: BLUE, band: STIP, prov: 'PROPOSED', accept: () => this.apply({ accStep: true }, 'step') });
+    else add('TIME', { id: 'step', t: 'One step = one operating day', sw: 'p-aut', stamp: 'accepted by you, 29 Sep', prov: 'AUTHORED' });
+    if (!s.weather) add('UNCERTAINTY', { id: 'weather', t: 'Weather causes delays · behaviour', cite: 'S1', sw: 'p-unk', v: '', vk: 'unk', prov: 'UNKNOWN' });
+    else if (s.weather === 'rule') add('UNCERTAINTY', { id: 'weather', t: 'Weather causes delays', cite: 'S1', sw: 'p-aut', v: '1 day in 20 · 2–6 h', vk: 'aut', stamp: 'you, 29 Sep', prov: 'AUTHORED' });
+    else add('UNCERTAINTY', { id: 'weather', t: 'Weather causes delays · behaviour', cite: 'S1', sw: 'p-unk', v: 'UNKNOWN', vk: 'unk', stamp: 'kept by you', prov: 'UNKNOWN' });
+    add('', { id: 'branch', t: 'Fleet mix: all-E175, or E175 + ATR — both run', cite: 'S1 S2', sw: 'p-aut', stamp: 'you, 29 Sep', prov: 'AUTHORED', hidden: s.fleet !== 'branch' });
+    add('ECONOMICS', { id: 'rent', t: 'Lease rent on 20 aircraft, due on the 1st', cite: 'S2', sw: 'p-src', prov: 'FROM SOURCE' });
+    add('', { id: 'maint', t: 'Maintenance reserve rate', cite: 'S2', sw: 'p-unk', v: s.maint ? 'UNKNOWN' : '', vk: 'unk',
+      stamp: s.maint === 'ask' ? 'asked lessor · queued' : (s.maint ? 'kept by you' : ''), prov: s.maint ? 'UNKNOWN' : 'UNKNOWN' });
+    if (s.lease === 'rule') add('CONSEQUENCES', { id: 'late', t: 'Late lease payment →', cite: 'S2', sw: 'p-aut', v: '30 days: may repossess', vk: 'aut', stamp: 'you, 29 Sep', prov: 'AUTHORED' });
+    else add('CONSEQUENCES', { id: 'late', t: 'Late lease payment →', cite: 'S2', sw: 'p-unk', v: s.lease ? 'UNKNOWN' : '', vk: 'unk', stamp: s.lease ? 'kept by you' : '', prov: s.lease ? 'UNKNOWN' : 'UNKNOWN' });
+
+    const ROW = 24, GAP = 8, Y0 = 78;
+    let y = Y0; let seen = false;
+    const lineY = {};
+    const lines = rows.map((r, i) => {
+      if (r.sec && seen) y += GAP;
+      if (r.sec) seen = true;
+      const ly = r.hidden ? y - ROW : y;
+      if (!r.hidden) y += ROW;
+      lineY[r.id] = ly;
+      const m = markByLine[r.id];
+      const open = m && !m.res;
+      const selected = selMark && selMark.line === r.id;
+      return {
+        sec: r.sec, y: ly, op: compiled && !r.hidden ? 1 : 0, ty: compiled ? 0 : 6, dl: settled ? 0 : i * 55,
+        bg: flash.indexOf(r.id) >= 0 ? '#EADFC6' : (selected ? 'rgba(179,38,30,0.08)' : 'rgba(179,38,30,0)'),
+        sw: r.sw, ink: r.ink || INK, t: r.t, cite: r.cite || '', band: r.band || 'none',
+        ul: open ? 'inset 0 -1.5px 0 ' + RED : 'none',
+        hasVal: !!r.vk, v: r.v || '', vStyle: r.vk === 'aut' ? 'solid' : 'dashed', vInk: r.vk === 'aut' ? INK : GREY,
+        stamp: r.stamp || '', stampDisp: !how && r.stamp ? 'inline' : 'none',
+        canAccept: !!r.accept, accept: r.accept || null, acceptAria: 'Accept Foundry proposal: ' + r.t,
+        hasTag: !!r.tag, tag: r.tag || '', tagBorder: r.tagOk ? 'solid' : 'dashed', tagLine: r.tagOk ? '#6B655B' : INK,
+        tagBg: r.tagOk ? '#6B655B' : 'transparent', tagFg: r.tagOk ? '#F7F3EA' : INK,
+        prov: r.prov || '', provDisp: how && r.prov ? 'inline' : 'none', provInk: r.sw === 'p-pro' ? BLUE : GREY,
+        mkDisp: m ? 'inline-block' : 'none', mkN: m ? String(m.n) : '', mkStyle: open ? 'solid' : 'dashed', mkInk: open ? RED : '#8C8578'
+      };
+    });
+
+    // ---------- margin layout ----------
+    const OPTS = {
+      fleet: [['S1 wins — 20 × E175', { fleet: 's1' }, s.fleet === 's1'],
+        ['S2 wins — 12 × E175 + 8 × ATR 72-600', { fleet: 's2' }, s.fleet === 's2'],
+        ['Keep both as an uncertainty — the World branches on fleet mix', { fleet: 'branch' }, s.fleet === 'branch']],
+      fare: [['Bound demand by seats flown and a rival’s fare response', { fare: 'bound' }, s.fare === 'bound'],
+        ['Drop the model — fares become UNKNOWN; setting a fare is refused', { fare: 'remove' }, s.fare === 'remove']],
+      limit: [['Author $50k', { limit: 50000 }, lim === 50000, 'third', 'Author a spending limit of $50,000 per contract'],
+        ['Author $250k', { limit: 250000 }, lim === 250000, 'third', 'Author a spending limit of $250,000 per contract'],
+        ['Author $1M', { limit: 1000000 }, lim === 1000000, 'third', 'Author a spending limit of $1,000,000 per contract'],
+        ['Mark UNKNOWN — actions that need it are refused at runtime', { limit: 'unknown' }, lim === 'unknown'],
+        ['Ask the source owner (S4, Finance) — queued', { limit: 'ask' }, lim === 'ask']],
+      weather: [['Author a delay rule: 1 day in 20, delays of 2–6 hours', { weather: 'rule' }, s.weather === 'rule'],
+        ['Leave as UNKNOWN', { weather: 'unknown' }, s.weather === 'unknown']],
+      maint: [['Ask the lessor (S2 owner) — queued', { maint: 'ask' }, s.maint === 'ask'],
+        ['Leave as UNKNOWN', { maint: 'unknown' }, s.maint === 'unknown']],
+      lease: [['Author: 30 days late → the lessor may repossess', { lease: 'rule' }, s.lease === 'rule'],
+        ['Leave as UNKNOWN', { lease: 'unknown' }, s.lease === 'unknown']],
+      rest: [['Author the rule from 14 CFR 117.25: 10 h rest, incl. an 8 h sleep opportunity (verify)', { rest: 'rule' }, s.rest === 'rule'],
+        ['Mark UNKNOWN — scheduling a pilot’s next duty is refused at runtime', { rest: 'unknown' }, s.rest === 'unknown']],
+      engine: [['Author an approval step — an engine order above the limit waits for the S4 owner', { engine: 'approval' }, s.engine === 'approval'],
+        ['Mark UNKNOWN — “Order a spare engine” is refused at runtime', { engine: 'unknown' }, s.engine === 'unknown']],
+      fareconf: [['S1 wins — the major sets fares; “Set a fare” is refused', { fareRule: 'major' }, s.fareRule === 'major'],
+        ['Author an exception — Cascade sets fares on flights it sells itself', { fareRule: 'own' }, s.fareRule === 'own']]
+    };
+    const OPT_H = { fleet: 160, fare: 106, limit: 160, rest: 110, engine: 110, fareconf: 110, weather: 106, maint: 128, lease: 106 };
+    const TOP0 = 16, BOT = 758, MG = 4;
+    // with one mark open, the others fold to their header line so the column always fits
+    const isCompact = (m) => !!sel && sel !== m.id;
+    const hs = MK.map((m) => {
+      const open = sel === m.id;
+      if (isCompact(m)) return 30;
+      let h = m.res && open ? 88 : 70;
+      if (m.id === 'fare') h += 50;
+      if (open) h += OPT_H[m.id];
+      return h;
+    });
+    const tops = MK.map((m) => lineY[m.line] - 4);
+    let prev = TOP0 - MG;
+    tops.forEach((t, i) => { tops[i] = Math.max(t, prev + MG); prev = tops[i] + hs[i]; });
+    let limit = BOT;
+    for (let i = tops.length - 1; i >= 0; i--) { tops[i] = Math.min(tops[i], limit - hs[i]); limit = tops[i] - MG; }
+    prev = TOP0 - MG;
+    tops.forEach((t, i) => { tops[i] = Math.max(t, prev + MG); prev = tops[i] + hs[i]; });
+
+    const marks = MK.map((m, i) => {
+      const open = sel === m.id;
+      const r = m.res;
+      const compact = isCompact(m);
+      const dy = lineY[m.line] + 12 - tops[i];
+      return {
+        n: String(m.n), code: m.code, text: r && !open ? SHORT[m.id] : m.text, top: tops[i], h: hs[i],
+        textDisp: compact ? 'none' : 'block',
+        op: compiled ? 1 : 0, tx: compiled ? 0 : 14, dl: settled ? 0 : 1400 + i * 240,
+        edge: r ? '#B9B0A0' : RED, bg: open ? 'rgba(179,38,30,0.06)' : 'rgba(179,38,30,0)',
+        kind: r ? r.kind : (m.blocking ? 'BLOCKING' : 'DECLARED UNKNOWN'),
+        kindStyle: r ? (r.solid ? 'solid' : 'dashed') : (m.blocking ? 'solid' : 'dashed'),
+        kindLine: r ? INK : RED, kindBg: !r && m.blocking ? RED : 'transparent', kindFg: r ? INK : (m.blocking ? '#F7F3EA' : RED),
+        strike: r ? 'line-through' : 'none', cls: r && !open ? 'one' : '',
+        note: r ? r.note : '', noteDisp: r && !compact ? 'block' : 'none',
+        expanded: open ? 'true' : 'false', open: open,
+        pick: () => this.setState({ sel: sel === m.id ? null : m.id }),
+        lead: 'M1 ' + dy + ' C 22 ' + dy + ', 18 16, 42 16', ly: dy,
+        dash: r ? '2 3' : 'none', leadOp: r && !open ? 0.55 : 1,
+        isFare: m.id === 'fare' && !compact,
+        chartU: !s.fare ? 1 : 0, chartB: s.fare === 'bound' ? 1 : 0, chartX: s.fare === 'remove' ? 1 : 0,
+        chartCap: !s.fare ? 'profit vs fare · proposed model' : (s.fare === 'bound' ? 'bounded: a range, illustrative shape' : ''),
+        chartAria: !s.fare ? 'Proposed model: profit rises without limit as the fare falls toward $19.'
+          : (s.fare === 'bound' ? 'Bounded model: profit is a hatched range that peaks at a middle fare and falls to a loss at $19.' : 'No demand model: fares are unknown.'),
+        groupLabel: 'Resolve mark ' + m.n + ': ' + m.code + '. Foundry will not choose for you.',
+        optNote: m.id === 'maint' ? 'No source gives a rate. Foundry will not invent one.' : '',
+        optNoteDisp: m.id === 'maint' ? 'block' : 'none',
+        opts: OPTS[m.id].map((o) => ({
+          label: o[0], pressed: o[2] ? 'true' : 'false', aria: o[4] || o[0],
+          w: o[3] === 'third' ? 'calc((100% - 12px) / 3)' : '100%',
+          pick: () => this.apply(o[1], m.line)
+        }))
+      };
+    });
+
+    // ---------- sources ----------
+    const hl = selMark ? selMark.src : [];
+    const SRC = [
+      { id: 'S1', kind: 'OPS MEMO', segs: [['Fleet: '], ['20 Embraer E175', 'fleet'], [', 76 seats, hub at [city]. '], ['Weather causes delays.', 'weather'], [' '], ['Partner flying is under a capacity-purchase agreement.', 'cpa']] },
+      { id: 'S2', kind: 'LEASE SCHEDULE', segs: [['12 × E175 (76 seats) · 8 × ATR 72-600 (70 seats).', 'fleet'], [' Rent due on the 1st. '], ['Late payments will be noted.', 'lease'], [' '], ['Maintenance reserves apply.', 'maint']] },
+      { id: 'S3', kind: "Partner's pilot contract (scope clause)", segs: [['“Regional aircraft flown for the partner may not exceed 76 seats.”']] },
+      { id: 'S4', kind: 'FINANCE NOTE', segs: [['Purchasing manager handles parts and fuel contracts.', 'limit']] },
+      { id: 'R', kind: 'PUBLIC RECORD · RULE TEXT, VERIFY', rec: true, segs: [['US major-airline pilot scope clauses commonly cap regional jets at 76 seats — why the E175 usually flies with 76. '], ['FAA Part 117 (14 CFR 117.25, verify): at least 10 hours’ rest before duty, with an 8-hour sleep opportunity.', 'rest']] }
+    ];
+    const sources = SRC.map((d) => {
+      const hit = d.segs.some((g) => g[1] && hl.indexOf(g[1]) >= 0);
+      return {
+        id: d.id, kind: d.kind, clip: d.rec ? 'none' : 'block', paper: d.rec ? '#F7F3EA' : '#FFFDF7',
+        edge: hit ? RED : (d.rec ? INK : '#CFC6B4'),
+        segs: d.segs.map((g) => {
+          const on = g[1] && hl.indexOf(g[1]) >= 0;
+          return { t: g[0], bg: on ? 'rgba(179,38,30,0.10)' : 'rgba(179,38,30,0)', ul: on ? 'inset 0 -2px 0 ' + RED : 'none' };
+        })
+      };
+    });
+
+    // ---------- status ----------
+    const blocking = ['fleet', 'fare', 'limit', 'rest'].filter((k) => s[k] == null).length
+      + (fareRuleDone ? 0 : 1) + (engineDone ? 0 : 1);
+    const unknowns = (lim === 'unknown' || lim === 'ask' ? 1 : 0) + (s.fare === 'remove' ? 1 : 0)
+      + (s.weather === 'rule' ? 0 : 1) + 1 + (s.lease === 'rule' ? 0 : 1)
+      + (s.rest === 'unknown' ? 1 : 0) + (s.engine === 'unknown' ? 1 : 0);
+    const uWord = unknowns + ' declared unknown' + (unknowns === 1 ? '' : 's');
+    const runs = compiled && blocking === 0;
+    // capabilities the charter lists as ACTIONS that this world refuses
+    const ACT_NAME = { 'a-engine': 'spare engines', 'a-fuel': 'fuel contracts', 'a-fare': 'fares', 'a-assign': 'aircraft assignment', 'a-crew': 'crew scheduling', 'a-pay': 'lease payment' };
+    const refused = ACT.filter((a) => A[a[0]].indexOf('REFUSED') === 0).map((a) => ACT_NAME[a[0]]);
+    const props = s.accStep ? 0 : 1;
+    const struck = MK.filter((m) => m.res).length;
+
+    return {
+      toggleHow: () => this.setState({ how: !how }),
+      howPressed: how ? 'true' : 'false', howBg: how ? INK : 'transparent', howFg: how ? '#F7F3EA' : INK,
+      sources: sources,
+      compile: () => {
+        if (compiled) return;
+        clearTimeout(this.st);
+        this.setState({ compiled: true, settled: false });
+        this.st = setTimeout(() => this.setState({ settled: true }), 3400);
+      },
+      compiledFlag: compiled,
+      cBg: compiled ? 'transparent' : INK, cFg: compiled ? GREY : '#F7F3EA',
+      cLabel: compiled ? 'Compiled · proof 1' : 'Compile intent + sources',
+      proofLabel: runs ? (refused.length ? 'PROOF 1 · RUNS WITH REFUSALS' : 'PROOF 1 · OK TO RUN') : 'PROOF 1',
+      charterSub: '1 intent · 4 sources · 1 public record',
+      stampOp: runs ? 1 : 0,
+      stampText: refused.length ? 'RUNS WITH REFUSALS · ' + refused.length + ' REFUSED' : 'OK TO RUN · ' + unknowns + ' UNKNOWN' + (unknowns === 1 ? '' : 'S') + ' KEPT',
+      legendDisp: how && compiled ? 'flex' : 'none',
+      emptyOp: compiled ? 0 : 1,
+      lines: lines,
+      marks: marks,
+      marksCount: compiled ? (MK.length - struck) + ' open · ' + struck + ' struck' : 'none yet',
+      preOp: compiled ? 0 : 1,
+      stOp: compiled ? 1 : 0, stDl: compiled && !settled ? 3000 : 0,
+      stSw: runs ? 'p-com' : 'p-unk',
+      statusMain: runs ? (refused.length ? 'Runs with refusals' : 'Runs') + ' · ' + uWord
+        : 'Won’t run: ' + blocking + ' blocking · ' + uWord + (refused.length ? ' · ' + refused.length + ' refused' : ''),
+      statusSub: runs ? (refused.length ? 'refused: ' + refused.join(', ') + '. Every unknown is visible to anyone who enters this world.' : 'Every unknown is visible to anyone who enters this world.')
+        : 'Click a red mark to resolve it. Foundry will not choose for you.',
+      propNote: props + ' Foundry proposal' + (props === 1 ? '' : 's') + ' still in blue',
+      propDisp: runs && props > 0 ? 'inline' : 'none',
+      runs: runs,
+      reset: () => {
+        clearTimeout(this.st); clearTimeout(this.ft);
+        this.setState({ compiled: false, settled: false, sel: null, fleet: null, fare: null, limit: null,
+          weather: null, maint: null, lease: null, rest: null, fareRule: null, engine: null, accStep: false, flash: [] });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

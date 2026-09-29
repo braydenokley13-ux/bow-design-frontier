@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BOW Frontier — Frontier map</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F0E8;color:#1B1A17;font-family:'IBM Plex Sans',sans-serif}
+a{color:#A63A18;text-underline-offset:3px}a:hover{color:#6E250E}
+.mono{font-family:'IBM Plex Mono',monospace}
+.serif{font-family:'Newsreader',serif}
+.k{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:#57534B;text-transform:uppercase}
+.hd{cursor:pointer;border:0;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;min-height:44px;padding:4px 2px;transition:background .2s,color .2s}
+.hd:focus-visible,.rw:focus-visible{outline:3px solid #A63A18;outline-offset:-3px}
+.rw{cursor:pointer;border:0;text-align:left;font-family:'IBM Plex Sans',sans-serif;min-height:48px;padding:0 12px;transition:background .2s}
+.cell{transition:background .2s}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1500px; box-sizing: border-box; padding: 60px 88px 64px; display: flex; flex-direction: column; gap: 26px; background: #F3F0E8; color: #1B1A17">
+  <header style="display: flex; flex-direction: column; gap: 14px">
+    <div class="k" style="display: flex; justify-content: space-between; border-bottom: 1px solid #1B1A17; padding-bottom: 10px"><span>03 · Frontier map</span><span>Ten families · eleven shared questions · click a column or a row</span></div>
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 48px">
+      <h1 class="serif" style="margin: 0; font-weight: 400; font-size: 54px; line-height: 1.04; max-width: 820px">The grammar should emerge from what recurs — not be imposed.</h1>
+      <div style="display: flex; gap: 22px; font-size: 13px; align-items: center; padding-bottom: 8px">
+        <span style="display: inline-flex; gap: 8px; align-items: center"><span style="width: 16px; height: 16px; background: #1B1A17; display: inline-block"></span>tested hard here</span>
+        <span style="display: inline-flex; gap: 8px; align-items: center"><span style="width: 16px; height: 16px; border: 2px solid #1B1A17; box-sizing: border-box; display: inline-block"></span>present</span>
+        <span style="display: inline-flex; gap: 8px; align-items: center"><span style="width: 5px; height: 5px; background: #8F897C; display: inline-block"></span>not yet</span>
+      </div>
+    </div>
+  </header>
+
+  <section aria-label="Families by shared questions" style="display: grid; grid-template-columns: 250px repeat(11, minmax(0, 1fr)); border-top: 2px solid #1B1A17">
+    <div class="k" style="display: flex; align-items: flex-end; padding: 8px 12px">Family ↓ · question →</div>
+    <sc-for list="{{cols}}" as="c" hint-placeholder-count="11">
+      <button type="button" class="hd" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="background: {{c.bg}}; color: {{c.fg}}; border-bottom: 1px solid #1B1A17">{{c.label}}</button>
+    </sc-for>
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="10">
+      <button type="button" class="rw" onClick="{{r.pick}}" aria-pressed="{{r.pressed}}" style="background: {{r.bg}}; color: #1B1A17; border-bottom: 1px solid #CFC8B8; display: flex; flex-direction: column; justify-content: center; gap: 1px">
+        <span class="mono" style="font-size: 11px; color: #57534B">{{r.id}}</span>
+        <span style="font-size: 15px; font-weight: 600">{{r.name}}</span>
+      </button>
+      <sc-for list="{{r.cells}}" as="cl" hint-placeholder-count="11">
+        <div class="cell" style="display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #CFC8B8; background: {{cl.bg}}">
+          <span style="width: {{cl.s}}px; height: {{cl.s}}px; box-sizing: border-box; background: {{cl.fill}}; border: {{cl.border}}; display: block"></span>
+        </div>
+      </sc-for>
+    </sc-for>
+    <div class="k" style="padding: 10px 12px; display: flex; align-items: center">Recurrence</div>
+    <sc-for list="{{cols}}" as="c2" hint-placeholder-count="11">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 0">
+        <span style="width: 22px; height: {{c2.bar}}px; background: #1B1A17; display: block; align-self: center"></span>
+        <span class="mono" style="font-size: 12px">{{c2.score}}</span>
+      </div>
+    </sc-for>
+  </section>
+
+  <section style="display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 56px; border-top: 1px solid #1B1A17; padding-top: 22px; flex: 1">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <span class="k">{{panel.kicker}}</span>
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 34px; line-height: 1.1">{{panel.title}}</h2>
+      <p style="margin: 0; font-size: 16px; line-height: 1.5">{{panel.body}}</p>
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px">
+        <sc-for list="{{panel.items}}" as="it" hint-placeholder-count="4">
+          <div style="display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 14px; font-size: 15px; line-height: 1.4; padding: 6px 0; border-bottom: 1px solid #CFC8B8">
+            <a href="{{it.file}}" style="font-weight: 600">{{it.who}}</a><span>{{it.how}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <span class="k">What the map says after Wave 1</span>
+      <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 9px; font-size: 15px; line-height: 1.45">
+        <li><strong>HOW DO WE KNOW?</strong> shows up in every family. It is the strongest candidate for a universal gesture — and the one most likely to become a label wall if it is done lazily.</li>
+        <li><strong>WHAT IF?</strong> recurs in eight families but means three different things: a branch of history (P2, P5), a lab state (P3, P6, P8), a governance change (P9). The next tournament should test whether one gesture can carry all three.</li>
+        <li><strong>FOLLOW</strong> was not on the brief’s list of primary verbs. It emerged on its own in Chemistry, Biology, Enterprise and Network — follow a molecule, the oxygen, a promise, the money. It is earning a place.</li>
+        <li><strong>SHARE</strong> only becomes real once there is an address. Browser A and the Fork both produce one; nothing else does yet.</li>
+        <li><strong>WHO AM I?</strong> splits in two: a seat you occupy (Seat, Fork, APUSH) and a warrant an agent holds (Agent). Probably the same primitive.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const selC = s.c === undefined ? 7 : s.c;
+    const selR = s.r === undefined ? null : s.r;
+    const V = ['ENTER', 'WHAT IF?', 'WHY?', 'WHEN?', 'WHO AM I?', 'SCALE', 'VIEW', 'HOW DO WE KNOW?', 'COMPARE', 'FOLLOW', 'SHARE · BUILD ON'];
+    const VL = ['ENTER', 'WHAT IF?', 'WHY?', 'WHEN?', 'WHO?', 'SCALE', 'VIEW', 'HOW?', 'COMPARE', 'FOLLOW', 'SHARE'];
+    const F = [
+      ['P1', 'Browser', 'BrowserSentence.dc.html', [2,1,0,2,2,2,1,1,0,0,2], 'Search opens a system, not a page. Four challengers each make a different dimension the front door.'],
+      ['P2', 'Native APUSH', 'ApushRoom.dc.html', [2,2,1,1,2,0,1,2,1,0,0], 'Philadelphia, 1787, as a place, a record and a mechanism. Recorded history versus a stamped branch.'],
+      ['P3', 'Native Chemistry', 'Chemistry.dc.html', [0,1,1,1,0,1,2,2,0,2,0], 'One chemical state, five drawings. Push the plunger once; everything answers.'],
+      ['P4', 'Native Biology', 'Biology.dc.html', [0,0,1,0,0,2,1,1,0,2,0], 'A scale spine from runner to ATP synthase, with one lever — pace — reaching every level.'],
+      ['P5', 'Reality / Live', 'Fork.dc.html', [2,2,0,2,1,0,0,2,2,0,2], 'Enter a recorded moment, act, and cut a branch that declares its assumptions and compares with Reality.'],
+      ['P6', 'Lens / Lab', 'Lens.dc.html', [0,2,2,1,0,2,2,2,1,0,0], 'WHY? as lifting transparencies, each cause in its own drawing. A World can answer exactly; reality only by model.'],
+      ['P7', 'Foundry', 'Foundry.dc.html', [0,1,0,0,1,0,0,2,0,0,2], 'Intent and documents compile into a system; missing, conflicting and unbounded reality is marked, not invented.'],
+      ['P8', 'Enterprise', 'Enterprise.dc.html', [1,2,2,2,1,1,2,1,2,1,0], 'The organization as its promises. Mirror, Lens, Lab and Command are verbs over one drawing.'],
+      ['P9', 'Agent', 'Agent.dc.html', [0,1,2,1,2,0,0,2,0,0,0], 'A seat with a warrant. Intelligence occupies it; refusals come from the warrant, not the model’s mood.'],
+      ['P10', 'Network', 'Network.dc.html', [0,1,1,2,1,1,0,1,0,2,0], 'Institutions as ledger lanes; one media contract visibly changes what every team can afford.']
+    ];
+    const NOTES = {
+      '0,0': 'Search completes a sentence that is the address; Enter arrives there.', '0,3': 'The River: a system’s life drawn as time, with doors.', '0,4': 'The Seat: results are people you could be, with knowledge horizons.', '0,5': 'The Focus: a microscope turret of scales.', '0,10': 'The address itself is the thing you share.',
+      '1,0': 'Walk into the Assembly Room on 16 July 1787.', '1,1': 'Vote no as Caleb Strong; 5–5 fails; the branch is stamped.', '1,4': 'You sit in Caleb Strong’s seat; actor models are not the people.', '1,7': 'Madison’s notes have provenance too: written, revised, published 1840.',
+      '2,6': 'Apparatus, molecules, symbols, graph, explanation — one state.', '2,7': 'A value’s texture changes as the system settles: modeled → computed.', '2,9': 'Follow NO₂ or N₂O₄ through all five drawings at once.',
+      '3,5': 'Seven stops from organism to molecular machine, never losing where you are.', '3,9': 'Follow the oxygen from breath to Complex IV.',
+      '4,0': 'A door at 19 June 2017, 11:40 a.m.', '4,1': 'Keep No. 1: the line splits; the branch is signed and dated.', '4,3': 'Reality keeps moving; the branch has a model horizon.', '4,7': 'Hindsight is sealed until you choose.', '4,8': 'Season by season: a recorded tick against a modeled range.', '4,10': 'The branch has an address with its assumptions inside it.',
+      '5,1': 'Keep the backup big; every sheet above re-draws as a branch.', '5,2': 'Pull “because…” to lift one scale and reveal the next.', '5,5': 'Scoreline → possession → lineup → cap sheet → trade → scouting → budget.', '5,6': 'Each cause in its own native drawing.', '5,7': 'Flip to “real game”: recorded links turn modeled or unknown.',
+      '6,7': 'Every charter line says whether it came from a source, Foundry, the author — or nobody.', '6,10': 'Conceptual compile errors before anyone can build on the system.',
+      '7,1': 'Fork two responses to the fire and compare kept promises.', '7,2': 'Trace a frayed promise back to a 2023 single-sourcing decision.', '7,3': 'Promises run across eight weeks of time.', '7,6': 'Mirror, Lens, Lab, Command over the same drawing.', '7,8': 'Two lab branches side by side.',
+      '8,2': '“Why did it act?” shows what it saw and the rule that allowed it.', '8,4': 'The seat persists; the occupant — Claude, GPT, a person — changes.', '8,7': 'Every act is a receipt, refusals included.',
+      '9,3': 'Dated rows: CBA, media deal, trades.', '9,9': 'Follow the money, the people, the rights, the information.'
+    };
+    const colScore = V.map((_, j) => F.reduce((a, f) => a + f[3][j], 0));
+    const cols = VL.map((l, j) => ({
+      label: l, pressed: selC === j && selR === null ? 'true' : 'false',
+      bg: selC === j && selR === null ? '#1B1A17' : 'transparent', fg: selC === j && selR === null ? '#F3F0E8' : '#1B1A17',
+      pick: () => this.setState({ c: j, r: null }),
+      score: String(colScore[j]), bar: Math.round(colScore[j] / 20 * 60)
+    }));
+    const rows = F.map((f, i) => ({
+      id: f[0], name: f[1], pressed: selR === i ? 'true' : 'false', bg: selR === i ? '#E7E1D3' : 'transparent',
+      pick: () => this.setState({ r: i }),
+      cells: f[3].map((v, j) => ({
+        s: v === 2 ? 18 : v === 1 ? 16 : 5,
+        fill: v === 2 ? '#1B1A17' : v === 1 ? 'transparent' : '#8F897C',
+        border: v === 1 ? '2px solid #1B1A17' : '0',
+        bg: (selR === i) || (selR === null && selC === j) ? '#E7E1D3' : 'transparent'
+      }))
+    }));
+    let panel;
+    if (selR !== null) {
+      const f = F[selR];
+      const items = f[3].map((v, j) => ({ v: v, j: j })).filter((x) => x.v === 2).map((x) => ({ who: V[x.j], how: NOTES[selR + ',' + x.j] || '', file: f[2] }));
+      panel = { kicker: f[0] + ' · family', title: f[1], body: f[4], items: items };
+    } else {
+      const items = F.map((f, i) => ({ f: f, i: i })).filter((x) => x.f[3][selC] === 2).map((x) => ({ who: x.f[0] + ' ' + x.f[1], how: NOTES[x.i + ',' + selC] || '', file: x.f[2] }));
+      panel = { kicker: 'Shared question · recurs in ' + F.filter((f) => f[3][selC] > 0).length + ' of 10 families', title: V[selC], body: 'Where it is tested hardest on this canvas:', items: items };
+    }
+    return { cols: cols, rows: rows, panel: panel };
+  }
+}
+</script>
+</body>
+</html>

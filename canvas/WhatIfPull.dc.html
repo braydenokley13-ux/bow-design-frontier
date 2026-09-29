@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WHAT IF? — The Pull</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAF9F6;color:#1B1B1B;font-family:'Manrope',sans-serif}
+a{color:#0F5D75}a:hover{color:#073B4C}
+.mono{font-family:'IBM Plex Mono',monospace}
+.btn{font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;min-height:40px;padding:0 14px;border-radius:0;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.btn:focus-visible,.chip:focus-visible,.opt:focus-visible,.nm:focus-visible{outline:3px solid #0F5D75;outline-offset:2px}
+.btn:disabled{cursor:not-allowed}
+.chip{font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;line-height:1.2;min-height:40px;padding:0 8px;border-radius:0;cursor:pointer;border:1.5px solid #1B1B1B;background:#FAF9F6;color:#1B1B1B;transition:background .2s,color .2s}
+.chip:hover{background:#ECE9E0}
+.opt{font-family:'Manrope',sans-serif;font-weight:600;font-size:12.5px;line-height:1.25;min-height:52px;padding:4px 8px;border-radius:0;cursor:pointer;text-align:left;transition:background .2s,color .2s}
+.nm{font-family:'Manrope',sans-serif;font-weight:600;font-size:14px;min-height:40px;box-sizing:border-box;padding:0 10px;border:2px solid #0F5D75;background:#FFFFFF;color:#1B1B1B;border-radius:0;width:100%}
+.band-tax{background:repeating-linear-gradient(90deg,#B7791F 0 9px,#E6CB8F 9px 18px)}
+.band-first{background:linear-gradient(#B4461D,#B4461D) 0 0/100% 4px no-repeat,linear-gradient(#B4461D,#B4461D) 0 100%/100% 4px no-repeat,#F0C8B4}
+.band-second{background:conic-gradient(#8E1B1B 25%,#D9A3A3 0 50%,#8E1B1B 0 75%,#D9A3A3 0) 0 0/16px 16px}
+.pull{-webkit-appearance:none;appearance:none;background:transparent;margin:0;padding:0;border:0;writing-mode:vertical-lr;direction:rtl;cursor:grab}
+.pull:active{cursor:grabbing}
+.pull:focus-visible{outline:3px solid #0F5D75;outline-offset:3px}
+.pull::-webkit-slider-runnable-track{background:transparent;border:0}
+.pull::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:120px;height:30px;border-radius:2px;border:2px solid #073B4C;background:repeating-linear-gradient(90deg,#0F5D75 0 5px,#2A7F99 5px 6px);box-shadow:0 3px 0 #073B4C}
+.pull::-moz-range-track{background:transparent;border:0}
+.pull::-moz-range-thumb{width:116px;height:26px;border-radius:2px;border:2px solid #073B4C;background:#0F5D75}
+.pull:disabled{cursor:not-allowed}
+.pull:disabled::-webkit-slider-thumb{background:#7C9AA5;border-color:#4F6C77;box-shadow:none}
+.fade{transition:opacity .9s ease}
+.rw{transition:background .25s ease,border-color .25s ease,opacity .25s ease}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #FAF9F6; color: #1B1B1B; font-family: 'Manrope', sans-serif">
+
+  <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 87px; box-sizing: border-box; padding: 12px 40px 0; display: grid; grid-template-columns: 500px minmax(0, 1fr) auto; align-items: start; gap: 24px; border-bottom: 3px solid #1B1B1B">
+    <div style="display: flex; flex-direction: column; gap: 3px; white-space: nowrap">
+      <span class="mono" style="font-size: 11px; letter-spacing: .12em; color: #5E594E">BOW REALITY · WHAT IF? · THE PULL</span>
+      <span style="font-size: 30px; font-weight: 800; line-height: 1.05; letter-spacing: -.01em"><span style="display: inline-block; width: 13px; height: 13px; background: #007A33; vertical-align: 3px; margin-right: 10px"></span>Boston Celtics · 2026–27 payroll</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 3px; padding-top: 2px; min-width: 0">
+      <span class="mono" style="font-size: 11px; letter-spacing: .12em; color: #5E594E">ADDRESS · as of 29 Sep 2026 (2026–27 camp, verify)</span>
+      <span class="mono" style="font-size: 11px; line-height: 14px; padding: 4px 9px; border: 1.5px solid {{addrEdge}}; background: #FFFFFF; word-break: break-all; color: {{addrInk}}; min-height: 22px">{{address}}</span>
+    </div>
+    <div style="display: flex; gap: 10px; padding-top: 10px">
+      <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="border: 2px solid #1B1B1B; background: {{howBg}}; color: {{howFg}}; white-space: nowrap">How do we know?</button>
+      <button type="button" class="btn" onClick="{{reset}}" style="border: 2px solid #1B1B1B; background: transparent; color: #1B1B1B; white-space: nowrap">Back to Reality</button>
+    </div>
+  </header>
+
+  <!-- strata: tinted layers between the lines -->
+  <div style="position: absolute; left: 100px; top: 90px; width: 1300px; height: {{tintA}}px; background: #F3E2E0"></div>
+  <div style="position: absolute; left: 100px; top: {{tintB0}}px; width: 1300px; height: {{tintB}}px; background: #F5E6DC"></div>
+  <div style="position: absolute; left: 100px; top: {{tintC0}}px; width: 1300px; height: {{tintC}}px; background: #F5ECD6"></div>
+
+  <!-- the three lines, drawn as thick strata -->
+  <div class="band-second" style="position: absolute; left: 100px; top: {{bSecond}}px; width: 1300px; height: 16px"></div>
+  <div class="band-first" style="position: absolute; left: 100px; top: {{bFirst}}px; width: 1300px; height: 16px"></div>
+  <div class="band-tax" style="position: absolute; left: 100px; top: {{bTax}}px; width: 1300px; height: 16px"></div>
+  <span class="mono" style="position: absolute; left: 610px; top: {{pSecond}}px; height: 22px; line-height: 18px; box-sizing: border-box; padding: 0 8px; border: 2px solid #8E1B1B; background: #FAF9F6; font-size: 11px; font-weight: 600; letter-spacing: .04em; white-space: nowrap">SECOND APRON · $221.686M</span>
+  <span class="mono" style="position: absolute; left: 610px; top: {{pFirst}}px; height: 22px; line-height: 18px; box-sizing: border-box; padding: 0 8px; border: 2px solid #B4461D; background: #FAF9F6; font-size: 11px; font-weight: 600; letter-spacing: .04em; white-space: nowrap">FIRST APRON · $209.015M</span>
+  <span class="mono" style="position: absolute; left: 610px; top: {{pTax}}px; height: 22px; line-height: 18px; box-sizing: border-box; padding: 0 8px; border: 2px solid #B7791F; background: #FAF9F6; font-size: 11px; font-weight: 600; letter-spacing: .04em; white-space: nowrap">TAX LINE · $200.428M</span>
+
+  <!-- axis -->
+  <span class="mono" style="position: absolute; left: 40px; top: 96px; width: 62px; text-align: right; font-size: 11px; letter-spacing: .06em; color: #5E594E">PAYROLL</span>
+  <div style="position: absolute; left: 107px; top: 124px; width: 0; height: 646px; border-left: 1.5px solid #1B1B1B"></div>
+  <sc-for list="{{ticks}}" as="t" hint-placeholder-count="12">
+    <div style="position: absolute; left: 100px; top: {{t.y}}px; width: 8px; height: 0; border-top: 1.5px solid #1B1B1B"></div>
+    <span class="mono" style="position: absolute; left: 34px; top: {{t.ly}}px; width: 62px; text-align: right; font-size: 11px; color: #1B1B1B; opacity: {{t.op}}">{{t.label}}</span>
+  </sc-for>
+
+  <!-- left tiles -->
+  <div style="position: absolute; left: 112px; top: 130px; width: 164px; height: 136px; box-sizing: border-box; border: 2px dashed #1B1B1B; padding: 8px 10px; display: flex; flex-direction: column; gap: 5px">
+    <span class="mono" style="font-size: 11px; letter-spacing: .08em; font-weight: 600">WINS · UNKNOWN</span>
+    <span style="font-size: 12.5px; line-height: 1.35">{{winsText}}</span>
+    <span class="mono" style="font-size: 11px; color: #5E594E; margin-top: auto">no model has run</span>
+  </div>
+  <div style="position: absolute; left: 112px; top: 294px; width: 164px; height: 122px; box-sizing: border-box; padding: 4px 4px; display: flex; flex-direction: column; gap: 3px">
+    <span class="mono" style="font-size: 11px; letter-spacing: .08em; font-weight: 600; color: {{readInk}}">{{readHead}}</span>
+    <sc-if value="{{isRest}}" hint-placeholder-val="{{true}}">
+      <span style="font-size: 13px; line-height: 1.4">Grab the handle on the empty column and drag. Or focus it and press ↑ ↓. Range $180M–$235M.</span>
+    </sc-if>
+    <sc-if value="{{isNotRest}}" hint-placeholder-val="{{false}}">
+      <span style="font-size: 32px; font-weight: 800; line-height: 1.05; letter-spacing: -.02em; color: #0F5D75">{{readBig}}</span>
+      <span style="font-size: 14px; font-weight: 700; color: #0F5D75">{{readDelta}}</span>
+      <span style="font-size: 12.5px; line-height: 1.3; color: #3A362E">{{readStratum}}</span>
+    </sc-if>
+  </div>
+
+  <!-- Reality column: observed, solid ink -->
+  <div style="position: absolute; left: 112px; top: 448px; width: 164px; display: flex; flex-direction: column; gap: 2px">
+    <span class="mono" style="font-size: 11px; letter-spacing: .08em; font-weight: 600">REALITY · NOT MOVED</span>
+    <span style="font-size: 21px; font-weight: 800; line-height: 1.1">≈ $203.6M</span>
+  </div>
+  <div style="position: absolute; left: 130px; top: {{yReal}}px; width: 100px; height: {{realH}}px; background: #1B1B1B"></div>
+
+  <!-- ghost / branch column -->
+  <div class="fade" style="position: absolute; left: 290px; top: {{yGhost}}px; width: 100px; height: {{ghostH}}px; box-sizing: border-box; border: 2px solid #0F5D75; background: rgba(250, 249, 246, 0.72); opacity: {{ghostOp}}; box-shadow: {{ghostShadow}}"></div>
+  <div class="fade" style="position: absolute; left: 292px; top: {{dTop}}px; width: 96px; height: {{dH}}px; background: rgba(15, 93, 117, 0.30); opacity: {{ghostOp}}"></div>
+  <div class="fade" style="position: absolute; left: 290px; top: {{yReal}}px; width: 100px; height: 0; border-top: 2px solid #1B1B1B; opacity: {{ghostOp}}"></div>
+  <span class="mono fade" style="position: absolute; left: 292px; top: {{dLabTop}}px; width: 96px; text-align: center; font-size: 12px; font-weight: 600; color: #073B4C; opacity: {{dLabOp}}">{{dLab}}</span>
+  <span class="mono fade" style="position: absolute; left: 292px; top: {{refLy}}px; font-size: 11px; color: #1B1B1B; opacity: {{ghostOp}}; background: rgba(250, 249, 246, 0.85); padding: 0 3px">Reality level</span>
+  <span class="mono fade" style="position: absolute; left: 402px; top: {{yGhostLabel}}px; height: 22px; line-height: 20px; box-sizing: border-box; padding: 0 7px; border: 1.5px solid #0F5D75; background: #FFFFFF; font-size: 12px; font-weight: 600; color: #0F5D75; opacity: {{ghostOp}}; white-space: nowrap">{{valPlate}}</span>
+
+  <!-- axis break -->
+  <svg width="290" height="12" viewBox="0 0 290 12" style="position: absolute; left: 116px; top: 758px" aria-hidden="true">
+    <polygon points="0,4 30,10 60,3 90,10 120,3 150,10 180,3 210,10 240,3 270,10 290,4 290,12 0,12" fill="#FAF9F6" stroke="#1B1B1B" stroke-width="1.5"></polygon>
+  </svg>
+  <span class="mono" style="position: absolute; left: 112px; top: 776px; font-size: 11px; color: #5E594E; white-space: nowrap">axis starts at $180M · columns run down to $0</span>
+
+  <!-- the handle: a range input, plus its label -->
+  <input class="pull" type="range" min="1800" max="2350" step="1" value="{{ptVal}}" onChange="{{onRange}}" onPointerUp="{{onRelease}}" onKeyUp="{{onRelease}}" onKeyDown="{{onKey}}" disabled="{{handleOff}}" aria-label="Pull payroll" aria-orientation="vertical" aria-valuetext="{{ariaText}}" style="position: absolute; left: 280px; top: 109px; width: 120px; height: 676px">
+  <span class="mono" style="position: absolute; left: 280px; top: {{yHandleTop}}px; width: 120px; height: 30px; line-height: 30px; text-align: center; font-size: 11px; font-weight: 600; letter-spacing: .06em; color: #FFFFFF; pointer-events: none; white-space: nowrap">{{handleLabel}}</span>
+  <span class="mono fade" style="position: absolute; left: 292px; top: {{tagTop}}px; height: 22px; line-height: 18px; box-sizing: border-box; padding: 0 7px; border: 2px solid #0F5D75; box-shadow: inset 0 0 0 2px #FAF9F6, inset 0 0 0 3px #0F5D75; background: #FAF9F6; font-size: 11px; font-weight: 600; letter-spacing: .06em; color: #0F5D75; opacity: {{tagOp}}; white-space: nowrap; pointer-events: none">YOUR BRANCH · KEPT</span>
+
+  <!-- rules region -->
+  <span class="mono" style="position: absolute; left: 610px; top: 96px; font-size: 11px; letter-spacing: .04em; color: #3A362E; white-space: nowrap"><strong style="color: #1B1B1B">RULES</strong> · authored by the 2023 CBA · simplified · verify · <strong style="color: #1B1B1B">■ R</strong> = Reality · <strong style="color: #0F5D75">■ P</strong> = your pull</span>
+  <sc-for list="{{rules}}" as="r" hint-placeholder-count="9">
+    <div class="rw" style="position: absolute; left: 610px; top: {{r.top}}px; width: 790px; height: 34px; box-sizing: border-box; border: 1.5px solid {{r.border}}; border-left: 6px solid {{r.bar}}; background: {{r.bg}}; display: flex; align-items: center; gap: 8px; padding: 0 10px 0 8px">
+      <span style="flex: none; width: 13px; height: 13px; box-sizing: border-box; border: 1.5px solid #1B1B1B; background: {{r.rBg}}"></span>
+      <span style="flex: none; width: 13px; height: 13px; box-sizing: border-box; border: 1.5px solid #0F5D75; background: {{r.pBg}}"></span>
+      <span style="flex: 1; min-width: 0; font-size: 12.5px; line-height: 15px; font-weight: {{r.fw}}; color: {{r.fg}}">{{r.text}}</span>
+      <span class="mono" style="flex: none; width: 76px; font-size: 11px; font-weight: 600; color: #0F5D75; text-align: right">{{r.tag}}</span>
+      <span class="mono" style="flex: none; width: {{r.annW}}px; font-size: 11px; line-height: 13px; color: #0F5D75; text-align: right">{{r.ann}}</span>
+    </div>
+  </sc-for>
+
+  <!-- tax bill panel -->
+  <section aria-label="Luxury tax bill" style="position: absolute; left: 610px; top: 590px; width: 350px; height: 252px">
+    <span class="mono" style="position: absolute; left: 0; top: 0; font-size: 11px; letter-spacing: .04em; font-weight: 600; white-space: nowrap">LUXURY TAX · COMPUTED · simplified authored brackets</span>
+    <div style="position: absolute; left: 0; top: 20px; width: 168px; display: flex; flex-direction: column">
+      <span class="mono" style="font-size: 11px; color: #3A362E">REALITY BILL</span>
+      <span style="font-size: 30px; font-weight: 800; line-height: 1.05; letter-spacing: -.02em">{{billReal}}</span>
+    </div>
+    <div style="position: absolute; left: 182px; top: 20px; width: 168px; display: flex; flex-direction: column">
+      <span class="mono" style="font-size: 11px; color: #0F5D75">PULL BILL · <span>{{billDelta}}</span></span>
+      <span style="font-size: 30px; font-weight: 800; line-height: 1.05; letter-spacing: -.02em; color: #0F5D75">{{billPull}}</span>
+    </div>
+    <div class="mono" style="position: absolute; left: 0; top: 66px; width: 350px; height: 15px; font-size: 11px; color: #3A362E">
+      <span style="position: absolute; left: 0">$ OVER THE LINE · RATE PER $1</span>
+      <span style="position: absolute; left: 234px; width: 52px; text-align: right">R $M</span>
+      <span style="position: absolute; left: 294px; width: 56px; text-align: right; color: #0F5D75">P $M</span>
+    </div>
+    <sc-for list="{{steps}}" as="st" hint-placeholder-count="7">
+      <div style="position: absolute; left: 0; top: {{st.y}}px; width: 350px; height: 20px">
+        <span class="mono" style="position: absolute; left: 0; top: 2px; font-size: 11px; white-space: nowrap; color: #1B1B1B">{{st.label}}</span>
+        <span style="position: absolute; left: 104px; top: 3px; width: 124px; height: 14px; box-sizing: border-box; border: 1.5px solid #8C887C"></span>
+        <span style="position: absolute; left: 106px; top: 5px; width: {{st.rw}}px; height: 4px; background: #8C8A82"></span>
+        <span style="position: absolute; left: 106px; top: 10px; width: {{st.pw}}px; height: 4px; background: #5B9CB0"></span>
+        <span class="mono" style="position: absolute; left: 234px; top: 2px; width: 52px; text-align: right; font-size: 11px">{{st.r}}</span>
+        <span class="mono" style="position: absolute; left: 294px; top: 2px; width: 56px; text-align: right; font-size: 11px; color: #0F5D75; font-weight: 600">{{st.p}}</span>
+      </div>
+    </sc-for>
+    <span style="position: absolute; left: 0; top: 226px; width: 350px; font-size: 11px; line-height: 14px; color: #3A362E">Simplified; real brackets are indexed and repeat-taxpayer rates are higher — verify.</span>
+  </section>
+
+  <!-- right panel -->
+  <section aria-label="Pull and branch" style="position: absolute; left: 990px; top: 590px; width: 410px; height: 252px">
+    <sc-if value="{{isRest}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; flex-direction: column; gap: 9px">
+        <span class="mono" style="font-size: 11px; letter-spacing: .06em; font-weight: 600">NOTHING PULLED YET</span>
+        <span style="font-size: 14px; line-height: 1.45">Reality’s payroll is the black column. The empty column beside it is a ghost you can move. Pull it and the rules on the right switch on and off as it crosses each line. Nothing is forked until you keep a pull.</span>
+        <button type="button" class="btn" disabled="{{true}}" style="align-self: flex-start; margin-top: 4px; border: 2px dashed #5E594E; background: transparent; color: #5E594E; min-height: 46px; padding: 0 18px">Keep this branch</button>
+        <span class="mono" style="font-size: 11px; color: #3A362E">Disabled: a branch needs a difference from Reality to record. Pull first.</span>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isPull}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span class="mono" style="font-size: 11px; letter-spacing: .06em; font-weight: 600; color: #0F5D75">THE PULL VS REALITY · COMPUTED</span>
+        <span style="font-size: 14px; line-height: 1.4"><strong>Payroll</strong> {{diffPay}}</span>
+        <span style="font-size: 14px; line-height: 1.4"><strong>Tax bill</strong> {{diffTax}}</span>
+        <span style="font-size: 14px; line-height: 1.4"><strong>Rules</strong> {{diffRules}}</span>
+        <span style="font-size: 13px; line-height: 1.4; color: #3A362E">{{pullState}}</span>
+        <div style="display: flex; gap: 10px; margin-top: 4px">
+          <button type="button" class="btn" onClick="{{keep}}" style="border: 2px solid #0F5D75; background: #0F5D75; color: #FFFFFF; min-height: 46px; padding: 0 18px">Keep this branch</button>
+          <button type="button" class="btn" onClick="{{letGo}}" style="border: 2px solid #1B1B1B; background: transparent; color: #1B1B1B; min-height: 46px; padding: 0 16px">Let go</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isKept}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-direction: column; gap: 7px">
+        <span class="mono" style="font-size: 11px; line-height: 1.35; padding: 4px 8px; border: 2px solid #0F5D75; box-shadow: inset 0 0 0 2px #FAF9F6, inset 0 0 0 3px #0F5D75; color: #0F5D75; font-weight: 600; letter-spacing: .03em">YOUR BRANCH · diverged at 2026–27 payroll, 29 Sep 2026 · by you · not Reality</span>
+        <label for="pullName" class="mono" style="font-size: 11px; color: #3A362E; margin-top: 1px">NAME (editable)</label>
+        <input id="pullName" class="nm" type="text" value="{{nameVal}}" onChange="{{onName}}" aria-label="Branch name" style="margin-top: -5px">
+        <span style="font-size: 13.5px; font-weight: 700">Which move gets you there? <span class="mono" style="font-size: 11px; font-weight: 500; color: #B4461D">REQUIRED</span></span>
+        <div role="group" aria-label="Which move gets you there?" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+          <sc-for list="{{opts}}" as="o" hint-placeholder-count="3">
+            <button type="button" class="opt" onClick="{{o.pick}}" aria-pressed="{{o.pressed}}" style="border: {{o.border}}; background: {{o.bg}}; color: {{o.fg}}">{{o.label}}</button>
+          </sc-for>
+        </div>
+        <span style="font-size: 12px; line-height: 1.35; color: {{checkInk}}">{{moveCheck}}</span>
+      </div>
+    </sc-if>
+  </section>
+
+  <!-- left bottom row: snaps or kept actions -->
+  <div style="position: absolute; left: 112px; top: 796px; width: 486px; height: 42px; display: flex; gap: 6px">
+    <sc-if value="{{notKept}}" hint-placeholder-val="{{true}}">
+      <sc-for list="{{snaps}}" as="sn" hint-placeholder-count="4">
+        <button type="button" class="chip" onClick="{{sn.go}}" style="flex: 1; min-width: 0">{{sn.label}}</button>
+      </sc-for>
+    </sc-if>
+    <sc-if value="{{isKept}}" hint-placeholder-val="{{false}}">
+      <button type="button" class="btn" onClick="{{pullAgain}}" style="border: 2px solid #0F5D75; background: transparent; color: #0F5D75; padding: 0 16px">Pull again</button>
+      <button type="button" class="btn" onClick="{{letGo}}" style="border: 2px solid #1B1B1B; background: transparent; color: #1B1B1B; padding: 0 16px">Discard branch</button>
+    </sc-if>
+  </div>
+
+  <!-- how do we know -->
+  <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 860px; top: 92px; width: 540px; box-sizing: border-box; padding: 12px 16px; background: #FFFFFF; border: 2px solid #1B1B1B; display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 9px 12px; align-items: start; font-size: 12.5px; line-height: 1.4; z-index: 5">
+      <span class="mono" style="grid-column: 1 / 3; font-size: 11px; letter-spacing: .08em; font-weight: 600">HOW DO WE KNOW?</span>
+      <span style="width: 22px; height: 14px; margin-top: 2px; background: #1B1B1B"></span><span><strong>Solid ink · OBSERVED.</strong> Reality’s payroll (≈ $203.6M) and the four league lines. BOW Economics Live fixture, as of 29 Sep 2026 — verify.</span>
+      <span style="width: 22px; height: 14px; margin-top: 2px; box-sizing: border-box; border: 2px solid #1B1B1B"></span><span><strong>Outline · AUTHORED.</strong> Each rule as summarised here and the tax brackets. Someone chose them; no model ran. Your pull is authored too.</span>
+      <span style="width: 22px; height: 14px; margin-top: 2px; background: #8C8A82"></span><span><strong>Toned · COMPUTED.</strong> Tax bills and payroll after a move: exact arithmetic on the authored numbers above.</span>
+      <span style="width: 22px; height: 14px; margin-top: 2px; box-sizing: border-box; border: 2px dashed #1B1B1B"></span><span><strong>Dashed · UNKNOWN.</strong> Wins. Nothing here can compute them, so nothing is drawn.</span>
+      <span style="width: 22px; height: 14px; margin-top: 2px; box-sizing: border-box; border: 2px solid #0F5D75; box-shadow: inset 0 0 0 2px #FFFFFF, inset 0 0 0 3px #0F5D75"></span><span><strong>Teal, double-ruled · your branch.</strong> Recorded when you keep it, in your ink, stamped with where it diverged. Never Reality.</span>
+    </div>
+  </sc-if>
+
+  <!-- bottom strip -->
+  <span class="mono" style="position: absolute; left: 40px; top: 849px; font-size: 11px; color: #3A362E; white-space: nowrap">WHAT IF?, in this model, is one number pulled off Reality’s record: every rule that moves with it is computed, every result that doesn’t is left unknown.</span>
+  <span style="position: absolute; left: 40px; top: 866px; width: 690px; font-size: 11px; line-height: 14px; color: #3A362E">COMMERCIAL LENS · Hypothesis: the rule-aware pull is the professional tool (capologists, media, agents) — licence it; the same pull for fans is free and brings them in.</span>
+  <span class="mono" style="position: absolute; right: 40px; top: 866px; width: 620px; text-align: right; font-size: 11px; line-height: 14px; color: #3A362E">PROTOTYPE · DESIGN PROPOSAL · payroll and lines: BOW Economics Live fixture, as of 29 Sep 2026, verify · CBA rules simplified · tax brackets authored</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      const s = this.state || {};
+      if (s.returning) {
+        const pt = typeof s.pt === 'number' ? s.pt : 2036;
+        const diff = 2036 - pt;
+        if (Math.abs(diff) <= 2) this.setState({ pt: 2036, returning: false });
+        else this.setState({ pt: pt + Math.sign(diff) * Math.ceil(Math.abs(diff) * 0.16) });
+      }
+    }, 30);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  renderVals() {
+    const s = this.state || {};
+    const REAL = 2036;
+    const pt = typeof s.pt === 'number' ? s.pt : REAL;
+    const kept = !!s.kept, released = !!s.released, returning = !!s.returning;
+    const how = !!s.how;
+    const decl = s.decl || null;
+    const CAP = 164.961, TAX = 200.428, FIRST = 209.015, SECOND = 221.686, WHITE = 30.3;
+    const p = pt / 10, pr = REAL / 10, d = (pt - REAL) / 10;
+    const pulled = pt !== REAL;
+    const phase = kept ? 'kept' : (pulled ? 'pull' : 'rest');
+
+    const yOf = (v) => 770 - (v - 180) * (646 / 55);
+    const m1 = (x) => '$' + x.toFixed(1) + 'M';
+    const m2 = (x) => '$' + x.toFixed(2) + 'M';
+    const sg1 = (x) => (x < 0 ? '−' : '+') + '$' + Math.abs(x).toFixed(1) + 'M';
+    const sg2 = (x) => (x < 0 ? '−' : '+') + '$' + Math.abs(x).toFixed(2) + 'M';
+    const stratum = (v) => v > SECOND ? 'Over the second apron' : v > FIRST ? 'Over the first apron' : v > TAX ? 'Over the tax line' : 'Under the tax line';
+
+    // ---- luxury tax: COMPUTED from AUTHORED simplified brackets ----
+    const RATES = [1.5, 1.75, 2.5, 3.25, 3.75, 4.25, 4.75];
+    const tax = (v) => {
+      const over = Math.max(0, v - TAX);
+      const parts = RATES.map((r, i) => Math.min(5, Math.max(0, over - 5 * i)));
+      const bill = parts.reduce((a, x, i) => a + x * RATES[i], 0);
+      return { over, parts, bill };
+    };
+    const tR = tax(pr), tP = tax(p);
+
+    // ---- rules (AUTHORED, simplified) and which apply ----
+    const RULES = [
+      { id: 'match', g: 'base', text: 'Above the cap: incoming salary up to 125% of outgoing + $0.1M [verify]', short: '125% matching', on: (v) => v > CAP && v <= FIRST },
+      { id: 'tax', g: 'tax', text: 'Pays luxury tax on every dollar over the line', short: 'luxury tax', on: (v) => v > TAX },
+      { id: 'mle', g: 'first', text: 'Cannot use the non-taxpayer mid-level exception', short: 'no non-taxpayer MLE', on: (v) => v > FIRST },
+      { id: 'match2', g: 'first', text: 'Salary matching tightens: up to 110% of outgoing + $0.1M [verify]', short: 'tighter salary matching', on: (v) => v > FIRST },
+      { id: 'sat', g: 'first', text: 'Cannot acquire a player in a sign-and-trade', short: 'no sign-and-trade', on: (v) => v > FIRST },
+      { id: 'agg', g: 'second', text: 'Cannot combine (aggregate) salaries in a trade', short: 'no aggregating', on: (v) => v > SECOND },
+      { id: 'take', g: 'second', text: 'Cannot take back more salary than it sends out', short: 'no taking back more', on: (v) => v > SECOND },
+      { id: 'cash', g: 'second', text: 'Cannot send cash in a trade', short: 'no cash out', on: (v) => v > SECOND },
+      { id: 'pick', g: 'second', text: 'First-round pick seven years out is frozen', short: 'far pick frozen', on: (v) => v > SECOND }
+    ];
+    const GCOL = { base: '#5E594E', tax: '#B7791F', first: '#B4461D', second: '#8E1B1B' };
+    const GTINT = { base: 'transparent', tax: '#F5ECD6', first: '#F5E6DC', second: '#F3E2E0' };
+
+    // ---- the declared move ----
+    const inc = WHITE + d;
+    const lim = p > SECOND ? WHITE : p > FIRST ? WHITE * 1.10 + 0.1 : WHITE * 1.25 + 0.1;
+    const okTrade = inc <= lim + 1e-9;
+    const limRule = p > SECOND ? 'the second-apron rule (cannot take back more salary than it sends)' : p > FIRST ? 'the first-apron matching rule (up to 110% of outgoing + $0.1M)' : 'the cap matching rule (up to 125% of outgoing + $0.1M)';
+    const stretchNeed = d < 0 ? -d * 1.5 : 0;
+    const okStretch = d < 0;
+    let moveOk = true, moveCheck = '', moveLabel = '';
+    if (!decl) {
+      moveCheck = 'Choose a move. Without one the branch has no address. “Leave unknown” counts: the branch then carries the gap.';
+    } else if (decl === 'trade') {
+      moveLabel = 'trade-white';
+      moveOk = okTrade;
+      moveCheck = okTrade
+        ? 'Move check · COMPUTED: Derrick White (≈$30.3M) out, ' + m1(inc) + ' in. At ' + m1(p) + ' the limit is ' + m1(lim) + '. Allowed.'
+        : 'Refused by ' + limRule + ': this trade brings back ' + m1(inc) + ' for $30.3M out; the limit at ' + m1(p) + ' is ' + m1(lim) + '. Pick another move, or leave it unknown.';
+    } else if (decl === 'stretch') {
+      moveLabel = 'waive-stretch';
+      moveOk = okStretch;
+      moveCheck = okStretch
+        ? 'COMPUTED, assuming 1 year left (authored): a stretch spreads salary over 3 years. It needs a bench contract of ' + m1(stretchNeed) + ', and ' + m1(stretchNeed / 3) + ' then lands on each of the next two payrolls. [which contract: verify]'
+        : 'Refused by the stretch rule: waiving and stretching only lowers this year’s cap hit. It cannot raise payroll.';
+    } else {
+      moveLabel = 'move-unknown';
+      moveCheck = 'How Boston gets there is left unknown. The branch carries the gap; no matching or stretch rule is applied to it.';
+    }
+
+    // ---- rows ----
+    const groupOrder = { second: 0, first: 1, tax: 2, base: 3 };
+    const yTax = yOf(TAX), yFirst = yOf(FIRST), ySecond = yOf(SECOND), yReal = yOf(pr);
+    const groups = {
+      second: { bottom: ySecond - 10, items: RULES.filter((r) => r.g === 'second') },
+      first: { bottom: yFirst - 10, items: RULES.filter((r) => r.g === 'first') },
+      tax: { bottom: yTax - 10, items: RULES.filter((r) => r.g === 'tax') }
+    };
+    const rules = [];
+    const gained = [], lifted = [];
+    const showMove = kept && decl === 'trade';
+    RULES.forEach((r) => {
+      const rOn = r.on(pr), pOn = r.on(p);
+      if (pOn && !rOn) gained.push(r.short);
+      if (rOn && !pOn) lifted.push(r.short);
+      let top;
+      if (r.g === 'base') top = 548;
+      else {
+        const gp = groups[r.g], n = gp.items.length, i = gp.items.indexOf(r);
+        top = gp.bottom - (n - i) * 36 + 2;
+      }
+      let ann = '';
+      if (showMove) {
+        if (r.id === 'match' && pOn) ann = 'Your move: ' + m1(inc) + ' in, limit ' + m1(lim) + ' · ' + (okTrade ? 'allowed' : 'refused');
+        if (r.id === 'match2' && pOn && p <= SECOND) ann = 'Your move: ' + m1(inc) + ' in, limit ' + m1(lim) + ' · ' + (okTrade ? 'allowed' : 'refused');
+        if (r.id === 'take' && pOn) ann = 'Your move: ' + m1(inc) + ' in for $30.3M out · ' + (okTrade ? 'allowed' : 'refused');
+        if (r.id === 'agg' && pOn) ann = 'Your move: one player out, nothing combined';
+      }
+      let tag = '';
+      if (pOn && !rOn) tag = '+ GAINED';
+      else if (rOn && !pOn) tag = '− LIFTED';
+      else if (r.id === 'match' && !pOn && p > FIRST) tag = 'SUPERSEDED';
+      rules.push({
+        top: top.toFixed(1), text: r.text, ann: ann, annW: ann ? 200 : 0, tag: tag,
+        bar: pOn ? GCOL[r.g] : '#CFCABC',
+        border: pOn ? '#1B1B1B' : '#B9B4A6',
+        bg: pOn ? '#FFFFFF' : 'transparent',
+        fg: pOn ? '#1B1B1B' : '#5E594E',
+        fw: pOn ? '600' : '500',
+        rBg: rOn ? '#1B1B1B' : 'transparent',
+        pBg: pOn ? '#0F5D75' : 'transparent'
+      });
+    });
+
+    // ---- tax ladder ----
+    const steps = RATES.map((rate, i) => ({
+      y: (84 + i * 20),
+      label: '$' + (5 * i) + '–' + (5 * i + 5) + 'M · $' + rate.toFixed(2),
+      rw: Math.round(tR.parts[i] / 5 * 120), pw: Math.round(tP.parts[i] / 5 * 120),
+      r: tR.parts[i] > 0 ? (tR.parts[i] * rate).toFixed(2) : '—',
+      p: tP.parts[i] > 0 ? (tP.parts[i] * rate).toFixed(2) : '—'
+    }));
+    const billDelta = sg2(tP.bill - tR.bill);
+
+    // ---- geometry of the ghost ----
+    const yG = yOf(p);
+    const ghostH = 770 - yG;
+    const dTop = Math.min(yG, yReal), dH = Math.abs(yG - yReal);
+    const ghostOp = pt === REAL ? 0 : (returning ? Math.min(1, Math.abs(pt - REAL) / 50) : (released && !kept ? 0.4 : 1));
+    const above = yG < 175;
+    const tagTop = above ? yG + 20 : yG - 48;
+    const refLy = (pt === REAL) ? yReal + 2 : (yG < yReal ? yReal + 2 : yReal - 16);
+
+    // ---- names, address ----
+    const defName = 'Boston ' + (d < 0 ? '−' : '+') + '$' + Math.abs(d).toFixed(1) + 'M · unnamed move';
+    const nameVal = (typeof s.name === 'string') ? s.name : defName;
+    const slug = (nameVal || 'unnamed').toLowerCase().replace(/[−–—]/g, '-').replace(/[^a-z0-9.+-]+/g, '-').replace(/-{2,}/g, '-').replace(/^-+|-+$/g, '');
+    let address = 'bow://celtics/2026-27/payroll · reality';
+    let addrEdge = '#1B1B1B', addrInk = '#1B1B1B';
+    if (phase === 'pull') { address = 'bow://celtics/2026-27/payroll · reality · ghost pull, not a branch'; }
+    if (phase === 'kept') {
+      addrEdge = '#0F5D75'; addrInk = '#0F5D75';
+      if (!decl) address = 'bow://celtics/2026-27/payroll/branch:you·' + slug + ' · move not declared, no address yet';
+      else if (!moveOk) address = 'bow://celtics/2026-27/payroll/branch:you·' + slug + ' · declared move refused, no address yet';
+      else address = 'bow://celtics/2026-27/payroll/branch:you·' + slug + '?payroll=' + p.toFixed(1) + '&move=' + moveLabel;
+    }
+
+    const optDefs = [['trade', 'Trade Derrick White'], ['stretch', 'Waive and stretch [a bench contract]'], ['unknown', 'Leave unknown']];
+    const opts = optDefs.map((o) => {
+      const on = decl === o[0];
+      return { label: o[1], pressed: on ? 'true' : 'false', bg: on ? '#0F5D75' : '#FFFFFF', fg: on ? '#FFFFFF' : '#1B1B1B',
+        border: on ? '2px solid #073B4C' : '1.5px solid #0F5D75',
+        pick: () => this.setState({ decl: o[0] }) };
+    });
+
+    const snapDefs = [['Reality · $203.6M', REAL], ['Just over the tax line', 2005], ['Just over the first apron', 2091], ['Just over the second apron', 2217]];
+    const snaps = snapDefs.map((o) => ({ label: o[0], go: () => this.setState({ pt: o[1], released: false, returning: false }) }));
+
+    const ticks = [];
+    for (let v = 180; v <= 235; v += 5) {
+      const y = yOf(v);
+      const near = Math.min(Math.abs(y - yTax), Math.abs(y - yFirst), Math.abs(y - ySecond)) < 16;
+      ticks.push({ y: y.toFixed(1), ly: (y - 7).toFixed(1), label: '$' + v + 'M', op: near ? 0 : 1 });
+    }
+
+    const winsText = decl === 'trade' && kept ? 'You declared White out. Who else moves, and what it does to wins: unknown.'
+      : decl === 'stretch' && kept ? 'You declared a stretch. Which player is waived, and what it does to wins: unknown.'
+      : 'Depends on which players leave. Declare a move to go further.';
+
+    const dPay = d < 0 ? 'falls' : 'rises';
+    const diffPay = m1(pr) + ' → ' + m1(p) + ' (' + sg1(d) + ')';
+    const diffTax = m2(tR.bill) + ' → ' + m2(tP.bill) + ' (' + sg2(tP.bill - tR.bill) + ')';
+    const diffRules = (gained.length + lifted.length === 0) ? 'same as Reality — no line crossed.'
+      : (gained.length ? gained.length + ' gained: ' + gained.join(', ') + '. ' : '') + (lifted.length ? lifted.length + ' lifted: ' + lifted.join(', ') + '.' : '');
+    const pullState = released ? 'Released. Still only a ghost — nothing is forked unless you keep it.' : 'Held. Reality has not moved; nothing is forked.';
+
+    return {
+      how, howPressed: how ? 'true' : 'false', howBg: how ? '#1B1B1B' : 'transparent', howFg: how ? '#FAF9F6' : '#1B1B1B',
+      toggleHow: () => this.setState({ how: !how }),
+      reset: () => this.setState({ pt: REAL, kept: false, decl: null, name: null, released: false, returning: false }),
+      address, addrEdge, addrInk,
+      tintA: (ySecond + 8 - 90).toFixed(1), tintB0: (ySecond + 8).toFixed(1), tintB: (yFirst - ySecond).toFixed(1),
+      tintC0: (yFirst + 8).toFixed(1), tintC: (yTax - yFirst).toFixed(1),
+      bSecond: (ySecond - 8).toFixed(1), bFirst: (yFirst - 8).toFixed(1), bTax: (yTax - 8).toFixed(1),
+      pSecond: (ySecond - 11).toFixed(1), pFirst: (yFirst - 11).toFixed(1), pTax: (yTax - 11).toFixed(1),
+      ticks, winsText,
+      isRest: phase === 'rest', isPull: phase === 'pull', isKept: phase === 'kept', isNotRest: phase !== 'rest', notKept: phase !== 'kept',
+      readHead: phase === 'rest' ? 'PULL PAYROLL' : (phase === 'kept' ? 'YOUR BRANCH' : 'THE PULL'),
+      readInk: phase === 'rest' ? '#1B1B1B' : '#0F5D75',
+      readBig: m1(p), readDelta: sg1(d) + ' vs Reality', readStratum: stratum(p) + '.',
+      yReal: yReal.toFixed(1), realH: (770 - yReal).toFixed(1),
+      yGhost: yG.toFixed(1), ghostH: ghostH.toFixed(1), ghostOp: ghostOp, dTop: dTop.toFixed(1), dH: dH.toFixed(1),
+      ghostShadow: kept ? 'inset 0 0 0 3px #FAF9F6, inset 0 0 0 5px #0F5D75' : 'none',
+      refLy: refLy.toFixed(1), dLab: sg1(d), dLabTop: (dTop + dH / 2 - 8).toFixed(1), dLabOp: (ghostOp > 0 && dH > 22) ? ghostOp : 0,
+      yGhostLabel: (yG - 11).toFixed(1), valPlate: m1(p) + ' · ' + sg1(d),
+      yHandleTop: (yG - 15).toFixed(1),
+      handleLabel: kept ? 'LOCKED · KEPT' : 'PULL PAYROLL',
+      handleOff: kept, ptVal: pt,
+      ariaText: m1(p) + ', ' + sg1(d) + ' against Reality, ' + stratum(p).toLowerCase(),
+      tagTop: tagTop.toFixed(1), tagOp: kept ? 1 : 0,
+      onRange: (e) => this.setState({ pt: parseInt(e.target.value, 10) || REAL, released: false, returning: false }),
+      onRelease: () => { const q = this.state || {}; if (!q.kept && (typeof q.pt === 'number' ? q.pt : REAL) !== REAL) this.setState({ released: true }); },
+      onKey: (e) => { if (e.key === 'Escape') this.setState({ returning: true, kept: false, decl: null, name: null, released: false }); },
+      rules,
+      billReal: m2(tR.bill), billPull: m2(tP.bill), billDelta, steps,
+      diffPay, diffTax, diffRules, pullState,
+      keep: () => this.setState({ kept: true, released: false, decl: null, name: null }),
+      letGo: () => this.setState({ returning: true, kept: false, decl: null, name: null, released: false }),
+      pullAgain: () => this.setState({ kept: false, released: false }),
+      nameVal, onName: (e) => this.setState({ name: e.target.value }),
+      opts, moveCheck, checkInk: (decl && !moveOk) ? '#8E1B1B' : '#1B1B1B',
+      snaps
+    };
+  }
+}
+</script>
+</body>
+</html>

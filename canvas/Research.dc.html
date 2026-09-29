@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BOW Frontier — Medium research</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F0E8;color:#1B1A17;font-family:'IBM Plex Sans',sans-serif}
+.mono{font-family:'IBM Plex Mono',monospace}
+.serif{font-family:'Newsreader',serif}
+.k{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:#57534B;text-transform:uppercase}
+.chip{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;min-height:36px;padding:0 12px;border-radius:0;cursor:pointer;transition:background .2s,color .2s}
+.chip:focus-visible{outline:3px solid #A63A18;outline-offset:2px}
+.row{transition:opacity .25s ease}
+</style>
+</helmet>
+<div style="width: 1440px; height: 2340px; box-sizing: border-box; padding: 60px 88px 64px; display: flex; flex-direction: column; gap: 22px; background: #F3F0E8; color: #1B1A17">
+  <header style="display: flex; flex-direction: column; gap: 14px">
+    <div class="k" style="display: flex; justify-content: space-between; border-bottom: 1px solid #1B1A17; padding-bottom: 10px"><span>Wave 2 · Medium research · bounded</span><span>Not a competitor deck · what each solved, what to learn, what never to copy</span></div>
+    <h1 class="serif" style="margin: 0; font-weight: 400; font-size: 54px; line-height: 1.04; max-width: 1180px">Twenty things that already work — and where each stops being useful for executable systems.</h1>
+    <div role="group" aria-label="Filter by BOW verb" style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center">
+      <span class="k" style="margin-right: 6px">Show what informs</span>
+      <sc-for list="{{verbs}}" as="v" hint-placeholder-count="10">
+        <button type="button" class="chip" onClick="{{v.pick}}" aria-pressed="{{v.pressed}}" style="border: 1px solid #1B1A17; background: {{v.bg}}; color: {{v.fg}}">{{v.label}}</button>
+      </sc-for>
+    </div>
+  </header>
+  <div class="mono" style="display: grid; grid-template-columns: 210px minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1.1fr); gap: 20px; font-size: 11px; letter-spacing: .08em; color: #57534B; border-bottom: 2px solid #1B1A17; padding-bottom: 8px">
+    <span>PARADIGM</span><span>WHAT IT SOLVED</span><span>WHAT BOW SHOULD LEARN</span><span>WHAT BOW MUST NOT COPY</span>
+  </div>
+  <sc-for list="{{rows}}" as="r" hint-placeholder-count="20">
+    <div class="row" style="display: grid; grid-template-columns: 210px minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1.1fr); gap: 20px; padding: 2px 0 12px; border-bottom: 1px solid #CFC8B8; opacity: {{r.op}}; font-size: 14px; line-height: 1.42">
+      <div style="display: flex; flex-direction: column; gap: 4px"><strong class="serif" style="font-size: 20px; font-weight: 500; line-height: 1.1">{{r.name}}</strong><span class="mono" style="font-size: 10px; color: #A63A18">{{r.tags}}</span></div>
+      <span>{{r.solved}}</span>
+      <span>{{r.learn}}</span>
+      <span style="color: #4A4740">{{r.not}}</span>
+    </div>
+  </sc-for>
+  <section style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; border-top: 2px solid #1B1A17; padding-top: 18px">
+    <div style="display: flex; flex-direction: column; gap: 6px"><span class="k">The pattern across all twenty</span><p class="serif" style="margin: 0; font-size: 21px; line-height: 1.35">Each paradigm owns one dimension well — the map owns scale, git owns branches, the spreadsheet owns recomputation, the game owns attachment, the terminal owns density. None owns them together, and none carries provenance as a first-class property.</p></div>
+    <div style="display: flex; flex-direction: column; gap: 6px"><span class="k">Borrow outright</span><p style="margin: 0; font-size: 15px; line-height: 1.5">Semantic zoom (maps) · append-only history and blame (git) · dependency recomputation and "show formulas" (spreadsheets) · variation notation and the opening explorer (chess) · predict-before-reveal (explorable explanations) · fog of war and the after-action review (wargames) · time-travel debugging (devtools).</p></div>
+    <div style="display: flex; flex-direction: column; gap: 6px"><span class="k">Refuse outright</span><p style="margin: 0; font-size: 15px; line-height: 1.5">Ranked lists as answers · chat as the primary surface for a system · the dashboard of tiles · the infinite canvas as the only authoring metaphor · opaque formulas behind a game's numbers · merge as the goal of branching · realism as the goal of 3D.</p></div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2340}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const sel = s.v || 'ALL';
+    const V = ['ALL', 'ENTER', 'WHAT IF?', 'WHY?', 'WHEN?', 'ROLE', 'SCALE', 'VIEW', 'HOW DO WE KNOW?', 'FOLLOW', 'SHARE'];
+    const R = [
+      ['Web browsers', 'ENTER · SHARE · WHEN?', 'A universal address, back, tabs and links across any document.', 'The address is the social unit of a medium; back is sacred; view-source made the web learnable.', 'Pages as the atom; tabs as the model of parallel attention; one kind of “back” (BOW needs back-in-place and back-in-time).'],
+      ['Search engines', 'ENTER · WHY?', 'Finding the right thing in a trillion documents from one box.', 'One box; instant gratification; previews before commitment.', 'Ten ranked links as the answer to a question about how something works.'],
+      ['Maps & globes', 'SCALE · VIEW · ENTER', 'Continuous zoom with orientation kept; layers; dropping into a street.', 'Semantic zoom; layers as representations of one place; “drop the pegman” as ENTER; the blue dot as you-are-here.', 'Geography as the only organizing space; the always-on tile grid.'],
+      ['Spreadsheets', 'WHAT IF? · HOW DO WE KNOW?', 'Live recomputation; end-user modeling; what-if tables.', 'Dependency propagation; “show formulas” as how-do-we-know; goal seek as a pull-to-fork gesture.', 'The grid as the universal representation; errors that fail silently.'],
+      ['Git & version control', 'WHAT IF? · WHEN? · HOW DO WE KNOW?', 'Cheap branches, immutable history, diff, blame.', 'Append-only history; blame = provenance per value; a commit message as recorded intent.', 'Merge as the goal (possibility histories don’t merge); jargon; text diff as the only compare.'],
+      ['Figma-like collaborative objects', 'SHARE · ROLE', 'Many people on one live object; components; comments pinned to things.', 'Presence; templates with overrides (World kits); comments anchored to a state, not a page.', 'The infinite canvas as the only way to author a system; a layers panel as the model of structure.'],
+      ['Game engines', 'VIEW · WHEN?', 'Real-time rendering; entity–component data; play in the editor.', 'Separate state from behaviour from rendering; play-in-editor; deterministic replay.', 'The asset editor as Foundry; realism as the goal.'],
+      ['Management sims (Football Manager, franchise modes)', 'ROLE · ENTER · FOLLOW', 'Deep institutional simulation that people care about for hundreds of hours.', 'The inbox as the World’s voice; staff and delegation; the save file as a persistent world; depth on demand.', 'Opaque formulas; walls of tables; invented rules passed off as real economics; dominant strategies.'],
+      ['Digital twins', 'VIEW · FOLLOW', 'Live mirrors of plants and assets from sensors.', 'MIRROR as a mode; state bound to live data; alarms as thresholds on state.', '3D replicas for their own sake; KPI dashboards; twins with no roles, decisions or history.'],
+      ['Knowledge graphs', 'WHY? · HOW DO WE KNOW?', 'Entities and typed relations at scale.', 'Stable identities; typed relations; one thing known by many names.', 'Node-link pictures as the interface; facts with no time and no source.'],
+      ['Scientific instruments & sims (PhET, LabVIEW)', 'VIEW · FOLLOW · SCALE', 'Precise live readouts; linked views; tested teaching sims.', 'Linked brushing across views (FOLLOW); instrument clarity; PhET’s evidence about what students actually notice.', 'Panels-of-widgets layout; sims with no provenance, no time, no role.'],
+      ['IDEs & devtools', 'WHEN? · HOW DO WE KNOW? · WHY?', 'Inspecting live state; breakpoints; time-travel debugging.', 'Time-travel debugging is WHEN? for software; the inspector is how-do-we-know; the event log is the truth.', 'Dark, dense panes for people who aren’t developers.'],
+      ['Collaborative editors', 'WHAT IF? · SHARE', 'Simultaneous editing; suggestion mode; version history.', 'Suggestion mode = proposed vs accepted (Foundry’s blue vs ink); named versions.', 'One linear history for things that should branch.'],
+      ['Interactive journalism & explorables', 'SHARE · WHAT IF? · ENTER', 'Reader-driven stories; scrollytelling; “You draw it”.', 'Predict before reveal; explorable explanations; embeds that travel.', 'Bespoke one-offs that die after publication — no persistence, no branch, no address to a state.'],
+      ['Data terminals (Bloomberg-like)', 'FOLLOW · VIEW · ROLE', 'Extreme density and trust for professionals; command grammar.', 'Ticker + function as a grammar; density for experts; the paid professional seat as a business.', 'Density for everyone; information with no role attached.'],
+      ['Spatial computing', 'ENTER · SCALE', 'Presence; embodiment; windows in space.', 'Scale and presence; ENTER as a felt physical transition.', 'Floating panels in space; 3D because it’s possible.'],
+      ['Wargames & strategy games', 'ROLE · WHY? · WHEN?', 'Fog of war; turns; asymmetric information; after-action review.', 'Fog of war = role-bounded knowledge; the after-action review = Lens + replay; the umpire = rules with authority.', 'Winning as the frame for understanding; god-view as the default.'],
+      ['Chess analysis tools', 'WHAT IF? · WHY? · SHARE', 'Variation trees; engine evaluation; annotated games; the opening explorer.', 'Mainline vs variations as notation; the opening explorer = everyone’s public forks from one position, with outcomes.', 'One evaluation number presented as truth.'],
+      ['Forecasting platforms', 'WHAT IF? · HOW DO WE KNOW?', 'Aggregated probabilistic forecasts with track records.', 'Score models against what happened (the Fan); calibration as a public reputation.', 'The betting frame; a single consensus number that hides disagreement.'],
+      ['AI assistants & agents', 'ROLE · WHY? · ENTER', 'Natural-language access to intelligence; synthesis; tool use.', 'Ask anything; conversational repair; tools. Intelligence is a provider, not the product.', 'Chat as the surface for a system; prose answers with no state behind them; confident synthesis without sources; agents without warrants.']
+    ];
+    return {
+      verbs: V.map((v) => ({ label: v, pressed: sel === v ? 'true' : 'false', bg: sel === v ? '#1B1A17' : 'transparent', fg: sel === v ? '#F3F0E8' : '#1B1A17', pick: () => this.setState({ v: v }) })),
+      rows: R.map((r) => ({ name: r[0], tags: r[1], solved: r[2], learn: r[3], not: r[4], op: sel === 'ALL' || r[1].indexOf(sel) >= 0 ? 1 : 0.18 }))
+    };
+  }
+}
+</script>
+</body>
+</html>

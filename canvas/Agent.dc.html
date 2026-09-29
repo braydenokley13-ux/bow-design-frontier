@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Seat's Warrant</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Overpass+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F1E8;color:#1E4D3A;font-family:'Crimson Pro',serif}
+a{color:#1E4D3A}a:hover{color:#8B2E1E}
+.mono{font-family:'Overpass Mono',monospace}
+.sw{display:inline-block;width:22px;height:22px;box-sizing:border-box;flex:none}
+.t-obs{background:#1E4D3A}
+.t-rec{background:#1E4D3A;box-shadow:inset 0 0 0 3px #1E4D3A,inset 0 0 0 5px #FAF8F1}
+.t-aut{background:transparent;border:2px solid #1E4D3A}
+.t-com{background:#7E9186}
+.t-mod{background:repeating-linear-gradient(135deg,#1E4D3A 0 1.5px,transparent 1.5px 6px);border:1px solid #1E4D3A}
+.t-gen{background:radial-gradient(circle,#1E4D3A 1.1px,transparent 1.4px) 0 0/6px 6px;border:1px dotted #1E4D3A}
+.t-unk{background:transparent;border:2px dashed #1E4D3A}
+button{font-family:'Crimson Pro',serif;color:#1E4D3A}
+.btn{cursor:pointer;min-height:44px;padding:0 18px;border:2px solid #1E4D3A;background:transparent;font-size:17px;font-weight:600;display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s}
+.btn:hover{background:#E6E9DF}
+.btn.pri{background:#1E4D3A;color:#FAF8F1}
+.btn.pri:hover{background:#163A2C}
+.btn:disabled{cursor:not-allowed;opacity:.4}
+.occ{cursor:pointer;min-height:44px;padding:4px 12px;border:2px solid #1E4D3A;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:1px;transition:background .25s,color .25s}
+.why{cursor:pointer;min-height:30px;padding:0 10px;border:1.5px solid #1E4D3A;background:#FFFFFF;font-size:14px;font-weight:600;flex:none}
+.why:hover{background:#E6E9DF}
+.why.sm{min-height:26px;font-size:13px;padding:0 7px}
+.btn:focus-visible,.occ:focus-visible,.why:focus-visible{outline:3px solid #1E4D3A;outline-offset:2px}
+.print{animation:feed .55s ease-out}
+@keyframes feed{0%{transform:translateY(-10px);opacity:0}100%{transform:translateY(0);opacity:1}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F4F1E8; color: #1E4D3A; font-family: 'Crimson Pro', serif">
+
+  <!-- MASTHEAD -->
+  <div style="position: absolute; left: 32px; top: 8px; width: 976px; height: 46px; display: flex; justify-content: space-between; align-items: center">
+    <span class="mono" style="font-size: 10.5px; letter-spacing: .1em">HARROW MEDICAL · REGISTER OF SEATS · THE MORNING OF THE KAITO FIRE · SAME WORLD AS P8</span>
+    <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="background: {{howBg}}; color: {{howFg}}; font-size: 16px">How do we know?</button>
+  </div>
+
+  <!-- THE WARRANT -->
+  <article aria-label="Warrant of the seat" style="position: absolute; left: 32px; top: 58px; width: 976px; height: 824px; box-sizing: border-box; background: #FAF8F1; border: 1px solid #1E4D3A; box-shadow: inset 0 0 0 5px #FAF8F1, inset 0 0 0 8px #1E4D3A">
+
+    <div class="mono" style="position: absolute; left: 30px; top: 20px; font-size: 10.5px; letter-spacing: .12em">WARRANT OF A SEAT · No. HM-W-014</div>
+    <div class="mono" style="position: absolute; right: 30px; top: 20px; font-size: 10.5px; letter-spacing: .08em; text-align: right">{{versionLine}}</div>
+    <h1 style="position: absolute; left: 30px; top: 36px; margin: 0; font-size: 42px; line-height: 1; font-weight: 600; letter-spacing: -0.01em">Vice President, Procurement</h1>
+    <p style="position: absolute; left: 540px; top: 50px; width: 406px; margin: 0; font-size: 17px; line-height: 1.2; font-style: italic; color: #33584A; text-align: right">The seat keeps its authority and its history. Whoever sits in it — a person or a model — acts inside them.</p>
+    <div style="position: absolute; left: 22px; right: 22px; top: 90px; height: 0; border-top: 3px double #1E4D3A"></div>
+
+    <!-- LEFT COLUMN: one flow, so no section can ever print over another -->
+    <div style="position: absolute; left: 30px; top: 98px; width: 450px; display: flex; flex-direction: column; gap: 8px">
+
+      <section aria-label="Seat" style="width: 322px">
+        <h2 style="margin: 0 0 2px; font-size: 21px; line-height: 1.15; font-weight: 600">I. Seat</h2>
+        <sc-for list="{{seatRows}}" as="sr" hint-placeholder-count="3">
+          <div style="display: flex; align-items: baseline; gap: 6px; min-height: 20px; padding-left: 7px; border-left: 3px solid {{sr.bar}}; background: {{sr.bg}}; transition: background .3s">
+            <span class="mono" style="width: 24px; flex: none; font-size: 10px">{{sr.id}}</span>
+            <span class="mono" style="width: 90px; flex: none; font-size: 9.5px; letter-spacing: .04em">{{sr.label}}</span>
+            <span style="font-size: 15.5px; line-height: 1.25">{{sr.value}}</span>
+          </div>
+        </sc-for>
+      </section>
+
+      <section aria-label="Authority">
+        <div style="display: flex; align-items: center; gap: 10px; max-width: 318px">
+          <h2 style="margin: 0; font-size: 21px; line-height: 1.15; font-weight: 600; white-space: nowrap">II. Authority</h2>
+          <span class="sw t-aut" style="width: 16px; height: 16px"></span>
+          <span style="font-size: 14px; font-style: italic; color: #33584A; white-space: nowrap">authored by the Board, 2023</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 50px 1fr; margin-top: 3px">
+          <span class="mono" style="padding-top: 4px; font-size: 9.5px; letter-spacing: .12em">MAY</span>
+          <div style="display: flex; flex-direction: column; gap: 1px">
+            <sc-for list="{{mayRows}}" as="cl" hint-placeholder-count="3">
+              <div style="display: flex; align-items: baseline; gap: 8px; min-height: 20px; padding-left: 7px; border-left: 3px solid {{cl.bar}}; background: {{cl.bg}}; transition: background .3s">
+                <span class="mono" style="width: 30px; flex: none; font-size: 10px">{{cl.id}}</span>
+                <span style="font-size: 15.5px; line-height: 1.25">{{cl.txt}} <span class="mono" style="margin-left: 4px; font-size: 9px; font-weight: 600; white-space: nowrap; color: {{cl.tagc}}">{{cl.tag}}</span></span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 50px 1fr; margin-top: 8px">
+          <span class="mono" style="padding-top: 4px; font-size: 9.5px; letter-spacing: .12em">CANNOT</span>
+          <div style="display: flex; flex-direction: column; gap: 1px">
+            <sc-for list="{{cannotRows}}" as="cn" hint-placeholder-count="5">
+              <div style="display: flex; align-items: baseline; gap: 8px; min-height: 20px; padding-left: 7px; border-left: 3px solid {{cn.bar}}; background: {{cn.bg}}; transition: background .3s">
+                <span class="mono" style="width: 30px; flex: none; font-size: 10px">{{cn.id}}</span>
+                <span style="font-size: 15.5px; line-height: 1.25">{{cn.txt}} <span class="mono" style="margin-left: 4px; font-size: 9px; font-weight: 600; white-space: nowrap; color: {{cn.tagc}}">{{cn.tag}}</span></span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <section aria-label="Occupant">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px">
+          <h2 style="margin: 0; font-size: 21px; line-height: 1.15; font-weight: 600">IV. Occupant</h2>
+          <span class="mono" style="font-size: 9.5px; letter-spacing: .04em">{{sinceLine}}</span>
+        </div>
+        <div role="radiogroup" aria-label="Who occupies the seat" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px">
+          <sc-for list="{{occupants}}" as="oc" hint-placeholder-count="4">
+            <button type="button" class="occ" role="radio" aria-checked="{{oc.checked}}" onClick="{{oc.go}}" style="background: {{oc.bg}}; color: {{oc.fg}}">
+              <span style="font-size: 16.5px; font-weight: 600; line-height: 1.1">{{oc.name}}</span>
+              <span class="mono" style="font-size: 9.5px; letter-spacing: .04em">{{oc.kind}}</span>
+            </button>
+          </sc-for>
+        </div>
+        <p style="margin: 6px 0 0; font-size: 13px; line-height: 1.25; font-style: italic; color: #33584A">In this prototype every occupant acts the same way — only the name on the receipt changes. What discretion an occupant should have is an open design question.</p>
+      </section>
+
+      <!-- the seal: the authority limit, stamped (beside I. Seat and the II. heading) -->
+      <div aria-label="{{sealAria}}" role="img" style="position: absolute; left: 326px; top: 0; width: 124px; height: 124px; transform: rotate({{sealRot}}deg); transition: transform .7s cubic-bezier(.3,1.4,.5,1); opacity: .93">
+        <svg width="124" height="124" viewBox="0 0 124 124" aria-hidden="true">
+          <defs><path id="agentSealArc" d="M 62,16.5 A 45.5,45.5 0 1,1 61.99,16.5"></path></defs>
+          <circle cx="62" cy="62" r="59" fill="none" stroke="#1E4D3A" style="stroke-width: 2.2px"></circle>
+          <circle cx="62" cy="62" r="55" fill="none" stroke="#1E4D3A" style="stroke-width: .8px"></circle>
+          <circle cx="62" cy="62" r="37" fill="none" stroke="#1E4D3A" style="stroke-width: 1px"></circle>
+          <text fill="#1E4D3A" style="font-family: 'Overpass Mono', monospace; font-size: 7.4px; letter-spacing: .6px"><textPath href="#agentSealArc">HARROW MEDICAL · VP PROCUREMENT · LIMIT PER ORDER ·</textPath></text>
+          <text x="62" y="60" fill="#1E4D3A" style="font-family: 'Crimson Pro', serif; font-size: 17px; font-weight: 700; text-anchor: middle">{{sealLimit}}</text>
+          <text x="62" y="72" fill="#1E4D3A" style="font-family: 'Overpass Mono', monospace; font-size: 6.6px; letter-spacing: .8px; text-anchor: middle">PER ORDER</text>
+          <text x="62" y="84" fill="#1E4D3A" style="font-family: 'Overpass Mono', monospace; font-size: 6.6px; letter-spacing: .6px; text-anchor: middle">{{sealVer}}</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <section aria-label="Information scope" style="position: absolute; left: 506px; top: 100px; width: 440px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px">
+        <h2 style="margin: 0; font-size: 21px; font-weight: 600">III. Information</h2>
+        <span style="font-size: 13.5px; font-style: italic; color: #33584A">solid wall: visible to this seat · dashed: not visible</span>
+      </div>
+      <div style="position: relative; width: 440px; height: 210px">
+        <sc-for list="{{rooms}}" as="rm" hint-placeholder-count="8">
+          <div style="position: absolute; left: {{rm.x}}px; top: {{rm.y}}px; width: {{rm.w}}px; height: {{rm.h}}px; box-sizing: border-box; border: {{rm.bw}}px {{rm.bs}} #1E4D3A; background: {{rm.bg}}; padding: 6px 7px; display: flex; flex-direction: column; gap: 3px; transition: background .3s, border-width .2s">
+            <span class="mono" style="font-size: 8.5px; letter-spacing: .06em; font-weight: 600">{{rm.label}}</span>
+            <span style="font-size: 13.5px; line-height: 1.15; font-style: {{rm.fs}}; font-weight: 500">{{rm.line1}}</span>
+            <span style="font-size: 12.5px; line-height: 1.15; color: #33584A">{{rm.line2}}</span>
+            <sc-if value="{{rm.hasTag}}" hint-placeholder-val="{{false}}">
+              <span class="mono" style="margin-top: auto; align-self: flex-start; font-size: 8.5px; font-weight: 600; padding: 2px 5px; background: #8B2E1E; color: #FFFFFF">{{rm.tag}}</span>
+            </sc-if>
+          </div>
+          <sc-if value="{{rm.hasBadge}}" hint-placeholder-val="{{false}}">
+            <div class="mono" style="position: absolute; left: {{rm.bx}}px; top: {{rm.by}}px; width: 20px; height: 20px; border-radius: 50%; background: #1E4D3A; color: #FAF8F1; font-size: 10px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{rm.badge}}</div>
+          </sc-if>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-label="Beliefs" style="position: absolute; left: 506px; top: 358px; width: 440px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px">
+        <h2 style="margin: 0; font-size: 21px; font-weight: 600">V. Beliefs</h2>
+        <span style="font-size: 13.5px; font-style: italic; color: #33584A">held by the seat; each occupant inherits them</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <sc-for list="{{beliefs}}" as="bl" hint-placeholder-count="3">
+          <div style="display: flex; gap: 12px; align-items: flex-start">
+            <span class="sw {{bl.tex}}" style="margin-top: 2px"></span>
+            <div style="display: flex; flex-direction: column; gap: 1px">
+              <span style="font-size: 17px; font-weight: 600; line-height: 1.2">{{bl.claim}}</span>
+              <span style="font-size: 14px; line-height: 1.3; color: #33584A">{{bl.basis}}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- THE MORNING -->
+    <div style="position: absolute; left: 22px; right: 22px; top: 622px; height: 0; border-top: 3px double #1E4D3A"></div>
+    <section aria-label="The morning, step by step" style="position: absolute; left: 30px; top: 632px; width: 540px; height: 176px; display: flex; flex-direction: column; gap: 8px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <h2 style="margin: 0; font-size: 21px; font-weight: 600">The morning of the fire</h2>
+        <span class="mono" style="font-size: 9.5px; letter-spacing: .06em">{{progress}}</span>
+      </div>
+      <div style="position: relative; height: 50px">
+        <div style="position: absolute; left: 8px; right: 30px; top: 22px; height: 0; border-top: 1.5px solid #1E4D3A"></div>
+        <sc-for list="{{track}}" as="tk" hint-placeholder-count="6">
+          <div style="position: absolute; left: {{tk.x}}px; top: 0; width: 84px; display: flex; flex-direction: column; align-items: flex-start; gap: 3px">
+            <span class="mono" style="font-size: 9.5px; font-weight: 600">{{tk.t}}</span>
+            <span style="width: 16px; height: 16px; box-sizing: border-box; border-radius: 50%; border: {{tk.border}}; background: {{tk.bg}}; box-shadow: {{tk.shadow}}; transition: background .3s"></span>
+            <span style="font-size: 13px; line-height: 1">{{tk.label}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <p style="margin: 0; font-size: 16.5px; line-height: 1.25; min-height: 40px"><strong style="font-weight: 700">{{nextLead}}</strong>{{nextText}}</p>
+      <div style="display: flex; gap: 10px; align-items: center">
+        <button type="button" class="btn pri" onClick="{{advance}}" disabled="{{advanceOff}}">Next step →</button>
+        <button type="button" class="btn" onClick="{{amend}}" disabled="{{amendOff}}">Change the warrant</button>
+        <button type="button" class="btn" onClick="{{reset}}" style="border-color: transparent; text-decoration: underline; text-underline-offset: 3px">Start over</button>
+      </div>
+    </section>
+
+    <!-- SIDE PANEL: why / how / hint -->
+    <aside style="position: absolute; left: 590px; top: 632px; width: 356px; height: 176px; box-sizing: border-box; border-left: 1.5px solid #1E4D3A; padding-left: 18px; display: flex; flex-direction: column; gap: 4px">
+      <sc-if value="{{whyOn}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <h3 style="margin: 0; font-size: 19px; font-weight: 700">{{whyTitle}}</h3>
+          <button type="button" class="why sm" onClick="{{closeWhy}}" aria-label="Close the explanation">Close</button>
+        </div>
+        <span class="mono" style="font-size: 9px; letter-spacing: .1em">RULE THAT PERMITTED IT</span>
+        <sc-for list="{{whyRules}}" as="wr" hint-placeholder-count="2">
+          <span style="font-size: 14.5px; line-height: 1.2">{{wr.t}}</span>
+        </sc-for>
+        <span class="mono" style="font-size: 9px; letter-spacing: .1em; margin-top: 2px">WHAT THE SEAT COULD SEE (NUMBERED ON THE PLAN)</span>
+        <span style="font-size: 14.5px; line-height: 1.2">{{whyInputs}}</span>
+        <span style="font-size: 13px; line-height: 1.2; font-style: italic; color: #33584A; margin-top: auto">{{whyNote}}</span>
+      </sc-if>
+      <sc-if value="{{howOn}}" hint-placeholder-val="{{false}}">
+        <h3 style="margin: 0 0 2px; font-size: 19px; font-weight: 700">How do we know?</h3>
+        <sc-for list="{{howRows}}" as="hr" hint-placeholder-count="6">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13.5px; line-height: 1.1">
+            <span class="sw {{hr.tex}}" style="width: 14px; height: 14px"></span>
+            <span class="mono" style="width: 74px; font-size: 8.5px; font-weight: 600; letter-spacing: .05em">{{hr.word}}</span>
+            <span>{{hr.text}}</span>
+          </div>
+        </sc-for>
+        <span style="font-size: 12px; line-height: 1.2; color: #33584A; margin-top: auto">Harrow, Kaito, the brokers, Dana Ortiz and Mara Quinn are fictional. Kaito is modelled on the Renesas Naka fab fire, March 2021 — verify.</span>
+      </sc-if>
+      <sc-if value="{{hintOn}}" hint-placeholder-val="{{true}}">
+        <h3 style="margin: 0; font-size: 19px; font-weight: 700">Reading the warrant</h3>
+        <span style="font-size: 15px; line-height: 1.3">Each act prints a receipt on the tape. Open “Why did it act?” on an accepted one: the warrant marks the rule that allowed it and the rooms the seat could see.</span>
+        <span style="font-size: 15px; line-height: 1.3">Swap the occupant at any time. New receipts carry the new name; old ones keep theirs.</span>
+      </sc-if>
+    </aside>
+  </article>
+
+  <div class="mono" style="position: absolute; left: 32px; top: 885px; font-size: 9.5px; letter-spacing: .05em; color: #33584A">PROTOTYPE · DESIGN PROPOSAL · RECEIPTS PATTERN EXISTS TODAY (DECISION CHALLENGES) · AGENTS-IN-SEATS: PLATFORM HYPOTHESIS · HARROW MEDICAL IS FICTIONAL</div>
+
+  <!-- RECEIPT TAPE: a till roll, append-only -->
+  <section aria-label="Receipt tape" style="position: absolute; left: 1036px; top: 0; width: 372px; height: 900px; box-sizing: border-box; background: #FFFFFF; border-left: 2px dashed #BDB8A8; border-right: 2px dashed #BDB8A8; padding: 22px 16px 0; color: #1E4D3A; display: flex; flex-direction: column">
+    <div style="text-align: center; display: flex; flex-direction: column; gap: 3px; padding-bottom: 10px; border-bottom: 1.5px dashed #BDB8A8">
+      <span class="mono" style="font-size: 10.5px; letter-spacing: .14em; font-weight: 600">HARROW MEDICAL</span>
+      <span class="mono" style="font-size: 10px; letter-spacing: .1em">SEAT · VP PROCUREMENT · RECEIPT TAPE</span>
+      <span class="mono" style="font-size: 9px; letter-spacing: .08em; color: #33584A">APPEND-ONLY · REFUSED ACTS PRINT TOO</span>
+      <span style="font-size: 15px; font-style: italic; margin-top: 3px">History belongs to the seat, attributed to its occupants.</span>
+    </div>
+    <sc-if value="{{tapeEmpty}}" hint-placeholder-val="{{false}}">
+      <p style="margin: 18px 0 0; font-size: 15px; font-style: italic; color: #33584A; text-align: center">Nothing yet this morning.<br>Press Next step → on the warrant.</p>
+    </sc-if>
+    <sc-if value="{{rolled}}" hint-placeholder-val="{{false}}">
+      <div class="mono" style="padding: 5px 0; font-size: 9px; color: #33584A; text-align: center; border-bottom: 1px dashed #D4CFBF">{{rolledText}}</div>
+    </sc-if>
+    <div style="display: flex; flex-direction: column">
+      <sc-for list="{{tape}}" as="r" hint-placeholder-count="4">
+        <sc-if value="{{r.full}}" hint-placeholder-val="{{true}}">
+          <div class="print" style="padding: 8px 0 8px 8px; border-bottom: 1.5px dashed #BDB8A8; border-left: 3px solid {{r.lbar}}; display: flex; flex-direction: column; gap: 3px">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+              <span class="mono" style="font-size: 10px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.head}}</span>
+              <span class="mono" style="font-size: 9px; font-weight: 600; letter-spacing: .08em; padding: 2px 6px; border: {{r.stB}}; background: {{r.stBg}}; color: {{r.stFg}}; flex: none">{{r.status}}</span>
+            </div>
+            <span style="font-size: 15.5px; line-height: 1.12; font-weight: 600">{{r.act}}</span>
+            <span class="mono" style="font-size: 9px; color: #33584A">{{r.auth}}</span>
+            <span class="mono" style="font-size: 9px">{{r.ba}}</span>
+            <sc-if value="{{r.hasEvidence}}" hint-placeholder-val="{{false}}">
+              <div style="display: flex; flex-direction: column; gap: 3px; padding: 4px 6px; border: 1px solid #D4CFBF">
+                <span style="font-size: 13px; line-height: 1.2">{{r.evidence}}</span>
+                <span style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-style: italic"><span class="sw {{r.draftTex}}" style="width: 12px; height: 12px"></span>{{r.drafted}}</span>
+              </div>
+            </sc-if>
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+              <span style="font-size: 13.5px; line-height: 1.15; font-style: italic">{{r.reason}}</span>
+              <sc-if value="{{r.whyable}}" hint-placeholder-val="{{false}}">
+                <button type="button" class="why" onClick="{{r.whyGo}}" aria-pressed="{{r.whyPressed}}">Why did it act?</button>
+              </sc-if>
+            </div>
+            <sc-if value="{{r.hasAgg}}" hint-placeholder-val="{{false}}">
+              <span style="font-size: 12.5px; line-height: 1.2"><span class="mono" style="font-size: 9px; font-weight: 600; letter-spacing: .06em">II.8 </span>{{r.agg}}</span>
+            </sc-if>
+            <sc-if value="{{r.hasNote}}" hint-placeholder-val="{{false}}">
+              <div style="padding: 4px 6px; border: 1.5px dotted #1E4D3A; font-size: 13px; line-height: 1.2">{{r.note}}</div>
+            </sc-if>
+          </div>
+        </sc-if>
+        <sc-if value="{{r.compact}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; align-items: center; gap: 6px; min-height: 28px; border-bottom: 1px dashed #D4CFBF">
+            <span class="mono" style="font-size: 9px; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.line}}</span>
+            <span class="mono" style="font-size: 8px; font-weight: 600; padding: 1px 4px; border: {{r.stB}}; background: {{r.stBg}}; color: {{r.stFg}}; flex: none">{{r.status}}</span>
+            <sc-if value="{{r.whyable}}" hint-placeholder-val="{{false}}">
+              <button type="button" class="why sm" onClick="{{r.whyGo}}" aria-label="{{r.whyAria}}">Why?</button>
+            </sc-if>
+          </div>
+        </sc-if>
+      </sc-for>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  K() {
+    return {
+      OCC: {
+        claude: { name: 'Claude (Anthropic)', short: 'Claude', rname: 'Claude (Anthropic)', kind: 'AI MODEL', ai: true },
+        gpt: { name: 'GPT (OpenAI)', short: 'GPT', rname: 'GPT (OpenAI)', kind: 'AI MODEL', ai: true },
+        dana: { name: 'Dana Ortiz', short: 'Dana Ortiz', rname: 'Dana Ortiz (human)', kind: 'HUMAN · FICTIONAL', ai: false },
+        vacant: { name: 'Vacant', short: 'Vacant', rname: 'seat vacant', kind: 'EVERY ACT ESCALATES', ai: false }
+      },
+      ORDER: ['claude', 'gpt', 'dana', 'vacant'],
+      CFO: 'CFO · Mara Quinn (human)'
+    };
+  }
+  stockOf(log) { return 2300 + log.reduce((a, r) => a + (r.adds || 0), 0); }
+  committedOf(log) { return log.reduce((a, r) => a + (r.spend || 0), 0); }
+
+  advance() {
+    const s = this.state || {};
+    const step = s.step || 0;
+    if (step >= 5) return;
+    const K = this.K();
+    const occ = s.occ || 'claude';
+    const O = K.OCC[occ];
+    const vac = occ === 'vacant';
+    const log = (s.log || []).slice();
+    const push = (r) => log.push(Object.assign({ seq: log.length + 1 }, r));
+    const who = { who: O.rname, whoShort: O.short, whoKind: O.ai ? 'ai' : (vac ? 'vacant' : 'human') };
+    const stock = this.stockOf(log);
+    const d = (n) => Math.round(n / 210) + ' days';
+    const fmt = (n) => n.toLocaleString('en-US');
+    const escV = { status: 'ESCALATED', reason: 'Seat vacant — routed to the CFO.' };
+    const n = step + 1;
+    if (n === 1) {
+      push(Object.assign({ time: '06:40', key: 'q', act: 'Request quotes from 3 brokers for the HM-40 MCU',
+        auth: 'II.3 · quotes from anyone',
+        ba: vac ? 'quotes on file: 0 → 0' : 'quotes on file: 0 → 3 ($88 · $205 · $240 each)' },
+        who, vac ? escV : { status: 'ACCEPTED', reason: 'Quotes are free; nothing is committed.' }));
+    }
+    if (n === 2) {
+      push(Object.assign({ time: '07:15', key: 'o1', act: 'Place order #1: 2,000 MCUs from Broker 1, $176,000',
+        auth: 'II.1 · up to $250,000 per order · II.2 · qualified list',
+        ba: vac ? 'runway ' + d(stock) + ' → no change' : 'runway ' + d(stock) + ' → ' + d(stock + 2000) + ', if lots pass QA',
+        adds: vac ? 0 : 2000, spend: vac ? 0 : 176000 },
+        who, vac ? escV : { status: 'ACCEPTED', reason: '$176,000 is within the $250,000 limit.' }));
+    }
+    if (n === 3) {
+      const base = { time: '07:30', key: 'o2', act: 'Place order #2: 2,000 MCUs from Broker 2, $410,000',
+        auth: 'II.1 · limit $250,000 per order · II.5 · II.8', ba: 'runway ' + d(stock) + ' → no change' };
+      if (vac) push(Object.assign(base, who, escV));
+      else {
+        push(Object.assign(base, who, { status: 'REFUSED', reason: 'Exceeds the $250,000 limit. Refused by the warrant, not by the occupant’s judgement.',
+          agg: 'Even split in two ($205,000 each), Broker 2 totals $410,000 today: refused on aggregate grounds.' }));
+        push(Object.assign({ time: '07:31', key: 'esc', act: 'Escalation to the CFO: order #2, $410,000',
+          auth: 'II.5 · above the limit goes to the CFO', ba: 'order #2: refused → awaiting the CFO',
+          status: 'ESCALATED', reason: 'Awaiting a human: the CFO.',
+          evidence: 'Evidence: ' + fmt(stock) + ' MCUs vs 5,050 promised through W7 · three quotes · counterfeit risk (modeled) · St. Brigid clause (recorded)',
+          drafted: 'Wording authored for this prototype (no model ran)',
+          draftTex: 't-aut' }, who));
+      }
+    }
+    if (n === 4) {
+      push(Object.assign({ time: '07:45', key: 'pay', act: 'Request payroll data to model Line 2 overtime',
+        auth: 'III · information scope', ba: 'payroll data released: none' },
+        who, vac ? escV : { status: 'REFUSED', reason: 'HR/Payroll is outside this seat’s information scope.' }));
+    }
+    if (n === 5) {
+      const o1p = log.some((r) => r.key === 'o1' && r.status === 'ESCALATED');
+      const res = log.filter((r) => r.status === 'ESCALATED' && (r.key === 'esc' || r.key === 'o1' || r.key === 'o2'))
+        .map((r) => '#' + (r.seq < 10 ? '0' : '') + r.seq);
+      const adds = 2000 + (o1p ? 2000 : 0);
+      push({ time: '08:10', key: 'cfo', who: K.CFO, whoShort: 'CFO', whoKind: 'cfo',
+        act: o1p ? 'Approve orders #1 and #2: $586,000' : 'Approve order #2: $410,000',
+        auth: 'CFO’s warrant · spend above $250,000',
+        ba: 'runway ' + d(stock) + ' → ' + d(stock + adds) + ', if lots pass QA',
+        adds, spend: o1p ? 586000 : 410000,
+        status: 'ACCEPTED', reason: 'Approved by a human with that authority. Resolves ' + res.join(', ') + '.' });
+    }
+    this.setState({ step: n, log, why: 0 });
+  }
+
+  amend() {
+    const s = this.state || {};
+    if ((s.step || 0) < 5 || s.amended) return;
+    const log = (s.log || []).slice();
+    log.push({ seq: log.length + 1, time: '08:30', key: 'gov', who: this.K().CFO, whoShort: 'CFO', whoKind: 'cfo',
+      act: 'Warrant amended: II.1, II.8 limit $250,000 → $500,000',
+      auth: 'Board delegation to the CFO (authored, 2023)', ba: 'warrant v3 → v4, from 08:30',
+      status: 'GOVERNANCE', reason: 'Earlier receipts stay exactly as written.' });
+    this.setState({ log, amended: true });
+  }
+
+  swap(k) {
+    const s = this.state || {};
+    const occ = s.occ || 'claude';
+    if (k === occ) return;
+    const K = this.K();
+    const log = (s.log || []).slice();
+    const last = log.length ? log[log.length - 1].time : '06:30';
+    log.push({ seq: log.length + 1, time: last, key: 'seat', who: 'seat register', whoShort: 'seat', whoKind: 'seat',
+      act: 'Occupant changed: ' + K.OCC[occ].short + ' → ' + K.OCC[k].short,
+      auth: 'I.1 · the seat stays; the occupant changes', ba: 'authority, beliefs, history: unchanged',
+      status: 'SEAT', reason: 'Later receipts carry the new name; earlier ones keep theirs.' });
+    this.setState({ occ: k, log, since: last });
+  }
+
+  reset() { this.setState({ step: 0, log: [], amended: false, why: 0, occ: 'claude', since: '06:00' }); }
+
+  renderVals() {
+    const s = this.state || {};
+    const K = this.K();
+    const step = s.step || 0;
+    const occ = s.occ || 'claude';
+    const log = s.log || [];
+    const amended = !!s.amended;
+    const how = !!s.how;
+    const why = s.why || 0;
+    const G = '#1E4D3A', OX = '#8B2E1E', PAPER = '#FAF8F1', TINT = '#E2EBE4';
+    const fmt = (n) => n.toLocaleString('en-US');
+    const pad = (n) => (n < 10 ? '0' : '') + n;
+    const lim = amended ? '$500,000' : '$250,000';
+    const find = (key, status) => log.find((r) => r.key === key && (!status || r.status === status));
+
+    // ---- "Why did it act?": the seat's inputs and the rule, not the model's inner reasoning
+    const NOTE = 'Its inputs and its rule, not the occupant’s private reasoning.';
+    const WHY = {
+      q: { rules: [{ id: 'II.3', t: 'II.3 — may request quotes from anyone. A quote commits nothing.' }], rooms: ['sup', 'inv'], note: NOTE },
+      o1: { rules: [{ id: 'II.1', t: 'II.1 — up to $250,000 per order; $176,000 is inside it.' }, { id: 'II.2', t: 'II.2 — Broker 1 is on the qualified list (recorded, 2024).' }], rooms: ['inv', 'line', 'cust', 'con', 'sup'], note: NOTE },
+      cfo: { rules: [{ id: 'CFO', t: 'The CFO’s own warrant: spend above $250,000.' }, { id: 'I.2', t: 'I.2 — this seat answers to the CFO.' }], rooms: ['inv', 'cust', 'con', 'sup'], note: 'What else the CFO looked at is UNKNOWN to this seat.' }
+    };
+    const whyR = log.find((r) => r.seq === why);
+    const wy = whyR && whyR.status === 'ACCEPTED' ? WHY[whyR.key] : null;
+    const ruleSet = wy ? wy.rules.map((x) => x.id) : [];
+    const roomSet = wy ? wy.rooms : [];
+    const hl = (id) => ruleSet.indexOf(id) >= 0;
+
+    // ---- I. Seat, II. Authority
+    const seatRows = [
+      { id: 'I.1', label: 'SEAT', value: 'Vice President, Procurement' },
+      { id: 'I.2', label: 'ANSWERABLE TO', value: 'CFO' },
+      { id: 'I.3', label: 'ESTABLISHED', value: '3 April 2023 · warrant ' + (amended ? 'v4, amended 08:30' : 'v3') }
+    ].map((r) => Object.assign(r, { bar: hl(r.id) ? G : 'transparent', bg: hl(r.id) ? TINT : 'transparent' }));
+    const o2 = find('o2'), esc = find('esc'), pay = find('pay');
+    const tag5 = o2 ? (o2.status === 'REFUSED' ? 'refused #' + pad(o2.seq) + (esc ? ' · escalated #' + pad(esc.seq) : '') : 'escalated #' + pad(o2.seq)) + (amended ? ' (under v3)' : '') : '';
+    const payRef = !!(pay && pay.status === 'REFUSED');
+    const clause = (id, txt, tag) => ({ id, txt, tag: tag || '', tagc: OX, bar: hl(id) ? G : 'transparent', bg: hl(id) ? TINT : 'transparent' });
+    const mayRows = [
+      clause('II.1', 'Commit up to ' + lim + ' per order' + (amended ? ' (v4; was $250,000)' : '')),
+      clause('II.2', 'Approve suppliers already on the qualified list'),
+      clause('II.3', 'Request quotes from anyone')
+    ];
+    const cannotRows = [
+      clause('II.4', 'Change procurement policy'),
+      clause('II.5', 'Commit above ' + lim + ' — escalates to the CFO', tag5),
+      clause('II.6', 'See HR or payroll', payRef ? 'refused #' + pad(pay.seq) : ''),
+      clause('II.7', 'Qualify a new part'),
+      clause('II.8', 'Aggregate: ' + lim + ' per supplier per day (no splitting)')
+    ];
+
+    // ---- III. Information: rooms the seat can and cannot see
+    const q = find('q', 'ACCEPTED');
+    const stock = this.stockOf(log);
+    const days = Math.round(stock / 210);
+    const lotsN = Math.round((stock - 2300) / 2000);
+    const committed = this.committedOf(log);
+    const R = [
+      { k: 'sup', label: 'SUPPLIERS', x: 0, y: 0, w: 146, h: 102, l1: 'Kaito: fab fire 06:10', l2: 'restart UNKNOWN · ' + (q ? '3 broker quotes on file' : '2 approved distributors') },
+      { k: 'con', label: 'CONTRACTS', x: 150, y: 0, w: 94, h: 102, l1: 'St. Brigid: patient-critical clause', l2: '' },
+      { k: 'inv', label: 'INVENTORY', x: 248, y: 0, w: 94, h: 102, l1: fmt(stock) + ' MCUs', l2: days + ' days of builds' + (stock > 2300 ? ', if QA passes' : '') },
+      { k: 'line', label: 'LINE 2', x: 346, y: 0, w: 94, h: 102, l1: '210 pumps a day', l2: 'build schedule' },
+      { k: 'qa', label: 'QA', x: 0, y: 106, w: 100, h: 104, l1: 'broker lots to inspect: ' + lotsN, l2: 'every lot, before Line 2' },
+      { k: 'fin', label: 'FINANCE · SUMMARY', x: 104, y: 106, w: 118, h: 104, l1: 'committed today: $' + fmt(committed), l2: 'totals only' },
+      { k: 'hr', label: 'HR / PAYROLL', x: 226, y: 106, w: 100, h: 104, l1: 'not visible to this seat', l2: '', masked: true },
+      { k: 'cust', label: 'CUSTOMERS', x: 330, y: 106, w: 110, h: 104, l1: '5 open promises', l2: '3 patient-critical' }
+    ];
+    const NAMES = { sup: 'Suppliers', con: 'Contracts', inv: 'Inventory', line: 'Line 2', qa: 'QA', fin: 'Finance', cust: 'Customers' };
+    const rooms = R.map((r) => {
+      const bi = roomSet.indexOf(r.k);
+      const on = bi >= 0;
+      return {
+        x: r.x, y: r.y, w: r.w, h: r.h, label: r.label, line1: r.l1, line2: r.l2,
+        bw: r.masked ? 2 : (on ? 3 : 1.5), bs: r.masked ? 'dashed' : 'solid',
+        bg: r.masked ? 'transparent' : (on ? TINT : PAPER),
+        fs: r.masked ? 'italic' : 'normal',
+        hasTag: r.k === 'hr' && payRef, tag: payRef ? 'REFUSED #' + pad(pay.seq) : '',
+        hasBadge: on, badge: bi + 1, bx: r.x + r.w - 13, by: r.y - 8
+      };
+    });
+    const beliefs = [
+      { tex: 't-mod', claim: 'Broker stock may include counterfeits.', basis: 'Basis: industry alerts on counterfeit parts (observed, general — verify). Applies here: modeled. So every broker lot goes to QA.' },
+      { tex: 't-unk', claim: 'Kaito’s restart date: UNKNOWN.', basis: 'Basis: Kaito notice, 06:10 — no date given. Left as a hole, not guessed.' },
+      { tex: 't-rec', claim: 'St. Brigid’s order is patient-critical.', basis: 'Basis: contract clause (recorded).' }
+    ];
+
+    // ---- IV. Occupant
+    const occupants = K.ORDER.map((k) => ({
+      name: K.OCC[k].name, kind: K.OCC[k].kind,
+      checked: occ === k ? 'true' : 'false',
+      bg: occ === k ? G : 'transparent', fg: occ === k ? PAPER : G,
+      go: () => this.swap(k)
+    }));
+
+    // ---- The morning
+    const TR = [
+      { t: '06:40', label: 'Quotes' }, { t: '07:15', label: 'Order #1' }, { t: '07:30', label: 'Order #2' },
+      { t: '07:45', label: 'Payroll' }, { t: '08:10', label: 'CFO' }, { t: '08:30', label: 'Warrant', gov: true }
+    ];
+    const track = TR.map((x, i) => {
+      const done = x.gov ? amended : i < step;
+      const next = x.gov ? (step >= 5 && !amended) : i === step;
+      return {
+        t: x.t, label: x.label, x: i * 88,
+        bg: done ? G : PAPER,
+        border: (x.gov && !done ? '2px dashed ' : '2px solid ') + G,
+        shadow: next ? '0 0 0 3px ' + PAPER + ', 0 0 0 5px ' + G : (done ? 'inset 0 0 0 2px ' + PAPER : 'none')
+      };
+    });
+    const NX = [
+      ['Next — 06:40. ', 'Request quotes from 3 brokers.'],
+      ['Next — 07:15. ', 'Place broker order #1: 2,000 MCUs from Broker 1 at $88 each = $176,000.'],
+      ['Next — 07:30. ', 'Place broker order #2: 2,000 MCUs from Broker 2 at $205 each = $410,000.'],
+      ['Next — 07:45. ', 'Ask for payroll data to model overtime on Line 2.'],
+      ['Next — 08:10. ', 'The CFO, a human, decides what was escalated.']
+    ];
+    let nx;
+    if (step < 5) nx = NX[step];
+    else if (amended) nx = ['Warrant v4 from 08:30. ', o2 && o2.status === 'REFUSED' ? 'Receipt #' + pad(o2.seq) + ' still reads REFUSED; its note says what v4 would do.' : 'Earlier receipts are unchanged.'];
+    else nx = ['08:10 is on the record. ', 'As the CFO, change the warrant — or open a “Why?”, or swap the occupant.'];
+
+    // ---- The tape: newest at the bottom; older receipts fold to one line
+    const STAMP = {
+      ACCEPTED: { b: '1.5px solid ' + G, bg: 'transparent', fg: G },
+      REFUSED: { b: '1.5px solid ' + OX, bg: OX, fg: '#FFFFFF' },
+      ESCALATED: { b: '1.5px dashed ' + G, bg: 'transparent', fg: G },
+      SEAT: { b: '1px solid #7E9186', bg: 'transparent', fg: '#33584A' },
+      GOVERNANCE: { b: '3px double ' + G, bg: 'transparent', fg: G }
+    };
+    const noteOf = (r) => amended && r.key === 'o2' && r.status === 'REFUSED';
+    const MAXN = 22;
+    const shown = log.length > MAXN ? log.slice(log.length - MAXN) : log;
+    const COMPACT = 29, BUDGET = 750;
+    const H = (r) => 116 + (r.evidence ? 92 : 0) + (noteOf(r) ? 62 : 0) + (r.agg ? 34 : 0) + (r.act.length > 40 ? 18 : 0) + (WHY[r.key] && r.status === 'ACCEPTED' ? 6 : 0);
+    let used = shown.length * COMPACT;
+    const full = {};
+    const tryFull = (r) => {
+      if (!r || full[r.seq]) return;
+      const extra = H(r) - COMPACT;
+      if (used + extra <= BUDGET) { full[r.seq] = true; used += extra; }
+    };
+    if (whyR) tryFull(whyR);
+    tryFull(shown[shown.length - 1]); tryFull(shown[shown.length - 2]); tryFull(shown[shown.length - 3]);
+    shown.forEach((r) => { if (noteOf(r)) tryFull(r); });
+    const tape = shown.map((r) => {
+      const st = STAMP[r.status];
+      const whyable = r.status === 'ACCEPTED' && !!WHY[r.key];
+      const open = why === r.seq;
+      return {
+        full: !!full[r.seq], compact: !full[r.seq],
+        head: '#' + pad(r.seq) + ' · ' + r.time + ' · ' + r.who,
+        line: '#' + pad(r.seq) + ' ' + r.time + ' ' + r.whoShort + ' · ' + r.act,
+        status: r.status, stB: st.b, stBg: st.bg, stFg: st.fg,
+        lbar: open ? G : (r.status === 'REFUSED' ? OX : 'transparent'),
+        act: r.act, auth: 'AUTHORITY ' + r.auth, ba: 'BEFORE → AFTER  ' + r.ba,
+        reason: r.reason,
+        hasEvidence: !!r.evidence, evidence: r.evidence || '', drafted: r.drafted || '', draftTex: r.draftTex || 't-rec',
+        hasAgg: !!r.agg, agg: r.agg || '',
+        hasNote: noteOf(r),
+        note: 'Under v4 this act would be accepted: $410,000 is within $500,000 (II.1, II.8). The receipt stays as written.',
+        whyable, whyPressed: open ? 'true' : 'false',
+        whyAria: 'Why did receipt #' + pad(r.seq) + ' act?',
+        whyGo: () => this.setState({ why: ((this.state && this.state.why) || 0) === r.seq ? 0 : r.seq })
+      };
+    });
+
+    const howRows = [
+      { tex: 't-aut', word: 'AUTHORED', text: 'The warrant, and all receipt wording.' },
+      { tex: 't-rec', word: 'RECORDED', text: 'Receipts, append-only; contract clauses.' },
+      { tex: 't-com', word: 'COMPUTED', text: 'Runway: MCUs ÷ 210 pumps a day.' },
+      { tex: 't-mod', word: 'MODELED', text: 'Counterfeit risk as it applies here.' },
+      { tex: 't-gen', word: 'GENERATED', text: 'None here: no model ran.' },
+      { tex: 't-unk', word: 'UNKNOWN', text: 'Kaito’s restart; rooms not visible.' }
+    ];
+
+    return {
+      toggleHow: () => this.setState({ how: !how }),
+      howPressed: how ? 'true' : 'false', howBg: how ? G : 'transparent', howFg: how ? PAPER : G,
+      versionLine: amended ? 'WARRANT v4 · AMENDED 08:30 BY THE CFO' : 'WARRANT v3 · IN FORCE',
+      seatRows, mayRows, cannotRows,
+      sealAria: 'Seal of the seat: authority limit ' + lim + ' per order',
+      sealRot: amended ? 5 : -7, sealLimit: lim,
+      sealVer: amended ? 'v4 · 08:30' : 'v3 · 2023',
+      occupants,
+      sinceLine: 'NOW ' + K.OCC[occ].short.toUpperCase() + ' · SINCE ' + (s.since || '06:00'),
+      rooms, beliefs,
+      progress: 'STEP ' + step + ' OF 5' + (amended ? ' · WARRANT v4' : ''),
+      track, nextLead: nx[0], nextText: nx[1],
+      advance: () => this.advance(), advanceOff: step >= 5,
+      amend: () => this.amend(), amendOff: step < 5 || amended,
+      reset: () => this.reset(),
+      whyOn: !!wy && !how,
+      whyTitle: whyR ? 'Why did it act? · #' + pad(whyR.seq) : '',
+      closeWhy: () => this.setState({ why: 0 }),
+      whyRules: wy ? wy.rules : [],
+      whyInputs: wy ? wy.rooms.map((k, i) => (i + 1) + ' ' + NAMES[k]).join(' · ') : '',
+      whyNote: wy ? wy.note : '',
+      howOn: how, howRows,
+      hintOn: !how && !wy,
+      tapeEmpty: log.length === 0,
+      rolled: log.length > MAXN,
+      rolledText: log.length > MAXN ? '#01–#' + pad(log.length - MAXN) + ' ROLLED UP ABOVE · STILL ON THE RECORD' : '',
+      tape
+    };
+  }
+}
+</script>
+</body>
+</html>

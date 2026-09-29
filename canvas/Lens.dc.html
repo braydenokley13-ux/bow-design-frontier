@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lens Light Table</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&amp;family=Archivo+Narrow:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600;1,700&amp;family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FBFAF6;color:#1D1C1A;font-family:'Archivo',sans-serif}
+a{color:#C23B22}a:hover{color:#8E2A18}
+.an{font-family:'Archivo Narrow',sans-serif}
+.mono{font-family:'Courier Prime','Courier New',monospace}
+.sheet{position:absolute;left:344px;top:132px;width:760px;height:532px;box-sizing:border-box;transform-origin:0 0;background:rgba(255,255,254,.84);border:1px solid rgba(29,28,26,.24);pointer-events:none;transition:transform .75s cubic-bezier(.2,.75,.2,1),box-shadow .75s ease}
+.sc{position:absolute;left:0;top:0;width:758px;height:530px;transition:opacity .45s ease}
+.hole{position:absolute;top:6px;width:10px;height:10px;border-radius:50%;border:1px solid rgba(29,28,26,.32);background:#F0F2F1;box-sizing:border-box}
+.fade{transition-property:opacity;transition-duration:.6s;transition-timing-function:ease}
+.lr-rec{background:#C23B22;box-shadow:inset 0 0 0 2px #C23B22,inset 0 0 0 3.5px #FBFAF6}
+.lr-mod{background:repeating-linear-gradient(135deg,#C23B22 0 1.5px,transparent 1.5px 5px);box-shadow:inset 0 0 0 1px #C23B22}
+.lr-aut{background:transparent;border:2px solid #C23B22;box-sizing:border-box}
+.lr-unk{background:transparent;border:2px dashed #C23B22;box-sizing:border-box}
+.pv-rec{background:#1D1C1A;box-shadow:inset 0 0 0 2px #1D1C1A,inset 0 0 0 3.5px #FFFFFF}
+.pv-obs{background:#1D1C1A}
+.pv-unk{background:transparent;border:2px dashed #1D1C1A;box-sizing:border-box}
+.v-aut{background:transparent;border:2px solid #4B3FA0;box-sizing:border-box}
+.lk-tag{display:inline-block;flex:none;border:1.5px solid #C23B22;background:transparent;color:#C23B22;font-family:'Archivo Narrow',sans-serif;font-size:13px;font-weight:700;letter-spacing:.02em;line-height:18px;padding:0 7px;white-space:nowrap;transition:opacity .35s}
+.asm{display:inline-block;font-family:'Courier Prime','Courier New',monospace;font-size:11px;letter-spacing:.06em;border:1.5px solid #1D1C1A;padding:0 5px;line-height:16px;color:#1D1C1A;background:#FFFFFF;white-space:nowrap}
+.btn{font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:15px;letter-spacing:.03em;min-height:44px;padding:0 16px;border:1.5px solid #1D1C1A;background:transparent;color:#1D1C1A;cursor:pointer;border-radius:0;transition:background .2s,color .2s}
+.btn:hover{background:#ECEAE3}
+.btn:focus-visible,.fan:focus-visible,.tab:focus-visible{outline:3px solid #1D1C1A;outline-offset:2px}
+.vbtn{border-color:#4B3FA0;color:#4B3FA0}
+.vbtn:hover{background:#ECEAF6}
+.fan{position:absolute;left:12px;width:274px;border:0;background:transparent;padding:0;cursor:pointer;text-align:left;z-index:60}
+.fan .chip{transition:border-color .2s,box-shadow .2s}
+.fan:hover .chip{border-color:#C23B22;box-shadow:0 0 0 1px #C23B22}
+.tab{cursor:pointer;transition:background .2s}
+.tab:hover{background:#FFFFFF}
+.tabword{padding-bottom:3px;border-bottom:2px solid transparent;transition:border-color .2s}
+.tab:hover .tabword{border-bottom-color:#C23B22}
+.row{position:relative;height:24px;display:grid;grid-template-columns:184px 46px 132px 72px;align-items:center;border-bottom:1px solid rgba(29,28,26,.12)}
+.mrow{display:grid;grid-template-columns:13ch 1fr;font-family:'Courier Prime','Courier New',monospace;font-size:15px;line-height:23px}
+.brow{display:grid;grid-template-columns:30px 150px 78px 1fr 104px;align-items:center;min-height:48px;border-bottom:1px solid rgba(29,28,26,.14)}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #FBFAF6; color: #1D1C1A; font-family: 'Archivo', sans-serif">
+
+  <!-- HEADER -->
+  <header style="position: absolute; left: 20px; right: 20px; top: 14px; height: 66px; display: flex; align-items: center; gap: 24px; z-index: 70">
+    <div style="display: flex; flex-direction: column; gap: 5px; min-width: 0">
+      <span class="mono" style="font-size: 12px; letter-spacing: .1em; color: #55524A">P6 · LENS / LAB · THE LIGHT TABLE</span>
+      <h1 style="margin: 0; font-size: 29px; line-height: 1.05; font-weight: 800; letter-spacing: -0.01em">Why did Boston lose in Denver?</h1>
+    </div>
+    <div role="group" aria-label="Read every link as" style="margin-left: auto; display: flex; align-items: center; gap: 12px">
+      <span class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .08em; color: #55524A">READ EVERY LINK AS</span>
+      <div style="display: flex; border: 1.5px solid #1D1C1A">
+        <button type="button" class="btn" aria-pressed="{{worldPressed}}" onClick="{{toWorld}}" style="border: 0; background: {{worldBg}}; color: {{worldFg}}">This World</button>
+        <button type="button" class="btn" aria-pressed="{{realPressed}}" onClick="{{toReal}}" style="border: 0; border-left: 1.5px solid #1D1C1A; background: {{realBg}}; color: {{realFg}}">If this were a real NBA game</button>
+      </div>
+    </div>
+    <button type="button" class="btn" onClick="{{reset}}" style="border-color: transparent; text-decoration: underline; text-underline-offset: 4px">Start over</button>
+  </header>
+
+  <!-- FAN AREA LABEL + PLACEHOLDER -->
+  <span class="an" style="position: absolute; left: 22px; top: 92px; font-size: 12px; font-weight: 700; letter-spacing: .1em; color: #55524A; z-index: 5">LIFTED · YOUR PATH BACK</span>
+  <sc-if value="{{noneLifted}}" hint-placeholder-val="{{true}}">
+    <div style="position: absolute; left: 20px; top: 112px; width: 252px; height: 176px; box-sizing: border-box; border: 1px solid #D3D0C6; display: flex; align-items: center; padding: 20px; z-index: 5">
+      <span class="an" style="font-size: 15px; line-height: 1.4; color: #5F5B52">Pull “because…” on the table. Each sheet you lift stacks here. Click any of them to drop back to it.</span>
+    </div>
+  </sc-if>
+
+  <!-- THE LIGHT TABLE -->
+  <div style="position: absolute; left: 316px; top: 92px; width: 1108px; height: 780px; box-sizing: border-box; background-color: #F0F2F1; background-image: linear-gradient(rgba(29,28,26,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(29,28,26,.04) 1px, transparent 1px); background-size: 28px 28px; border: 1px solid #D7DAD6; z-index: 1"></div>
+  <span class="an" style="position: absolute; left: 344px; top: 104px; font-size: 12px; font-weight: 700; letter-spacing: .1em; color: #55524A; z-index: 2">{{tableLabel}}</span>
+
+  <!-- SHEET 1 · THE RESULT -->
+  <div class="sheet" style="transform: {{sh0.tf}}; z-index: {{sh0.z}}; box-shadow: {{sh0.shadow}}">
+    <div class="hole" style="left: 356px"></div><div class="hole" style="left: 394px"></div>
+    <div class="sc" style="opacity: {{sh0.cop}}">
+      <div style="position: absolute; left: 24px; top: 20px; width: 712px; height: 30px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(29,28,26,.25)">
+        <span class="{{sh0.pv}}" style="width: 28px; height: 13px; display: inline-block; flex: none; box-sizing: border-box"></span>
+        <span class="mono" style="font-size: 13px; color: #55524A">SHEET 1 / 7</span>
+        <span class="an" style="font-weight: 700; font-size: 21px; letter-spacing: .06em">THE RESULT</span>
+        <span class="an" style="margin-left: auto; font-size: 14px; color: #55524A">scale · one game</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 64px; width: 712px; height: 160px; box-sizing: border-box; box-shadow: inset 0 0 0 1.5px #1D1C1A, inset 0 0 0 5px #FFFFFF, inset 0 0 0 6.5px #1D1C1A; padding: 18px 30px; display: flex; align-items: flex-end; gap: 52px">
+        <div style="display: flex; flex-direction: column">
+          <span class="an" style="font-size: 19px; font-weight: 700; letter-spacing: .1em">DENVER</span>
+          <span style="font-size: 98px; line-height: .92; font-weight: 800; letter-spacing: -0.03em">115</span>
+        </div>
+        <div style="display: flex; flex-direction: column">
+          <span class="an" style="font-size: 19px; font-weight: 700; letter-spacing: .1em">BOSTON</span>
+          <span style="font-size: 98px; line-height: .92; font-weight: 800; letter-spacing: -0.03em">112</span>
+        </div>
+        <div style="margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; padding-bottom: 6px">
+          <span class="mono" style="font-size: 18px; font-weight: 700; letter-spacing: .12em">FINAL</span>
+          <span class="an" style="font-size: 15px; color: #55524A">at Denver · Stretch 1, Oct 20 – Nov 5</span>
+          <span class="an" style="font-size: 15px; color: #55524A">2026-27 · your World</span>
+        </div>
+      </div>
+      <div style="position: absolute; left: 24px; top: 236px; display: flex; gap: 10px; align-items: baseline">
+        <span class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .08em">LAST 5:00 · 20 POSSESSIONS</span>
+        <span class="an" style="font-size: 15px; color: #55524A">Boston won the stretch 16–10, but started it down 96–105.</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 262px; display: flex; gap: 2px">
+        <sc-for list="{{poss}}" as="p" hint-placeholder-count="20">
+          <div style="position: relative; width: 33.6px; height: 50px; box-sizing: border-box; border: 1px solid rgba(29,28,26,.35); background: {{p.bg}}; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 3px 0">
+            <span class="an" style="font-size: 11px; color: #55524A; line-height: 1">{{p.team}}</span>
+            <span style="font-size: 17px; font-weight: {{p.w}}; line-height: 1">{{p.pts}}</span>
+            <span class="mono" style="font-size: 11px; line-height: 1">{{p.who}}</span>
+            <div class="fade" style="position: absolute; left: -3px; top: -3px; right: -3px; bottom: -3px; border: 2px solid #4B3FA0; opacity: {{p.vop}}; transition-delay: {{p.vd}}s"></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="position: absolute; left: 24px; top: 330px; width: 400px">
+        <div class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .08em; margin-bottom: 6px">FINAL SECONDS · DENVER SCORE FIRST</div>
+        <sc-for list="{{finals}}" as="r" hint-placeholder-count="5">
+          <div class="mono" style="display: grid; grid-template-columns: 30px 44px 1fr 72px; font-size: 14px; line-height: 25px; border-bottom: 1px solid rgba(29,28,26,.12)">
+            <span style="color: #55524A">{{r.n}}</span><span>{{r.t}}</span><span>{{r.what}}</span><span style="text-align: right; font-weight: 700">{{r.sc}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div class="fade" style="position: absolute; left: 448px; top: 336px; width: 288px; opacity: {{sh0.nolab}}; transition-delay: {{sh0.ld}}s">
+        <p class="an" style="margin: 0; font-size: 18px; font-style: italic; font-weight: 500; line-height: 1.35">This World played the game once. A recorded result has no range.</p>
+      </div>
+      <div class="fade" style="position: absolute; left: 448px; top: 326px; width: 288px; box-sizing: border-box; border: 2px solid #4B3FA0; background: rgba(255,255,254,.94); padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 6px; opacity: {{sh0.lab}}; transition-delay: {{sh0.ld}}s">
+        <span class="an" style="font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #4B3FA0">LAB BRANCH · DIVERGED AT THE TRADE</span>
+        <span style="font-size: 13px; line-height: 1.35">A range, not a score. Once the Lab runs it, Boston would win possession 16 in some runs, not others.</span>
+        <div style="position: relative; height: 18px; margin-top: 2px; border-left: 1px solid #1D1C1A; border-right: 1px solid #1D1C1A">
+          <div style="position: absolute; left: 0; right: 0; top: 8px; height: 1px; background: #1D1C1A"></div>
+          <div class="v-aut" style="position: absolute; left: 38%; width: 14%; top: 0; height: 18px"></div>
+        </div>
+        <span style="font-size: 21px; font-weight: 800; color: #4B3FA0; line-height: 1.1">38–52% <span class="an" style="font-size: 14px; font-weight: 600">branch win probability</span></span>
+        <span class="mono" style="font-size: 12px; color: #4B3FA0">illustrative, authored — the Lab has not run</span>
+      </div>
+      <div class="mono" style="position: absolute; left: 24px; bottom: 10px; font-size: 12px; opacity: {{kop}}; transition: opacity .3s">c-g2-DEN · segment final · possession 20 of 20 · recorded</div>
+    </div>
+  </div>
+
+  <!-- SHEET 2 · THE POSSESSION -->
+  <div class="sheet" style="transform: {{sh1.tf}}; z-index: {{sh1.z}}; box-shadow: {{sh1.shadow}}">
+    <div class="hole" style="left: 356px"></div><div class="hole" style="left: 394px"></div>
+    <div class="sc" style="opacity: {{sh1.cop}}">
+      <div style="position: absolute; left: 24px; top: 20px; width: 712px; height: 30px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(29,28,26,.25)">
+        <span class="{{sh1.pv}}" style="width: 28px; height: 13px; display: inline-block; flex: none; box-sizing: border-box"></span>
+        <span class="mono" style="font-size: 13px; color: #55524A">SHEET 2 / 7</span>
+        <span class="an" style="font-weight: 700; font-size: 21px; letter-spacing: .06em">THE POSSESSION</span>
+        <span class="lk-tag" style="opacity: {{sh1.tagOp}}">{{sh1.tag}}</span>
+        <span class="an" style="margin-left: auto; font-size: 14px; color: #55524A">scale · one possession</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 62px; width: 712px; height: 26px; display: flex; align-items: center; gap: 12px">
+        <span class="{{sh1.lk}}" style="width: 30px; height: 12px; flex: none; display: inline-block"></span>
+        <span class="an" style="font-style: italic; font-weight: 600; font-size: 18px; color: #C23B22">{{sh1.bec}}</span>
+      </div>
+      <div class="fade" style="position: absolute; left: 66px; top: 92px; opacity: {{sh1.lab}}; transition-delay: {{sh1.ld}}s">
+        <span class="an" style="font-style: italic; font-weight: 600; font-size: 15px; color: #4B3FA0">Branch: with a second big, Boston drops instead of switching.</span>
+      </div>
+      <span class="fade an" style="position: absolute; right: 24px; top: 90px; opacity: {{sh1.lab}}; transition-delay: {{sh1.ld}}s; border: 1.5px solid #4B3FA0; color: #4B3FA0; font-size: 12px; font-weight: 700; letter-spacing: .08em; padding: 2px 8px; transform: rotate(-2deg); background: #FFFFFF">LAB · DIVERGED AT THE TRADE</span>
+      <svg width="420" height="372" viewBox="0 0 420 372" role="img" aria-label="Coach's diagram of possession 16. Murray and Jokić run a screen, Boston switches, Pritchard ends up on Jokić, Jokić scores." style="position: absolute; left: 24px; top: 120px; overflow: visible">
+        <defs>
+          <marker id="s2ai" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1 L9 5 L0 9 z" fill="#1D1C1A"></path></marker>
+          <marker id="s2ao" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#1D1C1A" stroke-width="1.4"></path></marker>
+          <marker id="s2av" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1 L9 5 L0 9 z" fill="#4B3FA0"></path></marker>
+        </defs>
+        <g fill="none" stroke="#1D1C1A" stroke-width="1.4" opacity="0.72">
+          <rect x="1" y="1" width="418" height="370"></rect>
+          <rect x="152" y="1" width="116" height="150"></rect>
+          <path d="M152 151 A58 58 0 0 0 268 151"></path>
+          <path d="M28 1 L28 107 A196 196 0 0 0 392 107 L392 1"></path>
+          <path d="M150 371 A60 60 0 0 1 270 371"></path>
+          <circle cx="210" cy="34" r="8"></circle>
+        </g>
+        <line x1="186" y1="24" x2="234" y2="24" stroke="#1D1C1A" stroke-width="2.4"></line>
+        <polyline points="238,290 246,278 254,288 262,274 270,284 278,268 286,278 296,260 310,244" fill="none" stroke="#1D1C1A" stroke-width="1.5" marker-end="url(#s2ai)"></polyline>
+        <line x1="241" y1="257" x2="241" y2="279" stroke="#1D1C1A" stroke-width="3.2"></line>
+        <path d="M250 256 Q 246 180 226 124" fill="none" stroke="#1D1C1A" stroke-width="1.8" marker-end="url(#s2ai)"></path>
+        <line x1="306" y1="238" x2="234" y2="126" stroke="#1D1C1A" stroke-width="1.1" marker-end="url(#s2ao)"></line>
+        <text x="276" y="178" font-family="Archivo Narrow, sans-serif" font-size="12" font-weight="600" fill="#55524A">pass</text>
+        <circle cx="222" cy="112" r="4.5" fill="#1D1C1A"></circle>
+        <g stroke="#1D1C1A" stroke-width="1.6" fill="#FFFFFF">
+          <circle cx="226" cy="296" r="12"></circle>
+          <circle cx="256" cy="268" r="12"></circle>
+          <circle cx="44" cy="58" r="12"></circle>
+          <circle cx="376" cy="58" r="12"></circle>
+          <circle cx="82" cy="200" r="12"></circle>
+        </g>
+        <g font-family="Archivo, sans-serif" font-weight="700" font-size="13" fill="#1D1C1A" text-anchor="middle">
+          <text x="226" y="300.5">1</text>
+          <text x="256" y="272.5">5</text>
+          <text x="44" y="62.5">2</text>
+          <text x="376" y="62.5">3</text>
+          <text x="82" y="204.5">4</text>
+        </g>
+        <g fill="none" stroke="#1D1C1A" stroke-width="2.2">
+          <path d="M60 72 L72 84 M72 72 L60 84"></path>
+          <path d="M348 72 L360 84 M360 72 L348 84"></path>
+          <path d="M98 180 L110 192 M110 180 L98 192"></path>
+        </g>
+        <g font-family="Archivo Narrow, sans-serif" font-weight="700" font-size="12" fill="#1D1C1A">
+          <text x="78" y="82">JB</text>
+          <text x="342" y="82" text-anchor="end">JT</text>
+          <text x="116" y="192">PG</text>
+        </g>
+        <g style="opacity: {{sh1.rec}}; transition: opacity .6s ease {{sh1.ld}}s">
+          <path d="M220 266 L232 278 M232 266 L220 278" fill="none" stroke="#1D1C1A" stroke-width="2.2"></path>
+          <path d="M256 232 L268 244 M268 232 L256 244" fill="none" stroke="#1D1C1A" stroke-width="2.2"></path>
+          <text x="212" y="262" text-anchor="end" font-family="Archivo Narrow, sans-serif" font-weight="700" font-size="12" fill="#1D1C1A">PP</text>
+          <text x="276" y="252" font-family="Archivo Narrow, sans-serif" font-weight="700" font-size="12" fill="#1D1C1A">MR</text>
+          <path d="M270 236 Q 294 224 302 234" fill="none" stroke="#1D1C1A" stroke-width="1.5" marker-end="url(#s2ai)"></path>
+          <path d="M222 262 Q 212 196 214 142" fill="none" stroke="#1D1C1A" stroke-width="1.5" marker-end="url(#s2ai)"></path>
+        </g>
+        <ellipse cx="224" cy="120" rx="42" ry="27" transform="rotate(-14 224 120)" fill="none" stroke="#C23B22" stroke-width="2.6"></ellipse>
+        <ellipse cx="226" cy="118" rx="45" ry="25" transform="rotate(-8 226 118)" fill="none" stroke="#C23B22" stroke-width="1.2" opacity="0.6"></ellipse>
+        <text x="176" y="96" text-anchor="end" font-family="Archivo Narrow, sans-serif" font-style="italic" font-weight="700" font-size="14" fill="#C23B22">guard on Jokić</text>
+        <g style="opacity: {{sh1.lab}}; transition: opacity .6s ease {{sh1.ld}}s">
+          <ellipse cx="224" cy="118" rx="30" ry="19" fill="none" stroke="#4B3FA0" stroke-width="2"></ellipse>
+          <path d="M258 246 Q 252 206 240 172" fill="none" stroke="#4B3FA0" stroke-width="2" marker-end="url(#s2av)"></path>
+          <path d="M230 154 L242 166 M242 154 L230 166" fill="none" stroke="#4B3FA0" stroke-width="2.4"></path>
+          <text x="224" y="166" text-anchor="end" font-family="Archivo Narrow, sans-serif" font-style="italic" font-weight="700" font-size="13" fill="#4B3FA0">MR drops</text>
+          <path d="M190 278 L202 290 M202 278 L190 290" fill="none" stroke="#4B3FA0" stroke-width="2.4"></path>
+          <text x="184" y="289" text-anchor="end" font-family="Archivo Narrow, sans-serif" font-weight="700" font-size="12" fill="#4B3FA0">JB</text>
+          <path d="M98 160 L110 172 M110 160 L98 172" fill="none" stroke="#4B3FA0" stroke-width="2.4"></path>
+          <text x="116" y="171" font-family="Archivo Narrow, sans-serif" font-weight="700" font-size="12" fill="#4B3FA0">NQ</text>
+          <text x="298" y="138" font-family="Archivo Narrow, sans-serif" font-style="italic" font-weight="700" font-size="13" fill="#4B3FA0">drop, not switch</text>
+        </g>
+      </svg>
+      <div style="position: absolute; left: 464px; top: 122px; width: 272px; display: flex; flex-direction: column; gap: 8px">
+        <span class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .08em">POSSESSION 16 OF 20 · DENVER BALL</span>
+        <span style="font-size: 34px; font-weight: 800; line-height: 1">Jokić scores</span>
+        <span class="an" style="font-size: 15px; color: #55524A">Denver 113–110 → 115–110</span>
+        <span style="font-size: 15px; font-weight: 600; line-height: 1.35; color: #C23B22">The switch left a guard, Pritchard, on Jokić.</span>
+        <span class="fade" style="font-size: 14px; font-weight: 600; line-height: 1.35; color: #4B3FA0; opacity: {{sh1.lab}}; transition-delay: {{sh1.ld}}s">Branch: Robinson drops and stays home on Jokić. Butler takes Murray; Queta takes Gordon.</span>
+        <div class="mono" style="font-size: 13px; line-height: 1.5; margin-top: 2px; border-top: 1px solid rgba(29,28,26,.25); padding-top: 8px">O Denver · X Boston<br>1 Murray · 2 Braun · 3 C. Johnson<br>4 Gordon · 5 Jokić<br>PP Pritchard · JB Butler · JT Tatum<br>PG George · MR Robinson</div>
+        <span class="an" style="font-size: 13px; color: #55524A; line-height: 1.35">zigzag = dribble · arrow = move · thin line = pass · bar = screen</span>
+      </div>
+      <div class="mono" style="position: absolute; left: 24px; bottom: 10px; font-size: 12px; opacity: {{kop}}; transition: opacity .3s">c-g2-DEN · possession 16 of 20 · “Jokić scores” · recorded</div>
+    </div>
+  </div>
+
+  <!-- SHEET 3 · THE LINEUP -->
+  <div class="sheet" style="transform: {{sh2.tf}}; z-index: {{sh2.z}}; box-shadow: {{sh2.shadow}}">
+    <div class="hole" style="left: 356px"></div><div class="hole" style="left: 394px"></div>
+    <div class="sc" style="opacity: {{sh2.cop}}">
+      <div style="position: absolute; left: 24px; top: 20px; width: 712px; height: 30px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(29,28,26,.25)">
+        <span class="{{sh2.pv}}" style="width: 28px; height: 13px; display: inline-block; flex: none; box-sizing: border-box"></span>
+        <span class="mono" style="font-size: 13px; color: #55524A">SHEET 3 / 7</span>
+        <span class="an" style="font-weight: 700; font-size: 21px; letter-spacing: .06em">THE LINEUP</span>
+        <span class="an" style="margin-left: auto; font-size: 14px; color: #55524A">scale · five players, last 5:00</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 62px; width: 712px; height: 26px; display: flex; align-items: center; gap: 12px">
+        <span class="{{sh2.lk}}" style="width: 30px; height: 12px; flex: none; display: inline-block"></span>
+        <span class="an" style="font-style: italic; font-weight: 600; font-size: 18px; color: #C23B22">{{sh2.bec}}</span>
+      </div>
+      <div class="fade" style="position: absolute; left: 66px; top: 92px; opacity: {{sh2.lab}}; transition-delay: {{sh2.ld}}s">
+        <span class="an" style="font-style: italic; font-weight: 600; font-size: 15px; color: #4B3FA0">Branch: Queta closes as the second big.</span>
+      </div>
+      <span class="fade an" style="position: absolute; right: 24px; top: 90px; opacity: {{sh2.lab}}; transition-delay: {{sh2.ld}}s; border: 1.5px solid #4B3FA0; color: #4B3FA0; font-size: 12px; font-weight: 700; letter-spacing: .08em; padding: 2px 8px; transform: rotate(-2deg); background: #FFFFFF">LAB · DIVERGED AT THE TRADE</span>
+      <div style="position: absolute; left: 24px; top: 124px; width: 712px; height: 176px; box-sizing: border-box; box-shadow: inset 0 0 0 1.5px #1D1C1A, inset 0 0 0 5px #FFFFFF, inset 0 0 0 6.5px #1D1C1A; padding: 7px; display: flex">
+        <sc-for list="{{lineup}}" as="c" hint-placeholder-count="5">
+          <div style="position: relative; flex: 1; border-left: {{c.bl}}; padding: 10px 12px 0; display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 34px; font-weight: 800; line-height: 1">{{c.pos}}</span>
+            <span style="font-size: 14px; margin-top: 8px">{{c.first}}</span>
+            <span style="font-size: 21px; font-weight: 800; line-height: 1.05">{{c.last}}</span>
+            <span class="mono" style="font-size: 12px; color: #55524A">World roster</span>
+            <span class="an" style="position: absolute; left: 12px; right: 12px; bottom: 10px; height: 24px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; letter-spacing: .12em; border: 1.5px solid #1D1C1A; background: {{c.bandBg}}; color: {{c.bandFg}}">{{c.band}}</span>
+            <div class="fade" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; opacity: {{c.lop}}; transition-delay: {{c.ld}}s">
+              <svg width="140" height="162" viewBox="0 0 140 162" style="position: absolute; left: 0; top: 0"><line x1="10" y1="150" x2="130" y2="14" stroke="#4B3FA0" stroke-width="2.5"></line></svg>
+              <span class="an" style="position: absolute; left: 8px; right: 8px; bottom: 42px; background: #FFFFFF; border: 1.5px solid #4B3FA0; color: #4B3FA0; font-size: 13px; font-weight: 700; padding: 2px 6px; text-align: center">Queta, C · LAB</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <span class="an" style="position: absolute; left: 24px; top: 314px; font-size: 13px; font-weight: 700; letter-spacing: .08em">BIGS ON THE FLOOR</span>
+      <div style="position: absolute; left: 24px; top: 338px; width: 214px; height: 54px; box-sizing: border-box; background: #1D1C1A; box-shadow: inset 0 0 0 2px #1D1C1A, inset 0 0 0 4px #FFFFFF; color: #FFFFFF; display: flex; align-items: center; padding: 0 16px; gap: 10px">
+        <span class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .1em">BIG 1</span><span style="font-size: 17px; font-weight: 700">Robinson, C</span>
+      </div>
+      <div style="position: absolute; left: 258px; top: 338px; width: 214px; height: 54px; box-sizing: border-box; border: 1.5px solid #1D1C1A; display: flex; align-items: center; padding: 0 16px; gap: 10px">
+        <span class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .1em">BIG 2</span><span style="font-size: 17px; font-weight: 600; color: #55524A">nobody</span>
+      </div>
+      <div class="fade v-aut" style="position: absolute; left: 258px; top: 338px; width: 214px; height: 54px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; opacity: {{sh2.lab}}; transition-delay: {{sh2.ld}}s">
+        <span style="background: #FFFFFF; color: #4B3FA0; font-size: 14px; font-weight: 700; padding: 2px 8px; border: 1.5px solid #4B3FA0">BIG 2 · Queta, C · LAB</span>
+      </div>
+      <div style="position: absolute; left: 244px; top: 326px; width: 242px; height: 78px; box-sizing: border-box; border: 2.5px solid #C23B22; border-radius: 50%; transform: rotate(-3deg)"></div>
+      <p class="an" style="position: absolute; left: 504px; top: 340px; width: 232px; margin: 0; font-size: 15px; line-height: 1.35; color: #55524A">Frozen when the Court opened. Nobody subbed in the last 5:00.</p>
+      <span class="an" style="position: absolute; left: 24px; top: 420px; font-size: 13px; font-weight: 700; letter-spacing: .08em">ON THE FLOOR FOR ALL 20 POSSESSIONS</span>
+      <div style="position: absolute; left: 24px; top: 444px; width: 711px; height: 12px; background: repeating-linear-gradient(90deg, #1D1C1A 0 31px, transparent 31px 35.55px)"></div>
+      <div class="mono" style="position: absolute; left: 24px; bottom: 10px; font-size: 12px; opacity: {{kop}}; transition: opacity .3s">c-g2-DEN · frozen five · set at Court open, Stretch 1 · recorded</div>
+    </div>
+  </div>
+
+  <!-- SHEET 4 · THE CAP SHEET -->
+  <div class="sheet" style="transform: {{sh3.tf}}; z-index: {{sh3.z}}; box-shadow: {{sh3.shadow}}">
+    <div class="hole" style="left: 356px"></div><div class="hole" style="left: 394px"></div>
+    <div class="sc" style="opacity: {{sh3.cop}}">
+      <div style="position: absolute; left: 24px; top: 20px; width: 712px; height: 30px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(29,28,26,.25)">
+        <span class="{{sh3.pv}}" style="width: 28px; height: 13px; display: inline-block; flex: none; box-sizing: border-box"></span>
+        <span class="mono" style="font-size: 13px; color: #55524A">SHEET 4 / 7</span>
+        <span class="an" style="font-weight: 700; font-size: 21px; letter-spacing: .06em">THE CAP SHEET</span>
+        <span class="an" style="margin-left: auto; font-size: 14px; color: #55524A">scale · the roster and its money</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 62px; width: 712px; height: 26px; display: flex; align-items: center; gap: 12px">
+        <span class="{{sh3.lk}}" style="width: 30px; height: 12px; flex: none; display: inline-block"></span>
+        <span class="an" style="font-style: italic; font-weight: 600; font-size: 18px; color: #C23B22">{{sh3.bec}}</span>
+      </div>
+      <div class="fade" style="position: absolute; left: 66px; top: 92px; opacity: {{sh3.lab}}; transition-delay: {{sh3.ld}}s">
+        <span class="an" style="font-style: italic; font-weight: 600; font-size: 15px; color: #4B3FA0">Branch: Queta stays, Scheierman goes. Same money, different shape.</span>
+      </div>
+      <span class="fade an" style="position: absolute; right: 24px; top: 90px; opacity: {{sh3.lab}}; transition-delay: {{sh3.ld}}s; border: 1.5px solid #4B3FA0; color: #4B3FA0; font-size: 12px; font-weight: 700; letter-spacing: .08em; padding: 2px 8px; transform: rotate(-2deg); background: #FFFFFF">LAB · DIVERGED AT THE TRADE</span>
+      <div class="row an" style="position: absolute; left: 24px; top: 118px; width: 434px; font-size: 12px; font-weight: 700; letter-spacing: .08em; border-bottom: 1.5px solid #1D1C1A">
+        <span>PLAYER</span><span>POS</span><span>ROLE</span><span style="text-align: right">2026-27</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 144px; width: 434px">
+        <sc-for list="{{cap}}" as="r" hint-placeholder-count="13">
+          <div class="row">
+            <span style="font-size: 14px; font-weight: 500; color: {{r.c}}">{{r.name}}</span>
+            <span class="an" style="font-size: 13px">{{r.pos}}</span>
+            <span class="an" style="font-size: 13px; color: #55524A">{{r.role}}</span>
+            <span class="mono" style="font-size: 14px; font-weight: 700; text-align: right; color: {{r.c}}">{{r.sal}}</span>
+            <div style="position: absolute; left: 0; right: 0; top: 11px; height: 1.5px; background: #1D1C1A; opacity: {{r.strike}}"></div>
+            <span class="asm" style="position: absolute; left: 108px; top: 3px; opacity: {{r.asm}}">ASSUMED</span>
+            <div class="fade" style="position: absolute; left: 0; right: 0; top: 10px; height: 3px; background: #4B3FA0; opacity: {{r.vs}}; transition-delay: {{r.vd}}s"></div>
+            <div class="fade" style="position: absolute; left: 0; right: 0; bottom: 1px; height: 5px; border-top: 1.5px solid #4B3FA0; border-bottom: 1.5px solid #4B3FA0; box-sizing: border-box; opacity: {{r.vu}}; transition-delay: {{r.vd}}s"></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="position: absolute; left: 14px; top: 402px; width: 452px; height: 36px; box-sizing: border-box; border: 2.5px solid #C23B22; border-radius: 50%; transform: rotate(-1deg)"></div>
+      <p class="fade an" style="position: absolute; left: 24px; top: 464px; width: 434px; margin: 0; font-size: 14px; font-weight: 600; color: #4B3FA0; opacity: {{sh3.lab}}; transition-delay: {{sh3.ld}}s">LAB: Queta kept (double rule), Scheierman sent (struck).</p>
+      <div style="position: absolute; left: 492px; top: 130px; width: 48px; height: 360px; box-sizing: border-box; border: 1.5px solid #1D1C1A">
+        <sc-for list="{{bar}}" as="b" hint-placeholder-count="12">
+          <div style="position: absolute; left: 0; width: 45px; top: {{b.top}}px; height: {{b.h}}px; box-sizing: border-box; background: #77746B; border-top: 1px solid #FFFFFF"></div>
+        </sc-for>
+      </div>
+      <div style="position: absolute; left: 480px; top: 201px; width: 72px; height: 0; border-top: 2.5px solid #1D1C1A"></div>
+      <div style="position: absolute; left: 546px; top: 173px; width: 8px; height: 29px; box-sizing: border-box; border: 1.5px solid #1D1C1A; border-left: 0"></div>
+      <span class="an" style="position: absolute; left: 562px; top: 120px; width: 174px; font-size: 13px; line-height: 1.25; color: #55524A">$250.0M payroll limit<br>World rule (the outline)</span>
+      <span style="position: absolute; left: 562px; top: 160px; font-size: 18px; font-weight: 800">$220.1M payroll</span>
+      <span class="an" style="position: absolute; left: 562px; top: 194px; font-size: 14px; font-weight: 600">$200.0M tax line · World rule</span>
+      <p class="an" style="position: absolute; left: 562px; top: 226px; width: 174px; margin: 0; font-size: 14px; line-height: 1.35">Over by $20.1M. Here every dollar over costs $2.50, so about $30.2M in tax.</p>
+      <p class="fade an" style="position: absolute; left: 562px; top: 330px; width: 174px; margin: 0; font-size: 14px; font-weight: 600; line-height: 1.35; color: #4B3FA0; opacity: {{sh3.lab}}; transition-delay: {{sh3.ld}}s">LAB payroll: $220.1M. The money barely moves; the roster’s shape does.</p>
+      <div class="mono" style="position: absolute; left: 24px; bottom: 10px; font-size: 12px; opacity: {{kop}}; transition: opacity .3s">World money ledger · salaries as retrieved 22 Sep 2026 · tax line: World rule</div>
+    </div>
+  </div>
+
+  <!-- SHEET 5 · THE TRADE -->
+  <div class="sheet" style="transform: {{sh4.tf}}; z-index: {{sh4.z}}; box-shadow: {{sh4.shadow}}">
+    <div class="hole" style="left: 356px"></div><div class="hole" style="left: 394px"></div>
+    <div class="sc" style="opacity: {{sh4.cop}}">
+      <div style="position: absolute; left: 24px; top: 20px; width: 712px; height: 30px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(29,28,26,.25)">
+        <span class="{{sh4.pv}}" style="width: 28px; height: 13px; display: inline-block; flex: none; box-sizing: border-box"></span>
+        <span class="mono" style="font-size: 13px; color: #55524A">SHEET 5 / 7</span>
+        <span class="an" style="font-weight: 700; font-size: 21px; letter-spacing: .06em">THE TRADE</span>
+        <span class="lk-tag" style="opacity: {{sh4.tagOp}}">{{sh4.tag}}</span>
+        <span class="an" style="margin-left: auto; font-size: 14px; color: #55524A">scale · one transaction</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 62px; width: 712px; height: 26px; display: flex; align-items: center; gap: 12px">
+        <span class="{{sh4.lk}}" style="width: 30px; height: 12px; flex: none; display: inline-block"></span>
+        <span class="an" style="font-style: italic; font-weight: 600; font-size: 18px; color: #C23B22">{{sh4.bec}}</span>
+      </div>
+      <div class="fade" style="position: absolute; left: 66px; top: 92px; opacity: {{sh4.lab}}; transition-delay: {{sh4.ld}}s">
+        <span class="an" style="font-style: italic; font-weight: 600; font-size: 15px; color: #4B3FA0">Branch cut here: Scheierman goes as filler instead of Queta.</span>
+      </div>
+      <span class="fade an" style="position: absolute; right: 24px; top: 90px; opacity: {{sh4.lab}}; transition-delay: {{sh4.ld}}s; border: 1.5px solid #4B3FA0; color: #4B3FA0; font-size: 12px; font-weight: 700; letter-spacing: .08em; padding: 2px 8px; transform: rotate(-2deg); background: #FFFFFF">LAB · DIVERGED HERE</span>
+      <span class="an" style="position: absolute; left: 24px; top: 124px; font-size: 13px; font-weight: 700; letter-spacing: .08em">DEAL d51 · VERSION 1 · THE SECOND WINDOW, OCT 7 (WORLD DATE)</span>
+      <span class="an" style="position: absolute; right: 30px; top: 150px; border: 2px solid #1D1C1A; padding: 3px 10px; font-size: 13px; font-weight: 700; letter-spacing: .08em; transform: rotate(-3deg)">A WORLD EVENT, NOT NBA HISTORY</span>
+      <div style="position: absolute; left: 24px; top: 184px; width: 330px">
+        <span class="an" style="display: block; font-size: 13px; font-weight: 700; letter-spacing: .1em; border-bottom: 1.5px solid #1D1C1A; padding-bottom: 4px">BOSTON SENDS</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 212px; display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 22px; font-weight: 700">Derrick White</span>
+        <span class="mono" style="font-size: 14px">G · $30.3M</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 268px; display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 10px">Neemias Queta <span class="asm">ASSUMED</span></span>
+        <span class="mono" style="font-size: 14px">C · $2.7M · salary filler</span>
+      </div>
+      <div style="position: absolute; left: 12px; top: 260px; width: 350px; height: 60px; box-sizing: border-box; border: 2.5px solid #C23B22; border-radius: 50%; transform: rotate(-2deg)"></div>
+      <div class="fade" style="position: absolute; left: 22px; top: 283px; width: 164px; height: 3px; background: #4B3FA0; opacity: {{sh4.lab}}; transition-delay: {{sh4.ld}}s"></div>
+      <span class="fade an" style="position: absolute; left: 250px; top: 296px; font-size: 13px; font-weight: 700; color: #4B3FA0; border: 1.5px solid #4B3FA0; background: #FFFFFF; padding: 0 6px; opacity: {{sh4.lab}}; transition-delay: {{sh4.ld}}s">kept · LAB</span>
+      <div class="fade" style="position: absolute; left: 24px; top: 328px; display: flex; flex-direction: column; gap: 2px; opacity: {{sh4.lab}}; transition-delay: {{sh4.ld}}s">
+        <span style="font-size: 22px; font-weight: 700; color: #4B3FA0">Baylor Scheierman</span>
+        <span class="mono" style="font-size: 14px; color: #4B3FA0">G · $2.7M · filler instead · LAB</span>
+      </div>
+      <svg width="40" height="60" viewBox="0 0 40 60" style="position: absolute; left: 368px; top: 214px" aria-hidden="true">
+        <path d="M2 18 H34 M27 11 L34 18 L27 25" fill="none" stroke="#1D1C1A" stroke-width="2"></path>
+        <path d="M38 42 H6 M13 35 L6 42 L13 49" fill="none" stroke="#1D1C1A" stroke-width="2"></path>
+      </svg>
+      <div style="position: absolute; left: 424px; top: 184px; width: 312px">
+        <span class="an" style="display: block; font-size: 13px; font-weight: 700; letter-spacing: .1em; border-bottom: 1.5px solid #1D1C1A; padding-bottom: 4px">BOSTON RECEIVES</span>
+      </div>
+      <div style="position: absolute; left: 424px; top: 212px; display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 22px; font-weight: 700">Jimmy Butler</span>
+        <span class="mono" style="font-size: 14px">F-G · $56.8M · 1 year left · age 37</span>
+      </div>
+      <div style="position: absolute; left: 424px; top: 268px; display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 22px; font-weight: 700">Cash</span>
+        <span class="mono" style="font-size: 14px">$0 either way</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 388px; width: 712px; border-top: 1.5px solid #1D1C1A; padding-top: 10px; display: flex; gap: 24px; align-items: baseline">
+        <span style="font-size: 18px; font-weight: 800; white-space: nowrap">Boston payroll +$23.8M</span>
+        <span class="an" style="font-size: 15px; color: #55524A">Over the tax line, Queta’s $2.7M costs Boston about $6.7M.</span>
+      </div>
+      <p class="fade an" style="position: absolute; left: 24px; top: 426px; margin: 0; font-size: 14px; font-weight: 600; color: #4B3FA0; opacity: {{sh4.lab}}; transition-delay: {{sh4.ld}}s">Branch: +$23.8M either way. Scheierman’s $2.7M saves the same.</p>
+      <div style="position: absolute; left: 24px; top: 452px; width: 300px; display: flex; align-items: flex-end; gap: 10px">
+        <svg width="26" height="24" viewBox="0 0 26 24" aria-hidden="true"><path d="M3 13 L10 20 L23 4" fill="none" stroke="#1D1C1A" stroke-width="2.2"></path></svg>
+        <span class="mono" style="font-size: 12px; border-top: 1px solid #1D1C1A; padding-top: 3px; flex: 1">BOSTON OWNER (YOU) · AGREED, V1</span>
+      </div>
+      <div style="position: absolute; left: 424px; top: 452px; width: 312px; display: flex; align-items: flex-end; gap: 10px">
+        <svg width="26" height="24" viewBox="0 0 26 24" aria-hidden="true"><path d="M3 13 L10 20 L23 4" fill="none" stroke="#1D1C1A" stroke-width="2.2"></path></svg>
+        <span class="mono" style="font-size: 12px; border-top: 1px solid #1D1C1A; padding-top: 3px; flex: 1">GOLDEN STATE OWNER · AGREED, V1</span>
+      </div>
+      <div class="mono" style="position: absolute; left: 24px; bottom: 10px; font-size: 12px; opacity: {{kop}}; transition: opacity .3s">deal d51 · v1 · “Both owners agreed to the same version.” · recorded</div>
+    </div>
+  </div>
+
+  <!-- SHEET 6 · THE SCOUTING REPORT -->
+  <div class="sheet" style="transform: {{sh5.tf}}; z-index: {{sh5.z}}; box-shadow: {{sh5.shadow}}">
+    <div class="hole" style="left: 356px"></div><div class="hole" style="left: 394px"></div>
+    <div class="sc" style="opacity: {{sh5.cop}}">
+      <div style="position: absolute; left: 24px; top: 20px; width: 712px; height: 30px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(29,28,26,.25)">
+        <span class="{{sh5.pv}}" style="width: 28px; height: 13px; display: inline-block; flex: none; box-sizing: border-box"></span>
+        <span class="mono" style="font-size: 13px; color: #55524A">SHEET 6 / 7</span>
+        <span class="an" style="font-weight: 700; font-size: 21px; letter-spacing: .06em">THE SCOUTING REPORT</span>
+        <span class="an" style="margin-left: auto; font-size: 14px; color: #55524A">scale · one document</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 62px; width: 712px; height: 26px; display: flex; align-items: center; gap: 12px">
+        <span class="{{sh5.lk}}" style="width: 30px; height: 12px; flex: none; display: inline-block"></span>
+        <span class="an" style="font-style: italic; font-weight: 600; font-size: 18px; color: #C23B22">{{sh5.bec}}</span>
+      </div>
+      <span class="asm" style="position: absolute; right: 24px; top: 104px">ASSUMED FOR THIS PROTOTYPE</span>
+      <div style="position: absolute; left: 44px; top: 110px; width: 680px">
+        <div class="mono" style="font-size: 15px; line-height: 23px; font-weight: 700">BOSTON · BASKETBALL OPS · WORLD DOCUMENT</div>
+        <div class="mono" style="font-size: 15px; line-height: 23px">SCOUTING NOTE · filed before the offer</div>
+        <div style="height: 12px"></div>
+        <div class="mrow"><span>RE:</span><span>Jimmy Butler, Golden State</span></div>
+        <div class="mrow"><span>FROM:</span><span>General Manager’s desk</span></div>
+        <div class="mrow"><span>STOP:</span><span>The Second Window</span></div>
+        <div style="height: 10px; border-bottom: 1.5px solid #1D1C1A; margin-bottom: 10px; width: 600px"></div>
+        <div class="mrow"><span>1. CLOSING</span><span>Best closer on the market. Takes the last shot.</span></div>
+        <div class="mrow"><span></span><span><span style="border-bottom: 3px solid #C23B22">Rating: HIGH.</span><span style="margin-left: 2ch">Range: wide.</span></span></div>
+        <div class="mrow"><span>2. CONTRACT</span><span>Age 37. One year left at $56.8M.</span></div>
+        <div class="mrow"><span>3. DEPTH</span><span>Sending Queta as filler leaves Robinson the only</span></div>
+        <div class="mrow"><span></span><span>rotation center for close games. <span style="border: 2.5px solid #C23B22; border-radius: 50%; padding: 2px 8px; margin: -2px -8px">Not modelled.</span></span></div>
+        <div class="mrow"><span>4. RANGES</span><span>Wide. Two scouting assignments this stop.</span></div>
+        <div class="mrow"><span></span><span>Scouting is not funded.</span></div>
+      </div>
+      <div class="fade" style="position: absolute; left: 16px; top: 100px; width: 726px; height: 390px; box-sizing: border-box; border: 2px dashed #1D1C1A; background: rgba(240,242,241,.9); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; opacity: {{sh5.realOp}}">
+        <span style="font-size: 22px; font-weight: 800">A real club keeps this sheet private.</span>
+        <span class="an" style="font-size: 16px; color: #3F3C36">Read as a real game, you would be guessing what it said.</span>
+      </div>
+      <div class="mono" style="position: absolute; left: 24px; bottom: 10px; font-size: 12px; opacity: {{kop}}; transition: opacity .3s">memo wording assumed · Scouting not funded, The Second Window · recorded</div>
+    </div>
+  </div>
+
+  <!-- SHEET 7 · THE INVESTMENT -->
+  <div class="sheet" style="transform: {{sh6.tf}}; z-index: {{sh6.z}}; box-shadow: {{sh6.shadow}}">
+    <div class="hole" style="left: 356px"></div><div class="hole" style="left: 394px"></div>
+    <div class="sc" style="opacity: {{sh6.cop}}">
+      <div style="position: absolute; left: 24px; top: 20px; width: 712px; height: 30px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(29,28,26,.25)">
+        <span class="{{sh6.pv}}" style="width: 28px; height: 13px; display: inline-block; flex: none; box-sizing: border-box"></span>
+        <span class="mono" style="font-size: 13px; color: #55524A">SHEET 7 / 7</span>
+        <span class="an" style="font-weight: 700; font-size: 21px; letter-spacing: .06em">THE INVESTMENT</span>
+        <span class="an" style="margin-left: auto; font-size: 14px; color: #55524A">scale · the owner’s budget</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 62px; width: 712px; height: 26px; display: flex; align-items: center; gap: 12px">
+        <span class="{{sh6.lk}}" style="width: 30px; height: 12px; flex: none; display: inline-block"></span>
+        <span class="an" style="font-style: italic; font-weight: 600; font-size: 18px; color: #C23B22">{{sh6.bec}}</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 112px; width: 712px; display: flex; justify-content: space-between; align-items: baseline">
+        <span class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .08em">OWNER’S DESK · DEPARTMENTS · THE SECOND WINDOW</span>
+        <span class="mono" style="font-size: 12px">option: bos-invested-business</span>
+      </div>
+      <div style="position: absolute; left: 24px; top: 142px; width: 712px">
+        <div class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .1em; padding-bottom: 4px; border-bottom: 1.5px solid #1D1C1A">BASKETBALL OPS</div>
+        <div class="brow">
+          <span style="width: 18px; height: 18px; border: 1.5px solid #1D1C1A; display: inline-block"></span>
+          <span style="font-size: 18px; font-weight: 700">Analytics</span>
+          <span class="mono" style="font-size: 15px; font-weight: 700">$2.5M</span>
+          <span class="an" style="font-size: 14px; line-height: 1.25; color: #55524A">Sees which clubs could give a trade partner what it wants.</span>
+          <span class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .08em; text-align: right">NOT FUNDED</span>
+        </div>
+        <div class="brow">
+          <span style="width: 18px; height: 18px; border: 1.5px solid #1D1C1A; display: inline-block"></span>
+          <span style="font-size: 18px; font-weight: 700">Scouting</span>
+          <span class="mono" style="font-size: 15px; font-weight: 700">$2.0M</span>
+          <span class="an" style="font-size: 14px; line-height: 1.25; color: #55524A">Sees three assignments a stop, and narrower ranges on every report.</span>
+          <span class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .08em; text-align: right">NOT FUNDED</span>
+        </div>
+        <div class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .1em; padding: 18px 0 4px; border-bottom: 1.5px solid #1D1C1A">BUSINESS</div>
+        <div class="brow">
+          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="1" y="1" width="18" height="18" fill="none" stroke="#1D1C1A" stroke-width="1.5"></rect><path d="M4 4 L16 16 M16 4 L4 16" stroke="#1D1C1A" stroke-width="2.2"></path></svg>
+          <span style="font-size: 18px; font-weight: 700">Ticketing</span>
+          <span class="mono" style="font-size: 15px; font-weight: 700">$1.5M</span>
+          <span class="an" style="font-size: 14px; line-height: 1.25; color: #55524A">Sees crowd forecasts by section, night by night.</span>
+          <span class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .08em; text-align: right">FUNDED</span>
+        </div>
+        <div class="brow">
+          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="1" y="1" width="18" height="18" fill="none" stroke="#1D1C1A" stroke-width="1.5"></rect><path d="M4 4 L16 16 M16 4 L4 16" stroke="#1D1C1A" stroke-width="2.2"></path></svg>
+          <span style="font-size: 18px; font-weight: 700">Partnerships</span>
+          <span class="mono" style="font-size: 15px; font-weight: 700">$0.8M</span>
+          <span class="an" style="font-size: 14px; line-height: 1.25; color: #55524A">Sees an estimate of the jersey patch deal.</span>
+          <span class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .08em; text-align: right">FUNDED</span>
+        </div>
+        <p style="margin: 18px 0 0; font-size: 17px; font-weight: 700">Funded $2.3M of the $6.8M on offer. Basketball Ops got none of it.</p>
+      </div>
+      <div style="position: absolute; left: 24px; top: 164px; width: 712px; height: 104px; box-sizing: border-box; border: 2.5px solid #C23B22; border-radius: 44px; transform: rotate(-0.4deg)"></div>
+      <div class="fade" style="position: absolute; left: 16px; top: 100px; width: 726px; height: 390px; box-sizing: border-box; border: 2px dashed #1D1C1A; background: rgba(240,242,241,.9); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; opacity: {{sh6.realOp}}">
+        <span style="font-size: 22px; font-weight: 800">A real owner’s budget is private.</span>
+        <span class="an" style="font-size: 16px; color: #3F3C36">Staff cuts get reported loosely, if at all.</span>
+      </div>
+      <div class="mono" style="position: absolute; left: 24px; bottom: 10px; font-size: 12px; opacity: {{kop}}; transition: opacity .3s">bos-invested-business · funded: ticketing, partnerships · recorded</div>
+    </div>
+  </div>
+
+  <!-- CAUSAL SPINE ALONG THE LIFTED STACK -->
+  <sc-for list="{{chain}}" as="c" hint-placeholder-count="2">
+    <div class="{{c.cls}}" style="position: absolute; left: 288px; top: {{c.top}}px; width: 10px; height: {{c.h}}px; z-index: 55"></div>
+  </sc-for>
+
+  <!-- THE LINK FROM THE SHEET ABOVE TO THE SHEET ON THE TABLE -->
+  <svg width="1440" height="900" viewBox="0 0 1440 900" aria-hidden="true" style="position: absolute; left: 0; top: 0; pointer-events: none; z-index: 55">
+    <defs>
+      <pattern id="lkH" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#C23B22" stroke-width="1.8"></line></pattern>
+    </defs>
+    <path d="{{lk.d}}" fill="none" stroke="#C23B22" stroke-width="7" style="opacity: {{lk.rec}}; transition: opacity .35s"></path>
+    <path d="{{lk.d}}" fill="none" stroke="#F4F5F3" stroke-width="2.4" style="opacity: {{lk.rec}}; transition: opacity .35s"></path>
+    <path d="{{lk.d}}" fill="none" stroke="#C23B22" stroke-width="8" style="opacity: {{lk.aut}}; transition: opacity .35s"></path>
+    <path d="{{lk.d}}" fill="none" stroke="#F4F5F3" stroke-width="5" style="opacity: {{lk.aut}}; transition: opacity .35s"></path>
+    <path d="{{lk.d}}" fill="none" stroke="url(#lkH)" stroke-width="10" style="opacity: {{lk.mod}}; transition: opacity .35s"></path>
+    <path d="{{lk.d}}" fill="none" stroke="#C23B22" stroke-width="2.2" stroke-dasharray="7 6" style="opacity: {{lk.unk}}; transition: opacity .35s"></path>
+  </svg>
+
+  <!-- LIFTED STACK: THE PATH BACK -->
+  <sc-for list="{{fan}}" as="f" hint-placeholder-count="2">
+    <button type="button" class="fan" onClick="{{f.pick}}" aria-label="{{f.aria}}" style="top: {{f.top}}px; height: {{f.h}}px">
+      <span class="chip" style="position: absolute; left: 178px; top: 4px; width: 94px; box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; padding: 4px 6px 5px; background: #FBFAF6; border: 1px solid #1D1C1A">
+        <span class="an" style="font-size: 13px; font-weight: 700; letter-spacing: .06em; color: #1D1C1A">{{f.label}}</span>
+        <span class="an" style="font-size: 13px; color: {{f.keyColor}}; font-weight: {{f.keyWeight}}">{{f.key}}</span>
+      </span>
+    </button>
+  </sc-for>
+
+  <!-- THE PULL TAB -->
+  <sc-if value="{{canLift}}" hint-placeholder-val="{{true}}">
+    <button type="button" class="tab" onClick="{{lift}}" aria-label="{{liftAria}}" style="position: absolute; left: 904px; top: 663px; width: 200px; height: 54px; box-sizing: border-box; border: 1px solid rgba(29,28,26,.3); border-top: 0; background: rgba(255,255,254,.95); box-shadow: 0 6px 12px rgba(40,38,30,.10); display: flex; align-items: center; justify-content: center; gap: 12px; z-index: 50; padding: 0 14px">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M17 17 L5 5 M5 5 L5 13 M5 5 L13 5" fill="none" stroke="#C23B22" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <span style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.05">
+        <span class="an tabword" style="font-size: 23px; font-weight: 700; font-style: italic; color: #C23B22">because…</span>
+        <span class="an" style="font-size: 12px; color: #55524A; letter-spacing: .04em; margin-top: 4px">lift this sheet</span>
+      </span>
+    </button>
+  </sc-if>
+  <sc-if value="{{atBottom}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 884px; top: 676px; width: 220px; box-sizing: border-box; border: 2px dashed #1D1C1A; padding: 8px 12px; z-index: 50; background: rgba(240,242,241,.94)">
+      <span class="an" style="font-size: 14px; line-height: 1.3">No sheet below. Why the owner chose Business is not in the record.</span>
+    </div>
+  </sc-if>
+
+  <!-- TRUTH LEGEND + THE INSIGHT -->
+  <div style="position: absolute; left: 344px; top: 676px; width: 530px; display: flex; flex-direction: column; gap: 10px; z-index: 50">
+    <div style="display: flex; gap: 6px 18px; align-items: center; flex-wrap: wrap">
+      <span style="display: flex; align-items: center; gap: 7px"><span class="lr-rec" style="width: 32px; height: 12px; display: inline-block"></span><span class="an" style="font-size: 13px">Recorded · the World ran it</span></span>
+      <span style="display: flex; align-items: center; gap: 7px"><span class="lr-aut" style="width: 32px; height: 12px; display: inline-block"></span><span class="an" style="font-size: 13px">Authored · assumed or chosen</span></span>
+      <span style="display: flex; align-items: center; gap: 7px"><span class="lr-mod" style="width: 32px; height: 12px; display: inline-block"></span><span class="an" style="font-size: 13px">Modeled · an estimate</span></span>
+      <span style="display: flex; align-items: center; gap: 7px"><span class="lr-unk" style="width: 32px; height: 12px; display: inline-block"></span><span class="an" style="font-size: 13px">Unknown · no record</span></span>
+    </div>
+    <p style="margin: 0; font-size: 21px; line-height: 1.2; font-weight: 800; letter-spacing: -0.005em">In a World, each link is on the record. In reality, the same links are estimates — and some are private.</p>
+    <p class="an" style="margin: 0; font-size: 14px; line-height: 1.35; color: #55524A">{{truthLine}}</p>
+  </div>
+
+  <!-- RIGHT COLUMN: HOW DO WE KNOW + LAB -->
+  <div style="position: absolute; left: 1128px; top: 108px; width: 272px; height: 752px; display: flex; flex-direction: column; gap: 10px; z-index: 50">
+    <button type="button" class="btn" aria-pressed="{{knowPressed}}" onClick="{{toggleKnow}}" style="width: 100%; display: flex; align-items: center; justify-content: space-between; background: {{knowBg}}; color: {{knowFg}}"><span>How do we know?</span><span class="mono" style="font-size: 13px; font-weight: 400">{{knowSign}}</span></button>
+    <div style="display: flex; flex-direction: column">
+      <sc-if value="{{labFar}}" hint-placeholder-val="{{true}}">
+        <div style="border-top: 2px solid #4B3FA0; padding-top: 10px; display: flex; flex-direction: column; gap: 8px">
+          <span class="an" style="font-size: 15px; font-weight: 700; letter-spacing: .08em; color: #4B3FA0">WHAT IF?</span>
+          <span style="font-size: 13px; line-height: 1.4">A branch can be cut at any sheet. In this prototype it is cut at the trade, Sheet 5.</span>
+          <button type="button" class="btn vbtn" onClick="{{goTrade}}">{{goTradeLabel}}</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{labHere}}" hint-placeholder-val="{{false}}">
+        <div style="border-top: 2px solid #4B3FA0; padding-top: 10px; display: flex; flex-direction: column; gap: 8px">
+          <span class="an" style="font-size: 15px; font-weight: 700; letter-spacing: .08em; color: #4B3FA0">WHAT IF?</span>
+          <span style="font-size: 13px; line-height: 1.4">Cut a branch at this sheet. The record stays exactly as it is.</span>
+          <button type="button" class="btn" onClick="{{fork}}" style="background: #4B3FA0; border-color: #4B3FA0; color: #FFFFFF; text-align: left; padding: 8px 14px; display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 16px">Keep the backup big</span>
+            <span style="font-size: 13px; font-weight: 500">send Scheierman ($2.7M) as the salary filler instead</span>
+          </button>
+        </div>
+      </sc-if>
+      <sc-if value="{{labOn}}" hint-placeholder-val="{{false}}">
+        <div style="border: 2px solid #4B3FA0; background: rgba(255,255,254,.94); display: flex; flex-direction: column">
+          <div class="v-aut" style="height: 10px"></div>
+          <div style="padding: 8px 14px 10px; display: flex; flex-direction: column; gap: 5px">
+            <span style="font-size: 18px; font-weight: 800; color: #4B3FA0; letter-spacing: .02em">LAB BRANCH</span>
+            <span class="mono" style="font-size: 13px; color: #4B3FA0">diverged at the trade · Sheet 5</span>
+            <span style="font-size: 13px; line-height: 1.4"><strong>Assumptions:</strong> salary filler swapped (Scheierman for Queta); everything else as recorded until it changes.</span>
+            <span style="font-size: 13px; line-height: 1.4; color: #4B3FA0">Re-inked above: cap sheet, lineup, possession, result.</span>
+            <span style="font-size: 13px; line-height: 1.4; font-style: italic">This shows how the branch differs, not that the trade alone caused the loss.</span>
+            <div style="display: flex; gap: 8px; margin-top: 2px">
+              <button type="button" class="btn vbtn" onClick="{{seeResult}}" style="flex: 1; padding: 0 8px">See the result</button>
+              <button type="button" class="btn" onClick="{{closeLab}}" style="flex: 1; padding: 0 8px">Close branch</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{know}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; flex-direction: column; gap: 8px; padding: 10px 14px; background: rgba(255,255,254,.92); border: 1px solid rgba(29,28,26,.25)">
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <span class="an" style="font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #55524A">HOW WE KNOW · THIS SHEET · {{kTitle}}</span>
+          <span style="display: flex; align-items: center; gap: 8px"><span class="{{kSheetCls}}" style="width: 26px; height: 12px; display: inline-block; flex: none; box-sizing: border-box"></span><span class="an" style="font-size: 13px; font-weight: 700">{{kSheetWord}}</span></span>
+          <sc-for list="{{kRec}}" as="r" hint-placeholder-count="3">
+            <span class="mono" style="font-size: 12.5px; line-height: 1.3">{{r.t}}</span>
+          </sc-for>
+        </div>
+        <sc-if value="{{kHasLink}}" hint-placeholder-val="{{true}}">
+          <div style="display: flex; flex-direction: column; gap: 4px; border-top: 1px solid rgba(29,28,26,.2); padding-top: 8px">
+            <span class="an" style="font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #55524A">ITS LINK TO THE SHEET ABOVE</span>
+            <span style="display: flex; align-items: center; gap: 8px"><span class="{{kLinkCls}}" style="width: 26px; height: 12px; display: inline-block; flex: none"></span><span class="an" style="font-size: 13px; font-weight: 700">{{kLinkWord}}</span></span>
+            <span style="font-size: 13px; line-height: 1.38">{{kBasis}}</span>
+          </div>
+        </sc-if>
+        <div style="display: flex; flex-direction: column; gap: 4px; border-top: 1px solid rgba(29,28,26,.2); padding-top: 8px">
+          <span class="an" style="font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #55524A">ASSUMED FOR THIS PROTOTYPE</span>
+          <sc-for list="{{kAsm}}" as="a" hint-placeholder-count="1">
+            <span style="font-size: 13px; line-height: 1.38; display: flex; gap: 8px"><span style="width: 9px; height: 9px; border: 1.5px solid #1D1C1A; flex: none; margin-top: 4px"></span><span>{{a.t}}</span></span>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{notKnow}}" hint-placeholder-val="{{false}}">
+      <p class="an" style="margin: 0; font-size: 14px; line-height: 1.4; color: #55524A">Every sheet and every link keeps its source. Open this to read it for the sheet on the table.</p>
+    </sc-if>
+  </div>
+
+  <!-- STATUS -->
+  <p class="an" style="position: absolute; left: 20px; bottom: 6px; margin: 0; font-size: 12px; color: #55524A; z-index: 70">PROTOTYPE · DESIGN PROPOSAL · World fixture EXISTS TODAY (BOW Worlds branch, bos-invested-business) · items boxed ASSUMED are this prototype’s additions · real NBA names inside a BOW World; the trade is a World event, not NBA history</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const cur = s.cur || 0;
+    const lab = !!s.lab;
+    const real = !!s.real;
+    const know = s.know === undefined ? true : !!s.know;
+
+    const SX = 344, SY = 132, FX = 12, FT0 = 112, FS = 122, SC = 0.22;
+    const MID = Math.round(532 * SC / 2);
+    const ROT = [-2.4, 1.6, -1.3, 2.1, -1.7, 1.3, -1.0];
+    const REAL = ['mod', 'unk', 'mod', 'mod', 'unk', 'mod'];
+    // link j joins sheet j (above) to sheet j+1. In a World it is 'rec' unless the designer authored it.
+    const AUTH_W = [true, false, false, true, false, false];
+    const LINK_TAG = ['', 'chosen by the designer (authored)', '', '', 'link runs through Queta: assumed (authored)', '', ''];
+    const linkSt = (j) => (real ? REAL[j] : (AUTH_W[j] ? 'aut' : 'rec'));
+    const LD = [1.4, 1.05, 0.7, 0.35, 0];
+
+    const TITLES = ['THE RESULT', 'THE POSSESSION', 'THE LINEUP', 'THE CAP SHEET', 'THE TRADE', 'THE SCOUTING REPORT', 'THE INVESTMENT'];
+    const KEY = ['DEN 115 · BOS 112', 'Poss. 16 · Jokić scores', 'One big: Robinson', 'Payroll $220.1M', 'White + Queta for Butler', 'Closing: high · depth: ?', 'Business funded'];
+    const KEYLAB = ['Branch: 38–52% (authored, not run)', 'Branch: drop coverage', 'Branch: Queta closes', 'Branch: Queta kept', 'Branch: filler swapped'];
+
+    const BEC_W = [
+      '',
+      'Denver held on because Jokić scored all 10 of its points in the last five minutes.',
+      'Boston switched because no second big was on the floor.',
+      'No second big was on the floor because the backup center was gone.',
+      'The backup center was gone because the trade sent him to cut the tax bill.',
+      'Boston traded because the note rated Butler’s closing above the depth risk.',
+      'The note’s ranges were wide because the owner funded Business over Basketball Ops.'
+    ];
+    const BEC_R = [
+      '',
+      'Models would credit Jokić’s 10 late points. An estimate, not a log.',
+      'Why Boston switched lives in the coach’s head. Nothing public says.',
+      'The missing backup center probably mattered. Probably.',
+      'The trade is public. Why he was the filler is inferred from the cap sheet.',
+      'A real club’s scouting notes are private. Why it traded: unknown.',
+      'Reported staff cuts might explain thin scouting. An estimate at best.'
+    ];
+    const BASIS_W = [
+      '',
+      'Every Denver point in the last 5:00 was “Jokić scores”: possessions 2, 10, 12, 14 and 16. Picking possession 16 as “the” cause is the designer’s choice.',
+      'The Court’s coverage rule ran on possession 16: one center on the floor, so switch. Rule assumed for this prototype.',
+      'The closing five was set from this roster when the Court opened. Two-big rule assumed.',
+      'Deal d51 moved the contracts on Oct 7 (World date). The World records only “White for Butler”; Queta as the filler is assumed.',
+      'The offer was written at the same stop the note was filed. Assumed.',
+      'Department funding sets report ranges. A World rule.'
+    ];
+    const BASIS_R = [
+      '',
+      'A win-probability model would credit Jokić’s late points. No log says so.',
+      'The coach’s reason is in no public record.',
+      'A rotation model could estimate it. Coaches rarely say.',
+      'The trade terms would be public. Why he was the filler is inferred.',
+      'A real club’s scouting notes are private.',
+      'Staff cuts get reported loosely; their effect is estimated.'
+    ];
+    const WORDS = { rec: 'RECORDED · actual in this run', mod: 'MODELED · an estimate', unk: 'UNKNOWN · no record exists' };
+    const WORDS_AUT = { 1: 'AUTHORED · chosen by the designer', 4: 'AUTHORED · assumed' };
+    const KNOW = [
+      { rec: ['court segment c-g2-DEN · final', 'possession 20 of 20 · recorded', 'Denver 115, Boston 112', 'fixture bos-invested-business'], asm: [] },
+      { rec: ['possession 16 of 20 · Denver ball', '“Jokić scores” · 2 pts · recorded', 'defense call recorded: “balanced”', 'film drawn as a coach’s diagram, as the World does today'], asm: ['The switch is this prototype’s reading of the recorded replay.', 'Possession 16 as “the” cause is the designer’s choice, not a finding.'] },
+      { rec: ['frozen five · c-g2-DEN', 'set at Court open, Stretch 1', 'one center: Mitchell Robinson'], asm: [] },
+      { rec: ['salaries: 2026-27 contracts, retrieved 22 Sep 2026', 'World payroll recorded: $222.8M', 'tax line $200.0M · World rule'], asm: ['Queta out as filler, so payroll reads $220.1M (computed).'] },
+      { rec: ['deal d51 · version 1 · The Second Window', 'White for Butler · no cash', '“Both owners agreed to the same version.”'], asm: ['Queta added as salary filler; the link to the cap sheet runs through it.'] },
+      { rec: ['Scouting not funded at The Second Window', 'World rule: funded Scouting narrows every report’s range'], asm: ['The memo’s wording.'] },
+      { rec: ['option recorded: bos-invested-business', 'funded: Ticketing $1.5M, Partnerships $0.8M', 'not funded: Analytics $2.5M, Scouting $2.0M'], asm: [] }
+    ];
+
+    const mk = (i) => {
+      let tf, z, cop, shadow;
+      if (i < cur) {
+        tf = `translate(${FX - SX}px, ${FT0 + i * FS - SY}px) rotate(${ROT[i]}deg) scale(${SC})`;
+        z = 40 + i; cop = 1;
+        shadow = '0 2px 3px rgba(40,38,30,.10), 0 10px 22px rgba(40,38,30,.14)';
+      } else if (i === cur) {
+        tf = 'translate(0px, 0px) rotate(0deg) scale(1)';
+        z = 30; cop = 1;
+        shadow = '0 1px 2px rgba(40,38,30,.08), 0 14px 30px rgba(40,38,30,.10)';
+      } else {
+        const d = i - cur;
+        tf = `translate(${d * 4}px, ${d * 4}px) rotate(0deg) scale(1)`;
+        z = 30 - d; cop = 0;
+        shadow = '0 1px 1px rgba(40,38,30,.05)';
+      }
+      const isLab = lab && i <= 4;
+      return {
+        tf, z, cop, shadow,
+        pv: real ? (i >= 5 ? 'pv-unk' : 'pv-obs') : 'pv-rec',
+        lk: i >= 1 ? 'lr-' + linkSt(i - 1) : 'lr-rec',
+        bec: real ? BEC_R[i] : BEC_W[i],
+        lab: isLab ? 1 : 0,
+        nolab: isLab ? 0 : 1,
+        rec: isLab ? 0.35 : 1,
+        ld: isLab ? LD[i] : 0,
+        realOp: real ? 1 : 0,
+        tag: LINK_TAG[i],
+        tagOp: (!real && LINK_TAG[i]) ? 1 : 0
+      };
+    };
+    const sh = [0, 1, 2, 3, 4, 5, 6].map(mk);
+
+    const PS = [['B', 0, ''], ['D', 2, 'J'], ['B', 0, ''], ['D', 0, ''], ['B', 3, 'B'], ['D', 0, ''], ['B', 3, 'B'], ['D', 0, ''], ['B', 2, 'R'], ['D', 2, 'J'],
+      ['B', 0, ''], ['D', 2, 'J'], ['B', 3, 'B'], ['D', 2, 'J'], ['B', 3, 'B'], ['D', 2, 'J'], ['B', 0, ''], ['D', 0, ''], ['B', 2, 'R'], ['D', 0, '']];
+    const poss = PS.map((p) => ({
+      team: p[0] === 'B' ? 'BOS' : 'DEN',
+      pts: p[1] ? String(p[1]) : '–',
+      w: p[1] ? 800 : 400,
+      who: p[2] || ' ',
+      bg: p[0] === 'D' ? '#E8E6DF' : '#FFFFFF',
+      vop: lab && p[2] === 'J' ? 1 : 0,
+      vd: lab ? LD[0] : 0
+    }));
+    const finals = [
+      { n: '16', t: 'DEN', what: 'Jokić scores', sc: '115–110' },
+      { n: '17', t: 'BOS', what: 'Miss, def. rebound', sc: '' },
+      { n: '18', t: 'DEN', what: 'Miss, def. rebound', sc: '' },
+      { n: '19', t: 'BOS', what: 'Robinson scores', sc: '115–112' },
+      { n: '20', t: 'DEN', what: 'Miss, def. rebound', sc: 'FINAL' }
+    ];
+
+    const LU = [['G', 'Payton', 'Pritchard', 'GUARD', false, true], ['F-G', 'Jimmy', 'Butler', 'WING', false, false], ['F', 'Jayson', 'Tatum', 'WING', false, false], ['F-G', 'Paul', 'George', 'WING', false, false], ['C', 'Mitchell', 'Robinson', 'BIG', true, false]];
+    const lineup = LU.map((c, i) => ({
+      pos: c[0], first: c[1], last: c[2], band: c[3],
+      bandBg: c[4] ? '#1D1C1A' : 'transparent',
+      bandFg: c[4] ? '#FFFFFF' : '#1D1C1A',
+      bl: i ? '1px solid rgba(29,28,26,.3)' : '0',
+      lop: lab && c[5] ? 1 : 0,
+      ld: lab ? LD[2] : 0
+    }));
+
+    const CAP = [['Jayson Tatum', 'F', 'Star', '$58.5M'], ['Jimmy Butler', 'F-G', 'Star · via trade', '$56.8M'], ['Paul George', 'F-G', 'Starter', '$54.1M'], ['Mitchell Robinson', 'C', 'Rotation', '$15.0M'], ['Sam Hauser', 'F', 'Rotation', '$10.8M'], ['Payton Pritchard', 'G', 'Rotation', '$7.8M'], ['Ron Harper Jr.', 'G-F', 'Bench', '$3.2M'], ['Chris Cenac Jr.', 'C', 'Bench', '$3.0M'], ['Hugo González', 'G-F', 'Bench', '$2.9M'], ['Luka Garza', 'F-C', 'Rotation', '$2.8M'], ['Baylor Scheierman', 'G', 'Bench', '$2.7M'], ['Neemias Queta', 'C', 'Rotation', '$2.7M'], ['Devin Carter', 'G', 'Bench', '$2.4M']];
+    const cap = CAP.map((r, i) => {
+      const q = i === 11, sch = i === 10;
+      return {
+        name: r[0], pos: r[1], role: r[2], sal: r[3],
+        c: q ? '#6A665D' : '#1D1C1A',
+        strike: q ? 1 : 0,
+        asm: q ? 1 : 0,
+        vs: lab && sch ? 1 : 0,
+        vu: lab && q ? 1 : 0,
+        vd: lab ? LD[3] : 0
+      };
+    });
+    const SAL = [58.457, 56.833, 54.126, 15.044, 10.848, 7.768, 3.151, 2.988, 2.924, 2.801, 2.744, 2.449];
+    let cum = 0;
+    const bar = SAL.map((v) => {
+      const seg = { top: +(357 - (cum + v) * 1.44).toFixed(1), h: +(v * 1.44).toFixed(1) };
+      cum += v;
+      return seg;
+    });
+
+    const fan = [];
+    for (let i = 0; i < cur; i++) {
+      const L = lab && i <= 4;
+      fan.push({
+        top: FT0 + i * FS,
+        h: FS,
+        label: (i + 1) + ' · ' + TITLES[i],
+        key: L ? KEYLAB[i] : KEY[i],
+        keyColor: L ? '#4B3FA0' : '#1D1C1A',
+        keyWeight: L ? 700 : 500,
+        aria: 'Drop back to sheet ' + (i + 1) + ', ' + TITLES[i].toLowerCase(),
+        pick: () => this.setState({ cur: i })
+      });
+    }
+    const chain = [];
+    for (let i = 0; i < cur - 1; i++) {
+      chain.push({ top: FT0 + i * FS + MID, h: FS, cls: 'lr-' + linkSt(i) });
+    }
+    let lk = { d: 'M 0 0', rec: 0, aut: 0, mod: 0, unk: 0 };
+    if (cur >= 1) {
+      const y0 = FT0 + (cur - 1) * FS + MID;
+      const st = linkSt(cur - 1);
+      lk = { d: `M 293 ${y0} C 334 ${y0}, 330 207, 368 207`, rec: st === 'rec' ? 1 : 0, aut: st === 'aut' ? 1 : 0, mod: st === 'mod' ? 1 : 0, unk: st === 'unk' ? 1 : 0 };
+    }
+
+    const K = KNOW[cur];
+    const kSt = cur >= 1 ? linkSt(cur - 1) : 'rec';
+
+    return {
+      sh0: sh[0], sh1: sh[1], sh2: sh[2], sh3: sh[3], sh4: sh[4], sh5: sh[5], sh6: sh[6],
+      poss, finals, lineup, cap, bar, fan, chain, lk,
+      kop: know ? 1 : 0,
+      tableLabel: 'ON THE TABLE · SHEET ' + (cur + 1) + ' OF 7 · ' + TITLES[cur],
+      noneLifted: cur === 0,
+      canLift: cur < 6,
+      atBottom: cur === 6,
+      liftAria: 'because… Lift ' + TITLES[cur].toLowerCase() + ' to see the sheet beneath',
+      lift: () => this.setState({ cur: Math.min(6, cur + 1) }),
+      worldPressed: real ? 'false' : 'true',
+      realPressed: real ? 'true' : 'false',
+      worldBg: real ? 'transparent' : '#1D1C1A',
+      worldFg: real ? '#1D1C1A' : '#FFFFFF',
+      realBg: real ? '#1D1C1A' : 'transparent',
+      realFg: real ? '#FFFFFF' : '#1D1C1A',
+      toWorld: () => this.setState({ real: false }),
+      toReal: () => this.setState({ real: true }),
+      truthLine: real
+        ? 'Reading as a real NBA game: the links turn into estimates, two turn into holes, and sheets 6 and 7 go private.'
+        : 'Reading as this World: solid links are lines in its log. The two outlined links are authored (assumed, or chosen by the designer) and say so.',
+      know,
+      notKnow: !know,
+      knowPressed: know ? 'true' : 'false',
+      knowBg: know ? '#1D1C1A' : 'transparent',
+      knowFg: know ? '#FFFFFF' : '#1D1C1A',
+      knowSign: know ? 'close' : 'open',
+      toggleKnow: () => this.setState({ know: !know }),
+      kTitle: TITLES[cur],
+      kSheetCls: real ? (cur >= 5 ? 'pv-unk' : 'pv-obs') : 'pv-rec',
+      kSheetWord: real ? (cur >= 5 ? 'UNKNOWN · private to a real club' : 'OBSERVED · public in a real game') : 'RECORDED · actual in this run',
+      kRec: K.rec.map((t) => ({ t })),
+      kHasLink: cur >= 1,
+      kLinkCls: 'lr-' + kSt,
+      kLinkWord: kSt === 'aut' ? WORDS_AUT[cur] : WORDS[kSt],
+      kBasis: real ? BASIS_R[cur] : BASIS_W[cur],
+      kAsm: (K.asm.length ? K.asm : ['Nothing on this sheet.']).map((t) => ({ t })),
+      labFar: !lab && cur !== 4,
+      labHere: !lab && cur === 4,
+      labOn: lab,
+      goTradeLabel: cur > 4 ? 'Back to the trade' : 'Go to the trade',
+      goTrade: () => this.setState({ cur: 4 }),
+      fork: () => this.setState({ lab: true }),
+      closeLab: () => this.setState({ lab: false }),
+      seeResult: () => this.setState({ cur: 0 }),
+      reset: () => this.setState({ cur: 0, lab: false, real: false, know: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

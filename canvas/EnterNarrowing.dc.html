@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>E1 · The Narrowing</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&amp;family=Barlow:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E9E8E4;color:#111;font-family:'Barlow',sans-serif}
+.cnd{font-family:'Barlow Condensed',sans-serif}
+.fx{transition:opacity .55s ease,top .6s ease,left .6s ease,width .75s ease,height .6s ease,background-color .6s ease,border-color .6s ease,color .6s ease,transform .9s cubic-bezier(.2,.7,.2,1),box-shadow .9s ease}
+.btn{font-family:'Barlow',sans-serif;font-weight:600;cursor:pointer;border-radius:0;padding:0 14px;transition:background-color .2s,color .2s,border-color .2s}
+.btn:focus-visible{outline:3px solid #111;outline-offset:2px}
+.btn:hover{filter:brightness(.94)}
+.t-aut{border:1.5px solid #111;background:transparent}
+.t-com{background:#BDBBB4}
+.t-unk{border:1.5px dashed #111;background:transparent}
+.t-stip{background-image:radial-gradient(circle,#A3A19A 1.2px,transparent 1.6px);background-size:7px 7px}
+.fs{transition:left .5s ease,width .5s ease,opacity .5s ease,background-color .5s ease,box-shadow .5s ease}
+.sw{display:inline-block;width:14px;height:14px;box-sizing:border-box;flex:none}
+@keyframes ring{0%{opacity:1}50%{opacity:.15}100%{opacity:1}}
+.ring{animation:ring 1.1s infinite}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #E9E8E4; color: #111; font-family: 'Barlow', sans-serif">
+
+  <header style="position: absolute; left: 28px; right: 28px; top: 0; height: 50px; display: flex; align-items: center; gap: 14px">
+    <span class="cnd" style="font-size: 28px; font-weight: 800; letter-spacing: .04em">BOW</span>
+    <span style="width: 1px; height: 22px; background: #111"></span>
+    <span class="cnd" style="font-size: 17px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap">Boston · Year Two · Week 9 · Tuesday morning</span>
+    <span style="font-size: 13px; color: #45443F; white-space: nowrap">the morning after 112–115 vs Denver</span>
+    <span style="flex: 1"></span>
+    <sc-if value="{{moving}}" hint-placeholder-val="{{false}}">
+      <button type="button" class="btn" onClick="{{skip}}" style="height: 38px; border: 2px solid #111; background: #FFFFFF; color: #111; font-size: 14px">Skip transition</button>
+    </sc-if>
+    <span class="fx cnd" style="height: 30px; box-sizing: border-box; display: inline-flex; align-items: center; padding: 0 12px; font-size: 15px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; border: 2px solid {{role.bd}}; background: {{role.bg}}; color: {{role.fg}}">{{role.t}}</span>
+    <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="height: 38px; border: 2px solid #111; background: {{howBg}}; color: {{howFg}}; font-size: 14px; white-space: nowrap">How do we know?</button>
+  </header>
+
+  <section aria-label="What you can see" style="position: absolute; left: 28px; top: 54px; width: 1384px; height: 44px">
+    <div class="fx cnd" style="position: absolute; left: 0; top: 0; width: 340px; height: 44px; box-sizing: border-box; padding: 0 14px; background: #111; color: #FFFFFF; font-size: 16px; font-weight: 700; letter-spacing: .07em; line-height: 44px; white-space: nowrap; overflow: hidden">{{st.aT}}</div>
+    <div class="fs cnd" style="position: absolute; left: 348px; top: 0; width: {{st.bW}}px; height: 44px; box-sizing: border-box; padding: 0 16px; background: {{st.bBg}}; box-shadow: inset 0 0 0 2px {{st.bBg}}, inset 0 0 0 4px #E9E8E4; color: #FFFFFF; font-size: 16px; font-weight: 700; letter-spacing: .07em; line-height: 44px; white-space: nowrap; overflow: hidden">{{st.bT}}</div>
+    <div class="fs t-unk cnd" style="position: absolute; left: {{st.hL}}px; top: 0; width: {{st.hW}}px; height: 44px; box-sizing: border-box; padding: 0 14px; opacity: {{st.hOp}}; color: #111; font-size: 16px; font-weight: 700; letter-spacing: .07em; line-height: 41px; white-space: nowrap; overflow: hidden">{{st.hT}}</div>
+  </section>
+  <p style="position: absolute; left: 28px; top: 103px; margin: 0; height: 28px; font-size: 19px; font-weight: 500; line-height: 28px; white-space: nowrap">
+    <sc-for list="{{sentence}}" as="sg" hint-placeholder-count="5"><span style="font-weight: {{sg.w}}; background: {{sg.bg}}; color: {{sg.fg}}; padding: 0 {{sg.pad}}px">{{sg.t}}</span></sc-for>
+  </p>
+
+  <section aria-label="League payroll wall" class="fx" style="position: absolute; left: 28px; top: 138px; width: 456px; height: 698px; box-sizing: border-box; background: #F2F1EE; border: 1px solid #B4B2AB; opacity: {{wallOp}}">
+    <span class="cnd" style="position: absolute; left: 10px; top: 6px; font-size: 19px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase">League payroll wall · 30 teams</span>
+    <span style="position: absolute; left: 10px; top: 28px; font-size: 12px; color: #45443F; white-space: nowrap">{{leagueLegend}}</span>
+    <span class="cnd" style="position: absolute; left: 10px; top: 45px; width: 214px; text-align: right; font-size: 12px; font-weight: 700; letter-spacing: .06em; white-space: nowrap">TAX LINE $200M</span>
+    <span class="cnd" style="position: absolute; left: 316px; top: 45px; font-size: 12px; font-weight: 700; letter-spacing: .06em; white-space: nowrap">2ND APRON $221.7M</span>
+    <div style="position: absolute; left: 227px; top: 62px; width: 4px; height: 610px; box-sizing: border-box; border: 1.5px solid #111"></div>
+    <div style="position: absolute; left: 306px; top: 62px; width: 4px; height: 610px; box-sizing: border-box; border: 1.5px solid #111"></div>
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="30">
+      <div class="fx" style="position: absolute; left: 0; top: {{r.top}}px; width: 454px; height: 20px; background: {{r.band}}"></div>
+      <span class="fx cnd" style="position: absolute; left: 8px; top: {{r.lt}}px; width: 38px; height: 18px; box-sizing: border-box; padding-left: 4px; font-size: 14px; line-height: 18px; font-weight: {{r.lw}}; letter-spacing: .04em; background: {{r.lbg}}; color: {{r.lfg}}">{{r.ab}}</span>
+      <div class="fx" style="position: absolute; left: 50px; top: {{r.bt}}px; width: {{r.bw}}px; height: {{r.bh}}px; box-sizing: border-box; border: {{r.bbd}}; background: {{r.bbg}}; box-shadow: {{r.bsh}}; opacity: {{r.bop}}; transition-delay: {{r.delay}}ms"></div>
+      <div class="fx" style="position: absolute; left: {{r.tx}}px; top: {{r.tt}}px; width: 2px; height: 14px; background: {{r.tc}}; opacity: {{r.top2}}; transition-delay: {{r.delay}}ms"></div>
+      <span class="fx" style="position: absolute; left: 378px; top: {{r.lt}}px; width: 44px; text-align: right; font-size: 12px; line-height: 18px; font-weight: {{r.lw}}; font-variant-numeric: tabular-nums; opacity: {{r.vop}}; transition-delay: {{r.delay}}ms">{{r.val}}</span>
+      <div class="fx" style="position: absolute; left: 430px; top: {{r.mt}}px; width: 14px; height: 14px; background: {{r.mbg}}; box-shadow: inset 0 0 0 2px {{r.mbg}}, inset 0 0 0 3.5px #F2F1EE; opacity: {{r.mS}}; transition-delay: {{r.delay}}ms"></div>
+      <div class="fx t-unk" style="position: absolute; left: 430px; top: {{r.mt}}px; width: 14px; height: 14px; box-sizing: border-box; opacity: {{r.mD}}; transition-delay: {{r.delay}}ms"></div>
+    </sc-for>
+    <span style="position: absolute; left: 10px; top: 676px; font-size: 12px; color: #45443F; white-space: nowrap">Scale $150M–$240M · authored, illustrative; not reporting on real teams</span>
+  </section>
+
+  <section aria-label="Private notes and rumours" style="position: absolute; left: 504px; top: 138px; width: 396px; height: 698px">
+    <span class="cnd fx" style="position: absolute; left: 0; top: 0; font-size: 15px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; opacity: {{wallOp}}">{{notesHead}}</span>
+    <sc-for list="{{notes}}" as="n" hint-placeholder-count="5">
+      <div class="fx" style="position: absolute; left: 0; top: {{n.top}}px; width: 396px; height: {{n.h}}px; overflow: hidden">
+        <div class="fx" aria-hidden="{{n.openHidden}}" style="position: absolute; left: 0; top: 0; width: 396px; height: 84px; box-sizing: border-box; background: #F7F6F3; border: 1px solid #111; padding: 8px 12px 0 34px; opacity: {{n.openOp}}; transition: {{n.openTr}}">
+          <span class="sw" style="position: absolute; left: 11px; top: 10px; background: #111; box-shadow: inset 0 0 0 2px #111, inset 0 0 0 3.5px #F7F6F3"></span>
+          <span class="cnd" style="display: block; font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase">{{n.who}} · private note</span>
+          <span style="display: block; font-size: 14px; line-height: 1.25; margin-top: 2px">{{n.text}}</span>
+          <sc-if value="{{n.showAct}}" hint-placeholder-val="{{false}}">
+            <span style="position: absolute; left: 12px; right: 8px; bottom: 5px; padding-left: 8px; border-left: 4px solid #007A33; font-size: 12px; line-height: 1.2; font-weight: 600">{{n.actLine}}</span>
+          </sc-if>
+        </div>
+        <div class="fx t-unk" style="position: absolute; left: 0; top: 0; width: 396px; height: 40px; box-sizing: border-box; padding: 0 12px; display: flex; align-items: center; font-size: 14px; opacity: {{n.closedOp}}; transition: {{n.closedTr}}">{{n.closedT}}</div>
+      </div>
+    </sc-for>
+    <span class="cnd fx" style="position: absolute; left: 0; top: {{rumHead.top}}px; font-size: 15px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; opacity: {{wallOp}}">{{rumHead.t}}</span>
+    <sc-for list="{{rums}}" as="m" hint-placeholder-count="4">
+      <div class="fx" style="position: absolute; left: 0; top: {{m.top}}px; width: 396px; height: 46px; box-sizing: border-box; background: #F7F6F3; border: 1px solid {{m.bd}}">
+        <div class="fx t-stip" style="position: absolute; left: 0; top: 0; width: 394px; height: 44px; opacity: {{m.stipOp}}"></div>
+        <div style="position: absolute; left: 4px; top: 4px; width: 246px; height: 36px; box-sizing: border-box; padding: 1px 6px; background: #F7F6F3; font-size: 14px; line-height: 1.2">{{m.text}}</div>
+        <div class="fx" style="position: absolute; right: 6px; top: 4px; width: 128px; height: 36px; box-sizing: border-box; padding: 3px 6px; background: #BDBBB4; opacity: {{m.vOp}}; transition: {{m.vTr}}">
+          <span class="cnd" style="display: block; font-size: 14px; font-weight: 700; letter-spacing: .06em; line-height: 15px">{{m.verdict}}</span>
+          <span style="display: block; font-size: 11px; line-height: 13px">{{m.vSub}}</span>
+        </div>
+        <div class="fx" style="position: absolute; right: 6px; top: 4px; width: 128px; height: 36px; box-sizing: border-box; padding: 3px 6px; background: #F7F6F3; border: 1px dotted #111; opacity: {{m.uOp}}; transition: {{m.uTr}}">
+          <span class="cnd" style="display: block; font-size: 14px; font-weight: 700; letter-spacing: .06em; line-height: 15px">UNVERIFIED</span>
+          <span style="display: block; font-size: 11px; line-height: 13px">as reported · [source]</span>
+        </div>
+      </div>
+    </sc-for>
+    <div class="fx" style="position: absolute; left: 0; top: {{rec.top}}px; width: 396px; height: {{rec.h}}px; box-sizing: border-box; padding: 10px 12px; border: 1.5px solid #007A33; background: #FFFFFF; opacity: {{rec.op}}">
+      <span class="cnd" style="display: block; font-size: 14px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase">Your record · kept · attributed to you</span>
+      <sc-for list="{{keptView}}" as="k" hint-placeholder-count="3">
+        <span style="display: block; font-size: 13px; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><span class="cnd" style="font-weight: 700; letter-spacing: .04em">{{k.when}}</span> · {{k.t}}</span>
+      </sc-for>
+    </div>
+  </section>
+
+  <section aria-label="Boston GM desk" class="fx" style="position: absolute; left: {{desk.left}}px; top: {{desk.top}}px; width: {{desk.w}}px; height: {{desk.h}}px; box-sizing: border-box; background: {{desk.bg}}; border: 1.5px solid {{desk.bd}}; box-shadow: {{desk.sh}}">
+    <div class="fx" style="position: absolute; left: -1.5px; top: -1.5px; right: -1.5px; height: 50px; box-sizing: border-box; padding: 0 14px; display: flex; align-items: center; justify-content: space-between; background: {{desk.hbg}}; color: {{desk.hfg}}; border-bottom: 1.5px solid {{desk.bd}}">
+      <span class="cnd" style="font-size: 24px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap">Boston · GM’s desk<span style="font-size: 15px; font-weight: 600; letter-spacing: .08em"> · {{desk.tag}}</span></span>
+      <sc-if value="{{canLeave}}" hint-placeholder-val="{{false}}">
+        <button type="button" class="btn" onClick="{{leave}}" style="height: 36px; border: 2px solid #FFFFFF; background: transparent; color: #FFFFFF; font-size: 14px; white-space: nowrap">Leave the seat</button>
+      </sc-if>
+    </div>
+
+    <span class="cnd" style="position: absolute; left: 14px; top: 58px; font-size: 14px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; display: flex; align-items: center; gap: 8px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      {{phoneHead}}
+    </span>
+    <sc-for list="{{calls}}" as="p" hint-placeholder-count="3">
+      <div class="fx" style="position: absolute; left: 14px; right: 14px; top: {{p.top}}px; height: 46px; box-sizing: border-box; border: {{p.bd}}; background: {{p.bg}}; display: flex; align-items: center; gap: 10px; padding: 0 10px">
+        <span class="{{p.dotCls}}" style="flex: none; width: 10px; height: 10px; background: {{p.dot}}"></span>
+        <span style="flex: 1; min-width: 0; font-size: 14px; line-height: 1.2"><strong>{{p.who}}</strong> · {{p.time}}<br><span style="font-size: 13px">{{p.what}}</span></span>
+        <sc-if value="{{p.canAnswer}}" hint-placeholder-val="{{false}}">
+          <button type="button" class="btn" onClick="{{p.answer}}" style="flex: none; height: 36px; border: 2px solid #007A33; background: #007A33; color: #FFFFFF; font-size: 14px">Answer</button>
+        </sc-if>
+        <span style="flex: none; font-size: 12px; text-align: right; max-width: 120px; line-height: 1.2">{{p.state}}</span>
+      </div>
+    </sc-for>
+
+    <div style="position: absolute; left: 14px; right: 14px; top: 232px; height: 226px">
+      <sc-if value="{{blot.obs}}" hint-placeholder-val="{{true}}">
+        <div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0">
+          <sc-if value="{{blot.hasKept}}" hint-placeholder-val="{{false}}">
+            <div style="position: absolute; left: 0; top: 0; right: 0; height: 124px; box-sizing: border-box; padding: 8px 12px; border: 1.5px solid #007A33; background: #FFFFFF">
+              <span style="display: block; font-size: 13.5px; line-height: 1.2; font-weight: 700">What you did while you were in the seat is kept — attributed to you.</span>
+              <sc-for list="{{keptView}}" as="k" hint-placeholder-count="3">
+                <span style="display: block; font-size: 12.5px; line-height: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><span class="cnd" style="font-weight: 700; letter-spacing: .04em">{{k.when}}</span> · {{k.t}}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+          <div style="position: absolute; left: 0; right: 0; top: {{blot.offerTop}}px; bottom: 0; display: flex; gap: 14px; align-items: flex-start">
+            <svg width="52" height="52" viewBox="0 0 48 48" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M14 6h20l-2 20H16z"></path><path d="M10 26h28v6H10z"></path><path d="M14 32v11M34 32v11M24 32v11"></path><path d="M8 43h32"></path></svg>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px; align-items: flex-start">
+              <span class="cnd" style="font-size: 26px; font-weight: 800; line-height: 1; text-transform: uppercase; letter-spacing: .03em">{{blot.offerHead}}</span>
+              <sc-if value="{{blot.showDesc}}" hint-placeholder-val="{{true}}"><span style="font-size: 14px; line-height: 1.3">Sitting down costs you every other team’s private notes. It gets you the pen: offer, accept, waive, call up.</span></sc-if>
+              <button type="button" class="btn" onClick="{{enter}}" style="height: 46px; padding: 0 20px; border: 2px solid #111; background: #111; color: #FFFFFF; font-size: 16px">{{blot.btn}}</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{blot.occ}}" hint-placeholder-val="{{false}}">
+        <div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0">
+          <sc-if value="{{blot.idle}}" hint-placeholder-val="{{false}}">
+            <div style="position: absolute; left: 0; top: 0; right: 0; height: 226px; box-sizing: border-box; border: 1px solid #B4B2AB; background: #FFFFFF; display: flex; align-items: center; justify-content: center; padding: 0 30px; text-align: center; font-size: 15px; color: #45443F"><span>Answer a call and its paper opens here. Denver’s has been ringing since 08:50.<br><br><strong>Whatever you do from this seat is kept, attributed to you.</strong></span></div>
+          </sc-if>
+          <sc-if value="{{blot.card}}" hint-placeholder-val="{{false}}">
+            <div style="position: absolute; left: 0; top: 0; right: 0; height: 226px; box-sizing: border-box; padding: 8px 14px; border: 2px solid #007A33; background: #FFFFFF; box-shadow: 6px 6px 0 rgba(0,0,0,.14)">
+              <span class="cnd" style="display: block; font-size: 14px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase">Denver GM · on the line · 08:50</span>
+              <span style="display: block; margin-top: 3px; font-size: 16px; line-height: 1.25; font-weight: 500">“We need a backup guard. We’ll send a 2029 second-round pick for yours.”</span>
+              <span style="display: block; margin-top: 4px; font-size: 12.5px; line-height: 1.25">Your guard: $2.7M, authored. If he goes: payroll $220.1M (COMPUTED).</span>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px">
+                <sc-for list="{{opts}}" as="o" hint-placeholder-count="4">
+                  <button type="button" class="btn" onClick="{{o.pick}}" style="height: 40px; padding: 0 8px; border: 2px solid #111; background: #FFFFFF; color: #111; font-size: 14px; line-height: 1.1">{{o.t}}</button>
+                </sc-for>
+              </div>
+              <div class="t-unk" style="margin-top: 8px; height: 24px; box-sizing: border-box; padding: 0 8px; display: flex; align-items: center; font-size: 12px">Denver’s limit — you can’t see this now.</div>
+            </div>
+          </sc-if>
+          <sc-if value="{{blot.done}}" hint-placeholder-val="{{false}}">
+            <div style="position: absolute; left: 0; top: 0; right: 0; height: 226px; box-sizing: border-box; padding: 10px 14px; border: 2px solid #111; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px">
+              <span class="cnd" style="display: block; font-size: 14px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase">Denver GM · call ended</span>
+              <span style="display: block; font-size: 16px; line-height: 1.3; font-weight: 500">{{res.line}}</span>
+              <span style="display: block; font-size: 13px; line-height: 1.3">{{res.money}}</span>
+              <div style="margin-top: auto; padding: 8px 12px; background: #007A33; box-shadow: inset 0 0 0 2px #007A33, inset 0 0 0 4px #FFFFFF; color: #FFFFFF; font-size: 13px; line-height: 1.3"><strong class="cnd" style="letter-spacing: .06em; font-size: 14px">RECORDED · {{res.when}}</strong><br>{{res.rec}}</div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+
+    <span class="cnd" style="position: absolute; left: 14px; top: 466px; font-size: 14px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase">Scouts’ private reports · only {{onlyWho}}</span>
+    <sc-for list="{{scouts}}" as="q" hint-placeholder-count="2">
+      <div class="fx" style="position: absolute; left: 14px; right: 14px; top: {{q.top}}px; height: 44px; box-sizing: border-box; padding: 5px 10px 0 34px; border: 1px solid {{q.bd}}; background: {{q.bg}}; font-size: 13px; line-height: 1.2">
+        <span class="fx sw" style="position: absolute; left: 10px; top: 12px; background: {{q.mk}}; box-shadow: inset 0 0 0 2px {{q.mk}}, inset 0 0 0 3.5px {{q.mkIn}}"></span>{{q.t}}
+      </div>
+    </sc-for>
+
+    <span class="cnd" style="position: absolute; left: 14px; top: 586px; font-size: 14px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase">{{authHead}}</span>
+    <div style="position: absolute; left: 14px; right: 14px; top: 606px; font-size: 13px; line-height: 17px">
+      <span style="display: block"><strong>Can:</strong> offer · accept · waive · call up.</span>
+      <span style="display: block"><strong>Cannot:</strong> exceed the second apron without the owner.</span>
+      <span style="display: block">Owner’s note: “Stay under the second apron by the deadline.”</span>
+      <span style="display: block"><strong>{{auth.line}}</strong></span>
+    </div>
+  </section>
+
+  <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+    <aside aria-label="How do we know" style="position: absolute; left: 504px; top: 138px; width: 396px; box-sizing: border-box; padding: 12px 14px; background: #FFFFFF; border: 2px solid #111; box-shadow: 6px 6px 0 rgba(0,0,0,.16); display: flex; flex-direction: column; gap: 7px">
+      <span class="cnd" style="font-size: 16px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase">How do we know?</span>
+      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.25"><span class="sw" style="margin-top: 2px; background: #111; box-shadow: inset 0 0 0 2px #111, inset 0 0 0 3.5px #FFFFFF"></span><span><strong>Double rule = RECORDED.</strong> Written into Boston’s World records: Boston’s payroll, its notes, its desk, your acts.</span></span>
+      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.25"><span class="sw t-aut" style="margin-top: 2px"></span><span><strong>Outline = AUTHORED.</strong> The other 29 payrolls, every rival note, the tax and apron lines. Illustrative; no model ran.</span></span>
+      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.25"><span class="sw t-com" style="margin-top: 2px"></span><span><strong>Toned = COMPUTED.</strong> A rumour’s verdict: the rumour checked against the note it is about.</span></span>
+      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.25"><span class="sw t-stip" style="margin-top: 2px; border: 1px dotted #111"></span><span><strong>Stipple = unverified rumour.</strong> Reported, source unnamed. (Here stipple marks “unverified”; the shared grammar reserves it for generated material.)</span></span>
+      <span style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.25"><span class="sw t-unk" style="margin-top: 2px"></span><span><strong>Dashed = UNKNOWN to your seat.</strong> It exists in the World. The seat’s access rule hides it from you.</span></span>
+      <span style="font-size: 12.5px; line-height: 1.25; padding-top: 6px; border-top: 1px solid #111">Access is authored, and it belongs to the seat: an observer may open any World record; the GM sees public facts and Boston’s own notes. No hatch appears here because no model ran.</span>
+    </aside>
+  </sc-if>
+
+  <span style="position: absolute; left: 28px; top: 846px; font-size: 13px; font-weight: 500; white-space: nowrap; letter-spacing: .01em">ENTER, in this model, means trading omniscience for agency: the view narrows to one desk, and what you do from it is kept, attributed to you.</span>
+  <span style="position: absolute; left: 28px; top: 876px; width: 800px; font-size: 11px; letter-spacing: .03em; color: #45443F; white-space: nowrap">COMMERCIAL LENS · hypothesis: observing is free and wide; occupying is the premium act — seats in persistent Worlds are what people pay for.</span>
+  <span style="position: absolute; right: 28px; top: 876px; width: 540px; text-align: right; font-size: 11px; letter-spacing: .03em; color: #45443F; white-space: nowrap">PROTOTYPE · DESIGN PROPOSAL · Boston: BOW Worlds fixtures · other 29 teams and notes: authored</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.tm = setInterval(() => {
+      const s = this.state || {};
+      if (s.dir === 'in') {
+        const nc = (s.c || 0) + 100;
+        if (nc >= 3300) this.setState({ c: 3300, dir: null }); else this.setState({ c: nc });
+      } else if (s.dir === 'out') {
+        const nc = (s.c || 0) - 150;
+        if (nc <= 0) this.setState({ c: 0, dir: null }); else this.setState({ c: nc });
+      }
+    }, 100);
+  }
+  componentWillUnmount() { clearInterval(this.tm); }
+  renderVals() {
+    const s = this.state || {};
+    const c = s.c || 0;
+    const dir = s.dir || null;
+    const kept = s.kept || [];
+    const choice = s.choice || null;
+    const answered = !!s.answered;
+    const visits = s.visits || 0;
+    const how = !!s.how;
+    const moving = !!dir;
+    const SEAT_T = ['09:12', '09:41', '10:10', '10:39'];
+    const seatT = SEAT_T[Math.max(0, Math.min(3, visits - 1))];
+    const plus = (t, m) => { const p = t.split(':'); const tot = Number(p[0]) * 60 + Number(p[1]) + m; return (tot >= 600 ? '' : '0') + Math.floor(tot / 60) + ':' + (tot % 60 < 10 ? '0' : '') + (tot % 60); };
+    const wk = (t) => 'Wk 9 Tue ' + t;
+
+    const NT = [500, 800, 1100, 1400, 1700];
+    const RT = [2000, 2250, 2500, 2750];
+    const k = NT.filter((t) => c >= t).length;
+    const ripple = c >= 400;
+    const seat = c >= 2000;
+    const occ = c >= 2500;
+    const final = c >= 3000;
+
+    // payroll (World, RECORDED) changes only if the deal went through
+    const done = choice === 'take' || choice === 'two';
+    const pay = done ? 220.1 : 222.8;
+    const APRON2 = 221.686;
+    const over = pay - APRON2;
+    const roster = done ? 14 : 15;
+
+    // access strip
+    const bW = Math.round(1036 - k * (1036 - 280) / 5);
+    const hL = 348 + bW + 8;
+    const st = {
+      aT: k === 0 ? 'EVERY PUBLIC FACT' : 'PUBLIC FACTS',
+      bW: bW, bBg: k >= 5 ? '#007A33' : '#111111',
+      bT: k === 0 ? 'EVERY TEAM’S PRIVATE NOTES · OBSERVER ACCESS' : k < 5 ? (dir === 'out' ? 'PRIVATE NOTES · REOPENING' : 'PRIVATE NOTES · CLOSING') : 'BOSTON’S PRIVATE NOTES',
+      hL: k > 0 ? hL : 1384, hW: k > 0 ? 1384 - hL : 0, hOp: k > 0 ? 1 : 0,
+      hT: k >= 5 ? '29 TEAMS’ PRIVATE NOTES · YOU GAVE THESE UP' : (dir === 'out' ? 'REOPENING' : 'CLOSED TO YOU')
+    };
+    let sentence;
+    if (c < 300) sentence = [{ t: 'You can see: ', w: 600 }, { t: 'every public fact', w: 700 }, { t: ' · ', w: 400 }, { t: 'every team’s private notes (observer access)', w: 700 }];
+    else if (c < 3000) sentence = [{ t: 'You can see: ', w: 600 }, { t: 'public facts', w: 700 }, { t: ' · …  ', w: 400 }, { t: dir === 'out' ? 'Widening: 29 teams’ private notes are reopening.' : 'Narrowing: 29 teams’ private notes are closing.', w: 500 }];
+    else sentence = [{ t: 'You can see: ', w: 600 }, { t: 'public facts', w: 700 }, { t: ' · ', w: 400 }, { t: 'Boston’s private notes', w: 700 }, { t: '. You gave up 29 teams’ private notes. ', w: 500 }, { t: 'You got the pen.', w: 700, bg: '#007A33', fg: '#FFFFFF', pad: 7 }];
+    sentence = sentence.map((x) => ({ t: x.t, w: x.w, bg: x.bg || 'transparent', fg: x.fg || '#111111', pad: x.pad || 0 }));
+
+    // role tag
+    const role = final && dir !== 'out' ? { t: 'GM · Boston · you', bg: '#007A33', fg: '#FFFFFF', bd: '#007A33' }
+      : c === 0 ? { t: 'Observer · no seat', bg: 'transparent', fg: '#111111', bd: '#111111' }
+      : { t: dir === 'out' ? 'Leaving the seat…' : 'Taking the seat…', bg: '#FFFFFF', fg: '#111111', bd: '#111111' };
+
+    // league wall
+    const TEAMS = [['GSW', 231.5, 4], ['LAC', 226.9, -3], ['BOS', 222.8, -1.5], ['PHX', 219.4, 5], ['MIL', 214.6, -6], ['NYK', 213.2, -9], ['DEN', 208.3, 6], ['PHI', 205.7, 2], ['MIA', 203.9, -4], ['MIN', 201.8, 3],
+      ['LAL', 199.4, -1], ['DAL', 197.6, 5], ['CLE', 196.2, -2], ['HOU', 193.5, 4], ['TOR', 190.8, -5], ['SAC', 189.9, 2], ['IND', 188.3, 6], ['ORL', 185.9, -3], ['ATL', 184.7, 1], ['NOP', 182.4, -2],
+      ['MEM', 180.6, 4], ['OKC', 178.8, -6], ['CHI', 176.2, -2], ['BKN', 173.5, 3], ['SAS', 170.1, 7], ['DET', 167.4, -1], ['POR', 164.9, 2], ['CHA', 161.2, 5], ['WAS', 158.6, -3], ['UTA', 154.9, 1]];
+    const X = (v) => 50 + (v - 150) * 3.6;
+    const list = TEAMS.map((t) => ({ ab: t[0], v: t[0] === 'BOS' ? pay : t[1], d: t[2] })).sort((a, b) => b.v - a.v);
+    const green = '#007A33';
+    const rows = list.map((t, i) => {
+      const bos = t.ab === 'BOS';
+      const mc = bos && seat ? green : '#111111';
+      const delay = dir === 'out' ? (29 - i) * 16 : i * 22;
+      return {
+        ab: t.ab, val: t.v.toFixed(1), top: 70 + i * 20, lt: 71 + i * 20,
+        band: bos ? '#DAD9D3' : 'transparent',
+        lw: bos ? 700 : 500, lbg: bos && seat ? green : 'transparent', lfg: bos && seat ? '#FFFFFF' : '#111111',
+        bw: Math.round(X(t.v) - 50), bh: bos ? 12 : 9, bt: 70 + i * 20 + (bos ? 4 : 5.5),
+        bbg: bos ? mc : 'transparent', bbd: bos ? '0px solid transparent' : '1.5px solid #111111',
+        bsh: bos ? 'inset 0 0 0 2px ' + mc + ', inset 0 0 0 3.5px #DAD9D3' : 'none',
+        bop: bos ? 1 : (ripple ? 0.4 : 1),
+        tx: Math.round(X(t.v + t.d)), tt: 70 + i * 20 + 3, tc: mc, top2: ripple && !bos ? 0 : 1,
+        vop: bos ? 1 : (ripple ? 0.5 : 1),
+        mt: 70 + i * 20 + 3, mbg: mc, mS: ripple && !bos ? 0 : 1, mD: ripple && !bos ? 1 : 0,
+        delay: delay
+      };
+    });
+    const leagueLegend = ripple ? 'Bars: public payroll. Ticks and the square at right: closed to your seat.' : 'Bars: payroll. Tick: internal target. Square at right: that team’s private notes.';
+
+    // middle column: notes (collapse one by one), rumours, record
+    const NOTES = [
+      ['Denver', 'Denver’s internal board', 'Backup guard is the hole. Will pay up to two 2nds. Walks at a first-round ask.'],
+      ['Miami', 'Miami’s internal board', 'Not moving salary before Week 12. Watching the buyout market.'],
+      ['New York', 'New York’s internal board', 'Owner wants payroll down before the deadline. Would attach a 2nd to do it.'],
+      ['Lakers', 'The Lakers’ internal board', 'No first-round picks move before the deadline.'],
+      ['Oklahoma City', 'Oklahoma City’s internal board', 'Keeping cap room for the summer. Not taking salary.']
+    ];
+    const ACT = { take: 'took one 2nd. Ceiling here: two.', two: 'asked for two 2nds. Ceiling here: two.', first: 'asked for a first. Walks at a first.', decline: 'declined. Ceiling here: two 2nds.' };
+    const dt = plus(seatT, 2);
+    const actLine = choice ? 'YOUR ACT · ' + dt + ' · ' + ACT[choice] : '';
+    let acc = 26;
+    const notes = NOTES.map((n, i) => {
+      const closed = c >= NT[i];
+      const h = closed ? 40 : 84;
+      const top = acc; acc += h + 4;
+      return { top: top, h: h, who: n[0], text: n[2], closedT: n[1] + ' — you can’t see this now', openOp: closed ? 0 : 1, closedOp: closed ? 1 : 0, openHidden: closed ? 'true' : 'false', openTr: dir === 'out' ? 'opacity .3s ease .2s' : 'opacity .25s ease', closedTr: dir === 'out' ? 'opacity .25s ease' : 'opacity .3s ease .2s', showAct: i === 0 && !!choice, actLine: actLine };
+    });
+    const notesHead = c >= 500 ? 'Other teams’ private notes · closed to your seat' : 'Private notes · every team · showing 5 of 30';
+    const rhTop = acc + 6;
+    const RUM = [
+      ['Denver is shopping for a backup guard.', 'TRUE', 'matches DEN note'],
+      ['Denver will pay a first-round pick for one.', 'FALSE', 'DEN walks at a first'],
+      ['New York wants to dump salary before the deadline.', 'TRUE', 'matches NYK note'],
+      ['The Lakers will move a first for help now.', 'FALSE', 'LAL: no firsts move']
+    ];
+    const rums = RUM.map((r, j) => {
+      const un = c >= RT[j];
+      return { top: rhTop + 24 + j * 50, text: r[0], verdict: r[1], vSub: r[2], stipOp: un ? 1 : 0, bd: un ? '#55534E' : '#111111', vOp: un ? 0 : 1, uOp: un ? 1 : 0, vTr: dir === 'out' ? 'opacity .3s ease .2s' : 'opacity .25s ease', uTr: dir === 'out' ? 'opacity .25s ease' : 'opacity .3s ease .2s' };
+    });
+    const rumHead = { top: rhTop, t: c >= 2000 ? 'Rumours · you hear them like everyone else' : 'Rumours · as reported · checked against the notes' };
+    const recTop = rhTop + 24 + 4 * 50 + 6;
+    const rec = { top: occ ? recTop : 500, h: occ ? 150 : 0, op: occ && kept.length ? 1 : 0 };
+    const keptAll = kept.map((x) => ({ when: x.when, t: x.t }));
+    const keptView = keptAll.slice(-4);
+
+    // desk
+    const desk = seat
+      ? { left: 906, top: 130, w: 506, h: 706, bg: '#FFFFFF', bd: '#111111', sh: '10px 10px 0 rgba(0,0,0,.18)', hbg: green, hfg: '#FFFFFF', tag: c >= 2800 ? 'yours' : 'taking it' }
+      : { left: 920, top: 148, w: 492, h: 690, bg: '#E9E8E4', bd: '#8C8A84', sh: '0 0 0 rgba(0,0,0,0)', hbg: '#E9E8E4', hfg: '#111111', tag: 'seat vacant' };
+    const wallOp = seat ? 0.84 : 1;
+    const ringing = c >= 3000 && !answered && !choice;
+    const canLeave = c >= 3300 && !dir;
+    const calls = [
+      { who: 'Denver GM', time: '08:50', what: 'your backup guard' },
+      { who: 'Butler’s agent', time: '08:41', what: 'a meeting about his fourth-quarter role' },
+      { who: 'G League affiliate', time: '08:22', what: 'the two-way call-up [your two-way player]' }
+    ].map((p, i) => {
+      const first = i === 0;
+      const live = occ && first && !choice;
+      let state = occ ? (first ? (choice ? 'answered ' + dt : (answered ? 'on the line' : '')) : 'holding') : (first && choice ? 'answered ' + dt : 'unanswered');
+      return {
+        who: p.who, time: p.time, what: p.what, top: 78 + i * 50,
+        bd: live ? '2px solid #007A33' : '1px solid ' + (occ ? '#111111' : '#8C8A84'),
+        bg: occ ? '#FFFFFF' : 'transparent',
+        dot: live ? '#007A33' : (occ ? '#111111' : 'transparent'), dotCls: (ringing && first ? 'ring ' : '') + (occ ? '' : 't-aut'),
+        canAnswer: ringing && first, state: state,
+        answer: () => this.setState({ answered: true })
+      };
+    });
+    const phoneHead = occ ? 'The phone · 3 calls · yours to answer' : 'The phone · 3 calls · call log';
+    const OPTS = [['take', 'Take their second'], ['two', 'Ask for two seconds'], ['first', 'Ask for a first (the rumour)'], ['decline', 'Decline']];
+    const opts = OPTS.map((o) => ({ t: o[1], pick: () => {
+      const cur = this.state || {};
+      const v = cur.visits || 1;
+      const t2 = plus(SEAT_T[Math.max(0, Math.min(3, v - 1))], 2);
+      const LOG = { take: 'Took Denver’s offer: backup guard for a 2029 second', two: 'Asked Denver for two 2nds: Denver agreed', first: 'Asked Denver for a first: Denver ended the call', decline: 'Declined Denver’s offer' };
+      this.setState({ choice: o[0], kept: (cur.kept || []).concat([{ when: wk(t2), t: LOG[o[0]] }]) });
+    } }));
+    const RES = {
+      take: ['Deal. Your backup guard goes to Denver for a 2029 second-round pick.', 'Payroll $220.1M, under the second apron by $1.6M. Roster 14 of 15 (COMPUTED).', 'Took the offer as made.'],
+      two: ['Denver agreed to two second-round picks. Your backup guard goes to Denver.', 'Payroll $220.1M, under the second apron by $1.6M. Roster 14 of 15 (COMPUTED).', 'Asked for two 2nds; Denver agreed.'],
+      first: ['Denver ended the call. The offer is gone.', 'Payroll still $222.8M, over the second apron by $1.1M. Roster 15 of 15 (COMPUTED).', 'Asked for a first-round pick; Denver ended the call.'],
+      decline: ['You kept your backup guard. Denver moves on.', 'Payroll still $222.8M, over the second apron by $1.1M. Roster 15 of 15 (COMPUTED).', 'Declined the offer.']
+    };
+    const rr = choice ? RES[choice] : ['', '', ''];
+    const res = { line: rr[0], money: rr[1], when: wk(dt), rec: rr[2] + ' Attributed to GM · Boston (you).' };
+    const hasKept = kept.some((x) => x.t === 'Left the seat');
+    const blot = {
+      obs: !occ, occ: occ, hasKept: hasKept, offerTop: hasKept ? 132 : 6,
+      offerHead: hasKept ? 'The seat is open again.' : 'Boston’s seat is open.',
+      btn: dir === 'in' ? 'Sitting down…' : (hasKept ? 'Take the seat again' : 'Take the seat'), showDesc: !hasKept,
+      idle: !answered && !choice, card: answered && !choice, done: !!choice
+    };
+    const scoutsT = ['Week 9 vs Denver, last possession: a switch left a big on a guard and Jokić scored. (RECORDED)', 'No lineup data this year: the analytics room has been unfunded since Year One.'];
+    const scouts = scoutsT.map((t, i) => ({
+      t: t, top: 486 + i * 48, bg: occ ? '#FFFFFF' : 'transparent', bd: seat ? '#111111' : '#8C8A84',
+      mk: seat ? green : '#111111', mkIn: seat ? '#FFFFFF' : '#E9E8E4'
+    }));
+    const auth = {
+      line: 'Payroll $' + pay.toFixed(1) + 'M · ' + (over > 0 ? 'over' : 'under') + ' the 2nd apron by $' + Math.abs(over).toFixed(1) + 'M · roster ' + roster + ' of 15'
+    };
+    return {
+      st: st, sentence: sentence, role: role, rows: rows, leagueLegend: leagueLegend, wallOp: wallOp,
+      notes: notes, notesHead: notesHead, actLine: actLine, rums: rums, rumHead: rumHead, rec: rec, keptView: keptView,
+      desk: desk, calls: calls, phoneHead: phoneHead, opts: opts, res: res, blot: blot, scouts: scouts, auth: auth,
+      onlyWho: occ ? 'yours' : 'Boston’s', authHead: occ ? 'Your authority' : 'The seat’s authority',
+      canLeave: canLeave, moving: moving, how: how, howPressed: how ? 'true' : 'false',
+      howBg: how ? '#111111' : 'transparent', howFg: how ? '#FFFFFF' : '#111111',
+      toggleHow: () => this.setState({ how: !(this.state && this.state.how) }),
+      skip: () => {
+        const cur = this.state || {};
+        if (cur.dir === 'in') this.setState({ c: 3300, dir: null });
+        else if (cur.dir === 'out') this.setState({ c: 0, dir: null });
+      },
+      enter: () => {
+        const cur = this.state || {};
+        if (cur.dir || (cur.c || 0) > 0) return;
+        const v = (cur.visits || 0) + 1;
+        const t = SEAT_T[Math.max(0, Math.min(3, v - 1))];
+        this.setState({ dir: 'in', c: 0, visits: v, kept: (cur.kept || []).concat([{ when: wk(t), t: 'Took Boston’s seat' }]) });
+      },
+      leave: () => {
+        const cur = this.state || {};
+        if (cur.dir || (cur.c || 0) < 3300) return;
+        const v = cur.visits || 1;
+        const t = plus(SEAT_T[Math.max(0, Math.min(3, v - 1))], 9);
+        this.setState({ dir: 'out', c: 3300, kept: (cur.kept || []).concat([{ when: wk(t), t: 'Left the seat' }]) });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

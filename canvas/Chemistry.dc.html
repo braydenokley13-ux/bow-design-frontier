@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Equilibrium — one state, one instrument</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FBFBF8;color:#16181A;font-family:'Atkinson Hyperlegible',sans-serif}
+a{color:#1F5FAD}a:hover{color:#123E75}
+.mono{font-family:'JetBrains Mono',monospace}
+.serif{font-family:'Source Serif 4',serif}
+.pt{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.sw{display:inline-block;width:12px;height:12px;box-sizing:border-box;flex:none}
+.t-rec{background:#16181A;box-shadow:inset 0 0 0 2px #16181A,inset 0 0 0 4px #FBFBF8}
+.t-aut{border:1.5px solid #16181A;background:transparent}
+.t-com{background:#8E9296}
+.t-mod{background:repeating-linear-gradient(135deg,#16181A 0 1.2px,transparent 1.2px 5px);border:1px solid #16181A}
+.t-gen{background:radial-gradient(circle,#16181A 1px,transparent 1.3px) 0 0/5px 5px;border:1px dotted #16181A}
+.t-obs{background:#16181A}
+.t-unk{border:1.5px dashed #16181A;background:transparent}
+.btn{font-family:'Atkinson Hyperlegible',sans-serif;font-weight:700;font-size:15px;min-height:44px;padding:0 10px;border-radius:3px;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s,border-color .2s}
+.btn:focus-visible{outline:3px solid #1F5FAD;outline-offset:2px}
+.gas{transition:background-color .12s linear}
+input[type=range]{accent-color:#16181A;height:26px;margin:0}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #FBFBF8; color: #16181A; font-family: 'Atkinson Hyperlegible', sans-serif">
+
+  <header style="position: absolute; left: 32px; right: 32px; top: 14px; height: 50px; display: flex; justify-content: space-between; align-items: center; gap: 24px">
+    <div style="display: flex; flex-direction: column; gap: 3px">
+      <span class="serif" style="font-size: 30px; font-weight: 600; line-height: 1">N₂O₄ ⇌ 2 NO₂ <span style="font-weight: 400; font-style: italic">— one state, one instrument</span></span>
+      <span class="mono" style="font-size: 11px; letter-spacing: .06em; color: #555A5E">BOW NATIVE CHEMISTRY · P3 · PROTOTYPE · DESIGN PROPOSAL · constants: literature values, approx. — verify</span>
+    </div>
+    <div role="group" aria-label="Follow a species through every drawing" style="display: flex; gap: 8px; align-items: center">
+      <span class="mono" style="font-size: 12px; color: #555A5E; margin-right: 4px">FOLLOW</span>
+      <button type="button" class="btn" onClick="{{focusM}}" aria-pressed="{{fmPressed}}" style="border: 2px solid #8A3B12; background: {{fmBg}}; color: {{fmFg}}">NO₂</button>
+      <button type="button" class="btn" onClick="{{focusD}}" aria-pressed="{{fdPressed}}" style="border: 2px solid #16181A; background: {{fdBg}}; color: {{fdFg}}">N₂O₄</button>
+      <span style="width: 14px"></span>
+      <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="border: 2px solid #16181A; background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+    </div>
+  </header>
+
+  <section aria-label="The instrument" style="position: absolute; left: 32px; top: 76px; width: 876px; height: 470px">
+    <div style="position: absolute; left: 8px; top: 20px; width: 860px; height: 200px; background: {{bathFill}}; border: 1px solid {{bathEdge}}; transition: background .6s ease"></div>
+    <span class="mono" style="position: absolute; left: 18px; top: 28px; font-size: 11px; letter-spacing: .08em; color: #3F4448">{{bathLabel}}</span>
+    <span style="position: absolute; left: 18px; top: 196px; font-size: 12px; color: #3F4448">seen from the side</span>
+
+    <div style="position: absolute; left: 40px; top: 72px; width: 84px; height: 84px; border-radius: 42px; border: 2px solid #16181A; background: #FFFFFF; box-sizing: border-box"></div>
+    <div style="position: absolute; left: 81px; top: 84px; width: 2px; height: 32px; background: #8A3B12; transform-origin: 1px 30px; transform: rotate({{gauge.deg}}deg); transition: transform .15s linear"></div>
+    <span class="mono" style="position: absolute; left: 40px; top: 124px; width: 84px; text-align: center; font-size: 12px; font-weight: 500">{{gauge.p}}</span>
+    <span class="mono" style="position: absolute; left: 40px; top: 160px; width: 84px; text-align: center; font-size: 10px; color: #3F4448">PRESSURE</span>
+    <div style="position: absolute; left: 124px; top: 111px; width: 30px; height: 6px; background: #16181A"></div>
+
+    <sc-for list="{{marks}}" as="m" hint-placeholder-count="9">
+      <div style="position: absolute; left: {{m.x}}px; top: 64px; width: 1px; height: {{m.h}}px; background: #3F4448"></div>
+      <span class="mono" style="position: absolute; left: {{m.x}}px; top: 48px; font-size: 10px; color: #3F4448; transform: translateX(-50%)">{{m.label}}</span>
+    </sc-for>
+    <div style="position: absolute; left: 154px; top: 100px; width: 26px; height: 28px; background: #16181A"></div>
+    <div style="position: absolute; left: 178px; top: 74px; width: 568px; height: 80px; border: 2px solid #16181A; border-left-width: 3px; box-sizing: border-box; background: #FFFFFF"></div>
+    <div class="gas" style="position: absolute; left: 181px; top: 77px; width: {{gasW}}px; height: 74px; background: {{gasColor}}"></div>
+    <div style="position: absolute; left: {{plungerX}}px; top: 76px; width: 12px; height: 76px; background: #16181A; transition: left .15s linear"></div>
+    <div style="position: absolute; left: {{rodX}}px; top: 108px; width: 70px; height: 12px; background: #3F4448; transition: left .15s linear"></div>
+    <div style="position: absolute; left: {{handleX}}px; top: 82px; width: 10px; height: 64px; background: #16181A; transition: left .15s linear"></div>
+
+    <div style="position: absolute; left: 836px; top: 40px; width: 12px; height: 150px; border: 2px solid #16181A; border-radius: 6px; box-sizing: border-box; background: #FFFFFF"></div>
+    <div style="position: absolute; left: 839px; top: {{thermo.top}}px; width: 6px; height: {{thermo.h}}px; border-radius: 3px; background: #B3261E; transition: top .3s, height .3s"></div>
+    <span class="mono" style="position: absolute; left: 770px; top: 168px; width: 62px; text-align: right; font-size: 12px; font-weight: 500">{{thermo.t}}</span>
+
+    <label for="plunger" class="mono" style="position: absolute; left: 18px; top: 232px; font-size: 11px; letter-spacing: .06em; color: #3F4448">PLUNGER</label>
+    <input id="plunger" type="range" min="0" max="80" step="1" value="{{V}}" onChange="{{onV}}" aria-valuetext="{{vText}}" style="position: absolute; left: 172px; top: 226px; width: 580px">
+    <span class="mono" style="position: absolute; left: 766px; top: 230px; font-size: 13px; font-weight: 500">{{V}} mL</span>
+
+    <div style="position: absolute; left: 181px; top: 156px; width: 0; height: 104px; border-left: 1.5px dashed #6B7075"></div>
+    <div style="position: absolute; left: {{lensRight}}px; top: 156px; width: 0; height: 104px; border-left: 1.5px dashed #6B7075; transition: left .15s linear"></div>
+
+    <div style="position: absolute; left: 181px; top: 262px; width: {{gasW}}px; height: 190px; border: 2px solid #16181A; border-right-width: 5px; box-sizing: border-box; background: #FFFFFF; transition: width .15s linear; overflow: hidden">
+      <sc-for list="{{parts}}" as="p" hint-placeholder-count="40">
+        <div style="position: absolute; left: {{p.x}}px; top: {{p.y}}px; width: {{p.w}}px; height: 10px; margin-left: -5px; margin-top: -5px; border-radius: 6px; box-sizing: border-box; background: {{p.fill}}; border: {{p.border}}; opacity: {{p.op}}; box-shadow: 0 0 0 {{p.ring}}px rgba(31,95,173,.55)"></div>
+      </sc-for>
+    </div>
+    <div style="position: absolute; left: 8px; top: 266px; width: 160px; display: flex; flex-direction: column; gap: 6px">
+      <span class="pt"><span class="sw t-gen"></span>Molecules</span>
+      <span style="font-size: 13px; line-height: 1.35; color: #3F4448">The same gas, magnified. Squeeze the barrel and this window squeezes with it.</span>
+      <span class="mono" style="font-size: 12px; line-height: 1.6">● NO₂ {{nM}}<br>○○ N₂O₄ {{nD}}</span>
+    </div>
+    <sc-if value="{{condense}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: 470px; top: 158px; width: 390px; padding: 6px 10px; background: #FFFFFF; border: 1.5px dashed #16181A; font-size: 13px; line-height: 1.35">A real syringe would hold liquid N₂O₄ here. This model keeps it all gas — an authored simplification.</div>
+    </sc-if>
+    <span style="position: absolute; left: 18px; top: 212px; font-size: 13px; color: #16181A">What you see: <strong>{{looks}}</strong></span>
+  </section>
+
+  <section aria-label="Graph" style="position: absolute; left: 32px; top: 560px; width: 876px; height: 316px; display: flex; flex-direction: column; gap: 8px">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <span class="pt"><span class="sw t-mod"></span>The same state over time</span>
+      <span style="display: flex; gap: 18px; font-size: 13px; align-items: center">
+        <span style="display: inline-flex; gap: 6px; align-items: center"><span style="width: 22px; height: 3px; background: #8A3B12; display: inline-block"></span>p NO₂ <span class="mono">{{g.pM}}</span></span>
+        <span style="display: inline-flex; gap: 6px; align-items: center"><span style="width: 22px; height: 0; border-top: 3px dotted #16181A; display: inline-block"></span>p N₂O₄ <span class="mono">{{g.pD}}</span></span>
+        <span class="mono" style="color: #555A5E">bar</span>
+      </span>
+    </div>
+    <div style="position: relative; width: 876px; height: 280px; background: #FFFFFF; border: 1px solid #E3E5E2">
+      <svg width="876" height="280" viewBox="0 0 876 280" style="position: absolute; left: 0; top: 0" aria-label="Partial pressures over the last twelve seconds">
+        <line x1="44" y1="20" x2="44" y2="250" stroke="#C9CCC9" stroke-width="1"></line>
+        <line x1="44" y1="250" x2="864" y2="250" stroke="#16181A" stroke-width="1"></line>
+        <line x1="44" y1="154" x2="864" y2="154" stroke="#EDEEEC" stroke-width="1"></line>
+        <line x1="44" y1="58" x2="864" y2="58" stroke="#EDEEEC" stroke-width="1"></line>
+        <polyline points="{{g.d}}" fill="none" stroke="#16181A" stroke-width="{{g.dw}}" stroke-dasharray="2 4" stroke-linecap="round"></polyline>
+        <polyline points="{{g.m}}" fill="none" stroke="#8A3B12" stroke-width="{{g.mw}}" stroke-linejoin="round"></polyline>
+      </svg>
+      <sc-for list="{{g.marks}}" as="gm" hint-placeholder-count="2">
+        <div style="position: absolute; left: {{gm.x}}px; top: 20px; width: 0; height: 230px; border-left: 1.5px solid #1F5FAD"></div>
+        <span class="mono" style="position: absolute; left: {{gm.x}}px; top: 4px; font-size: 10px; color: #1F5FAD; transform: translateX(-50%); white-space: nowrap">{{gm.label}}</span>
+      </sc-for>
+      <span class="mono" style="position: absolute; left: 8px; top: 243px; font-size: 10px; color: #555A5E">0</span>
+      <span class="mono" style="position: absolute; left: 8px; top: 147px; font-size: 10px; color: #555A5E">0.5</span>
+      <span class="mono" style="position: absolute; left: 8px; top: 51px; font-size: 10px; color: #555A5E">1.0</span>
+      <span class="mono" style="position: absolute; left: 44px; top: 258px; font-size: 10px; color: #555A5E">12 s ago</span>
+      <span class="mono" style="position: absolute; right: 12px; top: 258px; font-size: 10px; color: #555A5E">now</span>
+      <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+        <div style="position: absolute; left: 56px; top: 26px; width: 520px; padding: 8px 10px; background: #FFFFFF; border: 1px solid #16181A; font-size: 12px; line-height: 1.45">
+          <strong class="mono" style="font-size: 11px; letter-spacing: .08em">AUTHORED CHOICES IN THIS INSTRUMENT</strong><br>
+          Two clocks share this axis. Chemistry is slowed about a million-fold (the real shift takes microseconds). Warming and cooling are sped up (a real syringe takes minutes). Ideal gas only — no liquid forms. Color follows Beer–Lambert with an illustrative absorptivity. In a real hand-squeezed syringe, much of the slow fade is compression heat leaving the gas, not only the chemical shift.
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <section aria-label="Your move" style="position: absolute; left: 936px; top: 76px; width: 472px; height: 262px; display: flex; flex-direction: column; gap: 10px">
+    <span class="pt"><span class="sw t-rec"></span>Your move — predict, then act</span>
+    <div role="group" aria-label="Actions" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+      <sc-for list="{{actions}}" as="a" hint-placeholder-count="6">
+        <button type="button" class="btn" onClick="{{a.pick}}" aria-pressed="{{a.pressed}}" style="border: 2px solid #16181A; background: {{a.bg}}; color: {{a.fg}}">{{a.label}}</button>
+      </sc-for>
+    </div>
+    <sc-if value="{{asking}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border: 2px solid #1F5FAD; background: #FFFFFF">
+        <span style="font-size: 15px; font-weight: 700">{{askText}}</span>
+        <div style="display: flex; gap: 8px">
+          <sc-for list="{{guesses}}" as="gq" hint-placeholder-count="3">
+            <button type="button" class="btn" onClick="{{gq.pick}}" style="flex: 1; border: 2px solid #16181A; background: #FFFFFF; color: #16181A">{{gq.label}}</button>
+          </sc-for>
+          <button type="button" class="btn" onClick="{{skip}}" style="border: 2px solid #C9CCC9; background: #FFFFFF; color: #3F4448">Skip</button>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{notAsking}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; flex-direction: column; gap: 5px">
+        <sc-for list="{{log}}" as="l" hint-placeholder-count="2">
+          <div style="display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 10px; font-size: 14px; line-height: 1.35; padding: 4px 0; border-bottom: 1px solid #E3E5E2">
+            <span class="mono" style="color: #555A5E; white-space: nowrap">{{l.t}}</span><span><strong>{{l.what}}</strong> {{l.pred}} <span style="color: #1F5FAD">{{l.result}}</span></span>
+          </div>
+        </sc-for>
+        <sc-if value="{{noLog}}" hint-placeholder-val="{{true}}"><span style="font-size: 14px; color: #555A5E; line-height: 1.4">Pick a move. BOW asks what you expect before it happens, and keeps your guess next to what happened. Or drag the plunger to play freely.</span></sc-if>
+      </div>
+    </sc-if>
+  </section>
+
+  <section aria-label="Symbols" style="position: absolute; left: 936px; top: 350px; width: 472px; height: 250px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #C9CCC9; padding-top: 12px; box-sizing: border-box">
+    <span class="pt"><span class="sw t-com"></span>The same state as algebra</span>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 14px">
+      <span class="serif" style="font-size: 28px; text-decoration: {{dUnder}}; text-decoration-thickness: 3px; text-underline-offset: 6px">N₂O₄(g)</span>
+      <svg width="86" height="40" viewBox="0 0 86 40" aria-hidden="true">
+        <path d="M 4 14 L 76 14" stroke="#16181A" stroke-width="{{eq.fw}}" fill="none" style="transition: stroke-width .2s"></path>
+        <path d="M 66 6 L 80 14" stroke="#16181A" stroke-width="3" fill="none"></path>
+        <path d="M 82 28 L 10 28" stroke="#8A3B12" stroke-width="{{eq.rw}}" fill="none" style="transition: stroke-width .2s"></path>
+        <path d="M 20 36 L 6 28" stroke="#8A3B12" stroke-width="3" fill="none"></path>
+      </svg>
+      <span class="serif" style="font-size: 28px; color: #8A3B12; text-decoration: {{mUnder}}; text-decoration-thickness: 3px; text-underline-offset: 6px">2 NO₂(g)</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <div style="padding: 8px 10px; border: 1px solid #C9CCC9; display: flex; flex-direction: column; gap: 2px">
+        <span class="mono" style="font-size: 10px; letter-spacing: .08em; color: #555A5E">Qp, RIGHT NOW</span>
+        <span class="mono" style="font-size: 13px">({{eq.pM}})² / {{eq.pD}}</span>
+        <span class="mono" style="font-size: 20px; font-weight: 500">= {{eq.Q}}</span>
+      </div>
+      <div style="padding: 8px 10px; border: 1px solid #C9CCC9; display: flex; flex-direction: column; gap: 2px">
+        <span class="mono" style="font-size: 10px; letter-spacing: .08em; color: #555A5E">Kp AT {{eq.T}} K · 1-bar standard</span>
+        <span class="mono" style="font-size: 13px">ΔH° = +57.2 kJ/mol</span>
+        <span class="mono" style="font-size: 20px; font-weight: 500">= {{eq.K}}</span>
+      </div>
+    </div>
+    <div style="position: relative; height: 34px">
+      <div style="position: absolute; left: 0; right: 0; top: 16px; height: 2px; background: #C9CCC9"></div>
+      <div style="position: absolute; left: 50%; top: 4px; width: 2px; height: 26px; background: #16181A"></div>
+      <div style="position: absolute; left: {{eq.qx}}%; top: 8px; width: 18px; height: 18px; margin-left: -9px; border-radius: 9px; background: #8A3B12; transition: left .2s"></div>
+      <span class="mono" style="position: absolute; left: 0; top: 22px; font-size: 10px; color: #555A5E">Q &lt; K</span>
+      <span class="mono" style="position: absolute; right: 0; top: 22px; font-size: 10px; color: #555A5E">Q &gt; K</span>
+    </div>
+    <p style="margin: 0; font-size: 15px; font-weight: 700; text-align: center">{{eq.verdict}}</p>
+  </section>
+
+  <section aria-label="Explanation" style="position: absolute; left: 936px; top: 610px; width: 472px; height: 266px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #C9CCC9; padding-top: 12px; box-sizing: border-box">
+    <span class="pt"><span class="sw t-aut"></span>Written for this state</span>
+    <p class="serif" style="margin: 0; font-size: 20px; line-height: 1.35">{{ex.main}}</p>
+    <p class="serif" style="margin: 0; font-size: 16px; line-height: 1.4; color: #3F4448">{{ex.sub}}</p>
+    <sc-if value="{{ex.named}}" hint-placeholder-val="{{false}}">
+      <div style="margin-top: auto; padding: 10px 12px; border: 2px solid #16181A; background: #FFFFFF; display: flex; flex-direction: column; gap: 3px">
+        <span class="mono" style="font-size: 10px; letter-spacing: .1em; color: #555A5E">WHAT YOU JUST DID HAS A NAME</span>
+        <span class="serif" style="font-size: 18px; font-weight: 600">Le Châtelier’s principle</span>
+        <span class="serif" style="font-size: 14px; line-height: 1.4">Squeeze or stretch the gas and the balance shifts to partly undo the change. Heat or cool it and something else happens: K itself moves, and the gas settles wherever the new K puts it.</span>
+      </div>
+    </sc-if>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  kp(T) { return 0.148 * Math.exp(-57200 / 8.314 * (1 / T - 1 / 298)); }
+  c0(T, V) { return 0.3 * (T / 298) * (50 / V); }
+  aeq(T, V) { const K = this.kp(T), c = this.c0(T, V); return (-K + Math.sqrt(K * K + 16 * c * K)) / (8 * c); }
+  pvap(T) { return 1.013 * Math.exp(-38000 / 8.314 * (1 / T - 1 / 294.3)); }
+  gasL(V) { return Math.round(V * 7); }
+  opacity(s) { const c = this.c0(s.T, s.V), pM = 2 * s.alpha * c; return 1 - Math.exp(-2.43 * pM * 298 / s.T); }
+  mk(kind, x, y) { const a = Math.random() * Math.PI * 2; return { kind: kind, x: x, y: y, vx: Math.cos(a), vy: Math.sin(a), age: 99 }; }
+  initSim() {
+    if (this.sim) return;
+    const T = 298, V = 50, a = this.aeq(T, V), w = this.gasL(V);
+    const parts = [], pairs = Math.round(40 * a);
+    for (let i = 0; i < 40 - pairs; i++) parts.push(this.mk('D', 14 + Math.random() * (w - 34), 14 + Math.random() * 160));
+    for (let i = 0; i < pairs * 2; i++) parts.push(this.mk('M', 14 + Math.random() * (w - 34), 14 + Math.random() * 160));
+    this.sim = { T: T, Tbath: 298, V: V, alpha: a, parts: parts, hist: [], t: 0, events: [], last: null, kinds: {}, log: [], pred: null };
+    const c = this.c0(T, V);
+    for (let i = 0; i < 240; i++) this.sim.hist.push({ pM: 2 * a * c, pD: (1 - a) * c });
+  }
+  split() {
+    const P = this.sim.parts, ds = P.filter((p) => p.kind === 'D'); if (!ds.length) return;
+    const d = ds[Math.floor(Math.random() * ds.length)]; P.splice(P.indexOf(d), 1);
+    const m1 = this.mk('M', d.x - 4, d.y), m2 = this.mk('M', d.x + 4, d.y); m2.vx = -m1.vx; m2.vy = -m1.vy; m1.age = 0; m2.age = 0; P.push(m1, m2);
+  }
+  merge() {
+    const P = this.sim.parts, ms = P.filter((p) => p.kind === 'M'); if (ms.length < 2) return;
+    const a = ms[Math.floor(Math.random() * ms.length)]; let b = null, best = 1e9;
+    for (const m of ms) { if (m === a) continue; const dd = (m.x - a.x) * (m.x - a.x) + (m.y - a.y) * (m.y - a.y); if (dd < best) { best = dd; b = m; } }
+    P.splice(P.indexOf(a), 1); P.splice(P.indexOf(b), 1);
+    const d = this.mk('D', (a.x + b.x) / 2, (a.y + b.y) / 2); d.age = 0; P.push(d);
+  }
+  settled() { const s = this.sim; return Math.abs(s.alpha - this.aeq(s.T, s.V)) < 0.003 && Math.abs(s.T - s.Tbath) < 0.8; }
+  tick() {
+    const s = this.sim; if (!s) return;
+    const dt = 0.05;
+    s.T += (s.Tbath - s.T) * dt / 1.6;
+    s.alpha += (this.aeq(s.T, s.V) - s.alpha) * dt / 0.9;
+    const targetM = 2 * Math.round(40 * s.alpha);
+    let curM = s.parts.filter((p) => p.kind === 'M').length, guard = 0;
+    while (curM < targetM && guard++ < 20) { this.split(); curM += 2; }
+    while (curM > targetM && guard++ < 40) { this.merge(); curM -= 2; }
+    if (Math.random() < 0.3 && curM >= 2 && curM < 80) { this.split(); this.merge(); }
+    const w = this.gasL(s.V), sp = 1.6 * Math.sqrt(s.T / 298);
+    for (const p of s.parts) {
+      p.x += p.vx * sp; p.y += p.vy * sp; p.age++;
+      if (p.x < 10) { p.x = 10; p.vx = Math.abs(p.vx); }
+      if (p.x > w - 16) { p.x = w - 16; p.vx = -Math.abs(p.vx); }
+      if (p.y < 10) { p.y = 10; p.vy = Math.abs(p.vy); }
+      if (p.y > 174) { p.y = 174; p.vy = -Math.abs(p.vy); }
+    }
+    const c = this.c0(s.T, s.V);
+    s.hist.push({ pM: 2 * s.alpha * c, pD: (1 - s.alpha) * c }); if (s.hist.length > 240) s.hist.shift();
+    s.t++;
+    for (const e of s.events) e.age++;
+    s.events = s.events.filter((e) => e.age < 240);
+    if (s.pred && !s.pred.done && s.t - s.pred.t > 12 && this.settled()) {
+      const d = this.opacity(s) - s.pred.opBefore;
+      const got = d > 0.03 ? 'darker' : d < -0.03 ? 'lighter' : 'the same';
+      s.pred.done = true;
+      s.pred.entry.result = s.pred.guess ? '→ settled ' + got + (got === s.pred.guess ? ', as you said.' : '.') : '→ settled ' + got + '.';
+    }
+    this.setState({ tick: s.t });
+  }
+  componentDidMount() { this.initSim(); this.timer = setInterval(() => this.tick(), 50); }
+  componentWillUnmount() { clearInterval(this.timer); }
+  record(kind, what, guess) {
+    const s = this.sim;
+    s.events.push({ age: 0, label: kind });
+    s.last = { kind: kind, t: s.t };
+    s.kinds[kind === 'squeeze' || kind === 'stretch' ? 'volume' : 'temperature'] = true;
+    const entry = { t: 't=' + (s.t / 20).toFixed(1) + 's', what: what, pred: guess ? '· you said ' + guess : '· no prediction', result: '' };
+    s.log.unshift(entry); s.log = s.log.slice(0, 3);
+    return entry;
+  }
+  moveV(V) {
+    const s = this.sim, old = s.V, f = (this.gasL(V) - 26) / (this.gasL(old) - 26);
+    for (const p of s.parts) p.x = 10 + (p.x - 10) * f;
+    s.V = V;
+  }
+  drag(V) {
+    const s = this.sim; V = Math.max(20, Math.min(80, Math.round(V))); if (V === s.V) return;
+    const live = s.dragging && s.t - s.dragging.t < 30;
+    const from = live ? s.dragging.from : s.V;
+    this.moveV(V);
+    if (live) { s.dragging.t = s.t; s.dragging.entry.what = 'Dragged ' + from + '→' + V + ' mL'; s.events[s.events.length - 1].age = 0; }
+    else { const e = this.record(V < from ? 'squeeze' : 'stretch', 'Dragged ' + from + '→' + V + ' mL', null); s.dragging = { t: s.t, from: from, entry: e }; }
+    s.last = { kind: V < from ? 'squeeze' : 'stretch', t: s.t };
+    s.pred = null;
+  }
+  setV(V, guess) {
+    const s = this.sim; V = Math.max(20, Math.min(80, Math.round(V))); if (V === s.V) return null;
+    const old = s.V;
+    const opBefore = this.opacity(s);
+    this.moveV(V);
+    const e = this.record(V < old ? 'squeeze' : 'stretch', (V < old ? 'Squeezed ' : 'Pulled ') + old + '→' + V + ' mL', guess);
+    return { opBefore: opBefore, entry: e };
+  }
+  setBath(T, name, guess) {
+    const s = this.sim; if (T === s.Tbath) return null;
+    const opBefore = this.opacity(s);
+    const e = this.record(T > s.Tbath ? 'heat' : 'cool', name, guess);
+    s.Tbath = T;
+    return { opBefore: opBefore, entry: e };
+  }
+  doAction(id, guess) {
+    const s = this.sim;
+    const A = { sq: () => this.setV(25, guess), b50: () => this.setV(50, guess), p75: () => this.setV(75, guess),
+      ice: () => this.setBath(273, 'Into the ice bath', guess), room: () => this.setBath(298, 'Back to room temperature', guess), hot: () => this.setBath(353, 'Into hot water', guess) };
+    const r = A[id]();
+    if (r) s.pred = { t: s.t, guess: guess, opBefore: r.opBefore, entry: r.entry, done: false };
+    this.setState({ pending: null });
+  }
+  renderVals() {
+    this.initSim();
+    const s = this.sim, st = this.state || {};
+    const how = !!st.how, focus = st.focus || null, pending = st.pending || null;
+    const c = this.c0(s.T, s.V), K = this.kp(s.T);
+    const pM = 2 * s.alpha * c, pD = (1 - s.alpha) * c, P = (1 + s.alpha) * c, Q = pM * pM / pD;
+    const settled = this.settled();
+    const op = this.opacity(s);
+    const looks = op < 0.2 ? 'nearly colorless' : op < 0.4 ? 'pale amber' : op < 0.55 ? 'amber-brown' : 'deep brown';
+    const L = this.gasL(s.V), fmt = (x, n) => x.toFixed(n);
+    const marks = [];
+    for (let m = 0; m <= 80; m += 10) marks.push({ x: 181 + m * 7, h: m % 20 === 0 ? 12 : 7, label: m % 20 === 0 ? String(m) : '' });
+    const bathFill = s.Tbath === 273 ? '#E3EEF6' : s.Tbath === 353 ? '#F8E6D6' : '#F2F3F1';
+    const bathEdge = s.Tbath === 273 ? '#9DB9CE' : s.Tbath === 353 ? '#D9A77F' : '#D9DBD8';
+    const bathLabel = s.Tbath === 273 ? 'ICE BATH · 273 K' : s.Tbath === 353 ? 'HOT WATER · 353 K' : 'ROOM · 298 K';
+    const tFrac = (s.T - 260) / 110;
+    const thermo = { h: Math.round(20 + tFrac * 120), top: Math.round(186 - (20 + tFrac * 120)), t: fmt(s.T, 0) + ' K' };
+    const gauge = { deg: Math.round(-120 + Math.min(1.5, P) / 1.5 * 240), p: fmt(P, 2) + ' bar' };
+    const condense = pD > this.pvap(s.T);
+
+    const parts = s.parts.map((p) => {
+      const isM = p.kind === 'M', dim = focus && ((focus === 'M' && !isM) || (focus === 'D' && isM));
+      return { x: Math.round(p.x), y: Math.round(p.y), w: isM ? 10 : 20, fill: isM ? '#8A3B12' : '#FFFFFF', border: isM ? '0' : '1.5px solid #16181A', op: dim ? 0.22 : 1, ring: p.age < 8 ? 3 : 0 };
+    });
+    const nM = s.parts.filter((p) => p.kind === 'M').length, nD = s.parts.length - nM;
+
+    const rf = K * pD, rr = pM * pM, tot = rf + rr, ratio = Q / K;
+    const qx = Math.max(4, Math.min(96, 50 + Math.log10(ratio) * 60));
+    const verdict = ratio < 0.97 ? 'Q < K: splitting outpaces pairing — net toward NO₂.' : ratio > 1.03 ? 'Q > K: pairing outpaces splitting — net toward N₂O₄.' : 'Q = K: both directions run at the same rate.';
+    const eq = { fw: (1.5 + 9 * rf / tot).toFixed(2), rw: (1.5 + 9 * rr / tot).toFixed(2), pM: fmt(pM, 3), pD: fmt(pD, 3), Q: fmt(Q, 3), K: fmt(K, 3), T: fmt(s.T, 0), qx: qx.toFixed(1), verdict: verdict };
+
+    const H = s.hist, gy = (p) => (250 - Math.min(1.2, p) / 1.2 * 230).toFixed(1), gx = (i) => (44 + i / 239 * 820).toFixed(1);
+    const g = { m: H.map((h, i) => gx(i) + ',' + gy(h.pM)).join(' '), d: H.map((h, i) => gx(i) + ',' + gy(h.pD)).join(' '),
+      mw: focus === 'M' ? 4.5 : 3, dw: focus === 'D' ? 4.5 : 3, pM: fmt(pM, 3), pD: fmt(pD, 3),
+      marks: s.events.map((e) => ({ x: Math.round(44 + (239 - e.age) / 239 * 820), label: e.label })) };
+
+    const ACT = [['sq', 'Squeeze · 25 mL'], ['b50', 'Back · 50 mL'], ['p75', 'Pull · 75 mL'], ['ice', 'Ice · 0 °C'], ['room', 'Room · 25 °C'], ['hot', 'Hot · 80 °C']];
+    const actions = ACT.map((a) => ({ label: a[1], pressed: pending === a[0] ? 'true' : 'false', bg: pending === a[0] ? '#1F5FAD' : '#FFFFFF', fg: pending === a[0] ? '#FFFFFF' : '#16181A',
+      pick: () => this.setState({ pending: a[0] }) }));
+    const askNames = { sq: 'squeeze it to 25 mL', b50: 'bring it back to 50 mL', p75: 'pull it to 75 mL', ice: 'put it in ice', room: 'bring it to room temperature', hot: 'put it in hot water' };
+    const guesses = ['darker', 'the same', 'lighter'].map((gq) => ({ label: gq === 'the same' ? 'Same' : gq[0].toUpperCase() + gq.slice(1), pick: () => this.doAction(pending, gq) }));
+
+    const last = s.last ? s.last.kind : null;
+    const TXT = {
+      none: ['Nothing seems to be happening. It is.', 'Molecules are still splitting and pairing — watch for the blue rings. They do it at the same rate, so the color holds. That balance is what “equilibrium” means.'],
+      squeezeMoving: ['You squeezed it. Everything got closer, so the color darkened at once.', 'Now pairs form faster than they split: two NO₂ become one N₂O₄ — fewer molecules pushing on the walls.'],
+      squeezeDone: ['Settled darker than before, lighter than the instant you pushed.', 'The gas undid part of your squeeze by pairing up. Not all of it.'],
+      stretchMoving: ['You gave it room. The color thinned at once.', 'Now more N₂O₄ splits than forms — more molecules to fill the space.'],
+      stretchDone: ['Settled paler than before, browner than the instant you pulled.', 'The gas made up part of the lost pressure by splitting. Not all of it.'],
+      heatMoving: ['Heat is flowing in. Splitting absorbs energy, so heat drives the split.', 'Watch the brown deepen as the gas warms. K itself is growing.'],
+      heatDone: ['Hot, and much browner.', 'At 80 °C, K is dozens of times larger than at 25 °C. Temperature moves K; squeezing never does.'],
+      coolMoving: ['The gas is losing heat. Pairing releases energy, so cold favors the pairs.', 'The brown drains away as N₂O₄ forms. K is shrinking.'],
+      coolDone: ['Cold, and nearly colorless.', 'Most NO₂ has paired up. K at 0 °C is several times smaller than at 25 °C.']
+    };
+    const key = !last ? 'none' : last + (settled ? 'Done' : 'Moving');
+    const ex = { main: TXT[key][0], sub: TXT[key][1], named: !!(s.kinds.volume && s.kinds.temperature) };
+
+    return {
+      how, marks, bathFill, bathEdge, bathLabel, thermo, gauge, condense, looks,
+      gasColor: 'rgba(138,59,18,' + op.toFixed(3) + ')',
+      V: s.V, vText: s.V + ' millilitres', gasW: L - 3, plungerX: 178 + L, rodX: 190 + L, handleX: 260 + L, lensRight: 178 + L,
+      parts, nM, nD, eq, g, ex, actions, guesses,
+      asking: !!pending, notAsking: !pending, askText: pending ? 'Before you ' + askNames[pending] + ': when it settles, will the gas look…' : '',
+      skip: () => this.doAction(pending, null),
+      log: s.log, noLog: s.log.length === 0,
+      dUnder: focus === 'D' ? 'underline' : 'none', mUnder: focus === 'M' ? 'underline' : 'none',
+      onV: (e) => { this.drag(Number(e.target.value)); this.setState({ v: this.sim.V }); },
+      focusM: () => this.setState({ focus: focus === 'M' ? null : 'M' }),
+      focusD: () => this.setState({ focus: focus === 'D' ? null : 'D' }),
+      fmPressed: focus === 'M' ? 'true' : 'false', fmBg: focus === 'M' ? '#8A3B12' : '#FFFFFF', fmFg: focus === 'M' ? '#FFFFFF' : '#8A3B12',
+      fdPressed: focus === 'D' ? 'true' : 'false', fdBg: focus === 'D' ? '#16181A' : '#FFFFFF', fdFg: focus === 'D' ? '#FFFFFF' : '#16181A',
+      toggleHow: () => this.setState({ how: !how }),
+      howPressed: how ? 'true' : 'false', howBg: how ? '#16181A' : '#FFFFFF', howFg: how ? '#FFFFFF' : '#16181A'
+    };
+  }
+}
+</script>
+</body>
+</html>

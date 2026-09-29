@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Promise Threads</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&amp;family=Martian+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAFAF7;color:#111111;font-family:'Schibsted Grotesk',sans-serif}
+a{color:#111111}a:hover{color:#1D4ED8}
+.mono{font-family:'Martian Mono',monospace}
+.sw{display:inline-block;width:20px;height:20px;box-sizing:border-box;flex:none}
+.t-obs{background:#111111}
+.t-rec{background:#111111;box-shadow:inset 0 0 0 3px #111111,inset 0 0 0 5px #FAFAF7}
+.t-aut{background:transparent;border:2px solid #111111}
+.t-com{background:#8C8980}
+.t-mod{background:repeating-linear-gradient(135deg,#111111 0 1.5px,transparent 1.5px 6px);border:1px solid #111111}
+.t-gen{background:radial-gradient(circle,#111111 1.1px,transparent 1.4px) 0 0/6px 6px;border:1px dotted #111111}
+.t-unk{background:transparent;border:2px dashed #111111}
+.t-yel{background:#F2C200;border:2px solid #111111}
+button{font-family:'Schibsted Grotesk',sans-serif;color:#111111}
+.rb{border:0;background:#FAFAF7;cursor:pointer;min-height:44px;padding:0 12px;display:flex;align-items:center;gap:9px;text-align:left}
+.rb:disabled{cursor:not-allowed;opacity:.45}
+.btn{cursor:pointer;min-height:44px;padding:0 16px;border:2px solid #111111;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s}
+.btn:disabled{cursor:not-allowed;opacity:.4}
+.btn:focus-visible,.rb:focus-visible,.lane:focus-visible,.pk:focus-visible{outline:3px solid #111111;outline-offset:2px}
+.lane{position:absolute;left:28px;top:1px;width:1384px;height:54px;background:transparent;border:2px dashed transparent;cursor:pointer;padding:0}
+.lane:hover{border-color:#111111}
+.lane.on{border:2px solid #111111}
+.pk{cursor:pointer;min-height:40px;padding:0 12px;border:2px solid #1D4ED8;font-size:13px;font-weight:600;transition:background .2s,color .2s}
+.pin{animation:land .45s ease-out}
+@keyframes land{0%{transform:scale(1.7);opacity:0}100%{transform:scale(1);opacity:1}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #FAFAF7; color: #111111; font-family: 'Schibsted Grotesk', sans-serif">
+
+  <!-- MASTHEAD -->
+  <header style="position: absolute; left: 32px; top: 16px; width: 1376px; height: 50px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #111111; padding-bottom: 8px">
+    <div style="display: flex; align-items: baseline; gap: 18px">
+      <h1 style="margin: 0; font-size: 30px; line-height: 1; font-weight: 800; letter-spacing: -0.02em">Promise threads</h1>
+      <span style="font-size: 15px; color: #3D3B36">Harrow Medical, drawn as what it has promised · HM-40 infusion pumps · Line 2, Dayton</span>
+    </div>
+    <div class="mono" style="font-size: 9px; line-height: 1.5; letter-spacing: .05em; color: #3D3B36; text-align: right">
+      <div>PROTOTYPE · DESIGN PROPOSAL · PLATFORM HYPOTHESIS (ENTERPRISE)</div>
+      <div>HARROW MEDICAL IS FICTIONAL · NUMBERS AUTHORED FOR THE PROTOTYPE</div>
+    </div>
+  </header>
+
+  <!-- MODE RAIL -->
+  <div style="position: absolute; left: 32px; top: 74px; width: 1376px; height: 46px; display: flex; align-items: center; justify-content: space-between">
+    <div role="group" aria-label="Modes: verbs over the same drawing" style="position: relative; display: flex; align-items: center; gap: 4px">
+      <div style="position: absolute; left: 12px; right: 12px; top: 22px; height: 2px; background: #111111"></div>
+      <sc-for list="{{modes}}" as="m" hint-placeholder-count="4">
+        <button type="button" class="rb" onClick="{{m.go}}" aria-pressed="{{m.pressed}}" disabled="{{m.disabled}}" style="position: relative">
+          <span style="width: 16px; height: 16px; box-sizing: border-box; border-radius: 50%; border: 2.5px solid #111111; background: {{m.dot}}; flex: none; transition: background .25s"></span>
+          <span style="display: flex; flex-direction: column; line-height: 1.15">
+            <span style="font-size: 14px; font-weight: 800; letter-spacing: .06em; border-bottom: 3px solid {{m.bar}}">{{m.label}}</span>
+            <span style="font-size: 11.5px; color: #55534C">{{m.verb}}</span>
+          </span>
+        </button>
+      </sc-for>
+      <button type="button" class="rb" disabled="{{true}}" aria-disabled="true" aria-label="OPERATE is locked: requires authorization, not connected in this prototype" style="position: relative">
+        <svg width="16" height="18" viewBox="0 0 16 18" aria-hidden="true" style="flex: none"><rect x="2" y="8" width="12" height="9" fill="none" stroke="#111111" style="stroke-width: 2px"></rect><path d="M4.5 8 V5.5 a3.5 3.5 0 0 1 7 0 V8" fill="none" stroke="#111111" style="stroke-width: 2px"></path></svg>
+        <span style="display: flex; flex-direction: column; line-height: 1.15">
+          <span style="font-size: 14px; font-weight: 800; letter-spacing: .06em">OPERATE</span>
+          <span style="font-size: 11.5px; color: #55534C">locked · requires authorization, not connected</span>
+        </span>
+      </button>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px">
+      <sc-if value="{{notFired}}" hint-placeholder-val="{{false}}">
+        <button type="button" class="btn" onClick="{{fire}}" style="background: #F2C200; color: #111111">
+          <svg width="12" height="14" viewBox="0 0 12 14" aria-hidden="true"><path d="M1 1 L11 7 L1 13 Z" fill="#111111"></path></svg>
+          Kaito fab fire — 06:10
+        </button>
+      </sc-if>
+      <sc-if value="{{fired}}" hint-placeholder-val="{{true}}">
+        <button type="button" class="btn" onClick="{{rewind}}" style="background: #FAFAF7">Rewind to 06:00</button>
+      </sc-if>
+      <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+    </div>
+  </div>
+
+  <!-- SENTENCE -->
+  <p style="position: absolute; left: 32px; top: 126px; width: 1376px; margin: 0; font-size: 16px; line-height: 22px"><strong style="font-weight: 800">{{lead}}</strong>{{rest}}</p>
+
+  <!-- AXIS -->
+  <div class="mono" style="position: absolute; left: 32px; top: 157px; font-size: 11px; letter-spacing: .06em; color: #55534C">PROMISE</div>
+  <div class="mono" style="position: absolute; left: 1084px; top: 157px; font-size: 11px; letter-spacing: .06em; color: #55534C">CUSTOMER · PUMPS · DUE</div>
+  <sc-for list="{{weeks}}" as="w" hint-placeholder-count="8">
+    <div class="mono" style="position: absolute; left: {{w.lx}}px; top: 157px; width: 40px; text-align: center; font-size: 11px; font-weight: 600">{{w.label}}</div>
+    <div style="position: absolute; left: {{w.gx}}px; top: 178px; width: 1px; height: 350px; background: {{w.gc}}"></div>
+  </sc-for>
+  <div style="position: absolute; left: 32px; top: 177px; width: 1376px; height: 1px; background: #111111"></div>
+  <div class="mono" style="position: absolute; left: 124px; top: 155px; width: 80px; height: 18px; line-height: 18px; text-align: center; background: #111111; color: #FAFAF7; font-size: 11px; font-weight: 600">{{clock}}</div>
+  <div style="position: absolute; left: 163px; top: 173px; width: 2px; height: 355px; background: #111111"></div>
+
+  <!-- SUPPLY ROW: Kaito -> Inbound, MCU stock -->
+  <div style="position: absolute; left: 32px; top: 186px; width: 116px; height: 26px; box-sizing: border-box; border: 2px solid #111111; background: {{kaitoBg}}; display: flex; align-items: center; justify-content: center; transition: background .5s"><span class="mono" style="font-size: 11px; font-weight: 600">{{kaitoLabel}}</span></div>
+  <div class="mono" style="position: absolute; left: 32px; top: 217px; font-size: 11px; color: #3D3B36">MCU STOCK</div>
+  <div style="position: absolute; left: 164px; top: 197px; width: 900px; height: 0; border-top: 2px {{railStyle}} #111111"></div>
+  <sc-for list="{{lots}}" as="lt" hint-placeholder-count="7">
+    <div class="mono" style="position: absolute; left: {{lt.x}}px; top: 187px; width: 52px; height: 22px; box-sizing: border-box; border: 2px {{lt.bs}} #111111; background: #FAFAF7; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{lt.txt}}</div>
+  </sc-for>
+  <div style="position: absolute; left: 164px; top: 214px; width: 900px; height: 22px; background: #8C8980; clip-path: {{clip}}; transition: clip-path 1.3s cubic-bezier(.3,.7,.2,1)"></div>
+  <div class="mono" style="position: absolute; left: 176px; top: 217px; font-size: 11px; color: #111111; opacity: {{preOp}}; transition: opacity .4s">2,300 ON HAND · RESTOCKED 1,050 A WEEK</div>
+  <div class="mono" style="position: absolute; left: {{dryLabelX}}px; top: 217px; font-size: 11px; color: #111111; opacity: {{postOp}}; transition: opacity .5s .9s">{{stockNote}}</div>
+  <div style="position: absolute; left: {{dryX}}px; top: 212px; width: 0; height: 316px; border-left: 1.5px dashed #111111; opacity: {{postOp}}; transition: opacity .5s 1.1s"></div>
+  <div style="position: absolute; left: 1084px; top: 186px; width: 324px">
+    <div style="font-size: 15px; font-weight: 700">Kaito Semiconductor</div>
+    <div style="font-size: 12.5px; margin-top: 3px; color: #3D3B36">{{kaitoStatus}}</div>
+  </div>
+
+  <!-- THREADS -->
+  <sc-for list="{{lanes}}" as="t" hint-placeholder-count="5">
+    <div style="position: absolute; left: 0; top: {{t.top}}px; width: 1440px; height: 56px">
+      <!-- the record (LENS dims whole rows; LAB fades only the threads, so promises stay readable) -->
+      <div style="position: absolute; left: 0; top: 0; width: 1440px; height: 56px; opacity: {{t.op}}; transition: opacity .4s">
+        <div style="position: absolute; left: 32px; top: 0; width: 1376px; height: 0; border-top: 1px solid #E2E0D8"></div>
+        <div style="position: absolute; left: 32px; top: 6px; width: 104px; display: flex; flex-direction: column; align-items: flex-start; gap: 3px">
+          <span class="mono" style="font-size: 11px; font-weight: 600">{{t.num}}</span>
+          <sc-if value="{{t.crit}}" hint-placeholder-val="{{true}}">
+            <span class="mono" style="font-size: 11px; line-height: 1.1; letter-spacing: 0; padding: 2px 4px; border: 1.5px solid #111111; box-shadow: inset 0 0 0 1.5px #FAFAF7, inset 0 0 0 2.5px #111111">PATIENT-<br>CRITICAL</span>
+          </sc-if>
+        </div>
+        <div style="position: absolute; left: 0; top: 0; width: 1440px; height: 56px; opacity: {{t.tOp}}; transition: opacity .4s">
+        <div style="position: absolute; left: 164px; top: 22px; height: 6px; width: {{t.solidW}}px; background: #111111; transition: width 1.2s cubic-bezier(.3,.7,.2,1)"></div>
+        <div style="position: absolute; left: {{t.fx}}px; top: 13px; width: {{t.fw}}px; height: 24px; opacity: {{t.fop}}; transition: opacity .7s .7s">
+          <svg width="{{t.fw}}" height="24" aria-hidden="true" style="display: block; overflow: visible">
+            <path d="{{t.f1}}" fill="none" stroke="#111111" style="stroke-width: 2px; stroke-dasharray: 12 4"></path>
+            <path d="{{t.f2}}" fill="none" stroke="#111111" style="stroke-width: 2px; stroke-dasharray: 7 6"></path>
+            <path d="{{t.f3}}" fill="none" stroke="#111111" style="stroke-width: 2px; stroke-dasharray: 3 7"></path>
+          </svg>
+        </div>
+        <sc-for list="{{t.stops}}" as="st" hint-placeholder-count="6">
+          <div style="position: absolute; left: {{st.x}}px; top: {{st.y}}px; width: {{st.w}}px; height: {{st.h}}px; box-sizing: border-box; border: 2px {{st.bs}} #111111; border-radius: {{st.rad}}; background: {{st.bg}}; transform: rotate({{st.rot}}deg); opacity: {{st.op}}; transition: background .5s .3s, opacity .6s .5s"></div>
+          <div class="mono" style="position: absolute; left: {{st.lx}}px; top: 38px; width: 34px; text-align: center; font-size: 11px; line-height: 13px; color: #3D3B36">{{st.lab}}</div>
+        </sc-for>
+        <div style="position: absolute; left: {{t.tx}}px; top: 12px; width: 5px; height: 26px; background: #111111; opacity: {{t.top2}}; transition: opacity .6s .6s"></div>
+        <div class="mono" style="position: absolute; left: {{t.tlx}}px; top: 38px; width: 34px; text-align: center; font-size: 11px; line-height: 13px; color: #3D3B36">DUE</div>
+        <sc-if value="{{t.frayed}}" hint-placeholder-val="{{false}}">
+          <div style="position: absolute; left: {{t.fmx}}px; top: 18px; width: 14px; height: 14px; box-sizing: border-box; background: #F2C200; border: 2px solid #111111"></div>
+        </sc-if>
+        <sc-if value="{{t.tagOn}}" hint-placeholder-val="{{false}}">
+          <div class="mono" style="position: absolute; left: {{t.ftx}}px; top: 1px; padding: 0 5px; line-height: 15px; background: #F2C200; border: 1.5px solid #111111; font-size: 11px; font-weight: 600; white-space: nowrap">{{t.ftag}}</div>
+        </sc-if>
+        </div>
+        <div style="position: absolute; left: 1084px; top: 8px; width: 324px">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px">
+            <span style="font-size: 15px; font-weight: 700">{{t.name}}</span>
+            <span class="mono" style="font-size: 11px; font-weight: 500">{{t.qd}}</span>
+          </div>
+          <div style="font-size: 12.5px; margin-top: 3px; font-weight: {{t.sw}}; color: #262521">{{t.status}}</div>
+        </div>
+      </div>
+      <!-- LAB: the selected branch's outcome for this promise, in its own ink, on the same row -->
+      <div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 1440px; height: 56px; pointer-events: none; opacity: {{t.bop}}; transition: opacity .5s">
+        <div style="position: absolute; left: 164px; top: 8px; width: {{t.bsW}}px; height: 4px; background: #1D4ED8; transition: width 1.1s cubic-bezier(.3,.7,.2,1)"></div>
+        <div style="position: absolute; left: {{t.bhX}}px; top: 6px; width: {{t.bhW}}px; height: 8px; box-sizing: border-box; background: {{t.hatch}}; border: 2px solid #1D4ED8; opacity: {{t.bhOp}}; transition: width 1s .5s"></div>
+        <div style="position: absolute; left: {{t.bdX}}px; top: 6px; width: {{t.bdW}}px; height: 8px; box-sizing: border-box; background: {{t.hatch}}; border: 2px dashed #1D4ED8; opacity: {{t.bdOp}}; transition: width .8s 1s"></div>
+        <div style="position: absolute; left: {{t.bfx}}px; top: 0; width: {{t.bfw}}px; height: 20px; opacity: {{t.bfop}}; transition: opacity .6s .7s">
+          <svg width="{{t.bfw}}" height="20" aria-hidden="true" style="display: block; overflow: visible">
+            <path d="{{t.bf1}}" fill="none" stroke="#1D4ED8" style="stroke-width: 1.5px; stroke-dasharray: 8 3"></path>
+            <path d="{{t.bf2}}" fill="none" stroke="#1D4ED8" style="stroke-width: 1.5px; stroke-dasharray: 5 5"></path>
+            <path d="{{t.bf3}}" fill="none" stroke="#1D4ED8" style="stroke-width: 1.5px; stroke-dasharray: 2 6"></path>
+          </svg>
+        </div>
+        <div style="position: absolute; left: {{t.btx}}px; top: 3px; width: 3px; height: 14px; background: #1D4ED8"></div>
+        <div style="position: absolute; left: {{t.bmx}}px; top: 4px; width: 12px; height: 12px; box-sizing: border-box; border-radius: 50%; background: {{t.mbg}}; border: {{t.mbd}}; opacity: {{t.mop}}; transition: opacity .5s 1s"></div>
+        <svg width="14" height="14" aria-hidden="true" style="position: absolute; left: {{t.bxx}}px; top: 3px; opacity: {{t.xop}}; transition: opacity .5s 1s"><path d="M2 2 L12 12 M12 2 L2 12" fill="none" stroke="#1D4ED8" style="stroke-width: 2.5px"></path></svg>
+        <div class="mono" style="position: absolute; left: {{t.blx}}px; top: 2px; font-size: 11px; line-height: 14px; font-weight: 600; color: #1D4ED8; white-space: nowrap; opacity: {{t.blop}}; transition: opacity .5s 1s">{{t.btxt}}</div>
+      </div>
+      <sc-if value="{{t.lensable}}" hint-placeholder-val="{{false}}">
+        <button type="button" class="lane {{t.lcls}}" onClick="{{t.pick}}" aria-label="{{t.aria}}" aria-pressed="{{t.pressed}}"></button>
+      </sc-if>
+    </div>
+  </sc-for>
+
+  <!-- LENS ring: walks backwards along the selected thread -->
+  <sc-if value="{{lensOn}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: {{ring.x}}px; top: {{ring.y}}px; width: {{ring.w}}px; height: {{ring.h}}px; box-sizing: border-box; border: 3px solid #111111; border-radius: {{ring.r}}; box-shadow: 0 0 0 3px #FAFAF7; pointer-events: none; transition: left .55s ease, top .55s ease, width .55s ease, height .55s ease"></div>
+    <sc-for list="{{badges}}" as="bd" hint-placeholder-count="2">
+      <div class="mono" style="position: absolute; left: {{bd.x}}px; top: {{bd.y}}px; width: 18px; height: 18px; background: #111111; color: #FAFAF7; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; pointer-events: none">{{bd.n}}</div>
+    </sc-for>
+  </sc-if>
+
+  <!-- LAB: a branch is a frame, its own ink and a stamp, drawn on the same rows; the record stays underneath, faded -->
+  <sc-if value="{{labOn}}" hint-placeholder-val="{{false}}">
+    <div aria-hidden="true" style="position: absolute; left: 24px; top: 241px; width: 1392px; height: 289px; box-sizing: border-box; border: 2px solid #1D4ED8; pointer-events: none"></div>
+    <div style="position: absolute; left: 520px; top: 248px; width: 306px; text-align: right; font-size: 12px; font-weight: 600; line-height: 18px; color: #1D4ED8; pointer-events: none">{{labWho}}</div>
+    <div class="mono" style="position: absolute; left: 840px; top: 247px; padding: 0 6px; line-height: 16px; border: 1.5px solid #1D4ED8; background: #FAFAF7; color: #1D4ED8; font-size: 11px; font-weight: 700; letter-spacing: .03em; white-space: nowrap; transform: rotate(-1.5deg); pointer-events: none">LAB BRANCH · not reality</div>
+    <div style="position: absolute; left: 32px; top: 534px; display: flex; align-items: center; gap: 10px; font-size: 12px; color: #1D4ED8"><span class="mono" style="padding: 1px 6px; border: 1.5px solid #1D4ED8; background: #FAFAF7; font-size: 11px; font-weight: 600">BRANCH LEAVES THE RECORD AT THE BLACK RULE · 06:10</span><span>Same rows, in blue. Solid: from stock · outlined: authored broker timing (no model ran) · cross: the thread breaks. The record is faded underneath.</span></div>
+  </sc-if>
+
+  <!-- COMMAND: assignment pins along the threads (outline = authored) -->
+  <sc-if value="{{cmdOn}}" hint-placeholder-val="{{false}}">
+    <sc-for list="{{pins}}" as="pn" hint-placeholder-count="4">
+      <div class="mono pin" style="position: absolute; left: {{pn.x}}px; top: {{pn.y}}px; width: 22px; height: 22px; box-sizing: border-box; border: 2.5px solid #111111; background: #FFFFFF; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{pn.n}}</div>
+    </sc-for>
+  </sc-if>
+
+  <sc-if value="{{notLab}}" hint-placeholder-val="{{true}}"><div style="position: absolute; left: 32px; top: 532px; width: 1376px; font-size: 12px; color: #55534C">Time runs left to right in working days, five to a week, from the black rule (now). A thread is solid while every station ahead of it can still hold; it frays where it runs out of MCUs.</div></sc-if>
+
+  <!-- LOWER PANEL: MIRROR -->
+  <sc-if value="{{showMirror}}" hint-placeholder-val="{{true}}">
+    <section aria-label="Mirror" style="position: absolute; left: 32px; top: 558px; width: 1376px; height: 326px; box-sizing: border-box; border-top: 2px solid #111111; padding-top: 14px; display: grid; grid-template-columns: 380px 1fr 1fr; gap: 40px">
+      <div style="display: flex; flex-direction: column; gap: 9px">
+        <h2 style="margin: 0 0 2px; font-size: 18px; font-weight: 800">Reading a thread</h2>
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 13.5px"><span style="width: 26px; display: flex; justify-content: center"><span style="width: 15px; height: 15px; box-sizing: border-box; border: 2px solid #111111; border-radius: 50%; background: #FFFFFF"></span></span><span><strong>KAI</strong> Kaito, the only qualified MCU supplier</span></div>
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 13.5px"><span style="width: 26px; display: flex; justify-content: center"><span style="width: 11px; height: 11px; box-sizing: border-box; border: 2px solid #111111; background: #FFFFFF"></span></span><span><strong>INB</strong> inbound: the lot is received. <strong>STK</strong> already in stock</span></div>
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 13.5px"><span style="width: 26px; display: flex; justify-content: center"><span style="width: 26px; height: 14px; box-sizing: border-box; border: 2px solid #111111; border-radius: 2px; background: #FFFFFF"></span></span><span><strong>L2</strong> Line 2 build, 210 pumps a day</span></div>
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 13.5px"><span style="width: 26px; display: flex; justify-content: center"><span style="width: 11px; height: 11px; box-sizing: border-box; border: 2px solid #111111; background: #FFFFFF; transform: rotate(45deg)"></span></span><span><strong>QA</strong> release testing</span></div>
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 13.5px"><span style="width: 26px; display: flex; justify-content: center"><span style="width: 17px; height: 10px; box-sizing: border-box; border: 2px solid #111111; border-radius: 5px; background: #FFFFFF"></span></span><span><strong>DST</strong> distribution</span></div>
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 13.5px"><span style="width: 26px; display: flex; justify-content: center"><span style="width: 5px; height: 22px; background: #111111"></span></span><span><strong>DUE</strong> the customer's due date</span></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0 0 2px; font-size: 18px; font-weight: 800">{{mirrorTitle}}</h2>
+        <sc-for list="{{mirrorItems}}" as="mi" hint-placeholder-count="4">
+          <div style="display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; line-height: 1.4"><span class="sw {{mi.tex}}" style="width: 16px; height: 16px; margin-top: 3px"></span><span>{{mi.text}}</span></div>
+        </sc-for>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0 0 2px; font-size: 18px; font-weight: 800">Responses on the table</h2>
+        <div style="font-size: 14px; line-height: 1.4"><strong class="mono" style="font-size: 12px">A</strong>  Broker spot-buy: 4,000 MCUs at ≈6×–14× list, 1–2 weeks, counterfeit risk, every lot inspected.</div>
+        <div style="font-size: 14px; line-height: 1.4"><strong class="mono" style="font-size: 12px">B</strong>  Allocate: remaining MCUs to patient-critical promises first; distributor and export slip.</div>
+        <div style="font-size: 14px; line-height: 1.4"><strong class="mono" style="font-size: 12px">C</strong>  Requalify an alternate MCU: 10–14 weeks of change control; nothing ships from it in this window.</div>
+        <div style="font-size: 14px; line-height: 1.4"><strong class="mono" style="font-size: 12px">D</strong>  A and B together.</div>
+        <div style="font-size: 13px; color: #55534C">Trace a fray in LENS. Run any two responses side by side in LAB.</div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- LOWER PANEL: LENS -->
+  <sc-if value="{{showLens}}" hint-placeholder-val="{{false}}">
+    <section aria-label="Lens" style="position: absolute; left: 32px; top: 558px; width: 1376px; height: 326px; box-sizing: border-box; border-top: 2px solid #111111; padding-top: 12px; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 800">{{lensTitle}}</h2>
+        <div style="display: flex; gap: 8px; align-items: center">
+          <span style="font-size: 13px; color: #55534C">Frayed threads:</span>
+          <sc-for list="{{lensPicks}}" as="lp" hint-placeholder-count="3">
+            <button type="button" class="btn" onClick="{{lp.go}}" aria-pressed="{{lp.pressed}}" style="background: {{lp.bg}}; color: {{lp.fg}}">{{lp.label}}</button>
+          </sc-for>
+          <button type="button" class="btn" onClick="{{stepBack}}" disabled="{{stepBackOff}}" style="background: #111111; color: #FAFAF7; margin-left: 12px">Trace one step back</button>
+          <button type="button" class="btn" onClick="{{showAll}}" disabled="{{showAllOff}}" style="background: #FAFAF7">{{showAllLabel}}</button>
+        </div>
+      </div>
+      <ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
+        <sc-for list="{{chain}}" as="c" hint-placeholder-count="5">
+          <li style="box-sizing: border-box; height: 208px; padding: 12px 14px; border: 2px {{c.bs}} {{c.bc}}; background: {{c.bg}}; display: flex; flex-direction: column; gap: 9px; transition: background .3s, border-color .3s">
+            <div style="display: flex; align-items: center; gap: 9px">
+              <span class="mono" style="width: 22px; height: 22px; background: #111111; color: #FAFAF7; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{c.n}}</span>
+              <sc-if value="{{c.shown}}" hint-placeholder-val="{{true}}">
+                <span class="sw {{c.tex}}"></span>
+                <span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .04em">{{c.word}}</span>
+              </sc-if>
+              <span class="mono" style="margin-left: auto; font-size: 11px; color: #55534C">{{c.where}}</span>
+            </div>
+            <sc-if value="{{c.shown}}" hint-placeholder-val="{{true}}">
+              <strong style="font-size: 16px; line-height: 1.25; font-weight: 700">{{c.cap}}</strong>
+              <span style="font-size: 13px; line-height: 1.45; color: #262521">{{c.det}}</span>
+            </sc-if>
+            <sc-if value="{{c.hidden}}" hint-placeholder-val="{{false}}">
+              <span style="font-size: 13px; line-height: 1.45; color: #55534C">{{c.hint}}</span>
+            </sc-if>
+          </li>
+        </sc-for>
+      </ol>
+      <div style="display: flex; align-items: center; gap: 10px; min-height: 26px; padding: 3px 12px; border-top: 2px solid #111111">
+        <sc-if value="{{keyOn}}" hint-placeholder-val="{{false}}">
+          <span class="sw t-rec" style="width: 14px; height: 14px"></span>
+          <span class="sw t-aut" style="width: 14px; height: 14px"></span>
+          <strong style="font-size: 14.5px; font-weight: 700">Single-sourcing saved ≈$21,000 a year (recorded 2023); the broker response costs ≈$350k–$590k in total spend (authored estimate)</strong>
+        </sc-if>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- LOWER PANEL: LAB -->
+  <sc-if value="{{showLab}}" hint-placeholder-val="{{false}}">
+    <section aria-label="Lab" style="position: absolute; left: 32px; top: 558px; width: 1376px; height: 330px; box-sizing: border-box; border-top: 2px solid #1D4ED8; padding-top: 10px; display: flex; flex-direction: column; gap: 8px">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px">
+        <div role="group" aria-label="Pick two responses" style="display: flex; gap: 6px; align-items: center">
+          <span style="font-size: 14px; font-weight: 700; margin-right: 6px">Pick two responses</span>
+          <sc-for list="{{picks}}" as="pk" hint-placeholder-count="4">
+            <button type="button" class="pk" onClick="{{pk.go}}" aria-pressed="{{pk.pressed}}" style="background: {{pk.bg}}; color: {{pk.fg}}">{{pk.label}}</button>
+          </sc-for>
+        </div>
+        <div role="group" aria-label="Which branch is drawn on the threads above" style="display: flex; gap: 6px; align-items: center">
+          <span style="font-size: 14px; font-weight: 700; margin-right: 2px">On the threads</span>
+          <sc-for list="{{drawPicks}}" as="dp" hint-placeholder-count="2">
+            <button type="button" class="pk" onClick="{{dp.go}}" aria-pressed="{{dp.pressed}}" aria-label="{{dp.aria}}" style="background: {{dp.bg}}; color: {{dp.fg}}; min-width: 44px">{{dp.label}}</button>
+          </sc-for>
+        </div>
+        <strong style="font-size: 14px; font-weight: 800">A difference between branches, not proof of what will happen.</strong>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px">
+        <sc-for list="{{cards}}" as="cd" hint-placeholder-count="2">
+          <sc-if value="{{cd.real}}" hint-placeholder-val="{{true}}">
+            <article style="position: relative; box-sizing: border-box; height: 246px; padding: 8px 14px; border: 2px solid #1D4ED8; background: #FFFFFF; color: #1D4ED8; display: flex; flex-direction: column; gap: 4px">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start">
+                <h3 style="margin: 0; font-size: 16px; font-weight: 800">{{cd.title}}</h3>
+                <span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .03em; padding: 1px 6px; border: 2px solid #1D4ED8; transform: rotate(-2deg)">LAB BRANCH · not reality</span>
+              </div>
+              <div class="mono" style="font-size: 11px; color: #1D4ED8">YOUR BRANCH · DIVERGED TODAY 06:10 FROM THE RECORD</div>
+              <div style="font-size: 12px; color: #1E3A8A">{{cd.assume}}</div>
+              <div style="position: relative; height: 14px; margin-left: 124px; width: 330px">
+                <sc-for list="{{miniAxis}}" as="ma" hint-placeholder-count="4">
+                  <span class="mono" style="position: absolute; left: {{ma.x}}px; top: 0; font-size: 11px; line-height: 13px; color: #55534C">{{ma.label}}</span>
+                </sc-for>
+              </div>
+              <div style="display: flex; flex-direction: column">
+                <sc-for list="{{cd.rows}}" as="rw" hint-placeholder-count="5">
+                  <div style="display: flex; align-items: center; height: 20px; background: {{rw.bgRow}}">
+                    <span style="width: 118px; padding-left: 4px; font-size: 12px; font-weight: {{rw.nw}}; color: #111111; white-space: nowrap">{{rw.name}}</span>
+                    <div style="position: relative; width: 330px; height: 20px; margin-left: 6px; flex: none">
+                      <div style="position: absolute; left: 0; top: 0; width: 320px; height: 20px; border-right: 1px dashed #1D4ED8"></div>
+                      <sc-for list="{{rw.segs}}" as="sg" hint-placeholder-count="2">
+                        <div style="position: absolute; left: {{sg.x}}px; top: {{sg.top}}px; width: {{sg.w}}px; height: {{sg.h}}px; box-sizing: border-box; background: {{sg.bg}}; border: {{sg.bd}}"></div>
+                      </sc-for>
+                      <div style="position: absolute; left: {{rw.fx}}px; top: 2px; width: {{rw.fw}}px; height: 16px; opacity: {{rw.fop}}">
+                        <svg width="{{rw.fw}}" height="16" aria-hidden="true" style="display: block; overflow: visible">
+                          <path d="{{rw.f1}}" fill="none" stroke="#1D4ED8" style="stroke-width: 1.5px; stroke-dasharray: 8 3"></path>
+                          <path d="{{rw.f2}}" fill="none" stroke="#1D4ED8" style="stroke-width: 1.5px; stroke-dasharray: 5 5"></path>
+                          <path d="{{rw.f3}}" fill="none" stroke="#1D4ED8" style="stroke-width: 1.5px; stroke-dasharray: 2 6"></path>
+                        </svg>
+                      </div>
+                      <div style="position: absolute; left: {{rw.tx}}px; top: 3px; width: 3px; height: 14px; background: #1D4ED8"></div>
+                    </div>
+                    <span style="margin-left: 14px; font-size: 12px; font-weight: {{rw.ow}}; white-space: nowrap">{{rw.txt}}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin-top: auto">
+                <div style="display: flex; flex-direction: column; gap: 2px">
+                  <strong style="font-size: 13px">{{cd.summary}}</strong>
+                  <span style="font-size: 12px; color: #1E3A8A">{{cd.cost}}</span>
+                </div>
+                <button type="button" class="pk" onClick="{{cd.take}}" style="background: #1D4ED8; color: #FFFFFF; min-height: 36px; flex: none">{{cd.takeLabel}}</button>
+              </div>
+            </article>
+          </sc-if>
+          <sc-if value="{{cd.empty}}" hint-placeholder-val="{{false}}">
+            <div style="box-sizing: border-box; height: 246px; border: 2px dashed #1D4ED8; color: #1D4ED8; display: flex; align-items: center; justify-content: center; font-size: 15px">Pick a second response to compare.</div>
+          </sc-if>
+        </sc-for>
+      </div>
+      <div style="font-size: 11px; color: #3D3B36; white-space: nowrap">Solid blue: from stock (computed) · outlined: authored broker timing (no model ran) · frayed: broken in the window · no branch assumes a Kaito restart (date UNKNOWN) · branch comparison: a pattern already used in BOW’s decision products</div>
+    </section>
+  </sc-if>
+
+  <!-- LOWER PANEL: COMMAND -->
+  <sc-if value="{{showCmd}}" hint-placeholder-val="{{false}}">
+    <section aria-label="Command" style="position: absolute; left: 32px; top: 558px; width: 1376px; height: 332px; box-sizing: border-box; border-top: 2px solid #111111; padding-top: 8px; display: flex; flex-direction: column; gap: 6px">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px">
+        <div style="display: flex; align-items: center; gap: 10px">
+          <h2 style="margin: 0; font-size: 18px; font-weight: 800">{{cmdTitle}}</h2>
+          <span class="mono" style="font-size: 11px; font-weight: 600; padding: 1px 6px; border: 2px solid #1D4ED8; color: #1D4ED8">FROM A LAB BRANCH · NOT YET REALITY</span>
+        </div>
+        <div role="group" aria-label="Branch to command" style="display: flex; gap: 6px; align-items: center">
+          <span style="font-size: 13px; color: #55534C; margin-right: 4px">Branch</span>
+          <sc-for list="{{cmdPicks}}" as="cp" hint-placeholder-count="4">
+            <button type="button" class="btn" onClick="{{cp.go}}" aria-pressed="{{cp.pressed}}" style="background: {{cp.bg}}; color: {{cp.fg}}; min-width: 48px; min-height: 36px; justify-content: center">{{cp.id}}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div role="table" aria-label="Assignments" style="display: flex; flex-direction: column">
+        <div role="row" class="mono" style="display: grid; grid-template-columns: 36px 240px 1fr 300px 120px 190px; gap: 12px; padding: 4px 0; border-bottom: 1.5px solid #111111; font-size: 11px; letter-spacing: .04em; color: #3D3B36">
+          <span role="columnheader">PIN</span><span role="columnheader">ROLE · SEAT</span><span role="columnheader">ASSIGNMENT</span><span role="columnheader">AUTHORITY USED</span><span role="columnheader">BY</span><span role="columnheader">SIGNATURE</span>
+        </div>
+        <sc-for list="{{asg}}" as="a" hint-placeholder-count="5">
+          <div role="row" style="display: grid; grid-template-columns: 36px 240px 1fr 300px 120px 190px; gap: 12px; align-items: center; min-height: 36px; padding: 1px 0; border-bottom: 1px solid #DAD7CE">
+            <span role="cell" class="mono" style="width: 22px; height: 22px; box-sizing: border-box; border: 2.5px solid #111111; background: #FFFFFF; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{a.n}}</span>
+            <span role="cell" style="display: flex; flex-direction: column; line-height: 1.2"><strong style="font-size: 14px">{{a.role}}</strong><span style="font-size: 11.5px; color: #55534C">{{a.who}}</span></span>
+            <span role="cell" style="font-size: 13px; line-height: 1.25">{{a.act}}</span>
+            <span role="cell" style="font-size: 12.5px; line-height: 1.25; font-weight: {{a.aw}}">{{a.auth}}</span>
+            <span role="cell" class="mono" style="font-size: 11px">{{a.when}}</span>
+            <span role="cell" style="display: flex; flex-direction: column; gap: 2px">
+              <span style="font-size: 12px; font-weight: {{a.sw}}">{{a.sig}}</span>
+              <sc-if value="{{a.human}}" hint-placeholder-val="{{true}}">
+                <span style="width: 150px; height: 14px; border-bottom: 1.5px solid #111111; font-size: 9px; color: #55534C" class="mono">X</span>
+              </sc-if>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{aggOn}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 13.5px; line-height: 18px">
+          <span class="sw t-aut" style="width: 14px; height: 14px"></span>
+          <strong>Aggregate limit: $250,000 per supplier per day — order #2 needs the CFO regardless of splitting</strong>
+        </div>
+      </sc-if>
+      <div style="display: flex; align-items: center; gap: 10px; margin-top: auto; padding: 4px 12px; border: 2px dashed #111111; font-size: 13px">
+        <svg width="14" height="16" viewBox="0 0 16 18" aria-hidden="true" style="flex: none"><rect x="2" y="8" width="12" height="9" fill="none" stroke="#111111" style="stroke-width: 2px"></rect><path d="M4.5 8 V5.5 a3.5 3.5 0 0 1 7 0 V8" fill="none" stroke="#111111" style="stroke-width: 2px"></path></svg>
+        <span><strong>OPERATE is locked.</strong> Sending these into purchasing, the plant schedule and the call queue requires authorization — not connected in this prototype. Pins on the drawing show where each assignment lands.</span>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- LOWER PANEL: HOW DO WE KNOW -->
+  <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+    <section aria-label="How do we know" style="position: absolute; left: 32px; top: 558px; width: 1376px; height: 326px; box-sizing: border-box; border-top: 2px solid #111111; padding-top: 12px; display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 800">How do we know? Every mark on the drawing wears the texture of its source.</h2>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 32px">
+        <sc-for list="{{howRows}}" as="hr" hint-placeholder-count="6">
+          <div style="display: flex; gap: 12px; align-items: flex-start">
+            <span class="sw {{hr.tex}}" style="width: 30px; height: 30px"></span>
+            <div style="display: flex; flex-direction: column; gap: 3px">
+              <span class="mono" style="font-size: 11px; font-weight: 600; letter-spacing: .04em">{{hr.word}}</span>
+              <span style="font-size: 13px; line-height: 1.4">{{hr.text}}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top: auto; font-size: 12px; color: #3D3B36; border-top: 1px solid #DAD7CE; padding-top: 8px">Yellow is the disruption, never a source. Blue is a LAB branch, never the record. Receipts and branch comparison are patterns already used in BOW’s decision products; promise threads for a whole company are a design proposal and a platform hypothesis.</div>
+    </section>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.auto = setTimeout(() => {
+      const s = this.state || {};
+      if (!s.touched && !s.fired) this.setState({ fired: true });
+    }, 1400);
+  }
+  componentWillUnmount() { clearTimeout(this.auto); }
+  renderVals() {
+    const s = this.state || {};
+    const fired = !!s.fired;
+    const how = !!s.how;
+    const mode = fired ? (s.mode || 'mirror') : 'mirror';
+    const sel = fired ? (s.sel || '') : '';
+    const lensStep = s.lensStep || 0;
+    const pick = s.pick || ['A', 'D'];
+    const cmd = s.cmd || 'D';
+
+    const INK = '#111111', PAPER = '#FAFAF7', YEL = '#F2C200', BLUE = '#1D4ED8';
+    const X0 = 164, PPD = 22.5, RATE = 210, STOCK = 2300, LOT = 1050;
+    const r1 = (v) => Math.round(v * 10) / 10;
+    const xd = (d) => r1(X0 + d * PPD);
+    const DRY = STOCK / RATE;
+    const LANE0 = 246, LH = 56, SUP = 182;
+    const fmt = (n) => n.toLocaleString('en-US');
+
+    // Promises (authored for the prototype). Due = end of week, in working days.
+    const P = [
+      { id: 'L', name: "Lakeshore Children's", short: 'Lakeshore', qty: 300, dueW: 'W2', due: 10, crit: true },
+      { id: 'S', name: 'St. Brigid Health', short: 'St. Brigid', qty: 1200, dueW: 'W3', due: 15, crit: true },
+      { id: 'M', name: 'MedSupply Distribution', short: 'MedSupply', qty: 2500, dueW: 'W4–6', due: 30, crit: false },
+      { id: 'E', name: 'County EMS', short: 'County EMS', qty: 150, dueW: 'W5', due: 25, crit: true },
+      { id: 'X', name: 'Export — Ontario', short: 'Export ON', qty: 900, dueW: 'W7', due: 35, crit: false }
+    ];
+    const byId = {};
+    P.forEach((p) => { byId[p.id] = p; });
+
+    // Line 2 builds in the given order at 210 a day; 2,300 MCUs on hand; no Kaito lots after 06:10.
+    const sim = (order) => {
+      let cum = 0, t = 0;
+      const out = {};
+      order.forEach((id) => {
+        const p = byId[id];
+        const start = t, end = t + p.qty / RATE, c0 = cum;
+        cum += p.qty; t = end;
+        let fray = null, kai = null;
+        const built = Math.max(0, Math.min(p.qty, STOCK - c0));
+        if (c0 + p.qty > STOCK) {
+          fray = c0 < STOCK ? start + (STOCK - c0) / RATE : start;
+          kai = 5 * Math.ceil((Math.max(c0 + 1, STOCK + 1) - STOCK) / LOT);
+        }
+        out[id] = { start, end, fray, kai, built, fromStock: fray === null };
+      });
+      return out;
+    };
+    const base = sim(['L', 'S', 'M', 'E', 'X']);
+    const crit1 = sim(['L', 'S', 'E', 'M', 'X']);
+    const atRisk = P.filter((p) => base[p.id].fray !== null);
+    const critAtRisk = atRisk.filter((p) => p.crit);
+
+    // Station marker
+    const mk = (kind, d0, d1, lab, st) => {
+      let w = 12, h = 12, rad = '0px', rot = 0, x, cx;
+      if (kind === 'kai') { w = 15; h = 15; rad = '50%'; }
+      if (kind === 'inb' || kind === 'stk') { w = 11; h = 11; }
+      if (kind === 'qa') { w = 11; h = 11; rot = 45; }
+      if (kind === 'dst') { w = 17; h = 10; rad = '5px'; }
+      if (kind === 'l2') { x = xd(d0); w = Math.max(8, r1(xd(d1) - xd(d0))); h = 14; rad = '2px'; cx = x + w / 2; }
+      else if (kind === 'stk') { cx = X0 - 13; x = r1(cx - w / 2); }
+      else { cx = xd(d0); x = r1(cx - w / 2); }
+      // labels are 11px: nudge KAI left and INB right (they sit one day apart), STK clear of the NOW rule
+      const lo = kind === 'kai' ? -7 : (kind === 'inb' ? 7 : (kind === 'stk' ? -4 : 0));
+      return {
+        x, y: r1(25 - h / 2), w, h, rad, rot,
+        bg: st === 'hit' ? YEL : '#FFFFFF',
+        bs: st === 'unk' ? 'dashed' : 'solid',
+        op: st === 'gone' ? 0.28 : 1,
+        lab, lx: r1(cx - 17 + lo)
+      };
+    };
+    const strands = (w, mid, amp) => {
+      const a = Math.max(w, 16), m = mid, k = amp || 9;
+      return {
+        f1: 'M0 ' + m + ' C ' + r1(a * 0.12) + ' ' + m + ', ' + r1(a * 0.22) + ' ' + (m - k + 1) + ', ' + r1(a) + ' ' + (m - k),
+        f2: 'M0 ' + m + ' C ' + r1(a * 0.2) + ' ' + m + ', ' + r1(a * 0.5) + ' ' + (m + 1) + ', ' + r1(a) + ' ' + m,
+        f3: 'M0 ' + m + ' C ' + r1(a * 0.12) + ' ' + m + ', ' + r1(a * 0.25) + ' ' + (m + k - 1) + ', ' + r1(a) + ' ' + (m + k)
+      };
+    };
+
+    const statusText = {
+      L: fired ? 'Kept — built from stock this week' : 'On schedule — built from stock',
+      S: fired ? 'Kept — built from stock by day 8' : 'On schedule — built from stock',
+      M: fired ? 'Frays day 11 — 800 of 2,500 built, then no MCUs' : 'On schedule — needs Kaito lots W2–W3',
+      E: fired ? 'Frays day 19 — 150 short, patient-critical' : 'On schedule — needs Kaito lot W3',
+      X: fired ? 'Frays day 20 — 900 short' : 'On schedule — needs Kaito lot W3'
+    };
+    const pickThread = (id) => () => this.setState({ sel: id, lensStep: 1, mode: 'lens', touched: true });
+
+    // ---------- LAB (branch definitions: used by the drawing and by the cards) ----------
+    const MPD = 8;
+    const mx = (d) => r1(d * MPD);
+    const HATCH = 'transparent';
+    const HATCHW = '#FFFFFF';
+    const BR = {
+      A: { name: 'Broker spot-buy', pick: 'Broker buy', order: base, buy: true, kinds: { M: 'mod', E: 'slip', X: 'mod' },
+           assume: 'Assumes: broker lots land in 1–2 wks · QA inspects every lot, 3–5 days · 0–15% of lots rejected',
+           cost: 'Total spend $350k–$590k (authored estimate): 4,000 MCUs at ≈6×–14× list, 3 quotes' },
+      B: { name: 'Allocate to patient-critical', pick: 'Allocate', order: crit1, buy: false,
+           assume: 'Assumes: patient-critical promises built first · no new MCUs in the window',
+           cost: 'No purchase added · late-delivery terms not modeled' },
+      C: { name: 'Requalify an alternate MCU', pick: 'Requalify', order: base, buy: false,
+           assume: 'Assumes: an alternate MCU needs 10–14 wks of engineering + regulatory change control',
+           cost: 'Engineering + regulatory $120k–$300k (authored estimate) · first pumps W10–W14' },
+      D: { name: 'Broker buy + allocate', pick: 'A + B', order: crit1, buy: true, kinds: { M: 'mod', X: 'mod' },
+           assume: 'Assumes: A’s broker timing · patient-critical promises built first',
+           cost: 'Total spend $350k–$590k (authored estimate), the same buy as A' }
+    };
+    const outcomeOf = (br, p) => {
+      const o = br.order[p.id];
+      const kind = o.fromStock ? 'stock' : (br.buy ? br.kinds[p.id] : (o.built > 0 ? 'partial' : 'broken'));
+      return { o, kind };
+    };
+    // which of the two picked branches is drawn on the threads (the other stays a card)
+    const drawId = (s.labDraw && pick.indexOf(s.labDraw) >= 0) ? s.labDraw : pick[0];
+    const drawBr = BR[drawId];
+    const labMode = mode === 'lab';
+
+    const lanes = P.map((p, i) => {
+      const b = base[p.id];
+      const frayed = fired && b.fray !== null;
+      const endD = frayed ? b.fray : p.due;
+      const stops = [];
+      if (b.fromStock) stops.push(mk('stk', 0, 0, 'STK', 'ok'));
+      else {
+        stops.push(mk('kai', b.kai, 0, 'KAI', fired ? 'hit' : 'ok'));
+        stops.push(mk('inb', b.kai + 1, 0, 'INB', fired ? 'unk' : 'ok'));
+      }
+      if (frayed && b.fray > b.start + 0.01) {
+        stops.push(mk('l2', b.start, b.fray, 'L2', 'ok'));
+        stops.push(mk('l2', b.fray, b.end, '', 'gone'));
+      } else {
+        stops.push(mk('l2', b.start, b.end, 'L2', frayed ? 'gone' : 'ok'));
+      }
+      stops.push(mk('qa', b.end + 1, 0, 'QA', frayed ? 'gone' : 'ok'));
+      stops.push(mk('dst', b.end + 2, 0, 'DST', frayed ? 'gone' : 'ok'));
+      const fw = b.fray !== null ? r1(xd(p.due) - xd(b.fray)) : 0;
+      const st = strands(fw, 12);
+      const lensable = mode === 'lens' && frayed;
+      // LAB: the drawn branch's outcome for this promise, on this same row, in the branch's own ink
+      const oc = outcomeOf(drawBr, p), kd = oc.kind, ob = oc.o;
+      const dueX = xd(p.due), dryX0 = xd(DRY);
+      const L = { bsW: 0, bhX: dryX0, bhW: 0, bdX: dueX, bdW: 0, bfx: X0, bfw: 0, bfop: 0, bmx: r1(dueX - 6), mbg: BLUE, mbd: '1.5px solid ' + BLUE, mop: 0, bxx: r1(dueX - 7), xop: 0, blx: r1(dueX + 12), btxt: '', blop: 0 };
+      if (labMode) {
+        L.mop = 1; L.blop = 1;
+        if (kd === 'stock') { L.bsW = r1(dueX - X0); L.btxt = 'kept'; }
+        else if (kd === 'mod' || kd === 'slip') {
+          L.bsW = r1(dryX0 - X0); L.bhW = r1(dueX - dryX0); L.mbg = HATCHW; L.btxt = 'kept';
+          if (kd === 'slip') {
+            const sx = xd(p.due + 5);
+            L.bdW = r1(sx - dueX); L.bmx = r1(sx - 6); L.blx = r1(sx + 12);
+            L.mbd = '1.5px dashed ' + BLUE; L.btxt = 'may slip 0–1 wk';
+          }
+        } else {
+          const fx = xd(ob.fray);
+          L.bsW = r1(fx - X0); L.bfx = fx; L.bfw = r1(dueX - fx); L.bfop = 1;
+          L.mop = 0; L.xop = 1; L.bxx = r1(fx - 7); L.blx = r1(dueX + 8);
+          L.btxt = kd === 'partial' ? 'partial · ' + fmt(ob.built) + ' of ' + fmt(p.qty) : 'broken';
+        }
+      }
+      const bst = strands(L.bfw, 10, 6);
+      return {
+        top: LANE0 + i * LH,
+        op: mode === 'lens' && sel && sel !== p.id ? 0.25 : 1,
+        tOp: labMode ? 0.3 : 1,
+        tagOn: frayed && !labMode,
+        bop: labMode ? 1 : 0,
+        bsW: L.bsW, bhX: L.bhX, bhW: L.bhW, bdX: L.bdX, bdW: L.bdW, hatch: HATCH,
+        bhOp: L.bhW > 0 ? 1 : 0, bdOp: L.bdW > 0 ? 1 : 0,
+        bfx: L.bfx, bfw: L.bfw, bfop: L.bfop, bf1: bst.f1, bf2: bst.f2, bf3: bst.f3,
+        btx: r1(dueX - 1.5), bmx: L.bmx, mbg: L.mbg, mbd: L.mbd, mop: L.mop,
+        bxx: L.bxx, xop: L.xop, blx: L.blx, btxt: L.btxt, blop: L.blop,
+        num: '0' + (i + 1),
+        crit: p.crit,
+        solidW: r1(xd(endD) - X0),
+        fx: b.fray !== null ? xd(b.fray) : 0,
+        fw, fop: frayed ? 1 : 0,
+        f1: st.f1, f2: st.f2, f3: st.f3,
+        stops,
+        tx: r1(xd(p.due) - 2.5), tlx: r1(xd(p.due) - 17),
+        top2: frayed ? 0.28 : 1,
+        frayed,
+        fmx: frayed ? r1(xd(b.fray) - 7) : 0,
+        ftx: frayed ? r1(xd(b.fray) + 6) : 0,
+        ftag: frayed ? 'DAY ' + Math.round(b.fray) + ' · NO MCUs' : '',
+        name: p.name,
+        qd: fmt(p.qty) + ' · due ' + p.dueW,
+        sw: frayed ? 700 : 400,
+        status: statusText[p.id] + (how ? (fired ? ' · computed' : ' · plan, authored') : ''),
+        lensable,
+        pick: pickThread(p.id),
+        aria: 'Trace why the ' + p.name + ' thread frays',
+        pressed: sel === p.id ? 'true' : 'false',
+        lcls: sel === p.id ? 'on' : ''
+      };
+    });
+
+    // ---------- LENS ----------
+    const S1 = {
+      M: ['MedSupply frays on day 11.', 'Line 2 has built 800 of its 2,500 pumps when the last MCU is used.'],
+      E: ['County EMS frays on day 19.', 'Its build comes after MedSupply in due-date order. MedSupply used the last MCUs on days 8–11.'],
+      X: ['Export — Ontario frays on day 20.', 'Its build was to run on Kaito’s W3 lot. That lot will not come, and stock is gone by day 11.']
+    };
+    const s1 = S1[sel] || ['', ''];
+    const CH = [
+      { tex: 't-com', word: 'COMPUTED', where: 'THE FRAY', cap: s1[0], det: s1[1] },
+      { tex: 't-com', word: 'COMPUTED', where: 'MCU STOCK', cap: 'MCU stock runs out on day 11.', det: '2,300 on hand ÷ 210 pumps a day = 10.95 working days.' },
+      { tex: 't-rec', word: 'RECORDED', where: 'KAI', cap: 'Kaito is the only qualified MCU source.', det: 'Procurement committee, 2023: single-sourcing saves $0.40 a unit, about $21,000 a year at 52,500 units. Risk accepted in the minutes.' },
+      { tex: 't-aut', word: 'AUTHORED', where: 'INB', cap: 'Safety stock is set at two weeks of MCUs.', det: 'Policy, 2023: about 2,100 MCUs. Met this morning with 2,300. Two weeks is shorter than a restart nobody can date.' },
+      { tex: 't-obs', word: 'OBSERVED', where: 'KAITO', cap: 'Kaito fab fire, 06:10. Shipments stop.', det: 'Supplier notice. Restart date: UNKNOWN. Kaito is fictional; its situation is modelled on the Renesas Naka fab fire, March 2021 (verify).' }
+    ];
+    const chain = CH.map((c, i) => {
+      const shown = !!sel && i < lensStep;
+      const cur = !!sel && i === lensStep - 1;
+      return {
+        n: i + 1, tex: c.tex, word: c.word, where: shown ? c.where : '', cap: c.cap, det: c.det,
+        shown, hidden: !shown,
+        hint: sel ? 'Why? Trace one step back.' : 'Pick a frayed thread first.',
+        bs: shown ? 'solid' : 'dashed',
+        bc: cur ? INK : (shown ? '#8C8980' : '#B9B6AC'),
+        bg: cur ? '#FFFFFF' : PAPER
+      };
+    });
+    const bsel = base[sel] || { fray: 0, kai: 0 };
+    const li = Math.max(0, P.findIndex((p) => p.id === sel));
+    const ly = LANE0 + li * LH + 25;
+    const pts = [
+      { x: xd(bsel.fray || 0), y: ly, w: 34, h: 34, r: '50%' },
+      { x: xd(DRY), y: SUP + 43, w: 34, h: 34, r: '50%' },
+      { x: xd(bsel.kai || 0), y: ly, w: 34, h: 34, r: '50%' },
+      { x: xd((bsel.kai || 0) + 1), y: ly, w: 28, h: 28, r: '50%' },
+      { x: 90, y: SUP + 17, w: 130, h: 36, r: '4px' }
+    ];
+    const cp = pts[Math.max(0, Math.min(4, lensStep - 1))];
+    const ring = { x: r1(cp.x - cp.w / 2), y: r1(cp.y - cp.h / 2), w: cp.w, h: cp.h, r: cp.r };
+    const badges = pts.slice(0, lensStep).map((p, i) => ({ n: i + 1, x: r1(p.x + p.w / 2 - 6), y: r1(p.y - p.h / 2 - 14) }));
+    const lensPicks = atRisk.map((p) => ({
+      label: p.short, go: pickThread(p.id),
+      pressed: sel === p.id ? 'true' : 'false',
+      bg: sel === p.id ? INK : PAPER, fg: sel === p.id ? PAPER : INK
+    }));
+
+    // ---------- LAB (rows) ----------
+    const rowOf = (br, p) => {
+      const oc = outcomeOf(br, p), o = oc.o, kind = oc.kind;
+      const segs = [];
+      let fx = 0, fw = 0, fop = 0, txt = '', strong = false;
+      const solid = (a, b) => segs.push({ x: mx(a), w: r1(mx(b) - mx(a)), top: 8, h: 4, bg: BLUE, bd: '0px solid transparent' });
+      const hatch = (a, b, dash) => segs.push({ x: mx(a), w: r1(mx(b) - mx(a)), top: 6, h: 8, bg: HATCH, bd: '2px ' + (dash ? 'dashed' : 'solid') + ' #1D4ED8' });
+      if (kind === 'stock') { solid(0, p.due); txt = 'kept · from stock'; }
+      if (kind === 'mod') { solid(0, DRY); hatch(DRY, p.due, false); txt = 'kept · on broker lots'; }
+      if (kind === 'slip') { solid(0, DRY); hatch(DRY, p.due, false); hatch(p.due, p.due + 5, true); txt = 'may slip 0–1 wk'; strong = true; }
+      if (kind === 'partial' || kind === 'broken') {
+        solid(0, o.fray); fx = mx(o.fray); fw = r1(mx(40) - mx(o.fray)); fop = 1; strong = true;
+        txt = kind === 'partial' ? fmt(o.built) + ' of ' + fmt(p.qty) + ' · rest broken' : 'broken in window';
+      }
+      const st = strands(fw, 8);
+      return {
+        name: p.short, crit: p.crit, kind,
+        bgRow: p.crit ? '#E8EEFB' : 'transparent', nw: p.crit ? 700 : 400,
+        segs, fx, fw, fop, f1: st.f1, f2: st.f2, f3: st.f3,
+        tx: r1(mx(p.due) - 1.5), txt, ow: strong ? 700 : 500
+      };
+    };
+    const cardOf = (id) => {
+      const br = BR[id];
+      const rows = P.map((p) => rowOf(br, p));
+      const critKept = rows.filter((r) => r.crit && (r.kind === 'stock' || r.kind === 'mod')).length;
+      const slips = rows.filter((r) => r.kind === 'slip').map((r) => r.name);
+      const broken = rows.filter((r) => r.kind === 'broken' || r.kind === 'partial').length;
+      const summary = 'Critical on time: ' + critKept + ' of 3' + (slips.length ? ' · ' + slips.join(', ') + ' may slip' : '') + ' · broken: ' + broken;
+      return {
+        real: true, empty: false, id,
+        title: 'Branch ' + id + ' — ' + br.name,
+        assume: br.assume, rows, summary, cost: br.cost,
+        takeLabel: 'Take ' + id + ' to COMMAND',
+        take: () => this.setState({ cmd: id, mode: 'command' })
+      };
+    };
+    const cards = pick.map(cardOf);
+    if (cards.length < 2) cards.push({ real: false, empty: true, rows: [], title: '', assume: '', summary: '', cost: '', takeLabel: '', take: () => {} });
+    const picks = ['A', 'B', 'C', 'D'].map((id) => {
+      const on = pick.indexOf(id) >= 0;
+      return {
+        label: id + ' · ' + BR[id].pick, pressed: on ? 'true' : 'false',
+        bg: on ? BLUE : '#FFFFFF', fg: on ? '#FFFFFF' : BLUE,
+        go: () => {
+          const curP = (this.state && this.state.pick) || ['A', 'D'];
+          let nx;
+          if (curP.indexOf(id) >= 0) nx = curP.length > 1 ? curP.filter((x) => x !== id) : curP;
+          else { nx = curP.concat([id]); if (nx.length > 2) nx = nx.slice(nx.length - 2); }
+          this.setState({ pick: nx });
+        }
+      };
+    });
+    const drawPicks = pick.map((id) => ({
+      label: id, pressed: drawId === id ? 'true' : 'false',
+      aria: 'Draw branch ' + id + ' on the threads',
+      bg: drawId === id ? BLUE : '#FFFFFF', fg: drawId === id ? '#FFFFFF' : BLUE,
+      go: () => this.setState({ labDraw: id })
+    }));
+    const miniAxis = [1, 2, 3, 4, 5, 6, 7, 8].map((k) => ({ label: 'W' + k, x: r1(mx(5 * k - 2.5) - 6) }));
+
+    // ---------- COMMAND ----------
+    const AS = {
+      VP: { role: 'VP Procurement', who: 'agent seat · occupant: Claude (Anthropic)', act: 'Place broker orders for 4,000 MCUs. Order #1: 2,000 at $88 = $176,000.', auth: 'Broker orders up to $250,000 each — within authority', when: 'TODAY 12:00', human: false, pin: ['sup', 7.5] },
+      CFO: { role: 'CFO', who: 'human', act: 'Approve order #2: 2,000 MCUs at $205 = $410,000.', auth: 'Over $250,000, split or not — needs human approval', when: 'TODAY 10:00', human: true, pin: ['sup', 12.5] },
+      QA: { role: 'QA Lead', who: 'human', act: 'Counterfeit inspection of every broker lot before it reaches Line 2.', auth: 'Lot release — required, no exceptions', when: 'ON ARRIVAL', human: true, pin: [2, 17] },
+      PLANT: { role: 'Plant Manager, Line 2', who: 'human', act: 'Build patient-critical first: Lakeshore, St. Brigid, County EMS.', auth: 'Production schedule — within authority', when: 'TODAY 14:00', human: false, pin: [3, 7.5] },
+      CARE_L: { role: 'Customer Care', who: 'human', act: "Call Lakeshore Children's today: W2 holds, built from stock.", auth: 'Customer contact — within authority', when: 'TODAY', human: false, pin: [0, 8.6] },
+      CARE_E: { role: 'Customer Care', who: 'human', act: 'Call County EMS today: delivery may slip up to one week.', auth: 'Customer contact — within authority', when: 'TODAY', human: false, pin: [3, 26.6] },
+      CARE_E2: { role: 'Customer Care', who: 'human', act: 'Call County EMS today: 150 pumps have no MCUs inside the window.', auth: 'Customer contact — within authority', when: 'TODAY', human: false, pin: [3, 26.6] },
+      SALES: { role: 'VP Sales', who: 'human', act: 'Tell MedSupply and Export — Ontario their dates are at risk.', auth: 'Contract terms — needs human sign-off', when: 'TODAY', human: true, pin: [4, 30] },
+      WATCH: { role: 'VP Procurement', who: 'agent seat · occupant: Claude (Anthropic)', act: 'Keep requesting broker quotes; watch for a Kaito restart date.', auth: 'Quotes commit nothing — within authority', when: 'DAILY 08:00', human: false, pin: ['sup', 2.5] },
+      ENG: { role: 'Engineering + Regulatory', who: 'human', act: 'Open change control to qualify an alternate MCU.', auth: 'Design change — needs human signature', when: 'THIS WEEK', human: true, pin: ['sup', 32.5] },
+      CFO_C: { role: 'CFO', who: 'human', act: 'Fund requalification: $120k–$300k (authored estimate).', auth: 'May exceed $250,000 — needs human approval', when: 'THIS WEEK', human: true, pin: ['sup', 27.5] }
+    };
+    const PLAN = {
+      A: ['VP', 'CFO', 'QA', 'CARE_E'],
+      B: ['PLANT', 'CARE_L', 'SALES', 'WATCH'],
+      C: ['ENG', 'CFO_C', 'SALES', 'CARE_E2'],
+      D: ['VP', 'CFO', 'QA', 'PLANT', 'CARE_L']
+    };
+    const plan = PLAN[cmd];
+    const aggOn = plan.indexOf('VP') >= 0;
+    const humans = plan.filter((k) => AS[k].human).length;
+    const asg = plan.map((k, i) => {
+      const a = AS[k];
+      return {
+        n: i + 1, role: a.role, who: a.who, act: a.act, auth: a.auth, when: a.when,
+        aw: a.human ? 700 : 400, human: a.human,
+        sig: a.human ? 'Needs a human signature' : 'Within authority — no signature',
+        sw: a.human ? 700 : 400
+      };
+    });
+    const pins = plan.map((k, i) => {
+      const pin = AS[k].pin;
+      const y = pin[0] === 'sup' ? SUP + 2 : LANE0 + pin[0] * LH + 1;
+      return { n: i + 1, x: r1(xd(pin[1]) - 11), y };
+    });
+    const cmdPicks = ['A', 'B', 'C', 'D'].map((id) => ({
+      id, pressed: cmd === id ? 'true' : 'false',
+      bg: cmd === id ? INK : PAPER, fg: cmd === id ? PAPER : INK,
+      go: () => this.setState({ cmd: id })
+    }));
+
+    // ---------- MIRROR ----------
+    const mirrorItems = fired ? [
+      { tex: 't-yel', text: 'Kaito’s fab is on fire. MCU shipments stop; the restart date is UNKNOWN.' },
+      { tex: 't-unk', text: 'Every Kaito lot after today becomes a hole on the supply track.' },
+      { tex: 't-com', text: 'Line 2 runs dry on day 11: 2,300 MCUs ÷ 210 pumps a day.' },
+      { tex: 't-com', text: 'MedSupply, County EMS and Export fray. Lakeshore and St. Brigid hold, built from stock.' }
+    ] : [
+      { tex: 't-aut', text: 'Kaito ships 1,050 MCUs a week. It is the only qualified source.' },
+      { tex: 't-com', text: '2,300 MCUs on hand: 11 working days of builds at 210 pumps a day.' },
+      { tex: 't-rec', text: 'Five promises through W7. Three are patient-critical by contract.' },
+      { tex: 't-yel', text: 'Press “Kaito fab fire — 06:10” to play the morning.' }
+    ];
+
+    // ---------- HOW DO WE KNOW ----------
+    const howRows = [
+      { tex: 't-obs', word: 'OBSERVED', text: 'Reported from outside Harrow: Kaito’s 06:10 notice. Kaito is fictional; its situation is modelled on the Renesas Naka fab fire, March 2021 — verify.' },
+      { tex: 't-rec', word: 'RECORDED', text: 'Written into Harrow’s own history: the five promises, their patient-critical clauses, the 2023 single-source decision and its $0.40 saving.' },
+      { tex: 't-aut', word: 'AUTHORED', text: 'Chosen on purpose: two weeks of safety stock, Kaito’s weekly plan, building in due-date order, and every cost estimate. Every Harrow number is authored for this prototype.' },
+      { tex: 't-com', word: 'COMPUTED', text: 'Follows from the above: day 11 run-dry (2,300 ÷ 210), each fray point, the $21,000-a-year saving.' },
+      { tex: 't-mod', word: 'MODELED', text: 'None on this board: no model ran. Broker delivery, QA time, lot rejection and requalification time are illustrative, authored ranges, drawn as outlines. Counterfeit-part alerts exist industry-wide (observed, general — verify); their rate here is authored.' },
+      { tex: 't-unk', word: 'UNKNOWN', text: 'Marked holes: Kaito’s restart date and every lot after 06:10. No branch assumes a restart.' }
+    ];
+
+    // ---------- MODES + SENTENCE ----------
+    const MODES = [
+      { id: 'mirror', label: 'MIRROR', verb: 'see it' },
+      { id: 'lens', label: 'LENS', verb: 'trace why' },
+      { id: 'lab', label: 'LAB', verb: 'fork responses' },
+      { id: 'command', label: 'COMMAND', verb: 'assign the work' }
+    ];
+    const firstFray = atRisk.length ? atRisk[0].id : 'M';
+    const modes = MODES.map((m) => ({
+      label: m.label, verb: m.verb,
+      pressed: mode === m.id ? 'true' : 'false',
+      disabled: !fired && m.id !== 'mirror',
+      dot: mode === m.id ? INK : PAPER,
+      bar: mode === m.id ? INK : 'transparent',
+      go: () => {
+        const cur = this.state || {};
+        const patch = { mode: m.id, touched: true };
+        if (m.id === 'lens' && !cur.sel) { patch.sel = firstFray; patch.lensStep = 5; }
+        this.setState(patch);
+      }
+    }));
+    let lead = '', rest = '';
+    if (!fired) { lead = '06:00. '; rest = 'Five promises on schedule. 2,300 MCUs on hand; Kaito ships 1,050 a week.'; }
+    else if (mode === 'mirror') { lead = 'Promises at risk: ' + atRisk.length + ' of 5. '; rest = (critAtRisk.length === 1 ? 'One is' : critAtRisk.length + ' are') + ' patient-critical: County EMS, 150 pumps due W5. Two hold, built from stock.'; }
+    else if (mode === 'lens') {
+      lead = sel ? 'Tracing ' + byId[sel].short + ' backwards. ' : 'Click a frayed thread. ';
+      rest = sel ? 'Step ' + lensStep + ' of 5 — each step answers “why?” for the one before.' : 'LENS walks back from where a thread frays to what caused it.';
+    }
+    else if (mode === 'lab') { lead = 'Branch ' + drawId + ' is drawn on the threads, in blue, from 06:10. '; rest = 'The record is still there, faded underneath; nothing in LAB touches it.'; }
+    else { lead = 'Branch ' + cmd + ' as work: ' + plan.length + ' assignments, ' + humans + ' need a human signature. '; rest = 'Nothing has been ordered, called or signed.'; }
+
+    const weeks = [1, 2, 3, 4, 5, 6, 7, 8].map((k) => ({
+      label: 'W' + k, lx: r1(xd(5 * k - 2.5) - 20), gx: r1(xd(5 * k)), gc: k === 8 ? INK : '#DAD7CE'
+    }));
+    const lots = [5, 10, 15, 20, 25, 30, 35].map((d) => ({ x: r1(xd(d) - 26), bs: fired ? 'dashed' : 'solid', txt: fired ? '?' : '1,050' }));
+    const dp = r1((DRY / 40) * 100);
+
+    return {
+      modes, notFired: !fired, fired,
+      fire: () => this.setState({ fired: true, touched: true }),
+      rewind: () => this.setState({ fired: false, touched: true, mode: 'mirror', sel: '', lensStep: 0 }),
+      toggleHow: () => this.setState({ how: !how }),
+      howPressed: how ? 'true' : 'false', howBg: how ? INK : PAPER, howFg: how ? PAPER : INK,
+      lead, rest, weeks, clock: fired ? 'NOW 06:10' : 'NOW 06:00',
+      kaitoBg: fired ? YEL : '#FFFFFF',
+      kaitoLabel: fired ? 'KAITO · FIRE' : 'KAITO · MCU',
+      railStyle: fired ? 'dashed' : 'solid',
+      lots,
+      clip: fired
+        ? 'polygon(0% 0%, ' + dp + '% 100%, 100% 100%, 100% 100%, 0% 100%)'
+        : 'polygon(0% 0%, ' + dp + '% 0%, 100% 0%, 100% 100%, 0% 100%)',
+      preOp: fired ? 0 : 1, postOp: fired ? 1 : 0,
+      dryX: r1(xd(DRY) - 0.75), dryLabelX: r1(xd(DRY) + 24),
+      stockNote: '2,300 → 0 BY DAY 11 · 2,300 ÷ 210 A DAY' + (how ? ' · COMPUTED' : ''),
+      kaitoStatus: fired
+        ? 'Fab fire 06:10 · restart date UNKNOWN' + (how ? ' · notice: observed' : '')
+        : 'Ships 1,050 MCUs a week · sole qualified source' + (how ? ' · plan: authored' : ''),
+      lanes,
+      lensOn: mode === 'lens' && !!sel && lensStep > 0,
+      ring, badges,
+      labOn: mode === 'lab', notLab: mode !== 'lab', cmdOn: mode === 'command', pins,
+      showMirror: mode === 'mirror' && !how,
+      mirrorTitle: fired ? 'What changed at 06:10' : 'At 06:00, before the fire',
+      mirrorItems,
+      showLens: mode === 'lens' && !how,
+      lensTitle: sel ? 'Why does ' + byId[sel].short + ' fray? Traced backwards: ' + lensStep + ' of 5' : 'Why does a thread fray? Pick one.',
+      lensPicks, chain,
+      stepBack: () => this.setState({ lensStep: Math.min(5, lensStep + 1) }),
+      showAll: () => this.setState({ lensStep: lensStep >= 5 ? 1 : 5 }),
+      showAllLabel: lensStep >= 5 ? 'Trace step by step' : 'Show all five',
+      showAllOff: !sel,
+      stepBackOff: !sel || lensStep >= 5,
+      keyOn: !!sel && lensStep >= 3,
+      showLab: mode === 'lab' && !how,
+      picks, cards, miniAxis, drawPicks,
+      labWho: 'Branch ' + drawId + ' — ' + drawBr.name,
+      showCmd: mode === 'command' && !how,
+      cmdTitle: 'Branch ' + cmd + ' — ' + BR[cmd].name + ', as assignments',
+      cmdPicks, asg, aggOn,
+      how, howRows
+    };
+  }
+}
+</script>
+</body>
+</html>

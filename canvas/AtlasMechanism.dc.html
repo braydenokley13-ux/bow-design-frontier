@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Atlas: the mechanism answer</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAFBFC;color:#14181F;font-family:'IBM Plex Sans Condensed',sans-serif}
+a{color:#0B5C73}a:hover{color:#083F50}
+.cd{font-family:'IBM Plex Sans Condensed',sans-serif}
+.mo{font-family:'IBM Plex Mono',monospace}
+.btn{font-family:'IBM Plex Sans Condensed',sans-serif;border-radius:0;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.btn:focus-visible,.hold:focus-visible{outline:3px solid #0B5C73;outline-offset:2px}
+.btn:disabled{cursor:not-allowed}
+.mv{transition-property:left,width,opacity;transition-duration:.45s;transition-timing-function:cubic-bezier(.2,.7,.2,1)}
+.fd{transition:opacity .4s ease}
+.hold{-webkit-appearance:none;appearance:none;background:transparent;margin:0;padding:0;width:600px;height:36px;cursor:ew-resize}
+.hold::-webkit-slider-runnable-track{height:8px;background:#FFFFFF;border:2px solid #14181F;border-radius:0}
+.hold::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:26px;height:34px;margin-top:-14px;background:#0B5C73;border:2px solid #14181F;border-radius:0}
+.hold::-moz-range-track{height:6px;background:#FFFFFF;border:2px solid #14181F;border-radius:0}
+.hold::-moz-range-thumb{width:22px;height:30px;background:#0B5C73;border:2px solid #14181F;border-radius:0}
+.hold:disabled{opacity:.35;cursor:not-allowed}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #FAFBFC; color: #14181F; font-family: 'IBM Plex Sans Condensed', sans-serif">
+
+  <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 56px; box-sizing: border-box; padding: 0 28px; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #14181F">
+    <span class="cd" style="font-size: 22px; font-weight: 700; letter-spacing: .08em">BOW</span>
+    <span class="mo" style="font-size: 11px; letter-spacing: .1em; color: #3D4652; margin-right: 10px">ATLAS · ASK</span>
+    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="#14181F" stroke-width="2"></circle><line x1="12.5" y1="12.5" x2="18" y2="18" stroke="#14181F" stroke-width="2"></line></svg>
+    <sc-for list="{{queries}}" as="q" hint-placeholder-count="2">
+      <button type="button" class="btn" onClick="{{q.pick}}" aria-pressed="{{q.on}}" style="height: 40px; padding: 0 16px; font-size: 17px; font-weight: 600; border: 2px solid #14181F; background: {{q.bg}}; color: {{q.fg}}">{{q.text}}</button>
+    </sc-for>
+    <span style="flex: 1"></span>
+    <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{how}}" style="height: 38px; padding: 0 14px; font-size: 15px; font-weight: 600; border: 2px solid #14181F; background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+  </header>
+
+  <div style="position: absolute; left: 28px; top: 62px; width: 1384px; height: 42px; box-sizing: border-box; border: 1.5px dotted #14181F; display: flex; align-items: center; gap: 12px; padding: 0 8px 0 10px">
+    <span style="width: 18px; height: 18px; flex: none; display: inline-block; box-sizing: border-box; background: radial-gradient(circle, #14181F 1.1px, transparent 1.4px) 0 0/6px 6px; border: 1px dotted #14181F"></span>
+    <span class="mo" style="font-size: 12px; font-weight: 600; letter-spacing: .06em; white-space: nowrap">GENERATED STRUCTURE</span>
+    <span style="font-size: 15px; white-space: nowrap">{{stamp.line}}</span>
+    <span style="flex: 1"></span>
+    <span class="mo" style="font-size: 11px; color: #3D4652; white-space: nowrap">{{stamp.note}}</span>
+    <button type="button" class="btn" disabled="{{revOff}}" style="height: 36px; padding: 0 12px; font-size: 13px; font-weight: 600; border: 1.5px solid #5B6572; background: #EEF1F4; color: #4A5461; white-space: nowrap">{{stamp.rev}}</button>
+  </div>
+
+  <sc-for list="{{hours}}" as="hr" hint-placeholder-count="15">
+    <div style="position: absolute; left: {{hr.x}}px; top: 128px; width: 1px; height: 546px; background: #E6EAEE"></div>
+    <span class="mo" style="position: absolute; left: {{hr.x}}px; top: 110px; transform: translateX(-50%); font-size: 11px; color: #3D4652; white-space: nowrap">{{hr.label}}</span>
+  </sc-for>
+  <span class="mo" style="position: absolute; left: 28px; top: 109px; font-size: 11px; color: #3D4652; letter-spacing: .05em">{{axisTag}}</span>
+
+  <!-- lane 0 · the perturbation -->
+  <div style="position: absolute; left: 28px; top: 128px; width: 1071px; height: 1px; background: #14181F"></div>
+  <div class="fd" style="position: absolute; left: 28px; top: 134px; opacity: {{opP}}">
+    <div class="cd" style="font-size: 14px; font-weight: 700; letter-spacing: .05em; color: #0B5C73">PERTURBATION</div>
+    <div class="mo" style="font-size: 11px; color: #0B5C73">{{pertSub}}</div>
+  </div>
+  <div class="mv" style="position: absolute; left: {{pert.x}}px; top: 140px; width: {{pert.w}}px; height: 18px; box-sizing: border-box; background: #0B5C73; opacity: {{pert.op}}"></div>
+  <div class="mv" style="position: absolute; left: {{pert.x}}px; top: 132px; width: 2px; height: 34px; background: #0B5C73; opacity: {{opP}}"></div>
+  <span class="mo mv" style="position: absolute; left: {{pert.tx}}px; top: 141px; font-size: 12px; font-weight: 600; color: #0B5C73; white-space: nowrap; opacity: {{opP}}">{{pert.text}}</span>
+
+  <!-- lane 1 · the aircraft -->
+  <div style="position: absolute; left: 28px; top: 172px; width: 1071px; height: 1px; background: #14181F"></div>
+  <div class="fd" style="position: absolute; left: 28px; top: 178px; width: 250px; opacity: {{opA}}">
+    <div style="display: flex; align-items: center; gap: 8px"><span class="mv" style="width: 14px; height: 14px; box-sizing: border-box; border: 2px solid #14181F; background: {{fired.a}}; flex: none"></span><span class="cd" style="font-size: 15px; font-weight: 700; letter-spacing: .05em">{{w.aT}}</span></div>
+    <div class="mo" style="font-size: 11px; color: #3D4652; margin-left: 22px">{{w.aS}}</div>
+  </div>
+  <div aria-live="polite" class="fd" style="position: absolute; left: 284px; top: 176px; width: 815px; height: 34px; font-size: 14px; line-height: 17px; opacity: {{opA}}">{{cap.a}}</div>
+  <span class="mo fd" style="position: absolute; left: 28px; top: 222px; font-size: 11px; color: #3D4652; opacity: {{opA}}">{{tag.sched}}</span>
+  <span class="mo fd" style="position: absolute; left: 28px; top: 262px; font-size: 11px; color: #3D4652; opacity: {{opAct}}">{{tag.act}}</span>
+  <span class="mo fd" style="position: absolute; left: 28px; top: 291px; font-size: 11px; color: #3D4652; opacity: {{opAct}}">{{tag.late}}</span>
+  <span class="mo fd" style="position: absolute; left: 28px; top: 313px; font-size: 11px; color: #3D4652; opacity: {{opTurn}}">{{tag.turn}}</span>
+
+  <sc-for list="{{bars}}" as="b" hint-placeholder-count="4">
+    <div class="fd" style="position: absolute; left: {{b.x}}px; top: 214px; width: {{b.w}}px; height: 32px; box-sizing: border-box; background: #FFFFFF; border: 2px solid #14181F; padding: 1px 5px; overflow: hidden; white-space: nowrap; opacity: {{b.op}}">
+      <div style="font-size: 12px; font-weight: 600; line-height: 13px">{{b.t1}}</div>
+      <div class="mo" style="font-size: 11px; line-height: 13px">{{b.t2}}</div>
+    </div>
+  </sc-for>
+  <sc-for list="{{slk}}" as="k" hint-placeholder-count="3">
+    <div class="mo fd" style="position: absolute; left: {{k.x}}px; top: 222px; width: {{k.w}}px; text-align: center; font-size: 11px; color: #3D4652; white-space: nowrap; opacity: {{k.op}}">{{k.t}}</div>
+  </sc-for>
+  <sc-for list="{{act}}" as="a" hint-placeholder-count="4">
+    <div class="mv" style="position: absolute; left: {{a.x}}px; top: 254px; width: {{a.w}}px; height: 32px; box-sizing: border-box; background: #8E9AA8; padding: 1px 5px; overflow: hidden; white-space: nowrap; opacity: {{a.op}}; transition-delay: {{a.td}}ms">
+      <div style="font-size: 12px; font-weight: 600; line-height: 14px">{{a.t1}}</div>
+      <div class="mo" style="font-size: 11px; line-height: 14px">{{a.t2}}</div>
+    </div>
+    <div class="mv" style="position: absolute; left: {{a.rx}}px; top: 290px; width: {{a.rw}}px; height: 17px; box-sizing: border-box; background: #F2B01E; color: #14181F; opacity: {{a.rop}}; transition-delay: {{a.td}}ms"><span class="mo" style="font-size: 11px; font-weight: 600; line-height: 17px; padding-left: 3px; white-space: nowrap">{{a.rt}}</span></div>
+  </sc-for>
+  <sc-for list="{{turns}}" as="tu" hint-placeholder-count="3">
+    <div class="mo fd" style="position: absolute; left: {{tu.x}}px; top: 313px; width: 150px; text-align: center; font-size: 11px; color: #14181F; white-space: nowrap; opacity: {{tu.op}}">{{tu.t}}</div>
+  </sc-for>
+  <svg class="fd" width="30" height="60" viewBox="0 0 30 60" aria-hidden="true" style="position: absolute; left: {{cut.x}}px; top: 249px; opacity: {{cut.op}}"><polyline points="15,0 22,10 8,20 22,30 8,40 22,50 15,58" fill="none" stroke="#14181F" stroke-width="3.5"></polyline></svg>
+  <span class="cd fd" style="position: absolute; left: {{cut.tx}}px; top: 262px; font-size: 13px; font-weight: 700; letter-spacing: .04em; white-space: nowrap; opacity: {{cut.op}}">{{cut.t}}</span>
+
+  <!-- lane 2 · the crew -->
+  <div style="position: absolute; left: 28px; top: 340px; width: 1071px; height: 1px; background: #14181F"></div>
+  <div class="fd" style="position: absolute; left: 28px; top: 346px; width: 250px; opacity: {{opC}}">
+    <div style="display: flex; align-items: center; gap: 8px"><span class="mv" style="width: 14px; height: 14px; box-sizing: border-box; border: 2px solid #14181F; background: {{fired.c}}; flex: none"></span><span class="cd" style="font-size: 15px; font-weight: 700; letter-spacing: .05em">{{w.cT}}</span></div>
+    <div class="mo" style="font-size: 11px; color: #3D4652; margin-left: 22px">{{w.cS}}</div>
+  </div>
+  <div aria-live="polite" class="fd" style="position: absolute; left: 284px; top: 344px; width: 815px; height: 34px; font-size: 14px; line-height: 17px; opacity: {{opC}}">{{cap.c}}</div>
+  <span class="mo fd" style="position: absolute; left: 28px; top: 402px; font-size: 11px; color: #3D4652; opacity: {{opC}}">{{tag.duty}}</span>
+  <div class="fd" style="position: absolute; left: {{crew.x0}}px; top: 396px; width: {{crew.trackW}}px; height: 30px; box-sizing: border-box; border: 2px solid #14181F; background: #FFFFFF; opacity: {{opC}}"></div>
+  <div class="mv" style="position: absolute; left: {{crew.x0}}px; top: 398px; width: {{crew.toneW}}px; height: 26px; margin-left: 2px; background: #8E9AA8; opacity: {{opCAct}}"></div>
+  <div class="mv" style="position: absolute; left: {{crew.ambL}}px; top: 398px; width: {{crew.ambW}}px; height: 26px; box-sizing: border-box; background: #F2B01E; opacity: {{crew.ambOp}}"><span class="mo" style="font-size: 11px; font-weight: 600; line-height: 26px; padding-left: 3px">{{crew.ambT}}</span></div>
+  <div class="mv" style="position: absolute; left: {{crew.overL}}px; top: 398px; width: {{crew.overW}}px; height: 26px; box-sizing: border-box; background: #F2B01E; opacity: {{crew.overOp}}"></div>
+  <div style="position: absolute; left: {{crew.limX}}px; top: 380px; width: 3px; height: 50px; margin-left: -1px; background: #14181F; opacity: {{opC}}"></div>
+  <span class="mo" style="position: absolute; left: {{crew.limTx}}px; top: 380px; width: 200px; text-align: right; font-size: 11px; font-weight: 600; opacity: {{opC}}">{{crew.limT}}</span>
+  <div class="mv" style="position: absolute; left: {{crew.dimL}}px; top: 434px; width: {{crew.dimW}}px; height: 6px; box-sizing: border-box; border-left: 1.5px solid #14181F; border-right: 1.5px solid #14181F; border-bottom: 1.5px solid #14181F; opacity: {{crew.dimOp}}"></div>
+  <span class="mo mv" style="position: absolute; left: {{crew.dimTx}}px; top: 441px; width: 230px; text-align: center; font-size: 11px; opacity: {{crew.dimOp}}">{{crew.dimT}}</span>
+  <span class="mo fd" style="position: absolute; left: 284px; top: 441px; width: 620px; font-size: 11px; font-weight: 600; opacity: {{crew.overOp}}">{{crew.overT}}</span>
+
+  <!-- lane 3 · the passengers -->
+  <div style="position: absolute; left: 28px; top: 458px; width: 1071px; height: 1px; background: #14181F"></div>
+  <div class="fd" style="position: absolute; left: 28px; top: 464px; width: 250px; opacity: {{opX}}">
+    <div style="display: flex; align-items: center; gap: 8px"><span class="mv" style="width: 14px; height: 14px; box-sizing: border-box; border: 2px solid #14181F; background: {{fired.p}}; flex: none"></span><span class="cd" style="font-size: 15px; font-weight: 700; letter-spacing: .05em">{{w.pT}}</span></div>
+    <div class="mo" style="font-size: 11px; color: #3D4652; margin-left: 22px">{{w.pS}}</div>
+  </div>
+  <div aria-live="polite" class="fd" style="position: absolute; left: 284px; top: 462px; width: 815px; height: 34px; font-size: 14px; line-height: 17px; opacity: {{opX}}">{{cap.p}}</div>
+  <sc-for list="{{pax}}" as="p" hint-placeholder-count="6">
+    <div class="fd" style="position: absolute; left: 28px; top: {{p.y}}px; width: 250px; height: 28px; opacity: {{opX}}">
+      <div class="mo" style="font-size: 11px; line-height: 13px; white-space: nowrap">{{p.l1}}</div>
+      <div style="font-size: 12.5px; line-height: 15px; white-space: nowrap"><span style="background: {{p.resBg}}; padding: 0 4px 0 0; font-weight: 600">{{p.res}}</span></div>
+    </div>
+    <div style="position: absolute; left: 284px; top: {{p.yb}}px; width: 815px; height: 1px; background: #EEF1F4"></div>
+    <div class="mv" style="position: absolute; left: {{p.toneL}}px; top: {{p.yt}}px; width: {{p.toneW}}px; height: 14px; background: #8E9AA8; opacity: {{p.toneOp}}"></div>
+    <div class="mv" style="position: absolute; left: {{p.outL}}px; top: {{p.yt}}px; width: {{p.outW}}px; height: 14px; box-sizing: border-box; border: 1.5px solid #14181F; opacity: {{p.outOp}}"></div>
+    <div class="mv" style="position: absolute; left: {{p.ambL}}px; top: {{p.yt}}px; width: {{p.ambW}}px; height: 14px; background: #F2B01E; opacity: {{p.ambOp}}"></div>
+    <div style="position: absolute; left: {{p.tickX}}px; top: {{p.ytk}}px; width: 2px; height: 22px; margin-left: -1px; background: #14181F; opacity: {{p.tickOp}}"></div>
+    <div class="mv" style="position: absolute; left: {{p.markX}}px; top: {{p.ymk}}px; width: 7px; height: 7px; margin-left: -3px; background: #14181F; opacity: {{p.markOp}}"></div>
+    <span class="mo mv" style="position: absolute; left: {{p.noteX}}px; top: {{p.yn}}px; font-size: 11px; white-space: nowrap; opacity: {{p.noteOp}}">{{p.note}}</span>
+    <span class="mo fd" style="position: absolute; left: {{p.strandX}}px; top: {{p.yn}}px; width: 170px; text-align: right; font-size: 11px; font-weight: 600; white-space: nowrap; opacity: {{p.strandOp}}">{{p.strandT}}</span>
+  </sc-for>
+
+  <!-- right column: components, rules, key -->
+  <div class="mo" style="position: absolute; left: 1124px; top: 109px; font-size: 11px; letter-spacing: .06em; color: #3D4652">{{compHead}}</div>
+  <sc-for list="{{comps}}" as="cp" hint-placeholder-count="6">
+    <div class="fd" style="position: absolute; left: 1124px; top: {{cp.y}}px; width: 288px; opacity: {{cp.op}}">
+      <div style="display: flex; gap: 8px; align-items: flex-start">
+        <span style="width: 14px; height: 14px; flex: none; margin-top: 2px; box-sizing: border-box; background: {{cp.bg}}; border: {{cp.bd}}"></span>
+        <div style="min-width: 0">
+          <div style="font-size: 14px; font-weight: 700; line-height: 16px">{{cp.name}}</div>
+          <div style="font-size: 12.5px; line-height: 15px">{{cp.line}}</div>
+          <div class="mo" style="font-size: 11px; line-height: 14px; color: #3D4652; white-space: nowrap">{{cp.src}}</div>
+        </div>
+      </div>
+    </div>
+  </sc-for>
+  <div class="mo fd" style="position: absolute; left: 1124px; top: 446px; font-size: 11px; letter-spacing: .06em; color: #3D4652; opacity: {{opAct}}">RULES · authored for this prototype</div>
+  <sc-for list="{{rules}}" as="ru" hint-placeholder-count="4">
+    <div class="fd" style="position: absolute; left: 1124px; top: {{ru.y}}px; width: 288px; font-size: 12.5px; line-height: 14px; opacity: {{opAct}}"><span class="mo" style="font-size: 11px; font-weight: 600">{{ru.n}}</span> {{ru.t}}</div>
+  </sc-for>
+  <div class="fd" style="position: absolute; left: 1124px; top: 590px; width: 288px; opacity: {{keyOp}}">
+    <div class="mo" style="font-size: 11px; letter-spacing: .06em; color: #3D4652; margin-bottom: 3px">TEXTURE KEY</div>
+    <sc-for list="{{key}}" as="ky" hint-placeholder-count="4">
+      <div style="display: flex; gap: 8px; align-items: center; height: 17px"><span style="width: 14px; height: 12px; flex: none; box-sizing: border-box; background: {{ky.bg}}; border: {{ky.bd}}"></span><span style="font-size: 12px; line-height: 14px; white-space: nowrap">{{ky.t}}</span></div>
+    </sc-for>
+  </div>
+
+  <!-- controls -->
+  <button type="button" class="btn" onClick="{{press40}}" disabled="{{ctlOff}}" style="position: absolute; left: 28px; top: 700px; width: 200px; height: 44px; font-size: 17px; font-weight: 600; border: 2px solid #14181F; background: #0B5C73; color: #FFFFFF">{{btn40}}</button>
+  <span class="mo" style="position: absolute; left: 252px; top: 684px; font-size: 11px; letter-spacing: .06em; color: #0B5C73; font-weight: 600">{{sliderTag}}</span>
+  <input class="hold" type="range" min="0" max="120" step="1" value="{{hold}}" onChange="{{onSlide}}" disabled="{{ctlOff}}" aria-label="{{sliderAria}}" aria-valuetext="{{holdText}}" style="position: absolute; left: 252px; top: 702px">
+  <sc-for list="{{ticks}}" as="tk" hint-placeholder-count="5">
+    <span class="mo" style="position: absolute; left: {{tk.x}}px; top: 741px; transform: translateX(-50%); font-size: 11px; color: #3D4652">{{tk.t}}</span>
+  </sc-for>
+  <div class="fd" style="position: absolute; left: {{thr.x}}px; top: 696px; width: 3px; height: 14px; margin-left: -1px; background: #14181F; opacity: {{thr.op}}"></div>
+  <div style="position: absolute; left: 872px; top: 694px; width: 120px; height: 50px; box-sizing: border-box; background: #14181F; display: flex; align-items: baseline; justify-content: center; gap: 6px; padding-top: 6px" aria-hidden="true"><span class="mo" style="font-size: 30px; font-weight: 600; color: #F2B01E; line-height: 36px">{{hold}}</span><span class="mo" style="font-size: 12px; color: #FFFFFF">min</span></div>
+  <button type="button" class="btn" onClick="{{clearHold}}" disabled="{{ctlOff}}" style="position: absolute; left: 1004px; top: 700px; width: 95px; height: 44px; font-size: 16px; font-weight: 600; border: 2px solid #14181F; background: #FFFFFF; color: #14181F">Clear</button>
+  <div aria-live="polite" class="fd" style="position: absolute; left: 28px; top: 760px; width: 1071px; height: 18px; font-size: 13.5px; line-height: 18px; font-weight: 500; opacity: {{thr.noteOp}}">{{thr.note}}</div>
+
+  <div class="cd" style="position: absolute; left: 28px; top: 794px; width: 1384px; font-size: 24px; font-weight: 600; line-height: 30px; letter-spacing: .01em; white-space: nowrap"><span class="mo" style="font-size: 20px; letter-spacing: .04em">SEARCH</span>, in this model, is asking for a mechanism and getting a small running system you can push on.</div>
+
+  <div class="mo" style="position: absolute; left: 28px; bottom: 14px; width: 760px; font-size: 11px; line-height: 15px; letter-spacing: .02em; color: #3D4652">COMMERCIAL LENS · Hypothesis: answering-by-system is free at small scale (it is the medium’s front door); reviewed, persistent systems behind popular questions are where publishers and licensors pay.</div>
+  <div class="mo" style="position: absolute; right: 28px; bottom: 14px; width: 560px; text-align: right; font-size: 11px; line-height: 15px; letter-spacing: .02em; color: #3D4652">PROTOTYPE · DESIGN PROPOSAL · PLATFORM HYPOTHESIS (on-the-fly system assembly) · data: rotation, loads and rules authored for this prototype; FAA rule to verify; no real airline data</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      const s = this.state || {};
+      const asm = s.asm || 0;
+      if (asm < 6) {
+        const tk = (s.tk || 0) + 1;
+        this.setState({ tk: tk, asm: tk % 5 === 0 ? asm + 1 : asm });
+        return;
+      }
+      const h = s.hold || 0;
+      const tg = s.target;
+      if (typeof tg === 'number' && tg !== h) {
+        const nh = h < tg ? Math.min(tg, h + 2) : Math.max(tg, h - 4);
+        const patch = { hold: nh, target: nh === tg ? null : tg };
+        if (this.sim(this.nets()[s.net || 'air'], nh).cutFrom !== null) patch.seenCut = true;
+        this.setState(patch);
+      }
+    }, 50);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  nets() {
+    return {
+      air: {
+        key: 'air', q: 'Why do airline delays spread?',
+        t0: 300, minTurn: 45, reportBefore: 60, dutyLimit: 780, post: 15, mct: 30, holdLeg: 1, holdNode: 'ORD',
+        legs: [{ dep: 360, blk: 95 }, { dep: 530, blk: 135 }, { dep: 725, blk: 120 }, { dep: 895, blk: 95 }],
+        names: ['BOS→PHL', 'PHL→ORD', 'ORD→PHL', 'PHL→BOS'],
+        groups: [
+          { l: 'to DEN', dep: 715, n: 31, leg: 1, type: 'c' },
+          { l: 'to MSP', dep: 755, n: 19, leg: 1, type: 'c' },
+          { l: 'to CLT', dep: 890, n: 26, leg: 2, type: 'c' },
+          { l: 'to DCA', dep: 935, n: 17, leg: 2, type: 'c' },
+          { l: 'to BOS, on board', dep: 0, n: 27, leg: 3, type: 'r' },
+          { l: 'onward from BOS', dep: 1055, n: 9, leg: 3, type: 'c' }
+        ],
+        w: { v: 'aircraft', aT: '1 · THE AIRCRAFT', aS: 'rotation', cT: '2 · THE CREW', cS: 'duty limit', pT: '3 · THE PASSENGERS', pS: 'connections', unit: 'passengers', limit: '13 h limit', trip: 'leg', dutyTag: 'duty day', lateTag: 'late arrival', missTxt: (s) => 'MISSES · ' + s + ' min short', strandTxt: (k) => 'STRANDED · leg ' + k + ' cancelled', strandShort: (k) => 'leg ' + k + ' cancelled', crewWord: 'crew', mctWord: '30 min after landing' },
+        stamp: 'assembled for this question from 6 components · unreviewed', note: 'the airline day, one clock', rev: 'Open BOW’s reviewed air-network system · not built yet',
+        axisTag: 'ONE CLOCK · authored', sliderTag: 'HOLD AT ORD · drag, 0–120 min', btn: 'Hold ORD 40 min',
+        comps: [
+          ['Rotation', 'BOS→PHL→ORD→PHL→BOS · four legs', 'typical regional schedule (AUTHORED)', 'a'],
+          ['Minimum turn', '45 min between legs', 'AUTHORED', 'a'],
+          ['Crew duty', '13 h duty · 15 min post-flight · no reserve', 'simplified from FAA Part 117 (verify)', 'a'],
+          ['Passenger connections', '6 groups · loads, connecting flights', 'loads: AUTHORED', 'a'],
+          ['Perturbation', 'weather hold at ORD, 0–120 min', 'your input · the slider', 'u'],
+          ['Propagation', 'delays, missed connections, cancellation', 'COMPUTED here from the four rules', 'c']
+        ],
+        rules: [
+          'The aircraft reaches ORD as many minutes late as the hold.',
+          'Scheduled turn − 45 min = slack. Slack absorbs delay; the rest rides into the next leg.',
+          'A leg is cancelled if its landing + 15 min falls after report + 13 h. No spare crew.',
+          'A group connects if the aircraft lands and 30 min later is still before the connecting departure.'
+        ]
+      },
+      parcel: {
+        key: 'parcel', q: 'Why did my package take three extra days?',
+        t0: 990, minTurn: 45, reportBefore: 90, dutyLimit: 840, post: 15, mct: 30, holdLeg: 1, holdNode: 'CTR',
+        legs: [{ dep: 1080, blk: 100 }, { dep: 1240, blk: 150 }, { dep: 1450, blk: 150 }, { dep: 1650, blk: 100 }],
+        names: ['DEP→REG', 'REG→CTR', 'CTR→REG', 'REG→DEP'],
+        groups: [
+          { l: 'West sort', dep: 1430, n: 420, leg: 1, type: 'c' },
+          { l: 'South sort', dep: 1475, n: 310, leg: 1, type: 'c' },
+          { l: 'Local sort', dep: 1635, n: 380, leg: 2, type: 'c' },
+          { l: 'Next-day air', dep: 1700, n: 150, leg: 2, type: 'c' },
+          { l: 'to DEP, on board', dep: 0, n: 260, leg: 3, type: 'r' },
+          { l: 'Morning wave', dep: 1800, n: 210, leg: 3, type: 'c' }
+        ],
+        w: { v: 'trailer', aT: '1 · THE TRAILER', aS: 'line-haul rotation', cT: '2 · THE DRIVER', cS: 'hours limit', pT: '3 · THE PARCELS', pS: 'sort cutoffs', unit: 'parcels', limit: '14 h window', trip: 'trip', dutyTag: 'driver window', lateTag: 'late arrival', missTxt: (s) => '+1 DAY · ' + s + ' min short', strandTxt: (k) => 'HELD A DAY · trip ' + k + ' cancelled', strandShort: (k) => 'trip ' + k + ' cancelled', crewWord: 'driver', mctWord: '30 min to unload and sort' },
+        stamp: 'same mechanism, re-skinned for parcel hubs · unreviewed', note: 'placeholder skin · your route: [tracking feed]', rev: 'Open BOW’s reviewed parcel-hub system · not built yet',
+        axisTag: 'ONE CLOCK · overnight', sliderTag: 'DELAY AT CTR · drag, 0–120 min', btn: 'Delay CTR 40 min',
+        comps: [
+          ['Rotation', 'DEP→REG→CTR→REG→DEP · four trips', 'typical line-haul shuttle (AUTHORED)', 'a'],
+          ['Minimum dwell', '45 min between trips', 'AUTHORED', 'a'],
+          ['Driver hours', '14 h window · 15 min post-trip · no relief', 'simplified from FMCSA rules (verify)', 'a'],
+          ['Sort cutoffs', '6 groups · volumes, cutoffs', 'volumes: AUTHORED', 'a'],
+          ['Perturbation', 'delay at CTR hub, 0–120 min', 'your input · the slider', 'u'],
+          ['Propagation', 'late trips, missed sorts, cancelled trip', 'COMPUTED here from the four rules', 'c']
+        ],
+        rules: [
+          'The trailer reaches CTR as many minutes late as the delay.',
+          'Scheduled dwell − 45 min = slack. Slack absorbs delay; the rest rides into the next trip.',
+          'A trip is cancelled if its arrival + 15 min falls after report + 14 h. No relief driver.',
+          'A group makes a sort if arrival + 30 min is before the cutoff. If not, it waits a day.'
+        ]
+      }
+    };
+  }
+
+  sim(net, H) {
+    const L = net.legs, n = L.length;
+    const sched = L.map((l) => ({ dep: l.dep, arr: l.dep + l.blk }));
+    const slack = [];
+    for (let i = 0; i < n - 1; i++) slack.push(sched[i + 1].dep - sched[i].arr - net.minTurn);
+    const depD = [], arrD = [], absorb = [], carry = [];
+    for (let i = 0; i < n; i++) {
+      let d = 0;
+      if (i > 0) { const inc = arrD[i - 1]; const a = Math.min(inc, slack[i - 1]); absorb.push(a); carry.push(inc - a); d = inc - a; }
+      depD.push(d);
+      arrD.push(d + (i === net.holdLeg ? H : 0));
+    }
+    const report = L[0].dep - net.reportBefore;
+    const limit = report + net.dutyLimit;
+    let cutFrom = null;
+    for (let i = 0; i < n; i++) { if (sched[i].arr + arrD[i] + net.post > limit) { cutFrom = i; break; } }
+    const last = cutFrom === null ? n - 1 : cutFrom - 1;
+    const dutyEnd = last < 0 ? report : sched[last].arr + arrD[last] + net.post;
+    const schedEnd = sched[n - 1].arr + net.post;
+    const wouldEnd = cutFrom === null ? null : sched[cutFrom].arr + arrD[cutFrom] + net.post;
+    const rows = net.groups.map((g) => {
+      if (cutFrom !== null && g.leg >= cutFrom) return { g: g, stranded: true };
+      const arrT = sched[g.leg].arr + arrD[g.leg];
+      if (g.type === 'r') return { g: g, ride: true, arrT: arrT, late: arrD[g.leg], stranded: false, missed: false };
+      const ready = arrT + net.mct;
+      const spare = g.dep - ready;
+      return { g: g, arrT: arrT, ready: ready, spare: spare, missed: spare < 0, stranded: false };
+    });
+    let missedN = 0, strandedN = 0, missedG = 0, tight = null;
+    rows.forEach((r) => {
+      if (r.stranded) strandedN += r.g.n;
+      else if (r.missed) { missedN += r.g.n; missedG += 1; }
+      else if (!r.ride && (tight === null || r.spare < tight.spare)) tight = { spare: r.spare, l: r.g.l };
+    });
+    return { sched, slack, depD, arrD, absorb, carry, report, limit, cutFrom, last, dutyEnd, schedEnd, wouldEnd, rows, missedN, strandedN, missedG, tight,
+      margin: limit - dutyEnd, schedMargin: limit - schedEnd, over: wouldEnd === null ? 0 : wouldEnd - limit };
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const key = s.net || 'air';
+    const net = this.nets()[key];
+    const H = s.hold || 0;
+    const asm = s.asm || 0;
+    const how = !!s.how;
+    const seenCut = !!s.seenCut;
+    const sm = this.sim(net, H);
+    const sm0 = this.sim(net, 0);
+    const w = net.w;
+    const nLeg = net.legs.length;
+    const pad = (n) => (n < 10 ? '0' : '') + n;
+    const fmt = (t) => { const m = ((Math.round(t) % 1440) + 1440) % 1440; return pad(Math.floor(m / 60)) + ':' + pad(m % 60); };
+    const X0 = 284, SC = 0.95, t0 = net.t0;
+    const X = (t) => Math.round((X0 + (t - t0) * SC) * 10) / 10;
+    const Wd = (m) => Math.round(Math.max(0, m) * SC * 10) / 10;
+    const cut = sm.cutFrom !== null;
+    const hl = net.holdLeg;
+    const node = net.holdNode;
+
+    // threshold the user can find by dragging (computed by scanning the same rules)
+    let thrMin = null;
+    for (let h = 0; h <= 120; h++) { if (this.sim(net, h).cutFrom !== null) { thrMin = h; break; } }
+
+    const setNet = (k) => () => this.setState({ net: k, hold: 0, target: null, asm: 0, tk: 0, seenCut: false });
+    const NN = this.nets();
+    const queries = ['air', 'parcel'].map((k) => ({
+      text: NN[k].q, on: k === key, pick: setNet(k),
+      bg: k === key ? '#14181F' : '#FFFFFF', fg: k === key ? '#FFFFFF' : '#14181F'
+    }));
+
+    const hours = [];
+    for (let k = 0; k <= 14; k++) { const t = t0 + 60 * k; hours.push({ x: X(t), label: fmt(t) }); }
+
+    const opP = asm > 4 ? 1 : 0.15, opA = asm > 0 ? 1 : 0, opTurn = asm > 1 ? 1 : 0, opC = asm > 2 ? 1 : 0.15, opX = asm > 3 ? 1 : 0.15, opAct = asm > 5 ? 1 : 0;
+    const opCAct = asm > 5 ? 1 : 0;
+
+    const pert = {
+      x: X(sm.sched[hl].arr), w: Wd(H), op: (asm > 4 && H > 0) ? 1 : 0,
+      tx: X(sm.sched[hl].arr) + Wd(H) + 10,
+      text: H > 0 ? node + ' hold · ' + H + ' min · ' + fmt(sm.sched[hl].arr) + '–' + fmt(sm.sched[hl].arr + H) : node + ' · no hold set'
+    };
+
+    const bars = net.legs.map((l, i) => ({ x: X(l.dep), w: Wd(l.blk), t1: (i + 1) + ' · ' + net.names[i], t2: fmt(l.dep) + '–' + fmt(l.dep + l.blk), op: opA }));
+    const slk = [];
+    for (let i = 0; i < nLeg - 1; i++) slk.push({ x: X(sm.sched[i].arr), w: Wd(sm.sched[i + 1].dep - sm.sched[i].arr), t: 'slack ' + sm.slack[i], op: opTurn });
+    const act = net.legs.map((l, i) => {
+      const cancelled = cut && i >= sm.cutFrom;
+      const d = sm.arrD[i];
+      const show = asm > 5 && !cancelled;
+      return {
+        x: X(l.dep + sm.depD[i]), w: Wd(l.blk), t1: (i + 1) + ' · ' + net.names[i], t2: 'arr ' + fmt(l.dep + l.blk + d),
+        op: show ? 1 : 0, td: i * 110,
+        rx: X(l.dep + l.blk), rw: Wd(d), rop: (show && d > 0) ? 1 : 0, rt: '+' + d
+      };
+    });
+    const turns = [];
+    for (let i = 0; i < nLeg - 1; i++) {
+      const inc = sm.arrD[i];
+      turns.push({ x: X((sm.sched[i].arr + sm.sched[i + 1].dep) / 2) - 75, t: 'absorb ' + sm.absorb[i] + ' · carry ' + sm.carry[i], op: (asm > 5 && inc > 0) ? 1 : 0 });
+    }
+    const cutLeg = cut ? sm.cutFrom : nLeg - 1;
+    const cutObj = {
+      x: X(net.legs[cutLeg].dep + net.legs[cutLeg].blk / 2) - 15,
+      tx: X(net.legs[cutLeg].dep + net.legs[cutLeg].blk / 2) + 14,
+      op: cut ? 1 : 0, t: (w.trip === 'leg' ? 'LEG ' : 'TRIP ') + (cutLeg + 1) + ' CANCELLED'
+    };
+
+    // captions
+    let capA;
+    if (H === 0) capA = 'On schedule: one ' + w.v + ', four legs, three turns with ' + sm.slack.join(', ') + ' min of slack. Set a hold at ' + node + ' and watch where it goes.';
+    else {
+      const a1 = sm.absorb[hl], c1 = sm.carry[hl];
+      capA = node + ' holds the ' + w.v + ' ' + H + ' min. ' + (c1 === 0 ? 'That turn’s slack absorbs all of it; nothing rides on.' : 'That turn absorbs ' + a1 + '; ' + c1 + ' min rides into ' + w.trip + ' ' + (hl + 2) + '.');
+      if (c1 > 0 && hl + 1 < nLeg - 1) {
+        const a2 = sm.absorb[hl + 1], c2 = sm.carry[hl + 1];
+        capA += ' The next turn absorbs ' + a2 + '; ' + w.trip + ' ' + (hl + 3) + ' leaves ' + (c2 === 0 ? 'on time' : c2 + ' min late') + '.';
+      }
+      if (cut) capA += ' ' + (w.trip === 'leg' ? 'Leg ' : 'Trip ') + (sm.cutFrom + 1) + ' does not run.';
+    }
+    const lastLand = sm0.sched[nLeg - 1].arr;
+    let capC;
+    if (H === 0) capC = 'Report ' + fmt(sm.report) + '; the ' + w.limit + ' ends at ' + fmt(sm.limit) + '. Last landing ' + fmt(lastLand) + ' plus 15 min post-' + w.trip + ' leaves ' + sm.schedMargin + ' min of margin.';
+    else if (cut) capC = (w.trip === 'leg' ? 'Leg ' : 'Trip ') + (sm.cutFrom + 1) + ' would land ' + fmt(sm.wouldEnd - net.post) + '; with 15 min post-' + w.trip + ' the ' + w.crewWord + ' is on duty until ' + fmt(sm.wouldEnd) + ', ' + sm.over + ' min past the limit. No reserve ' + w.crewWord + ', so it is cancelled.';
+    else if (sm.margin < sm.schedMargin) capC = 'The last ' + w.trip + ' now lands ' + fmt(sm.dutyEnd - net.post) + '. Duty ends ' + fmt(sm.dutyEnd) + ': margin ' + sm.margin + ' min, down from ' + sm.schedMargin + '. Every late minute here comes out of that margin.';
+    else capC = 'Turn slack soaked the hold up before the last ' + w.trip + '. The duty clock has not moved: margin ' + sm.margin + ' min.';
+    const totalN = net.groups.reduce((a, g) => a + g.n, 0);
+    let capP;
+    if (sm.missedN + sm.strandedN === 0) {
+      capP = H === 0 ? totalN + ' ' + w.unit + ' in 6 groups. Each connecting departure is fixed; each group needs ' + w.mctWord + '.' : 'Every connection still fits' + (sm.tight ? ': the tightest (' + sm.tight.l + ') has ' + sm.tight.spare + ' min to spare' : '') + '.';
+    } else {
+      capP = sm.missedG + (sm.missedG === 1 ? ' connection fails: ' : ' connections fail: ') + sm.missedN + ' ' + w.unit + ' miss' + (net.key === 'parcel' ? ' their sort and wait a day' : ' their onward flight') + '.' + (sm.strandedN > 0 ? ' The cancelled ' + w.trip + ' strands ' + sm.strandedN + ' more.' : '') + (net.key === 'parcel' ? ' A cutoff turns minutes into a day.' : '');
+    }
+    const fired = {
+      a: H > 0 ? '#F2B01E' : '#FFFFFF',
+      c: (H > 0 && sm.margin < sm.schedMargin) || cut ? '#F2B01E' : '#FFFFFF',
+      p: (sm.missedN + sm.strandedN) > 0 ? '#F2B01E' : '#FFFFFF'
+    };
+
+    // crew lane
+    const flownEnd = sm.dutyEnd;
+    const toneEnd = Math.min(flownEnd, sm0.dutyEnd);
+    const crew = {
+      x0: X(sm.report), trackW: Wd(sm.limit - sm.report),
+      toneW: Math.max(0, Wd(toneEnd - sm.report) - 4),
+      ambL: X(sm0.dutyEnd), ambW: cut ? 0 : Wd(flownEnd - sm0.dutyEnd), ambOp: (asm > 5 && !cut && flownEnd > sm0.dutyEnd) ? 1 : 0, ambT: '+' + Math.max(0, flownEnd - sm0.dutyEnd),
+      overL: X(sm.limit), overW: cut ? Math.max(4, Wd(sm.over)) : 0, overOp: cut ? 1 : 0,
+      limX: X(sm.limit), limTx: X(sm.limit) - 205, limT: w.limit + ' · ' + fmt(sm.limit),
+      dimL: X(flownEnd), dimW: cut ? 0 : Wd(sm.limit - flownEnd), dimOp: (asm > 5 && !cut) ? 1 : 0,
+      dimTx: X(flownEnd) + Wd(sm.limit - flownEnd) / 2 - 115, dimT: 'margin ' + sm.margin + ' min',
+      overT: cut ? 'Cut line: ' + (w.trip === 'leg' ? 'leg ' : 'trip ') + (sm.cutFrom + 1) + ' needs duty until ' + fmt(sm.wouldEnd) + '; the limit is ' + fmt(sm.limit) + '.' : ''
+    };
+
+    // passenger rows
+    const pax = sm.rows.map((r, i) => {
+      const g = r.g;
+      const y = 502 + i * 29;
+      const o = { y: y, yb: y + 26, yt: y + 6, ytk: y + 2, ymk: y + 9, yn: y + 7 };
+      const hidden = { toneL: 284, toneW: 0, toneOp: 0, outL: 284, outW: 0, outOp: 0, ambL: 284, ambW: 0, ambOp: 0, markX: 284, markOp: 0, noteX: 284, note: '', noteOp: 0, strandX: 284, strandT: '', strandOp: 0 };
+      const unit = net.key === 'parcel' ? '' : '';
+      if (r.stranded) {
+        const tx = g.type === 'r' ? X(sm.sched[g.leg].arr) : X(g.dep);
+        return Object.assign(o, hidden, { l1: g.l + (g.type === 'c' ? ' · ' + fmt(g.dep) : '') + ' · ' + g.n, res: w.strandTxt(sm.cutFrom + 1), resBg: '#F2B01E', tickX: tx, tickOp: 1, strandX: tx - 178, strandT: w.strandShort(sm.cutFrom + 1), strandOp: 1 });
+      }
+      if (r.ride) {
+        const tx = X(sm.sched[g.leg].arr);
+        const dep = net.legs[g.leg].dep + sm.depD[g.leg];
+        const late = r.late;
+        return Object.assign(o, hidden, {
+          l1: g.l + ' · ' + g.n, res: late > 0 ? 'arrive ' + late + ' min late' : 'arrive on time', resBg: late > 0 ? '#F2B01E' : 'transparent',
+          tickX: tx, tickOp: 1, toneL: X(dep), toneW: Wd(sm.sched[g.leg].arr - dep), toneOp: 1,
+          ambL: tx, ambW: Wd(late), ambOp: late > 0 ? 1 : 0, markX: X(r.arrT), markOp: 1,
+          noteX: tx + Wd(late) + 8, note: late > 0 ? '+' + late : 'on time', noteOp: 1
+        });
+      }
+      const xA = X(r.arrT), xD = X(g.dep), xR = X(r.ready);
+      const made = !r.missed;
+      return Object.assign(o, hidden, {
+        l1: g.l + ' · ' + fmt(g.dep) + ' · ' + g.n,
+        res: made ? 'connects · spare ' + r.spare + ' min' : w.missTxt(-r.spare), resBg: made ? 'transparent' : '#F2B01E',
+        tickX: xD, tickOp: 1, markX: xA, markOp: 1,
+        toneL: xA, toneW: Math.max(0, Math.min(xR, xD) - xA), toneOp: 1,
+        outL: xR, outW: made ? Math.max(0, xD - xR) : 0, outOp: (made && r.spare > 0) ? 1 : 0,
+        ambL: xD, ambW: made ? 0 : xR - xD, ambOp: made ? 0 : 1,
+        noteX: (made ? xD : xR) + 8, note: made ? 'spare ' + r.spare : 'short ' + (-r.spare), noteOp: 1
+      });
+    });
+
+    if (asm <= 3) pax.forEach((p) => { p.toneOp = 0; p.outOp = 0; p.ambOp = 0; p.markOp = 0; p.tickOp = 0; p.noteOp = 0; p.strandOp = 0; });
+
+    const comps = net.comps.map((c, i) => ({
+      y: 128 + i * 51, name: c[0], line: c[1], src: c[2], op: asm > i ? 1 : 0.12,
+      bg: c[3] === 'a' ? '#FFFFFF' : c[3] === 'u' ? '#0B5C73' : '#8E9AA8',
+      bd: c[3] === 'a' ? '2px solid #14181F' : c[3] === 'u' ? '2px solid #14181F' : '0'
+    }));
+    const rules = net.rules.map((t, i) => ({ y: 464 + i * 30, n: 'R' + (i + 1), t: t }));
+    const keyRows = [
+      { bg: '#FFFFFF', bd: '2px solid #14181F', t: 'AUTHORED · outline · a number someone chose' },
+      { bg: '#8E9AA8', bd: '0', t: 'COMPUTED · toned solid · follows from R1–R4' },
+      { bg: '#F2B01E', bd: '0', t: 'AMBER · computed minutes late' },
+      { bg: 'radial-gradient(circle, #14181F 1.1px, transparent 1.4px) 0 0/6px 6px', bd: '1px dotted #14181F', t: 'GENERATED STRUCTURE · unreviewed' }
+    ];
+
+    const ticks = [0, 30, 60, 90, 120].map((v) => ({ t: String(v), x: 252 + 13 + (v / 120) * 574 }));
+    const thr = {
+      x: 252 + 13 + ((thrMin === null ? 0 : thrMin) / 120) * 574,
+      op: seenCut ? 1 : 0, noteOp: seenCut ? 1 : 0,
+      note: seenCut && thrMin !== null ? 'Edge found: at ' + thrMin + ' min the ' + w.crewWord + '’s limit runs out and ' + (w.trip === 'leg' ? 'leg' : 'trip') + ' 4 is cut. At ' + (thrMin - 1) + ' it still runs. (Computed by scanning the slider through R1–R4.)' : ''
+    };
+
+    return {
+      queries: queries, how: how, howBg: how ? '#14181F' : '#FFFFFF', howFg: how ? '#FFFFFF' : '#14181F',
+      toggleHow: () => this.setState({ how: !(this.state && this.state.how) }),
+      stamp: { line: asm < 6 ? 'assembling for this question… ' + asm + ' of 6 components' : net.stamp, note: net.note, rev: net.rev }, revOff: true,
+      pertSub: how ? 'your input · hypothetical' : 'your input', hours: hours, axisTag: net.axisTag, opP: opP, opA: opA, opTurn: opTurn, opC: opC, opX: opX, opAct: opAct, opCAct: opCAct,
+      pert: pert, w: w, fired: fired, cap: { a: capA, c: capC, p: capP },
+      tag: { sched: how ? 'scheduled · AUTHORED · outline' : 'scheduled', act: how ? 'actual · COMPUTED · toned' : 'actual', late: how ? w.lateTag + ' · COMPUTED' : w.lateTag, turn: 'turns', duty: how ? w.dutyTag + ' · AUTHORED limit' : w.dutyTag },
+      bars: bars, slk: slk, act: act, turns: turns, cut: cutObj, crew: crew, pax: pax, comps: comps, rules: rules,
+      compHead: 'ASSEMBLED FROM 6 COMPONENTS', key: keyRows, keyOp: how ? 1 : 0,
+      ctlOff: asm < 6, btn40: net.btn, sliderTag: net.sliderTag, sliderAria: net.sliderTag,
+      press40: () => { if ((this.state && this.state.asm || 0) >= 6) this.setState({ target: 40 }); },
+      clearHold: () => this.setState({ target: 0 }),
+      hold: H, holdText: H + ' minutes',
+      onSlide: (e) => {
+        const v = Math.max(0, Math.min(120, parseInt(e.target.value, 10) || 0));
+        const patch = { hold: v, target: null };
+        if (this.sim(net, v).cutFrom !== null) patch.seenCut = true;
+        this.setState(patch);
+      },
+      ticks: ticks, thr: thr
+    };
+  }
+}
+</script>
+</body>
+</html>

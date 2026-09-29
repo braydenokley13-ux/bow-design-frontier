@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Scale Spine</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&amp;family=Karla:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F5EFE2;color:#1B1712;font-family:'Karla',sans-serif}
+button{font-family:'Karla',sans-serif;color:#1B1712;cursor:pointer}
+button:focus-visible{outline:3px solid #A8402F;outline-offset:2px}
+.btn{border:1.5px solid #1B1712;border-radius:0;min-height:44px;background:transparent;padding:0 12px;font-size:15px;font-weight:700;transition:background .2s,color .2s}
+.btn:hover{filter:brightness(.93)}
+.sw{display:inline-block;width:18px;height:18px;box-sizing:border-box;flex:none}
+.kick{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4D463C}
+.serif{font-family:'Crimson Pro',serif}
+.plate{position:absolute;left:0;top:0;width:736px;height:560px}
+.plate>svg{display:block}
+@keyframes inDeep{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+@keyframes outDeep{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(2.8)}}
+@keyframes inUp{from{opacity:0;transform:scale(2.8)}to{opacity:1;transform:scale(1)}}
+@keyframes outUp{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.4)}}
+@media (prefers-reduced-motion: reduce){.plate{animation:none !important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F5EFE2; color: #1B1712; font-family: 'Karla', sans-serif">
+
+ <div style="position: absolute; left: 32px; top: 10px; width: 420px">
+  <h1 class="serif" style="margin: 0; font-size: 38px; line-height: 1; font-weight: 600">The Scale Spine</h1>
+  <p class="serif" style="margin: 6px 0 0; font-size: 17px; font-style: italic; line-height: 1.25; color: #3A342C">One runner, one pace, seven scales down. Change the pace and watch every scale answer.</p>
+ </div>
+
+ <div style="position: absolute; left: 472px; top: 8px; width: 940px; pointer-events: none">
+  <span class="kick">The one state · pace</span>
+  <div role="group" aria-label="Pace" style="display: flex; margin-top: 4px; pointer-events: auto">
+  <sc-for list="{{paces}}" as="pc" hint-placeholder-count="4">
+   <button type="button" aria-pressed="{{pc.pressed}}" onClick="{{pc.pick}}" style="width: 128px; height: 44px; padding: 0; border: 1.5px solid #1B1712; border-left-width: {{pc.bl}}px; border-radius: 0; background: {{pc.bg}}; color: {{pc.fg}}; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: background .25s, color .25s">
+    <span style="font-size: 17px; font-weight: 700; line-height: 1.05">{{pc.name}}</span>
+    <span style="font-size: 11.5px; line-height: 1.2">{{pc.met}}</span>
+   </button>
+  </sc-for>
+  </div>
+  <div style="display: flex; align-items: center; gap: 8px; margin-top: 5px; font-size: 13px; line-height: 1.2"><span class="sw" style="width: 12px; height: 12px; background: #8C8374"></span><span>{{formula}}</span></div>
+ </div>
+
+ <div style="position: absolute; left: 1076px; top: 8px; width: 340px">
+  <span class="kick">Look with</span>
+  <div style="display: flex; gap: 10px; margin-top: 4px">
+  <button type="button" class="btn" aria-pressed="{{foP}}" onClick="{{toggleFollow}}" style="width: 178px; display: flex; align-items: center; gap: 8px; background: {{foBg}}; color: {{foFg}}"><span style="width: 12px; height: 12px; border-radius: 50%; background: #2A5DA8; box-shadow: 0 0 0 2px {{foRing}}; flex: none"></span>Follow the oxygen</button>
+  <button type="button" class="btn" aria-pressed="{{hwP}}" onClick="{{toggleHow}}" style="width: 152px; background: {{hwBg}}; color: {{hwFg}}">How do we know?</button>
+  </div>
+ </div>
+ <div style="position: absolute; left: 32px; right: 32px; top: 98px; height: 1px; background: #1B1712; opacity: .35"></div>
+
+ <nav aria-label="Scale spine" style="position: absolute; left: 24px; top: 108px; width: 264px; height: 644px">
+  <div style="position: absolute; left: 21px; top: 29px; width: 2px; height: 552px; background: #1B1712"></div>
+  <div style="position: absolute; left: 20px; top: 29px; width: 4px; height: 552px; background: #2A5DA8; opacity: {{fo}}; transition: opacity .4s"></div>
+  <sc-for list="{{stops}}" as="st" hint-placeholder-count="7">
+  <button type="button" aria-pressed="{{st.pressed}}" aria-label="{{st.aria}}" onClick="{{st.pick}}" style="position: absolute; left: 0; top: {{st.top}}px; width: 264px; height: 92px; padding: 0; text-align: left; border: 0; border-left: 4px solid {{st.bar}}; border-radius: 0; background: {{st.bg}}; transition: background .3s">
+   <span style="position: absolute; left: 9px; top: 20px; width: 18px; height: 18px; box-sizing: border-box; border-radius: 50%; border: 2px solid #1B1712; background: {{st.node}}; transition: background .3s"></span>
+   <span style="position: absolute; left: 14px; top: 25px; width: 8px; height: 8px; border-radius: 50%; background: #2A5DA8; opacity: {{st.dot}}; transition: opacity .4s"></span>
+   <span style="position: absolute; left: 42px; right: 8px; top: 9px; display: flex; flex-direction: column; gap: 2px">
+    <span style="display: flex; justify-content: space-between; align-items: baseline"><span class="serif" style="font-size: 22px; line-height: 1.05; font-weight: 600">{{st.name}}</span><span style="font-size: 12px; color: #4D463C">{{st.scale}}</span></span>
+    <span style="font-size: 13px; line-height: 1.25; color: #3A342C">{{st.sub}}</span>
+    <span style="display: flex; align-items: center; gap: 8px; margin-top: 5px"><span style="position: relative; width: 88px; height: 10px; box-sizing: border-box; border: 1px solid #1B1712; overflow: hidden; flex: none"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: {{st.w}}%; box-sizing: border-box; background: {{st.bg2}}; border: {{st.bd2}}; transition: width .5s"></span></span><span style="font-size: 12px; line-height: 1.15; font-weight: 700; min-width: 0">{{st.meter}}</span></span>
+   </span>
+   <span style="position: absolute; right: 8px; top: 34px; width: 20px; height: 20px; box-sizing: border-box; border-radius: 50%; border: {{st.bbd}}; background: {{st.bbg}}; color: {{st.bfg}}; font-size: 12px; font-weight: 700; line-height: 17px; text-align: center">{{st.badge}}</span>
+  </button>
+  </sc-for>
+ </nav>
+ <div style="position: absolute; left: 24px; top: 760px; width: 264px; display: flex; gap: 8px">
+  <button type="button" class="btn" onClick="{{zoomOut}}" aria-label="Zoom out one level" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10L8 5L13 10" fill="none" stroke="#1B1712" stroke-width="2"></path></svg>Zoom out</button>
+  <button type="button" class="btn" onClick="{{zoomIn}}" aria-label="Zoom in one level" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6L8 11L13 6" fill="none" stroke="#1B1712" stroke-width="2"></path></svg>Zoom in</button>
+ </div>
+ <p class="serif" style="position: absolute; left: 24px; top: 814px; width: 264px; margin: 0; font-size: 15px; font-style: italic; line-height: 1.3; color: #3A342C">Drawings are representational, not to scale between levels.</p>
+ <div style="position: absolute; left: 24px; top: 880px; background: #F5EFE2; font-size: 11px; letter-spacing: .05em; color: #4D463C">PROTOTYPE · DESIGN PROPOSAL · values: textbook approximations, as of 29 Sep 2026, verify before use</div>
+
+ <div style="position: absolute; left: 300px; top: 106px; width: 748px; height: 572px; box-sizing: border-box; border: 1.5px solid #1B1712; background: #FAF5E8"></div>
+ <section aria-label="Plate" style="position: absolute; left: 306px; top: 112px; width: 736px; height: 560px; overflow: hidden; background: #FAF5E8; box-shadow: 0 0 0 4px #FAF5E8, 0 0 0 5px rgba(27,23,18,.5)">
+  <sc-if value="{{p0.show}}" hint-placeholder-val="{{true}}">
+  <div class="plate" style="transform-origin: {{p0.ox}}px {{p0.oy}}px; animation: {{p0.anim}}">
+  <svg width="736" height="560" viewBox="0 0 736 560" role="img" font-family="Crimson Pro, serif" font-style="italic" font-size="16" fill="#1B1712" aria-label="A runner, with lungs, heart and thigh muscle marked">
+   <g style="opacity: {{dim}}; transition: opacity .45s ease">
+    <path d="M56 448H600" fill="none" stroke="#1B1712" stroke-width="1.3"></path>
+    <path d="M84 458H572" fill="none" stroke="#1B1712" stroke-opacity=".35" stroke-dasharray="2 9"></path>
+    <ellipse cx="300" cy="449" rx="150" ry="5" fill="#1B1712" fill-opacity=".1"></ellipse>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M318 290L284 372L208 392L190 376" stroke="#1B1712" stroke-width="29"></path>
+    <path d="M354 166L400 214L446 178" stroke="#1B1712" stroke-width="19"></path>
+    <path d="M318 290L284 372L208 392L190 376" stroke="#CDBE9B" stroke-width="24"></path>
+    <path d="M354 166L400 214L446 178" stroke="#CDBE9B" stroke-width="14"></path>
+    <path d="M360 150L374 126" stroke="#1B1712" stroke-width="21"></path>
+    <path d="M356 152L318 288" stroke="#1B1712" stroke-width="61"></path>
+    <path d="M360 150L374 126" stroke="#EADFC6" stroke-width="16"></path>
+    <path d="M356 152L318 288" stroke="#EADFC6" stroke-width="56"></path>
+    </g>
+    <circle cx="378" cy="108" r="26" fill="#EADFC6" stroke="#1B1712" stroke-width="2.5"></circle>
+    <path d="M402 101Q415 109 402 117" fill="#EADFC6" stroke="#1B1712" stroke-width="2" stroke-linecap="round"></path>
+    <circle cx="391" cy="101" r="2.2" fill="#1B1712"></circle>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M318 290L408 334L374 410L408 424" stroke="#1B1712" stroke-width="31"></path>
+    <path d="M350 166L302 204L288 250" stroke="#1B1712" stroke-width="19"></path>
+    <path d="M318 290L408 334L374 410L408 424" stroke="#EADFC6" stroke-width="26"></path>
+    <path d="M350 166L302 204L288 250" stroke="#EADFC6" stroke-width="14"></path>
+    </g>
+    <path d="M370 136L350 172M350 172L340 186M350 172L357 188" fill="none" stroke="#1B1712" stroke-width="2.4" stroke-linecap="round"></path>
+    <g transform="{{d0.lu}}"><ellipse cx="344" cy="204" rx="16" ry="32" transform="rotate(10 344 204)" fill="#F0D4C9" stroke="#1B1712" stroke-width="1.2"></ellipse></g>
+    <g transform="{{d0.hb}}"><path d="M342 256C324 246 324 228 335 228C339 228 342 232 342 235C342 232 346 228 350 228C361 228 360 246 342 256Z" fill="#A8402F" stroke="#1B1712" stroke-width="1.2"></path></g>
+    <path d="M342 256C336 268 328 278 326 292C340 304 370 318 396 330" fill="none" stroke="#8B2F22" stroke-width="3.4" stroke-linecap="round"></path>
+    <ellipse cx="363" cy="312" rx="47" ry="12.5" transform="rotate(26 363 312)" fill="{{d0.mq}}" stroke="#1B1712" stroke-width="1.2" style="transition: fill .5s"></ellipse>
+    <path d="M324 298L402 336" fill="none" stroke="#1B1712" stroke-opacity=".35" stroke-width="1"></path>
+    <g fill="none" stroke="#1B1712" stroke-width=".8"><path d="M466 150L364 190"></path><path d="M482 244L364 240"></path><path d="M490 318L400 318"></path></g>
+    <text x="472" y="150">lungs</text><text x="488" y="248">heart</text><text x="496" y="322">quadriceps</text>
+    <g fill="none" stroke="#1B1712" stroke-width="1.2"><path d="M600 83V448M594 83H606M594 448H606"></path><path d="M556 516H676M556 510V522M676 510V522"></path></g>
+    <g font-family="Karla, sans-serif" font-style="normal" font-size="12" fill="#3A342C"><text x="624" y="270" transform="rotate(-90 624 270)" text-anchor="middle">runner ≈ 1.7 m</text><text x="616" y="506" text-anchor="middle">bar ≈ 0.5 m</text></g>
+   </g>
+   <g style="opacity: {{ox0}}; transition: opacity .45s ease">
+    <path d="M406 111C392 118 376 132 366 150L350 188L344 214L342 236C336 262 326 276 326 292C340 304 370 318 396 330" fill="none" stroke="#2A5DA8" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="1 8"></path>
+    <path d="M456 92L420 106M420 106L430 98M420 106L431 111M458 124L420 116M420 116L431 108M420 116L432 121" fill="none" stroke="#2A5DA8" stroke-width="2.4" stroke-linecap="round"></path>
+    <path d="M440 280L332 288" fill="none" stroke="#2A5DA8" stroke-width=".9"></path>
+    <g fill="#2A5DA8" stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round"><text x="462" y="100">O₂ in</text><text x="446" y="284">carried by haemoglobin</text><text x="430" y="372">burned in the muscle</text></g>
+   </g>
+   <path d="M293 284V266H311M413 266H431V284M431 340V358H413M311 358H293V340M355 312h14M362 305v14" fill="none" stroke="#1B1712" stroke-width="2.6" stroke-linecap="square"></path><path d="M190 308L293 312" fill="none" stroke="#1B1712" stroke-width=".8"></path><g stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round"><text x="40" y="312" text-anchor="start" font-size="15">next: the quadriceps</text></g>
+  </svg>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{p1.show}}" hint-placeholder-val="{{false}}">
+  <div class="plate" style="transform-origin: {{p1.ox}}px {{p1.oy}}px; animation: {{p1.anim}}">
+  <svg width="736" height="560" viewBox="0 0 736 560" role="img" font-family="Crimson Pro, serif" font-style="italic" font-size="16" fill="#1B1712" aria-label="The quadriceps, its artery, and a blood-flow gauge">
+   <g style="opacity: {{dim}}; transition: opacity .45s ease" stroke-linejoin="round">
+    <path d="M240 112C160 200 152 330 254 424L282 428L264 372C234 296 236 202 270 128Z" fill="#C9705C" stroke="#1B1712" stroke-width="1.3"></path>
+    <path d="M350 236C412 296 398 384 316 432L298 428L326 372C348 326 352 280 342 244Z" fill="#D58C79" stroke="#1B1712" stroke-width="1.3"></path>
+    <path d="M300 82C262 168 250 282 272 372L300 432L328 372C350 282 338 168 300 82Z" fill="#DE9885" stroke="#1B1712" stroke-width="1.3"></path>
+    <g fill="none" stroke="#1B1712" stroke-opacity=".38" stroke-width="1"><path d="M300 98V420M300 130L282 158M300 130L318 158M300 176L278 208M300 176L322 208M300 226L275 262M300 226L325 262M300 280L277 312M300 280L323 312M300 330L283 356M300 330L317 356"></path><path d="M262 150C214 230 208 320 262 400M244 170C196 250 194 320 240 380M284 150C250 230 246 320 268 380"></path><path d="M338 262C392 320 372 388 310 420M330 282C374 330 360 384 316 414"></path></g>
+    <path d="M282 424L318 424L310 460L290 460Z" fill="#EFE6D0" stroke="#1B1712" stroke-width="1.2"></path>
+    <ellipse cx="300" cy="478" rx="21" ry="18" fill="#EFE6D0" stroke="#1B1712" stroke-width="1.3"></ellipse>
+    <path d="M396 58C388 130 376 210 360 280C346 340 332 392 318 430" fill="none" stroke="#7E2A1E" stroke-linecap="round" style="stroke-width: {{d1.aw}}px; transition: stroke-width .5s"></path>
+    <path d="M388 126C360 132 334 142 314 160M376 190C352 200 330 210 312 228M364 250C344 260 326 268 308 284M350 312C334 320 320 328 306 342" fill="none" stroke="#7E2A1E" stroke-linecap="round" style="stroke-width: {{d1.bw}}px; transition: stroke-width .5s"></path>
+    <g fill="none" stroke="#1B1712" stroke-width=".8"><path d="M146 196L268 196"></path><path d="M144 296L176 296"></path><path d="M426 346L402 346"></path><path d="M418 82L400 74"></path><path d="M336 442L314 442"></path><path d="M332 488L320 484"></path></g>
+    <text x="140" y="200" text-anchor="end">rectus femoris</text><text x="138" y="300" text-anchor="end">vastus lateralis</text><text x="430" y="350">vastus medialis</text><text x="422" y="86">femoral artery</text><text x="340" y="446">patellar tendon</text><text x="336" y="492">kneecap</text>
+    <rect x="606" y="96" width="44" height="360" fill="none" stroke="#1B1712" stroke-width="2"></rect>
+    <path d="M650 425H662" fill="none" stroke="#1B1712" stroke-width="1.2"></path>
+    <g font-family="Karla, sans-serif" font-style="normal" font-size="12" fill="#3A342C"><text x="590" y="86">blood flow, relative</text><text x="658" y="112">ceiling</text><text x="666" y="430">rest</text></g>
+    <g fill="none" stroke="#1B1712" stroke-width="1.2"><path d="M556 516H676M556 510V522M676 510V522"></path></g>
+    <text x="616" y="506" text-anchor="middle" font-family="Karla, sans-serif" font-style="normal" font-size="12" fill="#3A342C">bar ≈ 14 cm · muscle ≈ 40 cm</text>
+   </g>
+   <g style="opacity: {{ox1}}; transition: opacity .45s ease">
+    <path d="M396 58C390 110 384 150 372 200C352 214 330 226 312 240" fill="none" stroke="#2A5DA8" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="1 8"></path>
+    <g fill="#2A5DA8" stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round"><text x="414" y="52">oxygen-rich blood in</text><text x="360" y="252">O₂ enters the muscle</text></g>
+   </g>
+   <path d="M252 225V207H270M330 207H348V225M348 275V293H330M270 293H252V275M293 250h14M300 243v14" fill="none" stroke="#1B1712" stroke-width="2.6" stroke-linecap="square"></path><g stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round"><text x="356" y="200" text-anchor="start" font-size="15">next: fibres and capillaries</text></g>
+  </svg>
+  <div style="position: absolute; left: 608px; top: 98px; width: 40px; height: 356px; overflow: hidden"><div style="position: absolute; left: 0; right: 0; bottom: 0; height: {{d1.pct}}%; background: transparent; border: 2px solid #1B1712; box-sizing: border-box; transition: height .5s ease"></div></div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{p2.show}}" hint-placeholder-val="{{false}}">
+  <div class="plate" style="transform-origin: {{p2.ox}}px {{p2.oy}}px; animation: {{p2.anim}}">
+  <svg width="736" height="560" viewBox="0 0 736 560" role="img" font-family="Crimson Pro, serif" font-style="italic" font-size="16" fill="#1B1712" aria-label="Muscle fibres cut across, ringed by open and closed capillaries">
+   <defs><marker id="mk2b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="3.6" markerHeight="3.6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2A5DA8"></path></marker></defs>
+   <g style="opacity: {{dim}}; transition: opacity .45s ease" stroke-linejoin="round">
+    <rect x="90" y="70" width="500" height="430" fill="#EBDDBF"></rect>
+    <g stroke="#1B1712" stroke-width="1.4" style="transition: fill-opacity .5s">
+    <g fill="#CF7B67" fill-opacity="{{d2.f0}}" style="transition: fill-opacity .5s"><path d="M373.7 223.4Q407.4 243.1 407.1 281.9Q406.8 320.6 373.4 341.3Q340 362 307.2 340.9Q274.5 319.8 272.8 281Q271.1 242.2 305.6 223Q340 203.7 373.7 223.4Z"></path><path d="M228.3 224.3Q262.1 243 262.2 282.1Q262.3 321.2 228.4 339.6Q194.5 358.1 160.9 339.5Q127.3 320.8 126.2 281.4Q125.1 241.9 159.8 223.8Q194.5 205.7 228.3 224.3Z"></path><path d="M301.1 97.9Q334.9 116.9 335 156.1Q335.1 195.2 301.2 215.5Q267.3 235.7 234.6 214.7Q201.9 193.8 200.4 155.2Q199 116.6 233.1 97.7Q267.3 78.9 301.1 97.9Z"></path></g>
+    <g fill="#E2A08F" fill-opacity="{{d2.f1}}" style="transition: fill-opacity .5s"><path d="M518.8 224.1Q552.1 243.6 553.5 282.8Q555 322.1 520.2 341.3Q485.5 360.6 452.6 340.3Q419.7 320 419.5 281.9Q419.3 243.8 452.4 224.2Q485.5 204.6 518.8 224.1Z"></path><path d="M447.2 349.2Q481.7 368.2 481.1 407.6Q480.5 447.1 446.6 467.6Q412.8 488 379.5 467.2Q346.2 446.4 346.4 408.1Q346.6 369.8 379.7 350Q412.8 330.2 447.2 349.2Z"></path></g>
+    <g fill="#EDBFB0" fill-opacity="{{d2.f3}}" style="transition: fill-opacity .5s"><path d="M301.6 348.9Q335.9 368.4 335.5 407.8Q335.1 447.2 301.2 467.1Q267.3 486.9 232.4 467.6Q197.6 448.2 198.3 408.4Q198.9 368.5 233.1 349Q267.3 329.4 301.6 348.9Z"></path><path d="M446.6 97.4Q480.4 116.9 480.5 156.1Q480.6 195.2 446.7 213.5Q412.8 231.8 379 213.4Q345.2 195 344.2 155.4Q343.1 115.8 377.9 96.8Q412.8 77.8 446.6 97.4Z"></path></g>
+    </g>
+    <path d="M367.9 233.1Q395.8 249.8 396.5 282.4Q397.2 315 368.6 331.1Q340 347.2 311.8 330.9Q283.5 314.6 284 282.3Q284.5 249.9 312.2 233.2Q340 216.4 367.9 233.1Z" fill="none" stroke="#5F7454" stroke-width="5" stroke-dasharray="0 9" stroke-linecap="round"></path>
+    <ellipse cx="302" cy="240" rx="10" ry="5" transform="rotate(-28 302 240)" fill="#8A7E68" stroke="#1B1712" stroke-width="1"></ellipse>
+    <g font-family="Karla, sans-serif" font-style="normal" font-size="11" fill="#1B1712" text-anchor="middle"><text x="340" y="298">type I</text><text x="194" y="286">type I</text><text x="267" y="160">type I</text><text x="485" y="286">type IIa</text><text x="413" y="412">type IIa</text><text x="267" y="412">type IIx</text><text x="413" y="160">type IIx</text></g>
+    <g stroke="#1B1712" stroke-width="1.4"><circle cx="340" cy="198" r="{{d2.c0r}}" fill="{{d2.c0f}}" stroke-dasharray="{{d2.c0d}}"></circle><circle cx="412.75" cy="240" r="{{d2.c1r}}" fill="{{d2.c1f}}" stroke-dasharray="{{d2.c1d}}"></circle><circle cx="412.75" cy="324" r="{{d2.c2r}}" fill="{{d2.c2f}}" stroke-dasharray="{{d2.c2d}}"></circle><circle cx="340" cy="366" r="{{d2.c3r}}" fill="{{d2.c3f}}" stroke-dasharray="{{d2.c3d}}"></circle><circle cx="267.25" cy="324" r="{{d2.c4r}}" fill="{{d2.c4f}}" stroke-dasharray="{{d2.c4d}}"></circle><circle cx="267.25" cy="240" r="{{d2.c5r}}" fill="{{d2.c5f}}" stroke-dasharray="{{d2.c5d}}"></circle><circle cx="558.25" cy="240" r="{{d2.c6r}}" fill="{{d2.c6f}}" stroke-dasharray="{{d2.c6d}}"></circle><circle cx="121.75" cy="324" r="{{d2.c7r}}" fill="{{d2.c7f}}" stroke-dasharray="{{d2.c7d}}"></circle></g>
+    <g fill="none" stroke="#1B1712" stroke-width=".8"><path d="M494 138L462 152"></path><path d="M580 222L568 234"></path></g>
+    <text x="498" y="134">muscle fibre, cut across</text><text x="566" y="200">open capillary,</text><text x="566" y="218">red cells inside</text>
+    <g fill="none" stroke="#1B1712" stroke-width="1.2"><path d="M556 528H676M556 522V534M676 522V534"></path></g>
+    <g font-family="Karla, sans-serif" font-style="normal" font-size="12" fill="#3A342C"><text x="616" y="518" text-anchor="middle">bar ≈ 50 µm</text><text x="88" y="530">dashed ring: capillary drawn closed</text></g>
+   </g>
+   <g style="opacity: {{ox2}}; transition: opacity .45s ease">
+    <g stroke="#2A5DA8" stroke-linecap="round" marker-end="url(#mk2b)" style="stroke-width: {{d2.aw}}px; transition: stroke-width .5s ease"><line x1="340" y1="212" x2="340" y2="250.1" style="opacity: {{d2.a0}}; transition: opacity .4s ease"></line><line x1="400.6" y1="247" x2="367.6" y2="266" style="opacity: {{d2.a1}}; transition: opacity .4s ease"></line><line x1="400.6" y1="317" x2="367.6" y2="298" style="opacity: {{d2.a2}}; transition: opacity .4s ease"></line><line x1="340" y1="352" x2="340" y2="313.9" style="opacity: {{d2.a3}}; transition: opacity .4s ease"></line><line x1="279.4" y1="317" x2="312.4" y2="298" style="opacity: {{d2.a4}}; transition: opacity .4s ease"></line><line x1="279.4" y1="247" x2="312.4" y2="266" style="opacity: {{d2.a5}}; transition: opacity .4s ease"></line><line x1="546.1" y1="247" x2="514.6" y2="265.2" style="opacity: {{d2.a6}}; transition: opacity .4s ease"></line><line x1="133.9" y1="317" x2="165.4" y2="298.8" style="opacity: {{d2.a7}}; transition: opacity .4s ease"></line></g>
+    <g fill="#2A5DA8" stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round"><text x="566" y="304">oxygen leaves</text><text x="566" y="322">the capillary and</text><text x="566" y="340">diffuses in</text></g>
+   </g>
+   <path d="M254 206V188H272M408 188H426V206M426 358V376H408M272 376H254V358M333 282h14M340 275v14" fill="none" stroke="#1B1712" stroke-width="2.6" stroke-linecap="square"></path><g stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round"><text x="434" y="182" text-anchor="start" font-size="15">next: one fibre</text></g>
+  </svg>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{p3.show}}" hint-placeholder-val="{{false}}">
+  <div class="plate" style="transform-origin: {{p3.ox}}px {{p3.oy}}px; animation: {{p3.anim}}">
+  <svg width="736" height="560" viewBox="0 0 736 560" role="img" font-family="Crimson Pro, serif" font-style="italic" font-size="16" fill="#1B1712" aria-label="One muscle fibre with mitochondria, and a capillary below">
+   <defs>
+    <marker id="mk3f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="3.4" markerHeight="3.4" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#9A7424"></path></marker>
+    <marker id="mk3b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2A5DA8"></path></marker>
+   </defs>
+   <g style="opacity: {{dim}}; transition: opacity .45s ease">
+    <path d="M64 132H672C692 190 660 214 680 272C700 330 662 354 674 410H64C44 354 78 330 56 272C38 214 76 190 64 132Z" fill="#F3DDD3" stroke="#1B1712" stroke-width="1.6"></path>
+    <path d="M76 190H664M76 270H664M76 350H664" fill="none" stroke="#EDBFB0" stroke-width="40"></path><path d="M76 190H664M76 270H664M76 350H664" fill="none" stroke="#D99483" stroke-width="40" stroke-dasharray="34 22"></path><path d="M76 190H664M76 270H664M76 350H664" fill="none" stroke="#1B1712" stroke-opacity=".55" stroke-width="40" stroke-dasharray="1.4 54.6" stroke-dashoffset="-44.3"></path>
+    <path d="M86 230a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM176 230a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM266 230a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM356 230a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM446 230a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM536 230a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM126 310a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM226 310a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM326 310a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM426 310a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM526 310a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM616 310a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM146 156a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM306 156a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM476 156a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM106 386a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM266 386a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM436 386a24 12 0 1 0 48 0a24 12 0 1 0 -48 0ZM596 386a24 12 0 1 0 48 0a24 12 0 1 0 -48 0Z" fill="#C5D0B8" stroke="#1B1712" stroke-width="1.1"></path>
+    <path d="M100 223V237M110 221V233M120 225V239M190 223V237M200 221V233M210 225V239M280 223V237M290 221V233M300 225V239M370 223V237M380 221V233M390 225V239M460 223V237M470 221V233M480 225V239M550 223V237M560 221V233M570 225V239M140 303V317M150 301V313M160 305V319M240 303V317M250 301V313M260 305V319M340 303V317M350 301V313M360 305V319M440 303V317M450 301V313M460 305V319M540 303V317M550 301V313M560 305V319M630 303V317M640 301V313M650 305V319M160 149V163M170 147V159M180 151V165M320 149V163M330 147V159M340 151V165M490 149V163M500 147V159M510 151V165M120 379V393M130 377V389M140 381V395M280 379V393M290 377V389M300 381V395M450 379V393M460 377V389M470 381V395M610 379V393M620 377V389M630 381V395" fill="none" stroke="#5F7454" stroke-width="1.4"></path>
+    <ellipse cx="250" cy="156" rx="34" ry="9" fill="#BDB29B" stroke="#1B1712" stroke-width="1.1"></ellipse>
+    <ellipse cx="540" cy="386" rx="34" ry="9" fill="#BDB29B" stroke="#1B1712" stroke-width="1.1"></ellipse>
+    <rect x="0" y="442" width="736" height="40" fill="#E9B8A8" stroke="#1B1712" stroke-width="1.4"></rect>
+    <path d="M210 438V388" fill="none" stroke="#9A7424" stroke-linecap="round" marker-end="url(#mk3f)" style="stroke-width: {{d3.gw}}px; transition: stroke-width .5s"></path>
+    <path d="M380 438V388" fill="none" stroke="#9A7424" stroke-linecap="round" marker-end="url(#mk3f)" style="stroke-width: {{d3.fw}}px; transition: stroke-width .5s"></path>
+    <ellipse cx="590" cy="272" rx="{{d3.lx}}" ry="{{d3.ly}}" fill="none" stroke="#1B1712" stroke-width="2" style="opacity: {{d3.lo}}"></ellipse>
+    <g fill="none" stroke="#1B1712" stroke-width=".8"><path d="M120 104L128 134"></path><path d="M250 122V146"></path><path d="M476 122L500 176"></path><path d="M600 512V484"></path></g>
+    <text x="40" y="100">sarcolemma, the cell membrane</text><text x="222" y="118">nucleus</text><text x="384" y="118">glycolysis: cytoplasm, no oxygen</text><text x="222" y="432">glucose</text><text x="392" y="432">fatty acids</text><text x="560" y="528">capillary</text><text x="40" y="502">mitochondria drawn far larger than true scale</text>
+    <g stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round" style="opacity: {{d3.lt}}"><text x="590" y="196" text-anchor="middle">lactate (authored)</text></g>
+    <g fill="none" stroke="#1B1712" stroke-width="1.2"><path d="M556 520H676M556 514V526M676 514V526"></path></g>
+    <text x="616" y="510" text-anchor="middle" font-family="Karla, sans-serif" font-style="normal" font-size="12" fill="#3A342C">bar ≈ 30 µm</text>
+   </g>
+   <g style="opacity: {{ox3}}; transition: opacity .45s ease">
+    <path d="M300 438C300 400 336 362 350 326" fill="none" stroke="#2A5DA8" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="1 8" marker-end="url(#mk3b)"></path>
+    <g fill="#2A5DA8" stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round"><text x="316" y="428">oxygen from the red cells</text></g>
+   </g>
+   <path d="M296 302V284H314M386 284H404V302M404 322V340H386M314 340H296V322M343 312h14M350 305v14" fill="none" stroke="#1B1712" stroke-width="2.6" stroke-linecap="square"></path><g stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round"><text x="300" y="278" text-anchor="start" font-size="15">next: a mitochondrion</text></g>
+  </svg>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{p4.show}}" hint-placeholder-val="{{false}}">
+  <div class="plate" style="transform-origin: {{p4.ox}}px {{p4.oy}}px; animation: {{p4.anim}}">
+  <svg width="736" height="560" viewBox="0 0 736 560" role="img" font-family="Crimson Pro, serif" font-style="italic" font-size="16" fill="#1B1712" aria-label="A mitochondrion with folded inner membrane">
+   <defs><marker id="mk4b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2A5DA8"></path></marker></defs>
+   <g style="opacity: {{dim}}; transition: opacity .45s ease">
+    <ellipse cx="368" cy="272" rx="292" ry="152" fill="#E9E4CF" stroke="#5F7454" stroke-width="3"></ellipse>
+    <path d="M100 272L106 244.6L114 230.5L122 220.4L130 212.2L138 205.3L146 199.2L154 193.7L162 188.8L170 184.4L180 179.4L180 255.7A8 8 0 0 0 196 255.7L196 172.3L202 169.9L210 167L218 164.3L226 161.7L234 159.4L242 157.3L250 155.3L260 153L260 231.4A8 8 0 0 0 276 231.4L276 149.9L282 148.9L290 147.6L298 146.5L306 145.5L314 144.7L322 143.9L330 143.3L340 142.7L340 222.4A8 8 0 0 0 356 222.4L356 142.1L362 142L370 142L378 142.1L386 142.3L394 142.6L402 143.1L410 143.6L420 144.5L420 225.3A8 8 0 0 0 436 225.3L436 146.3L442 147.1L450 148.2L458 149.5L466 151L474 152.6L482 154.3L490 156.3L500 158.9L500 241.1A8 8 0 0 0 516 241.1L516 163.6L522 165.6L530 168.4L538 171.5L546 174.8L554 178.4L562 182.3L570 186.6L580 192.5L580 277.8A8 8 0 0 0 596 277.8L596 203.7L602 208.6L610 216.1L618 225.2L626 236.8L636 272L626 307.2L618 318.8L610 327.9L602 335.4L594 341.9L586 347.6L578 352.8L570 357.4L562 361.7L556 364.6L556 288.3A8 8 0 0 0 540 288.3L540 371.7L530 375.6L522 378.4L514 381L506 383.4L498 385.7L490 387.7L482 389.7L476 391L476 312.6A8 8 0 0 0 460 312.6L460 394.1L450 395.8L442 396.9L434 398L426 398.9L418 399.7L410 400.4L402 400.9L396 401.3L396 321.6A8 8 0 0 0 380 321.6L380 401.9L370 402L362 402L354 401.8L346 401.6L338 401.2L330 400.7L322 400.1L316 399.5L316 318.7A8 8 0 0 0 300 318.7L300 397.7L290 396.4L282 395.1L274 393.7L266 392.2L258 390.5L250 388.7L242 386.7L236 385.1L236 302.9A8 8 0 0 0 220 302.9L220 380.4L210 377L202 374.1L194 370.9L186 367.4L178 363.7L170 359.6L162 355.2L156 351.5L156 266.2A8 8 0 0 0 140 266.2L140 340.3L130 331.8L122 323.6L114 313.5L106 299.4Z" fill="#DCE3CD" stroke="#5F7454" stroke-width="3" stroke-linejoin="round"></path>
+    <path d="M368 248A20 20 0 1 1 350 259M345 254L350 259L356 255" fill="none" stroke="#9A7424" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+    <g fill="none" stroke="#1B1712" stroke-width=".8"><path d="M100 116L158 162"></path><path d="M268 102V170"></path><path d="M556 112L520 152"></path><path d="M516 456L486 392"></path><path d="M330 458V300"></path></g>
+    <text x="24" y="112">outer membrane</text><text x="180" y="96">cristae: folds of the inner membrane</text><text x="560" y="108">intermembrane space</text><text x="500" y="474">inner membrane</text><text x="330" y="478" text-anchor="middle">matrix, where the citric acid cycle runs</text>
+    <g fill="none" stroke="#1B1712" stroke-width="1.2"><path d="M556 520H676M556 514V526M676 514V526"></path></g>
+    <text x="616" y="510" text-anchor="middle" font-family="Karla, sans-serif" font-style="normal" font-size="12" fill="#3A342C">bar ≈ 0.2 µm · whole ≈ 1 µm</text>
+   </g>
+   <g style="opacity: {{ox4}}; transition: opacity .45s ease">
+    <path d="M28 272H100C190 290 280 262 334 222L340 206" fill="none" stroke="#2A5DA8" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="1 8" marker-end="url(#mk4b)"></path>
+    <g fill="#2A5DA8" stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round"><text x="16" y="256">oxygen in</text><text x="390" y="196">O₂ used here</text></g>
+   </g>
+   <path d="M318 152V134H336M360 134H378V152M378 230V248H360M336 248H318V230M341 191h14M348 184v14" fill="none" stroke="#1B1712" stroke-width="2.6" stroke-linecap="square"></path><g stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round"><text x="386" y="156" text-anchor="start" font-size="15">next: the inner membrane</text></g>
+  </svg>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{p5.show}}" hint-placeholder-val="{{false}}">
+  <div class="plate" style="transform-origin: {{p5.ox}}px {{p5.oy}}px; animation: {{p5.anim}}">
+  <svg width="736" height="560" viewBox="0 0 736 560" role="img" font-family="Crimson Pro, serif" font-style="italic" font-size="16" fill="#1B1712" aria-label="Inner membrane with complexes I to IV and ATP synthase">
+   <defs>
+    <marker id="mk5k" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#1B1712"></path></marker>
+    <marker id="mk5b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2A5DA8"></path></marker>
+   </defs>
+   <g style="opacity: {{dim}}; transition: opacity .45s ease">
+    <rect x="0" y="96" width="736" height="134" fill="#EFEAD3"></rect>
+    <rect x="0" y="290" width="736" height="200" fill="#E6E9D3"></rect>
+    <rect x="0" y="230" width="736" height="60" fill="#DCE3CD"></rect>
+    <path d="M0 260H736" fill="none" stroke="#5F7454" stroke-opacity=".35" stroke-width="30" stroke-dasharray="1 10"></path>
+    <path d="M0 229H736M0 291H736" fill="none" stroke="#5F7454" stroke-width="9" stroke-dasharray="0 11" stroke-linecap="round"></path>
+    <g stroke="#1B1712" stroke-width="1.3" stroke-linejoin="round">
+    <path d="M64 232Q64 214 88 214H176Q198 214 198 238V282Q198 300 176 300H132V376Q132 386 122 386H90Q80 386 80 376V300Q64 296 64 282Z" fill="#B8C6AD"></path>
+    <path d="M226 234Q226 226 236 226H268Q278 226 278 234V344Q278 350 272 350H232Q226 350 226 344Z" fill="#C9D3BE"></path>
+    <ellipse cx="312" cy="258" rx="15" ry="9" fill="#8FA383"></ellipse>
+    <path d="M338 232Q338 208 364 206H394Q420 208 420 232V288Q420 314 394 316H364Q338 314 338 288Z" fill="#B8C6AD"></path>
+    <circle cx="456" cy="210" r="10" fill="#8FA383"></circle>
+    <path d="M488 232Q488 222 500 222H540Q552 222 552 232V292Q552 306 540 306H500Q488 306 488 292Z" fill="#B8C6AD"></path>
+    <rect x="624" y="232" width="46" height="58" rx="6" fill="#8FA383"></rect>
+    <rect x="642" y="290" width="10" height="26" fill="#3A342C"></rect>
+    <circle cx="647" cy="330" r="20" fill="#C5D0B8"></circle><circle cx="633" cy="354" r="20" fill="#C5D0B8"></circle><circle cx="661" cy="354" r="20" fill="#C5D0B8"></circle>
+    </g>
+    <path d="M96 388L106 332L136 272L312 262L378 262L456 214L520 262" fill="none" stroke="#1B1712" stroke-opacity=".6" stroke-width="1.3" stroke-dasharray="4 4"></path>
+    <path d="M176 322V160M404 322V160M536 322V160" fill="none" stroke="#1B1712" stroke-linecap="round" marker-end="url(#mk5k)" style="stroke-width: {{d5.hw}}px; transition: stroke-width .5s"></path>
+    <g font-size="22" font-weight="600" text-anchor="middle"><text x="134" y="266">I</text><text x="252" y="272">II</text><text x="379" y="270">III</text><text x="520" y="272">IV</text></g>
+    <g font-family="Karla, sans-serif" font-style="normal" font-size="11" fill="#1B1712" text-anchor="middle"><text x="312" y="262">Q</text><text x="456" y="214">c</text><text x="252" y="292">no pump</text></g>
+    <text x="34" y="124">intermembrane space: protons crowd here</text><text x="34" y="462">matrix: fewer protons</text><text x="44" y="410">NADH in</text><text x="647" y="398" text-anchor="middle">ATP synthase</text>
+    <circle cx="40" cy="522" r="5" fill="#FAF5E8" stroke="#1B1712" stroke-width="1.5"></circle><circle cx="170" cy="522" r="2.6" fill="#1B1712"></circle>
+    <g font-family="Karla, sans-serif" font-style="normal" font-size="12" fill="#3A342C"><text x="52" y="526">proton, H⁺</text><text x="180" y="526">electron</text><text x="616" y="510" text-anchor="middle">bar ≈ 10 nm</text></g>
+    <path d="M556 520H676M556 514V526M676 514V526" fill="none" stroke="#1B1712" stroke-width="1.2"></path>
+   </g>
+   <g style="opacity: {{ox5}}; transition: opacity .45s ease">
+    <path d="M468 440C486 396 508 350 520 312" fill="none" stroke="#2A5DA8" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="1 8" marker-end="url(#mk5b)"></path>
+    <path d="M544 310C560 346 572 378 578 408" fill="none" stroke="#2A5DA8" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="1 8" marker-end="url(#mk5b)"></path>
+    <g fill="#2A5DA8" stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round"><text x="440" y="458" font-size="18" font-weight="600">O₂</text><text x="558" y="432" font-size="18" font-weight="600">2 H₂O</text><text x="250" y="492" font-size="17">at Complex IV: O₂ + 4 e⁻ + 4 H⁺ → 2 H₂O</text></g>
+   </g>
+   <path d="M604 234V216H622M672 216H690V234M690 368V386H672M622 386H604V368M640 301h14M647 294v14" fill="none" stroke="#1B1712" stroke-width="2.6" stroke-linecap="square"></path><g stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round"><text x="598" y="208" text-anchor="end" font-size="15">next: ATP synthase</text></g>
+  </svg>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{p6.show}}" hint-placeholder-val="{{false}}">
+  <div class="plate" style="transform-origin: {{p6.ox}}px {{p6.oy}}px; animation: {{p6.anim}}">
+  <svg width="736" height="560" viewBox="0 0 736 560" role="img" font-family="Crimson Pro, serif" font-style="italic" font-size="16" fill="#1B1712" aria-label="ATP synthase from the side and from the matrix end">
+   <defs><marker id="mk6f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="3.4" markerHeight="3.4" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#9A7424"></path></marker></defs>
+   <g style="opacity: {{dim}}; transition: opacity .45s ease" stroke-linejoin="round">
+    <rect x="0" y="80" width="484" height="70" fill="#EFEAD3"></rect>
+    <rect x="0" y="190" width="484" height="310" fill="#E6E9D3"></rect>
+    <rect x="0" y="150" width="484" height="40" fill="#DCE3CD"></rect>
+    <path d="M0 170H484" fill="none" stroke="#5F7454" stroke-opacity=".35" stroke-width="20" stroke-dasharray="1 10"></path>
+    <path d="M0 149H484M0 191H484" fill="none" stroke="#5F7454" stroke-width="9" stroke-dasharray="0 11" stroke-linecap="round"></path>
+    <path d="M486 90V500" fill="none" stroke="#1B1712" stroke-opacity=".3" stroke-width="1"></path>
+    <ellipse cx="196" cy="300" rx="42" ry="66" fill="#B8C6AD" stroke="#1B1712" stroke-width="1.3"></ellipse>
+    <ellipse cx="274" cy="300" rx="42" ry="66" fill="#B8C6AD" stroke="#1B1712" stroke-width="1.3"></ellipse>
+    <path d="M334 208C368 236 350 262 300 270" fill="none" stroke="#1B1712" stroke-width="12" stroke-linecap="round"></path>
+    <path d="M334 208C368 236 350 262 300 270" fill="none" stroke="#7B8F6E" stroke-width="8" stroke-linecap="round"></path>
+    <rect x="296" y="128" width="48" height="82" rx="8" fill="#C9D3BE" stroke="#1B1712" stroke-width="1.3"></rect>
+    <path d="M308 128V172M332 172V210" fill="none" stroke="#FAF5E8" stroke-width="7" stroke-linecap="round"></path>
+    <rect x="180" y="136" width="110" height="68" rx="14" fill="#6F8262" stroke="#1B1712" stroke-width="1.4"></rect>
+    <path d="{{d6.st}}" fill="none" stroke="#1B1712" stroke-opacity=".8" stroke-width="2.2"></path>
+    <rect x="229" y="204" width="12" height="52" fill="#3A342C" stroke="#1B1712" stroke-width=".8"></rect>
+    <line x1="{{d6.gx}}" x2="{{d6.gx}}" y1="206" y2="244" stroke="#F5EFE2" stroke-width="2"></line>
+    <ellipse cx="235" cy="312" rx="42" ry="66" fill="#C5D0B8" stroke="#1B1712" stroke-width="1.3"></ellipse>
+    <path d="M235 250V372" fill="none" stroke="#1B1712" stroke-opacity=".35" stroke-width="1"></path>
+    <g fill="none" stroke="#9A7424" stroke-width="3" stroke-linecap="round"><path d="M104 314H152" marker-end="url(#mk6f)"></path><path d="M318 338H372" marker-end="url(#mk6f)"></path></g>
+    <text x="24" y="96">intermembrane space: protons crowd here</text><text x="24" y="216">matrix: fewer protons</text><text x="235" y="128" text-anchor="middle">c-ring</text><text x="320" y="116" text-anchor="middle">a</text><text x="250" y="228">γ shaft</text><text x="382" y="252">stator arm</text><text x="24" y="312">ADP + Pi</text><text x="380" y="342">ATP</text><text x="235" y="400" text-anchor="middle">α₃β₃ head</text>
+    <path d="M378 248L358 240" fill="none" stroke="#1B1712" stroke-width=".8"></path>
+    <rect x="24" y="508" width="14" height="14" fill="#6F8262" stroke="#1B1712" stroke-width="1"></rect><rect x="24" y="530" width="14" height="14" fill="#C5D0B8" stroke="#1B1712" stroke-width="1"></rect>
+    <g font-family="Karla, sans-serif" font-style="normal" font-size="12" fill="#3A342C"><text x="46" y="520">turns: c-ring and γ shaft</text><text x="46" y="542">holds still: a, stator arm, head</text></g>
+    <circle cx="606" cy="300" r="96" fill="#EFE9D6" stroke="#1B1712" stroke-width="1.3"></circle>
+    <g stroke="#1B1712" stroke-width="1.2"><circle cx="606" cy="248" r="33" fill="#A8B99A"></circle><circle cx="651" cy="274" r="33" fill="#D3DBC6"></circle><circle cx="651" cy="326" r="33" fill="#A8B99A"></circle><circle cx="606" cy="352" r="33" fill="#D3DBC6"></circle><circle cx="561" cy="326" r="33" fill="#A8B99A"></circle><circle cx="561" cy="274" r="33" fill="#D3DBC6"></circle><circle cx="606" cy="300" r="14" fill="#FAF5E8"></circle></g>
+    <g text-anchor="middle"><text x="606" y="242">β</text><text x="660" y="272">α</text><text x="660" y="336">β</text><text x="606" y="372">α</text><text x="552" y="336">β</text><text x="552" y="272">α</text></g>
+    <g transform="{{d6.tf}}"><path d="M606 300L606 252" fill="none" stroke="#3A342C" stroke-width="10" stroke-linecap="round"></path><circle cx="606" cy="300" r="9" fill="#3A342C"></circle><circle cx="606" cy="252" r="5" fill="#3A342C"></circle></g>
+    <g stroke="#1B1712" stroke-width="1.2"><circle cx="606" cy="178" r="13" fill="#9A7424" style="opacity: {{d6.a0}}"></circle><circle cx="712" cy="361" r="13" fill="#9A7424" style="opacity: {{d6.a1}}"></circle><circle cx="500" cy="361" r="13" fill="#9A7424" style="opacity: {{d6.a2}}"></circle></g>
+    <g font-family="Karla, sans-serif" font-style="normal" font-size="9" font-weight="700" fill="#F5EFE2" text-anchor="middle"><text x="606" y="181" style="opacity: {{d6.a0}}">ATP</text><text x="712" y="364" style="opacity: {{d6.a1}}">ATP</text><text x="500" y="364" style="opacity: {{d6.a2}}">ATP</text></g>
+    <g text-anchor="middle"><text x="606" y="446">seen from the matrix end:</text><text x="606" y="466">the γ shaft turns inside the ring,</text><text x="606" y="486">one ATP for every 120°</text></g>
+        <path d="M540 536H702M540 530V542M702 530V542" fill="none" stroke="#1B1712" stroke-width="1.2"></path>
+    <text x="621" y="526" text-anchor="middle" font-family="Karla, sans-serif" font-style="normal" font-size="12" fill="#3A342C">bar ≈ 10 nm</text>
+   </g>
+   <g style="opacity: {{ox6}}; transition: opacity .45s ease">
+    <g fill="#2A5DA8" stroke="#FAF5E8" stroke-width="4" paint-order="stroke" stroke-linejoin="round"><text x="24" y="428">oxygen is not in here:</text><text x="24" y="448">it was spent upstream, at</text><text x="24" y="468">Complex IV, and that keeps</text><text x="24" y="488">the protons coming</text></g>
+   </g>
+  </svg>
+  <div style="position: absolute; left: 456px; top: 500px; width: 300px; white-space: nowrap; text-align: center; font-family: 'Karla', sans-serif; font-size: 12px; font-weight: 700; line-height: 1.2; color: #1B1712">Turns drawn since you arrived: {{d6.cnt}} (slowed)</div>
+  </div>
+  </sc-if>
+
+  <div style="position: absolute; left: 0; top: 0; width: 736px; height: 560px; pointer-events: none; opacity: {{ovOp}}; transition: opacity .3s ease">
+  <sc-for list="{{parts}}" as="q" hint-placeholder-count="40">
+   <div style="position: absolute; left: {{q.x}}px; top: {{q.y}}px; width: {{q.w}}px; height: {{q.h}}px; box-sizing: border-box; border-radius: {{q.br}}; background: {{q.bg}}; border: {{q.bd}}; opacity: {{q.op}}"></div>
+  </sc-for>
+  </div>
+  <div style="position: absolute; left: 16px; top: 10px; pointer-events: none">
+  <span class="kick">{{plateNo}}</span>
+  <div class="serif" style="font-size: 28px; line-height: 1.05; font-style: italic">{{plateTitle}}</div>
+  </div>
+  <div class="serif" style="position: absolute; right: 14px; top: 12px; font-size: 14px; font-style: italic; color: #4D463C; pointer-events: none">{{hint}}</div>
+  <button type="button" onClick="{{zoomIn}}" aria-label="{{retAria}}" style="position: absolute; left: {{ret.x}}px; top: {{ret.y}}px; width: {{ret.w}}px; height: {{ret.h}}px; padding: 0; border: 0; border-radius: 0; background: transparent; cursor: zoom-in; pointer-events: {{ret.pe}}"></button>
+ </section>
+
+ <div style="position: absolute; left: 300px; top: 692px; width: 360px; max-height: 180px; overflow: hidden">
+  <span class="kick">This plate</span>
+  <p class="serif" style="margin: 3px 0 0; font-size: 18px; line-height: 1.28">{{cap}}</p>
+  <sc-if value="{{follow}}" hint-placeholder-val="{{false}}">
+  <div style="margin-top: 10px; padding-left: 12px; border-left: 3px solid #2A5DA8">
+   <span class="kick" style="color: #2A5DA8">Follow the oxygen</span>
+   <p class="serif" style="margin: 3px 0 0; font-size: 18px; line-height: 1.28">{{oxCap}}</p>
+  </div>
+  </sc-if>
+  <sc-if value="{{notFollow}}" hint-placeholder-val="{{true}}">
+  <p style="margin: 12px 0 0; font-size: 13.5px; line-height: 1.35; color: #4D463C">Turn on Follow the oxygen to trace one molecule through every scale, from breath to water.</p>
+  </sc-if>
+ </div>
+
+ <div style="position: absolute; left: 676px; top: 692px; width: 372px; height: 180px; box-sizing: border-box; border-top: 1px solid #1B1712; padding-top: 8px">
+  <sc-if value="{{walkHint}}" hint-placeholder-val="{{true}}">
+  <span class="kick">A question that opens at Sprint</span>
+  <p class="serif" style="margin: 4px 0 10px; font-size: 18px; line-height: 1.28">Why does lactate build up? Set the pace to Sprint and the question opens here, as a three-step walk down the spine.</p>
+  <button type="button" class="btn" onClick="{{setSprint}}">Set the pace to Sprint</button>
+  </sc-if>
+  <sc-if value="{{walkAsk}}" hint-placeholder-val="{{false}}">
+  <span class="kick">Lactate is climbing in the cell plate</span>
+  <p class="serif" style="margin: 4px 0 10px; font-size: 18px; line-height: 1.28">You are past the oxygen ceiling. Follow the cause down the spine, one scale at a time.</p>
+  <button type="button" class="btn" onClick="{{walkStart}}" style="background: #1B1712; color: #F5EFE2">Why does lactate build up?</button>
+  </sc-if>
+  <sc-if value="{{walkOn}}" hint-placeholder-val="{{false}}">
+  <div style="display: flex; align-items: center; gap: 8px"><span class="sw" style="width: 14px; height: 14px; background: transparent; border: 2px solid #1B1712"></span><span class="kick">Lactate walk · step {{walk}} of 3 · authored</span></div>
+  <div class="serif" style="margin-top: 3px; font-size: 20px; line-height: 1.12; font-weight: 600">{{wt}}</div>
+  <p style="margin: 3px 0 6px; font-size: 13.5px; line-height: 1.35; color: #1B1712">{{wd}}</p>
+  <div style="display: flex; gap: 8px">
+   <button type="button" class="btn" onClick="{{walkBack}}" style="opacity: {{walkBackOp}}">← Back</button>
+   <button type="button" class="btn" onClick="{{walkNext}}" style="background: #1B1712; color: #F5EFE2">{{walkNextLabel}}</button>
+   <button type="button" class="btn" onClick="{{walkClose}}">Close</button>
+  </div>
+  </sc-if>
+ </div>
+
+ <sc-if value="{{hasAbove}}" hint-placeholder-val="{{true}}">
+  <button type="button" onClick="{{zoomOut}}" aria-label="{{insetAria}}" style="position: absolute; left: 1068px; top: 106px; width: 348px; height: 184px; padding: 0; text-align: left; border: 1px solid #1B1712; border-radius: 0; background: #FAF5E8; overflow: hidden; cursor: zoom-out">
+  <span class="kick" style="position: absolute; left: 10px; top: 8px">Where you came from · {{aboveName}}</span>
+  <span style="position: absolute; left: 6px; top: 32px; width: 336px; height: 144px">
+<svg width="336" height="144" viewBox="0 0 336 144" aria-hidden="true"><g style="opacity: {{ins.o0}}"><g transform="translate(67 -14) scale(.32)"><g fill="none" stroke="#7A6E58" stroke-linecap="round" stroke-linejoin="round"><path d="M318 290L284 372L208 392L190 376M354 166L400 214L446 178" stroke-width="22"></path><path d="M356 152L318 288" stroke-width="58" stroke="#B9AB8C"></path><path d="M318 290L408 334L374 410L408 424M350 166L302 204L288 250" stroke-width="26" stroke="#B9AB8C"></path></g><circle cx="378" cy="108" r="26" fill="#B9AB8C"></circle><ellipse cx="363" cy="312" rx="47" ry="12.5" transform="rotate(26 363 312)" fill="#A8402F"></ellipse></g><rect x="161" y="71" width="44" height="29" fill="rgba(250,245,232,.3)" stroke="#1B1712" stroke-width="2.4"></rect></g><g style="opacity: {{ins.o1}}"><g transform="translate(89 4) scale(.28)"><g fill="#D58C79" stroke="#1B1712" stroke-width="3" stroke-linejoin="round"><path d="M240 112C160 200 152 330 254 424L300 432L326 372L270 128Z" fill="#C9705C"></path><path d="M300 82C262 168 250 282 272 372L300 432L328 372C350 282 338 168 300 82Z" fill="#DE9885"></path><path d="M350 236C412 296 398 384 316 432L326 372C348 326 352 280 342 244Z"></path><circle cx="300" cy="478" r="20" fill="#EFE6D0"></circle></g></g><rect x="158" y="60" width="30" height="28" fill="rgba(250,245,232,.3)" stroke="#1B1712" stroke-width="2.4"></rect></g><g style="opacity: {{ins.o2}}"><g transform="translate(66 -13) scale(.3)"><circle cx="340" cy="282" r="76" stroke="#1B1712" stroke-width="3.5" fill="#DE9885"></circle><circle cx="485.5" cy="282" r="76" stroke="#1B1712" stroke-width="3.5" fill="#DE9885"></circle><circle cx="412.75" cy="408" r="76" stroke="#1B1712" stroke-width="3.5" fill="#DE9885"></circle><circle cx="267.25" cy="408" r="76" stroke="#1B1712" stroke-width="3.5" fill="#DE9885"></circle><circle cx="194.5" cy="282" r="76" stroke="#1B1712" stroke-width="3.5" fill="#DE9885"></circle><circle cx="267.25" cy="156" r="76" stroke="#1B1712" stroke-width="3.5" fill="#DE9885"></circle><circle cx="412.75" cy="156" r="76" stroke="#1B1712" stroke-width="3.5" fill="#DE9885"></circle></g><rect x="140" y="44" width="56" height="58" fill="rgba(250,245,232,.3)" stroke="#1B1712" stroke-width="2.4"></rect></g><g style="opacity: {{ins.o3}}"><g transform="translate(43 -20) scale(.34)"><path d="M64 132H672C692 190 660 214 680 272C700 330 662 354 674 410H64C44 354 78 330 56 272C38 214 76 190 64 132Z" fill="#F3DDD3" stroke="#1B1712" stroke-width="4"></path><path d="M76 190H664M76 270H664M76 350H664" stroke="#D99483" stroke-width="40" fill="none"></path><path d="M110 230h1M290 230h1M470 230h1M150 310h1M350 310h1M550 310h1" stroke="#5F7454" stroke-width="30" stroke-linecap="round" fill="none"></path></g><rect x="143" y="75" width="37" height="21" fill="rgba(250,245,232,.3)" stroke="#1B1712" stroke-width="2.4"></rect></g><g style="opacity: {{ins.o4}}"><ellipse cx="168" cy="72" rx="105" ry="55" fill="#E9E4CF" stroke="#5F7454" stroke-width="2.5"></ellipse><ellipse cx="168" cy="72" rx="96" ry="47" fill="#DCE3CD" stroke="#5F7454" stroke-width="2"></ellipse><path d="M103.2 38.4V67.9M132 29.7V59.2M160.8 26.4V55.9M189.6 27.5V57M218.4 33.2V62.7M247.2 46.4V75.9M88.8 97.6V68.1M117.6 110.8V81.3M146.4 116.5V87M175.2 117.6V88.1M204 114.3V84.8M232.8 105.6V76.1" fill="none" stroke="#5F7454" stroke-width="4.5" stroke-linecap="round"></path><rect x="150" y="22" width="26" height="46" fill="rgba(250,245,232,.3)" stroke="#1B1712" stroke-width="2.4"></rect></g><g style="opacity: {{ins.o5}}"><rect width="336" height="60" fill="#EFEAD3"></rect><rect y="82" width="336" height="62" fill="#E6E9D3"></rect><rect y="60" width="336" height="22" fill="#DCE3CD"></rect><g stroke="#1B1712" fill="#B8C6AD"><rect x="22" y="48" width="46" height="46" rx="6"></rect><rect x="92" y="52" width="16" height="50" rx="4"></rect><rect x="130" y="44" width="42" height="50" rx="8"></rect><rect x="196" y="50" width="34" height="42" rx="6"></rect><rect x="278" y="52" width="26" height="40" rx="4" fill="#8FA383"></rect><circle cx="291" cy="114" r="14"></circle></g><rect x="262" y="44" width="64" height="92" fill="rgba(250,245,232,.3)" stroke="#1B1712" stroke-width="2.4"></rect></g></svg>
+  </span>
+  </button>
+ </sc-if>
+ <sc-if value="{{noAbove}}" hint-placeholder-val="{{false}}">
+  <div style="position: absolute; left: 1068px; top: 106px; width: 348px; height: 184px; box-sizing: border-box; border: 1px solid #1B1712; background: #FAF5E8; padding: 10px">
+  <span class="kick">Where you came from</span>
+  <p class="serif" style="margin: 8px 0 0; font-size: 18px; line-height: 1.3; font-style: italic">Nothing. This is the widest view on the spine. Zoom in on the marked thigh and the runner becomes the small picture in this corner.</p>
+  </div>
+ </sc-if>
+
+ <div class="kick" style="position: absolute; left: 1068px; top: 302px; width: 348px">Readings · {{lvName}} · {{paceName}}</div>
+ <div style="position: absolute; left: 1068px; top: 322px; width: 348px">
+  <sc-for list="{{reads}}" as="r" hint-placeholder-count="3">
+  <div style="height: 124px; box-sizing: border-box; padding-top: 8px; border-top: 1px solid rgba(27,23,18,.4); display: flex; gap: 10px; overflow: hidden">
+   <span class="sw" style="margin-top: 2px; background: {{r.bg}}; border: {{r.bd}}"></span>
+   <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+    <span class="kick">{{r.label}}</span>
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px"><span class="serif" style="font-size: 30px; font-weight: 600; line-height: 1.05">{{r.value}}</span><span style="font-size: 13px; color: #3A342C">{{r.unit}}</span></div>
+    <span style="font-size: 13px; line-height: 1.35; color: #3A342C">{{r.text}}</span>
+    <sc-if value="{{r.hasBar}}" hint-placeholder-val="{{true}}">
+    <div style="position: relative; height: 10px; width: 220px; box-sizing: border-box; border: 1px solid #1B1712; overflow: hidden; margin-top: auto"><div style="position: absolute; left: 0; top: 0; bottom: 0; width: {{r.barW}}%; box-sizing: border-box; background: {{r.barBg}}; border: {{r.barBd}}; transition: width .5s ease"></div></div>
+    </sc-if>
+   </div>
+  </div>
+  </sc-for>
+ </div>
+
+ <div style="position: absolute; left: 1068px; top: 706px; width: 348px; height: 166px; box-sizing: border-box; border-top: 1px solid #1B1712; padding-top: 8px">
+  <span class="kick">How sure is each reading?</span>
+  <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+  <sc-for list="{{legend}}" as="lg" hint-placeholder-count="5">
+   <div style="display: flex; align-items: center; gap: 10px; height: 25px"><span class="sw" style="background: {{lg.bg}}; border: {{lg.bd}}"></span><span style="font-size: 13px"><strong>{{lg.word}}</strong> {{lg.means}}</span></div>
+  </sc-for>
+  </sc-if>
+  <sc-if value="{{notHow}}" hint-placeholder-val="{{true}}">
+  <div style="display: flex; gap: 10px; margin: 8px 0 6px">
+   <sc-for list="{{legend}}" as="lg" hint-placeholder-count="5"><span class="sw" style="width: 26px; height: 26px; background: {{lg.bg}}; border: {{lg.bd}}"></span></sc-for>
+  </div>
+  <p style="margin: 0; font-size: 13px; line-height: 1.4; color: #3A342C">Each texture says how a reading is known. Turn on “How do we know?” to read the words and see where each number comes from.</p>
+  </sc-if>
+ </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+const INK = '#1B1712', PAPER = '#FAF5E8', GEO = {"tops":[[188,175.7,263.7],[268,151.4,239.4],[348,142.4,230.4],[428,145.3,233.3],[508,161.1,249.1],[588,197.8,285.8]],"bots":[[148,346.2,258.2],[228,382.9,294.9],[308,398.7,310.7],[388,401.6,313.6],[468,392.6,304.6],[548,368.3,280.3]],"ims":[[78,156],[153,152],[222,146],[283,144],[339,150],[397,156],[463,154],[536,148],[114,178],[186,182],[250,188],[307,189],[364,184],[426,178],[496,180],[572,187]],"caps":[[340,198],[412.75,240],[412.75,324],[340,366],[267.25,324],[267.25,240],[558.25,240],[121.75,324]]};
+const PACE = [['Rest', '1 MET'], ['Walk', '≈ 3.5 METs'], ['Run', '≈ 10 METs'], ['Sprint', 'beyond VO₂max']];
+const UP = [210, 735, 2100, 3000];
+const HEAD = UP.map((u) => Math.round((3000 - u) / 30));
+const WAT = UP.map((u) => (u / 22414 * 2 * 18.015).toFixed(1));
+const SUB = ['1 × 3.5 × 60 = 210', '3.5 × 3.5 × 60 = 735', '10 × 3.5 × 60 = 2,100', 'ceiling: 50 × 60 = 3,000'];
+const ROTS = ['0.3', '0.8', '1.6', '2.4'];
+const FLS = [0.12, 0.3, 0.6, 1.0], HBS = [0.6, 0.85, 1.3, 1.6], BRS = [0.2, 0.3, 0.55, 0.85], ROT = [0.3, 0.8, 1.6, 2.4], LACT = [0, 0, 0.22, 1];
+const OPEN = [0, 3, 1, 4, 2, 5, 6, 7], RANK = [0, 2, 4, 1, 3, 5, 6, 7];
+const BASEOX = [0, 0, 1, 0, 0, 1, 0];
+const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
+const TEX = {
+ obs: { bg: INK, bd: '1px solid ' + INK, w: 'OBSERVED', m: 'measured or reported from outside BOW' },
+ com: { bg: '#8C8374', bd: '1px solid #8C8374', w: 'COMPUTED', m: 'follows exactly from the rules and the state' },
+ mod: { bg: 'repeating-linear-gradient(135deg, ' + INK + ' 0 1.5px, transparent 1.5px 6px)', bd: '1px solid ' + INK, w: 'MODELED', m: '· none on this board: no model runs here' },
+ aut: { bg: 'transparent', bd: '2px solid ' + INK, w: 'AUTHORED', m: 'a rule or number someone chose' },
+ unk: { bg: 'transparent', bd: '2px dashed ' + INK, w: 'UNKNOWN', m: 'this board does not know' }
+};
+const RET = [[293, 266, 138, 92], [252, 207, 96, 86], [254, 188, 172, 188], [296, 284, 108, 56], [318, 134, 60, 114], [604, 216, 86, 170]];
+const LV = [
+ { n: 'Organism', sub: 'the runner', sc: '~1.7 m', t: 'The runner', nx: 'the quadriceps', cap: 'A 60 kg runner. Lungs, heart and legs all answer to the pace.', ox: 'A breath brings oxygen to the lungs; haemoglobin in red blood cells carries it out to the legs.' },
+ { n: 'Organ', sub: 'the quadriceps', sc: '~40 cm', t: 'The quadriceps', nx: 'fibres and capillaries', cap: 'The quadriceps, front of the thigh. An artery feeds it; harder work means wider vessels and more flow.', ox: 'Arteries branch through the muscle, still carrying most of their oxygen.' },
+ { n: 'Tissue', sub: 'fibres and capillaries', sc: '~0.3 mm', t: 'Fibres and capillaries', nx: 'one fibre', cap: 'A slice across the muscle. Each fibre is one long cell, ringed by capillaries. Faster pace, more of them carry blood.', ox: 'Red blood cells give up oxygen in the capillaries, and it diffuses into the fibre.' },
+ { n: 'Cell', sub: 'one muscle fibre', sc: '50–100 µm', t: 'One muscle fibre', nx: 'a mitochondrion', cap: 'One fibre is a single very long cell, packed with mitochondria. They are drawn far too big, so you can see them.', ox: 'Inside the fibre, oxygen diffuses to the mitochondria, helped along by myoglobin.' },
+ { n: 'Mitochondrion', sub: 'cristae', sc: '~1 µm', t: 'A mitochondrion', nx: 'the inner membrane', cap: 'A mitochondrion: two membranes, the inner one folded into cristae. The citric acid cycle runs in the matrix.', ox: 'Oxygen slips through both membranes to the inner membrane, where it gets used up.' },
+ { n: 'Inner membrane', sub: 'electron transport chain', sc: '~50 nm', t: 'The inner membrane', nx: 'ATP synthase', cap: 'A patch of inner membrane. Electrons pass along I to IV; I, III and IV pump protons. ATP synthase lets them back.', ox: 'At Complex IV each O₂ takes four electrons and four protons and becomes two water molecules.' },
+ { n: 'ATP synthase', sub: 'a rotary motor', sc: '~10 nm', t: 'ATP synthase', nx: '', cap: 'ATP synthase: protons flowing through turn the rotor. Each third of a turn, the head builds one ATP.', ox: 'No oxygen here. It was used upstream, at Complex IV.' }
+];
+const READ = [
+ [{ l: 'Oxygen uptake', v: UP.map((u) => u.toLocaleString('en-US')), u: 'mL O₂ / min', d: SUB.map((x) => 'METs × 3.5 mL/kg/min × 60 kg. Here: ' + x), t: 'com', b: UP.map((u) => u / 3000), p: 'COMPUTED: exact from METs × 3.5 × 60 kg. At Sprint the cap is this runner’s VO₂max, 50 mL/kg/min (authored).' },
+  { l: 'Effort', v: ['1', '≈ 3.5', '≈ 10', 'past the ceiling'], u: ['MET', 'METs', 'METs', ''], d: ['1 MET = 3.5 mL O₂/kg/min, the standard definition', 'walking about 5 km/h', 'running about 10 km/h', 'the rest is paid for without oxygen'], t: ['obs', 'obs', 'obs', 'aut'], p: ['OBSERVED: typical METs, Compendium of Physical Activities (approx., verify).', 'OBSERVED: typical METs, Compendium of Physical Activities (approx., verify).', 'OBSERVED: typical METs, Compendium of Physical Activities (approx., verify).', 'AUTHORED · illustrative, authored: “past the ceiling” is a label, not a measured demand. This board has no Sprint demand number.'] },
+  { l: 'Heart rate', v: ['60–80', '90–110', '140–170', '180+'], u: 'beats / min', d: ['typical range', 'typical range', 'typical range', 'near a personal maximum'], t: 'aut', p: 'AUTHORED · illustrative, authored: typical ranges for a fit adult. Real hearts differ with age and fitness.' }],
+ [{ l: 'Blood flow to the muscle', v: ['baseline', 'up several-fold', 'up many-fold', 'near its ceiling'], u: '', d: 'relative to rest; a picture, not a measurement', t: 'aut', b: [0.08, 0.3, 0.68, 0.92], p: 'AUTHORED · illustrative, authored: a relative bar, so it claims no precision. Real flow rises many-fold from rest to hard exercise.' },
+  { l: 'Share of cardiac output', v: ['15–20 %', '30–40 %', '55–70 %', '75–85 %'], u: 'to muscle', d: 'the ends are textbook; the middle two are interpolated', t: 'aut', p: 'AUTHORED · illustrative, authored: approx. textbook ranges (verify); walk and run are interpolated.' },
+  { l: 'Oxygen taken from 100 mL of blood', v: ['≈ 5', '≈ 8', '≈ 13', '≈ 15'], u: 'mL', d: 'arterial blood carries about 20 mL per 100 mL; the middle two are interpolated', t: ['obs', 'aut', 'aut', 'obs'], p: ['OBSERVED at rest: arteriovenous O₂ difference, textbook (approx., verify).', 'AUTHORED · illustrative, authored: interpolated between the observed rest and near-maximum values.', 'AUTHORED · illustrative, authored: interpolated between the observed rest and near-maximum values.', 'OBSERVED near maximum: arteriovenous O₂ difference, textbook (approx., verify).'] }],
+ [{ l: 'Capillaries carrying red cells', v: ['5 of 8', '6 of 8', '7 of 8', '8 of 8'], u: '', d: 'filled rings carry red blood cells', t: 'aut', p: 'AUTHORED · illustrative, authored: most capillaries in resting muscle already carry some flow; exercise mainly adds red-cell traffic (verify).' },
+  { l: 'Oxygen supply against demand', v: ['meets demand', 'meets demand', 'meets demand', 'falls short'], u: '', d: HEAD.map((h) => h ? h + ' % of the ceiling still free' : 'no ceiling left; demand runs past it'), t: ['com', 'com', 'com', 'aut'], p: ['COMPUTED: (3,000 − uptake) ÷ 3,000 mL/min.', 'COMPUTED: (3,000 − uptake) ÷ 3,000 mL/min.', 'COMPUTED: (3,000 − uptake) ÷ 3,000 mL/min.', 'AUTHORED · illustrative, authored: the demand past the ceiling has no number on this board; the ceiling itself is authored (50 mL/kg/min).'] },
+  { l: 'Fibres recruited', v: ['slow', 'slow', 'slow + fast', 'all types'], u: '', d: ['type I, slow and oxidative', 'type I, slow and oxidative', 'type I and IIa, fast oxidative', 'type I, IIa and IIx, fast glycolytic'], t: 'obs', p: 'OBSERVED · textbook generalisation (size principle); a real runner’s mix varies (verify).' }],
+ [{ l: 'Fuel burned', v: ['mostly fat', 'fat and glucose', 'mostly glucose', 'almost all glucose'], u: '', d: 'outlined bar: the glucose share', t: 'aut', b: [0.3, 0.45, 0.7, 0.95], p: 'AUTHORED · illustrative, authored: the mix shifts with pace, fitness and diet. A bar to show the idea, not a measurement.' },
+  { l: 'Lactate in the fibre', v: ['baseline', 'baseline', 'holding steady', 'building up'], u: '', d: ['about 0.5–1.5 mmol/L in blood', 'about 0.5–1.5 mmol/L in blood', 'about 1.5–4 mmol/L in blood', '10+ mmol/L in blood, still rising'], t: 'aut', p: 'AUTHORED · illustrative, authored: typical blood lactate ranges (approx., verify). Inside one fibre, numbers differ.' },
+  { l: 'ATP per glucose, no oxygen', v: '2', u: 'ATP', d: 'glycolysis alone. Mitochondria add about 28–30 more.', t: 'obs', p: 'OBSERVED: standard biochemistry; “28–30 more” is the current estimate (verify).' }],
+ [{ l: 'Whole-body oxygen, against rest', v: ['×1', '×3.5', '×10', '×14'], u: ['', '', '', 'the ceiling'], d: 'whole-body uptake ÷ resting uptake of 210 mL/min', t: 'com', b: UP.map((u) => u / 3000), p: 'COMPUTED: uptake ÷ 210 mL/min, from the runner plate’s numbers.' },
+  { l: 'In a working thigh fibre', v: 'many-fold more', u: '', d: 'far above the whole-body ratio; resting organs barely change', t: 'aut', p: 'AUTHORED · illustrative, authored: no per-fibre number on this board.' },
+  { l: 'ATP per glucose, with oxygen', v: '≈ 30–32', u: 'ATP', d: 'the pace changes the rate, not the yield', t: 'obs', p: 'OBSERVED: current textbook estimate; older books say 36–38 (verify).' }],
+ [{ l: 'Water made at Complex IV, whole body', v: WAT, u: 'g / min', d: 'uptake ÷ 22.4 L per mol × 2 H₂O × 18 g per mol', t: 'com', p: 'COMPUTED: each O₂ makes two H₂O; uptake is quoted at standard conditions, 22.4 L/mol (approx.).' },
+  { l: 'Protons pumped per NADH', v: '≈ 10', u: 'H⁺', d: 'complexes I, III and IV pump; II does not', t: 'obs', p: 'OBSERVED: structural biochemistry; counts vary (about 10 per NADH, fewer per FADH₂).' },
+  { l: 'Membrane voltage in a working leg', v: 'not known here', u: '', d: 'isolated mitochondria read about 150–180 mV', t: 'unk', p: 'UNKNOWN: this board has no honest number for a living leg at this pace, so it leaves the hole.' }],
+ [{ l: 'ATP per full rotation', v: '3', u: 'ATP', d: 'one for each 120° step: three catalytic sites', t: 'obs', p: 'OBSERVED: structure and mechanism of F₁ (Boyer, Walker; Nobel Prize 1997).' },
+  { l: 'Rotation as drawn', v: ROTS, u: 'turns / s', d: 'slowed so you can watch; the real enzyme turns on the order of 100 times a second (verify)', t: 'aut', p: 'AUTHORED · illustrative, authored: on-screen speed is a drawing rule that follows the pace.' },
+  { l: 'Protons per turn', v: '8', u: 'H⁺', d: 'one per c-subunit; cattle have a c₈ ring, human assumed (verify)', t: 'obs', p: 'OBSERVED: bovine mitochondrial ATP synthase c-ring structure (verify).' }]
+];
+const HEADS = (i, p) => [
+ { t: UP[p].toLocaleString('en-US') + ' mL/min', f: UP[p] / 3000, x: 'com' },
+ { t: ['baseline', 'several-fold', 'many-fold', 'near ceiling'][p], f: [0.08, 0.3, 0.68, 0.92][p], x: 'aut' },
+ { t: [5, 6, 7, 8][p] + ' of 8 carrying', f: [5, 6, 7, 8][p] / 8, x: 'aut' },
+ { t: ['mostly fat', 'fat + glucose', 'mostly glucose', 'lactate builds'][p], f: [0.3, 0.45, 0.7, 0.95][p], x: 'aut' },
+ { t: 'body oxygen ' + ['×1', '×3.5', '×10', '×14'][p], f: UP[p] / 3000, x: 'com' },
+ { t: WAT[p] + ' g water/min, body', f: UP[p] / 3000, x: 'com' },
+ { t: 'drawn ' + ROTS[p] + '/s · real ≈100/s', f: [0.125, 0.33, 0.67, 1][p], x: 'aut' }
+][i];
+const WALK = [
+ { lv: 2, t: 'Oxygen delivery hits its ceiling', d: 'Uptake is capped at 3,000 mL/min. The legs ask for more energy than that oxygen can pay for.' },
+ { lv: 4, t: 'Mitochondria are at full speed', d: 'They cannot take in pyruvate any faster.' },
+ { lv: 3, t: 'Glycolysis keeps going: pyruvate becomes lactate', d: 'Turning extra pyruvate into lactate frees NAD⁺, so glycolysis keeps running. Lactate is made at every pace; at Sprint it is made faster than it is cleared.' }
+];
+const K = {
+ rbc: { w: 11, h: 7, bg: '#8B2F22', bd: '1px solid ' + INK, br: '50%' },
+ e: { w: 5, h: 5, bg: INK, bd: '0', br: '50%' },
+ h: { w: 10, h: 10, bg: PAPER, bd: '1.5px solid ' + INK, br: '50%' },
+ fuel: { w: 8, h: 8, bg: '#9A7424', bd: '1px solid ' + INK, br: '2px' },
+ atp: { w: 11, h: 11, bg: '#9A7424', bd: '1.5px solid ' + INK, br: '50%' },
+ o: { w: 9, h: 9, bg: '#2A5DA8', bd: '1.5px solid ' + PAPER, br: '50%' }
+};
+const A = (a, p) => (Array.isArray(a) ? a[p] : a);
+const F1 = (x) => Math.round(x * 10) / 10;
+const poly = (pts) => { const c = [0]; for (let i = 1; i < pts.length; i++) c.push(c[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1])); return { p: pts, c: c, L: c[c.length - 1] }; };
+const at = (P, u) => { const d = u * P.L; let i = 1; while (i < P.c.length - 1 && P.c[i] < d) i++; const t = (d - P.c[i - 1]) / ((P.c[i] - P.c[i - 1]) || 1); return [P.p[i - 1][0] + (P.p[i][0] - P.p[i - 1][0]) * t, P.p[i - 1][1] + (P.p[i][1] - P.p[i - 1][1]) * t]; };
+const FLOWS = [
+ [{ P: poly([[406, 111], [392, 118], [376, 132], [366, 150], [350, 188], [344, 214], [342, 236], [336, 262], [326, 292], [345, 306], [372, 320], [396, 330]]), n: [3, 5, 8, 11], k: 'o', ox: 1 },
+  { P: poly([[342, 256], [336, 268], [328, 278], [326, 292], [340, 304], [370, 318], [396, 330]]), n: [1, 2, 4, 5], k: 'rbc', sp: 1.2 }],
+ [{ P: poly([[396, 58], [390, 110], [384, 150], [372, 200], [352, 214], [330, 226], [312, 240]]), n: [3, 5, 8, 11], k: 'o', ox: 1 },
+  { P: poly([[396, 58], [388, 130], [376, 210], [360, 280], [346, 340], [332, 392], [318, 430]]), n: [3, 6, 11, 15], k: 'rbc' }],
+ [],
+ [{ P: poly([[0, 462], [736, 462]]), n: [3, 5, 9, 12], k: 'rbc', sp: 0.8 },
+  { P: poly([[210, 438], [210, 392]]), n: [1, 2, 3, 5], k: 'fuel' },
+  { P: poly([[380, 438], [380, 392]]), n: [3, 3, 2, 1], k: 'fuel' },
+  { P: poly([[300, 438], [300, 400], [336, 362], [350, 326]]), n: [3, 5, 8, 11], k: 'o', ox: 1 }],
+ [{ P: poly([[28, 272], [100, 272], [190, 284], [280, 264], [334, 222], [340, 206]]), n: [3, 5, 8, 11], k: 'o', ox: 1 }].concat(
+  GEO.tops.map((t, i) => ({ P: poly([[t[0], t[1] + 6], [t[0], t[2] - 4]]), n: [1, 1, 2, 3], k: 'e', sp: 1.1 })),
+  GEO.bots.map((t, i) => ({ P: poly([[t[0], t[1] - 6], [t[0], t[2] + 4]]), n: [0, 1, 2, 3], k: 'e', sp: 1.1 }))),
+ [{ P: poly([[96, 388], [106, 332], [136, 272], [312, 262], [378, 262], [456, 214], [520, 262]]), n: [2, 4, 8, 12], k: 'e', sp: 1.1 },
+  { P: poly([[176, 320], [176, 160]]), n: [1, 1, 2, 3], k: 'h', sp: 0.8 }, { P: poly([[404, 320], [404, 160]]), n: [1, 1, 2, 3], k: 'h', sp: 0.8 }, { P: poly([[536, 320], [536, 160]]), n: [1, 1, 2, 3], k: 'h', sp: 0.8 },
+  { P: poly([[647, 110], [647, 250], [690, 300]]), n: [1, 2, 3, 5], k: 'h', sp: 0.9 },
+  { S: GEO.ims, n: [4, 7, 11, 16], k: 'h' },
+  { P: poly([[468, 440], [486, 396], [508, 350], [520, 312]]), n: [2, 3, 5, 7], k: 'o', ox: 1 },
+  { P: poly([[544, 310], [560, 346], [572, 378], [578, 408]]), n: [1, 2, 3, 4], k: 'o', ox: 1 }],
+ [{ P: poly([[308, 100], [308, 168], [294, 176]]), n: [1, 1, 2, 3], k: 'h' }, { P: poly([[334, 190], [334, 214], [340, 262], [352, 300]]), n: [1, 1, 2, 3], k: 'h' },
+  { P: poly([[268, 336], [330, 340], [378, 344]]), n: [1, 1, 2, 3], k: 'atp' }, { P: poly([[112, 314], [150, 318], [196, 324]]), n: [1, 1, 2, 3], k: 'fuel' }]
+];
+class Component extends DCLogic {
+ componentDidMount() {
+  this.fl = 0; this.hb = 0; this.br = 0; this.ang = 0; this.lac = 0; this.last = Date.now();
+  this.tm = setInterval(() => this.frame(), 60);
+ }
+ componentWillUnmount() { clearInterval(this.tm); }
+ frame() {
+  const s = this.state || {}, p = s.pace === undefined ? 2 : s.pace, now = Date.now(), dt = Math.min(0.25, (now - this.last) / 1000);
+  this.last = now;
+  this.fl += dt * FLS[p]; this.hb += dt * HBS[p]; this.br += dt * BRS[p]; this.ang += dt * ROT[p] * 360;
+  this.lac += (LACT[p] - this.lac) * Math.min(1, dt * 0.4);
+  this.setState({ tick: (s.tick || 0) + 1 });
+ }
+ nav(k) {
+  const s = this.state || {}, cur = s.lvl || 0;
+  if (k === cur) return {};
+  const R = RET[Math.min(k, cur)];
+  if (k === 6) this.ang = 0;
+  return { prev: cur, lvl: k, dir: k > cur ? 'deep' : 'up', until: Date.now() + 650, ox: R[0] + R[2] / 2, oy: R[1] + R[3] / 2 };
+ }
+ flowsFor(lvl, p) {
+  if (lvl !== 2) return FLOWS[lvl];
+  const nOpen = [5, 6, 7, 8][p];
+  return OPEN.slice(0, nOpen).map((idx) => {
+   const c = GEO.caps[idx], t = idx < 6 ? [340, 282] : (idx === 6 ? [485.5, 282] : [194.5, 282]), k = idx < 6 ? 0.62 : 0.6;
+   return { P: poly([c, [c[0] + (t[0] - c[0]) * k, c[1] + (t[1] - c[1]) * k]]), n: [2, 2, 2, 2], k: 'o', ox: 1 };
+  });
+ }
+ particles(lvl, p, follow) {
+  const out = [], fl = this.fl || 0;
+  this.flowsFor(lvl, p).forEach((f, fi) => {
+   const n = f.n[p], kd = K[f.k], vis = f.ox ? (follow ? 1 : 0) : (follow ? 0.3 : 1);
+   if (!n || !vis) return;
+   for (let i = 0; i < n; i++) {
+    let x, y, op = vis;
+    if (f.S) { const q = f.S[i]; if (!q) break; x = q[0] + Math.sin(fl * 6 + i * 1.7) * 2.5; y = q[1] + Math.cos(fl * 5 + i * 2.3) * 2.5; }
+    else { const u = (fl * (f.sp || 1) + i / n + fi * 0.37) % 1, pt = at(f.P, u); x = pt[0]; y = pt[1]; op = vis * Math.min(1, u * 8, (1 - u) * 8); }
+    out.push({ x: F1(x - kd.w / 2), y: F1(y - kd.h / 2), w: kd.w, h: kd.h, bg: kd.bg, bd: kd.bd, br: kd.br, op: F1(op) });
+   }
+  });
+  return out;
+ }
+ renderVals() {
+  const s = this.state || {}, p = s.pace === undefined ? 2 : s.pace, lvl = s.lvl || 0, prev = s.prev === undefined ? -1 : s.prev;
+  const follow = !!s.follow, how = !!s.how, walk = p === 3 ? (s.walk || 0) : 0, walkOn = walk > 0;
+  const busy = Date.now() < (s.until || 0), fl = this.fl || 0, ang = this.ang || 0, lac = this.lac || 0;
+  const L = LV[lvl], fmt = (n) => n.toLocaleString('en-US');
+
+  const paces = PACE.map((x, i) => ({ name: x[0], met: x[1], pressed: p === i ? 'true' : 'false', bg: p === i ? INK : 'transparent', fg: p === i ? '#F5EFE2' : INK, bl: i === 0 ? 1.5 : 0, pick: () => this.setState({ pace: i, walk: i === 3 ? (s.walk || 0) : 0 }) }));
+  const formula = (how ? 'COMPUTED · ' : '') + (p < 3 ? PACE[p][0] + ' · ' + ['1 MET', '3.5 METs', '10 METs'][p] + ' → uptake = ' + ['1', '3.5', '10'][p] + ' × 3.5 mL/kg/min × 60 kg = ' + fmt(UP[p]) + ' mL O₂/min' : 'Sprint · capped at this runner’s VO₂max, 50 mL/kg/min (authored) × 60 kg = 3,000 mL O₂/min');
+
+  const stops = LV.map((v, i) => {
+   const h = HEADS(i, p), t = TEX[h.x], wi = walkOn ? WALK.findIndex((w) => w.lv === i) : -1, lit = wi === walk - 1 && wi >= 0, sel = lvl === i;
+   const on = wi >= 0, cur = wi + 1 === walk, done = wi + 1 < walk;
+   return { top: i * 92, name: v.n, sub: v.sub, scale: v.sc, pressed: sel ? 'true' : 'false', aria: v.n + ', ' + v.sub + ', scale ' + v.sc, pick: () => this.setState(this.nav(i)),
+    bar: sel ? INK : 'transparent', bg: lit ? '#EDCFC5' : (sel ? '#EADFC6' : 'transparent'), node: lit ? '#A8402F' : (sel ? INK : PAPER), dot: follow ? 1 : 0,
+    w: Math.round(h.f * 100), bg2: t.bg, bd2: t.bd, meter: h.t,
+    badge: on ? String(wi + 1) : '', bbd: on ? '2px solid ' + (cur ? '#A8402F' : INK) : '0', bbg: on ? (cur ? '#A8402F' : (done ? INK : PAPER)) : 'transparent', bfg: on ? (cur || done ? '#F5EFE2' : INK) : 'transparent' };
+  });
+
+  const reads = READ[lvl].map((r) => { const tx = TEX[A(r.t, p)], b = r.b ? r.b[p] : null; return { label: r.l, value: A(r.v, p), unit: A(r.u || '', p), text: how ? A(r.p, p) : A(r.d, p), bg: tx.bg, bd: tx.bd, hasBar: b !== null, barW: b === null ? 0 : Math.round(b * 100), barBg: r.bu ? tx.bg + ', ' + r.bu : tx.bg, barBd: tx.bd }; });
+  const legend = ['obs', 'com', 'mod', 'aut', 'unk'].map((k) => ({ bg: TEX[k].bg, bd: TEX[k].bd, word: TEX[k].w, means: TEX[k].m }));
+
+  const plates = {};
+  for (let k = 0; k < 7; k++) {
+   const cur = lvl === k, pv = busy && prev === k;
+   plates['p' + k] = { show: cur || pv, ox: s.ox || 368, oy: s.oy || 280, anim: cur ? (s.dir ? (s.dir === 'deep' ? 'inDeep' : 'inUp') + ' .62s cubic-bezier(.22,.7,.25,1) both' : 'none') : (s.dir === 'deep' ? 'outDeep' : 'outUp') + ' .62s ease-in both' };
+  }
+  const oxs = {}; for (let k = 0; k < 7; k++) oxs['ox' + k] = follow ? 1 : BASEOX[k];
+
+  const hbS = 1 + 0.12 * Math.max(0, Math.sin((this.hb || 0) * 6.2832)), luS = 1 + 0.08 * Math.sin((this.br || 0) * 6.2832);
+  const d0 = { hb: 'translate(342 242) scale(' + hbS.toFixed(3) + ') translate(-342 -242)', lu: 'translate(344 204) scale(' + (1 + (luS - 1) * 0.6).toFixed(3) + ' ' + luS.toFixed(3) + ') translate(-344 -204)', mq: ['#E1A99A', '#D58C79', '#C46A55', '#A8402F'][p] };
+  const d1 = { aw: [2.5, 3.6, 5.4, 7.4][p], bw: [1.2, 1.8, 2.8, 4][p], pct: [8, 30, 68, 92][p] };
+  const nOpen = [5, 6, 7, 8][p], d2 = { f0: 1, f1: p >= 2 ? 1 : 0.4, f3: p >= 3 ? 1 : 0.4, aw: [1.5, 2.5, 3.8, 5.2][p] };
+  for (let i = 0; i < 8; i++) { const o = RANK[i] < nOpen; d2['c' + i + 'r'] = o ? 11 : 8; d2['c' + i + 'f'] = o ? '#8B2F22' : '#EBDDBF'; d2['c' + i + 'd'] = o ? 'none' : '3 3'; d2['a' + i] = o ? 1 : 0; }
+  const d3 = { gw: [1.6, 2.4, 3.4, 4.6][p], fw: [3, 2.8, 2.2, 1.2][p], lx: F1(26 + lac * 44), ly: F1(22 + lac * 46), lo: lac < 0.03 ? 0 : F1(0.25 + 0.75 * lac), lt: lac > 0.5 ? 1 : 0 };
+  const d5 = { hw: [1.2, 2, 3.2, 4.4][p] };
+  const rad = (ang % 360) * Math.PI / 180, d6 = { gx: F1(235 + 3.5 * Math.sin(rad)), tf: 'rotate(' + (ang % 360).toFixed(1) + ' 606 300)', cnt: String(Math.floor(ang / 360)) };
+  let st = ''; for (let i = 0; i < 8; i++) { const th = rad + i * Math.PI / 4; if (Math.cos(th) > 0.05) st += 'M' + F1(235 + 46 * Math.sin(th)) + ' 141V199'; } d6.st = st;
+  for (let j = 0; j < 3; j++) { let dl = ((ang % 360) - 120 * j + 540) % 360 - 180; d6['a' + j] = F1(0.28 + 0.72 * Math.exp(-(dl / 32) * (dl / 32))); }
+
+  const ret = lvl < 6 ? { x: RET[lvl][0], y: RET[lvl][1], w: RET[lvl][2], h: RET[lvl][3], pe: 'auto' } : { x: 0, y: 0, w: 1, h: 1, pe: 'none' };
+  const above = lvl > 0 ? LV[lvl - 1].n : '';
+  const ins = {}; for (let i = 0; i < 6; i++) ins['o' + i] = lvl === i + 1 ? 1 : 0;
+  const walkStep = walk > 0 ? WALK[walk - 1] : WALK[0];
+
+  return Object.assign({
+   paces, formula, stops, reads, legend, ins, ret, d0, d1, d2, d3, d5, d6,
+   parts: this.particles(lvl, p, follow), ovOp: busy ? 0 : 1,
+   dim: follow ? 0.6 : 1, fo: follow ? 1 : 0, follow, notFollow: !follow, how, notHow: !how,
+   foP: follow ? 'true' : 'false', foBg: follow ? '#2A5DA8' : 'transparent', foFg: follow ? '#FFFFFF' : INK, foRing: follow ? '#FFFFFF' : INK,
+   hwP: how ? 'true' : 'false', hwBg: how ? INK : 'transparent', hwFg: how ? '#F5EFE2' : INK,
+   toggleFollow: () => this.setState({ follow: !follow }), toggleHow: () => this.setState({ how: !how }),
+   zoomIn: () => this.setState(this.nav(Math.min(6, lvl + 1))), zoomOut: () => this.setState(this.nav(Math.max(0, lvl - 1))),
+   plateNo: 'Plate ' + ROMAN[lvl] + ' of VII', plateTitle: L.t, hint: lvl < 6 ? 'Click the bracketed region to go in' : 'The deepest scale on this spine', retAria: lvl < 6 ? 'Zoom in to ' + L.nx : 'Deepest level reached',
+   cap: L.cap, oxCap: L.ox, lvName: L.n, paceName: PACE[p][0], hasAbove: lvl > 0, noAbove: lvl === 0, aboveName: above, insetAria: 'Back up to ' + above,
+   walk, walkHint: p !== 3, walkAsk: p === 3 && walk === 0, walkOn, wt: walkStep.t, wd: walkStep.d, walkBackOp: walk > 1 ? 1 : 0.4, walkNextLabel: walk >= 3 ? 'Done' : 'Next →',
+   setSprint: () => this.setState({ pace: 3 }),
+   walkStart: () => this.setState(Object.assign(this.nav(WALK[0].lv), { walk: 1 })),
+   walkNext: () => (walk >= 3 ? this.setState({ walk: 0 }) : this.setState(Object.assign(this.nav(WALK[walk].lv), { walk: walk + 1 }))),
+   walkBack: () => (walk > 1 ? this.setState(Object.assign(this.nav(WALK[walk - 2].lv), { walk: walk - 1 })) : null),
+   walkClose: () => this.setState({ walk: 0 })
+  }, plates, oxs);
+ }
+}
+</script>
+</body>
+</html>

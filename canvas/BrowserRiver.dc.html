@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The River</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=Libre+Caslon+Display&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F1ECE2;color:#221F1B;font-family:'Libre Caslon Text',serif}
+a{color:#7A4A1E}a:hover{color:#4F2E10}
+.mono{font-family:'DM Mono',monospace}
+.ital{font-family:'Libre Caslon Text',serif;font-style:italic}
+.btn{font-family:'Libre Caslon Text',serif;font-size:16px;font-weight:700;min-height:44px;padding:0 20px;border-radius:0;cursor:pointer;transition:background .2s,color .2s}
+.chip{font-family:'Libre Caslon Text',serif;font-style:italic;font-size:17px;min-height:44px;padding:0 16px;border-radius:0;cursor:pointer;text-underline-offset:5px;transition:background .2s,color .2s}
+.seatb{display:flex;align-items:center;gap:16px;width:100%;min-height:52px;box-sizing:border-box;padding:0 16px;border:2px solid #221F1B;border-radius:0;font-family:'Libre Caslon Text',serif;font-style:italic;font-size:19px;text-align:left;cursor:pointer;transition:background .2s,color .2s}
+.btn:focus-visible,.chip:focus-visible,.seatb:focus-visible,.door:focus-visible{outline:3px solid #221F1B;outline-offset:3px}
+.arr .btn:focus-visible{outline-color:#F1ECE2}
+input:focus-visible{outline:3px solid #7A4A1E;outline-offset:2px}
+input::placeholder{color:#6B6357;opacity:1}
+.door{position:absolute;top:124px;width:44px;height:92px;padding:0;border:0;background:transparent;cursor:pointer}
+.dr{position:absolute;left:14px;top:6px;width:16px;height:80px;box-sizing:border-box;border:2px solid #221F1B;border-radius:8px 8px 0 0;transition:background .25s}
+.sw{display:block;width:28px;height:13px;box-sizing:border-box;flex:none}
+.t-obs{background:#7A4A1E}
+.t-aut{background:transparent;border:2px solid #221F1B}
+.t-rec{background:#7A4A1E;box-shadow:inset 0 0 0 3px #7A4A1E,inset 0 0 0 5px #F8F4EA}
+.t-unk{background:transparent;border:2px dashed #221F1B}
+.t-fork{background:transparent;height:5px;border-top:2px solid #3F5A73}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important;animation-duration:.01s!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F1ECE2; color: #221F1B; font-family: 'Libre Caslon Text', serif">
+
+  <span class="mono" style="position: absolute; left: 40px; top: 22px; font-size: 12px; letter-spacing: .14em; color: #5B544A">THE RIVER · TIME IS THE FRONT DOOR</span>
+  <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="position: absolute; right: 40px; top: 12px; border: 2px solid #221F1B; background: {{howBg}}; color: {{howFg}}; white-space: nowrap">How do we know?</button>
+
+  <form onSubmit="{{onSubmit}}" style="position: absolute; left: 40px; top: 52px; width: 640px; display: flex; gap: 10px; margin: 0">
+    <input type="text" value="{{q}}" onChange="{{onQ}}" aria-label="Search a system" placeholder="Ask a system for its life" class="ital" style="flex: 1; min-width: 0; height: 52px; box-sizing: border-box; border: 2px solid #221F1B; border-radius: 0; background: #FAF7F0; color: #221F1B; padding: 0 16px; font-size: 24px">
+    <button type="button" class="btn" onClick="{{onOpen}}" style="height: 52px; border: 2px solid #221F1B; background: #221F1B; color: #F1ECE2">Open</button>
+  </form>
+  <sc-if value="{{miss}}" hint-placeholder-val="{{false}}">
+    <span class="ital" role="status" style="position: absolute; left: 700px; top: 62px; width: 700px; font-size: 20px; line-height: 1.3">{{missMsg}}</span>
+  </sc-if>
+  <div role="group" aria-label="Suggested systems" style="position: absolute; left: 40px; top: 114px; display: flex; gap: 10px">
+    <sc-for list="{{chips}}" as="c" hint-placeholder-count="4">
+      <button type="button" class="chip" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="border: 1.5px solid #221F1B; background: {{c.bg}}; color: {{c.fg}}; text-decoration: {{c.deco}}">{{c.label}}</button>
+    </sc-for>
+  </div>
+
+  <span class="mono" style="position: absolute; right: 40px; bottom: 14px; font-size: 11px; letter-spacing: .06em; color: #5B544A">PROTOTYPE · DESIGN PROPOSAL · data: prototype, dated, verify before use</span>
+
+  <sc-if value="{{noSys}}" hint-placeholder-val="{{true}}">
+    <div>
+      <h1 class="ital" style="position: absolute; left: 40px; top: 236px; margin: 0; font-size: 92px; font-weight: 400; line-height: 1.04; letter-spacing: -.01em; white-space: nowrap">Ask a system for its life.</h1>
+      <p style="position: absolute; left: 40px; top: 352px; width: 820px; margin: 0; font-size: 22px; line-height: 1.5">Search returns a river of time, not a page. Recorded history is the solid band. A door standing on it is a moment you can walk into.</p>
+      <div style="position: absolute; left: 100px; top: 560px; width: 1240px; height: 0; border-top: 1px solid rgba(34,31,27,.25)"></div>
+      <span class="mono" style="position: absolute; left: 100px; top: 574px; font-size: 12px; letter-spacing: .1em; color: #5B544A">THE RIVERBED IS EMPTY · NO SYSTEM OPEN</span>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{hasSys}}" hint-placeholder-val="{{true}}">
+    <div>
+      <span class="mono" style="position: absolute; left: 40px; top: 178px; font-size: 12px; letter-spacing: .14em; color: #7A4A1E">{{kicker}}</span>
+      <span class="mono" style="position: absolute; left: 40px; top: 194px; font-size: 12px; letter-spacing: .02em; color: #5B544A">{{widthKey}}</span>
+      <h1 class="ital" style="position: absolute; left: 40px; top: 214px; margin: 0; font-size: 56px; font-weight: 400; line-height: 1.05; white-space: nowrap">{{sysTitle}}</h1>
+      <p class="ital" style="position: absolute; right: 40px; top: 206px; width: 480px; margin: 0; text-align: right; font-size: 15px; line-height: 1.4; color: #5B544A; text-wrap: balance">{{sysNote}}</p>
+
+      <section aria-label="River of time: {{sysTitle}}" style="position: absolute; left: 0; top: 270px; width: 1440px; height: 320px">
+        <div style="position: absolute; left: 0; top: 0; width: 1440px; height: 320px; clip-path: inset(0 {{drawInset}}% 0 0); transition: clip-path {{drawDur}} cubic-bezier(.45,.05,.3,1)">
+          <div style="position: absolute; left: 0; top: 0; width: 1440px; height: 320px; transform-origin: 0 0; transform: translateX({{bandTx}}px) scaleX({{bandZ}}); transition: transform .9s cubic-bezier(.5,0,.2,1)">
+            <svg width="1440" height="320" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true">
+              <path d="{{riverD}}" fill="#7A4A1E"></path>
+            </svg>
+          </div>
+        </div>
+
+        <svg width="1440" height="320" viewBox="0 0 1440 320" style="position: absolute; left: 0; top: 0; opacity: {{forkOp}}; transition: opacity .6s {{forkDelay}}s" aria-hidden="true">
+          <path d="{{forksD}}" fill="none" stroke="#3F5A73" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+        <sc-for list="{{forks}}" as="f" hint-placeholder-count="2">
+          <div style="position: absolute; left: {{f.dx}}px; top: {{f.dy}}px; width: 10px; height: 10px; box-sizing: border-box; border-radius: 5px; border: 2px solid #3F5A73; background: #F1ECE2; opacity: {{f.op}}; transition: opacity .6s {{f.delay}}s"></div>
+          <div style="position: absolute; left: {{f.sx}}px; top: {{f.sy}}px; width: {{f.sw}}px; box-sizing: border-box; border: 1.5px solid #3F5A73; background: #F1ECE2; opacity: {{f.op}}; transition: opacity .6s {{f.delay}}s">
+            <div style="display: flex; align-items: stretch">
+              <span class="mono" style="display: flex; align-items: center; padding: 0 9px; background: #3F5A73; color: #F1ECE2; font-size: 10.5px; letter-spacing: .14em; font-weight: 500">FORK</span>
+              <span class="mono" style="padding: 3px 8px; font-size: 10.5px; letter-spacing: .04em; color: #5B544A; white-space: nowrap">{{f.l1}}</span>
+            </div>
+            <div style="padding: 3px 8px 5px">
+              <span class="ital" style="display: block; font-size: 15px; line-height: 1.25">{{f.l2}}</span>
+              <span class="ital" style="display: block; font-size: 12.5px; line-height: 1.25; color: #5B544A">{{f.l3}}</span>
+              <span class="mono" style="display: block; font-size: 10.5px; letter-spacing: .04em; color: #5B544A">{{f.l4}}</span>
+            </div>
+          </div>
+        </sc-for>
+
+        <sc-for list="{{miles}}" as="m" hint-placeholder-count="4">
+          <div style="position: absolute; left: {{m.x}}px; top: {{m.stemTop}}px; width: 0; height: {{m.stemH}}px; border-left: 1px solid #221F1B; opacity: {{m.op}}; transition: opacity .5s {{m.delay}}s"></div>
+          <div style="position: absolute; left: {{m.dotX}}px; top: 164px; width: 12px; height: 12px; box-sizing: border-box; border-radius: 6px; background: #221F1B; border: 2px solid #F1ECE2; opacity: {{m.op}}; transition: opacity .5s {{m.delay}}s"></div>
+          <div style="position: absolute; left: {{m.lx}}px; top: {{m.top}}px; width: {{m.w}}px; opacity: {{m.op}}; transition: opacity .5s {{m.delay}}s">
+            <span class="mono" style="display: block; font-size: 12px; letter-spacing: .08em">{{m.d}}</span>
+            <span style="display: block; font-size: 13.5px; line-height: 1.25">{{m.t}}</span>
+          </div>
+        </sc-for>
+
+        <sc-if value="{{hasNow}}" hint-placeholder-val="{{true}}">
+          <div style="position: absolute; left: {{nowLine}}px; top: 134px; width: 0; height: 116px; border-left: 2px solid #221F1B; opacity: {{futOp}}; transition: opacity .6s {{futDelay}}s"></div>
+          <div style="position: absolute; left: {{nowLab}}px; top: 232px; width: 180px; opacity: {{futOp}}; transition: opacity .6s {{futDelay}}s">
+            <span class="mono" style="display: block; font-size: 12px; letter-spacing: .1em; font-weight: 500">{{nowL1}}</span>
+            <span class="mono" style="display: block; font-size: 11px; color: #5B544A">{{nowL2}}</span>
+            <span class="mono" style="display: block; font-size: 11px; color: #5B544A">{{nowL3}}</span>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{hasEnd}}" hint-placeholder-val="{{false}}">
+          <div style="position: absolute; left: {{endX}}px; top: 120px; width: 0; height: 100px; border-left: 3px solid #221F1B; opacity: {{futOp}}; transition: opacity .6s {{futDelay}}s"></div>
+          <span class="mono" style="position: absolute; left: {{endLab}}px; top: 224px; font-size: 12px; letter-spacing: .1em; opacity: {{futOp}}; transition: opacity .6s {{futDelay}}s">1789</span>
+          <p class="ital" style="position: absolute; left: {{endTx}}px; top: 128px; width: 150px; margin: 0; font-size: 17px; line-height: 1.3; opacity: {{futOp}}; transition: opacity .6s {{futDelay}}s">{{endText}}</p>
+        </sc-if>
+
+        <sc-if value="{{hasUnk}}" hint-placeholder-val="{{false}}">
+          <div style="position: absolute; left: {{nowX}}px; top: 170px; width: {{unkW}}px; height: 0; border-top: 2px dashed #221F1B; opacity: {{futOp}}; transition: opacity .6s {{futDelay}}s"></div>
+          <sc-for list="{{unks}}" as="u" hint-placeholder-count="3">
+            <div style="position: absolute; left: {{u.x}}px; top: 157px; width: 26px; height: 26px; box-sizing: border-box; border: 2px dashed #221F1B; background: #F1ECE2; opacity: {{futOp}}; transition: opacity .6s {{futDelay}}s"></div>
+            <div style="position: absolute; left: {{u.lx}}px; top: 108px; width: 96px; text-align: center; opacity: {{futOp}}; transition: opacity .6s {{futDelay}}s">
+              <span class="mono" style="display: block; font-size: 11px">OPEN QUESTION</span>
+              <span style="display: block; font-size: 13px; color: #5B544A">[name: verify]</span>
+            </div>
+          </sc-for>
+        </sc-if>
+
+        <sc-for list="{{doors}}" as="d" hint-placeholder-count="3">
+          <button type="button" class="door" onClick="{{d.pick}}" onMouseEnter="{{d.pick}}" onFocus="{{d.pick}}" aria-label="{{d.aria}}" aria-pressed="{{d.pressed}}" style="left: {{d.bx}}px; opacity: {{d.op}}; pointer-events: {{d.pe}}; transition: left .9s cubic-bezier(.5,0,.2,1), opacity .5s {{d.delay}}s">
+            <span class="dr" style="background: {{d.fill}}"></span>
+          </button>
+          <div style="position: absolute; left: {{d.lx}}px; top: 224px; width: 120px; text-align: center; pointer-events: none; opacity: {{d.op}}; transition: left .9s cubic-bezier(.5,0,.2,1), opacity .5s {{d.delay}}s">
+            <span class="mono" style="display: block; font-size: 12px; letter-spacing: .08em; font-weight: {{d.fw}}; text-decoration: {{d.deco}}; text-underline-offset: 3px">{{d.date}}</span>
+            <span style="display: block; font-size: 13px; line-height: 1.25">{{d.short}}</span>
+          </div>
+        </sc-for>
+
+        <sc-if value="{{showTags}}" hint-placeholder-val="{{false}}">
+          <sc-for list="{{tags}}" as="tg" hint-placeholder-count="4">
+            <div style="position: absolute; left: {{tg.x}}px; top: 292px; display: flex; align-items: center; gap: 8px; white-space: nowrap">
+              <span class="sw {{tg.cls}}"></span>
+              <span class="mono" style="font-size: 11px; letter-spacing: .03em">{{tg.t}}</span>
+            </div>
+          </sc-for>
+        </sc-if>
+      </section>
+
+      <sc-if value="{{hasHint}}" hint-placeholder-val="{{true}}">
+        <p class="ital" style="position: absolute; left: 40px; top: 600px; margin: 0; font-size: 20px; color: #5B544A">Each upright door is a moment you can enter. Hover one, or tab to it.</p>
+      </sc-if>
+
+      <sc-if value="{{hasCard}}" hint-placeholder-val="{{false}}">
+        <div style="position: absolute; left: {{cardLeft}}px; top: 590px; width: 620px; box-sizing: border-box; padding: 12px 18px 14px; border: 2px solid #221F1B; background: #F8F4EA; transition: left .35s ease">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+            <span class="mono" style="font-size: 12px; letter-spacing: .14em">A DOOR · {{cardDate}}</span>
+            <button type="button" class="btn" onClick="{{enterMoment}}" style="border: 2px solid #221F1B; background: #221F1B; color: #F1ECE2; white-space: nowrap">Enter this moment →</button>
+          </div>
+          <p class="ital" style="margin: 6px 0 0; font-size: 20px; line-height: 1.3">{{cardText}}</p>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px; min-height: 14px">
+            <sc-if value="{{cardHasOut}}" hint-placeholder-val="{{false}}">
+              <span class="sw t-rec" style="width: 22px; height: 12px"></span>
+            </sc-if>
+            <span class="mono" style="font-size: 11.5px; color: #3B362F">{{cardMeta}}</span>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{panelShown}}" hint-placeholder-val="{{false}}">
+        <div style="position: absolute; left: 660px; top: 270px; width: 740px; box-sizing: border-box; padding: 22px 28px 24px; background: #F8F4EA; border: 2px solid #221F1B; animation: rise .5s ease both">
+          <span class="mono" style="font-size: 12px; letter-spacing: .14em">THRESHOLD · {{cardDate}}</span>
+          <h2 class="ital" style="margin: 8px 0 0; font-size: 38px; font-weight: 400; line-height: 1.12; text-wrap: balance">{{thrTitle}}</h2>
+          <span class="mono" style="display: block; margin: 6px 0 0; font-size: 12px; line-height: 1.4; color: #3B362F">{{sealLine}}</span>
+          <span class="mono" style="display: block; margin: 16px 0 8px; font-size: 12px; letter-spacing: .12em">CHOOSE A SEAT · outline: authored by the designers</span>
+          <div role="group" aria-label="Seats" style="display: flex; flex-direction: column; gap: 8px">
+            <sc-for list="{{seats}}" as="st" hint-placeholder-count="3">
+              <button type="button" class="seatb" onClick="{{st.pick}}" aria-pressed="{{st.pressed}}" style="background: {{st.bg}}; color: {{st.fg}}">
+                <span class="mono" style="font-style: normal; font-size: 14px">{{st.n}}</span>
+                <span style="flex: 1; display: flex; flex-direction: column; gap: 1px; line-height: 1.15">
+                  <span>{{st.name}}</span>
+                  <sc-if value="{{st.hasHeld}}" hint-placeholder-val="{{true}}">
+                    <span class="mono" style="font-style: normal; font-size: 10.5px; letter-spacing: .04em">{{st.held}}</span>
+                  </sc-if>
+                </span>
+                <span class="mono" style="font-style: normal; font-size: 11px; letter-spacing: .1em">{{st.tag}}</span>
+              </button>
+            </sc-for>
+          </div>
+          <sc-if value="{{hasHz}}" hint-placeholder-val="{{true}}">
+            <div>
+              <span class="mono" style="display: block; margin: 16px 0 8px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase">KNOWLEDGE HORIZON · {{hzSeat}}</span>
+              <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px">
+                <sc-for list="{{hz}}" as="h" hint-placeholder-count="4">
+                  <div style="box-sizing: border-box; padding: 8px 10px 8px; border: {{h.border}}; background: {{h.bg}}">
+                    <div style="display: flex; align-items: flex-start; gap: 6px; min-height: 28px">
+                      <span class="sw {{h.cls}}" style="width: 20px; margin-top: 1px"></span>
+                      <span class="mono" style="font-size: 10.5px; letter-spacing: .06em; font-weight: 500; line-height: 1.25">{{h.head}}</span>
+                    </div>
+                    <p class="ital" style="margin: 4px 0 0; font-size: 13.5px; line-height: 1.3">{{h.t}}</p>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <div style="display: flex; gap: 12px; margin-top: 18px; align-items: center">
+            <button type="button" class="btn" onClick="{{enterSeat}}" style="border: 2px solid #221F1B; background: #221F1B; color: #F1ECE2; min-height: 52px; padding: 0 28px; font-size: 18px">Enter →</button>
+            <button type="button" class="btn" onClick="{{backRiver}}" style="border: 2px solid #221F1B; background: transparent; color: #221F1B">Back to the river</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{showLegend}}" hint-placeholder-val="{{false}}">
+        <div style="position: absolute; left: 40px; top: 766px; width: 1360px; height: 92px; box-sizing: border-box; border-top: 2px solid #221F1B; padding-top: 8px; display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 24px">
+          <div>
+            <span class="mono" style="font-size: 12px; letter-spacing: .12em; font-weight: 500">HOW DO WE KNOW?</span>
+            <p style="margin: 4px 0 0; font-size: 12.5px; line-height: 1.4">{{src}}</p>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px">
+            <sc-for list="{{legend}}" as="lg" hint-placeholder-count="5">
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px">
+                  <span class="sw {{lg.cls}}"></span>
+                  <span class="mono" style="font-size: 11px; letter-spacing: .08em; font-weight: 500">{{lg.word}}</span>
+                </div>
+                <p style="margin: 4px 0 0; font-size: 12.5px; line-height: 1.35; color: #3B362F">{{lg.note}}</p>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isArrival}}" hint-placeholder-val="{{false}}">
+    <div class="arr" style="position: absolute; left: 0; top: 0; width: 1440px; height: 900px; background: #7A4A1E; color: #F1ECE2; animation: rise .7s ease both">
+      <div style="position: absolute; left: 40px; top: 34px; width: {{stripW}}px; height: 44px; overflow: hidden">
+        <svg width="1360" height="44" viewBox="0 106 1440 128" preserveAspectRatio="none" style="display: block" aria-hidden="true">
+          <path d="{{riverD}}" fill="#F1ECE2"></path>
+        </svg>
+      </div>
+      <div style="position: absolute; left: {{hereX}}px; top: 56px; width: {{sealW}}px; height: 0; border-top: 1px solid #F1ECE2; opacity: .4"></div>
+      <span class="mono" style="position: absolute; left: {{sealLab}}px; top: 38px; width: 60px; text-align: center; font-size: 11px; letter-spacing: .12em">SEALED</span>
+      <div style="position: absolute; left: {{hereX}}px; top: 24px; width: 0; height: 64px; border-left: 2px solid #F1ECE2"></div>
+      <div style="position: absolute; left: {{hereTri}}px; top: 90px; width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-bottom: 10px solid #F1ECE2"></div>
+      <span class="mono" style="position: absolute; left: {{hereLab}}px; top: 104px; width: 140px; text-align: center; font-size: 12px; letter-spacing: .12em; font-weight: 500">YOU ARE HERE</span>
+
+      <span class="mono" style="position: absolute; left: 40px; top: 176px; font-size: 13px; letter-spacing: .16em; color: #E9DFCB">ARRIVAL · {{sysTitle}}</span>
+      <div style="position: absolute; left: 40px; top: 204px; width: 1360px; display: flex; flex-direction: column; gap: 12px">
+        <h2 class="ital" style="width: 1300px; margin: 0; font-size: 72px; font-weight: 400; line-height: 1.06; text-wrap: balance">{{arrTitle}}</h2>
+        <p class="ital" style="width: 1180px; margin: 0; font-size: 32px; line-height: 1.3">{{arrLine}}</p>
+        <sc-if value="{{hasCh}}" hint-placeholder-val="{{true}}">
+          <div style="margin-top: 14px">
+            <span class="mono" style="font-size: 13px; letter-spacing: .16em; color: #E9DFCB">THE FIRST REAL CHOICE · SHOWN, NOT PLAYED</span>
+            <p class="ital" style="margin: 8px 0 14px; font-size: 30px; line-height: 1.2">{{chQ}}</p>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+              <sc-for list="{{chOpts}}" as="o" hint-placeholder-count="3">
+                <div style="display: flex; align-items: center; gap: 14px; min-height: 60px; box-sizing: border-box; padding: 0 18px; border: 2px solid #F1ECE2">
+                  <span class="mono" style="font-size: 13px; font-weight: 500">{{o.k}}</span>
+                  <span class="ital" style="font-size: 22px; line-height: 1.2">{{o.t}}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{hasRule}}" hint-placeholder-val="{{false}}">
+          <div style="margin-top: 14px; width: 1000px">
+            <span class="mono" style="font-size: 13px; letter-spacing: .16em; color: #E9DFCB">NOT A CHOICE · THE RULEBOOK ANSWERS · COMPUTED</span>
+            <p class="ital" style="margin: 10px 0 0; padding: 16px 20px; background: #D9C9AE; color: #221F1B; font-size: 24px; line-height: 1.3">{{ruleText}}</p>
+          </div>
+        </sc-if>
+        <sc-if value="{{noCh}}" hint-placeholder-val="{{false}}">
+          <span class="mono" style="display: block; margin-top: 14px; width: 1000px; font-size: 13px; line-height: 1.5; color: #E9DFCB">PROTOTYPE · the room behind this door is not built on this board. The threshold is the demonstration.</span>
+        </sc-if>
+      </div>
+
+      <div style="position: absolute; left: 40px; top: 690px; display: flex; gap: 14px">
+        <button type="button" class="btn" onClick="{{backArrival}}" style="border: 2px solid #F1ECE2; background: #F1ECE2; color: #7A4A1E; min-height: 52px; padding: 0 28px; font-size: 18px">Back to the river</button>
+        <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="border: 2px solid #F1ECE2; background: {{howBgA}}; color: {{howFgA}}; min-height: 52px">How do we know?</button>
+      </div>
+      <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+        <p class="mono" style="position: absolute; left: 40px; top: 764px; width: 1080px; margin: 0; font-size: 12.5px; line-height: 1.6; color: #F1ECE2">OBSERVED · the place and the date, from the public record [verify]. AUTHORED · the seat and the choices, written by BOW’s designers, so they are outlined. SEALED · the strip stops at the mark and the rest of the river is a hairline. What happened next is a RECORDED note on the door, never in the seat.</p>
+      </sc-if>
+      <span class="mono" style="position: absolute; right: 40px; bottom: 14px; font-size: 11px; letter-spacing: .06em; color: #E9DFCB">PROTOTYPE · DESIGN PROPOSAL · data: prototype, dated, verify before use</span>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentWillUnmount() { clearTimeout(this.tD); clearTimeout(this.tF); clearTimeout(this.tP); }
+
+  getSys() {
+    const NOTE = 'Time is not to scale: recent years are stretched so the doors can be read.';
+    return {
+      rev: {
+        label: 'American Revolution', title: 'The American Revolution', kicker: 'A HISTORICAL SYSTEM · 1763 TO 1789',
+        note: 'Time is not to scale. A historical system has no NOW: the record stops, and branches begin where you choose.',
+        x0: 100, x1: 1240, mw: 110, hasNow: false, unk: false, wkey: 'Width = how much is written down, not how well it went.',
+        endText: 'Recorded history ends here; branches are yours.',
+        anchors: [[100, 4], [200, 8], [330, 12], [440, 18], [600, 22], [730, 26], [880, 28], [960, 28], [1130, 30], [1240, 30]],
+        miles: [
+          { x: 100, row: 1, d: '1763', t: 'Treaty of Paris; Proclamation Line' },
+          { x: 200, row: 0, d: '1765', t: 'Stamp Act' },
+          { x: 330, row: 1, d: '1770', t: 'Boston Massacre' },
+          { x: 880, row: 1, d: '1781', t: 'Yorktown' },
+          { x: 960, row: 0, d: '1783', t: 'Treaty of Paris' }
+        ],
+        forks: [{ x: 520, ex: 620, ey: 40, sx: 628, sy: 6, sw: 240, l1: 'DIVERGED FEB 1775', l2: 'Conciliation accepted', l3: 'Lord North’s Conciliatory Proposal' }],
+        doors: [
+          { id: 'r73', x: 440, dt: '16 DEC 1773', short: 'Tea in Boston harbour',
+            card: '16 December 1773. Three tea ships at Griffin’s Wharf. A crowd is gathering. Nobody yet knows how the night will end.', meta: '',
+            where: 'Boston', when: '16 December 1773 · afternoon', thr: 'You arrive on the afternoon of 16 December.',
+            seats: [['Boston merchant', 'a Boston merchant'], ['Crown customs commissioner', 'a Crown customs commissioner'], ['Loyalist printer', 'a Loyalist printer']] },
+          { id: 'r75', x: 600, dt: '19 APR 1775', short: 'Lexington and Concord',
+            card: '19 April 1775. Lexington Green, before dawn. Two lines of men, and nobody knows yet who will fire first.', meta: '',
+            where: 'Lexington, Massachusetts', when: '19 April 1775 · before dawn', thr: 'You arrive before dawn.',
+            seats: [['Massachusetts militiaman at Lexington', 'a Massachusetts militiaman at Lexington'], ['British regular officer under General Gage', 'a British regular officer under General Gage'], ['Boston merchant, waiting for news', 'a Boston merchant, waiting for news']] },
+          { id: 'r76', x: 730, dt: '4 JUL 1776', short: 'Declaration of Independence',
+            card: '4 July 1776. Philadelphia. Delegates put their names to a declaration. If the war is lost, those names are evidence.', meta: '[verify: adopted 4 July; most delegates signed later]',
+            where: 'Philadelphia', when: '4 July 1776 · the day the text is adopted', thr: 'You arrive on the day the text is adopted.',
+            seats: [['Delegate to the Continental Congress', 'a delegate to the Continental Congress'], ['Loyalist printer', 'a Loyalist printer'], ['Soldier in the Continental Army', 'a soldier in the Continental Army']] },
+          { id: 'r87', x: 1130, dt: 'SUMMER 1787', short: 'Constitutional Convention',
+            card: 'Summer 1787. Philadelphia, windows shut. Large states and small states each fear being outvoted.', meta: '',
+            where: 'Philadelphia', when: 'Summer 1787 · in the room', thr: 'You arrive as the argument turns to who is counted.',
+            seats: [['Delegate from a small state', 'a delegate from a small state'], ['Delegate from a large state', 'a delegate from a large state'], ['The convention’s secretary', 'the convention’s secretary']] }
+        ],
+        tags: [[100, 't-obs', 'OBSERVED · solid band · dated record'], [380, 't-aut', 'AUTHORED · doors chosen by designers'], [700, 't-fork', 'A DIFFERENT HAND · framed, in its own ink']],
+        src: 'Sources: standard histories of the period. [verify exact days for each door]'
+      },
+      celtics: {
+        label: 'Boston Celtics', title: 'The Boston Celtics', kicker: 'A FRANCHISE · 1946 TO NOW', note: NOTE,
+        x0: 100, x1: 1210, mw: 150, hasNow: true, nowL2: 'live · [feed]', nowL3: 'no model has run past here', unk: false, endText: '', wkey: 'Width = how much is written down, not how well the team did.',
+        anchors: [[100, 3], [270, 7], [500, 13], [690, 18], [850, 24], [980, 29], [1110, 32], [1210, 32]],
+        miles: [
+          { x: 100, row: 0, d: '1946', t: 'Founded, in the BAA' },
+          { x: 270, row: 0, d: '1957', t: 'First championship' },
+          { x: 500, row: 0, d: '1986', t: 'Championship' },
+          { x: 690, row: 0, d: '2008', t: 'Championship' }
+        ],
+        forks: [
+          { x: 850, ex: 892, ey: 30, sx: 900, sy: 6, sw: 250, l1: 'DIVERGED 17 JUN 2017', l2: 'Boston keeps the No. 1 pick', l3: '' },
+          { x: 1140, ex: 1152, ey: 34, sx: 1160, sy: 6, sw: 240, l1: 'DIVERGED JUN 2025', l2: 'Holiday kept', l3: '' }
+        ],
+        doors: [
+          { id: 'c17', x: 850, dt: '17 JUN 2017', short: 'The No. 1 pick: keep or trade?',
+            card: '17 June 2017. Boston holds the first pick. Philadelphia wants it.', meta: '', out: 'Recorded: agreed 17 Jun, completed 19 Jun 2017 (verify)',
+            where: 'Boston', when: '17 June 2017 · morning', thr: 'You arrive the morning of the call.', sealAt: 'this morning',
+            seats: [
+              { name: 'President of Basketball Operations', of: 'the President of Basketball Operations', real: 'Danny Ainge', rk: 'p',
+                hz: ['You hold No. 1. Philadelphia wants it.', 'Keep it, trade down, or ask for more.', 'Make Philadelphia pay your price.', 'How any 19-year-old will turn out.'],
+                ch: { q: 'Philadelphia wants No. 1. What do you ask for?', o: ['Keep it and draft', 'Trade down for a future first', 'Hold out for more'] } },
+              { name: 'Head coach', of: 'the head coach', real: 'Brad Stevens', rk: 'p',
+                hz: ['Boston holds the first pick. Philadelphia wants it.', 'Set the rotation and the minutes.', 'Sign or trade anyone.', 'How any 19-year-old will turn out.'],
+                ch: { q: 'The front office is weighing an offer for No. 1. What do you tell them?', o: ['Say what the team needs now', 'Say the front office decides', 'Ask to see the offer first'] } },
+              { name: 'Philadelphia’s president of basketball operations', of: 'Philadelphia’s president of basketball operations', real: 'Bryan Colangelo', rk: 'p',
+                hz: ['You want the No. 1 pick, and Boston holds it.', 'Offer, raise, or walk away.', 'See inside Boston’s room.', 'How any 19-year-old will turn out.'],
+                ch: { q: 'You want No. 1 and Boston holds it. What do you offer?', o: ['A lower pick and a future first', 'More than that, to be sure', 'Wait for Boston to name a price'] } }
+            ] },
+          { id: 'c24', x: 980, dt: '17 JUN 2024', short: 'Game 5, up 3–1',
+            card: '17 June 2024. Game 5, in Boston. Dallas is down three games to one. One more win ends it.', meta: '', out: 'Recorded: champions, 4–1 over Dallas (verify)',
+            where: 'Boston', when: '17 June 2024 · morning', thr: 'You arrive the morning of Game 5.', sealAt: 'this morning',
+            seats: [
+              { name: 'Head coach', of: 'the head coach', real: 'Joe Mazzulla', rk: 'p',
+                hz: ['Boston leads the series 3–1. One more win ends it.', 'Set the rotation and the minutes.', 'Control how Dallas plays.', 'Who wins Game 5.'],
+                ch: { q: 'One more win ends it. How do you set the night?', o: ['Lean on the starters', 'Keep the usual rotation', 'Rest legs for a Game 6'] } },
+              { name: 'Season-ticket holder', of: 'a season-ticket holder', real: 'a composite fan', rk: 'c',
+                hz: ['Boston leads 3–1, and Game 5 is at home.', 'Go, resell your seat, or stay home.', 'Change a single minute of play.', 'Who wins Game 5.'],
+                ch: { q: 'Game 5 is at home tonight. What do you do with your seats?', o: ['Go, and bring family', 'Resell them', 'Watch from home'] } },
+              { name: 'Dallas’s general manager', of: 'Dallas’s general manager', real: 'Nico Harrison', rk: 'p',
+                hz: ['Dallas is down 3–1. One more loss ends it.', 'Back the coach and the players.', 'Change what happens on the floor.', 'Whether Dallas forces a Game 6.'],
+                ch: { q: 'Dallas is down 3–1 with one loss left. What do you tell the team?', o: ['Back the coach and the plan', 'Ask for changes tonight', 'Stay out of the way'] } }
+            ] },
+          { id: 'c25', x: 1110, dt: '12 MAY 2025', short: 'Game 4 · Tatum goes down',
+            card: '12 May 2025. Game 4 of the second round. Jayson Tatum goes down.', meta: '', out: 'Recorded: Tatum’s Achilles; Boston’s summer became a different summer (verify: date and game)',
+            where: 'Boston Celtics', when: '12 May 2025 · night', thr: 'You arrive the night of the injury.', sealAt: 'tonight',
+            seats: [
+              { name: 'President of Basketball Operations', of: 'the President of Basketball Operations', real: 'Brad Stevens', rk: 'p',
+                hz: ['Tatum has gone down in Game 4.', 'Wait for the medical news.', 'Change the roster tonight.', 'How long Tatum will be out.'],
+                ch: { q: 'Tatum is down. What do you do tonight?', o: ['Wait for the medical news', 'Start on the summer’s payroll', 'Ask what the team is without him'] } },
+              { name: 'Capologist', of: 'the capologist', real: 'a composite capologist', rk: 'c',
+                hz: ['Every contract, and the tax lines.', 'Build trade scenarios from any contract.', 'Make the call.', 'How long Tatum will be out.'],
+                ch: { q: 'The summer just changed. What do you build first?', o: ['The payroll with Tatum out', 'The payroll with Tatum back', 'Both, side by side'] } },
+              { name: 'The rulebook (computed, not a person)', of: 'the rulebook', real: '', rk: 'r',
+                hz: ['The rules as written, and each team’s payroll.', 'Apply the cap and apron rules.', 'Bend a rule for one team.', 'How teams will try to work around a line.'],
+                ch: { rule: 'Over the second apron, a team cannot combine salaries in a trade or take back more salary than it sends (verify).' } }
+            ] }
+        ],
+        tags: [[100, 't-obs', 'OBSERVED · solid band · public record'], [420, 't-fork', 'A DIFFERENT HAND · framed, in its own ink'], [790, 't-aut', 'AUTHORED · doors chosen by designers']],
+        src: 'Sources: public league and team records. [verify each date before use, the 2017 dates especially]'
+      },
+      cell: {
+        label: 'cellular respiration', title: 'Cellular respiration', kicker: 'A PROCESS · HOW WE CAME TO KNOW',
+        note: 'For a scientific idea, the river is the history of the evidence.',
+        x0: 100, x1: 1060, mw: 150, hasNow: true, nowL2: 'the evidence so far', nowL3: '', unk: true, endText: '', wkey: 'Width = how much is written down, not how well it went.',
+        anchors: [[100, 4], [200, 6], [520, 14], [700, 20], [900, 26], [1060, 28]],
+        miles: [],
+        forks: [],
+        doors: [
+          { id: 'b80', x: 200, dt: '1780s', short: 'Lavoisier and Laplace: ice calorimeter',
+            card: 'The 1780s. Paris. A guinea pig sits inside a shell of ice. The water that melts is the measure of its heat.', meta: '',
+            where: 'Paris', when: '1780s · at the bench', thr: 'You arrive at the bench.',
+            seats: [['Assistant at the calorimeter', 'the assistant at the calorimeter'], ['A sceptic of the method', 'a sceptic of the method'], ['Reader of the published result', 'a reader of the published result']] },
+          { id: 'b37', x: 520, dt: '1937', short: 'Krebs: the citric acid cycle',
+            card: '1937. Sheffield. Pigeon muscle in a flask, and a chain of molecules that turns out to be a circle.', meta: '',
+            where: 'Sheffield', when: '1937 · at the bench', thr: 'You arrive with the results in hand.',
+            seats: [['Researcher at the bench', 'the researcher at the bench'], ['Referee reading the manuscript', 'a referee reading the manuscript'], ['Chemist who favours another pathway', 'a chemist who favours another pathway']] },
+          { id: 'b61', x: 700, dt: '1961', short: 'Mitchell: chemiosmosis',
+            card: '1961. A proposal that a gradient of protons, not a chemical intermediate, drives the making of ATP. Many in the field do not believe it.', meta: 'Nobel Prize in Chemistry, 1978 [verify]',
+            where: 'The field', when: '1961 · the debate', thr: 'You arrive as the proposal is argued over.',
+            seats: [['Biochemist who doubts it', 'a biochemist who doubts it'], ['Biochemist who supports it', 'a biochemist who supports it'], ['Student choosing which lab to join', 'a student choosing which lab to join']] },
+          { id: 'b90', x: 900, dt: '1990s', short: 'ATP synthase structure',
+            card: 'The 1990s. A crystal of a molecular motor’s head, and a shape that fits a rotating machine.', meta: 'Walker; Nobel Prize in Chemistry, 1997, shared with Boyer and Skou [verify]',
+            where: 'The crystallography lab', when: '1990s · the structure', thr: 'You arrive when the structure appears.',
+            seats: [['Crystallographer', 'the crystallographer'], ['Biochemist who predicted rotation', 'a biochemist who predicted rotation'], ['Journal referee', 'a journal referee']] }
+        ],
+        tags: [[100, 't-obs', 'OBSERVED · solid band · papers, dated'], [480, 't-aut', 'AUTHORED · doors chosen by designers'], [1000, 't-unk', 'UNKNOWN · dashed: open questions']],
+        src: 'Sources: the original papers and prize records. [verify each date and citation]'
+      },
+      semi: {
+        label: 'semiconductor supply chain', title: 'The semiconductor supply chain', kicker: 'A SUPPLY CHAIN · 1947 TO NOW', note: NOTE,
+        x0: 100, x1: 1040, mw: 150, hasNow: true, nowL2: 'live · [feed]', nowL3: 'no model has run past here', unk: false, endText: '', wkey: 'Width = how much is written down, not how well it went.',
+        anchors: [[100, 3], [300, 6], [520, 12], [800, 24], [940, 30], [1040, 32]],
+        miles: [
+          { x: 100, row: 0, d: 'DEC 1947', t: 'Point-contact transistor, Bell Labs' },
+          { x: 300, row: 0, d: '1958–59', t: 'Integrated circuit (Kilby, Noyce)' },
+          { x: 520, row: 0, d: '1987', t: 'TSMC founded' }
+        ],
+        forks: [{ x: 1040, ex: 1130, ey: 40, sx: 1138, sy: 12, sw: 260, l1: 'SCENARIO · DIVERGED [date]', l2: '30-day shipping pause', l3: '' }],
+        doors: [
+          { id: 's21a', x: 800, dt: 'MAR 2021', short: 'Fire at Renesas’s Naka fab',
+            card: 'March 2021. Naka, Japan. A fire stops a fab that many carmakers rely on. Nobody yet knows when it restarts.', meta: '[verify: exact date and restart timeline]',
+            where: 'Naka, Japan', when: 'March 2021 · the day of the fire', thr: 'You arrive the day of the fire.',
+            seats: [['Fab operations manager', 'the fab operations manager'], ['Automaker procurement VP', 'an automaker’s procurement VP'], ['Chip broker', 'a chip broker']] },
+          { id: 's21b', x: 940, dt: '2021', short: 'The shortage',
+            card: '2021. Car lots with empty rows. Automakers idle plants, waiting for chips that are not there.', meta: '[verify: which plants and when]',
+            where: 'An automaker’s plant', when: '2021 · the line stops', thr: 'You arrive as the line stops.',
+            seats: [['Automaker procurement VP', 'an automaker’s procurement VP'], ['Chip broker', 'a chip broker'], ['Car buyer waiting for delivery', 'a car buyer waiting for delivery']] }
+        ],
+        tags: [[100, 't-obs', 'OBSERVED · solid band · public record'], [400, 't-fork', 'A DIFFERENT HAND · framed, in its own ink'], [740, 't-aut', 'AUTHORED · doors chosen by designers']],
+        src: 'Sources: company and industry reports. [verify: fire date and restart timeline]'
+      }
+    };
+  }
+
+  choose(k) {
+    const S = this.getSys()[k];
+    clearTimeout(this.tD); clearTimeout(this.tF); clearTimeout(this.tP);
+    this.setState({ sys: k, q: S.label, sel: '', phase: 'river', seat: 0, drawn: false, fresh: true, panelIn: false });
+    this.tD = setTimeout(() => this.setState({ drawn: true }), 90);
+    this.tF = setTimeout(() => this.setState({ fresh: false }), 3600);
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const q = s.q || '';
+    const sysKey = s.sys || '';
+    const sel = s.sel || '';
+    const phase = s.phase || 'river';
+    const seat = s.seat || 0;
+    const how = !!s.how;
+    const drawn = !!s.drawn;
+    const fresh = !!s.fresh;
+    const panelIn = !!s.panelIn;
+    const ALL = this.getSys();
+    const ORDER = ['rev', 'celtics', 'cell', 'semi'];
+    const S = ALL[sysKey || 'celtics'];
+    const hasSys = !!sysKey;
+    const CY = 170;
+
+    const ql = q.trim().toLowerCase();
+    const match = ql ? ORDER.find((k) => ALL[k].label.toLowerCase().indexOf(ql) === 0) : '';
+    const miss = !!ql && !match;
+    const chips = ORDER.map((k) => {
+      const on = k === sysKey;
+      return { label: ALL[k].label, pressed: on ? 'true' : 'false', bg: on ? '#221F1B' : '#F1ECE2', fg: on ? '#F1ECE2' : '#221F1B',
+        deco: (!on && match === k) ? 'underline' : 'none', pick: () => this.choose(k) };
+    });
+
+    const hh = (x) => {
+      const a = S.anchors;
+      let b = a[a.length - 1][1];
+      if (x <= a[0][0]) b = a[0][1];
+      else {
+        for (let i = 0; i < a.length - 1; i++) {
+          if (x >= a[i][0] && x <= a[i + 1][0]) { const t = (x - a[i][0]) / (a[i + 1][0] - a[i][0]); b = a[i][1] + (a[i + 1][1] - a[i][1]) * t; break; }
+        }
+      }
+      return b + (b > 8 ? 1.3 : 0.5) * Math.sin(x / 19);
+    };
+    const xs = [];
+    for (let x = S.x0; x < S.x1; x += 6) xs.push(x);
+    xs.push(S.x1);
+    const riverD = 'M ' + xs.map((x) => x + ' ' + (CY - hh(x)).toFixed(1)).join(' L ') + ' L ' + xs.slice().reverse().map((x) => x + ' ' + (CY + hh(x)).toFixed(1)).join(' L ') + ' Z';
+
+    const doorSel = S.doors.find((d) => d.id === sel) || null;
+    const zoomed = phase !== 'river' && !!doorSel;
+    const Z = 3.2;
+    const tx = doorSel ? 430 - Z * doorSel.x : 0;
+    const mx = (x) => (zoomed ? Z * x + tx : x);
+    const live = drawn && !zoomed;
+    const span = S.x1 - S.x0;
+    const D = (x) => (fresh && drawn ? (Math.max(0, Math.min(1, (x - S.x0) / span)) * 2.3).toFixed(2) : '0');
+    const futDelay = fresh && drawn ? '2.3' : '0';
+    // sealed hindsight: in the threshold, nothing to the right of the chosen door is shown
+    const after = (x) => zoomed && x > doorSel.x;
+
+    const miles = S.miles.map((m) => {
+      const st = m.row ? 92 : 144;
+      return { x: m.x, dotX: m.x - 6, top: m.row ? 24 : 92, w: S.mw, lx: m.x + 8, stemTop: st, stemH: CY - st, d: m.d, t: m.t, op: (live && !after(m.x)) ? 1 : 0, delay: D(m.x) };
+    });
+    const doors = S.doors.map((d) => {
+      const on = d.id === sel;
+      const x = mx(d.x);
+      return { bx: x - 22, lx: x - 60, date: d.dt, short: d.short, aria: 'Door: ' + d.dt + ', ' + d.short, pressed: on ? 'true' : 'false',
+        fill: on ? '#221F1B' : '#F1ECE2', op: !drawn ? 0 : (zoomed ? (on ? 1 : ((after(d.x) || x < 70) ? 0 : 0.35)) : 1), pe: zoomed ? 'none' : 'auto',
+        fw: on ? 500 : 400, deco: on ? 'underline' : 'none', delay: D(d.x),
+        pick: () => { const c = this.state || {}; if ((c.phase || 'river') !== 'river' || c.sel === d.id) return; this.setState({ sel: d.id, seat: 0 }); } };
+    });
+    const forks = S.forks.map((f) => ({
+      dx: f.x - 5, dy: Math.round(CY - hh(f.x)) - 5, sx: f.sx, sy: f.sy, sw: f.sw, l1: f.l1, l2: f.l2, l3: f.l3,
+      l4: 'by [author]' + (how ? ' · not the record' : ''), op: (live && !after(f.x)) ? 1 : 0, delay: D(f.x + 60)
+    }));
+    const forksD = S.forks.map((f) => {
+      const y0 = CY - hh(f.x);
+      const c2 = f.x + Math.min(35, (f.ex - f.x) * 0.6);
+      return 'M ' + f.x + ' ' + y0.toFixed(1) + ' C ' + f.x + ' ' + (y0 - 50).toFixed(1) + ', ' + c2.toFixed(1) + ' ' + f.ey + ', ' + f.ex + ' ' + f.ey;
+    }).join(' ');
+    const unks = S.unk ? [1150, 1250, 1350].map((x) => ({ x: x - 13, lx: x - 48 })) : [];
+
+    const hasOut = S.doors.some((d) => !!d.out);
+    const legend = [
+      { cls: 't-obs', word: 'OBSERVED', note: 'reported from outside BOW: the band and its dates' }
+    ];
+    if (hasOut) legend.push({ cls: 't-rec', word: 'RECORDED', note: 'what happened after a door: shown only here, never to the person in the seat' });
+    legend.push({ cls: 't-aut', word: 'AUTHORED', note: 'chosen by BOW’s designers: the doors, and how thick the band is' });
+    if (S.forks.length) legend.push({ cls: 't-fork', word: 'A DIFFERENT HAND', note: 'someone’s branch, in its own ink. Never inked onto the record.' });
+    if (S.unk) legend.push({ cls: 't-unk', word: 'UNKNOWN', note: 'open questions. The system does not know, and says so.' });
+
+    const norm = (st) => (Array.isArray(st) ? { name: st[0], of: st[1] } : st);
+    const seatObjs = doorSel ? doorSel.seats.map(norm) : [];
+    const seatIx = Math.min(seat, Math.max(0, seatObjs.length - 1));
+    const cur = seatObjs[seatIx] || null;
+    const heldLine = (st) => (st.rk === 'p' && st.real ? 'held in reality by ' + st.real + ' [verify]' : (st.rk === 'c' && st.real ? 'held in reality by ' + st.real : ''));
+    const notLine = (st) => (st.rk === 'p' ? 'You are not ' + st.real + '.' : (st.rk === 'c' ? 'No real person sits here; it is ' + st.real + '.' : (st.rk === 'r' ? 'You are not a person; the rulebook is computed.' : '')));
+    const seats = seatObjs.map((st, i) => ({ n: String(i + 1), name: st.name, held: heldLine(st), hasHeld: !!heldLine(st), pressed: i === seatIx ? 'true' : 'false',
+      bg: i === seatIx ? '#221F1B' : 'transparent', fg: i === seatIx ? '#F1ECE2' : '#221F1B', tag: i === seatIx ? 'CHOSEN' : '', pick: () => this.setState({ seat: i }) }));
+    const seatOf = cur ? cur.of : '';
+
+    const HZH = ['KNOW', 'CAN', 'CAN’T', 'NOBODY IN THIS SEAT KNOWS'];
+    const HZC = ['t-obs', 't-aut', 't-aut', 't-unk'];
+    const hz = cur && cur.hz ? cur.hz.map((t, i) => ({ head: HZH[i], t, cls: HZC[i],
+      border: i === 3 ? '2px dashed #221F1B' : '1.5px solid #221F1B', bg: i === 3 ? 'transparent' : '#FAF7F0' })) : [];
+    const ch = cur && cur.ch ? cur.ch : null;
+
+    const kx = 1360 / 1440;
+    const hereX = doorSel ? Math.round(40 + doorSel.x * kx) : 0;
+    const endX = Math.round(40 + S.x1 * kx);
+    const sealW = Math.max(0, endX - hereX);
+    const outNote = (how && doorSel && doorSel.out) ? doorSel.out : '';
+
+    return {
+      q, chips, miss, missMsg: 'BOW has no executable model of “' + q.trim() + '” yet.',
+      onQ: (e) => this.setState({ q: e && e.target ? e.target.value : '' }),
+      onOpen: () => { if (match) this.choose(match); },
+      onSubmit: (e) => { if (e && e.preventDefault) e.preventDefault(); if (match) this.choose(match); },
+      how, howPressed: how ? 'true' : 'false', howBg: how ? '#221F1B' : 'transparent', howFg: how ? '#F1ECE2' : '#221F1B',
+      howBgA: how ? '#F1ECE2' : 'transparent', howFgA: how ? '#7A4A1E' : '#F1ECE2',
+      toggleHow: () => this.setState({ how: !how }),
+      noSys: !hasSys, hasSys,
+      kicker: S.kicker, widthKey: S.wkey, sysTitle: S.title, sysNote: S.note,
+      drawInset: drawn ? 0 : 100, drawDur: drawn ? '2.4s' : '0.01s',
+      bandTx: zoomed ? tx : 0, bandZ: zoomed ? Z : 1, riverD,
+      nowX: S.x1, futOp: live ? 1 : 0, futDelay,
+      forkOp: live ? 1 : 0, forkDelay: futDelay, forks, forksD, miles, doors,
+      hasNow: S.hasNow, nowLine: S.x1 - 1, nowLab: S.x1 + 8, nowL1: 'NOW · 29 SEP 2026', nowL2: S.nowL2 || '', nowL3: S.nowL3 || '',
+      hasEnd: !!S.endText, endX: S.x1, endLab: S.x1 - 24, endTx: S.x1 + 16, endText: S.endText,
+      hasUnk: S.unk, unkW: 1400 - S.x1, unks,
+      showTags: how && phase === 'river' && drawn, tags: S.tags.map((t) => ({ x: t[0], cls: t[1], t: t[2] })),
+      hasHint: phase === 'river' && !doorSel && drawn,
+      hasCard: phase === 'river' && !!doorSel && drawn,
+      cardLeft: doorSel ? Math.max(40, Math.min(780, Math.round(doorSel.x - 60))) : 40,
+      cardDate: doorSel ? doorSel.dt : '', cardText: doorSel ? doorSel.card : '', cardMeta: outNote || (doorSel ? doorSel.meta : ''), cardHasOut: !!outNote,
+      thrTitle: doorSel ? doorSel.thr : '', seats,
+      sealLine: doorSel ? 'SEALED · what happens after ' + (doorSel.sealAt || 'this moment') + ' stays hidden while you are in the seat.' : '',
+      hasHz: hz.length > 0, hz, hzSeat: cur ? cur.name : '',
+      panelShown: phase === 'zoom' && panelIn && !!doorSel,
+      enterMoment: () => {
+        clearTimeout(this.tP); clearTimeout(this.tF);
+        this.setState({ phase: 'zoom', panelIn: false, seat: 0, fresh: false, drawn: true });
+        this.tP = setTimeout(() => this.setState({ panelIn: true }), 850);
+      },
+      backRiver: () => { clearTimeout(this.tP); this.setState({ phase: 'river', panelIn: false }); },
+      enterSeat: () => { clearTimeout(this.tP); this.setState({ phase: 'arrival' }); },
+      backArrival: () => this.setState({ phase: 'river', panelIn: false }),
+      showLegend: how && phase === 'river' && hasSys, legend, src: S.src,
+      isArrival: phase === 'arrival' && !!doorSel,
+      arrTitle: doorSel ? doorSel.where + ' · ' + doorSel.when : '',
+      arrLine: cur ? ('You are in the seat of ' + seatOf + '. ' + (notLine(cur) ? notLine(cur) + ' ' : '') + 'The record stays as it happened; what you do here is your branch.') : '',
+      hasCh: !!ch && !!ch.o, chQ: ch && ch.q ? ch.q : '', chOpts: ch && ch.o ? ch.o.map((t, i) => ({ k: 'ABC'.charAt(i), t })) : [],
+      hasRule: !!ch && !!ch.rule, ruleText: ch && ch.rule ? ch.rule : '', noCh: !ch,
+      stripW: doorSel ? Math.round(doorSel.x * kx) : 0, sealW, sealLab: Math.round(hereX + sealW / 2 - 30),
+      hereX, hereTri: hereX - 7, hereLab: hereX - 70
+    };
+  }
+}
+</script>
+</body>
+</html>

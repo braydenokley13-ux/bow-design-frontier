@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WHAT IF? — the fan</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed:wght@400;500;600;700;800&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F9FAFB;color:#0F1720;font-family:'Encode Sans Condensed',sans-serif}
+.mono{font-family:'DM Mono',monospace}
+.btn{font-family:'Encode Sans Condensed',sans-serif;font-weight:700;font-size:16px;min-height:44px;padding:0 18px;border-radius:0;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.btn:focus-visible,.mrow:focus-visible,.stp:focus-visible{outline:3px solid #0F1720;outline-offset:2px}
+.mrow{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:center;width:440px;height:80px;box-sizing:border-box;padding:0 6px 0 8px;margin:0;text-align:left;cursor:pointer;color:#0F1720;font-family:'Encode Sans Condensed',sans-serif;background:transparent;border:0;border-bottom:1px solid #CBD2DA;border-radius:0;transition:background .2s}
+.mrow:hover,.mfocus{background:#EDF1F6}
+.sw{display:block;width:44px;height:56px;box-sizing:border-box;transition:opacity .3s}
+.sw-h{background:repeating-linear-gradient(135deg,#0B62A8 0 1.4px,transparent 1.4px 6px);border:1.5px solid #0B62A8}
+.sw-t{background:rgba(176,78,0,.30);border:1.5px solid #B04E00}
+.sw-s{background:radial-gradient(circle,#9B1C5E 1.1px,transparent 1.5px) 0 0/6px 6px;border:1.5px solid #9B1C5E}
+.cell{position:absolute;top:5px;width:38px;height:26px;box-sizing:border-box;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;transition:background .3s,border-color .3s}
+.rt{display:flex;align-items:center;justify-content:center;width:22px;height:22px;box-sizing:border-box;font-family:'DM Mono',monospace;font-size:11px;font-weight:500}
+.fade{transition:opacity .4s ease}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F9FAFB; color: #0F1720; font-family: 'Encode Sans Condensed', sans-serif">
+
+  <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 84px; box-sizing: border-box; padding: 10px 40px 0; display: grid; grid-template-columns: 560px minmax(0, 1fr) auto; gap: 24px; align-items: start; border-bottom: 2px solid #0F1720">
+    <div style="display: flex; flex-direction: column; gap: 2px; white-space: nowrap">
+      <span class="mono" style="font-size: 11px; letter-spacing: .12em; color: #4A5563">BOW REALITY · W3 THE FAN · WHAT IF?</span>
+      <h1 style="margin: 0; font-size: 31px; font-weight: 800; line-height: 1.05; text-transform: uppercase; letter-spacing: .01em">Boston · Year Two · after Week {{now}}</h1>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 3px; padding-top: 4px; min-width: 0">
+      <span class="mono" style="font-size: 11px; letter-spacing: .12em; color: #4A5563">ADDRESS</span>
+      <span class="mono" style="font-size: 12px; line-height: 1.35; padding: 5px 10px; border: 1px solid #0F1720; background: #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{address}}</span>
+    </div>
+    <div style="display: flex; gap: 10px; padding-top: 8px">
+      <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="border: 2px solid #0F1720; background: {{howBg}}; color: {{howFg}}; white-space: nowrap">How do we know?</button>
+      <button type="button" class="btn" onClick="{{reset}}" style="border: 2px solid #0F1720; background: transparent; color: #0F1720; white-space: nowrap">Back to Week 9</button>
+    </div>
+  </header>
+
+  <div style="position: absolute; left: 40px; top: 92px; width: 760px; display: flex; flex-direction: column; gap: 1px">
+    <span class="mono" style="font-size: 12px; letter-spacing: .08em">WINS AFTER EACH WEEK · WORLD TIME, YEAR TWO</span>
+    <span style="font-size: 14px; line-height: 1.25; color: #2A3441">Black line: the World’s record. Fans: each model’s middle-half call from one state (scouts: their lowest to highest guess).</span>
+  </div>
+  <div style="position: absolute; left: 812px; top: 88px; width: 120px; height: 36px; display: flex; align-items: center; justify-content: space-between">
+    <button type="button" class="stp" onClick="{{stepBack}}" aria-label="Read an earlier week" style="width: 36px; height: 36px; padding: 0; border: 1.5px solid #0F1720; background: #FFFFFF; cursor: pointer; border-radius: 0; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0F1720" stroke-width="2" aria-hidden="true"><path d="M10 3 L5 8 L10 13"></path></svg></button>
+    <span class="mono" style="font-size: 12px; font-weight: 500">WK {{gH}}</span>
+    <button type="button" class="stp" onClick="{{stepFwd}}" aria-label="Read a later week" style="width: 36px; height: 36px; padding: 0; border: 1.5px solid #0F1720; background: #FFFFFF; cursor: pointer; border-radius: 0; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0F1720" stroke-width="2" aria-hidden="true"><path d="M6 3 L11 8 L6 13"></path></svg></button>
+  </div>
+
+  <svg width="1440" height="900" viewBox="0 0 1440 900" style="position: absolute; left: 0; top: 0; pointer-events: none" aria-hidden="true">
+    <defs>
+      <pattern id="fanHatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="#0B62A8" stroke-width="1.7"></line></pattern>
+      <pattern id="fanDots" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.05" fill="#9B1C5E"></circle></pattern>
+    </defs>
+    <rect x="{{dis.x}}" y="128" width="{{dis.w}}" height="408" fill="#D5DEE8" fill-opacity=".38" style="opacity: {{dis.op}}; transition: opacity .4s ease"></rect>
+    <line x1="{{dis.x}}" y1="128" x2="{{dis.x}}" y2="536" stroke="#6B7787" stroke-width="1" style="opacity: {{dis.op}}"></line>
+    <line x1="{{dis.x2}}" y1="128" x2="{{dis.x2}}" y2="536" stroke="#6B7787" stroke-width="1" style="opacity: {{dis.op}}"></line>
+    <line x1="76" y1="514.5" x2="906" y2="514.5" stroke="#D6DCE3" stroke-width="1"></line>
+    <line x1="76" y1="407.2" x2="906" y2="407.2" stroke="#D6DCE3" stroke-width="1"></line>
+    <line x1="76" y1="299.8" x2="906" y2="299.8" stroke="#D6DCE3" stroke-width="1"></line>
+    <line x1="76" y1="192.4" x2="906" y2="192.4" stroke="#D6DCE3" stroke-width="1"></line>
+    <line x1="242" y1="128" x2="242" y2="536" stroke="#E3E8EE" stroke-width="1"></line>
+    <line x1="449.5" y1="128" x2="449.5" y2="536" stroke="#E3E8EE" stroke-width="1"></line>
+    <line x1="657" y1="128" x2="657" y2="536" stroke="#E3E8EE" stroke-width="1"></line>
+    <line x1="864.5" y1="128" x2="864.5" y2="536" stroke="#E3E8EE" stroke-width="1"></line>
+    <line x1="76" y1="128" x2="76" y2="536" stroke="#0F1720" stroke-width="1.5"></line>
+    <line x1="76" y1="536" x2="906" y2="536" stroke="#0F1720" stroke-width="1.5"></line>
+    <line x1="906" y1="128" x2="906" y2="536" stroke="#0F1720" stroke-width="1.5"></line>
+
+    <polygon points="{{fanS.pts}}" fill="url(#fanDots)" stroke="#9B1C5E" stroke-width="1.7" style="opacity: {{fanS.op}}; transition: opacity .4s ease"></polygon>
+    <path d="{{fanS.lines}}" fill="none" stroke="#9B1C5E" stroke-width="1" style="opacity: {{fanS.lop}}; transition: opacity .4s ease"></path>
+    <polygon points="{{fanC.pts}}" fill="#B04E00" fill-opacity=".27" stroke="#B04E00" stroke-width="1.7" style="opacity: {{fanC.op}}; transition: opacity .4s ease"></polygon>
+    <polygon points="{{fanW.pts}}" fill="#F9FAFB" fill-opacity=".5" style="opacity: {{fanW.op}}; transition: opacity .4s ease"></polygon>
+    <polygon points="{{fanW.pts}}" fill="url(#fanHatch)" stroke="#0B62A8" stroke-width="1.7" style="opacity: {{fanW.op}}; transition: opacity .4s ease"></polygon>
+    <polyline points="{{fanC.mid}}" fill="none" stroke="#B04E00" stroke-width="2.4" style="opacity: {{fanC.op}}; transition: opacity .4s ease"></polyline>
+
+    <path d="{{fanS.ghost}}" fill="none" stroke="#9B1C5E" stroke-width="1.4" style="opacity: {{fanS.gop}}; transition: opacity .4s ease"></path>
+    <path d="{{fanC.ghost}}" fill="none" stroke="#B04E00" stroke-width="1.4" style="opacity: {{fanC.gop}}; transition: opacity .4s ease"></path>
+    <path d="{{fanW.ghost}}" fill="none" stroke="#0B62A8" stroke-width="1.4" style="opacity: {{fanW.gop}}; transition: opacity .4s ease"></path>
+
+    <polyline points="{{lim.up}}" fill="none" stroke="#7A8594" stroke-width="1"></polyline>
+    <polyline points="{{lim.dn}}" fill="none" stroke="#7A8594" stroke-width="1"></polyline>
+    <line x1="{{nowX}}" y1="128" x2="{{nowX}}" y2="536" stroke="#0F1720" stroke-width="1.5"></line>
+    <line x1="{{hx}}" y1="128" x2="{{hx}}" y2="536" stroke="#0F1720" stroke-width="1" style="opacity: {{hop}}"></line>
+
+    <polyline points="{{rec.pts}}" fill="none" stroke="#0F1720" stroke-width="7" stroke-linejoin="round"></polyline>
+    <polyline points="{{rec.pts}}" fill="none" stroke="#F9FAFB" stroke-width="2" stroke-linejoin="round"></polyline>
+  </svg>
+
+  <sc-for list="{{yLabels}}" as="yl" hint-placeholder-count="4">
+    <span class="mono" style="position: absolute; left: 36px; width: 34px; text-align: right; top: {{yl.y}}px; font-size: 11px; color: #4A5563">{{yl.t}}</span>
+  </sc-for>
+  <span class="mono" style="position: absolute; left: 36px; top: 542px; font-size: 11px; color: #4A5563; letter-spacing: .08em">WEEK</span>
+  <sc-for list="{{weeks}}" as="wk" hint-placeholder-count="21">
+    <span class="mono" style="position: absolute; left: {{wk.x}}px; top: 542px; transform: translateX(-50%); font-size: 11px; line-height: 14px; padding: 0 3px; background: {{wk.bg}}; color: {{wk.fg}}">{{wk.t}}</span>
+  </sc-for>
+
+  <span class="mono" style="position: absolute; left: {{nowX}}px; top: 128px; height: 18px; padding: 0 6px; background: #0F1720; color: #F9FAFB; font-size: 11px; line-height: 18px; letter-spacing: .06em; white-space: nowrap">{{nowTag}}</span>
+  <div style="position: absolute; left: 84px; top: 424px; width: 112px; display: flex; flex-direction: column; gap: 1px">
+    <span class="mono" style="font-size: 11px; letter-spacing: .06em; color: #4A5563">THROUGH WEEK 9</span>
+    <span style="font-size: 30px; font-weight: 800; line-height: 1.05">5–4</span>
+    <span class="mono" style="font-size: 11px; color: #4A5563; line-height: 1.3">World record, authored for this prototype</span>
+  </div>
+  <sc-for list="{{tips}}" as="tp" hint-placeholder-count="3">
+    <span class="mono" style="position: absolute; left: 912px; top: {{tp.y}}px; font-size: 11px; font-weight: 500; color: {{tp.color}}; opacity: {{tp.op}}; white-space: nowrap">{{tp.t}}</span>
+  </sc-for>
+  <span class="mono" style="position: absolute; left: {{lim.upX}}px; top: {{lim.upY}}px; width: 190px; text-align: right; font-size: 11px; color: #4A5563">{{lim.upT}}</span>
+  <span class="mono" style="position: absolute; left: {{lim.dnX}}px; top: {{lim.dnY}}px; width: 190px; text-align: right; font-size: 11px; color: #4A5563">{{lim.dnT}}</span>
+
+  <sc-for list="{{ticks}}" as="tk" hint-placeholder-count="4">
+    <div style="position: absolute; left: {{tk.x}}px; top: {{tk.y}}px; width: {{tk.s}}px; height: {{tk.s}}px; box-sizing: border-box; background: #0F1720; box-shadow: inset 0 0 0 2px #0F1720, inset 0 0 0 4px #F9FAFB"></div>
+  </sc-for>
+
+  <div style="position: absolute; left: 55px; top: 128px; width: 872px; height: 408px; cursor: crosshair" onMouseMove="{{onMove}}" onMouseLeave="{{onLeave}}"></div>
+
+  <sc-if value="{{disHas}}" hint-placeholder-val="{{true}}">
+    <div style="position: absolute; left: {{dis.bx}}px; top: 563px; width: {{dis.bw}}px; height: 8px; box-sizing: border-box; border: 2px solid #0F1720; border-top: 0"></div>
+  </sc-if>
+  <span class="mono" style="position: absolute; left: {{dis.lx}}px; top: 576px; width: 640px; font-size: 11px; line-height: 15px; color: #0F1720; letter-spacing: .02em">{{dis.text}}</span>
+
+  <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 92px; top: 162px; width: 420px; box-sizing: border-box; padding: 10px 14px 12px; background: #FFFFFF; border: 1.5px solid #0F1720; display: flex; flex-direction: column; gap: 7px">
+      <span class="mono" style="font-size: 11px; letter-spacing: .1em">HOW DO WE KNOW?</span>
+      <div style="display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 7px 12px; align-items: center; font-size: 13px; line-height: 1.25">
+        <div style="height: 12px; background: #0F1720; box-shadow: inset 0 0 0 2px #0F1720, inset 0 0 0 4px #FFFFFF"></div><span><strong>RECORDED.</strong> The World’s own results, authored for this prototype. The referee.</span>
+        <div style="height: 14px; background: repeating-linear-gradient(135deg, #0B62A8 0 1.4px, transparent 1.4px 6px); border: 1.5px solid #0B62A8"></div><span><strong>MODELED.</strong> A toy simulator, 200 seeded runs, authored parameters. A range, never a point.</span>
+        <div style="height: 14px; background: rgba(176, 78, 0, .30); border: 1.5px solid #B04E00"></div><span><strong>COMPUTED.</strong> Follows exactly from the record and one authored formula.</span>
+        <div style="height: 14px; background: radial-gradient(circle, #9B1C5E 1.1px, transparent 1.5px) 0 0 / 6px 6px; border: 1.5px solid #9B1C5E"></div><span><strong>ACTOR MODEL.</strong> In-World people’s authored opinions. Not measured, not simulated.</span>
+        <div style="height: 14px; border: 1.5px dashed #0F1720"></div><span><strong>SEALED.</strong> No result yet. You find out by advancing the World.</span>
+        <div style="height: 0; border-top: 1px solid #7A8594"></div><span><strong>COMPUTED limits.</strong> The fewest and most wins the record still allows.</span>
+      </div>
+    </div>
+  </sc-if>
+
+  <span class="mono" style="position: absolute; left: 960px; top: 92px; font-size: 12px; letter-spacing: .1em; font-weight: 500">THREE MODELS · ONE STATE</span>
+  <span class="mono" style="position: absolute; left: 1250px; top: 92px; width: 150px; text-align: right; font-size: 11px; color: #4A5563; white-space: nowrap">hover · click to hide</span>
+  <div style="position: absolute; left: 960px; top: 112px; width: 440px; border-top: 2px solid #0F1720">
+    <sc-for list="{{rows}}" as="m" hint-placeholder-count="3">
+      <button type="button" class="mrow {{m.cls}}" onClick="{{m.toggle}}" onMouseEnter="{{m.focus}}" onFocus="{{m.focus}}" aria-pressed="{{m.pressed}}" style="border-left: 4px solid {{m.edge}}">
+        <span class="sw {{m.sw}}" style="opacity: {{m.swOp}}"></span>
+        <span style="display: flex; flex-direction: column; gap: 1px; min-width: 0">
+          <span style="display: flex; justify-content: space-between; align-items: baseline">
+            <span style="font-size: 19px; font-weight: 700; line-height: 1.15">{{m.name}}</span>
+            <span class="mono" style="font-size: 11px; color: #4A5563">{{m.tag}}</span>
+          </span>
+          <span class="mono" style="font-size: 11px; color: #4A5563; line-height: 1.3">{{m.state}}</span>
+          <span style="font-size: 14px; font-weight: 600; line-height: 1.25">{{m.reading}}</span>
+          <span class="mono" style="font-size: 11px; color: #4A5563; line-height: 1.3">{{m.stamp}}</span>
+        </span>
+      </button>
+    </sc-for>
+  </div>
+
+  <div style="position: absolute; left: 960px; top: 362px; width: 440px; height: 236px; box-sizing: border-box; border-top: 3px solid {{fc.color}}; padding: 8px 0 0; display: flex; flex-direction: column; gap: 6px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline">
+      <span style="font-size: 16px; font-weight: 700"><span class="mono" style="font-size: 11px; letter-spacing: .1em; font-weight: 400; color: #4A5563">BASIS · </span>{{fc.name}}</span>
+      <span class="mono" style="font-size: 11px; color: #4A5563">{{fc.kind}}</span>
+    </div>
+    <sc-for list="{{fc.lines}}" as="ln" hint-placeholder-count="4">
+      <div style="display: grid; grid-template-columns: 62px minmax(0, 1fr); gap: 8px; align-items: start">
+        <span class="mono" style="font-size: 11px; letter-spacing: .06em; color: #4A5563; line-height: 17px">{{ln.k}}</span>
+        <span style="font-size: 13px; line-height: 17px; color: #0F1720">{{ln.t}}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="position: absolute; left: 40px; top: 610px; width: 880px; display: flex; align-items: baseline; gap: 14px">
+    <span class="mono" style="font-size: 12px; letter-spacing: .1em; font-weight: 500">THE REFEREE</span>
+    <span style="font-size: 14px; color: #2A3441">Each recorded week is scored against every model’s call. A handful of calls is a scoreboard, not a verdict.</span>
+  </div>
+  <div class="mono" style="position: absolute; left: 940px; top: 608px; width: 460px; display: grid; grid-template-columns: repeat(5, 1fr); font-size: 11px; letter-spacing: .06em; color: #4A5563; text-align: right">
+    <span>CALLS</span><span>LANDED</span><span>MISSED</span><span>OFF BY</span><span>CALL SIZE</span>
+  </div>
+  <div style="position: absolute; left: 40px; top: 631px; width: 1360px; border-top: 2px solid #0F1720"></div>
+  <sc-for list="{{lanes}}" as="ln" hint-placeholder-count="3">
+    <div style="position: absolute; left: 0; top: {{ln.top}}px; width: 1440px; height: 36px; border-bottom: 1px solid #CBD2DA; box-sizing: border-box">
+      <span class="sw {{ln.sw}}" style="position: absolute; left: 40px; top: 6px; width: 30px; height: 22px; opacity: {{ln.swOp}}"></span>
+      <span style="position: absolute; left: 78px; top: 6px; font-size: 15px; font-weight: 700; line-height: 22px; white-space: nowrap">{{ln.short}}</span>
+      <sc-for list="{{ln.cells}}" as="c" hint-placeholder-count="12">
+        <span class="cell" title="{{c.tip}}" style="left: {{c.x}}px; background: {{c.bg}}; color: {{c.fg}}; border: {{c.bd}}">{{c.t}}</span>
+      </sc-for>
+      <div style="position: absolute; left: 940px; top: 0; width: 460px; height: 35px; display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; text-align: right; font-size: 15px; font-family: 'DM Mono', monospace; font-weight: 500">
+        <span>{{ln.calls}}</span><span>{{ln.landed}}</span><span>{{ln.missed}}</span><span>{{ln.off}}</span><span>{{ln.size}}</span>
+      </div>
+    </div>
+  </sc-for>
+  <div style="position: absolute; left: 722px; top: 634px; width: 206px; height: 106px; box-sizing: border-box; border: 1.5px dashed #0F1720; background: #F9FAFB; padding: 8px 10px; display: flex; flex-direction: column; gap: 3px">
+    <span class="mono" style="font-size: 11px; letter-spacing: .08em">SEALED · WEEKS 22–26</span>
+    <span style="font-size: 13px; line-height: 1.25; color: #2A3441">No result is authored past Week 21. You find out by living it.</span>
+  </div>
+  <span class="mono" style="position: absolute; left: 76px; top: 746px; font-size: 11px; color: #4A5563; white-space: nowrap">Cell number: recorded wins minus the middle of the call. Solid: inside the fan. Outlined: outside. Dashed: not yet recorded.</span>
+  <span class="mono" style="position: absolute; left: 940px; top: 746px; width: 460px; text-align: right; font-size: 11px; color: #4A5563; white-space: nowrap">OFF BY: avg gap to the middle · CALL SIZE: avg width, wins</span>
+
+  <button type="button" class="btn" onClick="{{advance}}" disabled="{{adv.dis}}" style="position: absolute; left: 40px; top: 772px; width: 240px; height: 56px; font-size: 19px; border: 2px {{adv.bstyle}} #0F1720; background: {{adv.bg}}; color: {{adv.fg}}; cursor: {{adv.cur}}">{{adv.label}}</button>
+  <div style="position: absolute; left: 298px; top: 772px; width: 300px; display: flex; flex-direction: column; gap: 3px">
+    <span class="mono" style="font-size: 11px; letter-spacing: .06em">WORLD TIME · YEAR TWO · WEEK {{now}} OF 26</span>
+    <span style="font-size: 14px; line-height: 1.25; color: #2A3441">{{status}}</span>
+  </div>
+  <div style="position: absolute; left: 620px; top: 770px; display: flex; flex-direction: column; gap: 4px">
+    <span class="mono" style="font-size: 11px; letter-spacing: .06em; color: #4A5563; white-space: nowrap">THE WORLD’S RECORD · WEEKS 10–21 · AUTHORED</span>
+    <div style="display: flex; gap: 4px">
+      <sc-for list="{{tape}}" as="tp" hint-placeholder-count="12">
+        <span class="rt" title="{{tp.tip}}" style="background: {{tp.bg}}; color: {{tp.fg}}; border: {{tp.bd}}; box-shadow: {{tp.sh}}">{{tp.t}}</span>
+      </sc-for>
+    </div>
+  </div>
+  <span class="mono" style="position: absolute; left: 960px; top: 772px; width: 440px; font-size: 11px; line-height: 15px; color: #4A5563">Each press lets the World record four authored weeks. Fans re-run from the new state; the old calls stay drawn as thin outlines.</span>
+
+  <span style="position: absolute; left: 40px; top: 838px; font-size: 14px; font-weight: 500; color: #0F1720; white-space: nowrap">WHAT IF?, in this model, is a fan of competing branches from one state, with the World’s record as referee.</span>
+
+  <span class="mono" style="position: absolute; left: 40px; bottom: 8px; width: 700px; font-size: 11px; line-height: 15px; color: #4A5563">COMMERCIAL LENS · Hypothesis: model providers attach to BOW and are scored in public by the record — a marketplace of models with reputations; BOW takes a share of model runs.</span>
+  <span class="mono" style="position: absolute; right: 40px; bottom: 8px; width: 620px; text-align: right; font-size: 11px; line-height: 15px; color: #4A5563">PROTOTYPE · DESIGN PROPOSAL · PLATFORM HYPOTHESIS (model scoring) · World record and scout opinions are authored; the World fan is a toy stand-in, not the BOW simulator</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+const SEASON = 26, START = 9, W0 = 5, RUNS = 200, QL = 0.25, QH = 0.75;
+const RES = [1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0];
+const SCOUTS = [
+  { n: 'Head scout', r: 0.64 }, { n: 'Assistant GM', r: 0.58 },
+  { n: 'Video coordinator', r: 0.46 }, { n: 'Advance scout', r: 0.42 }
+];
+const MODELS = [
+  { id: 'world', name: 'The World itself', short: 'World itself', color: '#0B62A8', sw: 'sw-h', state: 'MODELED · 200 runs · toy · authored parameters', kind: 'MODELED · hatched' },
+  { id: 'carry', name: 'Carry-over rating', short: 'Carry-over', color: '#B04E00', sw: 'sw-t', state: 'COMPUTED · record + authored formula', kind: 'COMPUTED · toned' },
+  { id: 'scouts', name: 'Your scouts’ consensus', short: 'Scouts', color: '#9B1C5E', sw: 'sw-s', state: 'ACTOR MODEL · authored opinions', kind: 'ACTOR MODEL · stippled' }
+];
+const cw = (g) => { let w = W0; for (let i = 0; i < g - START && i < RES.length; i++) w += RES[i]; return w; };
+const pBase = (g) => (g >= 14 && g <= 18) ? 0.32 : 0.72;
+const rng = (seed) => { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
+const quant = (P, W, q) => { let c = 0; for (let i = 0; i < P.length; i++) { const nc = c + P[i]; if (P[i] > 0 && nc >= q - 1e-12) return W + i - 0.5 + (q - c) / P[i]; c = nc; } return W + P.length - 0.5; };
+const X = (g) => 76 + (g - 6) * 41.5;
+const Y = (w) => 536 - (w - 4) * (408 / 19);
+const f1 = (v) => v.toFixed(1);
+const sgn = (v) => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1);
+
+class Component extends DCLogic {
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      const s = this.state || {};
+      const target = (s.presses || 0) * 4;
+      if ((s.shown || 0) < target) this.setState({ shown: (s.shown || 0) + 1 });
+    }, 520);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  fan(s) {
+    this._fc = this._fc || {};
+    if (this._fc[s]) return this._fc[s];
+    const W = cw(s), n = SEASON - s;
+    const band = (k, lo, hi, med) => ({ lo: Math.max(W, lo), hi: Math.min(W + k, hi), med: med });
+    const rand = rng(90210 + s * 131);
+    const hist = [];
+    for (let k = 0; k <= n; k++) hist.push(new Array(k + 1).fill(0));
+    const psum = new Array(n + 1).fill(0);
+    for (let r = 0; r < RUNS; r++) {
+      const inj = rand() < 0.2;
+      const at = s + 1 + Math.floor(rand() * n);
+      let c = 0;
+      for (let k = 1; k <= n; k++) {
+        const g = s + k;
+        const p = Math.max(0.15, pBase(g) - (inj && g >= at ? 0.12 : 0));
+        psum[k] += p;
+        if (rand() < p) c++;
+        hist[k][c]++;
+      }
+    }
+    const world = [{ lo: W, med: W, hi: W }];
+    for (let k = 1; k <= n; k++) {
+      const P = hist[k].map((c) => c / RUNS);
+      world.push(band(k, quant(P, W, QL), quant(P, W, QH), quant(P, W, 0.5)));
+    }
+    const rate = (W + 3) / (s + 6);
+    const carry = [{ lo: W, med: W, hi: W }];
+    let P = [1];
+    for (let k = 1; k <= n; k++) {
+      const N = new Array(k + 1).fill(0);
+      for (let j = 0; j < k; j++) { N[j] += P[j] * (1 - rate); N[j + 1] += P[j] * rate; }
+      P = N;
+      carry.push(band(k, quant(P, W, QL), quant(P, W, QH), quant(P, W, 0.5)));
+    }
+    const scouts = [{ lo: W, med: W, hi: W }];
+    const sp = SCOUTS.reduce((a, b) => a + b.r, 0) / SCOUTS.length;
+    for (let k = 1; k <= n; k++) {
+      const E = SCOUTS.map((sc) => W + k * sc.r);
+      const sl = 0.9 * Math.sqrt(k);
+      scouts.push(band(k, Math.min(...E) - sl, Math.max(...E) + sl, W + k * sp));
+    }
+    const out = { W: W, n: n, world: world, carry: carry, scouts: scouts, pw: psum.map((v) => v / RUNS), rate: rate, sp: sp };
+    this._fc[s] = out;
+    return out;
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const presses = s.presses || 0;
+    const shown = s.shown || 0;
+    const busy = shown < presses * 4;
+    const now = START + shown;
+    const W = cw(now), L = now - W;
+    const nLeft = SEASON - now;
+    const hid = s.hid || {};
+    const how = !!s.how;
+    const hw = s.hw || 0;
+    const gH = hw || SEASON;
+    const focusId = s.focus || 'world';
+    const F = this.fan(now);
+    const vis = MODELS.filter((m) => !hid[m.id]);
+
+    // ---- calls already scored by the record ----
+    const calls = { world: [], carry: [], scouts: [] };
+    for (let g = 10; g <= START + shown; g++) {
+      const k = Math.floor((g - 10) / 4), s0 = START + 4 * k;
+      const Fk = this.fan(s0), A = cw(g);
+      MODELS.forEach((m) => {
+        const b = Fk[m.id][g - s0];
+        const lo = Math.round(b.lo), hi = Math.round(b.hi);
+        calls[m.id].push({ g: g, A: A, lo: lo, hi: hi, landed: A >= lo && A <= hi, gap: A - b.med, w: b.hi - b.lo });
+      });
+    }
+
+    // ---- fan geometry ----
+    const poly = (arr) => {
+      const up = [], dn = [];
+      for (let k = 0; k <= nLeft; k++) {
+        up.push(f1(X(now + k)) + ',' + f1(Y(arr[k].hi)));
+        dn.push(f1(X(now + k)) + ',' + f1(Y(arr[k].lo)));
+      }
+      return up.concat(dn.reverse()).join(' ');
+    };
+    const ghost = (id) => {
+      let d = '';
+      for (let k = 0; k < 3; k++) {
+        const c = Math.max(0, Math.min(4, shown - 4 * k));
+        if (!c) continue;
+        const s0 = START + 4 * k, arr = this.fan(s0)[id];
+        const up = [], dn = [];
+        for (let j = 0; j <= c; j++) {
+          up.push(f1(X(s0 + j)) + ' ' + f1(Y(arr[j].hi)));
+          dn.push(f1(X(s0 + j)) + ' ' + f1(Y(arr[j].lo)));
+        }
+        d += 'M ' + up.join(' L ') + ' L ' + dn.reverse().join(' L ') + ' Z ';
+      }
+      return d || 'M 0 0';
+    };
+    const on = (id) => (hid[id] ? 0 : 1);
+    const midPts = F.carry.map((b, k) => f1(X(now + k)) + ',' + f1(Y(b.med))).join(' ');
+    const scoutLines = SCOUTS.map((sc) => 'M ' + f1(X(now)) + ' ' + f1(Y(W)) + ' L ' + f1(X(SEASON)) + ' ' + f1(Y(W + nLeft * sc.r))).join(' ');
+    const fanW = { pts: poly(F.world), op: on('world'), ghost: ghost('world'), gop: on('world') * 0.85 };
+    const fanC = { pts: poly(F.carry), op: on('carry'), mid: midPts, ghost: ghost('carry'), gop: on('carry') * 0.85 };
+    const fanS = { pts: poly(F.scouts), op: on('scouts'), lop: on('scouts') * 0.5, lines: scoutLines, ghost: ghost('scouts'), gop: on('scouts') * 0.85 };
+
+    // ---- final-call labels at the season end ----
+    const tipsRaw = MODELS.map((m) => { const b = F[m.id][nLeft]; return { y: Y((b.lo + b.hi) / 2) - 7, color: m.color, op: on(m.id), t: Math.round(b.lo) + '–' + Math.round(b.hi) }; }).sort((a, b) => a.y - b.y);
+    for (let i = 1; i < tipsRaw.length; i++) if (tipsRaw[i].y - tipsRaw[i - 1].y < 15) tipsRaw[i].y = tipsRaw[i - 1].y + 15;
+    const tips = tipsRaw.map((t2) => ({ ...t2, y: f1(t2.y) }));
+
+    // ---- the record ----
+    const recPts = [], ticks = [];
+    for (let g = START; g <= now; g++) {
+      recPts.push(f1(X(g)) + ',' + f1(Y(cw(g))));
+      const big = g === now;
+      const sz = big ? 18 : 12;
+      ticks.push({ x: f1(X(g) - sz / 2), y: f1(Y(cw(g)) - sz / 2), s: sz });
+    }
+    const rec = { pts: recPts.join(' ') };
+    const lim = {
+      up: f1(X(now)) + ',' + f1(Y(W)) + ' ' + f1(X(SEASON)) + ',' + f1(Y(W + nLeft)),
+      dn: f1(X(now)) + ',' + f1(Y(W)) + ' ' + f1(X(SEASON)) + ',' + f1(Y(W)),
+      upT: (W + nLeft) + ' if every game is won', upX: 714, upY: f1(Y(W + nLeft) - 19),
+      dnT: W + ' if no game is won', dnX: 714, dnY: f1(Y(W) + 3)
+    };
+    
+    // ---- disagreement between visible models ----
+    const dis = { x: 0, w: 0, x2: 0, op: 0, bx: 0, bw: 0, lx: 76, text: '' };
+    let disHas = false;
+    if (vis.length < 2) dis.text = 'Show two models to see where they disagree.';
+    else if (nLeft > 0) {
+      const gaps = [];
+      for (let k = 1; k <= nLeft; k++) {
+        const ps = vis.map((m) => (m.id === 'world' ? F.pw[k] : m.id === 'carry' ? F.rate : F.sp));
+        gaps.push(Math.max(...ps) - Math.min(...ps));
+      }
+      const mx = Math.max(...gaps);
+      if (mx < 0.1) dis.text = 'No week has two models more than 10 points apart in per-game win chance.';
+      else {
+        const thr = Math.max(0.1, 0.85 * mx);
+        let a = -1, b = -1;
+        gaps.forEach((gp, i) => { if (gp >= thr) { if (a < 0) a = i; b = i; } });
+        const g1 = now + 1 + a, g2 = now + 1 + b;
+        const even = a === 0 && b === nLeft - 1 && nLeft > 1;
+        disHas = true;
+        dis.x = X(g1) - 20.75; dis.w = (g2 - g1) * 41.5 + 41.5; dis.x2 = dis.x + dis.w; dis.op = 1;
+        dis.bx = X(g1) - 18; dis.bw = (g2 - g1) * 41.5 + 36;
+        dis.lx = Math.max(76, Math.min(dis.bx, 340));
+        dis.text = (even ? 'MODELS DISAGREE EVENLY' : 'MODELS DISAGREE MOST') + ' · ' + (g1 === g2 ? 'Week ' + g1 : 'Weeks ' + g1 + '–' + g2) + ' · win chance per game differs by up to ' + Math.round(mx * 100) + ' points';
+      }
+    }
+
+    // ---- readings per model at the week being read ----
+    const readAt = (m) => {
+      if (hid[m.id]) return 'Hidden. Click to show.';
+      if (gH === START && shown === 0) return 'Week 9 · branch point · record ' + W + '–' + L;
+      if (gH <= START) return 'Week ' + gH + ' · only the total, 5–4, is kept';
+      if (gH <= now) {
+        const c = calls[m.id].find((x) => x.g === gH);
+        return c ? 'Week ' + gH + ' · recorded ' + c.A + ' · called ' + c.lo + '–' + c.hi + ' · ' + (c.landed ? 'landed' : 'missed') : '';
+      }
+      const b = F[m.id][gH - now];
+      return 'Week ' + gH + (gH === SEASON ? ' · final wins ' : ' · wins ') + Math.round(b.lo) + '–' + Math.round(b.hi);
+    };
+    const rows = MODELS.map((m) => {
+      const isOn = !hid[m.id];
+      return {
+        name: m.name, sw: m.sw, state: m.state, reading: readAt(m),
+        tag: isOn ? 'SHOWN' : 'HIDDEN', pressed: isOn ? 'true' : 'false', swOp: isOn ? 1 : 0.3,
+        cls: focusId === m.id ? 'mfocus' : '', edge: focusId === m.id ? m.color : 'transparent',
+        stamp: 'BRANCH from Week ' + now + (now > START ? ' · first called Week 9' : ''),
+        toggle: () => { const cur = (this.state && this.state.hid) || {}; this.setState({ hid: { ...cur, [m.id]: !cur[m.id] }, focus: m.id }); },
+        focus: () => { if ((this.state && this.state.focus) !== m.id) this.setState({ focus: m.id }); }
+      };
+    });
+
+    // ---- basis for the focused model ----
+    const BASIS = {
+      world: [
+        { k: 'BY', t: 'BOW World simulator. Here a toy stand-in written for this prototype, not the real one.' },
+        { k: 'MADE', t: 'The last ' + nLeft + ' weeks played forward 200 times from Week ' + now + ', seeded so it repeats. Fan: the middle half of the runs.' },
+        { k: 'ASSUMES', t: 'toy · authored parameters: 0.72 win chance a game; 0.32 in Weeks 14–18 (hard stretch); 1 run in 5 loses a key player, −0.12 a game after.' },
+        { k: 'BLIND', t: 'Its ratings never move. The record only changes where it starts.' }
+      ],
+      carry: [
+        { k: 'BY', t: 'A formula authored for this prototype [author].' },
+        { k: 'MADE', t: 'rating = (wins + 3) ÷ (games + 6) = (' + W + ' + 3) ÷ (' + now + ' + 6) = ' + F.rate.toFixed(3) + '. Every remaining game gets that win chance; the spread is exact, middle half.' },
+        { k: 'ASSUMES', t: 'The record predicts the rest. A 0.500 prior is worth 6 games.' },
+        { k: 'BLIND', t: 'Does not know the Butler trade or the Weeks 14–18 stretch.' }
+      ],
+      scouts: [
+        { k: 'BY', t: 'The World’s four scouts. Authored opinions of in-World people.' },
+        { k: 'MADE', t: 'Each guesses a win chance for the rest: ' + SCOUTS.map((sc) => sc.n + ' ' + sc.r.toFixed(2)).join(' · ') + '.' },
+        { k: 'ASSUMES', t: 'Fan runs from the lowest to the highest guess, widened by 0.9 × √(games left) wins. Analytics was cut in Year One.' },
+        { k: 'BLIND', t: 'Eyes, not numbers. Nothing here is computed, so it can only be scored.' }
+      ]
+    };
+    const fm = MODELS.find((m) => m.id === focusId) || MODELS[0];
+    const fc = { name: fm.name, color: fm.color, kind: fm.kind, lines: BASIS[fm.id] };
+
+    // ---- referee lanes ----
+    const lanes = MODELS.map((m, i) => {
+      const cs = calls[m.id];
+      const cells = [];
+      for (let g = 10; g <= 21; g++) {
+        const c = cs.find((x) => x.g === g);
+        const base = { x: f1(X(g) - 19) };
+        if (!c) cells.push({ ...base, t: '', bg: 'transparent', fg: '#0F1720', bd: '1.5px dashed #6B7787', tip: 'Week ' + g + ' · not yet recorded' });
+        else if (c.landed) cells.push({ ...base, t: sgn(c.gap), bg: m.color, fg: '#FFFFFF', bd: '1.5px solid ' + m.color, tip: 'Week ' + g + ' · recorded ' + c.A + ' · called ' + c.lo + '–' + c.hi + ' · landed' });
+        else cells.push({ ...base, t: sgn(c.gap), bg: '#FFFFFF', fg: '#0F1720', bd: '3px solid ' + m.color, tip: 'Week ' + g + ' · recorded ' + c.A + ' · called ' + c.lo + '–' + c.hi + ' · missed' });
+      }
+      const n = cs.length, landed = cs.filter((c) => c.landed).length;
+      const avg = (f) => (n ? f1(cs.reduce((a, c) => a + f(c), 0) / n) : '—');
+      return {
+        top: 634 + i * 36, sw: m.sw, swOp: hid[m.id] ? 0.3 : 1, short: m.short, cells: cells,
+        calls: n ? String(n) : '—', landed: n ? String(landed) : '—', missed: n ? String(n - landed) : '—',
+        off: avg((c) => Math.abs(c.gap)), size: avg((c) => c.w)
+      };
+    });
+
+    // ---- x axis, y axis ----
+    const weeks = [];
+    for (let g = 6; g <= SEASON; g++) weeks.push({ x: f1(X(g)), t: String(g), bg: g === now ? '#0F1720' : 'transparent', fg: g === now ? '#F9FAFB' : '#4A5563' });
+    const yLabels = [5, 10, 15, 20].map((w) => ({ t: String(w), y: f1(Y(w) - 7) }));
+
+    // ---- control row ----
+    const recorded = (a, b) => { let w = 0; for (let g = a; g <= b; g++) w += RES[g - 10]; return w + '–' + ((b - a + 1) - w); };
+    let status = 'World record ' + W + '–' + L + ', authored for this prototype. Weeks 10–13 are sealed.';
+    if (busy) status = 'The World is recording Week ' + (now + 1) + '…';
+    else if (presses > 0) {
+      const a = 10 + 4 * (presses - 1), b = a + 3;
+      status = 'Recorded Weeks ' + a + '–' + b + ': ' + recorded(a, b) + '. Record ' + W + '–' + L + '.' + (presses < 3 ? ' Weeks ' + (b + 1) + '–' + (b + 4) + ' are sealed.' : '');
+    }
+    const sealedEnd = !busy && presses >= 3;
+    const adv = {
+      label: busy ? 'Recording Week ' + (now + 1) + '…' : sealedEnd ? 'Weeks 22–26 are sealed' : 'Advance 4 weeks',
+      dis: busy || sealedEnd, bg: busy || sealedEnd ? '#EEF1F5' : '#0F1720', fg: busy || sealedEnd ? '#2A3441' : '#F9FAFB',
+      bstyle: sealedEnd ? 'dashed' : 'solid', cur: busy || sealedEnd ? 'default' : 'pointer'
+    };
+    const tape = [];
+    for (let i = 0; i < 12; i++) {
+      const g = 10 + i;
+      if (g <= now) {
+        const w = RES[i] === 1;
+        tape.push({ t: w ? 'W' : 'L', bg: w ? '#0F1720' : '#FFFFFF', fg: w ? '#F9FAFB' : '#0F1720', bd: '2px solid #0F1720', sh: w ? 'inset 0 0 0 2px #F9FAFB' : 'inset 0 0 0 2px #FFFFFF, inset 0 0 0 3px #0F1720', tip: 'Week ' + g + ' · ' + (w ? 'won' : 'lost') + ' (authored)' });
+      } else tape.push({ t: '', bg: 'transparent', fg: '#0F1720', bd: '1.5px dashed #6B7787', sh: 'none', tip: 'Week ' + g + ' · sealed' });
+    }
+
+    // ---- hover: which week, which fan ----
+    const onMove = (e) => {
+      const r = e.currentTarget.getBoundingClientRect();
+      const px = (e.clientX - r.left) * (872 / r.width);
+      const py = (e.clientY - r.top) * (408 / r.height);
+      const g = Math.max(6, Math.min(SEASON, Math.round(6 + (px - 21) / 41.5)));
+      const wins = 4 + (408 - py) / (408 / 19);
+      let fmid = null;
+      if (g > now) {
+        let best = 1e9;
+        MODELS.forEach((m) => {
+          if (hid[m.id]) return;
+          const b = F[m.id][g - now];
+          if (wins >= b.lo && wins <= b.hi && b.hi - b.lo < best) { best = b.hi - b.lo; fmid = m.id; }
+        });
+      }
+      const cur = this.state || {};
+      const patch = {};
+      if (cur.hw !== g) patch.hw = g;
+      if (fmid && cur.focus !== fmid) patch.focus = fmid;
+      if (Object.keys(patch).length) this.setState(patch);
+    };
+
+    const visNames = vis.length === 3 ? 'world + carry-over + scouts' : (vis.map((m) => m.short.toLowerCase().replace(' itself', '')).join(' + ') || 'none');
+    return {
+      now, gH, how, disHas, dis, rows, fc, lanes, weeks, yLabels, ticks, rec, lim, tips, tape, status, adv,
+      fanW, fanC, fanS,
+      nowX: f1(X(now)), nowTag: now === START ? 'BRANCH POINT · WEEK 9 · 5–4' : 'NOW · WEEK ' + now + ' · ' + W + '–' + L,
+      hx: f1(X(gH)), hop: hw ? 1 : 0,
+      address: 'boston / year-two / week-' + now + ' / models: ' + visNames + ' / view: fan',
+      howPressed: how ? 'true' : 'false', howBg: how ? '#0F1720' : 'transparent', howFg: how ? '#F9FAFB' : '#0F1720',
+      toggleHow: () => this.setState({ how: !how }),
+      reset: () => this.setState({ presses: 0, shown: 0, hw: 0 }),
+      advance: () => { const c = this.state || {}; const p = c.presses || 0; if ((c.shown || 0) >= p * 4 && p < 3) this.setState({ presses: p + 1 }); },
+      stepBack: () => this.setState({ hw: Math.max(6, gH - 1) }),
+      stepFwd: () => this.setState({ hw: Math.min(SEASON, gH + 1) }),
+      onMove, onLeave: () => this.setState({ hw: 0 })
+    };
+  }
+}
+</script>
+</body>
+</html>

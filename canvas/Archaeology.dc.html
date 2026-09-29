@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BOW Frontier — Repository archaeology</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F0E8;color:#1B1A17;font-family:'IBM Plex Sans',sans-serif}
+a{color:#A63A18}a:hover{color:#6E250E}
+.mono{font-family:'IBM Plex Mono',monospace}
+.serif{font-family:'Newsreader',serif}
+.k{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:#57534B;text-transform:uppercase}
+.src{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#57534B}
+li{margin:0}
+</style>
+</helmet>
+<div style="width: 1440px; height: 2180px; box-sizing: border-box; padding: 60px 88px 64px; display: flex; flex-direction: column; gap: 36px; background: #F3F0E8; color: #1B1A17">
+
+  <header style="display: flex; flex-direction: column; gap: 16px">
+    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #1B1A17; padding-bottom: 10px" class="k">
+      <span>02 · Repository archaeology</span><span>Evidence of experiments — not canon · read 29 Sep 2026</span>
+    </div>
+    <h1 class="serif" style="margin: 0; font-weight: 400; font-size: 60px; line-height: 1.02; max-width: 1180px">BOW has already discovered half the grammar — in two dialects, on branches nobody merged.</h1>
+    <p style="margin: 0; font-size: 18px; line-height: 1.5; max-width: 1120px; color: #2E2B26">Read across <strong>all 125 remote branches</strong>: 41 in bow-economics-live, 84 in bow-decision-challenges (bow-design-frontier is empty). The newest and most medium-relevant work — Worlds, Court, Film, Lab, Moments, the Decision X-Ray — lives on unmerged stacks from the last two weeks, not on main.</p>
+  </header>
+
+  <section aria-label="Branch strata" style="display: flex; flex-direction: column; gap: 10px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline">
+      <span class="k">Strata · 11 Aug → 29 Sep 2026</span>
+      <span style="display: flex; gap: 18px; font-size: 13px; align-items: center"><span style="display: inline-flex; gap: 6px; align-items: center"><span style="width: 22px; height: 12px; background: #1B1A17; display: inline-block"></span>in main</span><span style="display: inline-flex; gap: 6px; align-items: center"><span style="width: 22px; height: 12px; border: 2px solid #1B1A17; box-sizing: border-box; display: inline-block"></span>unmerged</span><span style="display: inline-flex; gap: 6px; align-items: center"><span style="width: 22px; height: 12px; background: #A8A294; display: inline-block"></span>absorbed by the 22 Aug history restart</span></span>
+    </div>
+    <div style="position: relative; height: 300px; border-top: 1px solid #1B1A17; border-bottom: 1px solid #1B1A17">
+      <span class="k" style="position: absolute; left: 0; top: 62px">Economics Live</span>
+      <span class="k" style="position: absolute; left: 0; top: 186px; width: 130px">Decision Challenges</span>
+      <sc-for list="{{eras}}" as="e" hint-placeholder-count="10">
+        <div style="position: absolute; left: {{e.x}}px; top: {{e.y}}px; width: {{e.w}}px; height: 22px; box-sizing: border-box; background: {{e.fill}}; border: {{e.border}}"></div>
+        <div style="position: absolute; left: {{e.x}}px; top: {{e.ly}}px; width: {{e.lw}}px; font-size: 13px; line-height: 1.25"><strong style="font-weight: 600">{{e.t}}</strong><br><span style="color: #57534B">{{e.sub}}</span></div>
+      </sc-for>
+      <sc-for list="{{ticks}}" as="t" hint-placeholder-count="8">
+        <span class="mono" style="position: absolute; left: {{t.x}}px; bottom: 4px; font-size: 11px; color: #57534B; border-left: 1px solid #A8A294; padding-left: 4px">{{t.l}}</span>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px">
+    <div style="display: flex; flex-direction: column; gap: 14px">
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 34px">bow-economics-live</h2>
+      <span class="k">Primitives that matter to the medium</span>
+      <ol style="margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.42">
+        <li><strong>One record, many permissioned projections.</strong> A pure reducer drawn three ways (/play, /teach, /board). “One derivation, not two” (D175). Drawn size must equal modeled size — measured, not eyeballed (D25). <span class="src">main</span></li>
+        <li><strong>A dated basis on every fact:</strong> real · derived · modeled · fiction. “A real figure without its date is not a real figure” (D93). <span class="src">main</span></li>
+        <li><strong>Five-class story truth:</strong> every line tagged FACT · YOUR BOOKS · FORECAST · SIGNAL · RUMOR; forecasts recorded before the result. <span class="src">world-one-alive</span></li>
+        <li><strong>Replay that refuses to invent.</strong> Film is rebuilt from recorded inputs and consumed dice; if it can’t be, “Replay unavailable.” <span class="src">vf-film-frontier</span></li>
+        <li><strong>Hindsight beside what was known:</strong> public prior · your reports · revealed truth, side by side. <span class="src">vf-first-look</span></li>
+        <li><strong>Visual economics.</strong> A spending choice that changes a place is visible from that place’s first view; unfunded rooms have “blinds drawn” (D253). <span class="src">quirky-maxwell</span></li>
+        <li><strong>History as architecture:</strong> MONUMENT · TRADITION · SCAR · ABSENCE. <span class="src">quirky-maxwell</span></li>
+        <li><strong>A causal ladder</strong> from object to system — object, person, money, lineup, possession, game, then modeled, then unknown. <span class="src">bow-worlds-complete-ultra</span></li>
+        <li><strong>Lab, Moments and a declaration-compiling Foundry</strong> already sketched: alternative action sequences replayed as ACTUAL / MODELED / UNKNOWN; a Moment keeps “what the player knew then.” <span class="src">bow-worlds-complete-ultra</span></li>
+        <li><strong>Determinism:</strong> “same seed + same decisions → same season, to the byte.” “The Commissioner controls theatre and timing. The world controls truth.” <span class="src">world-one</span></li>
+      </ol>
+      <div style="padding: 14px 16px; border: 2px solid #1B1A17; display: flex; flex-direction: column; gap: 6px">
+        <span class="k">Strongest insight to carry forward</span>
+        <span class="serif" style="font-size: 20px; line-height: 1.35">Every surface is a derived projection of one record, contractually checked against it. That is the working seed of <em>one truth, many representations</em>.</span>
+      </div>
+      <div style="padding: 14px 16px; border: 2px dashed #1B1A17; display: flex; flex-direction: column; gap: 6px">
+        <span class="k">Should not become canon</span>
+        <span style="font-size: 15px; line-height: 1.45">Representations are <em>decoration checked against truth</em>, not generated from it: fact HTML laid over neutral baked art, a hand-built leaf per room, a Blender level per club. The world is six lesson modules stitched by carry seeds. Replay is read-only and owner-only. And “THE FORK” was scored 32/100 and killed: “not honestly computable when other desks would have responded.”</span>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px">
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 34px">bow-decision-challenges</h2>
+      <span class="k">Primitives that matter to the medium</span>
+      <ol style="margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.42">
+        <li><strong>The receipt journal.</strong> Every act — accepted or refused — with its before and after state and the information version at that moment. <span class="src">main · d2A.ts</span></li>
+        <li><strong>What was knowable at the time.</strong> The decision is read against information at commitment; the outcome is stored apart. A sealed reading appears only after sealing. <span class="src">main · consequential-os</span></li>
+        <li><strong>Semantic events, never clickstream:</strong> a closed event vocabulary; a new type fails the build. <span class="src">main</span></li>
+        <li><strong>Typed absence.</strong> not-observed · answered-for · incomplete. Absence is not failure; answer_supplied caps at null, not zero. <span class="src">main</span></li>
+        <li><strong>The Decision X-Ray:</strong> World → On the table → You did → Rule → Moved → Later → Unknown, each layer typed by knowability. Every state has an address: <span class="mono" style="font-size: 12px">?event=N&amp;object=ID&amp;cut=after&amp;layer=moved</span>. <span class="src">wizardly-johnson</span></li>
+        <li><strong>Lab as branch difference:</strong> “a difference between histories, not proof that the selected rule caused every row.” <span class="src">consequential-os</span></li>
+        <li><strong>Provenance without causal claims:</strong> every edge carries a basis; “available-before” does not mean “read.” <span class="src">determined-turing</span></li>
+        <li><strong>A Director that can only choose certified options</strong> — a model picks an ID; it can’t change the set. <span class="src">main</span></li>
+        <li><strong>Compilers that refuse.</strong> Case-level compile errors; “Studio refuses to publish” (<span class="mono" style="font-size: 12px">OUTCOME_PROXY</span> — “Lucky stall”). <span class="src">earn-authoring · IP Foundry</span></li>
+        <li><strong>“Coordinates before engines.”</strong> <span class="src">decision-system showcase</span></li>
+      </ol>
+      <div style="padding: 14px 16px; border: 2px solid #1B1A17; display: flex; flex-direction: column; gap: 6px">
+        <span class="k">Strongest insight to carry forward</span>
+        <span class="serif" style="font-size: 20px; line-height: 1.35">One deterministic state and a journal of accepted <em>and refused</em> acts. Renderers, the Director and prose are projections — none of them can mint truth.</span>
+      </div>
+      <div style="padding: 14px 16px; border: 2px dashed #1B1A17; display: flex; flex-direction: column; gap: 6px">
+        <span class="k">Should not become canon</span>
+        <span style="font-size: 15px; line-height: 1.45">Everything is authored, linear and assessment-saturated; the only “fork” in code is two devices disagreeing. Provenance lives in <em>separate destinations</em> — a receipt route, a Lab route, a teacher page 3,258 px long — and in hedging prose, not inside the world. Each world family has its own reducer, and incentives shipped broken (“an absurd price wins inside the model”).</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 56px; border-top: 1px solid #1B1A17; padding-top: 24px">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 32px">What this changes about the commission</h2>
+      <ol style="margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 9px; font-size: 15px; line-height: 1.45">
+        <li><strong>The truth grammar exists in three dialects</strong> — real/derived/modeled/fiction; FACT/YOUR BOOKS/FORECAST/SIGNAL/RUMOR; then/act/model/later/never — and the brief adds a fourth. The frontier job is to <em>unify</em> them into one perceptible grammar, not coin another list. Proposal: truth as texture (00).</li>
+        <li><strong>Addresses already exist</strong> at the level of one event in one world. The five-coordinate address is an extension of working code, not a leap (Browser A).</li>
+        <li><strong>WHAT IF? has been killed once, for an honest reason.</strong> Any fork must turn other actors’ responses into declared assumptions or marked unknowns (P5 does exactly this).</li>
+        <li><strong>Standing strategy lines this program crosses:</strong> Decision Challenges rules out generative runtime agents (“no LLM-authored money, terms, obligations or consequences”), keeps Foundry internal, and makes every world beat “a matched simpler case.” P7 and P9 go past those lines on purpose. That is a founder decision, flagged — not assumed.</li>
+        <li><strong>Nothing has met a human.</strong> Across 125 branches there is no witness who is a real student, teacher or user. This canvas is pre-evidence too.</li>
+      </ol>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 32px">The founder’s taste, on record</h2>
+      <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.42">
+        <li>Rejected: midnight navy + gold + glass + cinematic plates; Georgia on navy with a tan desk and rotated papers — “zero taste / I hate it”; a Studio that read as a node editor; HUD stat tiles.</li>
+        <li>Asked for: “make everything light and coherent and insane.” Said the prototypes were “not immersive enough.”</li>
+        <li>Approved for composition: the Sep 28 North Star mockups, including a scale ladder object → person → department → possession → game → League.</li>
+        <li>Won a tournament: “Morning glass” — light plaster, parquet, Celtics green, hazed city.</li>
+        <li>Judged poor: the first arena and owner-desk 3D; a cinematic arena image “obscured the operational calendar.”</li>
+      </ul>
+      <p style="margin: 4px 0 0; font-size: 14px; line-height: 1.5; color: #57534B">This canvas deliberately avoids all of these visual directions. Each vertical gets its own light, specific skin; the shared thing is the grammar underneath.</p>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2180}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const X = (d) => Math.round(150 + d * 19.5);
+    const E = [
+      [0, 13, 24, 'm', 'Track 101 · Modules 1–2', 'lessons, cap, revenue'],
+      [0, 27, 34, 'm', 'Season One campaign', 'released 14 Sep'],
+      [0, 35, 38, 'u', 'Run the Franchise v3', 'Decision Lab, World Shell'],
+      [0, 40, 45, 'u', 'World One → Visual Frontier', 'Court, Film, Draft, Arena'],
+      [0, 45, 49, 'u', 'BOW Worlds', 'Harbor, Boston, Year Two'],
+      [1, 0, 11, 'a', 'Plan Under Pressure', 'basketball MVP'],
+      [1, 11, 24, 'm', 'Shells · Market · Avery', 'Boss harness'],
+      [1, 27, 29, 'm', '2030 vision · strategy', 'IP Foundry'],
+      [1, 29, 38, 'u', 'BOW 2.0 · Campaign One', 'case conference'],
+      [1, 42, 49, 'u', 'Consequential OS stack', 'X-Ray, Lab, Moments']
+    ];
+    const eras = E.map((e, i) => {
+      const x = X(e[1]), w = Math.max(24, X(e[2]) - X(e[1]) - 4);
+      const row = e[0], lower = (i % 2 === 1);
+      const y = row === 0 ? 58 : 184;
+      return { x: x, w: w, y: y, ly: lower ? y + 30 : y - 42, lw: 190, t: e[4], sub: e[5],
+        fill: e[3] === 'm' ? '#1B1A17' : e[3] === 'a' ? '#A8A294' : 'transparent',
+        border: e[3] === 'u' ? '2px solid #1B1A17' : '0' };
+    });
+    const ticks = [[0, '11 Aug'], [10, '21 Aug'], [21, '1 Sep'], [27, '7 Sep'], [35, '15 Sep'], [42, '22 Sep'], [49, '29 Sep']].map((t) => ({ x: X(t[0]), l: t[1] }));
+    return { eras: eras, ticks: ticks };
+  }
+}
+</script>
+</body>
+</html>

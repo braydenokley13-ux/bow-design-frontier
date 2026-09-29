@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BOW Frontier — The medium</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F0E8;color:#1B1A17;font-family:'IBM Plex Sans',sans-serif}
+a{color:#A63A18;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{color:#6E250E}
+.tx{height:52px;border-radius:2px;box-sizing:border-box}
+.t-obs{background:#1B1A17}
+.t-rec{background:#1B1A17;box-shadow:inset 0 0 0 4px #1B1A17,inset 0 0 0 6px #F3F0E8}
+.t-aut{background:transparent;border:2px solid #1B1A17}
+.t-com{background:#7C766B}
+.t-mod{background:repeating-linear-gradient(135deg,#1B1A17 0 1.5px,transparent 1.5px 7px);border:1px solid #1B1A17}
+.t-gen{background:radial-gradient(circle,#1B1A17 1.1px,transparent 1.4px) 0 0/7px 7px;border:1px dotted #1B1A17}
+.t-unk{background:transparent;border:2px dashed #1B1A17}
+.pick{cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.04em;min-height:44px;padding:0 18px;border-radius:0;transition:background .2s,color .2s}
+.part{transition:opacity .35s ease, transform .35s ease}
+</style>
+</helmet>
+<div style="width: 1440px; height: 2260px; box-sizing: border-box; padding: 64px 88px 72px; display: flex; flex-direction: column; gap: 56px; background: #F3F0E8; font-family: 'IBM Plex Sans', sans-serif; color: #1B1A17">
+
+  <header style="display: flex; flex-direction: column; gap: 28px">
+    <div style="display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: #57534B; border-bottom: 1px solid #1B1A17; padding-bottom: 12px">
+      <span>BOW Design Frontier · Wave 1 · Synthesis</span>
+      <span>29 Sep 2026 · Status: active hypothesis — nothing on this canvas is canon</span>
+    </div>
+    <h1 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 400; font-size: 84px; line-height: 1.0; letter-spacing: -0.02em; max-width: 1180px">An executable world is a document you can <em>stand inside.</em></h1>
+    <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 25px; line-height: 1.42; max-width: 1060px; color: #2E2B26">BOW is trying to invent the medium that comes after the page, the clip, the cell and the chat message. Its atom is not a page. It is <strong style="font-weight: 500">a moment of a system</strong> — its state, its rules, the people in it and what it remembers — with an address you can share, a door you can walk through, a branch you can cut, and an answer to <em>how do we know?</em> attached to every value in it.</p>
+  </header>
+
+  <section style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-top: 1px solid #1B1A17; border-bottom: 1px solid #1B1A17">
+    <div style="padding: 18px 20px 20px 0; border-right: 1px solid #CFC8B8; display: flex; flex-direction: column; gap: 8px">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em">TEXT</span>
+      <span style="font-size: 17px; line-height: 1.35">describes a system</span>
+      <span style="font-size: 14px; color: #57534B">atom: the sentence</span>
+    </div>
+    <div style="padding: 18px 20px 20px; border-right: 1px solid #CFC8B8; display: flex; flex-direction: column; gap: 8px">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em">IMAGE</span>
+      <span style="font-size: 17px; line-height: 1.35">shows what it looks like</span>
+      <span style="font-size: 14px; color: #57534B">atom: the frame</span>
+    </div>
+    <div style="padding: 18px 20px 20px; border-right: 1px solid #CFC8B8; display: flex; flex-direction: column; gap: 8px">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em">VIDEO</span>
+      <span style="font-size: 17px; line-height: 1.35">shows what happened</span>
+      <span style="font-size: 14px; color: #57534B">atom: the clip</span>
+    </div>
+    <div style="padding: 18px 20px 20px; border-right: 1px solid #CFC8B8; display: flex; flex-direction: column; gap: 8px">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em">SPREADSHEET</span>
+      <span style="font-size: 17px; line-height: 1.35">manipulates its numbers</span>
+      <span style="font-size: 14px; color: #57534B">atom: the cell</span>
+    </div>
+    <div style="padding: 18px 20px 20px; border-right: 1px solid #1B1A17; display: flex; flex-direction: column; gap: 8px">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em">CHAT</span>
+      <span style="font-size: 17px; line-height: 1.35">answers questions about it</span>
+      <span style="font-size: 14px; color: #57534B">atom: the message</span>
+    </div>
+    <div style="padding: 18px 0 20px 22px; background: #1B1A17; color: #F3F0E8; display: flex; flex-direction: column; gap: 8px">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em">BOW</span>
+      <span style="font-size: 17px; line-height: 1.35">lets you stand inside it, act, and branch it</span>
+      <span style="font-size: 14px; color: #D6D0C3">atom: the moment of a system</span>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 22px">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 40px">
+      <div style="display: flex; flex-direction: column; gap: 10px; max-width: 760px">
+        <h2 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 400; font-size: 44px; line-height: 1.05">Pages have addresses. Systems need coordinates.</h2>
+        <p style="margin: 0; font-size: 17px; line-height: 1.5; color: #2E2B26">Every BOW object is a point along the same dimensions. Moving along one of them is navigation. Sending the coordinates is sharing. “Open it in BOW” means: resolve this address and put me there.</p>
+      </div>
+      <div role="group" aria-label="Example systems" style="display: flex; gap: 0; border: 1px solid #1B1A17">
+        <sc-for list="{{examples}}" as="ex" hint-placeholder-count="4">
+          <button type="button" class="pick" onClick="{{ex.pick}}" aria-pressed="{{ex.pressed}}" style="border: 0; border-right: 1px solid #1B1A17; background: {{ex.bg}}; color: {{ex.fg}}">{{ex.label}}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; border-top: 3px solid #1B1A17">
+      <sc-for list="{{parts}}" as="p" hint-placeholder-count="6">
+        <div class="part" style="padding: 18px 16px 18px 0; display: flex; flex-direction: column; gap: 10px; border-right: 1px solid #CFC8B8; margin-right: 14px">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .1em; color: #A63A18">{{p.dim}}</span>
+          <span style="font-family: 'Newsreader', serif; font-size: 27px; line-height: 1.12">{{p.v}}</span>
+          <span style="font-size: 14px; line-height: 1.4; color: #57534B">{{p.verb}}</span>
+        </div>
+      </sc-for>
+    </div>
+    <p style="margin: 0; font-family: 'Newsreader', serif; font-style: italic; font-size: 21px; line-height: 1.4; color: #2E2B26; max-width: 1100px">{{caption}}</p>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 20px">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 40px">
+      <h2 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 400; font-size: 44px; line-height: 1.05">Truth is a texture, not a label.</h2>
+      <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #2E2B26; max-width: 620px">Every world gets its own skin. The epistemic grammar underneath does not change: solid, double-ruled, outlined, toned, hatched, stippled, open. Words appear on request — <em>how do we know?</em> — not stamped on everything.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 18px">
+      <div style="display: flex; flex-direction: column; gap: 8px"><div class="tx t-obs"></div><strong style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em">OBSERVED</strong><span style="font-size: 14px; line-height: 1.4">Measured or reported from outside BOW.</span><span style="font-size: 13px; line-height: 1.4; color: #57534B">Boston drafted Jayson Tatum at No. 3, 22 Jun 2017.</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px"><div class="tx t-rec"></div><strong style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em">RECORDED</strong><span style="font-size: 14px; line-height: 1.4">Written into BOW’s own history. Append-only.</span><span style="font-size: 13px; line-height: 1.4; color: #57534B">You kept the pick at 11:52 in your branch.</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px"><div class="tx t-aut"></div><strong style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em">AUTHORED</strong><span style="font-size: 14px; line-height: 1.4">A rule or number someone chose on purpose.</span><span style="font-size: 13px; line-height: 1.4; color: #57534B">This seat may commit up to $250,000.</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px"><div class="tx t-com"></div><strong style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em">COMPUTED</strong><span style="font-size: 14px; line-height: 1.4">Follows exactly from known rules and state.</span><span style="font-size: 13px; line-height: 1.4; color: #57534B">5 ayes, 5 noes: the motion fails.</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px"><div class="tx t-mod"></div><strong style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em">MODELED</strong><span style="font-size: 14px; line-height: 1.4">A bounded simulation’s answer. Shown as a range.</span><span style="font-size: 13px; line-height: 1.4; color: #57534B">Your branch, 2019: 41–55 wins.</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px"><div class="tx t-gen"></div><strong style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em">GENERATED</strong><span style="font-size: 14px; line-height: 1.4">Made to represent, not to assert.</span><span style="font-size: 13px; line-height: 1.4; color: #57534B">The actor model’s spoken phrasing.</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px"><div class="tx t-unk"></div><strong style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .08em">UNKNOWN</strong><span style="font-size: 14px; line-height: 1.4">A marked hole. Never filled in silently.</span><span style="font-size: 13px; line-height: 1.4; color: #57534B">What Washington privately thought of the vote.</span></div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 6px">
+      <p style="margin: 0; padding: 16px 20px; border: 2px solid #1B1A17; font-family: 'Newsreader', serif; font-size: 22px; line-height: 1.3">A modeled result never wears the texture of an observed one.</p>
+      <p style="margin: 0; padding: 16px 20px; border: 2px solid #1B1A17; font-family: 'Newsreader', serif; font-size: 22px; line-height: 1.3">A fork never wears the ink of the record. It is stamped, dated and signed.</p>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 64px; border-top: 1px solid #1B1A17; padding-top: 28px">
+    <div style="display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <h2 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 400; font-size: 32px">Six working laws, proposed</h2>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .08em; color: #57534B">FOR FOUNDER APPROVAL · NOT CANON</span>
+      </div>
+      <ol style="margin: 0; padding-left: 26px; display: flex; flex-direction: column; gap: 9px; font-size: 16px; line-height: 1.45">
+        <li><strong style="font-weight: 600">State once, show many.</strong> A change happens to the system once; every drawing of it is a view of that one state.</li>
+        <li><strong style="font-weight: 600">History is append-only.</strong> Branches are declared, never disguised as the record.</li>
+        <li><strong style="font-weight: 600">Every value can answer “how do we know?”</strong> One step away, never zero, never ten.</li>
+        <li><strong style="font-weight: 600">A role bounds knowing, doing and answering for</strong> — for people and agents alike.</li>
+        <li><strong style="font-weight: 600">Intelligence occupies seats; it never owns the world.</strong> Swap the model and the seat, its authority and its history stay.</li>
+        <li><strong style="font-weight: 600">An outcome is not the quality of the decision.</strong> The world keeps what was knowable at the moment you chose.</li>
+      </ol>
+      <p style="margin: 0; font-size: 14px; line-height: 1.45; color: #57534B">Laws 3 and 6 already exist in working code: Economics Live stamps every fact with a basis (real / derived / modeled / fiction) and a date; Decision Challenges keeps a receipt of every act, refused ones included, with what was knowable at the time. The frontier question is whether they can become the grammar of a whole medium.</p>
+    </div>
+    <nav aria-label="Canvas pages" style="display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 400; font-size: 32px">Walk the canvas</h2>
+      <div style="display: flex; flex-direction: column; font-size: 16px; line-height: 1.3">
+        <a href="Problems.dc.html" style="padding: 9px 0; border-bottom: 1px solid #CFC8B8">01 · The hardest problems, and how BOW could collapse</a>
+        <a href="Archaeology.dc.html" style="padding: 9px 0; border-bottom: 1px solid #CFC8B8">02 · What the repositories already know</a>
+        <a href="Map.dc.html" style="padding: 9px 0; border-bottom: 1px solid #CFC8B8">03 · Frontier map: ten families, one grammar</a>
+        <a href="BrowserSentence.dc.html" style="padding: 9px 0; border-bottom: 1px solid #CFC8B8">P1 · Browser tournament: Sentence, River, Focus, Seat</a>
+        <a href="ApushRoom.dc.html" style="padding: 9px 0; border-bottom: 1px solid #CFC8B8">P2 · Philadelphia 1787: Room, Notes, Arithmetic</a>
+        <a href="Chemistry.dc.html" style="padding: 9px 0; border-bottom: 1px solid #CFC8B8">P3 · One state, five views (working)</a>
+        <a href="Fork.dc.html" style="padding: 9px 0; border-bottom: 1px solid #CFC8B8">P5 · WHAT IF? the 2017 pick (working)</a>
+        <a href="Biology.dc.html" style="padding: 9px 0; border-bottom: 1px solid #CFC8B8">P4, P6–P10 · Frontier sweep</a>
+        <a href="Packet.dc.html" style="padding: 9px 0">Founder tournament packet</a>
+      </div>
+      <p style="margin: 6px 0 0; font-size: 13px; line-height: 1.5; color: #57534B">Status words used throughout: <strong>EXISTS TODAY</strong> (in a BOW repo) · <strong>DESIGN PROPOSAL</strong> · <strong>PLATFORM HYPOTHESIS</strong> · <strong>SPECULATIVE FRONTIER</strong>. No artboard here is evidence: none has met a human yet. Real-world figures are prototype data, dated, to be verified before any use.</p>
+    </nav>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2260}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const cur = s.ex || 0;
+    const EX = [
+      { label: 'Basketball',
+        parts: [
+          ['SYSTEM', 'Boston Celtics', 'what you opened'],
+          ['SCALE', 'Front office', 'zoom out to the league, in to one contract'],
+          ['WHEN', '19 Jun 2017, 11:40 ET', 'scrub back, or forward to now'],
+          ['BRANCH', 'Reality — recorded', 'WHAT IF? cuts a new one here'],
+          ['WHO AM I', 'President of Basketball Ops', 'change seats, change what you know'],
+          ['VIEW', 'Draft board', 'cap sheet, court, ledger, Lens']
+        ],
+        caption: 'The morning Boston agreed to trade the No. 1 pick. Enter here and the trade has not happened yet.' },
+      { label: 'History',
+        parts: [
+          ['SYSTEM', 'Federal Convention', 'what you opened'],
+          ['SCALE', 'Assembly Room', 'out to the thirteen states, in to one delegate'],
+          ['WHEN', '16 Jul 1787, morning', 'before the vote, or after'],
+          ['BRANCH', 'Recorded history', 'your counterfactual would be stamped'],
+          ['WHO AM I', 'Caleb Strong, Massachusetts', 'a split delegation, one vote that matters'],
+          ['VIEW', 'The room', 'Madison’s notes, the arithmetic, a map']
+        ],
+        caption: 'The morning of the vote on equal state suffrage in the Senate. Massachusetts is divided, and the tally is close.' },
+      { label: 'Chemistry',
+        parts: [
+          ['SYSTEM', 'N₂O₄ ⇌ 2 NO₂', 'what you opened'],
+          ['SCALE', 'Sealed syringe', 'down to molecules, up to the fume hood'],
+          ['WHEN', 't = 0 s, 298 K', 'time here is slowed on purpose, and says so'],
+          ['BRANCH', 'Your lab branch', 'a lab state is always a branch'],
+          ['WHO AM I', 'Experimenter', 'you can push the plunger; you cannot change ΔH'],
+          ['VIEW', 'Molecules', 'apparatus, equation, graph, explanation']
+        ],
+        caption: 'One chemical state. Five drawings of it. Change the state once and every drawing answers.' },
+      { label: 'Enterprise',
+        parts: [
+          ['SYSTEM', 'Harrow Medical (fictional)', 'what you opened'],
+          ['SCALE', 'Supply network', 'down to one purchase order, up to the market'],
+          ['WHEN', 'Now — observed 09:14', 'replay last spring’s shortage, or fork tomorrow'],
+          ['BRANCH', 'Mirror of reality', 'Lab forks never write back without authority'],
+          ['WHO AM I', 'VP Procurement', 'sees suppliers and contracts, not payroll'],
+          ['VIEW', 'Commitments', 'the promises, the plant floor, the money']
+        ],
+        caption: 'An organization at an address: what the procurement seat can see and do, right now, and what it cannot.' }
+    ];
+    const e = EX[cur];
+    return {
+      examples: EX.map((x, i) => ({
+        label: x.label,
+        pressed: i === cur ? 'true' : 'false',
+        bg: i === cur ? '#1B1A17' : 'transparent',
+        fg: i === cur ? '#F3F0E8' : '#1B1A17',
+        pick: () => this.setState({ ex: i })
+      })),
+      parts: e.parts.map((p) => ({ dim: p[0], v: p[1], verb: p[2] })),
+      caption: e.caption
+    };
+  }
+}
+</script>
+</body>
+</html>

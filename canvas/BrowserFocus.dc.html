@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Focus</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E6E9E7;color:#1E2322;font-family:'IBM Plex Sans Condensed',sans-serif}
+a{color:#A8360F}a:hover{color:#1E2322}
+.t-obs{background:#1E2322}
+.t-rec{background:#1E2322;box-shadow:inset 0 0 0 3px #1E2322,inset 0 0 0 5px #F1F3F2}
+.t-aut{background:transparent;border:2px solid #1E2322}
+.t-com{background:#8A9491}
+.t-gen{background:radial-gradient(circle,#1E2322 1.1px,transparent 1.4px) 0 0/7px 7px;border:1px dotted #1E2322}
+.t-unk{background:transparent;border:2px dashed #1E2322}
+.sw{width:26px;height:26px;box-sizing:border-box;flex:none;margin-top:1px}
+.sw.t-br{outline:2.5px solid #C8441A;outline-offset:2px}
+.fx-btn{font-family:'IBM Plex Sans Condensed',sans-serif;cursor:pointer;border-radius:0;transition:background .2s,color .2s,border-color .2s}
+.fx-btn:focus-visible,.fx-in:focus-visible,.fx-range:focus-visible{outline:3px solid #C8441A;outline-offset:2px}
+.fx-btn:disabled{cursor:default;color:#7A8481;border-color:#BCC3C0}
+.fx-stop:hover{background:#F7F8F7 !important}
+.fx-sug:hover{border-color:#1E2322 !important}
+.fx-ret:hover{background:rgba(200,68,26,.16) !important}
+.fx-ghost:hover{background:#F7F8F7}
+.fx-enter:hover{background:#000 !important}
+.fx-range{accent-color:#C8441A;writing-mode:vertical-lr;direction:ltr;margin:0;padding:0;cursor:pointer}
+.fx-in::placeholder{color:#6B7572}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #E6E9E7; color: #1E2322; font-family: 'IBM Plex Sans Condensed', sans-serif">
+
+  <svg width="0" height="0" aria-hidden="true" style="position: absolute; left: 0; top: 0">
+    <defs>
+      <pattern id="fx-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" style="stroke: #1E2322; stroke-width: 1.5"></line></pattern>
+      <pattern id="fx-stip" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.1" style="fill: #1E2322"></circle></pattern>
+    </defs>
+  </svg>
+
+  <div style="position: absolute; left: 32px; right: 32px; top: 14px; height: 22px; display: flex; justify-content: space-between; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .08em; color: #4A5250">
+    <span><strong style="color: #1E2322; font-weight: 600; letter-spacing: .24em">BOW</strong>&nbsp;&nbsp;THE FOCUS · scale is the front door</span>
+    <span>PROTOTYPE · DESIGN PROPOSAL · data: prototype, as of 29 Sep 2026, verify before use</span>
+  </div>
+
+  <div style="position: absolute; left: 32px; right: 32px; top: 46px; height: 48px; display: flex; align-items: stretch; gap: 10px">
+    <label for="fx-q" style="display: flex; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .14em; color: #4A5250; padding-right: 2px">OPEN</label>
+    <input id="fx-q" class="fx-in" type="text" value="{{q}}" onChange="{{onQ}}" placeholder="Type a system" style="width: 320px; box-sizing: border-box; border: 0; border-bottom: 2px solid #1E2322; background: #F1F3F2; padding: 0 14px; font-family: 'IBM Plex Mono', monospace; font-size: 17px; color: #1E2322; border-radius: 0">
+    <div role="group" aria-label="Example systems" style="display: flex; gap: 8px; align-items: stretch">
+      <sc-for list="{{sugg}}" as="sg" hint-placeholder-count="4">
+        <button type="button" class="fx-btn fx-sug" onClick="{{sg.pick}}" aria-pressed="{{sg.pressed}}" style="border: 1px solid {{sg.bd}}; background: {{sg.bg}}; color: {{sg.fg}}; padding: 0 14px; font-size: 16px; font-weight: 500; white-space: nowrap">{{sg.label}}</button>
+      </sc-for>
+    </div>
+    <span aria-live="polite" style="margin-left: auto; align-self: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #4A5250; text-align: right">{{resNote}}</span>
+  </div>
+
+  <div style="position: absolute; left: 32px; top: 108px; width: 1000px; height: 26px; display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #1E2322">
+    <span style="letter-spacing: .08em; font-weight: 600; white-space: nowrap">{{stopLine}}</span>
+    <span style="color: #4A5250; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{coord}}</span>
+  </div>
+
+  <div style="position: absolute; left: 32px; top: 140px; width: 1000px; height: 560px; background: #F1F3F2; outline: 1px solid #1E2322; overflow: hidden">
+    <div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 0; height: 5px; background: repeating-linear-gradient(90deg, #7A8481 0 1px, transparent 1px 20px); z-index: 3"></div>
+    <div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 0; height: 10px; background: repeating-linear-gradient(90deg, #1E2322 0 1px, transparent 1px 100px); z-index: 3"></div>
+    <div aria-hidden="true" style="position: absolute; top: 0; bottom: 0; right: 0; width: 5px; background: repeating-linear-gradient(180deg, #7A8481 0 1px, transparent 1px 20px); z-index: 3"></div>
+    <div aria-hidden="true" style="position: absolute; top: 0; bottom: 0; right: 0; width: 10px; background: repeating-linear-gradient(180deg, #1E2322 0 1px, transparent 1px 100px); z-index: 3"></div>
+
+    <sc-if value="{{hasSys}}" hint-placeholder-val="{{true}}">
+      <sc-for list="{{layers}}" as="ly" hint-placeholder-count="2">
+        <div aria-hidden="{{ly.hid}}" style="position: absolute; left: 0; top: 0; width: 1000px; height: 560px; transform-origin: 0 0; transform: {{ly.tf}}; opacity: {{ly.op}}; pointer-events: {{ly.pe}}; transition: transform .62s cubic-bezier(.5,0,.2,1), opacity .62s cubic-bezier(.5,0,.2,1)">
+          <svg width="1000" height="560" viewBox="0 0 1000 560" aria-hidden="true" style="position: absolute; left: 0; top: 0; overflow: visible">
+            <path d="{{ly.o}}" style="fill: #8A9491; stroke: #1E2322; stroke-width: 1"></path>
+            <path d="{{ly.h}}" style="fill: url(#fx-hatch); stroke: #1E2322; stroke-width: 1"></path>
+            <path d="{{ly.g}}" style="fill: url(#fx-stip); stroke: #1E2322; stroke-width: 1; stroke-dasharray: 1 3"></path>
+            <path d="{{ly.s}}" style="fill: #1E2322; stroke: none"></path>
+            <path d="{{ly.t}}" style="fill: none; stroke: #7A8481; stroke-width: 1"></path>
+            <path d="{{ly.k}}" style="fill: none; stroke: #1E2322; stroke-width: 1.6; stroke-linejoin: round"></path>
+            <path d="{{ly.a}}" style="fill: none; stroke: #1E2322; stroke-width: 2.6; stroke-linejoin: miter"></path>
+            <path d="{{ly.u}}" style="fill: none; stroke: #1E2322; stroke-width: 1.6; stroke-dasharray: 7 5"></path>
+            <path d="{{ly.b}}" style="fill: none; stroke: #1E2322; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round"></path>
+            <path d="{{ly.w}}" style="fill: none; stroke: #F1F3F2; stroke-width: 6; stroke-linejoin: miter"></path>
+            <path d="{{ly.w}}" style="fill: none; stroke: #C8441A; stroke-width: 2.5; stroke-linejoin: miter"></path>
+          </svg>
+          <sc-for list="{{ly.lb}}" as="lb" hint-placeholder-count="4">
+            <div style="position: absolute; left: {{lb.x}}px; top: {{lb.y}}px; transform: translate({{lb.tx}}, -50%); white-space: nowrap; font-family: {{lb.ff}}; font-size: {{lb.fs}}px; font-weight: {{lb.fw}}; letter-spacing: {{lb.ls}}; text-transform: {{lb.tt}}; color: {{lb.c}}; background: {{lb.bg}}; padding: {{lb.pd}}; border: {{lb.bd}}; line-height: 1.2">{{lb.t}}</div>
+          </sc-for>
+          <sc-if value="{{ly.hasCtl}}" hint-placeholder-val="{{false}}">
+            <div style="position: absolute; left: 22px; top: 196px; width: 232px; display: flex; flex-direction: column; gap: 8px">
+              <span id="fx-ctl-l" style="font-size: 16px; font-weight: 600; line-height: 1.2">Try a different year-2 salary</span>
+              <div role="group" aria-labelledby="fx-ctl-l" style="display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 6px; align-items: stretch">
+                <button type="button" class="fx-btn fx-ghost" onClick="{{ly.dec}}" disabled="{{ly.decDis}}" aria-label="Lower year-2 salary by $1M" style="min-height: 44px; padding: 0; background: #F1F3F2; border: 1px solid #1E2322; color: #1E2322; font-size: 22px; font-weight: 600; line-height: 1">−</button>
+                <div role="status" style="display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 600; color: {{ly.ctlC}}; border: 2px solid {{ly.ctlBd}}; background: #F1F3F2">{{ly.ctlVal}}</div>
+                <button type="button" class="fx-btn fx-ghost" onClick="{{ly.inc}}" disabled="{{ly.incDis}}" aria-label="Raise year-2 salary by $1M" style="min-height: 44px; padding: 0; background: #F1F3F2; border: 1px solid #1E2322; color: #1E2322; font-size: 22px; font-weight: 600; line-height: 1">+</button>
+              </div>
+              <button type="button" class="fx-btn fx-ghost" onClick="{{ly.reset}}" disabled="{{ly.resetDis}}" style="min-height: 44px; padding: 0 10px; background: transparent; border: 1px solid #1E2322; color: #1E2322; font-size: 15px; font-weight: 500; text-align: left">Back to the record ($58.5M)</button>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; line-height: 1.4; color: #4A5250">$50M to $66M, $1M at a time. Only year 2 changes; the rest stays as recorded. Watch 01 LEAGUE and 03 FRANCHISE.</span>
+            </div>
+          </sc-if>
+          <sc-if value="{{ly.hasRet}}" hint-placeholder-val="{{true}}">
+            <button type="button" class="fx-btn fx-ret" onClick="{{ly.zoomIn}}" disabled="{{ly.retDis}}" aria-label="{{ly.retAria}}" style="position: absolute; left: {{ly.rx}}px; top: {{ly.ry}}px; width: {{ly.rw}}px; height: {{ly.rh}}px; padding: 0; margin: 0; background: rgba(200,68,26,.06); border: 1px solid rgba(200,68,26,.55)">
+              <span aria-hidden="true" style="position: absolute; left: -3px; top: -3px; width: 16px; height: 16px; border-left: 3px solid #C8441A; border-top: 3px solid #C8441A"></span>
+              <span aria-hidden="true" style="position: absolute; right: -3px; top: -3px; width: 16px; height: 16px; border-right: 3px solid #C8441A; border-top: 3px solid #C8441A"></span>
+              <span aria-hidden="true" style="position: absolute; left: -3px; bottom: -3px; width: 16px; height: 16px; border-left: 3px solid #C8441A; border-bottom: 3px solid #C8441A"></span>
+              <span aria-hidden="true" style="position: absolute; right: -3px; bottom: -3px; width: 16px; height: 16px; border-right: 3px solid #C8441A; border-bottom: 3px solid #C8441A"></span>
+              <span aria-hidden="true" style="position: absolute; left: 50%; top: 50%; width: 11px; height: 1px; margin-left: -5px; background: #C8441A"></span>
+              <span aria-hidden="true" style="position: absolute; left: 50%; top: 50%; width: 1px; height: 11px; margin-top: -5px; background: #C8441A"></span>
+              <span style="position: absolute; left: {{ly.tagLeft}}px; top: {{ly.tagTop}}px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: .08em; color: #A8360F; background: #F1F3F2; padding: 2px 5px; white-space: nowrap; line-height: 1.2">{{ly.retTag}}</span>
+            </button>
+          </sc-if>
+        </div>
+      </sc-for>
+
+      <sc-if value="{{hasPar}}" hint-placeholder-val="{{true}}">
+        <button type="button" class="fx-btn fx-ghost" onClick="{{goUp}}" aria-label="{{parAria}}" style="position: absolute; left: 12px; bottom: 12px; width: 224px; padding: 0; margin: 0; background: #E6E9E7; border: 1px solid #1E2322; text-align: left; display: flex; flex-direction: column; z-index: 2">
+          <span style="display: flex; justify-content: space-between; gap: 8px; padding: 4px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .06em; color: #1E2322; border-bottom: 1px solid #9AA3A0"><span>CAME FROM ↑</span><span style="font-weight: 600">{{parName}}</span></span>
+          <svg width="222" height="124" viewBox="0 0 1000 560" aria-hidden="true" style="display: block">
+            <path d="{{par.o}}" style="fill: #8A9491; stroke: none"></path>
+            <path d="{{par.h}}" style="fill: url(#fx-hatch); stroke: #1E2322; stroke-width: 3"></path>
+            <path d="{{par.g}}" style="fill: url(#fx-stip); stroke: #1E2322; stroke-width: 3"></path>
+            <path d="{{par.s}}" style="fill: #1E2322; stroke: none"></path>
+            <path d="{{par.t}}" style="fill: none; stroke: #7A8481; stroke-width: 3"></path>
+            <path d="{{par.k}}" style="fill: none; stroke: #1E2322; stroke-width: 5"></path>
+            <path d="{{par.a}}" style="fill: none; stroke: #1E2322; stroke-width: 7"></path>
+            <path d="{{par.u}}" style="fill: none; stroke: #1E2322; stroke-width: 5; stroke-dasharray: 18 12"></path>
+            <path d="{{par.b}}" style="fill: none; stroke: #1E2322; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round"></path>
+            <rect x="{{par.rx}}" y="{{par.ry}}" width="{{par.rw}}" height="{{par.rh}}" style="fill: rgba(200,68,26,.2); stroke: #C8441A; stroke-width: 10"></rect>
+          </svg>
+        </button>
+      </sc-if>
+
+      <div style="position: absolute; right: 18px; bottom: 14px; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #1E2322; background: #F1F3F2; padding: 4px 0 0 8px; z-index: 2">
+        <span aria-hidden="true" style="display: block; width: 120px; height: 7px; border: 1.5px solid #1E2322; border-top: 0; box-sizing: border-box"></span>
+        <span>FIELD {{field}}</span>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{noSys}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: 0; top: 0; width: 1000px; height: 560px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; box-sizing: border-box; padding: 0 120px">
+        <svg width="96" height="96" viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="30" style="fill: none; stroke: #1E2322; stroke-width: 1.5"></circle><path d="M48 4V30M48 66V92M4 48H30M66 48H92" style="fill: none; stroke: #C8441A; stroke-width: 2"></path></svg>
+        <p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 21px; line-height: 1.4; color: #1E2322">{{emptyMsg}}</p>
+        <p style="margin: 0; font-size: 18px; line-height: 1.4; color: #4A5250">{{emptySub}}</p>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{entered}}" hint-placeholder-val="{{false}}">
+      <div role="status" style="position: absolute; left: 0; right: 0; top: 0; background: #1E2322; color: #E6E9E7; padding: 14px 22px 16px; display: flex; flex-direction: column; gap: 7px; border-bottom: 3px solid #C8441A; z-index: 4">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: .16em; color: #EE7F52">ARRIVED · {{stopLine}}</span>
+          <button type="button" class="fx-btn" onClick="{{leave}}" style="min-height: 40px; padding: 0 14px; background: transparent; color: #E6E9E7; border: 1px solid #8A9491; font-size: 15px">Back to the focus</button>
+        </div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 21px; line-height: 1.3; font-weight: 500">{{coordFull}}</div>
+        <div style="font-size: 17px; line-height: 1.4; color: #D5DAD8">First in view: {{first}} <span style="color: #AEB6B3">Acts from here open your own branch; the record is not changed.</span></div>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="position: absolute; left: 32px; top: 714px; width: 1000px; height: 170px">
+    <sc-if value="{{hasSys}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; justify-content: space-between; align-items: center; height: 42px; border-bottom: 1px solid #9AA3A0">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .12em; color: #4A5250">READINGS AT THIS STOP · <strong style="color: #1E2322; font-weight: 600">{{curUp}}</strong></span>
+        <button type="button" class="fx-btn fx-ghost" onClick="{{toggleWhy}}" aria-pressed="{{whyPressed}}" style="min-height: 36px; padding: 0 14px; background: {{whyBg}}; color: {{whyFg}}; border: 1px solid #1E2322; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px">
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle cx="6" cy="6" r="4.5" style="fill: none; stroke: currentColor; stroke-width: 1.5"></circle><path d="M9.3 9.3L13 13" style="fill: none; stroke: currentColor; stroke-width: 1.5"></path></svg>
+          How do we know?
+        </button>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; padding-top: 12px">
+        <sc-for list="{{reads}}" as="rd" hint-placeholder-count="3">
+          <div style="display: flex; gap: 12px; align-items: flex-start">
+            <div class="sw {{rd.cls}}"></div>
+            <div style="display: flex; flex-direction: column; gap: 5px; min-width: 0">
+              <span style="font-size: 16px; line-height: 1.3">{{rd.v}}</span>
+              <sc-if value="{{rd.br}}" hint-placeholder-val="{{false}}">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600; line-height: 1.3; color: #A8360F">YOUR WHAT IF · not the record</span>
+              </sc-if>
+              <sc-if value="{{rd.why}}" hint-placeholder-val="{{false}}">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; line-height: 1.4; color: #4A5250"><strong style="color: #1E2322; font-weight: 600">{{rd.word}}</strong> · {{rd.src}}</span>
+              </sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="position: absolute; left: 1064px; top: 108px; width: 344px; height: 776px; display: flex; flex-direction: column">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1E2322; padding-bottom: 5px">
+      <span style="font-size: 20px; font-weight: 700; letter-spacing: .16em">FOCUS</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #4A5250">wide at the top · fine below</span>
+    </div>
+    <sc-if value="{{hasSys}}" hint-placeholder-val="{{true}}">
+      <div style="position: relative; height: {{ladH}}px; margin-top: 8px">
+        <div aria-hidden="true" style="position: absolute; left: 19px; top: 25px; height: {{railH}}px; width: 1px; background: #1E2322"></div>
+        <input class="fx-range" type="range" min="0" max="{{maxD}}" step="1" value="{{depth}}" onChange="{{onRange}}" aria-label="Focus depth" aria-valuetext="{{curName}}" style="position: absolute; left: 10px; top: 17px; height: {{rangeH}}px; width: 20px">
+        <div style="position: absolute; left: 40px; right: 0; top: 0; display: flex; flex-direction: column">
+          <sc-for list="{{stops}}" as="st" hint-placeholder-count="8">
+            <button type="button" class="fx-btn fx-stop" onClick="{{st.pick}}" aria-pressed="{{st.pressed}}" style="height: 50px; display: grid; grid-template-columns: 16px 22px minmax(0, 1fr) auto; align-items: center; gap: 6px; padding: 0 8px 0 0; margin: 0; border: 0; border-left: 4px solid {{st.bar}}; background: {{st.bg}}; color: #1E2322; text-align: left">
+              <span aria-hidden="true" style="display: block; height: 2px; width: {{st.tw}}px; background: {{st.tc}}; transition: width .3s"></span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #4A5250">{{st.no}}</span>
+              <span style="display: flex; flex-direction: column; line-height: 1.12; min-width: 0">
+                <span style="font-size: 16px; font-weight: {{st.fw}}; letter-spacing: .03em; text-transform: uppercase; white-space: nowrap">{{st.name}}</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .06em; color: {{st.tagC}}; min-height: 12px">{{st.tag}}</span>
+              </span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #4A5250; white-space: nowrap">{{st.u}}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px">
+        <button type="button" class="fx-btn fx-ghost" onClick="{{goUp}}" disabled="{{upDis}}" style="min-height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; background: #F1F3F2; border: 1px solid #1E2322; color: #1E2322; font-size: 16px; font-weight: 600">
+          <svg width="12" height="10" viewBox="0 0 12 10" aria-hidden="true"><path d="M1 9L6 1L11 9Z" style="fill: currentColor"></path></svg>Wider
+        </button>
+        <button type="button" class="fx-btn fx-ghost" onClick="{{goDown}}" disabled="{{downDis}}" style="min-height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; background: #F1F3F2; border: 1px solid #1E2322; color: #1E2322; font-size: 16px; font-weight: 600">
+          Finer<svg width="12" height="10" viewBox="0 0 12 10" aria-hidden="true"><path d="M1 1L6 9L11 1Z" style="fill: currentColor"></path></svg>
+        </button>
+      </div>
+      <div style="margin-top: 16px; display: flex; flex-direction: column">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .12em; color: #4A5250; padding-bottom: 5px">AT THIS SCALE YOU CAN</span>
+        <sc-for list="{{verbs}}" as="vb" hint-placeholder-count="2">
+          <div style="display: flex; flex-direction: column; gap: 1px; border-top: 1px solid #9AA3A0; padding: 7px 0">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; letter-spacing: .04em">{{vb.V}}</span>
+            <span style="font-size: 15px; line-height: 1.3; color: #3F4745">{{vb.o}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <button type="button" class="fx-btn fx-enter" onClick="{{enter}}" style="margin-top: auto; min-height: 62px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; padding: 8px 16px; background: #1E2322; color: #F1F3F2; border: 0; border-left: 6px solid #C8441A; text-align: left">
+        <span style="font-size: 20px; font-weight: 600; letter-spacing: .02em">Enter at this depth →</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #C9CFCD">{{enterSub}}</span>
+      </button>
+    </sc-if>
+    <sc-if value="{{noSys}}" hint-placeholder-val="{{false}}">
+      <p style="margin: 18px 0 0; font-size: 17px; line-height: 1.45; color: #4A5250">The focus ladder appears when a system resolves. Every system has its own stops, from its widest view down to its finest part.</p>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  data() {
+    if (this._D) return this._D;
+    const f = (v) => +(+v).toFixed(1);
+    const R = (x, y, w, h) => `M${f(x)} ${f(y)}h${f(w)}v${f(h)}h${f(-w)}Z`;
+    const C = (x, y, r) => `M${f(x - r)} ${f(y)}a${r} ${r} 0 1 0 ${f(2 * r)} 0a${r} ${r} 0 1 0 ${f(-2 * r)} 0Z`;
+    const E = (x, y, rx, ry) => `M${f(x - rx)} ${f(y)}a${rx} ${ry} 0 1 0 ${f(2 * rx)} 0a${rx} ${ry} 0 1 0 ${f(-2 * rx)} 0Z`;
+    const P = (...p) => 'M' + p.map((q) => f(q[0]) + ' ' + f(q[1])).join('L');
+    const Q = (a, b, c, d, e, g) => `M${f(a)} ${f(b)}Q${f(c)} ${f(d)} ${f(e)} ${f(g)}`;
+    const H = (y, x1, x2) => `M${f(x1)} ${f(y)}H${f(x2)}`;
+    const V = (x, y1, y2) => `M${f(x)} ${f(y1)}V${f(y2)}`;
+    const ar = (x, y, d) => d === 'r' ? P([x - 7, y - 5], [x, y], [x - 7, y + 5]) : d === 'l' ? P([x + 7, y - 5], [x, y], [x + 7, y + 5]) : d === 'u' ? P([x - 5, y + 7], [x, y], [x + 5, y + 7]) : P([x - 5, y - 7], [x, y], [x + 5, y - 7]);
+    const sq = (ox, oy, cols, rows, sz, gap) => { let d = ''; for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) d += R(ox + c * (sz + gap), oy + r * (sz + gap), sz, sz); return d; };
+    const lb = (x, y, t, a, k) => [x, y, t, a || 'l', k || 'c'];
+    const lv = (n, u, as, v, first, r, d, l, ret) => ({ n, u, as, v, first, r, d, l, ret: ret || null });
+
+    /* ---------------- BOSTON CELTICS ---------------- */
+    const codes = [['BOS', 'BKN', 'NYK', 'PHI', 'TOR'], ['CHI', 'CLE', 'DET', 'IND', 'MIL'], ['ATL', 'CHA', 'MIA', 'ORL', 'WAS']];
+    const confL = [lb(288, 124, 'Atlantic', 'c'), lb(508, 124, 'Central', 'c'), lb(728, 124, 'Southeast', 'c'), lb(790, 470, 'the West is out of view', 'l', 'm')];
+    codes.forEach((col, c) => col.forEach((code, r) => confL.push(lb([260, 480, 700][c] + 28, 150 + r * 70 + 28, code, 'c', c === 0 && r === 0 ? 'w' : 'm'))));
+    let slots = H(192, 660, 940);
+    for (let c = 0; c < 3; c++) for (let r = 0; r < 5; r++) slots += R(676 + c * 88, 204 + r * 28, 76, 20);
+    const X = (y) => 140 + (y - 2017) * 56;
+    let yrT = '', yrL = [];
+    for (let y = 2017; y <= 2030; y++) { yrT += V(X(y), 314, 326); yrL.push(lb(X(y), 342, '’' + String(y).slice(2), 'c', 'm')); }
+    const sal = [54.1, 58.5, 62.8, 67.1, 71.4], seas = ['25–26', '26–27', '27–28', '28–29', '29–30'];
+    let bars = '', barL = [];
+    sal.forEach((v, i) => { const h = v * 2; bars += R(290 + i * 80, 480 - h, 56, h); barL.push(lb(318 + i * 80, 498, seas[i], 'c', 'm')); barL.push(lb(318 + i * 80, 480 - h - 14, '≈' + v, 'c', 'm')); });
+    const L25 = [154.647, 187.895, 195.945, 207.824], L26 = [164.961, 200.428, 209.015, 221.686];
+    const lineY = L26.map((v) => 480 - v * 2);
+    let clauseT = '';
+    for (let y = 90; y <= 490; y += 18) if (y < 236 || y > 356) clauseT += H(y, 318, 562 - ((y * 7) % 60));
+    const items = ['No taxpayer mid-level exception', 'No combining salaries in a trade', 'No taking back more salary than sent out', 'No cash sent in trades', 'Pick 7 years out can be frozen · verify'];
+    let itemA = '', itemL = [lb(630, 110, 'Above the second apron, a team cannot:', 'l', 'n')];
+    items.forEach((t, i) => { itemA += C(638, 150 + i * 50, 8) + P([632, 156 + i * 50], [644, 144 + i * 50]); itemL.push(lb(660, 150 + i * 50, t, 'l', 'n')); });
+
+    const cel = { name: 'Boston Celtics', when: 'now', branch: 'reality', lv: [
+      lv('League', '30 teams', 'league observer',
+        [['COMPARE', 'payrolls of all 30 teams on one axis'], ['FOLLOW', 'a player or a pick from team to team']],
+        'Boston’s payroll on one axis, with the cap, the tax line and both aprons drawn across it.',
+        [['aut', 'One rulebook binds all 30 teams: the 2023 CBA — cap, tax line, two aprons.', 'Agreed by the league and the players’ union, 2023'],
+         ['obs', '2026–27 lines: cap $164.961M, tax $200.428M, aprons $209.015M and $221.686M.', 'Set by the league, June 2026 · verify'],
+         ['unk', 'What the other 29 front offices are planning: UNKNOWN.', 'No outside source can see a front office’s plans']],
+        { k: sq(160, 200, 5, 3, 44, 16) + sq(556, 200, 5, 3, 44, 16) + H(470, 100, 900) + [164.961, 200.428, 209.015, 221.686].map((v) => V(100 + (v - 150) * 10, 452, 478)).join(''), s: R(160, 200, 44, 44) + R(632, 458, 8, 24), t: V(500, 170, 380) },
+        [lb(302, 176, 'Eastern Conference · 15', 'c'), lb(698, 176, 'Western Conference · 15', 'c'), lb(182, 222, 'BOS', 'c', 'w'), lb(500, 110, 'NBA · 30 teams · one cap system', 'c', 'm'), lb(500, 132, 'one square = one team · filled = Boston', 'c', 'm'),
+         lb(250, 446, 'cap 165.0', 'c', 'm'), lb(598, 446, 'tax 200.4', 'r', 'm'), lb(696, 446, '1st apron 209.0', 'l', 'm'), lb(822, 446, '2nd apron 221.7', 'l', 'm'),
+         lb(636, 494, 'Boston ≈ 203.6 (fixture, verify)', 'c', 'n'), lb(100, 494, 'payroll, $M', 'l', 'm'), lb(500, 522, 'other 29 payrolls are public but not loaded in this prototype', 'c', 'm')],
+        [137, 190, 330]),
+      lv('Conference', '15 teams', 'rival scout',
+        [['COMPARE', 'records inside one division'], ['FOLLOW', 'the race for the top six seeds']],
+        'the Eastern standings, with the play-in line drawn under seed 6.',
+        [['obs', 'The East: 15 teams in three divisions of five.', 'League structure, published by the NBA'],
+         ['aut', 'Seeds 7–10 must win a play-in to reach the playoffs.', 'League rule, in use since 2020–21 · verify'],
+         ['com', '52 of Boston’s 82 games are against the East.', 'Computed from the schedule formula: 4×4 + 6×4 + 4×3 · verify']],
+        { k: sq(260, 150, 1, 5, 56, 14) + sq(480, 150, 1, 5, 56, 14) + sq(700, 150, 1, 5, 56, 14), s: R(260, 150, 56, 56) },
+        confL, [213, 136, 150]),
+      lv('Franchise', '1 club', 'owner’s analyst',
+        [['FOLLOW', 'money from the owners down to the payroll'], ['COMPARE', 'this payroll with the tax bill it triggers']],
+        'the club’s books: payroll, tax owed, and what the owners have signed off on.',
+        [['obs', 'Control passed to a group led by Bill Chisholm in Aug 2025, at a reported ≈ $6.1B valuation; the rest transfers in 2028.', 'NBA approval 13 Aug 2025 · press reports · verify'],
+         ['com', '@TAX@', 'Computed from fixture payroll · verify repeater status'],
+         ['unk', 'How much loss the owners will accept to win: UNKNOWN.', 'Private; no public source']],
+        { k: R(400, 70, 200, 60) + R(230, 210, 230, 60) + R(540, 210, 230, 60) + R(430, 360, 170, 56) + R(620, 360, 150, 56) + R(790, 360, 190, 56) + V(500, 130, 170) + H(170, 345, 655) + V(345, 170, 210) + V(655, 170, 210) + V(655, 270, 320) + H(320, 515, 885) + V(515, 320, 360) + V(695, 320, 360) + V(885, 320, 360) },
+        [lb(500, 100, 'Ownership', 'c'), lb(345, 240, 'Business operations', 'c'), lb(655, 240, 'Basketball operations', 'c'), lb(515, 388, 'Coaching staff', 'c'), lb(695, 388, 'Roster', 'c'), lb(885, 388, 'Maine Celtics · G League', 'c'), lb(500, 470, 'boxes are parts of the club, not a full org chart', 'c', 'm')],
+        [505, 156, 300]),
+      lv('Front office', '1 room', 'president of basketball ops',
+        [['PROPOSE', 'a trade, a signing, a waiver'], ['WEIGH', 'next season’s wins against next season’s tax']],
+        'the trade board: who is available, what they cost, what the rules allow.',
+        [['obs', 'Brad Stevens, President of Basketball Operations since June 2021.', 'Team announcement, 2021 · verify current title'],
+         ['aut', 'Every trade and signing must pass the CBA’s rules first.', '2023 CBA, enforced by the league office'],
+         ['unk', 'Wins a trade would add: UNKNOWN — no season model has run.', 'Refused by the rule: hatch only for a model that ran; none is built']],
+        { k: E(360, 280, 170, 90) + C(360, 165, 16) + C(533, 222, 16) + C(533, 338, 16) + C(360, 395, 16) + C(187, 338, 16) + C(187, 222, 16) + R(660, 170, 280, 180), t: slots },
+        [lb(360, 138, 'President of basketball ops', 'c'), lb(557, 222, 'Capologist', 'l'), lb(557, 338, 'Analytics', 'l'), lb(360, 428, 'Head coach', 'c'), lb(163, 338, 'Medical', 'r'), lb(163, 222, 'Scouting', 'r'), lb(360, 280, 'the table', 'c', 'm'), lb(800, 182, 'roster board · 15 + 3', 'c', 'm')],
+        [635, 167, 330]),
+      lv('Roster', '18 slots', 'general manager',
+        [['BALANCE', 'depth on the court against dollars on the books'], ['FOLLOW', 'each player’s minutes and pay']],
+        'fifteen contracts stacked against the tax line and both aprons.',
+        [['aut', '15 standard contracts, plus up to 3 two-way contracts.', '2023 CBA roster rules'],
+         ['com', 'Team payroll today ≈ $203.6M, the sum of every cap hit on the books.', 'Computed · project fixture as of 29 Sep 2026, verify'],
+         ['unk', 'Who other teams would trade for, and at what price: UNKNOWN.', 'Known only when teams talk']],
+        { k: sq(290, 130, 5, 3, 70, 16), t: sq(780, 130, 1, 3, 70, 16), s: R(290, 130, 70, 70) },
+        [lb(704, 108, 'Standard contracts · 15', 'r'), lb(815, 108, 'Two-way · up to 3', 'c'), lb(325, 152, '#0', 'c', 'w'), lb(325, 178, 'TATUM', 'c', 'w'), lb(290, 410, 'the other 14 names are not loaded in this prototype (roster as of 29 Sep 2026)', 'l', 'm')],
+        [245, 120, 160]),
+      lv('Player', '1 player', 'performance staff',
+        [['FOLLOW', 'his minutes, pay and injuries by season'], ['COMPARE', 'him with players paid about the same']],
+        'his seasons as one line: games, minutes, salary, injuries.',
+        [['obs', 'Drafted No. 3 overall by Boston, June 2017.', 'NBA draft record, 22 Jun 2017'],
+         ['obs', 'Tore his right Achilles tendon in the May 2025 playoffs.', 'Team statement, May 2025 · verify'],
+         ['unk', 'How he plays over a full season after the injury: UNKNOWN — only part of 2025–26 is observed.', 'Returned 6 Mar 2026 vs Dallas (observed, verify)']],
+        { k: R(X(2017.5), 240, X(2021.5) - X(2017.5), 56) + R(X(2021.5), 240, X(2025.5) - X(2021.5), 56) + R(X(2025.5), 240, X(2030.5) - X(2025.5), 56) + H(320, 140, 686), u: H(320, 686, 910), t: yrT + V(X(2017.47), 192, 314) + V(X(2024.46), 160, 314) + V(X(2025.36), 192, 314) + V(X(2026.18), 214, 314) + V(686, 104, 420), s: C(X(2017.47), 320, 5) + C(X(2024.46), 320, 5) + C(X(2025.36), 320, 5) + C(X(2026.18), 320, 5) },
+        [lb(140, 70, '#0 Jayson Tatum · forward · his Celtics seasons', 'l'), lb(160, 180, 'Drafted No. 3 · Jun 2017', 'l', 'm'), lb(552, 150, 'Title · Jun 2024', 'r', 'm'), lb(614, 180, 'Achilles tear · May 2025', 'l', 'm'), lb(660, 222, 'Returned · 6 Mar 2026', 'l', 'm'), lb(692, 106, 'now · 29 Sep 2026', 'l', 'm'), lb(280, 268, 'Rookie scale', 'c'), lb(504, 268, 'Rookie max extension', 'c'), lb(756, 268, 'Supermax · 5 seasons', 'c'), lb(798, 380, 'dashed axis: seasons not played yet', 'c', 'm')].concat(yrL),
+        [596, 190, 320]),
+      lv('Contract', '5 seasons', 'capologist',
+        [['WHAT IF?', 'a shorter deal, or smaller raises'], ['HOW DO WE KNOW?', 'each number, traced to its rule']],
+        'the five salary years, each one traced to the 35% rule and the 8% raise.',
+        [['obs', 'Jayson Tatum: 5-year supermax extension, signed July 2024, reported ≈ $314M.', 'League and press reports, July 2024 · verify'],
+         ['com', 'Year 1 ≈ 35% of the 2025–26 cap ≈ $54.1M; each raise adds 8% of year 1.', 'Computed from the CBA formula · approx.'],
+         ['unk', 'What he is worth to the team in 2029–30: UNKNOWN.', 'Not yet played; any answer would be a model']],
+        { o: bars, k: H(480, 270, 860), a: L25.map((v) => H(480 - 2 * v, 280, 356)).join('') + L26.map((v) => H(480 - 2 * v, 360, 436)).join(''), u: L26.map((v) => H(480 - 2 * v, 440, 860)).join('') },
+        [lb(270, 14, 'Tatum’s salary · $M per season · Boston’s team lines on the same scale', 'l', 'm'), lb(866, lineY[0], 'CAP 165.0', 'l', 'm'), lb(866, lineY[1] + 2, 'TAX 200.4', 'l', 'm'), lb(866, lineY[2] - 4, '1ST APRON 209.0', 'l', 'm'), lb(866, lineY[3] - 4, '2ND APRON 221.7', 'l', 'm'), lb(478, 250, 'year 1 ≈ 35% of the cap; each raise = 8% of year 1', 'c', 'm'), lb(398, 333, 'now · year 2', 'c', 'm'), lb(575, 522, 'lines for 2027–28 on are not set yet: dashed', 'c', 'm')].concat(barL),
+        [620, 28, 240]),
+      lv('Clause', '1 rule', 'league cap auditor',
+        [['WHAT IF?', 'the second apron sat $10M higher'], ['HOW DO WE KNOW?', 'read the clause, then the moves it shaped']],
+        'the clause text, next to the trade tools it switches off.',
+        [['aut', 'Above the second apron, a team can’t combine salaries in a trade.', '2023 CBA apron rules · authored by league and union'],
+         ['obs', '2026–27 second apron: $221.686M.', 'Set by the league, June 2026 · verify'],
+         ['unk', 'Whether the aprons make the league more even: UNKNOWN — too few seasons to tell.', 'Full apron rules in force only since 2024–25 · verify']],
+        { k: R(290, 50, 300, 460) + H(262, 322, 550) + H(284, 322, 556) + H(306, 322, 540) + H(328, 322, 500), t: clauseT + H(296, 574, 615), a: R(306, 244, 268, 104) + itemA },
+        [lb(440, 28, 'a league rule, not a line in Tatum’s contract', 'c', 'm'), lb(440, 70, '2023 CBA · Article VII · verify', 'c', 'm'), lb(440, 230, 'second apron', 'c', 'm')].concat(itemL))
+    ] };
+    const Z = (...p) => P(...p) + 'Z';
+
+    /* ---------------- SEMICONDUCTOR SUPPLY CHAIN ---------------- */
+    let gr = '', dies = '';
+    [-130, 130].forEach((dy) => { const w = Math.sqrt(230 * 230 - dy * dy); gr += H(290 + dy, 440 - w, 440 + w); });
+    gr += E(440, 290, 230, 70) + E(440, 290, 110, 230) + V(440, 60, 520);
+    for (let i = -7; i < 7; i++) for (let j = -7; j < 7; j++) {
+      const x = 400 + i * 34, y = 290 + j * 34;
+      if ([[x, y], [x + 34, y], [x, y + 34], [x + 34, y + 34]].every((c) => Math.hypot(c[0] - 400, c[1] - 290) < 216)) dies += R(x + 1, y + 1, 32, 32);
+    }
+    const mirrors = [[420, 140], [420, 270], [600, 270], [600, 400], [800, 400]].map((m) => P([m[0] - 16, m[1] + 16], [m[0] + 16, m[1] - 16])).join('');
+
+    const semi = { when: 'now', branch: 'reality', lv: [
+      lv('Globe', 'the world', 'trade analyst',
+        [['COMPARE', 'how much each region designs, makes and buys'], ['FOLLOW', 'a chip from design to a finished product']],
+        'the world as flows: which regions design, make and buy chips.',
+        [['obs', 'Most leading-edge chip making is concentrated in East Asia, above all Taiwan.', 'Industry and government reports, 2020s · approx., verify'],
+         ['aut', 'Export controls on advanced chips and chip tools are set by governments (US rules since Oct 2022).', 'US Commerce Department rule, Oct 2022 · verify'],
+         ['unk', 'Where every chip in the world sits right now: UNKNOWN — no single source sees all of it.', 'Each company sees only its own stock']],
+        { t: gr, k: C(440, 290, 230) + R(245, 230, 30, 30) + R(405, 165, 30, 30) + Q(600, 236, 520, 150, 445, 184) + Q(600, 262, 440, 390, 290, 262) + ar(445, 184, 'l') + ar(290, 262, 'l'), s: R(596, 226, 44, 44) },
+        [lb(260, 282, 'United States', 'c'), lb(420, 138, 'Europe', 'c'), lb(618, 286, 'East Asia', 'c'), lb(440, 538, 'schematic globe, not a map · flows are illustrative', 'c', 'm')],
+        [530, 192, 200]),
+      lv('Region', '1 region', 'regional policy officer',
+        [['COMPARE', 'each economy’s subsidies and export rules'], ['ASSESS', 'how much output sits in one place']],
+        'East Asia as blocks: the mainland, Korea, Japan and Taiwan.',
+        [['obs', 'Reports put most leading-edge chip output in Taiwan.', 'Industry and government reports, 2020s · approx., verify'],
+         ['aut', 'Each government sets its own chip subsidies and export rules.', 'Industrial policy in Japan, Korea, Taiwan, China · verify'],
+         ['unk', 'What a blockade or a big quake would do to supply: UNKNOWN — only scenarios exist.', 'Any figure would be a model, not an observation']],
+        { k: Z([170, 150], [430, 130], [470, 260], [400, 400], [220, 430], [150, 300]) + Z([560, 150], [610, 140], [625, 215], [575, 230]) + Z([700, 120], [740, 110], [770, 190], [735, 215]) + Z([690, 250], [725, 240], [750, 300], [715, 315]), s: Z([580, 340], [610, 325], [625, 390], [598, 430]) },
+        [lb(310, 280, 'mainland China', 'c'), lb(592, 128, 'South Korea', 'c'), lb(738, 92, 'Japan', 'c'), lb(640, 378, 'Taiwan', 'l'), lb(440, 522, 'schematic blocks, not a map · not to scale', 'c', 'm')],
+        [520, 320, 200]),
+      lv('Company', '1 foundry', 'foundry customer',
+        [['CHOOSE', 'which foundry makes your design'], ['WAIT', 'for capacity that others have booked']],
+        'a foundry between chip designers and device makers, fed by tool makers.',
+        [['obs', 'TSMC, founded in 1987, is a foundry: it makes chips that other companies design.', 'Company history · verify'],
+         ['obs', 'Its customers include Apple and Nvidia (reported).', 'Press reports, 2020s · verify'],
+         ['unk', 'What each customer pays per wafer: UNKNOWN — contracts are private.', 'Not published']],
+        { k: R(90, 130, 210, 60) + R(90, 250, 210, 60) + R(90, 370, 210, 60) + R(390, 100, 240, 340) + R(720, 190, 190, 160) + R(390, 480, 240, 50) + [160, 280, 400].map((y) => H(y, 300, 386) + ar(388, y, 'r')).join('') + H(270, 630, 716) + ar(718, 270, 'r') + V(510, 480, 446) + ar(510, 444, 'u'), a: R(410, 130, 200, 60) + R(410, 240, 200, 60) + R(410, 350, 200, 60) },
+        [lb(195, 104, 'designers · no fabs of their own', 'c', 'm'), lb(195, 160, 'phone-chip designer', 'c'), lb(195, 280, 'AI-chip designer', 'c'), lb(195, 400, 'car-chip maker', 'c'), lb(510, 80, 'TSMC · founded 1987', 'c'), lb(510, 160, 'a fab', 'c', 'm'), lb(510, 270, 'a fab', 'c', 'm'), lb(510, 380, 'a fab', 'c', 'm'), lb(815, 262, 'device makers', 'c'), lb(815, 286, 'phones · PCs · cars', 'c', 'm'), lb(510, 506, 'tool makers', 'c')],
+        [400, 225, 220]),
+      lv('Fab', '1 factory', 'fab operations manager',
+        [['SCHEDULE', 'which lots run in which bay, and when'], ['REPAIR', 'the one tool that has stopped the line']],
+        'the floor plan of a fab: entry, two bays, utilities.',
+        [['obs', 'A leading-edge fab costs tens of billions of dollars.', 'Company announcements, 2020s · reported, verify'],
+         ['obs', 'March 2021: a fire at Renesas’s Naka fab in Japan cut car-chip supply.', 'Company statements, 2021 · verify dates'],
+         ['unk', 'When a new fab will reach full output: UNKNOWN until it does.', 'Ramp-up depends on yield, not on the building']],
+        { k: R(90, 80, 820, 400) + R(200, 120, 600, 150) + R(200, 300, 600, 150) + sq(206, 165, 8, 1, 60, 16) + sq(206, 345, 8, 1, 60, 16), t: R(100, 110, 80, 340) + H(145, 200, 800) + H(325, 200, 800), o: R(820, 110, 80, 340) },
+        [lb(140, 270, 'entry', 'c', 'm'), lb(140, 290, 'gowning', 'c', 'm'), lb(860, 280, 'utilities', 'c', 'm'), lb(500, 110, 'bay A · one production line', 'c', 'm'), lb(500, 290, 'bay B', 'c', 'm'), lb(500, 52, 'floor plan of a fab · cleanroom', 'c', 'm')],
+        [190, 105, 330]),
+      lv('Production line', '1 line', 'line supervisor',
+        [['BALANCE', 'wafers waiting against tools idle'], ['TRACE', 'a late lot back to the step that held it']],
+        'one loop of steps: coat, expose, develop, etch, clean.',
+        [['obs', 'Each layer of a chip repeats a short loop of steps (textbook).', 'Semiconductor process textbooks'],
+         ['obs', 'A wafer spends weeks to months in a fab (reported).', 'Industry reports · approx., verify'],
+         ['unk', 'Where one lot of wafers is right now: UNKNOWN to anyone outside the fab.', 'Tracked only in the fab’s own systems']],
+        { k: [0, 2, 3, 4].map((i) => R(90 + i * 172, 230, 140, 90)).join('') + [0, 1, 2, 3].map((i) => H(275, 230 + i * 172, 258 + i * 172) + ar(262 + i * 172, 275, 'r')).join(''), s: R(262, 230, 140, 90), u: P([848, 320], [848, 410], [160, 410], [160, 324]) + ar(160, 324, 'u') },
+        [lb(160, 275, 'coat', 'c'), lb(332, 275, 'expose', 'c', 'w'), lb(504, 275, 'develop', 'c'), lb(676, 275, 'etch', 'c'), lb(848, 275, 'clean', 'c'), lb(504, 434, 'repeat for every layer of the chip', 'c', 'm'), lb(332, 350, 'where the light tool works', 'c', 'm')],
+        [232, 219, 200]),
+      lv('Tool', '1 scanner', 'tool engineer',
+        [['SCHEDULE', 'the scanner’s hours across the fab’s orders'], ['WAIT', 'for a part from a single supplier']],
+        'an EUV scanner in cross-section: source, mirrors, mask, wafer stage.',
+        [['obs', 'EUV scanners come from one supplier, ASML.', 'Company and industry reports · verify'],
+         ['obs', 'EUV light has a wavelength of 13.5 nm; air absorbs it, so the path runs in a vacuum.', 'Physics textbooks'],
+         ['aut', 'Export licences decide which countries can buy one (Dutch and US rules).', 'Government export rules · verify']],
+        { t: R(60, 70, 880, 420), k: R(80, 90, 190, 100) + P([270, 140], [420, 140], [420, 270], [600, 270], [600, 400], [800, 400], [800, 414]) + ar(800, 414, 'd'), b: mirrors, s: R(700, 420, 200, 40) },
+        [lb(175, 118, 'source', 'c'), lb(175, 162, 'tin droplets + laser', 'c', 'm'), lb(340, 122, 'EUV light · 13.5 nm', 'c', 'm'), lb(436, 205, 'mirrors', 'l', 'm'), lb(600, 240, 'mask', 'c', 'm'), lb(800, 440, 'wafer stage', 'c', 'w'), lb(300, 470, 'the whole path runs in a vacuum · schematic', 'c', 'm')],
+        [660, 330, 260]),
+      lv('Wafer', '300 mm', 'yield engineer',
+        [['COUNT', 'dies per wafer, good and bad'], ['COMPARE', 'this lot’s yield with last month’s']],
+        'a 300 mm wafer as a grid of dies, one of them in focus.',
+        [['obs', 'The standard wafer is 300 mm across.', 'Industry standard (textbook)'],
+         ['com', 'Dies per wafer ≈ wafer area ÷ die area, less the ragged edge.', 'Computed: rule of thumb · approx.'],
+         ['unk', 'Yield, the share of dies that work, at a given fab today: UNKNOWN outside the company.', 'Fabs keep yield private']],
+        { k: C(400, 290, 230), t: dies, s: R(469, 257, 32, 32) },
+        [lb(700, 210, '300 mm wafer', 'l'), lb(700, 246, 'each square is one die: one chip', 'l', 'm'), lb(700, 268, 'the filled one is in focus', 'l', 'm')],
+        [435, 238, 100]),
+      lv('Transistor', '≈ nm', 'device physicist',
+        [['WHAT IF?', 'the gate leaked, or the oxide were thicker'], ['HOW DO WE KNOW?', 'a physical fact becomes a 0 or a 1']],
+        'a transistor cut open: source, gate, drain and the channel between.',
+        [['obs', 'Dec 1947: the first point-contact transistor is shown at Bell Labs.', 'Bell Labs, 1947 · verify date'],
+         ['obs', 'A voltage on the gate switches current between source and drain: on is 1, off is 0.', 'Semiconductor physics, textbook'],
+         ['obs', 'Node names like “3 nm” no longer match one measured length.', 'Industry consensus · verify']],
+        { o: R(140, 320, 720, 170), s: R(220, 320, 150, 60) + R(630, 320, 150, 60), k: R(390, 296, 220, 24), a: R(390, 236, 220, 60), b: V(295, 320, 200) + V(500, 236, 160) + V(705, 320, 200), u: H(340, 370, 630) },
+        [lb(295, 180, 'source', 'c'), lb(500, 140, 'gate', 'c'), lb(705, 180, 'drain', 'c'), lb(500, 266, 'gate metal', 'c', 'm'), lb(500, 308, 'oxide', 'c', 'm'), lb(500, 358, 'channel', 'c', 'm'), lb(500, 440, 'silicon', 'c', 'm'), lb(500, 520, 'flat schematic · real ones are 3-D fins or sheets', 'c', 'm')])
+    ] };
+
+    /* ---------------- CELLULAR RESPIRATION ---------------- */
+    let fib = '', cap = '', fl = '', mit = '', myo = '', cr = '';
+    for (let r = 0; r < 5; r++) for (let c = 0; c < 9; c++) { const x = 90 + c * 104 + (r % 2) * 52, y = 70 + r * 90; if (x < 960) { fib += C(x, y, 44); cap += C(x + 52, y + 30, 7); } }
+    for (let k = -2; k <= 2; k++) fl += Q(190 + Math.abs(k) * 30, 300 + k * 6, 500, 300 + k * 60, 810 - Math.abs(k) * 30, 300 + k * 6);
+    [170, 300, 430, 560, 690, 820].forEach((x) => { mit += E(x, 228, 40, 13); });
+    [235, 365, 495, 625, 755].forEach((x) => { mit += E(x, 308, 40, 13); });
+    [165, 245, 325].forEach((y) => { myo += R(120, y, 760, 46); for (let x = 155; x < 880; x += 70) myo += V(x, y, y + 46); });
+    const yb = (x) => 150 * Math.sqrt(1 - Math.pow((x - 500) / 330, 2));
+    [240, 370, 500, 630, 760].forEach((x) => { cr += R(x, 290 - yb(x + 11), 22, 70); });
+    [305, 435, 565, 695].forEach((x) => { cr += R(x, 290 + yb(x + 11) - 70, 22, 70); });
+
+    const cell = { when: 'a steady run', branch: 'textbook', lv: [
+      lv('Organism', '≈ 1.7 m', 'physiologist',
+        [['MEASURE', 'oxygen in and carbon dioxide out, breath by breath'], ['COMPARE', 'rest, walking and running']],
+        'a runner at a steady pace: lungs, heart, and the leg muscle that does the work.',
+        [['obs', 'Resting oxygen uptake ≈ 3.5 mL/kg/min (1 MET, a standard definition).', 'Textbook definition, approx.'],
+         ['com', 'For a 60 kg runner at rest: 3.5 × 60 = 210 mL of oxygen a minute.', 'Computed from the definition'],
+         ['aut', 'Heart rate at 10 km/h: 140–170 beats a minute (illustrative, authored).', 'Illustrative, authored for this prototype · no model ran']],
+        { o: Z([470, 270], [500, 275], [572, 300], [560, 344], [482, 314], [462, 300]) + E(492, 205, 22, 38), s: C(483, 232, 9), b: P([505, 140], [470, 290]) + P([500, 165], [440, 215], [400, 185]) + P([505, 165], [560, 205], [610, 175]) + P([470, 290], [560, 320], [540, 425]) + P([470, 290], [420, 360], [330, 400]), k: C(520, 108, 28) + H(455, 120, 880) + P([640, 108], [560, 108]) + ar(556, 108, 'l') + P([514, 214], [554, 230]) + P([586, 330], [566, 320]) + P([464, 239], [475, 235]) },
+        [lb(650, 108, 'oxygen in', 'l', 'm'), lb(558, 232, 'lungs', 'l', 'm'), lb(462, 240, 'heart', 'r', 'm'), lb(590, 330, 'quadriceps', 'l', 'm'), lb(120, 110, 'a runner, steady pace', 'l', 'm')],
+        [380, 250, 300]),
+      lv('Organ', '≈ 40 cm', 'muscle physiologist',
+        [['STIMULATE', 'the muscle and watch its blood supply respond'], ['COMPARE', 'a resting muscle with a working one']],
+        'the quadriceps: a muscle belly, its two tendons and the vessel that feeds it.',
+        [['obs', 'Working muscle can receive many times its resting blood flow.', 'Physiology textbooks · approx.'],
+         ['obs', 'A muscle is bundles of fibres; each fibre is one cell.', 'Textbook'],
+         ['unk', 'Which fibres are firing at this instant: UNKNOWN without electrodes.', 'Not visible from outside']],
+        { o: 'M140 300Q500 80 860 300Q500 520 140 300Z', t: fl, k: R(60, 290, 80, 20) + R(860, 290, 80, 20) + P([500, 470], [430, 440]) + P([500, 470], [570, 440]), b: P([120, 500], [500, 500], [500, 420]) },
+        [lb(500, 150, 'quadriceps · muscle belly', 'c'), lb(100, 268, 'tendon', 'c', 'm'), lb(900, 268, 'tendon', 'c', 'm'), lb(140, 522, 'blood in', 'l', 'm')],
+        [380, 215, 240]),
+      lv('Tissue', '≈ 1 mm', 'histologist',
+        [['STAIN', 'a slice to show fibres or vessels'], ['COUNT', 'capillaries around each fibre']],
+        'muscle cut across: fibres packed together, capillaries in the gaps.',
+        [['obs', 'Each fibre is wrapped by several capillaries (textbook).', 'Histology textbooks'],
+         ['obs', 'A fibre is about 50–100 µm across.', 'Textbook · approx.'],
+         ['unk', 'How many capillaries are open in this muscle right now: UNKNOWN; it changes second to second.', 'Not observable in a living runner']],
+        { k: fib, s: cap, o: C(506, 250, 44) },
+        [lb(506, 250, 'this fibre', 'c', 'm'), lb(572, 283, 'capillary', 'l', 'm'), lb(20, 522, 'muscle fibres cut across · dark dots are capillaries', 'l', 'm')],
+        [421, 202, 170]),
+      lv('Cell', '≈ 100 µm', 'cell biologist',
+        [['STAIN', 'the mitochondria and count them'], ['COMPARE', 'a trained fibre with an untrained one']],
+        'one muscle fibre, lengthwise: contracting bands and the ovals that power them.',
+        [['obs', 'Muscle cells are packed with mitochondria; trained muscle holds more.', 'Physiology textbooks'],
+         ['obs', 'Glucose and fatty acids both feed respiration; the mix shifts with effort.', 'Textbook'],
+         ['unk', 'Whether this fibre is burning mostly fat or sugar right now: UNKNOWN without a biopsy.', 'Not observable in a living runner']],
+        { k: R(110, 150, 780, 236), t: myo, o: mit },
+        [lb(500, 130, 'one muscle fibre, lengthwise', 'c'), lb(150, 188, 'myofibril', 'l', 'm'), lb(870, 228, 'mitochondria', 'l', 'm'), lb(500, 424, 'contracting bands, and their power plants (ovals)', 'c', 'm')],
+        [355, 186, 150]),
+      lv('Mitochondrion', '≈ 1 µm', 'mitochondrial biochemist',
+        [['ISOLATE', 'the organelle and feed it fuel'], ['MEASURE', 'oxygen used as the fuel is added']],
+        'the organelle cut open: two membranes, the folded inner one, and the matrix.',
+        [['obs', 'A mitochondrion is about 1 µm long.', 'Cell biology textbooks · approx.'],
+         ['obs', 'The citric acid cycle runs in the matrix (Krebs, 1937).', 'Textbook · Krebs 1937 · verify'],
+         ['unk', 'How many mitochondria this fibre holds today: UNKNOWN; the number shifts with training.', 'Not observable in a living runner']],
+        { k: E(500, 290, 380, 200), a: E(500, 290, 330, 150), o: cr },
+        [lb(500, 66, 'outer membrane', 'c', 'm'), lb(500, 115, 'intermembrane space', 'c', 'm'), lb(500, 290, 'matrix', 'c'), lb(410, 190, 'crista', 'l', 'm'), lb(500, 530, 'the inner membrane folds into cristae', 'c', 'm')],
+        [316, 146, 140]),
+      lv('Inner membrane', '≈ 100 nm', 'electron-transport biochemist',
+        [['TRACE', 'electrons from fuel to oxygen'], ['WHAT IF?', 'a poison blocked one complex']],
+        'the membrane as a wall: three pumping complexes on the left, ATP synthase on the right.',
+        [['obs', 'Oxygen is the last electron acceptor, at Complex IV, where it becomes water.', 'Biochemistry textbooks'],
+         ['obs', 'Complexes I, III and IV pump protons across the membrane.', 'Biochemistry textbooks'],
+         ['unk', 'How many protons a complex moves per second inside a living runner: UNKNOWN in vivo.', 'Measured only in isolated preparations']],
+        { k: H(270, 40, 960) + H(312, 40, 960) + [180, 330, 480].map((x) => V(x, 244, 192) + ar(x, 190, 'u')).join('') + V(735, 180, 330) + ar(735, 332, 'd') + V(480, 420, 340) + ar(480, 338, 'u'), o: R(140, 246, 80, 90) + R(290, 246, 80, 90) + R(440, 246, 80, 90) + C(780, 205, 42) + R(772, 247, 16, 26) + R(748, 270, 64, 42), u: H(291, 222, 288) + H(291, 372, 438) },
+        [lb(180, 291, 'I', 'c'), lb(330, 291, 'III', 'c'), lb(480, 291, 'IV', 'c'), lb(180, 170, 'H⁺ pumped up', 'c', 'm'), lb(500, 120, 'intermembrane space: protons pile up', 'c', 'm'), lb(720, 200, 'H⁺ flow back', 'r', 'm'), lb(480, 442, 'O₂ + 4 e⁻ + 4 H⁺ → 2 H₂O', 'c', 'm'), lb(480, 466, 'oxygen ends up as water', 'c', 'm'), lb(780, 348, 'ATP synthase', 'c'), lb(500, 520, 'matrix', 'c', 'm')],
+        [640, 150, 290]),
+      lv('ATP synthase', '≈ 10 nm', 'structural biologist',
+        [['SOLVE', 'the structure, atom by atom'], ['HOW DO WE KNOW?', 'a spinning motor no one can see turn']],
+        'the enzyme as a motor: a rotor in the membrane, a shaft, and a head that makes ATP.',
+        [['obs', 'ATP synthase makes about 3 ATP per full rotation (observed structure).', 'Structural biology · Walker, 1990s · verify'],
+         ['obs', 'Nobel Prize 1997, shared by Boyer, Walker and Skou.', 'Nobel Foundation · verify'],
+         ['unk', 'How fast it turns inside a living cell right now: UNKNOWN; speeds come from isolated molecules.', 'Not observable in a living runner']],
+        { k: H(330, 60, 940) + H(410, 60, 940) + P([600, 150], [640, 150], [640, 330]) + V(615, 270, 466) + ar(615, 468, 'd') + Q(455, 300, 500, 330, 545, 300) + ar(547, 300, 'r'), o: E(445, 170, 58, 92) + E(555, 170, 58, 92) + R(430, 330, 140, 80) + R(580, 330, 70, 80), s: R(490, 100, 20, 235) },
+        [lb(360, 170, 'F₁ head', 'r', 'm'), lb(526, 278, 'shaft (turns)', 'l', 'm'), lb(415, 370, 'F₀ rotor (c-ring)', 'r', 'm'), lb(656, 250, 'stator holds the head still', 'l', 'm'), lb(630, 440, 'protons flow through', 'l', 'm'), lb(880, 370, 'inner membrane', 'c', 'm'), lb(500, 520, 'about 3 ATP per full rotation', 'c')])
+    ] };
+
+    /* ---------------- AMERICAN REVOLUTION ---------------- */
+    const cl = [];
+    [['NH', 'MA', 'RI', 'CT'], ['NY', 'NJ', 'PA', 'DE'], ['MD', 'VA', 'NC', 'SC', 'GA']].forEach((col, c) => col.forEach((nm, r) => cl.push(lb([228, 488, 748][c], 178 + r * 70, nm, 'c', c === 0 && r === 1 ? 'w' : 'm'))));
+    let rl = '', led = '', ledS = '';
+    for (let y = 120; y <= 480; y += 30) rl += H(y, 236, 764);
+    for (let c = 135, i = 0; c <= 465; c += 30, i++) {
+      if (c === 285) ledS = R(346, 280, 210, 10) + R(690, 280, 50, 10) + R(246, 280, 60, 10);
+      else led += R(346, c - 5, 110 + (i * 67) % 160, 10) + R(690, c - 5, 50, 10) + R(246, c - 5, 60, 10);
+    }
+
+    const rev = { when: '16 Dec 1773', branch: 'record', lv: [
+      lv('Atlantic world', '≈ 5,000 km', 'London trade official',
+        [['COMPARE', 'what Britain sends out with what it takes in'], ['FOLLOW', 'one cargo across the ocean']],
+        'the ocean as a trading system: Britain, the colonies, the Caribbean, West Africa.',
+        [['aut', 'From the 1650s the Navigation Acts routed most colonial trade through British ports.', 'Acts of Parliament · verify'],
+         ['obs', 'Enslaved Africans were carried across the Atlantic to the Caribbean and the colonies.', 'Transatlantic Slave Trade Database · verify'],
+         ['unk', 'How much smuggling went on: UNKNOWN — smugglers kept no books.', 'By nature, unrecorded']],
+        { o: Z([130, 110], [190, 95], [220, 150], [200, 215], [150, 230], [120, 170]) + Z([730, 180], [800, 165], [930, 170], [930, 315], [850, 305], [780, 255]) + Z([380, 470], [520, 455], [540, 520], [400, 540]), k: E(690, 420, 40, 14) + E(775, 405, 30, 10) + Q(215, 140, 470, 60, 725, 178) + Q(735, 225, 470, 190, 220, 198) + ar(725, 178, 'r') + ar(220, 198, 'l') + Q(540, 480, 610, 450, 655, 428) + ar(655, 428, 'r') + Q(700, 410, 790, 380, 830, 320) + ar(830, 320, 'u') },
+        [lb(170, 80, 'Britain', 'c'), lb(830, 240, 'thirteen colonies', 'c'), lb(690, 452, 'West Indies', 'c', 'm'), lb(460, 497, 'West Africa', 'c'), lb(470, 88, 'manufactures, tea →', 'c', 'm'), lb(470, 228, '← tobacco, rice, timber', 'c', 'm'), lb(560, 522, 'trade in enslaved people →', 'l', 'm')],
+        [660, 150, 300]),
+      lv('Thirteen colonies', '13', 'colonial agent in London',
+        [['COMPARE', 'what each colony taxes, trades and grows'], ['FOLLOW', 'a law from London to a colony’s assembly']],
+        'the colonies in three groups, each with its own assembly.',
+        [['obs', 'In 1773 there were thirteen British colonies on the Atlantic coast, each with its own assembly.', 'Standard history · verify'],
+         ['obs', 'No body spoke for all of them until the First Continental Congress met in 1774.', 'Standard history · verify'],
+         ['unk', 'How many colonists thought of themselves as one people in 1773: UNKNOWN.', 'No poll; sources are partisan']],
+        { k: sq(200, 150, 1, 4, 56, 14) + sq(460, 150, 1, 4, 56, 14) + sq(720, 150, 1, 5, 56, 14), s: R(200, 220, 56, 56) },
+        [lb(228, 122, 'New England', 'c'), lb(488, 122, 'Middle', 'c'), lb(748, 122, 'Southern', 'c'), lb(500, 500, 'north at the top · three groups, not a map', 'c', 'm')].concat(cl),
+        [178, 208, 140]),
+      lv('Massachusetts', '1 colony', 'member of the General Court',
+        [['FOLLOW', 'news from Boston to the country towns'], ['WEIGH', 'the governor’s power against the assembly’s']],
+        'the colony as towns along a coast: Boston, its neighbours, the road west.',
+        [['obs', 'Thomas Hutchinson was royal governor of Massachusetts in December 1773.', 'Standard history · verify'],
+         ['aut', 'A royal governor and an elected assembly, the General Court, shared power.', 'Charter of 1691 · verify'],
+         ['unk', 'How many in the colony backed the crowd on 16 Dec 1773: UNKNOWN.', 'No poll; accounts are partisan']],
+        { k: 'M960 110Q800 130 745 215Q700 270 705 330Q720 420 900 450' + R(730, 170, 26, 26) + R(560, 240, 26, 26) + R(490, 235, 26, 26) + R(330, 330, 26, 26), t: P([708, 288], [573, 253], [503, 248], [343, 343]) + P([708, 288], [743, 183]), s: R(690, 268, 36, 36) },
+        [lb(708, 320, 'Boston', 'c'), lb(743, 150, 'Salem', 'c', 'm'), lb(573, 216, 'Lexington', 'c', 'm'), lb(503, 212, 'Concord', 'c', 'm'), lb(343, 372, 'Worcester', 'c', 'm'), lb(880, 300, 'the sea', 'c', 'm'), lb(400, 500, 'schematic: towns in true order, not to scale', 'c', 'm')],
+        [630, 232, 190]),
+      lv('Boston', '≈ 16,000', 'Boston selectman',
+        [['WALK', 'the streets the crowd walked'], ['WATCH', 'the three ships at the wharf']],
+        'the town on its peninsula: Old South, Long Wharf, and the ships at Griffin’s Wharf.',
+        [['obs', 'Three ships carrying East India Company tea lay at Griffin’s Wharf: Dartmouth, Eleanor, Beaver.', 'Standard accounts · verify'],
+         ['aut', 'Parliament’s Tea Act (May 1773) let the East India Company sell tea in the colonies directly.', 'Act of Parliament, 1773 · verify'],
+         ['unk', 'Who exactly boarded the ships: UNKNOWN in most cases; the crowd was disguised.', 'Few names were recorded at the time']],
+        { o: Z([300, 180], [420, 140], [540, 170], [610, 240], [580, 330], [500, 380], [470, 470], [450, 470], [430, 380], [330, 330], [280, 250]), k: R(605, 254, 250, 12) + R(545, 346, 90, 10), s: R(420, 270, 34, 26) + R(548, 362, 36, 14) + R(590, 362, 36, 14) + R(632, 362, 36, 14), u: P([437, 296], [470, 330], [550, 346]) },
+        [lb(437, 308, 'Old South', 'c', 'm'), lb(730, 238, 'Long Wharf', 'c', 'm'), lb(548, 396, 'Griffin’s Wharf · three tea ships', 'l', 'm'), lb(490, 440, 'the Neck · only land road out', 'l', 'm'), lb(400, 108, 'Boston, 1773', 'c'), lb(830, 330, 'harbour', 'c', 'm'), lb(150, 300, 'Charles River', 'c', 'm')],
+        [378, 254, 120]),
+      lv('Town meeting', '1 hall', 'crowd at Old South',
+        [['VOTE', 'on a motion'], ['SPEAK', 'from the floor']],
+        'the Old South floor: pews, the moderator’s platform, and a crowd outside.',
+        [['obs', 'Thousands came to Old South on 16 Dec 1773, more than the hall could hold; estimates vary.', 'Contemporary accounts · verify'],
+         ['obs', '16 Dec 1773 was a meeting of “the Body of the People”, open to non-voters · verify', 'Contemporary accounts'],
+         ['unk', 'What most Bostonians thought: UNKNOWN — no poll exists; sources are partisan.', 'Accounts come from the two sides']],
+        { k: R(150, 90, 700, 380) + sq(210, 170, 11, 5, 40, 14), a: R(400, 100, 200, 40), s: R(480, 278, 40, 40), u: R(110, 60, 780, 430) },
+        [lb(500, 120, 'moderator', 'c', 'm'), lb(500, 77, 'the crowd outside · size unknown', 'c', 'm'), lb(500, 481, 'illustrative plan: the pew layout is not a survey', 'c', 'm')],
+        [450, 270, 100]),
+      lv('A merchant’s ledger', '1 book', 'merchant’s clerk',
+        [['READ', 'what a firm owed and was owed'], ['DECIDE', 'whether to store, sell or refuse the tea']],
+        'one page of accounts, and the line where the tea would be entered.',
+        [['aut', 'Double entry: every sale is written twice, as a debit and a credit.', 'Accounting convention · textbook'],
+         ['obs', 'The Company’s tea in Boston was consigned to a few merchants, Hutchinson’s sons among them.', 'Standard accounts · verify'],
+         ['unk', 'What one merchant stood to gain or lose from the Tea Act: UNKNOWN without his books.', 'Few such books survive']],
+        { k: R(226, 70, 548, 440), t: rl + V(340, 90, 480) + V(660, 90, 480), o: led, s: ledS, a: R(236, 270, 528, 30) },
+        [lb(288, 105, 'date', 'c', 'm'), lb(500, 105, 'item', 'c', 'm'), lb(712, 105, '£   s   d', 'c', 'm'), lb(500, 50, 'a merchant’s ledger · illustrative page', 'c', 'm'), lb(832, 285, 'the tea line', 'c', 'm'), lb(500, 535, 'no surviving page is shown: layout only', 'c', 'm')],
+        [600, 244, 200]),
+      lv('One chest of tea', '1 chest', 'watcher on Griffin’s Wharf',
+        [['COUNT', 'the chests, one at a time'], ['WEIGH', 'one chest against the whole cargo']],
+        'a single chest, next to a tally of all 342.',
+        [['obs', '342 chests destroyed, 16 Dec 1773.', 'Standard accounts · verify'],
+         ['com', 'About 92,000 lb of tea ÷ 342 chests ≈ 270 lb a chest.', 'Computed · 92,000 lb is a reported figure, verify'],
+         ['aut', 'The 3-pence-a-pound tea duty was set by Parliament in 1767 and kept in 1770.', 'Townshend duties · verify']],
+        { o: R(260, 250, 300, 190) + Z([260, 250], [330, 190], [630, 190], [560, 250]) + Z([560, 250], [630, 190], [630, 380], [560, 440]), t: V(360, 250, 440) + V(460, 250, 440), k: sq(740, 110, 19, 18, 8, 2) + H(300, 260, 560), s: R(830, 190, 8, 8) },
+        [lb(410, 345, 'one chest', 'c'), lb(830, 84, '342 chests', 'c'), lb(830, 308, 'each square is one chest', 'c', 'm'), lb(830, 328, 'destroyed, 16 Dec 1773 (verify)', 'c', 'm'), lb(410, 476, 'about 270 lb of tea in one chest · computed', 'c', 'm')])
+    ] };
+
+    const meta = (o, id, label, slug) => Object.assign(o, { id: id, label: label, slug: slug, key: label.toLowerCase() });
+    this._D = [
+      meta(rev, 'rev', 'American Revolution', 'american-revolution'),
+      meta(cel, 'cel', 'Boston Celtics', 'boston-celtics'),
+      meta(cell, 'cell', 'cellular respiration', 'cellular-respiration'),
+      meta(semi, 'semi', 'semiconductor supply chain', 'semiconductor-supply-chain')
+    ];
+    return this._D;
+  }
+
+  resolve(q) {
+    const t = (q || '').trim().toLowerCase();
+    if (!t) return null;
+    const D = this.data();
+    return D.find((x) => x.key.indexOf(t) === 0) || (t.length > 2 ? D.find((x) => x.key.split(' ').some((w) => w.indexOf(t) === 0)) : null) || null;
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const D = this.data();
+    const q = s.q === undefined ? 'Boston Celtics' : s.q;
+    const sys = this.resolve(q);
+    const why = !!s.why;
+    const lvs = sys ? sys.lv : [];
+    const n = lvs.length;
+    const d = sys ? Math.max(0, Math.min(n - 1, s.depth || 0)) : 0;
+    const cur = sys ? lvs[d] : null;
+    const pv = sys && d > 0 ? lvs[d - 1] : null;
+    const setD = (i) => this.setState({ depth: Math.max(0, Math.min(n - 1, i)), entered: false });
+    const entered = !!sys && !!s.entered;
+
+    /* ---- one-state propagation: Boston year-2 salary what-if (A0) ---- */
+    const SAL0 = 58.5, PAY0 = 203.6, TAXL = 200.428;
+    const isCel = !!sys && sys.id === 'cel';
+    const sal2 = typeof s.sal2 === 'number' ? s.sal2 : SAL0;
+    const wi = isCel && Math.abs(sal2 - SAL0) > 0.001;
+    const pay = PAY0 + (sal2 - SAL0);
+    const fmt = (v) => (Math.round(v * 10) / 10).toFixed(1);
+    const salTxt = '$' + (Math.abs(sal2 - Math.round(sal2)) < 0.001 ? String(Math.round(sal2)) : sal2.toFixed(1)) + 'M';
+    const rp = (x, y, w, h) => 'M' + (Math.round(x * 10) / 10) + ' ' + (Math.round(y * 10) / 10) + 'h' + w + 'v' + h + 'h' + (-w) + 'Z';
+    const bill = (over, rep) => { const rt = [1.5, 1.75, 2.5, 3.25]; let left = over, tot = 0; for (let i = 0; i < 4 && left > 0; i++) { const part = Math.min(left, 5); tot += part * (rt[i] + (rep ? 1 : 0)); left -= part; } if (left > 0) tot += left * (rt[3] + (rep ? 1 : 0)); return tot; };
+    const taxText = () => {
+      const over = pay - TAXL;
+      if (over <= 0) return 'Under the tax line by ≈ $' + fmt(-over) + 'M: no tax bill.';
+      if (over <= 5) return 'Over the tax line by ≈ $' + fmt(over) + 'M: a bill of ≈ $' + fmt(bill(over, false)) + 'M at the $1.50 rate, ≈ $' + fmt(bill(over, true)) + 'M at the repeater $2.50 rate.';
+      return 'Over the tax line by ≈ $' + fmt(over) + 'M: a bill of ≈ $' + fmt(bill(over, false)) + 'M on simplified brackets, ≈ $' + fmt(bill(over, true)) + 'M at repeater rates.';
+    };
+    const stepUp = () => this.setState({ sal2: Math.min(66, Math.floor(sal2 + 1e-9) + 1) });
+    const stepDn = () => this.setState({ sal2: Math.max(50, Math.ceil(sal2 - 1e-9) - 1) });
+    const stepReset = () => this.setState({ sal2: SAL0 });
+    const extra = (L) => {
+      const ex = { w: '', hasCtl: false, add: [] };
+      if (!isCel) return ex;
+      if (L.n === 'League' && wi) {
+        const xw = 100 + (pay - 150) * 10;
+        ex.w = rp(xw - 4, 455, 8, 27);
+        ex.add = [[xw, 400, 'if year 2 were ' + salTxt + ': payroll ≈ ' + fmt(pay) + ' · all else as the fixture', 'c', 'v'], [xw, 421, 'YOUR WHAT IF · not the record', 'c', 'b']];
+      }
+      if (L.n === 'Contract') {
+        ex.hasCtl = true;
+        if (wi) { ex.w = rp(370, 480 - 2 * sal2, 56, 2 * sal2); ex.add = [[398, 300, 'YOUR WHAT IF · not the record', 'c', 'b']]; }
+      }
+      return ex;
+    };
+
+    const MONO = 'IBM Plex Mono, monospace', COND = 'IBM Plex Sans Condensed, sans-serif';
+    const KIND = {
+      c: [COND, 15, 600, '.05em', 'uppercase', '#1E2322', '#F1F3F2'],
+      m: [MONO, 11.5, 400, '.02em', 'none', '#4A5250', '#F1F3F2'],
+      w: [MONO, 13, 600, '.04em', 'none', '#F1F3F2', 'transparent'],
+      n: [COND, 17, 500, '0', 'none', '#1E2322', '#F1F3F2'],
+      v: [MONO, 11.5, 600, '.02em', 'none', '#A8360F', '#F1F3F2'],
+      b: [MONO, 11.5, 600, '.04em', 'none', '#A8360F', '#F1F3F2', '1.5px solid #C8441A', '2px 6px']
+    };
+    const mkLabel = (x) => { const K = KIND[x[4]] || KIND.c; return { x: x[0], y: x[1], t: x[2], tx: x[3] === 'c' ? '-50%' : x[3] === 'r' ? '-100%' : '0px', ff: K[0], fs: K[1], fw: K[2], ls: K[3], tt: K[4], c: K[5], bg: K[6], bd: K[7] || 'none', pd: K[8] || '1px 3px' }; };
+    const pth = (o) => ({ o: o.o || '', h: o.h || '', g: o.g || '', s: o.s || '', t: o.t || '', k: o.k || '', a: o.a || '', u: o.u || '', b: o.b || '', w: '' });
+    const rh = (r) => Math.round(r[2] * 56) / 100;
+    const CW = { c: 8.8, m: 7.1, w: 8.3, n: 7.6, v: 7.3, b: 7.6 };
+    const lrect = (x) => { const w = x[2].length * (CW[x[4]] || 8.8) + 6, x0 = x[3] === 'c' ? x[0] - w / 2 : x[3] === 'r' ? x[0] - w : x[0]; return [x0, x[1] - 11, x0 + w, x[1] + 11]; };
+    const ov = (a, b) => Math.max(0, Math.min(a[2], b[2]) - Math.max(a[0], b[0])) * Math.max(0, Math.min(a[3], b[3]) - Math.max(a[1], b[1]));
+    const tagPos = (L, tag) => {
+      const r = L.ret, h = rh(r), w = tag.length * 8.3 + 10, lr = L.l.map(lrect);
+      const cand = [[r[0] - 3, r[1] - 26], [r[0] - 3, r[1] + h + 6], [r[0] + r[2] + 8, r[1]], [r[0] - w - 8, r[1]]];
+      let best = null;
+      cand.forEach((c, k) => {
+        const t = [c[0], c[1], c[0] + w, c[1] + 20];
+        let sc = k;
+        lr.forEach((q) => { sc += ov(t, q); });
+        if (t[0] < 4 || t[1] < 4 || t[2] > 990 || t[3] > 554) sc += 5000;
+        if (!best || sc < best.sc) best = { sc: sc, x: c[0] - r[0], y: c[1] - r[1] };
+      });
+      return best;
+    };
+    const tfOf = (i) => {
+      if (i === d) return 'translate(0px, 0px) scale(1)';
+      if (i < d) { const r = lvs[i].ret, k = 1000 / r[2]; return 'translate(' + Math.round(-r[0] * k) + 'px, ' + Math.round(-r[1] * k) + 'px) scale(' + k + ')'; }
+      const r = lvs[d].ret;
+      return 'translate(' + r[0] + 'px, ' + r[1] + 'px) scale(' + r[2] / 1000 + ')';
+    };
+
+    const layers = lvs.map((L, i) => {
+      const cu = i === d, r = L.ret, nx = lvs[i + 1];
+      const tg = r ? '↓ ' + nx.n.toUpperCase() : '', tp = r ? tagPos(L, tg) : { x: 0, y: 0 };
+      const ex = extra(L);
+      const labs = L.l.map((x) => (isCel && wi && L.n === 'Contract' && sal2 > SAL0 && x[2] === '≈58.5') ? [x[0], 480 - 2 * SAL0 + 14, x[2], x[3], x[4]] : x).concat(ex.add);
+      return Object.assign(pth(L.d), {
+        w: ex.w, hasCtl: ex.hasCtl, dec: stepDn, inc: stepUp, reset: stepReset,
+        decDis: !cu || sal2 <= 50, incDis: !cu || sal2 >= 66, resetDis: !cu || !wi,
+        ctlVal: salTxt, ctlC: wi ? '#A8360F' : '#1E2322', ctlBd: wi ? '#C8441A' : '#1E2322',
+        hid: cu ? 'false' : 'true', tf: tfOf(i), op: cu ? 1 : 0, pe: cu ? 'auto' : 'none',
+        lb: labs.map(mkLabel),
+        hasRet: !!r, retDis: !cu, retAria: r ? 'Zoom in to ' + nx.n : '', zoomIn: () => setD(i + 1),
+        rx: r ? r[0] : 0, ry: r ? r[1] : 0, rw: r ? r[2] : 0, rh: r ? rh(r) : 0,
+        tagLeft: Math.round(tp.x), tagTop: Math.round(tp.y), retTag: tg
+      });
+    });
+    const pr = pv ? pv.ret : null;
+    const par = Object.assign(pth(pv ? pv.d : {}), { rx: pr ? pr[0] : 0, ry: pr ? pr[1] : 0, rw: pr ? pr[2] : 0, rh: pr ? rh(pr) : 0 });
+
+    const WI_STOPS = ['League', 'Franchise', 'Contract'];
+    const stTag = (L, cu, i) => { const base = cu ? 'IN FOCUS' : i === d - 1 ? 'CAME FROM' : ''; return (wi && WI_STOPS.indexOf(L.n) >= 0) ? (base ? base + ' · YOUR WHAT IF' : 'YOUR WHAT IF') : base; };
+    const stops = lvs.map((L, i) => {
+      const cu = i === d;
+      return { no: (i < 9 ? '0' : '') + (i + 1), name: L.n, u: L.u, pressed: cu ? 'true' : 'false', pick: () => setD(i),
+        bar: cu ? '#C8441A' : 'transparent', bg: cu ? '#F7F8F7' : 'transparent', fw: cu ? 700 : 500,
+        tw: cu ? 16 : i < d ? 10 : 6, tc: cu ? '#C8441A' : '#1E2322',
+        tag: stTag(L, cu, i), tagC: (cu || (wi && WI_STOPS.indexOf(L.n) >= 0)) ? '#A8360F' : '#4A5250' };
+    });
+
+    const WORD = { obs: 'OBSERVED', rec: 'RECORDED', aut: 'AUTHORED', com: 'COMPUTED', mod: 'MODELED', gen: 'GENERATED', unk: 'UNKNOWN' };
+    const reads = cur ? cur.r.map((x) => {
+      if (isCel && x[1] === '@TAX@') return { cls: 't-com' + (wi ? ' t-br' : ''), v: taxText(), br: wi, why: why, word: WORD[x[0]], src: wi ? 'simplified brackets · verify repeater status' : x[2] };
+      return { cls: 't-' + x[0], v: x[1], br: false, why: why, word: WORD[x[0]], src: x[2] };
+    }) : [];
+    const verbs = cur ? cur.v.map((x) => ({ V: x[0], o: x[1] })) : [];
+    const sugg = D.map((x) => { const on = !!sys && sys.id === x.id; return { label: x.label, pressed: on ? 'true' : 'false', bd: on ? '#C8441A' : '#7A8481', bg: on ? '#F7F8F7' : 'transparent', fg: '#1E2322', pick: () => this.setState({ q: x.label, depth: 0, entered: false }) }; });
+    const qt = (q || '').trim();
+    const scaleTxt = cur ? 'scale ' + (d + 1) + ' of ' + n + ' · ' + cur.n.toLowerCase() : '';
+    const brName = wi ? 'what-if' : sys ? sys.branch : '';
+    const head = sys ? sys.slug + ' / ' + sys.when + ' / ' + brName + ' / as: ' + cur.as + ' / ' : '';
+
+    return {
+      q: q, hasSys: !!sys, noSys: !sys, sugg: sugg,
+      onQ: (e) => {
+        const v = e.target.value, cq = this.state && this.state.q !== undefined ? this.state.q : 'Boston Celtics';
+        this.setState(this.resolve(v) === this.resolve(cq) ? { q: v } : { q: v, depth: 0, entered: false });
+      },
+      resNote: sys ? 'showing “' + sys.label + '” · ' + n + ' stops' : qt ? 'no match' : 'nothing open',
+      emptyMsg: qt ? 'BOW has no executable model of “' + qt + '” yet.' : 'Nothing is open.',
+      emptySub: 'This prototype opens four systems: ' + D.map((x) => x.label).join(', ') + '. Rule: a system opens only when its stops and sources are built.',
+      stopLine: cur ? 'STOP ' + (d + 1) + ' OF ' + n + ' · ' + cur.n.toUpperCase() : '',
+      coord: head + scaleTxt,
+      coordFull: sys ? 'bow://' + sys.slug + ' · ' + sys.when + ' · ' + brName + ' · as: ' + cur.as + ' · ' + scaleTxt : '',
+      first: cur ? cur.first : '',
+      layers: layers, par: par, hasPar: !!pv,
+      parName: pv ? pv.n.toUpperCase() : '', parAria: pv ? 'Came from ' + pv.n + '. Zoom out one stop.' : '',
+      field: cur ? cur.u : '',
+      curUp: cur ? cur.n.toUpperCase() : '', curName: cur ? cur.n : '',
+      reads: reads, verbs: verbs, stops: stops,
+      why: why, whyPressed: why ? 'true' : 'false', whyBg: why ? '#1E2322' : '#F1F3F2', whyFg: why ? '#F1F3F2' : '#1E2322',
+      toggleWhy: () => this.setState({ why: !why }),
+      ladH: n * 50, railH: Math.max(0, (n - 1) * 50), rangeH: Math.max(16, (n - 1) * 50 + 16), maxD: Math.max(0, n - 1), depth: d,
+      onRange: (e) => setD(parseInt(e.target.value, 10) || 0),
+      goUp: () => setD(d - 1), goDown: () => setD(d + 1), upDis: d <= 0, downDis: d >= n - 1,
+      enter: () => this.setState({ entered: true }), leave: () => this.setState({ entered: false }),
+      entered: entered, enterSub: cur ? 'as ' + cur.as + ' · ' + cur.n : ''
+    };
+  }
+}
+</script>
+</body>
+</html>

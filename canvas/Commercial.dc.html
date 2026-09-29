@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BOW Frontier — Commercial lens</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F0E8;color:#1B1A17;font-family:'IBM Plex Sans',sans-serif}
+.mono{font-family:'IBM Plex Mono',monospace}
+.serif{font-family:'Newsreader',serif}
+.k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#57534B;text-transform:uppercase}
+.pick{cursor:pointer;text-align:left;font-family:'IBM Plex Sans',sans-serif;min-height:44px;padding:6px 12px;border-radius:0;transition:background .2s,color .2s}
+.pick:focus-visible{outline:3px solid #A63A18;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1320px; box-sizing: border-box; padding: 56px 88px 56px; display: flex; flex-direction: column; gap: 20px; background: #F3F0E8; color: #1B1A17">
+  <header style="display: flex; flex-direction: column; gap: 12px">
+    <div class="k" style="display: flex; justify-content: space-between; border-bottom: 1px solid #1B1A17; padding-bottom: 10px"><span>Wave 2 · K · Commercial lens</span><span>Every price and path here is a HYPOTHESIS · it informs design, it does not dictate it</span></div>
+    <h1 class="serif" style="margin: 0; font-weight: 400; font-size: 48px; line-height: 1.05; max-width: 1150px">Who gets value, who pays, what it costs to serve — and the cheapest way to learn we’re wrong.</h1>
+  </header>
+  <div style="display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 32px; flex: 1">
+    <nav aria-label="Frontiers" style="display: flex; flex-direction: column; gap: 4px">
+      <sc-for list="{{list}}" as="f" hint-placeholder-count="11">
+        <button type="button" class="pick" onClick="{{f.pick}}" aria-pressed="{{f.pressed}}" style="border: 1px solid {{f.border}}; background: {{f.bg}}; color: {{f.fg}}"><span class="mono" style="font-size: 10px; letter-spacing: .08em; opacity: .8">{{f.role}}</span><br><strong style="font-size: 15px">{{f.name}}</strong></button>
+      </sc-for>
+    </nav>
+    <article style="display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1B1A17; padding-bottom: 8px">
+        <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 38px">{{cur.name}}</h2>
+        <span class="k">{{cur.role}}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 24px">
+        <sc-for list="{{cur.top}}" as="t" hint-placeholder-count="10">
+          <div style="display: flex; flex-direction: column; gap: 4px; padding-top: 8px; border-top: 1px solid #CFC8B8"><span class="k">{{t.k}}</span><span style="font-size: 14px; line-height: 1.45">{{t.v}}</span></div>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 2px solid #1B1A17; margin-top: 6px">
+        <sc-for list="{{cur.paths}}" as="pt" hint-placeholder-count="3">
+          <div style="padding: 12px 14px; border-right: 1px solid #CFC8B8; display: flex; flex-direction: column; gap: 6px"><span class="mono" style="font-size: 12px; letter-spacing: .06em; color: #A63A18">{{pt.k}}</span><span style="font-size: 14px; line-height: 1.45">{{pt.v}}</span></div>
+        </sc-for>
+      </div>
+      <div style="padding: 12px 16px; background: #1B1A17; color: #F3F0E8; display: flex; flex-direction: column; gap: 4px">
+        <span class="mono" style="font-size: 11px; letter-spacing: .08em; color: #D6D0C3">CHEAPEST COMMERCIAL FALSIFIER</span>
+        <span class="serif" style="font-size: 20px; line-height: 1.35">{{cur.falsifier}}</span>
+      </div>
+    </article>
+  </div>
+  <section style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; border-top: 2px solid #1B1A17; padding-top: 16px">
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <span class="k">What must be free for the medium to spread (proposed)</span>
+      <p style="margin: 0; font-size: 15px; line-height: 1.5">Entering a shared Moment · opening any public system as an observer · following a system · reading provenance (“how do we know?” is never paywalled) · forking a Moment once · the World format and truth tags (so others can build and render).</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <span class="k">Where money plausibly lives (proposed)</span>
+      <p style="margin: 0; font-size: 15px; line-height: 1.5">Persistent Worlds that run while you’re away · deep Lab runs and model execution · licensed Reality data · premium and official Worlds · professional seats · creator and studio plans · enterprise systems · per-contract network fees. The full map is the separate artifact “BOW Economic Architecture — Design Implications”.</p>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1320}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const cur = s.i || 0;
+    const F = [
+      { name: 'Browser', role: 'Flagship shell', u: 'Anyone who wants to understand or follow a system — fans, students, readers, professionals.', b: 'Mostly the same person, for a premium tier; publishers and institutions indirectly.', val: 'Open and enter a system instead of reading about it; one address for every kind of system.', why: 'Only a medium with state, time, roles and provenance has something to open.', unit: 'Free shell; paid persistent presences (Worlds that keep running) and deep Lab runs. [hypothesis]', cost: 'Rendering is cheap; model runs, persistent Worlds and licensed Reality data are not.', dist: 'Shared Moments and addresses — every share is an invitation to enter.', net: 'Public forks and Moments make a system richer for the next visitor.', plat: 'Every other product opens in it; it is the distribution layer.', proof: 'People return to followed systems unprompted; shared Moments turn into entries.', m1: 'A sports-first Browser beta whose paid tier is persistent Worlds for committed fans.', m100: 'The default place people open systems they care about — sports, learning, news — with subscriptions plus publisher licences.', b1: 'Only if “open it in BOW” becomes a habit across domains and third parties publish systems into it.', fals: 'Post shareable Moment links into real fan communities and measure entries and returns — before building the shell.' },
+      { name: 'Sports Worlds', role: 'Deepest proving ground', u: 'Basketball fans who want to run an institution; learners (Track 101).', b: 'Fans (subscription); schools for education editions; later leagues or teams as partners.', val: 'A persistent institution that remembers, where decisions become consequences on the court and in the books.', why: 'Games simulate; BOW grounds the World in real economics and lets you fork against Reality.', unit: 'A seat in a persistent World by season or subscription; premium Worlds. [hypothesis]', cost: 'Simulation compute, persistent storage, rendering, real-data licensing — and rights for team and player identity (escalate, don’t assume).', dist: 'Moments from real events (“enter before the call”) shared by fans and media.', net: 'Multi-owner leagues: other people make your World matter.', plat: 'Proves persistence, Court, Lens and Fork — the core runtime.', proof: 'Fans pay for a second season; weekly return; leagues form on their own.', m1: 'A few thousand fans paying for a season-long World.', m100: 'Several leagues, media partnerships, multi-owner play.', b1: 'Only if Worlds become a social layer of fandom the way fantasy sports did — with rights solved.', fals: 'Run a four-week closed league of real fans in Boston · Year Two. Do they come back every week without being asked?' },
+      { name: 'Native Textbooks', role: 'Large vertical', u: 'Students and teachers.', b: 'Schools and districts; families for a Learn plan.', val: 'Understanding by entering the system, plus evidence of how a student decided.', why: 'System first, text contextual; truth discipline a classroom can trust.', unit: 'Per-subject licence per school or district; family plan. [hypothesis]', cost: 'Authoring dominates (Foundry must cut it); compute is light.', dist: 'Teachers and district adoption; free Moments as homework.', net: 'Weak directly; strong library compounding.', plat: 'Drives Foundry maturity and the dynamics index.', proof: 'A real class shows a gain over a matched simpler case (the repos’ own stop rule).', m1: 'A handful of districts licensing Track 101 plus Decision Challenges.', m100: 'Several AP-level subjects adopted widely.', b1: 'Only if the native textbook replaces the textbook category in several subjects.', fals: 'Use the Room in three classrooms against a reading-only control on the same outcome question.' },
+      { name: 'Reality / Live', role: 'Bridge', u: 'Fans, journalists, analysts following real systems.', b: 'Publishers (licences), professionals (seats), consumers (premium follow).', val: 'Current events become enterable decision points with honest provenance.', why: 'Live state + sealed hindsight + fork.', unit: 'Licensed feeds, professional seats, publisher Moments. [hypothesis]', cost: 'Data licensing (large), latency, verification labour.', dist: 'The news cycle: each event can be a Moment.', net: 'Public forks around live events.', plat: 'Feeds Browser and Publisher.', proof: 'A publisher pays for event Moments; professionals renew seats.', m1: 'Publisher pilots around trade deadlines and drafts.', m100: 'Live Moments across major sports and business news.', b1: 'Only as part of Browser and Publisher, not alone.', fals: 'Hand-build three Moments around a real trade deadline and offer them to one sports publisher.' },
+      { name: 'Publisher', role: 'How systems travel', u: 'Readers and viewers.', b: 'Publishers, documentary producers, brands.', val: 'Stories you can enter; branches as engagement; systems that travel with their sources.', why: 'Provenance + fork + an embed that keeps its truth tags.', unit: 'Per-Moment or per-season licence; share of paid continuations. [hypothesis]', cost: 'Per-story authoring (must be templated); hosting branches.', dist: 'Publishers’ audiences; the Moment card.', net: 'Reader branches; remix chains.', plat: 'Brings audiences into Browser.', proof: 'A publisher renews after a pilot; readers branch.', m1: 'A few publisher partnerships.', m100: 'A standard format across sports, business and news.', b1: 'Only if the Moment becomes a native web object, like the video embed.', fals: 'One story with a door on a partner site; compare entries to page views.' },
+      { name: 'Search / Atlas', role: 'Front door for questions', u: 'Anyone asking how or why.', b: 'Indirect: publishers and licensors; premium users.', val: 'The system behind a question, runnable.', why: 'Systems, not prose.', unit: 'Free front door; premium reviewed systems; an API for question-to-system. [hypothesis]', cost: 'Model assembly per query (high); review labour.', dist: 'Answer engines and links into systems.', net: 'Each reviewed system serves many questions.', plat: 'Feeds Browser and textbooks.', proof: 'People choose to push the system rather than read the text.', m1: 'Licences to education and publishing for dynamics-index content.', m100: 'A default “explain by system” layer for major questions.', b1: 'Only if it competes with AI answer engines on understanding, not answers.', fals: 'Show the airline-delay mechanism to twenty people next to a prose answer; test comprehension and preference.' },
+      { name: 'Foundry / Studio', role: 'Supply side', u: 'Authors, teachers, creators, analysts.', b: 'Creators (plans), studios, enterprises.', val: 'Turn knowledge into an executable system without inventing reality.', why: 'Conceptual compile errors and provenance on every line.', unit: 'Creator plans; studio seats; hosting per published World. [hypothesis]', cost: 'Model compilation, review, hosting.', dist: 'Creators bring their audiences.', net: 'A marketplace of systems; remixes.', plat: 'Without it, BOW authors everything itself.', proof: 'Authoring time falls against hand-building (the repos mark this UNPROVED).', m1: 'Internal authoring leverage plus a few professional creators.', m100: 'A creator economy of Worlds and Moments.', b1: 'Only if Foundry becomes where systems get made.', fals: 'Time five authors building the same case with and without proof marks.' },
+      { name: 'Cloud / Developer', role: 'Infrastructure', u: 'Developers and companies building on the medium.', b: 'The same.', val: 'A runtime for executable worlds with truth tags, forks and roles.', why: 'The primitives are the product.', unit: 'Runtime (ticks, stored branches), model pass-through, hosted feeds. [hypothesis]', cost: 'Compute, storage, support.', dist: 'An open format, SDKs, third-party renderers.', net: 'Interoperable Worlds (Network).', plat: 'Everything runs on it.', proof: 'A third party builds a World BOW didn’t.', m1: 'A few partner integrations.', m100: 'Usage-based runtime revenue across verticals.', b1: 'If BOW becomes the standard runtime or protocol for executable worlds.', fals: 'Publish the World format and a tiny SDK; see whether anyone builds something unasked.' },
+      { name: 'Enterprise', role: 'Operational value', u: 'Operators and executives.', b: 'Enterprises.', val: 'Mirror, Lens, Lab and Command over an organization’s commitments; accountable human and agent seats.', why: 'Roles, authority, provenance and forks are native, not bolted on.', unit: 'System licence per organization + seats + runtime. [hypothesis]', cost: 'Integration labour (dominant), data connectors, security.', dist: 'Enterprise sales; a disruption-rehearsal wedge.', net: 'Supplier and customer Worlds interacting.', plat: 'Pays for rigour: security, audit, reliability.', proof: 'A rehearsal changes a real decision.', m1: 'A few scenario-rehearsal engagements.', m100: 'Operational Worlds at a set of mid-size firms.', b1: 'Only if Operate — approved action into reality — earns trust.', fals: 'Run a Harrow-style rehearsal with one real operations team on their own last disruption.' },
+      { name: 'Agents', role: 'Seats for intelligence', u: 'Organizations putting AI into roles.', b: 'Enterprises.', val: 'Accountable seats: warrants, receipts, escalation, swappable providers.', why: 'The seat outlives the model; refusals come from the warrant.', unit: 'Per seat, per recorded act, provider pass-through. [hypothesis]', cost: 'Model calls.', dist: 'Inside Enterprise deployments.', net: 'Shared warrant templates across firms.', plat: 'Makes BOW the environment around any intelligence provider.', proof: 'A risk or compliance team accepts receipts as audit evidence.', m1: 'Paid pilots inside Enterprise engagements.', m100: 'A standard for accountable AI seats.', b1: 'If “every AI in a role runs inside a warrant” becomes normal practice.', fals: 'Show the warrant and receipt board to five risk officers; ask what would make it audit evidence.' },
+      { name: 'Network', role: 'Interoperating systems', u: 'Institutions that transact.', b: 'Leagues, platforms, marketplaces.', val: 'A decision in one World becomes recorded state in another, with each side’s own record.', why: 'Only executable Worlds with roles and rules can commit together.', unit: 'Per committed cross-World contract; hosting the rulebook. [hypothesis]', cost: 'Low per transaction; trust and dispute handling are the real cost.', dist: 'Leagues and marketplaces onboard their members.', net: 'Strong: every institution that joins makes the others’ Worlds more real.', plat: 'Separates a medium from “many simulations”.', proof: 'Two independent parties transact through BOW.', m1: 'Multi-owner leagues inside Sports Worlds.', m100: 'Networks in sports, supply chains and creator licensing.', b1: 'Only if the protocol is open and adopted beyond BOW.', fals: 'A two-person league: each runs a club; one real trade through the Handshake.' }
+    ];
+    const f = F[cur];
+    return {
+      list: F.map((x, i) => ({ name: x.name, role: x.role, pressed: i === cur ? 'true' : 'false', bg: i === cur ? '#1B1A17' : 'transparent', fg: i === cur ? '#F3F0E8' : '#1B1A17', border: i === cur ? '#1B1A17' : '#CFC8B8', pick: () => this.setState({ i: i }) })),
+      cur: {
+        name: f.name, role: f.role, falsifier: f.fals,
+        top: [['User', f.u], ['Buyer', f.b], ['Value created', f.val], ['Why BOW', f.why], ['Monetizable unit', f.unit], ['Marginal cost', f.cost], ['Distribution', f.dist], ['Network effect', f.net], ['Platform effect', f.plat], ['Commercial proof required', f.proof]].map((t) => ({ k: t[0], v: t[1] })),
+        paths: [['$1M PATH · hypothesis', f.m1], ['$100M PATH · what must become true', f.m100], ['$1B+ PATH · only if', f.b1]].map((t) => ({ k: t[0], v: t[1] }))
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

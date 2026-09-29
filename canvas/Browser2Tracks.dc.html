@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tracks</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#ECEDEB;color:#15171A;font-family:'Barlow Semi Condensed',sans-serif}
+button{font-family:'Barlow Semi Condensed',sans-serif;color:#15171A}
+.mono{font-family:'JetBrains Mono',monospace}
+.cap{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#4D5259}
+.tb{min-height:36px;padding:0 12px;font-size:15px;font-weight:600;background:#F7F7F6;border:1px solid #9AA0A6;border-radius:0;cursor:pointer;transition:background .15s,color .15s}
+.tb:hover{background:#DDE0E4}
+.tb[aria-pressed="true"]{background:#15171A;color:#F7F7F6;border-color:#15171A}
+.tb.cut{background:#C2410C;color:#fff;border-color:#C2410C}
+.tb.cut:hover{background:#9A3412}
+.tb.off{opacity:.45}
+.sm{width:36px;height:36px;padding:0;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;background:#F7F7F6;border:1px solid #9AA0A6;border-radius:0;cursor:pointer}
+.sm[aria-pressed="true"]{background:#15171A;color:#F7F7F6}
+.tb:focus-visible,.sm:focus-visible,.hd:focus-visible,.mk:focus-visible,.qin:focus-visible,.gt:focus-visible{outline:2px solid #1D4ED8;outline-offset:1px}
+.qin{height:36px;box-sizing:border-box;padding:0 10px;font-family:'Barlow Semi Condensed',sans-serif;font-size:17px;background:#fff;border:1px solid #6B7178;border-radius:0;color:#15171A}
+.qin::placeholder{color:#6B7178;opacity:1}
+.hd{position:absolute;text-align:left;background:transparent;border:0;padding:0;cursor:pointer}
+.mk{position:absolute;width:36px;height:36px;padding:0;border:0;background:transparent;cursor:pointer}
+.mk i{position:absolute;left:14px;width:8px;height:8px;background:#F7F7F6;border:2px solid #15171A;transform:rotate(45deg)}
+.mk:hover i{background:#1D4ED8;border-color:#1D4ED8}
+.gt{position:absolute;padding:0;border:0;background:transparent;cursor:pointer;text-align:left}
+.k-obs{background:#15171A}
+.k-rec{background:#0F6E6A;box-shadow:inset 0 0 0 2px #0F6E6A,inset 0 0 0 4px #F7F7F6}
+.k-frk{background:#FFF7F0;border:2px solid #C2410C;box-sizing:border-box}
+.k-pub{background:#F5F3FA;border:1.5px solid #6A5F8C;box-sizing:border-box}
+.k-mod{background:repeating-linear-gradient(135deg,#5F646A 0 1.5px,transparent 1.5px 7px);border:1px solid #5F646A;box-sizing:border-box}
+.t-obs{background:#15171A}
+.t-rec{background:#0F6E6A;box-shadow:inset 0 0 0 2px #0F6E6A,inset 0 0 0 4px #F7F7F6}
+.t-aut{background:transparent;border:2px solid #15171A;box-sizing:border-box}
+.t-com{background:#9AA0A6}
+.t-mod{background:repeating-linear-gradient(135deg,#15171A 0 1.5px,transparent 1.5px 6px);border:1px solid #15171A;box-sizing:border-box}
+.t-gen{background:radial-gradient(circle,#15171A 1px,transparent 1.3px) 0 0/6px 6px;border:1px dotted #15171A;box-sizing:border-box}
+.t-unk{background:transparent;border:2px dashed #15171A;box-sizing:border-box}
+.t-seal{background:transparent;border:2px dashed #6B7178;box-sizing:border-box}
+.t-frk{background:#FFF7F0;border:2px solid #C2410C;box-sizing:border-box}
+.sw{display:inline-block;width:14px;height:14px;flex:none;vertical-align:-2px}
+.rng{position:absolute;margin:0;padding:0;background:transparent;-webkit-appearance:none;appearance:none;height:32px;cursor:ew-resize}
+.rng::-webkit-slider-runnable-track{background:transparent;height:32px}
+.rng::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:32px;background:#1D4ED8;border:0;border-radius:0}
+.rng::-moz-range-track{background:transparent;height:32px}
+.rng::-moz-range-thumb{width:14px;height:32px;background:#1D4ED8;border:0;border-radius:0}
+.rng:focus-visible{outline:2px solid #1D4ED8;outline-offset:2px}
+.rowin{transition:opacity .5s ease,transform .5s ease}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+.pulse{display:inline-block;width:9px;height:9px;border-radius:5px;background:#15171A;animation:pulse 1.6s infinite}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important;animation-duration:.01s!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #ECEDEB; color: #15171A; font-family: 'Barlow Semi Condensed', sans-serif">
+
+  <!-- TOP BAR -->
+  <div style="position:absolute;left:0;top:0;width:1440px;height:52px;background:#E2E4E1;border-bottom:1px solid #B5BAB6"></div>
+  <span style="position:absolute;left:20px;top:15px;font-size:17px;font-weight:700;letter-spacing:.16em">BOW · TRACKS</span>
+  <input class="qin" aria-label="Ask for a system" value="{{q}}" onChange="{{onQ}}" onKeyDown="{{onKey}}" placeholder="Ask for a system" style="position:absolute;left:180px;top:8px;width:360px">
+  <button type="button" class="tb" onClick="{{place}}" style="position:absolute;left:548px;top:8px">Place tracks</button>
+  <span class="cap" style="position:absolute;left:672px;top:19px">or</span>
+  <div style="position:absolute;left:704px;top:8px;display:flex;gap:8px">
+    <sc-for list="{{chips}}" as="ch" hint-placeholder-count="2">
+      <button type="button" class="tb" onClick="{{ch.pick}}" aria-pressed="{{ch.pressed}}">{{ch.t}}</button>
+    </sc-for>
+  </div>
+  <button type="button" class="tb" onClick="{{toggleHow}}" aria-pressed="{{howP}}" style="position:absolute;right:20px;top:8px">How do we know?</button>
+
+  <!-- MONITOR -->
+  <div style="position:absolute;left:20px;top:60px;width:1400px;height:280px;background:#F7F7F6;border:1px solid #B5BAB6;box-sizing:border-box;overflow:hidden">
+    <sc-if value="{{mon.empty}}" hint-placeholder-val="{{false}}">
+      <div style="position:absolute;left:24px;top:22px;width:940px;font-size:28px;line-height:1.2;color:#4D5259">Nothing to monitor yet. Ask for a system and its histories land as tracks on one time axis. The monitor shows the selected track at the playhead.</div>
+    </sc-if>
+    <sc-for list="{{mon.panes}}" as="pn" hint-placeholder-count="1">
+      <div style="position:absolute;left:{{pn.x}}px;top:0;width:{{pn.w}}px;height:218px;box-sizing:border-box;padding:12px 20px 0;border-right:{{pn.br}}">
+        <div style="display:flex;align-items:baseline;gap:14px;height:{{pn.hh}}px">
+          <span class="mono" style="font-size:{{pn.tcs}}px;font-weight:700;letter-spacing:-.03em;white-space:nowrap">{{pn.tc}}</span>
+          <span style="font-size:{{pn.nms}}px;font-weight:600;white-space:nowrap">{{pn.name}}</span>
+          <span class="cap" style="margin-left:auto;text-align:right">{{pn.stamp}}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:{{pn.cols}};gap:0 {{pn.gap}}px">
+          <div>
+            <span class="cap">{{pn.rTitle}}</span>
+            <sc-for list="{{pn.lines}}" as="ln" hint-placeholder-count="3">
+              <div style="display:flex;gap:8px;align-items:flex-start;margin-top:4px;font-size:{{pn.fs}}px;line-height:1.2"><span class="sw {{ln.cls}}" style="margin-top:2px"></span><span style="min-width:0"><span>{{ln.t}}</span><span class="cap" style="display:{{ln.wd}};text-transform:none;font-size:11px;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:430px">{{ln.cap}}</span></span></div>
+            </sc-for>
+            <div style="margin-top:5px;font-size:12.5px;line-height:1.25;color:#4D5259;display:{{pn.movesD}}">{{pn.moves}}</div>
+          </div>
+          <div>
+            <span class="cap">{{pn.pTitle}}</span>
+            <sc-if value="{{pn.isBar}}" hint-placeholder-val="{{true}}">
+              <div style="position:relative;height:{{pn.chH}}px;margin-top:6px;width:{{pn.cw}}px">
+                <div style="position:absolute;left:0;top:26px;width:{{pn.barW}}px;height:{{pn.barH}}px;background:{{pn.barBg}};box-shadow:{{pn.barBs}}"></div>
+                <sc-for list="{{pn.blines}}" as="bl" hint-placeholder-count="4">
+                  <div style="position:absolute;left:{{bl.x}}px;top:{{bl.y}}px;width:1px;height:{{bl.h}}px;background:#15171A"></div>
+                  <span class="mono" style="position:absolute;left:{{bl.lx}}px;top:{{bl.ty}}px;font-size:11px;white-space:nowrap">{{bl.t}}</span>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{pn.isRange}}" hint-placeholder-val="{{false}}">
+              <div style="position:relative;height:{{pn.chH}}px;margin-top:6px;width:{{pn.cw}}px">
+                <div class="t-aut" style="position:absolute;left:{{pn.rx}}px;top:26px;width:{{pn.rw}}px;height:{{pn.barH}}px"></div>
+                <sc-for list="{{pn.blines}}" as="bl" hint-placeholder-count="2">
+                  <div style="position:absolute;left:{{bl.x}}px;top:{{bl.y}}px;width:1px;height:{{bl.h}}px;background:#15171A"></div>
+                  <span class="mono" style="position:absolute;left:{{bl.lx}}px;top:{{bl.ty}}px;font-size:11px;white-space:nowrap">{{bl.t}}</span>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{pn.isTally}}" hint-placeholder-val="{{false}}">
+              <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;width:{{pn.cw}}px">
+                <sc-for list="{{pn.tokens}}" as="tk" hint-placeholder-count="11">
+                  <span class="mono {{tk.cls}}" style="display:inline-flex;width:{{pn.tkw}}px;height:28px;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:{{tk.c}};background:{{tk.bg}}">{{tk.s}}</span>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{pn.isHole}}" hint-placeholder-val="{{false}}">
+              <div class="t-unk" style="margin-top:8px;padding:8px 10px;width:{{pn.cw}}px;font-size:{{pn.fs}}px;line-height:1.25;color:#4D5259">{{pn.holeText}}</div>
+            </sc-if>
+            <div style="margin-top:6px;font-size:{{pn.fs}}px;line-height:1.25;width:{{pn.cw}}px;display:{{pn.payD}}">{{pn.payText}}</div>
+          </div>
+          <div style="grid-column:{{pn.rc}};margin-top:{{pn.rmt}}px">
+            <span class="cap">{{pn.resTitle}}</span>
+            <div style="display:flex;gap:8px;align-items:flex-start;margin-top:4px;font-size:{{pn.fs}}px;line-height:1.2"><span class="sw {{pn.res.cls}}" style="margin-top:2px"></span><span style="min-width:0"><span>{{pn.res.t}}</span><span class="cap" style="display:{{pn.res.wd}};text-transform:none;font-size:11px;letter-spacing:0;max-width:330px">{{pn.res.cap}}</span></span></div>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+    <sc-if value="{{mon.ab}}" hint-placeholder-val="{{false}}">
+      <div style="position:absolute;left:0;top:218px;width:1398px;height:60px;border-top:1px solid #B5BAB6;background:#ECEDEB;padding:8px 20px;box-sizing:border-box">
+        <div style="display:flex;gap:14px;align-items:baseline"><span class="cap" style="color:#15171A">A vs B at {{mon.dtc}}</span><span style="margin-left:auto;font-size:14px;font-style:italic">a difference between histories — not proof of cause</span></div>
+        <div style="display:flex;gap:24px;margin-top:4px">
+          <sc-for list="{{mon.diff}}" as="df" hint-placeholder-count="3">
+            <span style="font-size:14px;max-width:440px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span class="cap" style="margin-right:6px">{{df.k}}</span><strong style="color:{{df.c}}">{{df.v}}</strong></span>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{mon.legend}}" hint-placeholder-val="{{false}}">
+      <div style="position:absolute;left:0;top:218px;width:1398px;height:60px;border-top:1px solid #B5BAB6;background:#ECEDEB;padding:10px 20px;box-sizing:border-box;display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center">
+        <sc-for list="{{mon.keys}}" as="ky" hint-placeholder-count="7">
+          <span style="display:inline-flex;gap:7px;align-items:center;font-size:13px"><span class="sw {{ky.cls}}"></span><span><strong>{{ky.w}}</strong> · {{ky.d}}</span></span>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{mon.quiet}}" hint-placeholder-val="{{true}}">
+      <div style="position:absolute;left:20px;top:236px;font-size:12.5px;color:#4D5259">The monitor shows the selected track at the playhead. Turn on “How do we know?” to read what each mark is made of.</div>
+    </sc-if>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div style="position:absolute;left:20px;top:348px;width:1400px;height:40px;background:#E2E4E1;border:1px solid #B5BAB6;box-sizing:border-box"></div>
+  <button type="button" class="tb {{undoOff}}" onClick="{{undo}}" aria-label="Undo navigation: return to the previous selection, jump or zoom" style="position:absolute;left:24px;top:350px;display:flex;align-items:center;gap:7px"><svg width="16" height="14" viewBox="0 0 16 14" aria-hidden="true"><path d="M4 1 L1 4.5 L4 8 M1 4.5 H10 A4 4 0 0 1 10 12.5 H6" fill="none" stroke="currentColor" stroke-width="1.8"></path></svg>Undo navigation {{undoN}}</button>
+  <span class="cap" style="position:absolute;left:222px;top:362px">Move playhead</span>
+  <button type="button" class="tb" onClick="{{prevM}}" aria-label="Move the playhead to the previous Moment" style="position:absolute;left:326px;top:350px;display:flex;align-items:center;gap:6px"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M10 1 L3 6 L10 11 Z M2 1 V11" fill="currentColor" stroke="currentColor" stroke-width="1.5"></path></svg>Moment</button>
+  <button type="button" class="tb" onClick="{{nextM}}" aria-label="Move the playhead to the next Moment" style="position:absolute;left:430px;top:350px;display:flex;align-items:center;gap:6px">Moment<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1 L9 6 L2 11 Z M10 1 V11" fill="currentColor" stroke="currentColor" stroke-width="1.5"></path></svg></button>
+  <span class="mono" style="position:absolute;left:546px;top:357px;font-size:16px;font-weight:700;letter-spacing:-.02em">{{tcNow}}</span>
+  <button type="button" class="tb cut {{cutOff}}" onClick="{{cut}}" style="position:absolute;left:690px;top:350px">Cut a branch here</button>
+  <span class="cap" style="position:absolute;left:846px;top:362px;max-width:330px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{cutTarget}}</span>
+  <button type="button" class="tb {{abOff}}" onClick="{{toggleAB}}" aria-pressed="{{abP}}" style="position:absolute;left:1146px;top:350px">A/B compare</button>
+  <span class="cap" style="position:absolute;left:1262px;top:362px;display:{{zoomD}}">Zoom</span>
+  <button type="button" class="tb" onClick="{{zoomFull}}" aria-pressed="{{zFullP}}" style="position:absolute;left:1306px;top:350px;padding:0 8px;display:{{zoomD}}">10 yr</button>
+  <button type="button" class="tb" onClick="{{zoomNear}}" aria-pressed="{{zNearP}}" style="position:absolute;left:1352px;top:350px;padding:0 8px;display:{{zoomD}};margin-left:0">18 mo</button>
+
+  <!-- STATUS + RULER -->
+  <div role="status" aria-live="polite" style="position:absolute;left:24px;top:394px;width:328px;height:32px;font-size:11.5px;line-height:1.2;overflow:hidden;color:#15171A;display:flex;align-items:center">{{status}}</div>
+  <div style="position:absolute;left:360px;top:394px;width:1040px;height:32px;background:#F7F7F6;border:1px solid #B5BAB6;box-sizing:border-box"></div>
+  <sc-for list="{{ruler}}" as="rt" hint-placeholder-count="11">
+    <div style="position:absolute;left:{{rt.x}}px;top:{{rt.y}}px;width:1px;height:{{rt.h}}px;background:#6B7178"></div>
+    <span class="mono" style="position:absolute;left:{{rt.lx}}px;top:396px;font-size:11px;color:#4D5259;white-space:nowrap">{{rt.t}}</span>
+  </sc-for>
+
+  <!-- TRACK BACKGROUNDS -->
+  <div style="position:absolute;left:20px;top:430px;width:1380px;height:430px;background:#F7F7F6;border:1px solid #B5BAB6;box-sizing:border-box"></div>
+  <div style="position:absolute;left:21px;top:431px;width:332px;height:428px;background:#ECEDEB"></div>
+  <sc-for list="{{rowsBg}}" as="rb" hint-placeholder-count="5">
+    <div style="position:absolute;left:21px;top:{{rb.y}}px;width:1378px;height:{{rb.h}}px;background:{{rb.bg}};border-bottom:1px solid #C4C7C3;box-shadow:inset 4px 0 0 {{rb.edge}}"></div>
+  </sc-for>
+  <sc-for list="{{grid}}" as="gd" hint-placeholder-count="11">
+    <div style="position:absolute;left:{{gd.x}}px;top:432px;width:1px;height:426px;background:#D9DCD8"></div>
+  </sc-for>
+  <div style="position:absolute;left:353px;top:431px;width:1px;height:428px;background:#B5BAB6"></div>
+  <sc-if value="{{noTracks}}" hint-placeholder-val="{{true}}">
+    <div style="position:absolute;left:390px;top:620px;width:900px;font-size:22px;color:#6B7178">No tracks. Ask for a system, and each of its histories becomes a track here.</div>
+  </sc-if>
+  <sc-if value="{{hasNow}}" hint-placeholder-val="{{false}}">
+    <div style="position:absolute;left:{{now.x}}px;top:426px;width:0;height:432px;border-left:1px dashed #15171A;opacity:.6"></div>
+    <span class="cap" style="position:absolute;left:{{now.lx}}px;top:417px;background:#F7F7F6;padding:0 3px;color:#15171A">NOW</span>
+  </sc-if>
+
+  <!-- CLIPS -->
+  <sc-for list="{{clips}}" as="cl" hint-placeholder-count="8">
+    <div class="rowin" style="position:absolute;left:{{cl.x}}px;top:{{cl.y}}px;width:{{cl.w}}px;height:{{cl.h}}px;background:{{cl.bg}};border:{{cl.bd}};box-shadow:{{cl.bs}};box-sizing:border-box;opacity:{{cl.op}};transform:translateX({{cl.tx}}px);transition-delay:{{cl.dl}}s;overflow:hidden">
+      <span style="position:absolute;left:8px;top:{{cl.ly}}px;font-size:12px;font-weight:600;white-space:nowrap;color:{{cl.lc}};background:{{cl.lbg}};padding:0 {{cl.lp}}px">{{cl.label}}</span>
+    </div>
+  </sc-for>
+  <sc-for list="{{mlabels}}" as="ml" hint-placeholder-count="4">
+    <span class="rowin" style="position:absolute;left:{{ml.x}}px;top:{{ml.y}}px;width:96px;font-size:11.5px;line-height:1.1;font-weight:600;color:#15171A;opacity:{{ml.op}};transition-delay:{{ml.dl}}s">{{ml.t}}</span>
+  </sc-for>
+  <sc-for list="{{marks}}" as="mk" hint-placeholder-count="6">
+    <button type="button" class="mk rowin" onClick="{{mk.pick}}" aria-label="{{mk.aria}}" style="left:{{mk.x}}px;top:{{mk.y}}px;opacity:{{mk.op}};transition-delay:{{mk.dl}}s"><i style="top:14px"></i></button>
+  </sc-for>
+
+  <!-- TRACK HEADERS -->
+  <sc-for list="{{heads}}" as="hd" hint-placeholder-count="5">
+    <div class="rowin" style="position:absolute;left:21px;top:{{hd.y}}px;width:332px;height:{{hd.h}}px;opacity:{{hd.op}};transform:translateX({{hd.tx}}px);transition-delay:{{hd.dl}}s">
+      <span class="{{hd.chip}}" style="position:absolute;left:{{hd.cx}}px;top:{{hd.cy}}px;width:10px;height:{{hd.ch}}px;background:{{hd.cbg}};box-shadow:{{hd.cbs}};border:{{hd.cbd}};box-sizing:border-box"></span>
+      <button type="button" class="hd" onClick="{{hd.pick}}" aria-pressed="{{hd.pressed}}" aria-label="{{hd.aria}}" style="left:{{hd.nx}}px;top:0;width:{{hd.nw}}px;height:{{hd.h}}px;background:{{hd.sbg}}">
+        <span style="display:flex;align-items:baseline;gap:6px;padding:5px 0 0"><span class="mono" style="display:{{hd.abD}};font-size:11px;font-weight:700;background:#1D4ED8;color:#fff;padding:0 4px">{{hd.ab}}</span><span style="font-size:15px;font-weight:600;line-height:1.1;text-decoration:{{hd.deco}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{hd.name}}</span></span>
+        <span class="mono" style="display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;font-size:11px;letter-spacing:-.03em;line-height:1.12;color:#3D4247;padding-top:2px;overflow:hidden">{{hd.brief}}</span>
+      </button>
+      <button type="button" class="sm" onClick="{{hd.solo}}" aria-pressed="{{hd.soloP}}" aria-label="Solo {{hd.name}}" style="position:absolute;left:{{hd.sx}}px;top:{{hd.sy}}px;display:{{hd.smD}}">S</button>
+      <button type="button" class="sm" onClick="{{hd.mute}}" aria-pressed="{{hd.muteP}}" aria-label="Mute {{hd.name}}" style="position:absolute;left:{{hd.mx}}px;top:{{hd.sy}}px;display:{{hd.smD}}">M</button>
+    </div>
+  </sc-for>
+
+  <!-- PLAYHEAD -->
+  <div style="position:absolute;left:{{ph.x}}px;top:394px;width:2px;height:464px;background:#1D4ED8;pointer-events:none;opacity:{{ph.op}}"></div>
+  <input type="range" class="rng" aria-label="Playhead: drag along the time axis" min="{{rng.min}}" max="{{rng.max}}" step="{{rng.step}}" value="{{rng.val}}" onChange="{{rng.on}}" style="left:{{rng.left}}px;top:394px;width:{{rng.w}}px;opacity:{{ph.op}}">
+
+  <span style="position:absolute;left:28px;bottom:8px;width:800px;font-size:11px;line-height:1.35;color:#4D5259">COMMERCIAL LENS · Hypothesis: tracks for Reality and your own forks are free; persistent public tracks and model runs cost storage and compute — creators and studios pay.</span>
+  <span style="position:absolute;right:28px;bottom:8px;width:540px;text-align:right;font-size:11px;line-height:1.35;color:#4D5259">PROTOTYPE · DESIGN PROPOSAL · data: BOW Economics Live fixture, as of 29 Sep 2026, approx., verify before use</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.timer = setInterval(() => { const s = this.state || {}; const a = s.tT == null ? 99 : s.tT; if (a < 20) this.setState({ tT: a + 1 }); }, 250);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  pushNav(patch) {
+    const s = this.state || {};
+    const snap = { ds: s.ds || null, t: s.t, sel: s.sel, bsel: s.bsel, ab: !!s.ab, zoom: s.zoom || 'full', q: s.q || '' };
+    this.setState(Object.assign({ nav: (s.nav || []).concat([snap]).slice(-30), msg: '' }, patch));
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const R = Math.round;
+    const how = !!s.how;
+    const ds = s.ds || null;
+    const zoomNear = ds === 'bos' && s.zoom === 'near';
+    const DEC = (y, m, d) => y + ((Date.UTC(2001, m - 1, d) - Date.UTC(2001, 0, 1)) / 864e5) / 365;
+    const pad = (n) => (n < 10 ? '0' : '') + n;
+    const fmtD = (t) => { const y = Math.floor(t + 1e-9); const dt = new Date(Date.UTC(2001, 0, 1 + Math.round((t - y) * 365))); return y + '-' + pad(dt.getUTCMonth() + 1) + '-' + pad(dt.getUTCDate()); };
+    const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const WORD = { obs: 'OBSERVED', rec: 'RECORDED', aut: 'AUTHORED', com: 'COMPUTED', mod: 'MODELED', gen: 'GENERATED', unk: 'UNKNOWN', seal: 'SEALED' };
+    const F = (t, k, src) => ({ t: t, cls: 't-' + k, word: WORD[k], src: cut1(src || 'this prototype', 52), wd: how ? 'block' : 'none' });
+    const cut1 = (str, n) => (str.length > n ? str.slice(0, n - 1) + '…' : str);
+
+    // ---------- fixtures ----------
+    const NOW = DEC(2026, 9, 29);
+    const BM = [
+      { t: DEC(2017, 6, 17), date: '17 Jun 2017', name: 'Philadelphia calls', q: 'Philadelphia wants the No. 1 pick. Do you move it?' },
+      { t: DEC(2025, 5, 12), date: '12 May 2025', name: 'Tatum is hurt', q: 'Tatum’s Achilles goes in Game 4 against New York. What does the next year look like?' },
+      { t: DEC(2025, 6, 27), date: 'late Jun 2025', name: 'The apron summer', q: 'The apron summer. What do you do about the payroll? [exact date: verify]' },
+      { t: DEC(2025, 8, 13), date: '13 Aug 2025', name: 'The sale vote', q: 'The league votes on a sale of the team. What changes for the people who work here?' },
+      { t: DEC(2026, 2, 5), date: '5 Feb 2026', name: 'Deadline week', q: 'Deadline week, and the projected tax bill is ≈$39.5M [verify]. What do you do?' },
+      { t: DEC(2026, 3, 6), date: '6 Mar 2026', name: 'Tatum is back', q: 'Tatum’s first game back is tonight, against Dallas [verify]. How do you use him?' }
+    ];
+    const PM = [
+      { t: DEC(1787, 6, 30), date: '30 Jun 1787', name: 'Franklin’s turn', q: 'Franklin could speak. Does he? [verify: what the record shows]' },
+      { t: DEC(1787, 7, 16), date: '16 Jul 1787', name: 'The vote', q: 'The vote on equal state votes in the Senate. How does your state vote?' }
+    ];
+    const W0 = DEC(2025, 7, 1), Y2 = DEC(2026, 8, 3), ACT1 = DEC(2025, 10, 6), WK6 = DEC(2026, 9, 7), WK9 = NOW;
+    const wkOf = (t) => (t < Y2 ? 'Year One · Wk ' + Math.min(52, Math.floor((t - W0) * 365 / 7) + 1) : 'Year Two · Wk ' + (Math.floor((t - Y2) * 365 / 7) + 1));
+    const HZ1 = DEC(2020, 6, 17), MH = DEC(2027, 4, 15), VOTE = DEC(1787, 7, 16), SEP17 = DEC(1787, 9, 17);
+    const v0 = ds === 'phl' ? DEC(1787, 5, 20) : (zoomNear ? 2025.25 : 2017.0);
+    const v1 = ds === 'phl' ? DEC(1787, 9, 30) : 2027.5;
+    const MOM = ds === 'phl' ? PM : BM;
+    const LANE = { x0: 360, w: 1040 };
+    const X = (t) => LANE.x0 + (t - v0) / (v1 - v0) * LANE.w;
+    const t = Math.min(v1, Math.max(v0, s.t == null ? (ds === 'phl' ? VOTE : NOW) : s.t));
+
+    // ---------- pane builders ----------
+    const P = (o) => Object.assign({ tc: fmtD(t), name: '', stamp: '', rTitle: ds === 'phl' ? 'States' : 'Roster', pTitle: ds === 'phl' ? 'The vote' : 'Payroll vs the lines', lines: [], moves: '', chart: { kind: 'hole', text: '' }, payText: '', resTitle: ds === 'phl' ? 'Result' : 'Last result', res: F('—', 'unk'), brief: '' }, o);
+    const sealed = (name, msg, brief) => P({ name: name, stamp: 'SEALED', lines: [F(msg, 'seal')], chart: { kind: 'hole', text: 'sealed: you find out by living it' }, res: F('sealed', 'seal'), brief: brief || 'sealed' });
+    const notYet = (name, msg, brief) => P({ name: name, stamp: '', lines: [F(msg, 'unk')], chart: { kind: 'hole', text: 'nothing to show yet' }, res: F('—', 'unk'), brief: brief });
+    const LINES = [['CAP', 164.961, 'CAP 165.0'], ['TAX', 200.428, 'TAX 200.4'], ['1ST', 209.015, '1ST 209.0'], ['2ND', 221.686, '2ND 221.7']];
+    const EV = [[BM[0].t, '17 Jun 2017 · Boston holds the No. 1 pick; Philadelphia wants it'], [DEC(2017, 6, 22), '22 Jun 2017 · Tatum taken at No. 3'], [BM[1].t, '12 May 2025 · Tatum ruptures his right Achilles (Game 4 vs New York)'], [BM[2].t, 'late Jun 2025 · Holiday to Portland; Porziņģis to Atlanta'], [BM[3].t, '13 Aug 2025 · the league approves the sale'], [BM[4].t, '5 Feb 2026 · Simons to Chicago for Vučević'], [BM[5].t, '6 Mar 2026 · Tatum returns vs Dallas']];
+
+    const stReality = () => {
+      const name = 'Boston Celtics · Reality';
+      if (t > NOW + 0.002) return sealed(name, 'Reality has not happened here yet. The live edge is NOW.', 'not yet · SEALED');
+      const lines = [];
+      if (t < DEC(2017, 6, 22)) lines.push(F('[from the Reality feed]', 'unk'));
+      else {
+        lines.push(F(t < BM[1].t ? 'Tatum' : (t < BM[5].t ? 'Tatum · out, Achilles, since 12 May 2025' : 'Tatum · back since 6 Mar 2026'), 'obs', 'NBA.com, public reporting · verify'));
+        if (t >= BM[1].t && t < BM[2].t) lines.push(F('Holiday · Porziņģis', 'obs', 'public reporting · verify'));
+        if (t >= BM[2].t && t < BM[4].t) lines.push(F('Simons (from Portland) · Niang (from Atlanta)', 'obs', 'NBA.com / Hoops Rumors · verify'));
+        if (t >= BM[4].t) lines.push(F('Vučević (from Chicago)', 'obs', 'ESPN / NBC Sports Boston · verify'));
+        if (t >= NOW - 0.03) lines.push(F('Brown · White · Hauser · Pritchard', 'obs', 'contracts approx., public reporting · verify'));
+        lines.push(F('rest [from the Reality feed]', 'unk'));
+      }
+      let moves = ''; EV.forEach((e) => { if (e[0] <= t) moves = 'last on the record · ' + e[1]; });
+      const atNow = t >= NOW - 0.03;
+      const p = { name: name, stamp: t >= NOW - 0.003 ? 'OBSERVED · live' : 'OBSERVED', lines: lines.slice(0, 5), moves: moves, tc: fmtD(t) + (t >= NOW - 0.003 ? ' · NOW' : ''), res: F('[from the Reality feed]', 'unk') };
+      if (atNow) Object.assign(p, { chart: { kind: 'bar', pay: 203.6, look: 'obs', lines: LINES, src: F('', 'obs', 'BOW Economics Live fixture, approx. · verify') }, payText: '≈ $203.6M · $3.2M past the tax line · $18.1M under the second apron (gaps COMPUTED)', brief: 'payroll ≈ $203.6M · OBSERVED' });
+      else if (t >= BM[4].t && t < BM[5].t) Object.assign(p, { chart: { kind: 'hole', text: 'projected tax fell from ≈$39.5M to ≈$17M with the Feb deal · reported, verify' }, brief: 'projected tax ≈ $17M · OBSERVED' });
+      else Object.assign(p, { chart: { kind: 'hole', text: 'no payroll figure is stored for this date [from the Reality feed]' }, brief: 'Tatum' + (t < BM[1].t ? '' : (t < BM[5].t ? ' out (Achilles)' : ' back')) + ' · OBSERVED' });
+      return P(p);
+    };
+    const stWorld = () => {
+      const name = 'Your World · Boston · Year Two';
+      if (t < W0) return notYet(name, 'No World yet. It branches from Reality at Year 0, Jul 2025.', 'not branched yet');
+      if (t > WK9 + 0.002) return sealed(name, 'Past the World’s head. It advances on Mondays, with or without you.', 'sealed · past Week 9');
+      const lines = [F(t < WK6 ? 'Boston as of Year 0, copied from Reality' : 'Week 6: White and a backup big out, Butler in', 'rec', 'your World’s log · an act inside BOW')];
+      if (t >= ACT1) lines.push(F('Year One: funded Business over Basketball Ops', 'rec', 'your World’s log'));
+      lines.push(F('names here are a World event, not NBA history', 'aut', 'BOW Worlds fixture'));
+      const p = { name: name, stamp: 'RECORDED · ' + wkOf(t), tc: fmtD(t) + ' · ' + wkOf(t), lines: lines, rTitle: 'Roster · acts' };
+      if (t >= WK6) Object.assign(p, { chart: { kind: 'bar', pay: 222.8, look: 'rec', lines: [['TAX', 200, 'WORLD TAX 200']] }, payText: '≈ $222.8M vs the World’s $200M tax line · projected tax ≈ $34.2M = 1.5 × $22.8M (COMPUTED)', brief: 'payroll ≈ $222.8M · RECORDED' });
+      else Object.assign(p, { chart: { kind: 'hole', text: 'before Week 6: no payroll in this fixture [verify]' }, brief: 'Year 0 copy of Reality · RECORDED' });
+      p.res = t >= WK9 ? F('Week 9 · lost 112–115 to Denver, at home · 20 recorded possessions', 'rec', 'your World’s log') : F('[World results before Week 9: not in this fixture]', 'unk');
+      return P(p);
+    };
+    const stFork1 = () => {
+      const name = 'Your fork · Keep No. 1';
+      if (t < BM[0].t) return notYet(name, 'Not started. It forks from Reality on 17 Jun 2017.', 'forks from 17 Jun 2017');
+      if (t > HZ1) return sealed(name, 'Past this fork’s horizon (authored: 3 seasons).', 'sealed · past the horizon');
+      const early = t < DEC(2017, 6, 22);
+      return P({ name: name, stamp: 'YOUR BRANCH · diverged 17 Jun 2017', tc: fmtD(t),
+        lines: [F(early ? 'Holds the No. 1 pick: kept' : 'Fultz (No. 1, kept), not Tatum', 'com', 'assumption: Boston keeps the pick and takes Fultz'), F('the rest of the roster: not computed', 'unk')],
+        moves: 'Only the swap is computed. Health, growth and trades after it are not modeled.',
+        chart: { kind: 'hole', text: 'not computed: needs the contracts this branch changes [verify: rookie scale]' },
+        res: F('sealed: a branch plays no games until you live them', 'seal'), brief: early ? 'holds No. 1, kept · COMPUTED' : 'roster: Fultz, not Tatum · COMPUTED' });
+    };
+    const stPub = (nm, a, b, claim, extra) => () => {
+      const name = 'Public fork · ' + nm;
+      if (t < a) return notYet(name, 'Not started: it diverges ' + fmtD(a) + '.', 'diverges ' + fmtD(a));
+      if (t > b) return sealed(name, 'Past the author’s last recorded date [verify].', 'past the author’s last date');
+      return P({ name: name, stamp: 'UNREVIEWED · [author]', lines: [F(claim, 'aut', 'stated by [author] · unreviewed'), F(extra, 'unk')], chart: { kind: 'hole', text: 'no payroll computed for someone else’s branch' }, res: F('[author’s result: not stored here]', 'unk'), brief: 'as authored · unreviewed' });
+    };
+    const stModel = () => {
+      const name = 'Second-apron consequences · BOW model v0.3';
+      if (t < NOW) return notYet(name, 'Runs forward from NOW. It does not look back.', 'runs from NOW');
+      if (t > MH) return sealed(name, 'Past the horizon: an empty lane. The model says nothing here.', 'past horizon · empty');
+      return P({ name: name, stamp: 'MODEL WINDOW · v0.3 · no run stored', lines: [F('assumption: payroll starts at ≈ $203.6M (fixture)', 'aut', 'authored'), F('assumption: no further trades', 'aut', 'authored'), F('output: a range, never a point. This prototype stores no run.', 'unk', 'BOW model v0.3')], chart: { kind: 'range', lo: 203.6, hi: 221.686, lines: [['NOW', 203.6, 'NOW 203.6'], ['2ND', 221.686, '2ND 221.7']] },
+        payText: 'illustrative, authored: bounded by today’s payroll and the second apron. This prototype ran no model.', res: F('what a real run adds: where in that span, and what binds if it crosses', 'unk'), brief: 'range · illustrative, authored' });
+    };
+    // 1787
+    const TOK = [['CT', 'aye'], ['NJ', 'aye'], ['DE', 'aye'], ['MD', 'aye'], ['NC', 'aye'], ['PA', 'no'], ['VA', 'no'], ['SC', 'no'], ['GA', 'no'], ['MA', 'div'], ['NY', 'abs']];
+    const stRec = () => {
+      const name = 'Recorded history · Philadelphia, 1787';
+      if (t < VOTE) return P({ name: name, stamp: 'OBSERVED · recorded', lines: [F('Delegates know only what has been said in the room so far.', 'obs', 'Madison’s notes, published 1840 · verify')], moves: t >= PM[0].t ? '30 Jun 1787 · [verify: what the record shows]' : '', chart: { kind: 'hole', text: 'the vote on equal state votes comes on 16 Jul' }, res: F('not yet voted', 'unk'), brief: 'vote not yet held' });
+      return P({ name: name, stamp: t > SEP17 ? 'recorded history ends 17 Sep 1787' : 'OBSERVED · recorded',
+        lines: [F('Ayes: CT, NJ, DE, MD, NC · Noes: PA, VA, SC, GA', 'obs', 'Madison’s notes, published 1840 · verify'), F('Massachusetts divided: Gerry, Strong aye; King, Gorham no', 'obs'), F('New York absent', 'obs')],
+        chart: { kind: 'tally', tokens: TOK.map((k) => k) }, payText: '5 ayes · 4 noes · MA divided · NY absent', res: F('carried (a tie fails)', 'obs', 'Madison’s notes · verify'), brief: 'carried 5–4 · OBSERVED' });
+    };
+    const stBranch = () => {
+      const name = 'Your branch · Strong votes no (16 Jul)';
+      if (t < VOTE) return notYet(name, 'Diverges on 16 Jul 1787.', 'diverges 16 Jul');
+      if (t > VOTE + 0.06) return sealed(name, 'What the convention does next is not computed.', 'sealed · after the vote');
+      return P({ name: name, stamp: 'YOUR BRANCH · diverged 16 Jul 1787',
+        lines: [F('Strong votes no. Massachusetts: 1 aye, 3 no, so MA votes no.', 'com', 'rule authored here: a state votes with its delegation’s majority'), F('Ayes 5 · Noes 5 · New York absent', 'com')],
+        chart: { kind: 'tally', tokens: TOK.map((k) => (k[0] === 'MA' ? ['MA', 'no*'] : k)) }, payText: '5 ayes · 5 noes · NY absent', res: F('tie: it fails (a tie fails)', 'com', 'rule from the record: a tie fails'), brief: 'tie 5–5 · it fails · COMPUTED' });
+    };
+    const stPubPhl = stPub('Franklin silent (30 Jun)', PM[0].t, DEC(1787, 8, 20), 'Franklin does not speak on 30 Jun.', 'effect on the vote: not computed');
+    const stCut = (c) => () => {
+      const par = byId[c.parent];
+      if (t < c.t) return notYet(c.name, 'Not started: it diverges ' + fmtD(c.t) + '.', 'forks ' + fmtD(c.t));
+      if (t > c.end) return sealed(c.name, 'Past this fork’s horizon (authored).', 'sealed · past the horizon');
+      const pp = par.st();
+      const lines = [F('No acts in this branch yet: it follows ' + cut1(par.name, 34) + '.', 'com', 'a copy, so nothing here is new')].concat(pp.lines.slice(0, 2).map((l) => Object.assign({}, l, { cls: 't-com', word: 'COMPUTED', src: 'copy of the parent' })));
+      return Object.assign({}, pp, { name: c.name, stamp: 'YOUR BRANCH · ' + c.stamp, lines: lines, res: F('sealed: nothing has been played in this branch', 'seal'), brief: 'follows its parent · COMPUTED' });
+    };
+
+    // ---------- tracks ----------
+    const pubOpen = !!s.pubOpen;
+    const cuts = (s.cuts || []).filter((c) => c.ds === ds);
+    let base = [];
+    if (ds === 'bos') {
+      base = [
+        { id: 'reality', kind: 'reality', name: 'Boston Celtics · Reality', h: 66, a: 2017.0, b: NOW, st: stReality, mom: true },
+        { id: 'fork1', kind: 'fork', name: 'Your fork · Keep No. 1', parent: 'reality', h: 46, a: BM[0].t, b: HZ1, st: stFork1, stamp: 'diverged 17 Jun 2017 · by you', horizon: 'horizon: 3 seasons' },
+        { id: 'world', kind: 'world', name: 'Your World · Boston · Year Two', h: 46, a: W0, b: WK9, st: stWorld, stamp: 'branched from Reality at Year 0 · Jul 2025 · World calendar authored', ticks: [ACT1, WK6] },
+        { id: 'pubgrp', kind: 'group', name: 'Public forks', h: 40, a: 0, b: 0, st: () => P({}), ticks: [BM[0].t, BM[2].t] },
+        { id: 'pub1', kind: 'public', name: 'Keep No. 1 — Fultz', parent: 'pubgrp', h: 46, a: BM[0].t, b: DEC(2019, 6, 17), st: stPub('Keep No. 1 — Fultz', BM[0].t, DEC(2019, 6, 17), 'Fultz, not Tatum, as the author states it.', 'the rest: as the author states it'), stamp: '[author] · diverged 17 Jun 2017' },
+        { id: 'pub2', kind: 'public', name: 'Holiday kept', parent: 'pubgrp', h: 46, a: BM[2].t, b: DEC(2026, 3, 1), st: stPub('Holiday kept', BM[2].t, DEC(2026, 3, 1), 'Holiday stays; Simons and the two seconds never arrive, as the author states it.', 'the rest: as the author states it'), stamp: '[author] · diverged Jun 2025' },
+        { id: 'model', kind: 'model', name: 'Second-apron consequences · BOW model v0.3', h: 46, a: NOW, b: MH, st: stModel, stamp: 'v0.3 window · horizon Apr 2027 [verify]' }
+      ];
+    } else if (ds === 'phl') {
+      base = [
+        { id: 'rec', kind: 'reality', name: 'Recorded history · Philadelphia, 1787', h: 66, a: DEC(1787, 5, 25), b: SEP17, st: stRec, mom: true, closed: true },
+        { id: 'br', kind: 'fork', name: 'Your branch · Strong votes no (16 Jul)', parent: 'rec', h: 46, a: VOTE, b: VOTE + 0.06, st: stBranch, stamp: 'diverged 16 Jul 1787 · by you', horizon: 'horizon: the vote' },
+        { id: 'pubf', kind: 'public', name: 'Public fork · Franklin silent (30 Jun)', h: 46, a: PM[0].t, b: DEC(1787, 8, 20), st: stPubPhl, stamp: '[author] · diverged 30 Jun 1787' }
+      ];
+    }
+    const byId = {};
+    base.forEach((b0) => { byId[b0.id] = b0; });
+    cuts.forEach((c) => { byId[c.id] = { id: c.id, kind: 'fork', name: c.name, parent: c.parent, h: 46, a: c.t, b: c.end, st: stCut(c), stamp: c.stamp, horizon: 'horizon: authored', isCut: true }; });
+    const flat = [];
+    const kidsOf = (id) => base.filter((b0) => b0.parent === id).concat(cuts.filter((c) => c.parent === id).map((c) => byId[c.id]));
+    const walk = (tr, ind) => { flat.push(Object.assign({}, tr, { indent: ind })); if (tr.kind === 'group' && !pubOpen) return; kidsOf(tr.id).forEach((k) => walk(k, ind + 1)); };
+    base.filter((b0) => !b0.parent).forEach((b0) => walk(b0, 0));
+    flat.forEach((f, i) => { byId[f.id] = Object.assign(byId[f.id], { indent: f.indent }); });
+    let sel = s.sel && byId[s.sel] ? s.sel : (flat[0] ? flat[0].id : null);
+    const ab = !!s.ab && ds;
+    let bsel = s.bsel && byId[s.bsel] && s.bsel !== sel ? s.bsel : null;
+    if (ab && !bsel) { const c0 = flat.filter((f) => f.kind !== 'group' && f.id !== sel)[0]; bsel = c0 ? c0.id : null; }
+    const mute = s.mute || {};
+    const solo = s.solo || null;
+    const rev = (s.tT == null ? 99 : s.tT) >= 1;
+
+    // ---------- style of a kind ----------
+    const INK = { reality: '#15171A', world: '#0F6E6A', fork: '#C2410C', public: '#6A5F8C', model: '#5F646A', group: '#6A5F8C' };
+    const sty = (k) => k === 'reality' ? { bg: '#15171A', bd: '0', bs: 'none', lc: '#F7F7F6' }
+      : k === 'world' ? { bg: '#0F6E6A', bd: '0', bs: 'inset 0 0 0 2px #0F6E6A, inset 0 0 0 4px #F7F7F6', lc: '#FFFFFF' }
+      : k === 'fork' ? { bg: '#FFF7F0', bd: '2px solid #C2410C', bs: 'none', lc: '#9A3412' }
+      : k === 'public' ? { bg: '#F5F3FA', bd: '1.5px solid #6A5F8C', bs: 'none', lc: '#4E4570' }
+      : { bg: 'repeating-linear-gradient(135deg,#5F646A 0 1.5px,transparent 1.5px 7px)', bd: '1px solid #5F646A', bs: 'none', lc: '#15171A' };
+
+    // ---------- lists ----------
+    const clips = [], marks = [], mlabels = [], heads = [], rowsBg = [];
+    const nominal = flat.reduce((a, f) => a + f.h, 0), kH = Math.min(1.25, 428 / nominal);
+    let y = 431;
+    const lastLab = [-999, -999];
+    const nearM = MOM.filter((m) => Math.abs(m.t - t) < 0.012)[0] || null;
+    flat.forEach((tr, i) => {
+      const y0 = y, h = R(tr.h * kH); y += h;
+      const rop = mute[tr.id] ? 0.22 : (solo && solo !== tr.id ? 0.3 : 1);
+      const op = rev ? rop : 0, tx = rev ? 0 : 60, dl = R(i * 9) / 100;
+      const isSel = tr.id === sel, isB = ab && tr.id === bsel;
+      rowsBg.push({ y: y0, h: h, bg: isSel || isB ? '#E4EAF6' : (i % 2 ? '#F1F2F0' : '#F7F7F6'), edge: INK[tr.kind] });
+      const cy = tr.mom ? y0 + R(h * 0.32) : y0 + (h - 24) / 2;
+      const st0 = sty(tr.kind);
+      const add = (o) => clips.push(Object.assign({ x: 0, y: cy, w: 0, h: 24, bg: 'transparent', bd: '0', bs: 'none', label: '', lc: '#15171A', lbg: 'transparent', lp: 0, ly: 4, op: op, tx: tx, dl: dl }, o));
+      const span = (a, b) => { const x0 = Math.max(LANE.x0, X(a)), x1 = Math.min(LANE.x0 + LANE.w, X(b)); return x1 > x0 ? { x: R(x0), w: R(x1 - x0) } : null; };
+      if (tr.kind === 'group') {
+        (tr.ticks || []).forEach((tk) => { const sp = span(tk, tk + 0.004); if (sp && !pubOpen) add({ x: sp.x, w: 9, y: y0 + 13, h: 14, bg: '#F5F3FA', bd: '1.5px solid #6A5F8C' }); });
+      } else {
+        const sp = span(tr.a, tr.b);
+        const wide = (o, n) => (o && o.w > n);
+        if (sp) {
+          let lab = '';
+          if (tr.kind === 'reality') lab = tr.closed ? '' : '';
+          else if (tr.kind === 'world') lab = wide(sp, 420) ? tr.stamp : (wide(sp, 110) ? 'YOUR WORLD' : '');
+          else if (tr.kind === 'fork' || tr.kind === 'public') lab = wide(sp, 190) ? tr.stamp : (wide(sp, 60) ? '' : '');
+          else if (tr.kind === 'model') lab = wide(sp, 100) ? tr.stamp : '';
+          add({ x: sp.x, w: sp.w, bg: st0.bg, bd: st0.bd, bs: st0.bs, label: lab, lc: st0.lc, lbg: tr.kind === 'model' ? '#F7F7F6' : 'transparent', lp: tr.kind === 'model' ? 5 : 0 });
+        }
+        (tr.ticks || []).forEach((tk) => { const sp2 = span(tk, tk + 0.003); if (sp2) add({ x: sp2.x, w: 2, y: cy + 17, h: 7, bg: '#F7F7F6' }); });
+        if (tr.kind === 'model' && sp) { const c2 = span(tr.b, tr.b + 0.004); if (c2) { add({ x: c2.x, w: 3, y: cy - 4, h: 32, bd: '0', bs: 'none', bg: 'repeating-linear-gradient(180deg,#5F646A 0 5px,transparent 5px 8px)' }); mlabels.push({ x: c2.x - 46, y: y0 + 2, t: 'HORIZON', op: op, dl: dl }); } }
+        if (tr.kind === 'fork' || tr.kind === 'public') { const c2 = span(tr.b, tr.b + 0.003); if (c2) add({ x: c2.x, w: 3, y: cy - 3, h: 30, bg: INK[tr.kind] }); }
+        if (tr.kind === 'reality' && !tr.closed) { const sn = span(NOW - 0.004, NOW + 0.003); if (sn) add({ x: sn.x, w: 3, y: cy - 4, h: 32, bg: '#15171A' }); }
+        if (tr.kind === 'reality' && tr.closed) { const c2 = span(tr.b, tr.b + 0.004); if (c2) add({ x: c2.x, w: 3, y: cy - 4, h: 32, bg: '#15171A' }); }
+        if (tr.kind !== 'group' && !(tr.kind === 'reality' && tr.closed)) {
+          const sealA = tr.b + 0.004, sealB = v1;
+          const sq = span(sealA, sealB);
+          if (sq && sq.w > 6) add({ x: sq.x, w: sq.w, bd: '2px dashed ' + (tr.kind === 'model' ? '#6B7178' : INK[tr.kind] === '#15171A' ? '#6B7178' : INK[tr.kind]), label: sq.w > 180 ? (tr.kind === 'model' ? 'past the horizon · empty' : tr.kind === 'reality' ? 'not yet · sealed' : tr.kind === 'world' ? 'sealed · advances Mondays' : tr.kind === 'public' ? 'past the author’s last date [verify]' : 'sealed · past the horizon') : '', lc: '#4D5259', ly: 4, bg: 'transparent' });
+        }
+      }
+      if (tr.mom) {
+        MOM.forEach((m, j) => {
+          const mx = X(m.t); if (mx < LANE.x0 - 4 || mx > LANE.x0 + LANE.w + 4) return;
+          let lvl = j % 2; if (mx - lastLab[lvl] < 100) lvl = 1 - lvl;
+          const show = mx - lastLab[lvl] >= 100 && mx + 96 < 1440;
+          if (show) { lastLab[lvl] = mx; mlabels.push({ x: R(mx) + 8, y: lvl ? y0 + h - 20 : y0 + 4, t: m.name, op: op, dl: dl }); }
+          marks.push({ x: R(mx) - 18, y: cy - 6, op: op, dl: dl, aria: 'Jump the playhead to ' + m.date + ': ' + m.name, pick: () => this.pushNav({ t: m.t }) });
+        });
+      }
+      const p = tr.st();
+      const nx = 24 + tr.indent * 16;
+      heads.push({ y: y0, h: h, op: op, tx: tx, dl: dl, cx: 8 + tr.indent * 16, cy: R((h - 24) / 2), ch: 24, cbg: st0.bg, cbs: st0.bs, cbd: st0.bd, chip: '',
+        nx: nx + 8, nw: 254 - nx - 8, sbg: isSel ? '#DDE6F7' : 'transparent', name: tr.kind === 'group' ? 'Public forks ' + (pubOpen ? '▾' : '▸') : tr.name, brief: tr.kind === 'group' ? (pubOpen ? 'forks by others · [author]' : '2 by others · click to open') : p.brief,
+        ab: isSel && ab ? 'A' : (isB ? 'B' : ''), abD: (isSel && ab) || isB ? 'inline-block' : 'none', deco: mute[tr.id] ? 'line-through' : 'none', pressed: isSel ? 'true' : 'false',
+        aria: tr.kind === 'group' ? 'Expand or collapse public forks' : 'Select track ' + tr.name,
+        soloP: solo === tr.id ? 'true' : 'false', muteP: mute[tr.id] ? 'true' : 'false', smD: tr.kind === 'group' ? 'none' : 'block', sx: 254, mx: 292, sy: R((h - 36) / 2),
+        pick: () => {
+          const st = this.state || {};
+          if (tr.kind === 'group') return this.setState({ pubOpen: !st.pubOpen });
+          if (ab) { if (tr.id === sel) return this.pushNav({ sel: bsel, bsel: sel }); return this.pushNav({ bsel: tr.id }); }
+          return this.pushNav({ sel: tr.id });
+        },
+        solo: () => this.setState({ solo: solo === tr.id ? null : tr.id, msg: '' }),
+        mute: () => { const m = Object.assign({}, (this.state || {}).mute); if (m[tr.id]) delete m[tr.id]; else m[tr.id] = true; this.setState({ mute: m, msg: '' }); } });
+    });
+    
+    // ---------- monitor ----------
+    const barPane = (p, compact) => {
+      const cw = compact ? 330 : 520, ch = p.chart;
+      const xv = (v) => R((v - 160) / 70 * cw);
+      const o = { cw: cw, isBar: false, isRange: false, isTally: false, isHole: false, chH: compact ? 60 : 72, barH: compact ? 14 : 22, blines: [], tokens: [], tkw: compact ? 40 : 46, holeText: '', payD: p.payText ? 'block' : 'none' };
+      if (ch.kind === 'bar' || ch.kind === 'range') {
+        o.blines = ch.lines.map((l) => ({ x: xv(l[1]), y: 14, h: 12 + o.barH + 8, lx: xv(l[1]) + 3, ty: (ch.lines.indexOf(l) % 2) * 13, t: compact ? l[0] : l[2] }));
+        if (ch.kind === 'bar') { o.isBar = true; o.barW = xv(ch.pay); o.barBg = ch.look === 'rec' ? '#0F6E6A' : '#15171A'; o.barBs = ch.look === 'rec' ? 'inset 0 0 0 2px #0F6E6A, inset 0 0 0 4px #F7F7F6' : 'none'; }
+        else { o.isRange = true; o.rx = xv(ch.lo); o.rw = xv(ch.hi) - xv(ch.lo); }
+      } else if (ch.kind === 'tally') {
+        o.isTally = true;
+        o.tokens = ch.tokens.map((k) => {
+          const sname = k[0], kk = k[1];
+          if (kk === 'aye') return { s: sname, cls: '', c: '#F7F7F6', bg: '#15171A' };
+          if (kk === 'no') return { s: sname, cls: 't-aut', c: '#15171A', bg: 'transparent' };
+          if (kk === 'no*') return { s: sname, cls: '', c: '#15171A', bg: '#9AA0A6' };
+          if (kk === 'div') return { s: sname, cls: '', c: '#15171A', bg: 'transparent', };
+          return { s: sname, cls: 't-unk', c: '#4D5259', bg: 'transparent' };
+        });
+      } else { o.isHole = true; o.holeText = ch.text; }
+      return o;
+    };
+    const capOf = (f, compact) => Object.assign({}, f, { cap: compact ? f.word : f.word + ' · ' + f.src });
+    const view = (p, x, w, compact) => Object.assign({ x: x, w: w, br: compact && x === 0 ? '1px solid #B5BAB6' : '0', hh: compact ? 32 : 46, tcs: compact ? 20 : 30, nms: compact ? 17 : 26, cols: compact ? '270px 1fr' : '450px 520px 1fr', gap: compact ? 18 : 30, fs: compact ? 13 : 16, rc: compact ? '1 / 3' : '3', rmt: compact ? 4 : 0, movesD: compact ? 'none' : 'block' }, p, { name: compact ? cut1(p.name, 44) : p.name, rTitle: p.rTitle, pTitle: p.pTitle, resTitle: p.resTitle, lines: (compact ? p.lines.slice(0, 3) : p.lines).map((l) => capOf(l, compact)), res: capOf(p.res, compact) }, barPane(p, compact));
+    let panes = [], diff = [];
+    const selT = sel ? byId[sel] : null, bT = ab && bsel ? byId[bsel] : null;
+    if (selT) {
+      const pa = selT.st();
+      if (ab && bT) {
+        const pb = bT.st();
+        panes = [view(pa, 0, 699, true), view(pb, 699, 699, true)];
+        const tx = (p) => p.lines.map((l) => l.t).join('; ');
+        const same = (a, b) => a === b;
+        const rA = tx(pa), rB = tx(pb);
+        diff.push({ k: 'roster', v: same(rA, rB) ? 'same' : cut1(rA, 30) + ' → ' + cut1(rB, 34), c: same(rA, rB) ? '#4D5259' : '#B4340A' });
+        if (pa.chart.kind === 'bar' && pb.chart.kind === 'bar') { const d = pb.chart.pay - pa.chart.pay; diff.push({ k: 'payroll', v: (d >= 0 ? '+' : '−') + '$' + Math.abs(d).toFixed(1) + 'M, B over A (COMPUTED; different tax lines)', c: Math.abs(d) < 0.05 ? '#4D5259' : '#B4340A' }); }
+        else diff.push({ k: 'payroll', v: pa.chart.kind === 'tally' && pb.chart.kind === 'tally' ? (pa.payText === pb.payText ? 'same' : pa.payText + ' → ' + pb.payText) : 'no figure for one or both: not compared', c: pa.chart.kind === 'tally' && pa.payText !== pb.payText ? '#B4340A' : '#4D5259' });
+        diff.push({ k: 'last result', v: same(pa.res.t, pb.res.t) ? 'same' : cut1(pa.res.t, 30) + ' → ' + cut1(pb.res.t, 34), c: same(pa.res.t, pb.res.t) ? '#4D5259' : '#B4340A' });
+      } else panes = [view(pa, 0, 1398, false)];
+    }
+    const KEYS = [['t-obs', 'SOLID', 'observed'], ['t-rec', 'DOUBLE RULE', 'recorded in BOW'], ['t-aut', 'OUTLINE', 'authored; a branch is a frame'], ['t-com', 'TONED', 'computed'], ['t-mod', 'HATCH', 'modeled'], ['t-gen', 'DOTS', 'generated'], ['t-unk', 'DASHED', 'unknown or sealed']];
+    const mon = { empty: !ds, panes: panes, ab: !!(ab && bT), dtc: fmtD(t), diff: diff, legend: !!(ds && how && !(ab && bT)), keys: KEYS.map((k) => ({ cls: k[0], w: k[1], d: k[2] })), quiet: !!(ds && !how && !(ab && bT)) };
+
+    // ---------- ruler ----------
+    const ruler = [];
+    const grid = [];
+    const tickAt = (tt, hgt, label) => { const x = X(tt); if (x < LANE.x0 || x > LANE.x0 + LANE.w) return; ruler.push({ x: R(x), y: 426 - hgt, h: hgt, lx: R(x) + 4, t: label }); if (hgt >= 14) grid.push({ x: R(x) }); };
+    if (ds === 'bos' && !zoomNear) for (let yy = 2017; yy <= 2027; yy++) tickAt(yy, 14, String(yy));
+    else if (ds === 'bos') for (let yy = 2025; yy <= 2027; yy++) for (let mm = 1; mm <= 12; mm++) { const tt = DEC(yy, mm, 1); if (tt < 2025.25 || tt > 2027.5) continue; const maj = (mm - 1) % 3 === 0; tickAt(tt, maj ? 14 : 7, maj ? MON[mm - 1].toUpperCase() + (mm === 1 || tt < 2025.3 ? ' ' + yy : '') : ''); }
+    else if (ds === 'phl') { for (let mm = 6; mm <= 9; mm++) tickAt(DEC(1787, mm, 1), 14, MON[mm - 1].toUpperCase() + ' 1787'); for (let dd = 0; dd < 130; dd += 7) { const tt = DEC(1787, 5, 20) + dd / 365; if (dd % 7 === 0) tickAt(tt, 6, ''); } }
+    const nowD = ds === 'bos' && X(NOW) <= LANE.x0 + LANE.w;
+
+    // ---------- toolbar handlers ----------
+    const stops = MOM.map((m) => m.t).concat(ds === 'bos' ? [NOW] : []);
+    const jump = (dir) => () => { if (!ds) return; const tt = dir < 0 ? stops.filter((z) => z < t - 0.0035).pop() : stops.filter((z) => z > t + 0.0035)[0]; if (tt == null) return this.setState({ msg: dir < 0 ? 'This is the first Moment.' : 'No later Moment.' }); this.setState({ t: tt, msg: '' }); };
+    const say = (m) => this.setState({ msg: m });
+    const doCut = () => {
+      if (!ds || !selT) return;
+      const st = this.state || {};
+      const all = (st.cuts || []).filter((c) => c.ds === ds);
+      if (selT.kind === 'model') return say('Refused · rule: a model run is read-only. Change its assumptions and re-run it (metered); you cannot fork it.');
+      if (selT.kind === 'group') return say('Select one public fork first.');
+      if (all.length >= 2) return say('Prototype limit (authored): two new forks. Mute or solo tracks instead.');
+      if (t < selT.a) return say('Refused · rule: this track has not started at the playhead. Move it to the right.');
+      if (t > selT.b) return say('Refused · rule: this part of the track is sealed. There is no record here to cut.');
+      let at = t, label;
+      if (selT.kind === 'reality') {
+        const m = MOM.filter((z) => Math.abs(z.t - t) <= 0.013)[0];
+        if (!m) return say('Refused · Reality rule (authored): a fork begins at a recorded Moment. Click a diamond or use Moment buttons; Moments snap within a week.');
+        at = m.t; label = m.name;
+      } else if (selT.id === 'world') label = wkOf(t).replace(' · ', ' ');
+      else label = 'of ' + cut1(selT.name.replace('Your fork · ', '').replace('Public fork · ', ''), 22);
+      const n = all.length + 1;
+      const rec = { id: 'cut' + n, ds: ds, parent: selT.id, t: at, end: Math.min(v1, at + (ds === 'phl' ? 0.06 : 1.0)), name: 'Your fork · ' + label, stamp: 'diverged ' + fmtD(at) + ' · by you' };
+      this.pushNav({ cuts: (st.cuts || []).concat([rec]), sel: rec.id, msg: 'Cut. New track under ' + cut1(selT.name, 30) + ', ' + rec.stamp + '.' });
+    };
+    const load = (id, q) => this.pushNav({ ds: id, q: q, t: id === 'phl' ? VOTE : NOW, sel: id === 'phl' ? 'rec' : 'reality', bsel: null, ab: false, zoom: 'full', solo: null, mute: {}, pubOpen: false, tT: 0 });
+    const place = () => {
+      const q = (this.state || {}).q || '';
+      const tq = q.toLowerCase();
+      if (/boston|celtics|basketball/.test(tq)) return load('bos', q);
+      if (/philadelphia|1787|senate|convention/.test(tq)) return load('phl', q);
+      this.setState({ msg: q.trim() ? 'No tracks for that. Prototype rule (authored): two systems are built. Try a chip.' : 'Type a system, or pick a chip.' });
+    };
+    const nav = s.nav || [];
+    const statusTxt = s.msg ? s.msg : (nearM ? 'Moment · ' + nearM.date + ': ' + nearM.q : (ds ? 'Drag the blue playhead on the ruler. Diamonds are Moments: click one to jump.' : ''));
+    const zN = (z) => () => { if (ds === 'bos' && (this.state || {}).zoom !== z) this.pushNav({ zoom: z }); };
+
+    return {
+      q: s.q || '', onQ: (e) => this.setState({ q: e.target.value }), onKey: (e) => { if (e.key === 'Enter') place(); }, place: place,
+      chips: [['Boston basketball', 'bos'], ['Philadelphia 1787', 'phl']].map((c) => ({ t: c[0], pressed: ds === c[1] ? 'true' : 'false', pick: () => load(c[1], c[0]) })),
+      howP: how ? 'true' : 'false', toggleHow: () => this.setState({ how: !how }),
+      mon: mon, undoOff: nav.length ? '' : 'off', undoN: nav.length ? '(' + nav.length + ')' : '',
+      undo: () => { const st = this.state || {}; const nv = (st.nav || []).slice(); if (!nv.length) return; const snap = nv.pop(); this.setState(Object.assign({ nav: nv, msg: '' }, snap, snap.ds !== st.ds ? { tT: 0 } : {})); },
+      prevM: jump(-1), nextM: jump(1), tcNow: ds ? fmtD(t) : '----------',
+      cut: doCut, cutOff: ds && selT && selT.kind !== 'model' ? '' : 'off', cutTarget: ds && selT ? 'on ' + cut1(selT.name, 38) + ' · ' + fmtD(t) : '',
+      abP: ab ? 'true' : 'false', abOff: ds ? '' : 'off',
+      toggleAB: () => { if (!ds) return; if (!ab) this.pushNav({ ab: true, bsel: bsel }); else this.pushNav({ ab: false }); },
+      zoomD: ds === 'bos' ? 'inline-block' : 'none', zFullP: zoomNear ? 'false' : 'true', zNearP: zoomNear ? 'true' : 'false', zoomFull: zN('full'), zoomNear: zN('near'),
+      status: statusTxt, ruler: ruler, grid: grid, rowsBg: rowsBg, noTracks: !ds, hasNow: nowD, now: { x: R(X(NOW)), lx: R(X(NOW)) + 4 },
+      clips: clips, mlabels: mlabels, marks: marks, heads: heads,
+      ph: { x: R(X(t)) - 1, op: ds ? 1 : 0 },
+      rng: { min: v0, max: v1, step: 0.0027, val: t, left: LANE.x0 - 7, w: LANE.w + 14, on: (e) => this.setState({ t: parseFloat(e.target.value), msg: '' }) }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BOW Frontier — The hardest problems</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F0E8;color:#1B1A17;font-family:'IBM Plex Sans',sans-serif}
+a{color:#A63A18;text-underline-offset:3px}a:hover{color:#6E250E}
+.mono{font-family:'IBM Plex Mono',monospace}
+.serif{font-family:'Newsreader',serif}
+.k{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:#57534B;text-transform:uppercase}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1500px; box-sizing: border-box; padding: 60px 88px 64px; display: flex; flex-direction: column; gap: 34px; background: #F3F0E8; color: #1B1A17">
+  <header style="display: flex; flex-direction: column; gap: 16px">
+    <div class="k" style="display: flex; justify-content: space-between; border-bottom: 1px solid #1B1A17; padding-bottom: 10px"><span>01 · The hardest interaction problems</span><span>Active hypothesis · ranked by how much the medium depends on them</span></div>
+    <h1 class="serif" style="margin: 0; font-weight: 400; font-size: 60px; line-height: 1.02; max-width: 1150px">Eight problems stand between “a clever simulation” and “a medium.”</h1>
+  </header>
+
+  <section style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 56px">
+    <sc-for list="{{problems}}" as="p" hint-placeholder-count="8">
+      <article style="display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 16px; padding-top: 16px; border-top: 2px solid #1B1A17">
+        <span class="serif" style="font-size: 48px; line-height: .9">{{p.n}}</span>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <h2 style="margin: 0; font-size: 20px; font-weight: 600; letter-spacing: .01em">{{p.name}}</h2>
+          <p style="margin: 0; font-size: 15px; line-height: 1.5">{{p.hard}}</p>
+          <p style="margin: 0; font-size: 14px; line-height: 1.45; color: #2E2B26"><span class="k" style="font-size: 11px">Tested in</span> · {{p.tested}}</p>
+          <p style="margin: 0; font-size: 14px; line-height: 1.45; color: #2E2B26"><span class="k" style="font-size: 11px; color: #A63A18">Collapses into</span> · <span style="text-decoration: line-through; text-decoration-color: #A63A18">{{p.collapse}}</span></p>
+        </div>
+      </article>
+    </sc-for>
+  </section>
+
+  <section style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 56px; border-top: 1px solid #1B1A17; padding-top: 24px">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 class="serif" style="margin: 0; font-weight: 400; font-size: 34px; line-height: 1.1">The one test every board must pass</h2>
+      <p class="serif" style="margin: 0; font-size: 24px; line-height: 1.35">Could this exist almost unchanged as a website, a dashboard, an LMS page or a game menu? If yes, it hasn’t found the medium yet.</p>
+      <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #2E2B26">The inverse matters as much: strangeness is not proof. An interaction earns its place through comprehension, usefulness, emotional pull or truth — or it goes.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <span class="k">Where each family collapses if we get lazy</span>
+      <div style="display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 7px 18px; font-size: 15px; line-height: 1.35">
+        <strong>Browser</strong><span>a portal of rounded cards: History · Timeline · People · Quiz</span>
+        <strong>Native Textbook</strong><span>an e-book with a simulation beside the text and a quiz after</span>
+        <strong>Reality / fork</strong><span>a GM game, plus a chatbot paragraph predicting the future</span>
+        <strong>Lens</strong><span>a knowledge graph of circles and arrows</span>
+        <strong>Foundry</strong><span>a worse game engine, or an LLM that fills the gaps quietly</span>
+        <strong>Enterprise</strong><span>a dark dashboard of KPI tiles with “Ask AI” on the right</span>
+        <strong>Agent</strong><span>a chatbot with a job title</span>
+        <strong>Network</strong><span>a node-link diagram of logos</span>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = [
+      ['Truth you can see at a glance',
+       'Seven kinds of claim share one surface. Label everything and the world turns into a legal document; label nothing and a model passes for a fact. The grammar has to be silent until asked, and unmistakable when it matters.',
+       'every board — the seven textures; Chemistry, where a value changes status as it settles',
+       'disclaimer walls and “AI-generated” footers'],
+      ['Entering',
+       'A page just loads. A system needs a where, a when and a who. Ask too much at the door and nobody walks in; ask too little and the arrival feels arbitrary.',
+       'Browser A–D; the Fork’s door at 19 June 2017',
+       'a portal of cards, or a game’s “New game” menu'],
+      ['Forking without lying',
+       'A branch needs assumptions about everyone else. Computing them is dishonest; ignoring them is too. And a branch must stay visibly not-history for years.',
+       'P5 Fork; APUSH Room and Notes; Lens and Enterprise labs',
+       'duplicate file; a chatbot that predicts'],
+      ['One state, many drawings',
+       'Switching representation without losing your place — and letting one change land in every drawing at once, so the learner sees they are one thing.',
+       'P3 Chemistry; Biology; Enterprise modes',
+       'tabs: Lab | Molecules | Equation | Graph'],
+      ['Why, without a flowchart',
+       'Causes live at different scales and each has its own natural drawing. Show the whole chain and you get a node graph; show one answer and you hide the rest. In a World, causation is recorded; in reality it is interpretation.',
+       'P6 Lens light table; Enterprise lens; APUSH “why so close?”',
+       'a mind map'],
+      ['Role as a real constraint',
+       'Who you are should change what you know, what you can do and what you answer for — for people and for AI alike. Some positions should be studied through sources, not played.',
+       'Browser D (the Seat); P9 Agent warrant; “in the seat, not the person”',
+       'an avatar picker; a chatbot persona'],
+      ['Scale without getting lost',
+       'League to contract clause, organism to molecule — keeping orientation, and letting one change travel through the levels.',
+       'Browser C (the Focus); P4 Biology spine',
+       'breadcrumbs, or zoom-as-spectacle'],
+      ['Authoring without inventing',
+       'Turning intent and documents into an executable system while exposing what is missing, conflicting or unbounded — and never letting “the machine proposed it” pass for “the author decided it.”',
+       'P7 Foundry proof',
+       'a game engine; a no-code builder; silent gap-filling']
+    ];
+    return { problems: P.map((p, i) => ({ n: String(i + 1), name: p[0], hard: p[1], tested: p[2], collapse: p[3] })) };
+  }
+}
+</script>
+</body>
+</html>

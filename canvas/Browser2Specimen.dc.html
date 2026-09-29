@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Specimen Shelf</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;family=Fragment+Mono&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F7F7F5;color:#1B1B1A;font-family:'Hanken Grotesk',sans-serif}
+.mono{font-family:'Fragment Mono',monospace}
+.btn{font-family:'Hanken Grotesk',sans-serif;font-weight:700;font-size:15px;min-height:44px;padding:0 16px;border:1.5px solid #1B1B1A;border-radius:3px;background:#FFFFFF;color:#1B1B1A;cursor:pointer;transition:background .2s,color .2s;text-align:left}
+.btn:hover:not(:disabled){background:#1B1B1A;color:#FFFFFF}
+.btn:disabled{opacity:.5;cursor:not-allowed;border-style:dashed}
+.btn:focus-visible,.hit:focus-visible{outline:3px solid #0B5C6B;outline-offset:3px}
+.btnp{background:#1B1B1A;color:#FFFFFF}
+.btnp:hover:not(:disabled){background:#3B3B39}
+.arw{width:46px;min-height:46px;padding:0;text-align:center;font-size:18px}
+.obj{position:absolute;left:0;top:0;width:260px;height:260px;perspective:1400px;transition:transform .95s cubic-bezier(.3,.7,.2,1),opacity .55s ease}
+.hit{position:absolute;left:0;top:0;width:260px;height:260px;padding:0;margin:0;border:0;background:transparent;cursor:pointer;z-index:9}
+.wrap{position:absolute;left:0;top:0;width:260px;height:260px;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,.7,.2,1)}
+.cube{position:absolute;left:0;top:0;width:260px;height:260px;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.face{position:absolute;left:0;top:0;width:260px;height:260px;box-sizing:border-box;transition:transform .8s cubic-bezier(.3,.7,.2,1),clip-path .8s cubic-bezier(.3,.7,.2,1),opacity .5s ease}
+.grain{animation:drift 26s linear infinite}
+@keyframes drift{from{background-position:0 0,0 0,0 0}to{background-position:60px 30px,-40px 48px,0 0}}
+.rise{position:absolute;left:0;top:0;width:0;height:0;animation:rise .9s cubic-bezier(.3,.7,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+.fc{position:absolute;left:0;top:0;right:0;bottom:0;box-sizing:border-box;overflow:hidden;border:0 solid transparent;background-clip:padding-box}
+.fh{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid currentColor;padding-bottom:6px;margin-bottom:9px}
+.lab{font-family:'Fragment Mono',monospace;font-size:12px;letter-spacing:.14em}
+.ln{font-size:12.5px;line-height:1.3;margin-bottom:6px}
+.ln.aut{border:1px solid currentColor;padding:4px 7px}
+.ln.unk{border:1px dashed currentColor;padding:4px 7px}
+.ln.com{background:#B4B2A9;color:#141414;padding:3px 7px;display:inline-block}
+.td{display:inline-block;width:10px;height:10px;box-sizing:border-box;border-radius:5px;margin-right:8px;flex:none;margin-top:3px}
+.td.door{background:currentColor}
+.td.now{border:2px solid currentColor}
+.td.rec{background:currentColor;box-shadow:inset 0 0 0 2px transparent,0 0 0 2px transparent}
+.tr{display:flex;align-items:flex-start;font-size:12px;line-height:1.25;margin-bottom:6px}
+.tr.seal{border:1px dashed currentColor;padding:4px 6px}
+.sw{display:inline-block;width:14px;height:14px;box-sizing:border-box;flex:none;vertical-align:-2px}
+.t-obs{background:#1B1B1A}
+.t-rec{background:#1B1B1A;box-shadow:inset 0 0 0 2px #1B1B1A,inset 0 0 0 4px #FFFFFF}
+.t-aut{border:2px solid #1B1B1A}
+.t-mod{background:repeating-linear-gradient(135deg,#1B1B1A 0 1.5px,transparent 1.5px 4.5px);border:1px solid #1B1B1A}
+.t-gen{background:radial-gradient(circle,#1B1B1A 1.1px,transparent 1.4px) 0 0/4.5px 4.5px;border:1px dotted #1B1B1A}
+.t-fork{background:#0B5C6B;box-shadow:inset 0 0 0 2px #0B5C6B,inset 0 0 0 4px #FFFFFF}
+.t-stone{background:#A9A8A1}
+.plate{position:absolute;text-align:center;transition:left .95s cubic-bezier(.3,.7,.2,1),top .95s cubic-bezier(.3,.7,.2,1),opacity .5s ease,width .95s}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: linear-gradient(180deg, #FBFBF9 0, #F7F7F5 58%, #EFEFED 74%, #ECECEA 100%); color: #1B1B1A; font-family: 'Hanken Grotesk', sans-serif">
+
+<header style="position: absolute; left: 0; top: 0; width: 1440px; height: 72px; border-bottom: 1px solid #DCDCD7">
+<div style="position: absolute; left: 32px; top: 14px"><div style="font-size: 28px; font-weight: 800; line-height: 1; letter-spacing: .02em">BOW</div><div class="mono" style="font-size: 11px; letter-spacing: .08em; margin-top: 6px; color: #55554F">THE SPECIMEN SHELF</div></div>
+<form onSubmit="{{onSubmit}}" style="position: absolute; left: 250px; top: 12px; width: 580px; height: 48px; display: flex; margin: 0">
+<input type="text" value="{{q}}" onChange="{{onQ}}" aria-label="Search for systems" placeholder="a team, an organ, a market" style="flex: 1; min-width: 0; height: 48px; box-sizing: border-box; border: 1.5px solid #1B1B1A; border-right: 0; border-radius: 3px 0 0 3px; background: #FFFFFF; color: #1B1B1A; padding: 0 16px; font-family: 'Hanken Grotesk', sans-serif; font-size: 21px; font-weight: 500">
+<button type="submit" class="btn btnp" style="height: 48px; min-width: 92px; border-radius: 0 3px 3px 0; text-align: center">Search</button>
+</form>
+<div style="position: absolute; left: 848px; top: 18px; display: flex; gap: 8px">
+<sc-for list="{{quick}}" as="qk" hint-placeholder-count="2">
+<button type="button" class="btn" onClick="{{qk.go}}" aria-pressed="{{qk.pressed}}" style="min-height: 36px; height: 36px; padding: 0 12px; font-size: 14px; background: {{qk.bg}}; color: {{qk.fg}}">{{qk.label}}</button>
+</sc-for>
+</div>
+<button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="position: absolute; right: 32px; top: 18px; min-height: 36px; height: 36px; padding: 0 12px; font-size: 14px; background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+</header>
+
+<sc-if value="{{hasShelf}}" hint-placeholder-val="{{true}}">
+<div>
+<div style="position: absolute; left: 24px; top: 640px; width: 1392px; height: 30px; background: linear-gradient(180deg, #FFFFFF 0, #FFFFFF 8%, #EDEDEA 9%, #E4E4E0 100%); border-radius: 2px; box-shadow: 0 16px 24px rgba(20,20,20,.10), 0 2px 3px rgba(20,20,20,.12)"></div>
+<sc-if value="{{noStage}}" hint-placeholder-val="{{true}}">
+<div class="mono" style="position: absolute; left: 32px; top: 90px; width: 900px; font-size: 12.5px; line-height: 1.5; color: #55554F">{{shelfHint}}</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{noMatch}}" hint-placeholder-val="{{false}}">
+<div role="status" style="position: absolute; left: 32px; top: 300px; width: 900px"><div style="font-size: 44px; font-weight: 800; line-height: 1.05">The shelf is empty.</div><div style="font-size: 18px; margin-top: 12px; color: #55554F; line-height: 1.4">This prototype knows two queries. Try “Boston basketball” or “cellular respiration”.</div></div>
+</sc-if>
+
+<sc-if value="{{shelfOn}}" hint-placeholder-val="{{true}}">
+<div>
+<sc-for list="{{objs}}" as="o" hint-placeholder-count="8">
+<div style="position: absolute; left: {{o.shx}}px; top: {{o.shy}}px; width: {{o.shw}}px; height: 30px; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(20,20,20,.34), rgba(20,20,20,0) 68%); opacity: {{o.shop}}; transition: left .95s cubic-bezier(.3,.7,.2,1), top .95s cubic-bezier(.3,.7,.2,1), width .95s cubic-bezier(.3,.7,.2,1), opacity .5s"></div>
+<div class="rise" style="animation-delay: {{o.delay}}ms">
+<div class="obj" style="transform: translate({{o.x}}px, {{o.y}}px) scale({{o.s}}); opacity: {{o.op}}; visibility: {{o.vis}}; z-index: {{o.z}}">
+<button type="button" class="hit" aria-label="{{o.aria}}" onClick="{{o.pick}}" style="pointer-events: {{o.pe}}"></button>
+<sc-for list="{{o.halves}}" as="hv" hint-placeholder-count="2">
+<div class="wrap" style="transform: translateX({{hv.tx}}px); visibility: {{hv.vis}}">
+<div class="cube" style="transform: {{o.cubeTf}}">
+<sc-for list="{{hv.faces}}" as="f" hint-placeholder-count="7">
+<div class="face {{f.cls}}" style="transform: {{f.tr}}; clip-path: {{f.clip}}; background-color: {{f.bgc}}; background-image: {{f.bgi}}; background-size: {{f.bgs}}; box-shadow: {{f.bs}}; border: {{f.bd}}; border-image: {{f.bi}}; opacity: {{f.op}}; backface-visibility: {{f.bv}}">
+<sc-if value="{{f.band}}" hint-placeholder-val="{{false}}">
+<div style="position: absolute; left: 0; top: 104px; width: 260px; height: 52px; background: #EDE6D3; box-shadow: inset 0 0 0 1px #1B1B1A; display: flex; align-items: center; padding-left: 12px; box-sizing: border-box"><span class="mono" style="font-size: 12px; letter-spacing: .12em; color: #1B1B1A">SEALED · HINDSIGHT</span></div>
+<sc-if value="{{f.wax}}" hint-placeholder-val="{{false}}"><div style="position: absolute; left: 196px; top: 96px; width: 52px; height: 52px; border-radius: 26px; background: #7A1F1F; box-shadow: 0 0 0 3px #5C1414, inset 0 0 0 6px #8E2A2A"></div></sc-if>
+</sc-if>
+<sc-if value="{{f.has}}" hint-placeholder-val="{{false}}">
+<div class="fc" style="color: {{f.fg}}; padding: {{f.pad}}px; background-color: {{f.fcbg}}; border-width: {{f.fbw}}px">
+<div class="fh"><span class="lab">{{f.label}}</span><span class="lab">{{f.mark}}</span></div>
+<sc-if value="{{f.isPlan}}" hint-placeholder-val="{{false}}">
+<svg width="220" height="134" viewBox="0 0 224 134" style="display: block" aria-hidden="true">
+<g fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="8" width="150" height="84"></rect><line x1="79" y1="8" x2="79" y2="92"></line><circle cx="79" cy="50" r="14"></circle><rect x="4" y="32" width="32" height="36"></rect><rect x="122" y="32" width="32" height="36"></rect><rect x="164" y="8" width="56" height="84"></rect><line x1="164" y1="36" x2="220" y2="36"></line><line x1="164" y1="64" x2="220" y2="64"></line></g>
+<g fill="currentColor" font-family="Fragment Mono, monospace" font-size="11"><text x="4" y="110">arena floor</text><text x="164" y="110">front office</text><text x="4" y="126">practice space: [not drawn]</text></g>
+</svg>
+<div style="font-size: 12px; line-height: 1.3; margin-top: 4px">A plan, authored and illustrative.</div>
+</sc-if>
+<sc-if value="{{f.isMoney}}" hint-placeholder-val="{{false}}">
+<div style="position: relative; height: 96px">
+<sc-for list="{{f.money.lines}}" as="ml" hint-placeholder-count="4">
+<div style="position: absolute; left: {{ml.x}}px; top: {{ml.y0}}px; width: 0; height: {{ml.h}}px; border-left: 1.5px solid currentColor"></div>
+<div style="position: absolute; left: {{ml.bx}}px; top: {{ml.by}}px; width: 7px; height: 7px; box-sizing: border-box; border: 1.5px solid currentColor"></div>
+<span class="mono" style="position: absolute; left: {{ml.lx}}px; top: {{ml.ly}}px; font-size: 11px; white-space: nowrap; transform: translateX({{ml.tx}})">{{ml.t}}</span>
+</sc-for>
+<div style="position: absolute; left: 0; top: 52px; width: {{f.money.bar}}px; height: 22px; background: currentColor"></div>
+</div>
+<sc-for list="{{f.money.gaps}}" as="gp" hint-placeholder-count="3"><div class="ln com" style="display: table; margin-bottom: 5px">{{gp}}</div></sc-for>
+</sc-if>
+<sc-if value="{{f.isTime}}" hint-placeholder-val="{{false}}">
+<div style="border-left: 1px solid currentColor; padding-left: 9px; margin-left: 4px">
+<sc-for list="{{f.time}}" as="it" hint-placeholder-count="5">
+<div class="tr {{it.row}}"><span class="td {{it.cls}}" style="margin-left: -14px"></span><div><span class="mono" style="font-size: 11px">{{it.d}}</span> {{it.t}}</div></div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{f.isLines}}" hint-placeholder-val="{{false}}">
+<sc-for list="{{f.lines}}" as="ln" hint-placeholder-count="4"><div class="ln {{ln.cls}}">{{ln.t}}</div></sc-for>
+</sc-if>
+<sc-if value="{{f.isInt}}" hint-placeholder-val="{{false}}">
+<div style="font-size: 30px; font-weight: 800; line-height: 1.05; margin-top: 30px">{{f.intWho}}</div>
+<div style="font-size: 13px; line-height: 1.35; margin-top: 10px">{{f.intSub}}</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div class="plate" style="left: {{o.px}}px; top: {{o.py}}px; width: {{o.pw}}px; opacity: {{o.pop}}; visibility: {{o.pvis}}">
+<div style="font-size: {{o.pfs}}px; font-weight: 800; line-height: 1.12; display: flex; gap: 8px; justify-content: center; align-items: flex-start"><span class="sw {{o.sw}}" style="margin-top: 3px"></span><span>{{o.name}}</span></div>
+<div class="mono" style="font-size: 11.5px; line-height: 1.35; margin-top: 4px; color: #55554F">{{o.tk}}</div>
+<sc-if value="{{o.showHow}}" hint-placeholder-val="{{false}}"><div style="font-size: 11.5px; font-weight: 500; line-height: 1.3; margin-top: 5px; padding-top: 5px; border-top: 1px solid #C9C9C3">{{o.how}}</div></sc-if>
+
+</div>
+<sc-if value="{{o.tagged}}" hint-placeholder-val="{{false}}">
+<div style="position: absolute; left: {{o.tgx}}px; top: {{o.tgy}}px; width: 1px; height: 18px; background: #8A867A; z-index: 8; transition: left .95s cubic-bezier(.3,.7,.2,1), top .95s cubic-bezier(.3,.7,.2,1)"><div class="mono" style="position: absolute; left: -36px; top: 18px; width: 74px; box-sizing: border-box; text-align: center; font-size: 11px; padding: 3px 0; background: #F4EFE2; box-shadow: 0 0 0 1px #8A867A, 0 3px 5px rgba(20,20,20,.18)">FOLLOWING</div></div>
+</sc-if>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{bal.on}}" hint-placeholder-val="{{false}}">
+<div>
+<div style="position: absolute; left: 474px; top: 250px; width: 12px; height: 390px; background: linear-gradient(90deg, #D9D9D5, #F3F3F0 50%, #D2D2CD); border-radius: 2px"></div>
+<div style="position: absolute; left: 400px; top: 622px; width: 160px; height: 18px; background: linear-gradient(180deg, #F6F6F3, #DADAD5); border-radius: 3px"></div>
+<div style="position: absolute; left: 300px; top: 247px; width: 360px; height: 6px; background: #1B1B1A; border-radius: 3px; transform: rotate({{bal.deg}}deg); transition: transform 1s cubic-bezier(.3,.7,.2,1)"></div>
+<div style="position: absolute; left: 468px; top: 241px; width: 24px; height: 24px; border-radius: 12px; background: #1B1B1A; box-shadow: 0 0 0 4px #F7F7F5"></div>
+<sc-for list="{{bal.pans}}" as="bp" hint-placeholder-count="2">
+<div style="position: absolute; left: {{bp.sx}}px; top: {{bp.sy}}px; width: 1px; height: 100px; background: #6B6B66; transition: left 1s cubic-bezier(.3,.7,.2,1), top 1s cubic-bezier(.3,.7,.2,1)"></div>
+<div style="position: absolute; left: {{bp.px}}px; top: {{bp.py}}px; width: 170px; height: 12px; border-radius: 6px; background: linear-gradient(180deg, #4A4A47, #1B1B1A); transition: left 1s cubic-bezier(.3,.7,.2,1), top 1s cubic-bezier(.3,.7,.2,1)"></div>
+<div style="position: absolute; left: {{bp.lx}}px; top: {{bp.ly}}px; width: 170px; text-align: center; transition: left 1s cubic-bezier(.3,.7,.2,1), top 1s cubic-bezier(.3,.7,.2,1)"><div style="font-size: 13.5px; font-weight: 700">{{bp.name}}</div><div class="mono {{bp.cls}}" style="font-size: 12px; display: inline-block; margin-top: 3px; padding: 2px 8px; color: {{bp.fg}}; background: {{bp.bg}}; border: {{bp.bd}}; box-shadow: {{bp.bs}}">{{bp.val}}</div></div>
+</sc-for>
+</div>
+</sc-if>
+
+
+<sc-if value="{{hasStage}}" hint-placeholder-val="{{false}}">
+<div>
+<div style="position: absolute; left: {{stg.lx}}px; top: 688px; width: {{stg.lw}}px; text-align: center; transition: left .95s cubic-bezier(.3,.7,.2,1)">
+<div class="mono" style="font-size: 12px; letter-spacing: .1em; color: #55554F">{{stg.lookLabel}}</div>
+<div style="font-size: 44px; font-weight: 800; line-height: 1.05; letter-spacing: .01em">{{stg.facing}}</div>
+</div>
+
+<section aria-label="Handling the specimen" style="position: absolute; left: 800px; top: 92px; width: 600px; height: 470px">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
+<div style="min-width: 0"><div class="mono" style="font-size: 11.5px; letter-spacing: .1em; color: #55554F; display: flex; align-items: center; gap: 8px"><span class="sw {{stg.sw}}"></span><span>{{stg.word}}</span></div><div style="font-size: 28px; font-weight: 800; line-height: 1.08; margin-top: 6px">{{stg.name}}</div><div class="mono" style="font-size: 12px; margin-top: 6px; color: #55554F; line-height: 1.4">{{stg.tk}}</div></div>
+<button type="button" class="btn" onClick="{{setDown}}" style="flex: none; min-height: 40px; font-size: 14px">Set it back on the shelf</button>
+</div>
+
+<sc-if value="{{pn.stage}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; gap: 28px; margin-top: 20px">
+<div style="flex: none; width: 150px">
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55554F; margin-bottom: 6px">TURN</div>
+<div style="display: grid; grid-template-columns: 46px 46px 46px; grid-template-rows: 46px 46px 46px; gap: 3px">
+<span></span><button type="button" class="btn arw" onClick="{{turnUp}}" aria-label="Turn up" disabled="{{stg.upOff}}">▲</button><span></span>
+<button type="button" class="btn arw" onClick="{{turnLeft}}" aria-label="Turn left">◀</button><span style="display: flex; align-items: center; justify-content: center"><span style="width: 12px; height: 12px; background: #1B1B1A; border-radius: 2px"></span></span><button type="button" class="btn arw" onClick="{{turnRight}}" aria-label="Turn right">▶</button>
+<span></span><button type="button" class="btn arw" onClick="{{turnDown}}" aria-label="Turn down" disabled="{{stg.downOff}}">▼</button><span></span>
+</div>
+</div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 8px">
+<button type="button" class="btn btnp" onClick="{{doOpen}}" style="width: 100%"><span class="mono" style="font-size: 11px; letter-spacing: .1em; font-weight: 400; display: block; opacity: .8">OPEN</span>{{stg.openLabel}}</button>
+<button type="button" class="btn" onClick="{{doCut}}" style="width: 100%"><span class="mono" style="font-size: 11px; letter-spacing: .1em; font-weight: 400; display: block; opacity: .7">CUT</span>Fork it along a seam</button>
+<button type="button" class="btn" onClick="{{doWeigh}}" style="width: 100%"><span class="mono" style="font-size: 11px; letter-spacing: .1em; font-weight: 400; display: block; opacity: .7">WEIGH</span>Put it on the balance</button>
+<button type="button" class="btn" onClick="{{doTag}}" aria-pressed="{{stg.tagPressed}}" style="width: 100%; background: {{stg.tagBg}}; color: {{stg.tagFg}}"><span class="mono" style="font-size: 11px; letter-spacing: .1em; font-weight: 400; display: block; opacity: .7">TAG</span>{{stg.tagLabel}}</button>
+</div>
+</div>
+<div role="status" style="margin-top: 16px; min-height: 60px; font-size: 14.5px; line-height: 1.45; padding: 10px 14px; border: 1.5px {{stg.msgBd}} #1B1B1A; background: #FFFFFF; opacity: {{stg.msgOp}}">{{stg.msg}}</div>
+<sc-if value="{{how}}" hint-placeholder-val="{{false}}"><div style="margin-top: 10px; font-size: 12.5px; line-height: 1.4; color: #3B3B39"><span class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55554F">HOW DO WE KNOW?</span><br>{{stg.prov}}</div></sc-if>
+</sc-if>
+
+<sc-if value="{{pn.open}}" hint-placeholder-val="{{false}}">
+<div style="margin-top: 18px">
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55554F">YOU ENTERED THROUGH {{stg.facing}}</div>
+<div style="font-size: 26px; font-weight: 800; line-height: 1.15; margin-top: 4px">You enter as {{op.who}}.</div>
+<div style="display: flex; gap: 14px; margin-top: 12px">
+<div style="flex: 1; padding: 10px 14px; border: 1.5px solid #1B1B1A; background: #FFFFFF; font-size: 14px; line-height: 1.4"><span class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55554F">YOU CAN</span><br>{{op.can}}</div>
+<div style="flex: 1; padding: 10px 14px; border: 1.5px dashed #1B1B1A; background: #FFFFFF; font-size: 14px; line-height: 1.4"><span class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55554F">YOU CAN’T</span><br>{{op.cant}}</div>
+</div>
+<div style="margin-top: 10px; font-size: 13.5px; line-height: 1.4; color: #3B3B39">{{op.kindNote}}</div>
+<div style="display: flex; gap: 10px; margin-top: 12px">
+<button type="button" class="btn" onClick="{{tryOk}}" style="flex: 1">{{op.okB}}</button>
+<button type="button" class="btn" onClick="{{tryNo}}" style="flex: 1">{{op.noB}}</button>
+</div>
+<div role="status" style="margin-top: 10px; min-height: 64px; padding: 10px 14px; border: 1.5px solid #1B1B1A; background: #FFFFFF; font-size: 14px; line-height: 1.4; opacity: {{op.resOp}}">{{op.res}}</div>
+<button type="button" class="btn btnp" onClick="{{stepOut}}" style="margin-top: 12px">Step out and close the face</button>
+</div>
+</sc-if>
+
+<sc-if value="{{pn.cut}}" hint-placeholder-val="{{false}}">
+<div style="margin-top: 18px">
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55554F">CUT · WHERE DOES THE SEAM RUN?</div>
+<div style="font-size: 22px; font-weight: 800; line-height: 1.2; margin-top: 4px">{{ct.head}}</div>
+<sc-if value="{{ct.refused}}" hint-placeholder-val="{{false}}"><div role="status" style="margin-top: 12px; padding: 12px 14px; border: 1.5px solid #1B1B1A; background: #FFFFFF; font-size: 14.5px; line-height: 1.45">{{ct.refusal}}</div></sc-if>
+<sc-for list="{{ct.opts}}" as="co" hint-placeholder-count="4">
+<button type="button" class="btn" onClick="{{co.go}}" style="width: 100%; margin-top: 8px"><span class="mono" style="font-size: 11.5px; font-weight: 400">{{co.d}}</span> {{co.t}}</button>
+</sc-for>
+<button type="button" class="btn" onClick="{{cancelMode}}" style="margin-top: 14px">Never mind, leave it whole</button>
+</div>
+</sc-if>
+
+<sc-if value="{{pn.cutdone}}" hint-placeholder-val="{{false}}">
+<div style="margin-top: 18px">
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; color: #0B5C6B; font-weight: 600">CUT · TWO OBJECTS NOW</div>
+<div style="font-size: 22px; font-weight: 800; line-height: 1.2; margin-top: 4px">The record stays whole. Your branch is its own object.</div>
+<div style="display: flex; gap: 14px; margin-top: 12px">
+<div style="flex: 1; padding: 10px 14px; border-left: 6px solid #1B1B1A; background: #FFFFFF; font-size: 13.5px; line-height: 1.4"><span class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55554F">LEFT · THE RECORD</span><br>{{cd.left}}</div>
+<div style="flex: 1; padding: 10px 14px; border: 1.5px solid #0B5C6B; box-shadow: inset 0 0 0 3px #FFFFFF, inset 0 0 0 4px #0B5C6B; background: #FFFFFF; font-size: 13.5px; line-height: 1.4"><span class="mono" style="font-size: 11px; letter-spacing: .1em; color: #0B5C6B">RIGHT · YOUR BRANCH</span><br>{{cd.right}}</div>
+</div>
+<div style="margin-top: 12px; padding: 10px 14px; border: 1px solid #1B1B1A; background: #FFFFFF"><div class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55554F">ASSUMPTIONS · authored</div>
+<sc-for list="{{cd.assume}}" as="as" hint-placeholder-count="3"><div style="font-size: 13px; line-height: 1.35; margin-top: 4px">{{as.t}}</div></sc-for></div>
+<button type="button" class="btn btnp" onClick="{{setDown}}" style="margin-top: 12px">Set both on the shelf</button>
+</div>
+</sc-if>
+
+<sc-if value="{{pn.weigh}}" hint-placeholder-val="{{false}}">
+<div style="margin-top: 18px">
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55554F">WEIGH · ONE VARIABLE AT A TIME</div>
+<div style="font-size: 20px; font-weight: 800; line-height: 1.2; margin-top: 4px">{{wg.head}}</div>
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55554F; margin-top: 12px">AGAINST</div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px">
+<sc-for list="{{wg.partners}}" as="wp" hint-placeholder-count="6">
+<button type="button" class="btn" onClick="{{wp.go}}" aria-pressed="{{wp.pressed}}" style="min-height: 40px; font-size: 13.5px; padding: 0 10px; background: {{wp.bg}}; color: {{wp.fg}}">{{wp.t}}</button>
+</sc-for>
+</div>
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55554F; margin-top: 12px">VARIABLE</div>
+<div style="display: flex; gap: 6px; margin-top: 4px">
+<sc-for list="{{wg.vars}}" as="wv" hint-placeholder-count="2">
+<button type="button" class="btn" onClick="{{wv.go}}" aria-pressed="{{wv.pressed}}" style="min-height: 40px; font-size: 13.5px; padding: 0 10px; background: {{wv.bg}}; color: {{wv.fg}}">{{wv.t}}</button>
+</sc-for>
+</div>
+<div role="status" style="margin-top: 14px; padding: 12px 14px; border: 1.5px solid #1B1B1A; background: #FFFFFF; font-size: 14px; line-height: 1.45; min-height: 84px">{{wg.read}}</div>
+</div>
+</sc-if>
+</section>
+</div>
+</sc-if>
+
+<div class="mono" style="position: absolute; left: 32px; bottom: 12px; width: 760px; font-size: 11px; line-height: 1.25; color: #55554F">COMMERCIAL LENS · Hypothesis: specimens are the shareable unit. Anyone can turn and open a public one free; creators pay to publish specimens with persistent state.</div>
+<div class="mono" style="position: absolute; right: 28px; bottom: 12px; width: 560px; text-align: right; font-size: 11px; line-height: 1.25; color: #55554F">PROTOTYPE · DESIGN PROPOSAL · SPECULATIVE FRONTIER (object metaphor) · data: prototype, as of 29 Sep 2026; lines and contracts approx., verify before use</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+componentDidMount() { this.tms = []; }
+componentWillUnmount() { (this.tms || []).forEach(clearTimeout); }
+search(text) {
+const t = (text || '').toLowerCase();
+let q = 'none';
+if (/cell|respir|mitochond|krebs|atp/.test(t)) q = 'bio';
+else if (/boston|celtic|basketball|nba/.test(t)) q = 'boston';
+this.setState({ query: q, q: text, stage: null, mode: 'stage', n: 0, el: 0, cut: null, yf: null, partner: null, wvar: 'payroll', msg: null, res: null, tags: {}, searching: true });
+this.tms.push(setTimeout(() => this.setState({ searching: false }), 350));
+}
+stageIt(id) { this.setState({ stage: id, mode: 'stage', n: 0, el: 0, partner: null, wvar: 'payroll', msg: null, res: null, cutNote: null }); }
+renderVals() {
+const S = this.state || {};
+const q = S.query || 'boston';
+const isB = q === 'boston', isBio = q === 'bio', none = q === 'none';
+const how = !!S.how;
+const stage = S.stage || null;
+const mode = S.mode || 'stage';
+const n = S.n || 0, el = S.el || 0;
+const tags = S.tags || {};
+const cut = S.cut || null;
+const yf = S.yf || null;
+const partner = S.partner || null;
+const wvar = S.wvar || 'payroll';
+const searching = !!S.searching;
+const INK = '#1B1B1A';
+
+/* ---------- materials ---------- */
+const DR = (a) => 'inset 0 0 0 9px ' + a + ', inset 0 0 0 10.5px #F4F4F0, inset 0 0 0 15px ' + a + ', inset 0 0 0 16.5px #F4F4F0';
+const SHEEN = 'linear-gradient(135deg, rgba(255,255,255,.08), rgba(0,0,0,.16))';
+const MAT = {
+live: { bgc: '#1B1B1A', bgi: 'radial-gradient(rgba(255,255,255,.12) 1px, transparent 1.3px), radial-gradient(rgba(255,255,255,.07) 1px, transparent 1.3px), ' + SHEEN, bgs: '5px 5px, 8px 8px, auto', bs: 'inset 0 0 0 1px rgba(255,255,255,.14)', cls: 'grain', fg: '#F4F4F0', pad: 20, bv: 'visible' },
+ink: { bgc: '#1B1B1A', bgi: SHEEN, bgs: 'auto', bs: 'inset 0 0 0 1px rgba(255,255,255,.14)', cls: '', fg: '#F4F4F0', pad: 20, bv: 'visible' },
+world: { bgc: '#0F4C35', bgi: SHEEN, bgs: 'auto', bs: DR('#0F4C35'), cls: '', fg: '#F4F4F0', pad: 28, bv: 'visible' },
+teal: { bgc: '#0B5C6B', bgi: SHEEN, bgs: 'auto', bs: DR('#0B5C6B'), cls: '', fg: '#FFFFFF', pad: 28, bv: 'visible' },
+violet: { bgc: '#6A5F8C', bgi: SHEEN, bgs: 'auto', bs: 'inset 0 0 0 1px rgba(255,255,255,.4)', cls: '', fg: '#FFFFFF', pad: 20, bv: 'visible' },
+stone: { bgc: '#A9A8A1', bgi: 'radial-gradient(#8F8E88 1px, transparent 1.4px), radial-gradient(#BDBCB5 1px, transparent 1.4px)', bgs: '9px 9px, 13px 13px', bs: 'inset 0 0 0 1px rgba(0,0,0,.18)', cls: '', fg: '#141413', pad: 20, bv: 'visible' },
+wire: { bgc: 'rgba(255,255,255,.3)', bgi: 'none', bgs: 'auto', bs: 'none', bd: '14px solid transparent', bi: 'repeating-linear-gradient(135deg, #1B1B1A 0 1.6px, transparent 1.6px 6px) 14', cls: '', fg: '#1B1B1A', pad: 8, bv: 'hidden' },
+paper: { bgc: '#F2ECDD', bgi: 'radial-gradient(circle, #1B1B1A 1.1px, transparent 1.4px)', bgs: '7px 7px', bs: 'inset 0 0 0 1px #1B1B1A', cls: '', fg: '#1B1B1A', pad: 8, fbw: 16, fcbg: '#F2ECDD', bv: 'visible' },
+text: { bgc: '#FEFEFD', bgi: 'none', bgs: 'auto', bs: 'inset 0 0 0 2px #1B1B1A, inset 0 0 0 5px #FEFEFD, inset 0 0 0 6px #1B1B1A', cls: '', fg: '#1B1B1A', pad: 22, bv: 'visible' }
+};
+
+/* ---------- specimens ---------- */
+const SP = {
+reality: { kind: 'reality', sw: 't-obs', word: 'OBSERVED · LIVE', name: 'Boston Celtics · Reality', tk: 'live: ink with a moving grain', how: 'OBSERVED · Reality feed, 29 Sep 2026 · figures approx., verify', prov: 'Solid ink is observed; the drifting grain means it is live and keeps changing without you. League lines and contracts: BOW Economics Live fixture and public reporting, approx., as of 29 Sep 2026; verify.', mat: 'live', s: 0.52, sd: 1.22 },
+world: { kind: 'world', sw: 't-rec', word: 'RECORDED · YOURS', name: 'Boston · Year Two', tk: 'yours: solid, inner double rule', how: 'RECORDED · inside BOW · World fixtures, not NBA history', prov: 'The inner double rule marks what is written into BOW’s own history: a World you run, Year Two · Week 9. Facts are fixtures from the BOW Worlds branch (EXISTS TODAY), not NBA history.', mat: 'world', s: 0.5, sd: 1.22 },
+moment: { kind: 'moment', sw: 't-obs', word: 'OBSERVED · A MOMENT', name: '17 Jun 2017 · Philadelphia calls about No. 1', tk: 'a frozen morning: sealed band', how: 'OBSERVED · public reporting, verify · future sealed by BOW', prov: 'The paper band is the seal: hindsight stays closed until you act, so the person in the seat doesn’t inherit what happened next. The morning itself is observed, from public reporting; verify.', mat: 'ink', band: true, s: 0.34, sd: 1.0 },
+history: { kind: 'history', sw: 't-stone', word: 'OBSERVED · HISTORICAL STATE', name: '1985–86 Celtics', tk: 'frozen: still stone', how: 'OBSERVED · recorded history · [archive]', prov: 'Stone that never moves: a historical state is fully recorded and has no NOW. Nothing here changes.', mat: 'stone', s: 0.46, sd: 1.22 },
+model: { kind: 'model', sw: 't-mod', word: 'MODELED · A MODEL', name: 'Second-apron model v0.3', tk: 'wireframe: hatched edges', how: 'MODELED · BOW model v0.3 · no model ran here', prov: 'A wireframe with hatched edges: a bounded simulation, answering with ranges, never points. Its assumptions are listed and versioned. Any range shown in this prototype is illustrative, authored.', mat: 'wire', s: 0.48, sd: 1.22 },
+creator: { kind: 'creator', sw: 't-gen', word: 'GENERATED · CREATOR-BUILT', name: 'Garden nights · arena economics', tk: 'stippled paper · [creator] · unreviewed', how: 'GENERATED · by [creator] · not an official BOW system', prov: 'Stippled paper with an author tag: built by a community creator and not reviewed by BOW. It looks unlike the official objects on purpose.', mat: 'paper', s: 0.46, sd: 1.22 },
+pfork: { kind: 'pfork', sw: 't-fork', word: 'A DIFFERENT HAND · PUBLIC FORK', name: 'Keep No. 1 — Fultz', tk: 'two glued halves · by [author]', how: 'Diverged 17 Jun 2017 · by [author] · never on the record', prov: 'Two halves glued along a seam: the record in ink, someone else’s branch in their own. It never overwrites the record, and it lists its assumptions.', mat: 'ink', matR: 'violet', split: true, s: 0.5, sd: 1.22 },
+yfork: { kind: 'yfork', sw: 't-fork', word: 'RECORDED · YOUR BRANCH', name: yf ? 'Your branch · ' + yf.short : 'Your branch', tk: 'two glued halves · yours · own ink', how: 'RECORDED · you, cut 29 Sep 2026 · own ink', prov: 'Your branch: the record in ink on the left, your ink on the right, joined by a seam that names where and when it was cut.', mat: 'ink', matR: 'teal', split: true, s: 0.5, sd: 1.22 },
+runner: { kind: 'model', sw: 't-mod', word: 'MODELED · LIVE MODEL', name: 'Runner · live physiology model', tk: 'wireframe: hatched edges', how: 'MODELED · BOW model · placeholder · runs on demand', prov: 'A wireframe with hatched edges: a bounded simulation, answering with ranges. Numbers here are illustrative, authored; no model ran in this prototype.', mat: 'wire', s: 0.52, sd: 1.22 },
+mito: { kind: 'text', sw: 't-aut', word: 'AUTHORED · TEXTBOOK SYSTEM', name: 'Mitochondrion · textbook system', tk: 'outlined paper: authored', how: 'AUTHORED · BOW textbook, cell biology · placeholder', prov: 'Outlined paper: a rule-set someone chose on purpose, taught inside a course. It is authored, not observed.', mat: 'text', s: 0.52, sd: 1.22 },
+krebs: { kind: 'history', sw: 't-stone', word: 'OBSERVED · HISTORICAL STATE', name: 'Krebs 1937 · historical state', tk: 'frozen: still stone', how: 'OBSERVED · recorded history · [archive], verify', prov: 'Stone that never moves: a historical state is fully recorded and has no NOW.', mat: 'stone', s: 0.52, sd: 1.22 }
+};
+const SHELF = { reality: 110, world: 284, moment: 458, history: 632, model: 806, creator: 980, pfork: 1154, yfork: 1328, runner: 290, mito: 710, krebs: 1130 };
+const IDS = isB ? ['reality', 'world', 'moment', 'history', 'model', 'creator', 'pfork', 'yfork'] : isBio ? ['runner', 'mito', 'krebs'] : [];
+const visIds = IDS.filter((id) => id !== 'yfork' || yf);
+const others = visIds.filter((id) => id !== stage);
+const FN = isBio ? ['PLACE', 'ACTORS', 'TIME', 'ENERGY', 'RULES', 'SOURCES'] : ['PLACE', 'PEOPLE', 'TIME', 'MONEY', 'RULES', 'SOURCES'];
+const facingIdx = el === 1 ? 4 : el === -1 ? 5 : (((n % 4) + 4) % 4);
+const facing = FN[facingIdx];
+
+/* ---------- face content ---------- */
+const ln = (arr) => arr.map((s) => { const c = s[0]; return c === '!' ? { cls: 'aut', t: s.slice(1) } : c === '?' ? { cls: 'unk', t: s.slice(1) } : { cls: '', t: s }; });
+const TXT = {
+reality: { PEOPLE: ['Jayson Tatum', 'Jaylen Brown', 'Derrick White', 'Sam Hauser', 'Payton Pritchard', '?rest of roster [from the Reality feed]', 'Names only. Contracts are on MONEY.'], RULES: ['!Over the tax line: pays luxury tax', '!Over the first apron: extra limits [verify]', '!Over the second apron: no aggregating salaries in trades', '!Over the second apron: a future first-round pick is frozen', 'Authored by the 2023 CBA, simplified. Verify.'], SOURCES: ['League lines: BOW Economics Live fixture, verify', 'Payroll ≈ $203.6M: same source, verify', 'Contracts: public reporting, approx., verify', 'Moments: NBA.com, Hoops Rumors, ESPN, verify', 'As of 29 Sep 2026'] },
+world: { PLACE: ['Front office · Film room', 'Locker room · Archive', '?[floor plan from the World fixture]'], PEOPLE: ['You: the GM', 'Jimmy Butler (from the Week 6 trade)', 'Jayson Tatum', '?rest of roster [from the World]'], RULES: ['!World tax line: $200M (authored)', '!Advance rule: Mondays, regardless (authored)', 'Projected tax ≈ $34.2M at today’s payroll.'], SOURCES: ['RECORDED inside BOW · Year Two, Week 9', 'World facts: fixtures from the BOW Worlds branch (EXISTS TODAY)', 'Built from Reality at Year 0, then diverged by your acts.', 'Not NBA history.'] },
+moment: { PLACE: ['The draft-week office [authored scene]', 'Phones, a whiteboard, a stopped clock.'], PEOPLE: ['You: the person in the seat', 'Philadelphia is on the line.', 'Boston holds the No. 1 pick.'], MONEY: ['?[the pick’s value · authored, unmodeled]', 'No number is shown. You decide before you know.'], RULES: ['!The draft is days away (22 Jun) [verify]', '!Trades are finalized with the league [verify]'], SOURCES: ['OBSERVED · public reporting, verify', 'Future sealed by BOW: you don’t inherit hindsight.'] },
+history: { PLACE: ['?[the arena · from the archive]'], PEOPLE: ['?[the roster · from the archive]'], MONEY: ['?[the payroll · from the archive]'], RULES: ['?[the rules of that season · from the archive]'], SOURCES: ['OBSERVED · recorded history', 'Frozen: nothing here changes.'] },
+model: { PLACE: ['Not a place: a machine.', 'Inputs on the left, ranges on the right.'], PEOPLE: ['No people, only assumptions.', 'Assumptions are authored and versioned.'], MONEY: ['Takes payroll as an input.', '!Ranges shown are illustrative, authored'], RULES: ['!Tax and apron lines: 2026–27 fixture (verify)', '!No trades happen during a run'], SOURCES: ['MODELED · BOW model v0.3', 'No model ran in this prototype.'] },
+creator: { PLACE: ['Garden nights: an arena’s evenings.', '?[layout · by the creator]'], PEOPLE: ['?[cast · by the creator]'], MONEY: ['Arena economics, as the creator sees it.', '?[figures · unreviewed]'], RULES: ['!The creator’s rules, not BOW’s'], SOURCES: ['GENERATED · community-built', 'by [creator] · unreviewed'] },
+pfork: { PLACE: ['Keep No. 1 — Fultz', 'A branch by [author].'], PEOPLE: ['Roster in this branch: Fultz, not Tatum.', '?[the rest · by the author]'], MONEY: ['?[payroll in this branch · computed by the World rules]'], RULES: ['!Assumptions: [the author’s list]'], SOURCES: ['Diverged 17 Jun 2017', 'by [author] · never written onto the record'] },
+yfork: { PLACE: ['Your branch of ' + (yf ? yf.src : '') + '.', 'Cut 29 Sep 2026.'], PEOPLE: ['?[roster differs from the record after the cut · computed by the World rules]'], MONEY: ['?[computed from your branch’s roster]'], RULES: ['!Later moves replay as recorded until your change touches them [authored]', '!Horizon: 3 seasons; past it, sealed'], SOURCES: ['RECORDED · your act, own ink', 'Never written onto the record.'] },
+runner: { PLACE: ['A body on a treadmill.', 'Muscle · blood · lungs.'], ACTORS: ['Muscle fibres', 'Red blood cells', 'Mitochondria'], ENERGY: ['ATP demand rises with speed.', '!Ranges illustrative, authored'], RULES: ['!Aerobic threshold: authored', '!Oxygen supply limits ATP output'], SOURCES: ['MODELED · live physiology model', 'No model ran in this prototype.'] },
+mito: { PLACE: ['Inside the cell: the powerhouse organelle.', 'Inner membrane · matrix.'], ACTORS: ['Enzymes of the Krebs cycle', 'Electron-transport complexes', 'ATP synthase'], ENERGY: ['One glucose feeds a chain of steps.', 'ATP is the currency [counts: verify].'], RULES: ['!Oxygen is the final electron acceptor', '!No oxygen, no aerobic ATP'], SOURCES: ['AUTHORED · a textbook system', 'BOW textbook, cell biology [placeholder]'] },
+krebs: { PLACE: ['?[the lab · from the archive]'], ACTORS: ['Hans Krebs [verify]'], ENERGY: ['?[what the 1937 picture knew · from the archive]'], RULES: ['?[the 1937 account of the cycle · from the archive]'], SOURCES: ['OBSERVED · recorded history', 'Frozen: nothing here changes.'] }
+};
+const TIMES = {
+reality: [['17 Jun 2017', 'Philadelphia calls about No. 1', 'door'], ['12 May 2025', 'Your star is hurt in Game 4', 'door'], ['Late Jun 2025', 'The second apron is closing in', 'door'], ['5 Feb 2026', 'A ≈$39.5M projected tax bill', 'door'], ['29 Sep 2026', 'NOW · live', 'now']],
+world: [['Year One', 'You funded Business over Basketball Ops', 'rec'], ['Week 6', 'You accepted White for Butler', 'rec'], ['Week 9', 'Lost to Denver 112–115, home', 'rec'], ['Now', 'Year Two · Week 9 · advances Mondays', 'now']],
+moment: [['17 Jun 2017', 'the morning · stopped', 'now']], history: [['1985–86', 'the recorded season [archive]', 'rec']],
+model: [['Run 0', 'moves only when you run it', 'now']], creator: [['[date]', '[the creator’s timeline]', 'now']],
+pfork: [['17 Jun 2017', 'diverged from Reality', 'door']], yfork: [[yf ? yf.short : '', 'diverged from the record', 'door'], ['29 Sep 2026', 'cut by you', 'rec']],
+runner: [['Run 0', 'moves only when you run it', 'now']], mito: [['Glycolysis', 'before the mitochondrion', 'rec'], ['Krebs cycle', 'in the matrix', 'rec'], ['Electron transport', 'inner membrane', 'rec']], krebs: [['1937', 'the cycle described [verify]', 'rec']]
+};
+const NOSEAL = { history: 1, krebs: 1, mito: 1, world: 1 };
+const mf = (v) => Math.round((v - 150) * 2.7);
+const MONEYS = {
+reality: { bar: mf(203.6), mark: '≈ $203.6M', lines: [['2nd apron $221.7M', 221.686, 0], ['1st apron $209.0M', 209.015, 1], ['tax $200.4M', 200.428, 2], ['cap $165.0M', 164.961, -1]], gaps: ['+$3.2M past the tax line', '$5.4M under the 1st apron', '$18.1M under the 2nd apron'] },
+world: { bar: mf(222.8), mark: '≈ $222.8M', lines: [['World tax $200M', 200, 1]], gaps: ['+$22.8M past the World’s tax line', 'projected tax ≈ $34.2M'] }
+};
+const money = (m) => ({ bar: m.bar, gaps: m.gaps, lines: m.lines.map((l) => { const x = mf(l[1]); const r = l[2]; return r < 0 ? { x: x, y0: 74, h: 8, bx: x - 3, by: 80, lx: x + 8, ly: 78, tx: '0', t: l[0] } : { x: x, y0: r * 16 + 14, h: 52 - r * 16 - 14, bx: x - 3, by: r * 16 + 3, lx: x - 8, ly: r * 16, tx: '-100%', t: l[0] }; }) });
+
+const contentOf = (id, name) => {
+if (name === 'PLACE' && id === 'reality') return { t: 'plan', mark: 'PLAN' };
+if (name === 'MONEY' && MONEYS[id]) return { t: 'money', money: money(MONEYS[id]), mark: MONEYS[id].mark };
+if (name === 'TIME') { const it = (TIMES[id] || []).map((r) => ({ d: r[0], t: r[1], cls: r[2], row: '' })); if (!NOSEAL[id]) it.push({ d: '', t: 'the future: sealed. You find out by living it.', cls: '', row: 'seal' }); return { t: 'time', time: it, mark: NOSEAL[id] ? 'RECORDED' : 'DOORS' }; }
+const src = (TXT[id] || {})[name] || ['?[not drawn in this board]'];
+return { t: 'lines', lines: ln(src), mark: '' };
+};
+
+/* ---------- roles: the face chooses who you are ---------- */
+const RB = {
+PLACE: { who: 'the operations director', can: 'walk the whole building.', cant: 'rebuild it.', okB: 'Walk the plan', ok: 'You walk it: arena floor, front office, practice space. One floor; a plan, authored and illustrative.', noB: 'Rebuild the arena', no: 'Refused by the operations role: buildings belong to their owners, not to whoever is walking them.' },
+PEOPLE: { who: 'the head coach', can: 'set the rotation and see minutes.', cant: 'sign or trade anyone.', okB: 'Set tonight’s starters', ok: 'Starters saved to your scenario [illustrative]. Nothing is signed or traded.', noB: 'Trade a player', no: 'Refused by the head-coach role: trades belong to the GM’s seat.' },
+MONEY: { who: 'the capologist', can: 'see every contract and build scenarios.', cant: 'sign.', okB: 'Build a scenario: add $10M', ok: '', noB: 'Sign it', no: 'Refused by the capologist role: signing belongs to the GM’s seat. You can build the scenario; someone with the pen has to sign it.' },
+TIME: { who: 'a historian: read-only', can: 'read every Moment.', cant: 'change any.', okB: 'Read a Moment', ok: 'You open 17 Jun 2017, “Philadelphia calls about No. 1”, and read the morning as it stood, without the afternoon.', noB: 'Change a Moment', no: 'Refused by the historian role: the record is read-only. To change a Moment, cut a fork from it.' },
+RULES: { who: 'a league official', can: 'read every rule.', cant: 'waive one.', okB: 'Read the second-apron rule', ok: 'Over the second apron, salaries can’t be aggregated in trades (2023 CBA, simplified; verify).', noB: 'Waive a rule', no: 'Refused by the league-official role: a rule changes only when the parties to the CBA change it.' },
+SOURCES: { who: 'an auditor', can: 'trace every number to its source.', cant: 'edit a source.', okB: 'Trace the payroll number', ok: '≈ $203.6M committed payroll: BOW Economics Live fixture, as of 29 Sep 2026; verify.', noB: 'Edit a source', no: 'Refused by the auditor role: sources are read-only; they change when their owners do.' },
+ACTORS: { who: 'a molecule’s-eye observer', can: 'follow any molecule around the system.', cant: 'move one.', okB: 'Follow a molecule', ok: 'You follow one molecule through the system, step by step. [illustrative]', noB: 'Move a molecule', no: 'Refused by the observer role: you can watch actors, not place them.' },
+ENERGY: { who: 'the ATP accountant', can: 'read every energy budget and build scenarios.', cant: 'mint ATP.', okB: 'Build a scenario: double the demand', ok: 'Demand doubles; the budget shows the shortfall as a range [illustrative, authored].', noB: 'Mint ATP', no: 'Refused by the accountant role: energy is conserved; you can only move it around.' }
+};
+const KN = { reality: 'This is the real team: you can observe it. You can’t act on it.', world: 'This is your World: what you do here is recorded.', moment: 'This is a frozen morning: acting cuts a fork.', history: 'This is recorded history: whatever the role, nothing here can change.', model: 'This is a model: you can run it, and it answers with a range.', creator: 'This is unreviewed: BOW can’t vouch for anything inside.', pfork: 'This is someone’s branch: it is never written onto the record.', yfork: 'This is your branch: read the record beside it.', text: 'This is authored: a rule-set someone chose on purpose.' };
+const sp0 = stage ? SP[stage] : null;
+const roleFor = (nm) => {
+const r = RB[nm]; let ok = r.ok;
+if (nm === 'MONEY') {
+const base = stage === 'reality' ? 203.6 : stage === 'world' ? 222.8 : null;
+if (base === null) ok = 'This specimen defines no payroll, so the scenario has nothing to build on.';
+else if (stage === 'reality') ok = 'Payroll ≈ $213.6M: $13.2M past the tax line; $4.6M past the first apron; $8.1M under the second apron (computed from the fixture lines).';
+else ok = 'Payroll ≈ $232.8M: $32.8M past the World’s $200M tax line (computed).';
+}
+return { who: r.who, can: r.can, cant: r.cant, okB: r.okB, noB: r.noB, ok: ok, no: r.no };
+};
+
+/* ---------- orientation ---------- */
+const rx = -90 * el, ry = el === 0 ? -90 * n : -360 * Math.round(n / 4);
+const TILT = 'rotateX(-9deg) rotateY(15deg)';
+const stageTf = TILT + ' rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+const BT = ['translateZ(130px)', 'rotateY(90deg) translateZ(130px)', 'rotateY(180deg) translateZ(130px)', 'rotateY(-90deg) translateZ(130px)', 'rotateX(90deg) translateZ(130px)', 'rotateX(-90deg) translateZ(130px)'];
+const BR = ['', 'rotateY(90deg)', 'rotateY(180deg)', 'rotateY(-90deg)', 'rotateX(90deg)', 'rotateX(-90deg)'];
+const DOOR = ' translateX(-130px) rotateY(-105deg) translateX(130px)';
+const FULL = 'inset(0 0 0 0)', LH = 'inset(0 50% 0 0)', RH = 'inset(0 0 0 50%)';
+const isOpen = mode === 'open';
+const cutHere = (id) => SP[id].split || (cut && cut.id === id && (mode === 'cutdone'));
+
+const facesOf = (id, side, staged) => {
+const sp = SP[id];
+const isCut = !!cutHere(id);
+const matL = MAT[sp.mat];
+let matName = side === 'L' ? sp.mat : (sp.matR || (cut && cut.id === id ? 'teal' : sp.mat));
+if (side === 'R' && sp.mat === 'live' && cut && cut.id === id) matName = 'teal';
+if (side === 'L' && sp.split) matName = sp.mat;
+const mt = MAT[matName];
+const list = [];
+const clipOf = (i) => {
+if (!isCut) return FULL;
+if (i === 1 || i === 3) return FULL;
+const leftSide = side === 'L';
+if (i === 2) return leftSide ? RH : LH;
+return leftSide ? LH : RH;
+};
+const idx = side === 'L' ? [0, 2, 4, 5, 3, 1] : [0, 2, 4, 5, 1];
+idx.forEach((i) => {
+const nm = FN[i];
+const hide = (side === 'L' && i === 1 && isCut);
+const contentOn = staged && !hide && (!isOpen || i === facingIdx);
+const c = contentOn ? contentOf(id, nm) : null;
+const door = staged && isOpen && !isCut && i === facingIdx && side === 'L';
+list.push({
+tr: BT[i] + (door ? DOOR : ''), clip: clipOf(i), bgc: mt.bgc, bgi: mt.bgi, bgs: mt.bgs, bs: mt.bs, bd: mt.bd || '0', bi: mt.bi || 'none', cls: mt.cls, op: hide ? 0 : 1, bv: mt.bv,
+band: !!sp.band && i !== 4 && i !== 5, wax: !!sp.band && i === 0,
+has: !!c, fg: mt.fg, pad: mt.fbw ? 8 : mt.pad, fbw: mt.fbw || 0, fcbg: mt.fcbg || 'transparent', label: nm,
+mark: c ? (c.mark || (nm === facing ? 'FACING' : '')) : '',
+isPlan: !!c && c.t === 'plan', isMoney: !!c && c.t === 'money', isTime: !!c && c.t === 'time', isLines: !!c && c.t === 'lines', isInt: false,
+money: c && c.money ? c.money : { lines: [], gaps: [], bar: 0 }, time: c && c.time ? c.time : [], lines: c && c.lines ? c.lines : [], intWho: '', intSub: ''
+});
+});
+if (isCut) {
+const sec = mt.bgc === 'rgba(255,255,255,.3)' ? 'rgba(255,255,255,.5)' : mt.bgc;
+list.push({ tr: side === 'L' ? 'rotateY(90deg)' : 'rotateY(-90deg)', clip: FULL, bgc: sec, bgi: 'none', bgs: 'auto', bs: 'inset 0 0 0 3px rgba(255,255,255,.35)', bd: '0', bi: 'none', cls: '', op: 1, bv: 'visible', band: false, wax: false, has: false, fg: mt.fg, pad: 0, fbw: 0, fcbg: 'transparent', label: '', mark: '', isPlan: false, isMoney: false, isTime: false, isLines: false, isInt: false, money: { lines: [], gaps: [], bar: 0 }, time: [], lines: [], intWho: '', intSub: '' });
+}
+if (side === 'L' && staged) {
+const rl = roleFor(facing);
+list.push({ tr: BR[facingIdx] + ' translateZ(-120px)', clip: FULL, bgc: '#FAFAF7', bgi: 'none', bgs: 'auto', bs: 'inset 0 0 0 1px #C9C9C3', bd: '0', bi: 'none', cls: '', op: isOpen ? 1 : 0, bv: 'visible', band: false, wax: false, has: true, fg: '#1B1B1A', pad: 22, fbw: 0, fcbg: 'transparent', label: 'INSIDE', mark: '', isPlan: false, isMoney: false, isTime: false, isLines: false, isInt: true, money: { lines: [], gaps: [], bar: 0 }, time: [], lines: [], intWho: rl.who, intSub: 'You can ' + rl.can });
+}
+return list;
+};
+
+/* ---------- weighing ---------- */
+const PAYV = { reality: { v: 203.6, ov: 3.172, k: 'obs' }, world: { v: 222.8, ov: 22.8, k: 'rec' } };
+const WV = { payroll: 'Payroll', over: 'Past its own tax line' };
+let theta = 0, wRead = 'Pick a second specimen to put on the other pan.', wOk = false, aVal = '', bVal = '';
+if (mode === 'weigh' && partner) {
+const A = PAYV[stage], B = PAYV[partner];
+if (A && B) {
+const a = wvar === 'over' ? A.ov : A.v, b = wvar === 'over' ? B.ov : B.v;
+theta = Math.max(-14, Math.min(14, (b - a) / 20 * 12));
+wOk = true;
+aVal = wvar === 'over' ? '+$' + a.toFixed(1) + 'M' : '≈ $' + a.toFixed(1) + 'M';
+bVal = wvar === 'over' ? '+$' + b.toFixed(1) + 'M' : '≈ $' + b.toFixed(1) + 'M';
+const d = Math.abs(b - a).toFixed(1);
+wRead = SP[b > a ? partner : stage].name + ' is heavier by $' + d + 'M (computed). A difference on one variable, not proof of why. ' + (wvar === 'over' ? 'Each is measured against its own tax line: $200.428M for Reality, $200M for the World.' : 'Reality is observed; the World’s payroll is recorded inside BOW.');
+} else {
+const miss = !A ? SP[stage].name : SP[partner].name;
+wRead = 'Refused by the weighing rule: a variable is weighed only where both specimens define it. ' + miss + ' has no ' + (wvar === 'over' ? 'tax line to be past' : 'payroll') + ' to put on the pan. The beam stays level.';
+aVal = A ? '' : 'no payroll'; bVal = B ? '' : 'no payroll';
+}
+}
+const BAL = { cx: 480, py: 250, R: 180 };
+const cr = Math.cos(theta * Math.PI / 180), sr = Math.sin(theta * Math.PI / 180);
+const endL = { x: BAL.cx - BAL.R * cr, y: BAL.py - BAL.R * sr }, endR = { x: BAL.cx + BAL.R * cr, y: BAL.py + BAL.R * sr };
+
+/* ---------- positions ---------- */
+const posOf = (id) => {
+const sp = SP[id];
+if (!stage) return { x: SHELF[id], base: 640, s: sp.s, op: 1, z: 2, rec: false };
+if (id === stage) {
+if (mode === 'weigh') return { x: endL.x, base: endL.y + 96, s: 0.44, op: 1, z: 6, rec: false, pan: true };
+return { x: 430, base: 640, s: sp.sd, op: 1, z: 6, rec: false, st: true };
+}
+if (mode === 'weigh' && id === partner) return { x: endR.x, base: endR.y + 96, s: 0.44, op: 1, z: 6, rec: false, pan: true };
+const i = others.indexOf(id);
+return { x: 826 + i * 78, base: 640, s: 0.24, op: 0.55, z: 1, rec: true };
+};
+
+const objs = IDS.map((id, k) => {
+const sp = SP[id];
+const vis = visIds.indexOf(id) >= 0;
+const p = posOf(id);
+const staged = id === stage;
+const cy = p.base - 130 * p.s;
+const cutN = !!cutHere(id);
+const halves = [{ tx: 0, vis: 'visible', faces: facesOf(id, 'L', staged) }, { tx: 0, vis: 'hidden', faces: facesOf(id, 'R', staged) }];
+if (sp.split) { halves[0].tx = -1.5; halves[1].tx = 1.5; halves[1].vis = 'visible'; }
+if (cut && cut.id === id && mode === 'cutdone') { halves[0].tx = -80; halves[1].tx = 80; halves[1].vis = 'visible'; }
+const tagged = !!tags[id] && vis;
+const shelfPlate = !stage;
+const isSt = staged && !p.pan;
+let plx = p.x - 90, ply = 684, plw = 180, pfs = 15, plop = shelfPlate ? 1 : 0;
+if (p.pan) { plop = 0; }
+if (isSt) { plop = 0; }
+return {
+delay: k * 70, x: (p.x - 130).toFixed(1), y: (cy - 130).toFixed(1), s: p.s.toFixed(3), op: vis ? p.op : 0, vis: vis ? 'visible' : 'hidden', z: p.z,
+pe: staged ? 'none' : 'auto', aria: (stage ? (mode === 'weigh' ? 'Weigh against ' : 'Bring to the stage: ') : 'Bring to the stage: ') + sp.name + ', ' + sp.tk,
+pick: () => { const c = this.state || {}; if (c.mode === 'weigh' && c.stage) { if (id !== c.stage) this.setState({ partner: id }); return; } this.stageIt(id); },
+cubeTf: staged ? stageTf : TILT + ' rotateX(0deg) rotateY(0deg)', halves: halves,
+shx: (p.x - 130 * p.s * 1.25).toFixed(1), shy: (p.base - 12).toFixed(1), shw: (260 * p.s * 1.25).toFixed(1), shop: vis && !p.pan ? (p.rec ? 0.35 : 0.9) : 0,
+px: plx, py: ply, pw: plw, pop: vis ? plop : 0, pvis: vis && plop ? 'visible' : 'hidden', pfs: pfs, sw: sp.sw, name: sp.name, tk: sp.tk, showHow: how, how: sp.how, tagged: tagged,
+tgx: (p.x + 84 * p.s).toFixed(1), tgy: (p.base - 262 * p.s - 22).toFixed(1)
+};
+});
+
+/* ---------- panels ---------- */
+const otherPartners = visIds.filter((id) => id !== stage);
+const cutOpts = () => {
+if (stage === 'reality') return [['17 Jun 2017', 'Philadelphia calls about No. 1'], ['12 May 2025', 'Your star is hurt in Game 4'], ['Late Jun 2025', 'The second apron is closing in'], ['5 Feb 2026', 'A ≈$39.5M projected tax bill']].map((r) => ({ d: r[0], t: r[1], short: r[0], src: 'Reality at ' + r[0], where: 'Reality at ' + r[0] }));
+if (stage === 'world') return [['Year One', 'Business or Basketball Ops?'], ['Week 6', 'The White-for-Butler offer']].map((r) => ({ d: r[0], t: r[1], short: r[0], src: 'your World at ' + r[0], where: 'your World at ' + r[0] }));
+if (stage === 'moment') return [['17 Jun 2017', 'Keep No. 1'], ['17 Jun 2017', 'Ask Philadelphia for more']].map((r) => ({ d: r[0], t: r[1], short: r[0] + ' · ' + r[1], src: 'Reality at 17 Jun 2017', where: 'Reality at 17 Jun 2017, you: ' + r[1] }));
+return [];
+};
+const cutRefusal = { history: 'Refused by the recorded-history rule: a historical state is closed. It has Moments only in the archive, and none are built here.', model: 'Refused by the model rule: a model isn’t a history. Change its assumptions and run it again instead.', creator: 'Refused by the unreviewed-systems rule (authored): BOW doesn’t fork what it hasn’t reviewed.', pfork: 'Refused by the one-cut rule (authored): a branch has one seam. Set it down and cut the record instead.', yfork: 'Refused by the one-cut rule (authored): your branch already has its seam.', runner: 'Refused by the model rule: a model isn’t a history. Change its assumptions and run it again instead.', mito: 'Refused by the textbook rule (authored): a course isn’t forked; copy it into your own notes [not built].', krebs: 'Refused by the recorded-history rule: a historical state is closed.' };
+const opts = cutOpts();
+const ct = {
+head: opts.length ? 'Pick the Moment the record and your branch part at.' : 'This one can’t be cut.',
+refused: !opts.length, refusal: stage ? (cutRefusal[stage] || '') : '',
+opts: opts.map((o) => ({ d: o.d, t: o.t, go: () => this.setState({ mode: 'cutdone', cut: { id: stage, where: o.where }, yf: { short: o.short, src: o.src, where: o.where }, tags: { ...((this.state || {}).tags || {}) } }) }))
+};
+const cutWhere = cut ? cut.where : '';
+const cd = {
+left: (stage === 'reality' ? 'Reality keeps its ink and its moving grain. Nothing on the left changed.' : 'The record keeps its own material. Nothing on the left changed.') + ' Read it beside your branch.',
+right: 'Your branch, cut 29 Sep 2026, diverges from ' + cutWhere + '. Own ink, its own seam, never written onto the record.',
+assume: [{ t: 'Later moves replay as recorded until your change touches them [authored].' }, { t: 'Horizon: 3 seasons. Past it, the branch is sealed: you find out by living it.' }, { t: 'Any number in the branch is computed by the rules or marked authored.' }]
+};
+const rl0 = stage ? roleFor(facing) : { who: '', can: '', cant: '', okB: '', noB: '', ok: '', no: '' };
+const op = { who: rl0.who, can: rl0.can, cant: rl0.cant, okB: rl0.okB, noB: rl0.noB, kindNote: sp0 ? (KN[sp0.kind] || '') : '', res: S.res ? S.res : 'Try one of the two. One is inside your role; one isn’t.', resOp: S.res ? 1 : 0.6 };
+const wg = {
+head: stage ? SP[stage].name + ' on the left pan.' : '',
+partners: otherPartners.map((id) => ({ t: SP[id].name.length > 26 ? SP[id].name.slice(0, 24) + '…' : SP[id].name, pressed: partner === id ? 'true' : 'false', bg: partner === id ? INK : '#FFFFFF', fg: partner === id ? '#FFFFFF' : INK, go: () => this.setState({ partner: id }) })),
+vars: Object.keys(WV).map((k) => ({ t: WV[k], pressed: wvar === k ? 'true' : 'false', bg: wvar === k ? INK : '#FFFFFF', fg: wvar === k ? '#FFFFFF' : INK, go: () => this.setState({ wvar: k }) })),
+read: wRead
+};
+const isTagged = !!tags[stage];
+const stg = {
+lx: mode === 'weigh' ? 300 : 430 - 200, lw: 400, lookLabel: mode === 'open' ? 'YOU ENTERED THROUGH' : mode === 'weigh' ? 'ON THE BALANCE' : 'YOU’RE LOOKING AT:', facing: mode === 'weigh' ? '' : facing,
+sw: sp0 ? sp0.sw : '', word: sp0 ? sp0.word : '', name: sp0 ? sp0.name : '', tk: sp0 ? sp0.tk : '', prov: sp0 ? sp0.prov : '',
+upOff: el === 1, downOff: el === -1, openLabel: 'Open through ' + facing,
+tagPressed: isTagged ? 'true' : 'false', tagBg: isTagged ? INK : '#FFFFFF', tagFg: isTagged ? '#FFFFFF' : INK, tagLabel: isTagged ? 'Tagged: press to remove' : 'Follow it: tie a tag on',
+msg: S.msg || 'The object is on the stage. Turn it, open a face, cut it, weigh it, or tag it.', msgBd: S.msg ? 'solid' : 'dashed', msgOp: S.msg ? 1 : 0.75
+};
+const bal = {
+on: mode === 'weigh' && !!partner, deg: theta.toFixed(2),
+pans: [[endL, stage, aVal, 0], [endR, partner, bVal, 1]].map((pp) => { const id = pp[1]; const V = PAYV[id]; const k = V ? V.k : ''; return { sx: pp[0].x.toFixed(1), sy: pp[0].y.toFixed(1), px: (pp[0].x - 85).toFixed(1), py: (pp[0].y + 96).toFixed(1), lx: (pp[0].x - 85).toFixed(1), ly: (pp[0].y + 116).toFixed(1), name: id ? SP[id].name : '', val: pp[2] || (id ? '' : ''), cls: k === 'obs' ? 't-obs' : k === 'rec' ? 't-rec' : '', fg: k ? '#FFFFFF' : INK, bg: k ? INK : 'transparent', bd: k ? '0' : '1.5px dashed #1B1B1A', bs: k === 'rec' ? 'inset 0 0 0 2px #1B1B1A, inset 0 0 0 3.5px #FFFFFF' : 'none' }; })
+};
+
+const quick = [['Boston basketball', 'boston'], ['cellular respiration', 'bio']].map((p) => ({ label: p[0], pressed: q === p[1] ? 'true' : 'false', bg: q === p[1] ? INK : '#FFFFFF', fg: q === p[1] ? '#FFFFFF' : INK, go: () => this.search(p[0]) }));
+const cur = (this.state || {});
+return {
+q: S.q === undefined ? 'Boston basketball' : S.q,
+onQ: (e) => this.setState({ q: e && e.target ? e.target.value : '' }),
+onSubmit: (e) => { if (e && e.preventDefault) e.preventDefault(); const c = this.state || {}; this.search(c.q === undefined ? 'Boston basketball' : c.q); },
+quick: quick, howPressed: how ? 'true' : 'false', howBg: how ? INK : '#FFFFFF', howFg: how ? '#FFFFFF' : INK, how: how,
+toggleHow: () => this.setState({ how: !(this.state || {}).how }),
+hasShelf: !none && !searching, shelfOn: !none && !searching, noMatch: none, noStage: !stage && !none && !searching, hasStage: !!stage && !searching,
+shelfHint: isB ? 'A search returns objects, not links. Each keeps its own material: ink with a moving grain is live; a double rule is recorded in BOW; stone is frozen; hatched wireframe is modeled; stippled paper is unreviewed. Click one to bring it to the stage.' : 'A search returns objects, not links. Click one to bring it to the stage, then turn it, open a face, cut it or weigh it.',
+objs: objs, stg: stg, pn: { stage: mode === 'stage', open: mode === 'open', cut: mode === 'cut', cutdone: mode === 'cutdone', weigh: mode === 'weigh' },
+op: op, ct: ct, cd: cd, wg: wg, bal: bal,
+setDown: () => this.setState({ stage: null, mode: 'stage', n: 0, el: 0, partner: null, msg: null, res: null }),
+turnLeft: () => { const c = this.state || {}; this.setState({ n: (c.n || 0) - 1, el: 0, msg: null }); },
+turnRight: () => { const c = this.state || {}; this.setState({ n: (c.n || 0) + 1, el: 0, msg: null }); },
+turnUp: () => { const c = this.state || {}; const e = c.el || 0; this.setState({ el: e === 0 ? 1 : 0, msg: null }); },
+turnDown: () => { const c = this.state || {}; const e = c.el || 0; this.setState({ el: e === 0 ? -1 : 0, msg: null }); },
+doOpen: () => this.setState({ mode: 'open', res: null, msg: null }),
+stepOut: () => this.setState({ mode: 'stage', res: null }),
+doCut: () => this.setState({ mode: 'cut', msg: null }),
+cancelMode: () => this.setState({ mode: 'stage' }),
+doWeigh: () => this.setState({ mode: 'weigh', partner: null, wvar: 'payroll', msg: null }),
+doTag: () => { const c = this.state || {}; const t = { ...(c.tags || {}) }; t[c.stage] = !t[c.stage]; this.setState({ tags: t, msg: t[c.stage] ? 'Tagged. A paper tag is tied on: you’ll hear when it changes. A tag isn’t a subscription to a feed; it stays on the object.' : 'The tag is off.' }); },
+tryOk: () => this.setState({ res: rl0.ok }),
+tryNo: () => this.setState({ res: rl0.no })
+};
+}
+}
+</script>
+</body>
+</html>

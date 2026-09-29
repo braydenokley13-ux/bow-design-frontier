@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WHAT IF? — the 2017 pick</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Barlow:wght@400;500;600;700&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F5F0;color:#111111;font-family:'Barlow',sans-serif}
+a{color:#C2410C}a:hover{color:#8A2E08}
+.mono{font-family:'DM Mono',monospace}
+.disp{font-family:'Big Shoulders Display',sans-serif}
+.aut-o{border:2px solid #C2410C;background:transparent;box-sizing:border-box}
+.unk{border:1.5px dashed #111;background:transparent;box-sizing:border-box}
+.rec-o{background:#C2410C;box-shadow:inset 0 0 0 2px #C2410C,inset 0 0 0 4px #F6F5F0}
+.aut{border:1.5px solid #111;background:transparent;box-sizing:border-box}
+.btn{font-family:'Barlow',sans-serif;font-weight:600;font-size:16px;min-height:44px;padding:0 18px;border-radius:0;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.btn:focus-visible,.chip:focus-visible{outline:3px solid #C2410C;outline-offset:2px}
+.chip{font-family:'Barlow',sans-serif;font-weight:500;font-size:14px;min-height:36px;padding:0 12px;border-radius:0;cursor:pointer;transition:background .2s,color .2s}
+.fade{transition:opacity .6s ease}
+.seal{transition:opacity .9s ease}
+.row{transition:opacity .35s ease}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F6F5F0; color: #111111; font-family: 'Barlow', sans-serif">
+
+  <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 84px; box-sizing: border-box; padding: 12px 40px 0; display: grid; grid-template-columns: 330px minmax(0, 1fr) auto; align-items: start; gap: 24px; border-bottom: 3px solid #111111">
+    <div style="display: flex; flex-direction: column; gap: 2px; white-space: nowrap">
+      <span class="mono" style="font-size: 12px; letter-spacing: .12em; color: #55554F">BOW REALITY · P5 · WHAT IF?</span>
+      <span class="disp" style="font-size: 40px; font-weight: 800; line-height: 1; letter-spacing: .01em; text-transform: uppercase"><span style="display: inline-block; width: 14px; height: 14px; background: #007A33; vertical-align: 6px; margin-right: 10px"></span>Boston Celtics</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px; padding-top: 4px; min-width: 0">
+      <span class="mono" style="font-size: 10px; letter-spacing: .12em; color: #55554F">ADDRESS</span>
+      <span class="mono" style="font-size: 12px; line-height: 1.35; padding: 6px 10px; border: 1px solid #111111; background: #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{address}}</span>
+    </div>
+    <div style="display: flex; gap: 10px; padding-top: 8px">
+      <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="border: 2px solid #111111; background: {{howBg}}; color: {{howFg}}; white-space: nowrap">How do we know?</button>
+      <button type="button" class="btn" onClick="{{reset}}" style="border: 2px solid #111111; background: transparent; color: #111111; white-space: nowrap">Back to Reality</button>
+    </div>
+  </header>
+  <span class="mono" style="position: absolute; right: 40px; bottom: 8px; font-size: 10px; letter-spacing: .08em; color: #55554F">PROTOTYPE · DESIGN PROPOSAL · results are dated public records — verify before use · win ranges are a designer’s guess, not a model</span>
+
+  <section aria-label="Time rail" style="position: absolute; left: 0; top: 96px; width: 1440px; height: 240px">
+    <svg width="1440" height="240" viewBox="0 0 1440 240" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+      <line x1="70" y1="118" x2="1360" y2="118" stroke="#111111" stroke-width="6"></line>
+      <line x1="1360" y1="118" x2="1420" y2="118" stroke="#111111" stroke-width="2" stroke-dasharray="3 5"></line>
+      <path d="M 192 118 C 236 118 236 186 280 186" fill="none" stroke="#C2410C" stroke-width="5" style="opacity: {{branchOp}}; transition: opacity .6s ease"></path>
+      <line x1="1360" y1="58" x2="1360" y2="210" stroke="#111111" stroke-width="1.5"></line>
+    </svg>
+    <span class="mono" style="position: absolute; left: 40px; top: 96px; font-size: 11px; letter-spacing: .1em; color: #55554F; background: #F6F5F0; padding-right: 6px">REALITY</span>
+    <div class="fade aut-o" style="position: absolute; left: 280px; top: 178px; width: 294px; height: 16px; opacity: {{branchOp}}"></div>
+    <div class="fade" style="position: absolute; left: 574px; top: 185px; width: 786px; height: 0; border-top: 2px dashed #C2410C; opacity: {{branchOp}}"></div>
+    <div class="fade" style="position: absolute; left: 574px; top: 170px; width: 0; height: 24px; border-left: 1.5px solid #C2410C; opacity: {{branchOp}}"></div>
+    <div class="fade rec-o" style="position: absolute; left: 184px; top: 110px; width: 16px; height: 16px; opacity: {{branchOp}}"></div>
+    <span class="fade mono" style="position: absolute; left: 286px; top: 198px; font-size: 12px; letter-spacing: .05em; color: #C2410C; font-weight: 500; opacity: {{branchOp}}; white-space: nowrap">YOUR BRANCH · diverged 17 Jun 2017 · act recorded 29 Sep 2026, by you · not Reality</span>
+    <span class="fade mono" style="position: absolute; left: 584px; top: 158px; font-size: 11px; letter-spacing: .06em; color: #C2410C; opacity: {{branchOp}}">guess horizon — beyond it: UNKNOWN</span>
+
+    <sc-for list="{{events}}" as="ev" hint-placeholder-count="6">
+      <div style="position: absolute; left: {{ev.x}}px; top: 112px; width: 12px; height: 12px; margin-left: -6px; background: #111111"></div>
+      <div style="position: absolute; left: {{ev.x}}px; top: {{ev.y}}px; width: 0; height: {{ev.stem}}px; border-left: 1px solid #111111"></div>
+      <div style="position: absolute; left: {{ev.lx}}px; top: {{ev.ly}}px; width: 170px; display: flex; flex-direction: column; gap: 1px">
+        <span class="mono" style="font-size: 11px; letter-spacing: .04em; color: #55554F">{{ev.d}}</span>
+        <span style="font-size: 14px; font-weight: 600; line-height: 1.15">{{ev.t}}</span>
+      </div>
+    </sc-for>
+    <sc-for list="{{years}}" as="yr" hint-placeholder-count="10">
+      <span class="mono" style="position: absolute; left: {{yr.x}}px; top: 218px; font-size: 11px; color: #55554F; transform: translateX(-50%)">{{yr.y}}</span>
+    </sc-for>
+    <div style="position: absolute; left: 1180px; top: 30px; width: 174px; text-align: right; display: flex; flex-direction: column; gap: 1px">
+      <span class="mono" style="font-size: 11px; letter-spacing: .08em; white-space: nowrap">NOW · 29 SEP 2026</span>
+      <span style="font-size: 13px; font-weight: 600; white-space: nowrap">Reality keeps going</span>
+    </div>
+
+    <div class="seal" aria-hidden="{{sealHidden}}" style="position: absolute; left: 197px; top: 6px; width: 1243px; height: 228px; background: #ECEAE2; border-left: 2px dashed #111111; opacity: {{sealOp}}; pointer-events: none; display: flex; align-items: center; padding-left: 36px; box-sizing: border-box; gap: 16px">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8" aria-hidden="true"><rect x="4" y="10" width="16" height="11"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+      <span style="display: flex; flex-direction: column; gap: 2px">
+        <span class="mono" style="font-size: 12px; letter-spacing: .1em">SEALED · HINDSIGHT</span>
+        <span style="font-size: 16px; font-weight: 500">Everything after this morning is hidden until you make the call. What you know now is kept with your choice.</span>
+      </span>
+    </div>
+
+    <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: 860px; top: 138px; width: 480px; padding: 8px 10px; background: #FFFFFF; border: 1px solid #111111; font-size: 13px; line-height: 1.4">
+        <strong class="mono" style="font-size: 11px; letter-spacing: .08em">HOW DO WE KNOW?</strong><br>
+        Black line: OBSERVED public record (results, trades, dates). Orange square: RECORDED — your act, kept in BOW’s history with the real time you made it. Orange outline: AUTHORED — a designer’s guess, not a model. Dashed: UNKNOWN past a three-season horizon.
+      </div>
+    </sc-if>
+  </section>
+
+  <section style="position: absolute; left: 40px; top: 350px; width: 1360px; height: 520px">
+
+    <sc-if value="{{isReality}}" hint-placeholder-val="{{true}}">
+      <div style="display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 64px; height: 100%">
+        <div style="display: flex; flex-direction: column; gap: 18px; padding-top: 8px">
+          <span class="mono" style="font-size: 12px; letter-spacing: .12em; color: #55554F">A CONSEQUENTIAL MOMENT, RECORDED</span>
+          <h1 class="disp" style="margin: 0; font-size: 76px; font-weight: 900; line-height: .92; text-transform: uppercase">17 June 2017. Boston holds the No. 1 pick.</h1>
+          <p style="margin: 0; font-size: 20px; line-height: 1.45; max-width: 620px">Philadelphia wants it. Markelle Fultz works out for the 76ers today. Enter that morning and the trade has not happened — but everything after it has, on the black line above. Your choice can split the line. It can never erase it.</p>
+          <div style="display: flex; gap: 12px; margin-top: 6px">
+            <button type="button" class="btn" onClick="{{enter}}" style="border: 2px solid #111111; background: #111111; color: #F6F5F0; font-size: 18px; min-height: 52px; padding: 0 26px">Enter that morning →</button>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 14px; padding-top: 12px; border-left: 1px solid #D6D4CC; padding-left: 32px">
+          <span class="mono" style="font-size: 12px; letter-spacing: .12em; color: #55554F">WHAT THIS BOARD KEEPS APART</span>
+          <div style="display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px 16px; align-items: center; font-size: 15px; line-height: 1.35">
+            <div style="height: 6px; background: #111111"></div><span><strong>Reality.</strong> What happened, from the public record. No branch writes on it.</span>
+            <div class="rec-o" style="height: 16px; width: 16px"></div><span><strong>Your act.</strong> Kept in BOW’s history, stamped with when you really made it.</span>
+            <div style="height: 16px; border: 1.5px solid #111111; box-sizing: border-box"></div><span><strong>Your declarations.</strong> What other teams do in your branch. You say it; BOW doesn’t pretend to compute it.</span>
+            <div style="height: 16px; background: #8C8A82"></div><span><strong>Computed.</strong> What follows for certain: roster, salary, picks.</span>
+            <div class="aut-o" style="height: 16px"></div><span><strong>A guess, labelled.</strong> Win ranges are a designer’s guess, always a range.</span>
+            <div style="height: 0; border-top: 2px dashed #C2410C"></div><span><strong>Beyond the horizon.</strong> Unknown, and drawn as unknown.</span>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isMoment}}" hint-placeholder-val="{{false}}">
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; height: 100%">
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <span class="mono" style="font-size: 12px; letter-spacing: .12em">WHAT YOU KNOW THIS MORNING</span>
+            <span class="mono" style="font-size: 11px; color: #55554F">OBSERVED · as of 17 Jun 2017</span>
+          </div>
+          <div style="border: 2px solid #111111; background: #FFFFFF; padding: 12px 14px; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 4px 14px; font-size: 15px; line-height: 1.35">
+            <span class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55554F">CALL FROM</span><span><strong>Philadelphia 76ers</strong> front office</span>
+            <span class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55554F">OFFER</span><span>No. 3 this year, plus a future first: the 2018 Lakers pick if it lands 2–5, otherwise the 2019 Kings pick. <span class="mono" style="font-size: 11px; color: #55554F">[terms: verify]</span></span>
+            <span class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55554F">ASKS FOR</span><span>No. 1 this year</span>
+          </div>
+          <div style="display: flex; flex-direction: column; border-top: 2px solid #111111">
+            <div class="mono" style="display: grid; grid-template-columns: 52px minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1.3fr); gap: 10px; font-size: 11px; letter-spacing: .08em; color: #55554F; padding: 7px 0; border-bottom: 1px solid #D6D4CC">
+              <span>BOARDS</span><span>PROSPECT</span><span>SCHOOL</span><span>2016–17 (verify)</span>
+            </div>
+            <sc-for list="{{board}}" as="b" hint-placeholder-count="5">
+              <div style="display: grid; grid-template-columns: 52px minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1.3fr); gap: 10px; font-size: 16px; padding: 7px 0; border-bottom: 1px solid #D6D4CC; align-items: baseline">
+                <span class="disp" style="font-size: 20px; font-weight: 800">{{b.n}}</span><strong style="font-weight: 600">{{b.name}}</strong><span>{{b.school}}</span><span class="mono" style="font-size: 13px">{{b.line}}</span>
+              </div>
+            </sc-for>
+          </div>
+          <p style="margin: 0; font-size: 13px; line-height: 1.45; color: #3B3B37">A composite of June 2017 big boards: Fultz first nearly everywhere; boards split on Jackson and Tatum at 3–4. <span class="mono" style="font-size: 11px">[verify against published boards]</span></p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <span class="mono" style="font-size: 12px; letter-spacing: .12em">YOUR CALL · seat: President of Basketball Operations</span>
+          <p style="margin: 0; font-size: 14px; color: #3B3B37">You are in the seat. You are not Danny Ainge.</p>
+          <sc-for list="{{choices}}" as="c" hint-placeholder-count="3">
+            <button type="button" class="btn" onClick="{{c.pick}}" style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; border: 2px solid #111111; background: #FFFFFF; color: #111111; min-height: 76px; padding: 12px 18px; gap: 2px">
+              <span style="font-size: 20px; font-weight: 700">{{c.title}}</span><span style="font-size: 14px; font-weight: 500; color: #3B3B37">{{c.sub}}</span>
+            </button>
+          </sc-for>
+          <p style="margin: 4px 0 0; font-size: 14px; line-height: 1.45; color: #3B3B37">If your call matches what happened, you rejoin the record. If not, your call cuts a branch at this morning.</p>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isRecorded}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 900px; padding-top: 10px">
+        <span class="mono" style="font-size: 12px; letter-spacing: .12em">YOUR CALL MATCHES THE RECORD</span>
+        <h2 class="disp" style="margin: 0; font-size: 56px; font-weight: 900; line-height: .95; text-transform: uppercase">No branch. You rejoin Reality.</h2>
+        <p style="margin: 0; font-size: 18px; line-height: 1.5">Boston did trade down and took Jayson Tatum at No. 3 on 22 June. Your call is still kept — next to what you knew this morning — so it can be read apart from how things turned out.</p>
+        <div style="display: flex; gap: 12px">
+          <button type="button" class="btn" onClick="{{backToMoment}}" style="border: 2px solid #111111; background: #111111; color: #F6F5F0">Make a different call →</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isForked}}" hint-placeholder-val="{{false}}">
+      <div style="display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 48px; height: 100%">
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <span class="mono" style="font-size: 12px; letter-spacing: .12em; color: #C2410C">YOUR BRANCH NEEDS ANSWERS NO MODEL HAS</span>
+            <span class="mono" style="font-size: 11px; color: #55554F">AUTHORED · by you</span>
+          </div>
+          <p style="margin: 0; font-size: 15px; line-height: 1.45">Other teams would have reacted. BOW won’t pretend to know how. Declare each one — or leave it open, and the branch carries the gap.</p>
+          <sc-for list="{{assume}}" as="a" hint-placeholder-count="3">
+            <div class="aut" style="padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 8px">
+              <span style="font-size: 15px; font-weight: 600">{{a.q}}</span>
+              <div role="group" aria-label="{{a.q}}" style="display: flex; gap: 8px; flex-wrap: wrap">
+                <sc-for list="{{a.opts}}" as="o" hint-placeholder-count="3">
+                  <button type="button" class="chip" onClick="{{o.pick}}" aria-pressed="{{o.pressed}}" style="border: 1.5px solid #111111; background: {{o.bg}}; color: {{o.fg}}">{{o.label}}</button>
+                </sc-for>
+              </div>
+              <span style="font-size: 13px; color: #A6380A">{{a.moves}}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <span class="mono" style="font-size: 12px; letter-spacing: .12em">WHAT FOLLOWS FOR CERTAIN · COMPUTED</span>
+          <sc-for list="{{computed}}" as="cp" hint-placeholder-count="4">
+            <div style="display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 12px; align-items: start; padding: 7px 0; border-bottom: 1px solid #D6D4CC">
+              <div style="width: 14px; height: 14px; margin-top: 4px; background: {{cp.fill}}; border: 1.5px {{cp.border}} #111111; box-sizing: border-box"></div>
+              <span style="font-size: 15px; line-height: 1.4">{{cp.t}}</span>
+            </div>
+          </sc-for>
+          <div style="padding: 10px 14px; background: #FFFFFF; border: 1px solid #111111; font-size: 14px; line-height: 1.45"><strong>Hindsight, unsealed:</strong> in Reality, Fultz played 14 games as a rookie with a shoulder problem, was diagnosed with thoracic outlet syndrome in Dec 2018 and traded to Orlando in Feb 2019. Tatum won a title with Boston in 2024. None of that was knowable this morning.</div>
+          <button type="button" class="btn" onClick="{{play}}" style="align-self: flex-start; border: 2px solid #C2410C; background: #C2410C; color: #FFFFFF; font-size: 18px; min-height: 52px; padding: 0 24px">Run the branch forward →</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isRun}}" hint-placeholder-val="{{false}}">
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 34px; height: 100%">
+        <div style="display: flex; flex-direction: column">
+          <div class="mono" style="display: grid; grid-template-columns: 78px 226px 300px minmax(0, 1fr); gap: 14px; font-size: 11px; letter-spacing: .08em; color: #55554F; padding-bottom: 8px; border-bottom: 2px solid #111111; align-items: end">
+            <span>SEASON</span><span>REALITY · recorded</span>
+            <span style="position: relative; height: 26px; display: block">
+              <span style="position: absolute; left: 0; bottom: 0">WINS 20</span>
+              <span style="position: absolute; left: 120px; bottom: 0">40</span>
+              <span style="position: absolute; left: 180px; bottom: 0">50</span>
+              <span style="position: absolute; left: 240px; bottom: 0">60</span>
+              <span style="position: absolute; right: 0; bottom: 0">70</span>
+            </span>
+            <span style="color: #A6380A">YOUR BRANCH · {{branchName}} · guess</span>
+          </div>
+          <sc-for list="{{seasons}}" as="r" hint-placeholder-count="9">
+            <div class="row" style="display: grid; grid-template-columns: 78px 226px 300px minmax(0, 1fr); gap: 14px; align-items: center; min-height: 46px; border-bottom: 1px solid #D6D4CC; opacity: {{r.op}}; border-top: {{r.topRule}}">
+              <span class="disp" style="font-size: 20px; font-weight: 800">{{r.s}}</span>
+              <span style="font-size: 14px; line-height: 1.2"><strong style="font-weight: 700">{{r.rec}}</strong><br><span style="color: #3B3B37">{{r.po}}</span></span>
+              <span style="position: relative; height: 32px; display: block; background: linear-gradient(#D6D4CC,#D6D4CC) 0 50%/100% 1px no-repeat">
+                <sc-if value="{{r.hasBand}}" hint-placeholder-val="{{true}}">
+                  <span class="aut-o" style="position: absolute; left: {{r.b1x}}px; width: {{r.b1w}}px; top: {{r.b1y}}px; height: {{r.bh}}px; display: block"></span>
+                  <span class="mono" style="position: absolute; left: {{r.l1x}}px; top: {{r.b1y}}px; font-size: 9px; line-height: 12px; color: #A6380A">{{r.l1}}</span>
+                </sc-if>
+                <sc-if value="{{r.hasBand2}}" hint-placeholder-val="{{false}}">
+                  <span class="aut-o" style="position: absolute; left: {{r.b2x}}px; width: {{r.b2w}}px; top: 18px; height: 12px; display: block"></span>
+                  <span class="mono" style="position: absolute; left: {{r.l2x}}px; top: 18px; font-size: 9px; line-height: 12px; color: #A6380A">{{r.l2}}</span>
+                </sc-if>
+                <sc-if value="{{r.isUnk}}" hint-placeholder-val="{{false}}">
+                  <span style="position: absolute; left: 0; right: 0; top: 8px; height: 16px; display: block; border: 1.5px dashed #C2410C; box-sizing: border-box"></span>
+                </sc-if>
+                <sc-if value="{{r.hasTick}}" hint-placeholder-val="{{true}}">
+                  <span style="position: absolute; left: {{r.tx}}px; top: 0; width: 4px; height: 32px; margin-left: -2px; background: #111111; display: block"></span>
+                </sc-if>
+              </span>
+              <span style="font-size: 14px; line-height: 1.3; color: {{r.bColor}}">{{r.btext}}</span>
+            </div>
+          </sc-for>
+        </div>
+        <aside style="display: flex; flex-direction: column; gap: 12px; padding-top: 2px">
+          <p class="disp" style="margin: 0; font-size: 30px; font-weight: 800; line-height: 1; text-transform: uppercase">{{headline}}</p>
+          <span class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55554F">YOUR BRANCH, FOR CERTAIN</span>
+          <sc-for list="{{ledger}}" as="lg" hint-placeholder-count="4">
+            <div style="display: grid; grid-template-columns: 12px minmax(0, 1fr); gap: 10px; align-items: start; font-size: 14px; line-height: 1.35">
+              <div style="width: 12px; height: 12px; margin-top: 3px; background: {{lg.fill}}; border: 1.5px {{lg.border}} #111111; box-sizing: border-box"></div><span>{{lg.t}}</span>
+            </div>
+          </sc-for>
+          <p style="margin: 2px 0 0; font-size: 14px; line-height: 1.45; color: #3B3B37">Black ticks: what happened. Orange outlines: a designer’s guess for three seasons, then unknown. The branch still exists past the horizon; it just isn’t known.</p>
+          <div style="padding: 9px 12px; background: #FFFFFF; border: 1px solid #111111; display: flex; flex-direction: column; gap: 5px">
+            <span class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55554F">SHARE THIS BRANCH</span>
+            <span class="mono" style="font-size: 11px; line-height: 1.4; word-break: break-all">{{shareAddr}}</span>
+          </div>
+        </aside>
+      </div>
+    </sc-if>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      const s = this.state || {};
+      if (s.step === 'run' && (s.run || 0) < 9) this.setState({ run: (s.run || 0) + 1 });
+    }, 420);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  renderVals() {
+    const s = this.state || {};
+    const step = s.step || 'reality';
+    const opt = s.opt || null;
+    const how = !!s.how;
+    const run = s.run || 0;
+    const A = s.A || {};
+    const X = (t) => Math.round(70 + (t - 2016.5) * 126);
+
+    const events = [
+      { t: 2017.46, d: '17–22 JUN 2017', t2: 'No. 1 traded · Tatum at No. 3', tier: 0 },
+      { t: 2018.38, d: 'MAY 2018', t2: 'East finals, Game 7', tier: 1 },
+      { t: 2019.47, d: 'JUN 2019', t2: 'Kings pick → No. 14', tier: 0 },
+      { t: 2022.41, d: 'MAY 2022', t2: 'Win the East', tier: 0 },
+      { t: 2024.46, d: '17 JUN 2024', t2: 'Champions', tier: 0 },
+      { t: 2025.36, d: '12 MAY 2025', t2: 'Tatum’s Achilles', tier: 1 }
+    ].map((e) => {
+      const x = X(e.t), ly = e.tier === 0 ? 20 : 74;
+      return { x: x, lx: x + 8, ly: ly, y: ly + 4, stem: 112 - (ly + 4), d: e.d, t: e.t2 };
+    });
+    const years = [];
+    for (let y = 2017; y <= 2026; y++) years.push({ y: String(y), x: X(y) });
+
+    const forked = step === 'forked' || step === 'run';
+    const sealed = step === 'moment';
+    const branchSlug = opt === 'fultz' ? 'keep-no1-fultz' : 'keep-no1-tatum';
+    const address = 'celtics / 2017-06-17 morning / ' + (forked ? 'branch:you·' + branchSlug : 'reality') + ' / as: president of basketball ops / view: timeline';
+
+    const choices = [
+      { id: 'rec', title: 'Trade down. Take a player at No. 3.', sub: 'Keep the extra first-round pick.' },
+      { id: 'fultz', title: 'Keep No. 1. Take Markelle Fultz.', sub: 'The top prospect on nearly every board.' },
+      { id: 'tatum1', title: 'Keep No. 1. Take Jayson Tatum.', sub: 'Your player, without the extra pick.' }
+    ].map((c) => ({ ...c, pick: () => {
+      if (c.id === 'rec') this.setState({ step: 'recorded', opt: null, A: {}, run: 0 });
+      else this.setState({ step: 'forked', opt: c.id, A: {}, run: 0 });
+    } }));
+
+    const board = [
+      { n: '1', name: 'Markelle Fultz', school: 'Washington', line: '23.2 pts · 5.9 ast' },
+      { n: '2', name: 'Lonzo Ball', school: 'UCLA', line: '14.6 pts · 7.6 ast' },
+      { n: '3–4', name: 'Josh Jackson', school: 'Kansas', line: '16.3 pts · 7.4 reb' },
+      { n: '3–4', name: 'Jayson Tatum', school: 'Duke', line: '16.8 pts · 7.3 reb' },
+      { n: '5', name: 'De’Aaron Fox', school: 'Kentucky', line: '16.7 pts · 4.6 ast' }
+    ];
+
+    const DEFS = {
+      fultz: [
+        { k: 'phi', q: 'Philadelphia, now picking at No. 3, takes…', opts: [['tatum', 'Jayson Tatum'], ['jackson', 'Josh Jackson'], ['unk', 'Leave it unknown']], def: 'unk' },
+        { k: 'health', q: 'Fultz’s shoulder (in Reality: trouble from his rookie autumn, thoracic outlet syndrome diagnosed Dec 2018)…', opts: [['yes', 'Happens here too'], ['no', 'Does not happen'], ['unk', 'Unknown — show both']], def: 'unk' },
+        { k: 'summer', q: 'Boston’s other 2017 moves — Hayward signing, Irving trade…', opts: [['rec', 'Still happen (Boston clears the extra cap room)'], ['unk', 'Leave unknown']], def: 'rec' }
+      ],
+      tatum1: [
+        { k: 'phi', q: 'Philadelphia, now picking at No. 3, takes…', opts: [['fultz', 'Markelle Fultz'], ['jackson', 'Josh Jackson'], ['unk', 'Leave it unknown']], def: 'unk' },
+        { k: 'summer', q: 'Boston’s other 2017 moves — Hayward signing, Irving trade…', opts: [['rec', 'Still happen (Boston clears the extra cap room)'], ['unk', 'Leave unknown']], def: 'rec' }
+      ]
+    };
+    const defs = opt ? DEFS[opt] : [];
+    const val = (k) => { const d = defs.find((x) => x.k === k); return A[k] || (d ? d.def : null); };
+    const phi = val('phi'), health = val('health'), summerUnk = val('summer') === 'unk';
+    const MOVES = {
+      phi: phi === 'unk' ? 'Moves: Philadelphia’s roster stays open in your branch.' : 'Moves: Philadelphia’s roster in your branch.',
+      health: health === 'unk' ? 'Moves: the guess splits into two ranges.' : 'Moves: which guess range is drawn.',
+      summer: summerUnk ? 'Moves: every win guess becomes unknown.' : 'Moves: guesses hold Boston’s other moves as recorded.'
+    };
+    const assume = defs.map((d) => ({
+      q: d.q, moves: MOVES[d.k],
+      opts: d.opts.map((o) => {
+        const on = val(d.k) === o[0];
+        return { label: o[1], pressed: on ? 'true' : 'false', bg: on ? '#111111' : '#FFFFFF', fg: on ? '#F6F5F0' : '#111111',
+          pick: () => this.setState({ A: { ...((this.state && this.state.A) || {}), [d.k]: o[0] }, run: 0 }) };
+      })
+    }));
+
+    const toned = { fill: '#8C8A82', border: 'solid' };
+    const open = { fill: 'transparent', border: 'dashed' };
+    const outl = { fill: 'transparent', border: 'solid' };
+    const phiLine = phi === 'tatum' ? 'Philadelphia: Embiid, Simmons — and Jayson Tatum. Your declaration.'
+      : phi === 'fultz' ? 'Philadelphia: Embiid, Simmons — and Markelle Fultz. Your declaration.'
+      : phi === 'jackson' ? 'Philadelphia: Embiid, Simmons — and Josh Jackson. Your declaration.'
+      : 'Philadelphia’s No. 3 pick: unknown. The branch carries the gap.';
+    const capLine = summerUnk ? 'Hayward’s max needed cap room; the No. 1 salary uses ≈$2.7M more of it. Whether Boston still signs him: unknown.'
+      : 'Hayward’s max needed cap room (Boston traded Avery Bradley for it in July 2017). The No. 1 salary uses ≈$2.7M more — you declared Boston clears it.';
+    const computed = opt ? [
+      { ...toned, t: opt === 'fultz' ? 'Roster: Markelle Fultz (No. 1) in place of Jayson Tatum (No. 3).' : 'Roster: Jayson Tatum, drafted No. 1 instead of No. 3.' },
+      { ...toned, t: 'Rookie salary 2017–18: ≈$8.34M at No. 1 against ≈$5.65M at No. 3 — ≈$2.7M more on the cap. [rookie scale: verify]' },
+      { ...(summerUnk ? open : outl), t: capLine },
+      { ...toned, t: 'No extra first: the 2019 Kings pick (No. 14 — Romeo Langford in Reality) never comes to Boston.' },
+      { ...(phi === 'unk' ? open : outl), t: phiLine }
+    ] : [];
+    const ledger = opt ? [computed[0], computed[3], computed[4], computed[2]] : [];
+    const headline = opt === 'fultz' && phi === 'tatum' ? 'In your branch, Jayson Tatum is a 76er.'
+      : opt === 'fultz' ? 'In your branch, Boston takes Markelle Fultz first.'
+      : 'In your branch, Tatum goes first — and a pick disappears.';
+
+    const REAL = [
+      ['2017–18', 55, 27, 'Lost East finals in 7 (CLE)'],
+      ['2018–19', 49, 33, 'Lost East semis (MIL)'],
+      ['2019–20', 48, 24, 'Lost East finals (MIA)'],
+      ['2020–21', 36, 36, 'Lost first round (BKN)'],
+      ['2021–22', 51, 31, 'Lost Finals (GSW)'],
+      ['2022–23', 57, 25, 'Lost East finals in 7 (MIA)'],
+      ['2023–24', 64, 18, 'Won the championship (DAL)'],
+      ['2024–25', 61, 21, 'Lost East semis (NYK)'],
+      ['2025–26', null, null, '[not in this prototype — Reality feed]']
+    ];
+    const W = 300;
+    const px = (w) => Math.max(0, Math.min(W, Math.round((w - 20) / 50 * W)));
+    const split = opt === 'fultz' && health === 'unk';
+    const band = (c, sp) => ({ x: px(c - sp), w: Math.max(8, px(c + sp) - px(c - sp)) });
+    const seasons = REAL.map((r, k) => {
+      const row = { s: r[0], rec: r[1] === null ? '—' : (r[1] + '–' + r[2]), po: r[3], op: k < run ? 1 : 0.12,
+        hasTick: r[1] !== null, tx: r[1] === null ? 0 : px(r[1]), hasBand: false, hasBand2: false, isUnk: false,
+        b1x: 0, b1w: 0, b2x: 0, b2w: 0, b1y: 8, bh: 16, l1: '', l2: '', l1x: 0, l2x: 0, btext: '', bColor: '#A6380A',
+        topRule: k === 3 ? '2px solid #C2410C' : '0' };
+      if (!opt) return row;
+      if (k <= 2 && !summerUnk) {
+        if (opt === 'fultz') {
+          const hurt = [-3, -6, -7][k], sp = 3 + 2 * k, spW = 5 + 2 * k;
+          if (split) {
+            const a = band(r[1] + hurt, sp), b = band(r[1], spW);
+            row.hasBand = true; row.b1x = a.x; row.b1w = a.w; row.b1y = 2; row.bh = 12; row.l1 = 'hurt'; row.l1x = Math.max(0, a.x - 26);
+            row.hasBand2 = true; row.b2x = b.x; row.b2w = b.w; row.l2 = 'healthy'; row.l2x = Math.min(W - 44, b.x + b.w + 4);
+            row.btext = (r[1] + hurt - sp) + '–' + (r[1] + hurt + sp) + ' if hurt · ' + (r[1] - spW) + '–' + (r[1] + spW) + ' if healthy';
+          } else if (health === 'yes') {
+            const a = band(r[1] + hurt, sp);
+            row.hasBand = true; row.b1x = a.x; row.b1w = a.w;
+            row.btext = (r[1] + hurt - sp) + '–' + (r[1] + hurt + sp) + ' wins · guess';
+          } else {
+            const a = band(r[1], spW);
+            row.hasBand = true; row.b1x = a.x; row.b1w = a.w;
+            row.btext = (r[1] - spW) + '–' + (r[1] + spW) + ' · no reason to guess better or worse';
+          }
+        } else {
+          const sp = 2 + k;
+          const a = band(r[1], sp);
+          row.hasBand = true; row.b1x = a.x; row.b1w = a.w;
+          row.btext = (r[1] - sp) + '–' + (r[1] + sp) + ' wins · same player, same team';
+        }
+      } else {
+        row.isUnk = true;
+        row.btext = summerUnk && k <= 2 ? 'Unknown — you left Boston’s summer open.' : k === 3 ? 'Beyond the horizon: unknown.' : k === 6 ? 'A banner? Unknown. BOW doesn’t award titles it can’t justify.' : 'Unknown.';
+        row.bColor = '#3B3B37';
+      }
+      return row;
+    });
+
+    const shareAddr = 'bow://celtics/2017-06-17/branch:you·' + branchSlug + '?' + defs.map((d) => d.k + '=' + val(d.k)).join('&');
+
+    return {
+      address, how,
+      howPressed: how ? 'true' : 'false', howBg: how ? '#111111' : 'transparent', howFg: how ? '#F6F5F0' : '#111111',
+      toggleHow: () => this.setState({ how: !how }),
+      reset: () => this.setState({ step: 'reality', opt: null, A: {}, run: 0 }),
+      enter: () => this.setState({ step: 'moment', run: 0 }),
+      backToMoment: () => this.setState({ step: 'moment' }),
+      play: () => this.setState({ step: 'run', run: 0 }),
+      branchOp: forked ? 1 : 0,
+      sealOp: sealed ? 1 : 0, sealHidden: sealed ? 'false' : 'true',
+      isReality: step === 'reality', isMoment: step === 'moment', isRecorded: step === 'recorded',
+      isForked: step === 'forked', isRun: step === 'run',
+      events, years, board, choices, assume, computed, ledger, headline, seasons,
+      branchName: opt === 'fultz' ? 'Fultz at No. 1' : 'Tatum at No. 1',
+      shareAddr
+    };
+  }
+}
+</script>
+</body>
+</html>

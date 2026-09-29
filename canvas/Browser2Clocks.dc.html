@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Clock Hall</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700;800;900&amp;family=Red+Hat+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E6E5E1;color:#141414;font-family:'Red Hat Display',sans-serif}
+.mono{font-family:'Red Hat Mono',monospace}
+.ck{position:absolute;left:0;top:0;width:300px;height:300px;padding:0;margin:0;border:0;background:transparent;cursor:pointer;transform-origin:0 0;transition:transform .85s cubic-bezier(.3,.7,.2,1),opacity .5s ease}
+.ck:focus-visible{outline:3px solid #141414;outline-offset:8px}
+.hang{position:absolute;left:0;top:0;width:300px;height:300px;display:block;transform-origin:50% 0;animation:hang .8s cubic-bezier(.3,.7,.2,1) both}
+@keyframes hang{from{opacity:0;transform:translateY(-40px) rotate(-5deg)}to{opacity:1;transform:none}}
+.eng{position:absolute;left:0;width:300px;text-align:center;white-space:nowrap;font-family:'Red Hat Mono',monospace;color:#141414;line-height:1}
+.btn{font-family:'Red Hat Display',sans-serif;font-weight:700;font-size:15px;min-height:44px;padding:0 16px;border:2px solid #141414;background:#FBFBF9;color:#141414;cursor:pointer;border-radius:0;transition:background .2s,color .2s}
+.btn:hover:not(:disabled){background:#141414;color:#FBFBF9}
+.btn:disabled{opacity:.6;cursor:not-allowed;border-style:dashed}
+.btn:focus-visible{outline:3px solid #0B5C6B;outline-offset:2px}
+.btnp{background:#141414;color:#FBFBF9}
+.btnp:hover:not(:disabled){background:#3A3935}
+.ixb{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;padding:4px 8px;border:0;border-bottom:1px solid #C9C7C0;background:transparent;color:#141414;text-align:left;cursor:pointer;font-family:'Red Hat Display',sans-serif;transition:background .2s}
+.ixb:hover{background:#ECEBE7}
+.ixb:focus-visible{outline:3px solid #141414;outline-offset:-3px}
+.sw{display:inline-block;width:16px;height:16px;box-sizing:border-box;flex:none;vertical-align:-3px}
+.t-obs{background:#141414}
+.t-rec{background:#141414;box-shadow:inset 0 0 0 2px #141414,inset 0 0 0 4px #FFFFFF}
+.t-aut{background:transparent;border:2px solid #141414}
+.t-com{background:#B4B2A9}
+.t-mod{background:repeating-linear-gradient(135deg,#141414 0 1.5px,transparent 1.5px 5px);border:1px solid #141414}
+.t-gen{background:radial-gradient(circle,#141414 1.1px,transparent 1.4px) 0 0/5px 5px;border:1px dotted #141414}
+.t-unk{background:transparent;border:2px dashed #141414}
+.t-fork{background:#0B5C6B;box-shadow:inset 0 0 0 2px #0B5C6B,inset 0 0 0 4px #FFFFFF}
+.pulse{animation:pl 1.6s infinite}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+@keyframes pl{0%{opacity:1}50%{opacity:.3}100%{opacity:1}}
+.rng{width:100%;height:36px;accent-color:#141414}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #E6E5E1; color: #141414; font-family: 'Red Hat Display', sans-serif">
+
+<svg width="0" height="0" style="position: absolute" aria-hidden="true"><defs>
+<pattern id="ckHatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="#141414" stroke-width="1.6"></line></pattern>
+<pattern id="ckStip" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.3" fill="#141414"></circle></pattern>
+</defs></svg>
+
+<div style="position: absolute; left: 0; top: 76px; width: 1440px; height: 824px; background: repeating-linear-gradient(180deg, transparent 0 95px, rgba(20,20,20,.07) 95px 96px)"></div>
+
+<header style="position: absolute; left: 0; top: 0; width: 1440px; height: 76px; box-sizing: border-box; border-bottom: 2px solid #141414; background: #EFEEEA">
+<div style="position: absolute; left: 28px; top: 14px">
+<div style="font-size: 30px; font-weight: 900; letter-spacing: .02em; line-height: 1">BOW</div>
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; margin-top: 6px; color: #55534E">THE CLOCK HALL</div>
+</div>
+<form onSubmit="{{onSubmit}}" style="position: absolute; left: 250px; top: 13px; width: 600px; height: 50px; display: flex; margin: 0">
+<input type="text" value="{{q}}" onChange="{{onQ}}" aria-label="Search for systems" placeholder="a team, a market, a supply chain" style="flex: 1; min-width: 0; height: 50px; box-sizing: border-box; border: 2px solid #141414; border-right: 0; border-radius: 0; background: #FFFFFF; color: #141414; padding: 0 16px; font-family: 'Red Hat Display', sans-serif; font-size: 22px; font-weight: 500">
+<button type="submit" class="btn btnp" style="height: 50px; min-width: 96px">Search</button>
+</form>
+<div style="position: absolute; left: 866px; top: 20px; display: flex; gap: 8px">
+<sc-for list="{{quick}}" as="qk" hint-placeholder-count="2">
+<button type="button" class="btn" onClick="{{qk.go}}" aria-pressed="{{qk.pressed}}" style="min-height: 36px; height: 36px; padding: 0 12px; font-size: 14px; background: {{qk.bg}}; color: {{qk.fg}}">{{qk.label}}</button>
+</sc-for>
+</div>
+<button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="position: absolute; right: 28px; top: 20px; min-height: 36px; height: 36px; padding: 0 12px; font-size: 14px; background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+</header>
+
+<sc-if value="{{hasWall}}" hint-placeholder-val="{{true}}">
+<div>
+<span class="mono" style="position: absolute; left: 30px; top: 80px; font-size: 12px; letter-spacing: .04em; color: #55534E; opacity: {{capOp}}; transition: opacity .4s">{{wallCap}}</span>
+<div style="position: absolute; left: 18px; top: 96px; width: 1016px; height: 8px; background: #2B2A27; opacity: {{beamOp}}; transition: opacity .5s"></div>
+<div style="position: absolute; left: 18px; top: 528px; width: 1016px; height: 8px; background: #2B2A27; opacity: {{beamOp}}; transition: opacity .5s"></div>
+<span class="mono" style="position: absolute; left: 30px; top: 80px; font-size: 11px; letter-spacing: .08em; color: #55534E; opacity: {{stripCapOp}}; transition: opacity .5s .4s">PRESENCES · each one keeps its own time while you are elsewhere</span>
+</div>
+</sc-if>
+
+<sc-if value="{{noMatch}}" hint-placeholder-val="{{false}}">
+<div role="status" style="position: absolute; left: 30px; top: 300px; width: 900px">
+<div style="font-size: 44px; font-weight: 800; line-height: 1.05">Nothing hangs here yet.</div>
+<div style="font-size: 18px; margin-top: 12px; color: #55534E; line-height: 1.4">This prototype knows two queries. Try “Boston basketball” or “semiconductor supply chain”.</div>
+</div>
+</sc-if>
+
+<sc-if value="{{wallOn}}" hint-placeholder-val="{{true}}">
+<div>
+<sc-for list="{{clocks}}" as="c" hint-placeholder-count="10">
+<div style="position: absolute; left: {{c.rodX}}px; top: {{c.rodY}}px; width: 3px; height: {{c.rodH}}px; background: #2B2A27; opacity: {{c.rodOp}}; transition: opacity .4s"></div>
+
+<button type="button" class="ck" aria-label="{{c.aria}}" aria-pressed="{{c.pressed}}" onClick="{{c.pick}}" style="transform: translate({{c.x}}px, {{c.y}}px) scale({{c.k}}); opacity: {{c.op}}; visibility: {{c.vis}}; z-index: {{c.z}}">
+<span class="hang" aria-hidden="true" style="animation-delay: {{c.delay}}ms">
+<span style="position: absolute; left: 9px; top: 12px; width: 282px; height: 282px; border-radius: {{c.rad}}; box-shadow: 0 12px 16px rgba(20,20,20,.22)"></span>
+
+<sc-if value="{{c.isReality}}" hint-placeholder-val="{{true}}">
+<svg width="300" height="300" viewBox="0 0 300 300" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<circle cx="150" cy="150" r="144" fill="#FFFFFF" stroke="#141414" stroke-width="12"></circle>
+<circle cx="150" cy="150" r="135" fill="none" stroke="#141414" stroke-width="1.5"></circle>
+<circle cx="150" cy="150" r="127" fill="none" stroke="#141414" stroke-width="6" stroke-dasharray="1.6 11.7005" stroke-dashoffset="0.8" transform="rotate(-90 150 150)"></circle><circle cx="150" cy="150" r="123" fill="none" stroke="#141414" stroke-width="16" stroke-dasharray="4.4 60.0" stroke-dashoffset="2.2" transform="rotate(-90 150 150)"></circle>
+<g style="opacity: {{c.compOp}}; transition: opacity .7s">
+<circle cx="150" cy="202" r="32" fill="#FFFFFF" stroke="#141414" stroke-width="2" stroke-dasharray="{{c.compDash}}"></circle>
+<path d="M128.3 214.5A25 25 0 1 1 171.7 214.5" fill="none" stroke="#55534E" stroke-width="1"></path>
+<path d="M131.5 206.3L122.7 208.3 M156.1 184.0L158.9 175.5 M164.1 189.3L170.8 183.3 M169.0 202.5L178.0 202.7" stroke="#141414" stroke-width="2" fill="none" style="opacity: {{c.compNeedleOp}}"></path>
+<line x1="150" y1="202" x2="150" y2="181" stroke="#141414" stroke-width="3" style="opacity: {{c.compNeedleOp}}; transform-origin: 150px 202px; transform: rotate({{c.compDeg}}deg); transition: transform .9s cubic-bezier(.3,.7,.2,1)"></line>
+<circle cx="150" cy="202" r="3.5" fill="#141414"></circle>
+</g>
+</svg>
+</sc-if>
+
+<sc-if value="{{c.isWorld}}" hint-placeholder-val="{{false}}">
+<svg width="300" height="300" viewBox="0 0 300 300" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<circle cx="150" cy="150" r="144" fill="#FFFFFF" stroke="#141414" stroke-width="8"></circle>
+<circle cx="150" cy="150" r="135" fill="none" stroke="#141414" stroke-width="1.5"></circle>
+<circle cx="150" cy="150" r="123" fill="none" stroke="#141414" stroke-width="9" stroke-dasharray="2 12.862" stroke-dashoffset="1" transform="rotate(-90 150 150)"></circle><circle cx="150" cy="150" r="119" fill="none" stroke="#141414" stroke-width="18" stroke-dasharray="4 182.9" stroke-dashoffset="2" transform="rotate(-90 150 150)"></circle>
+<circle cx="150" cy="150" r="108" fill="none" stroke="#141414" stroke-width="6" style="stroke-dasharray: {{c.arcDash}} 700; transform: rotate(-90deg); transform-origin: 150px 150px; transition: stroke-dasharray .9s cubic-bezier(.3,.7,.2,1)"></circle>
+</svg>
+<span class="eng" style="top: 166px; font-family: 'Red Hat Display', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: .06em">YEAR TWO</span>
+<span class="eng" style="top: 190px; font-size: 20px; font-weight: 600">{{c.weekText}}</span>
+<span class="eng" style="top: 60px; left: 120px; width: 60px; font-size: 19px; color: #55534E">52</span>
+<span class="eng" style="top: 140px; left: 196px; width: 60px; font-size: 19px; color: #55534E">13</span>
+<span class="eng" style="top: 218px; left: 120px; width: 60px; font-size: 19px; color: #55534E">26</span>
+<span class="eng" style="top: 140px; left: 44px; width: 60px; font-size: 19px; color: #55534E">39</span>
+</sc-if>
+
+<sc-if value="{{c.isMoment}}" hint-placeholder-val="{{false}}">
+<svg width="300" height="300" viewBox="0 0 300 300" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<circle cx="150" cy="150" r="144" fill="#FFFFFF" stroke="#141414" stroke-width="12"></circle>
+<circle cx="150" cy="150" r="135" fill="none" stroke="#141414" stroke-width="1.5"></circle>
+<circle cx="150" cy="150" r="127" fill="none" stroke="#141414" stroke-width="6" stroke-dasharray="1.6 11.7005" stroke-dashoffset="0.8" transform="rotate(-90 150 150)"></circle><circle cx="150" cy="150" r="123" fill="none" stroke="#141414" stroke-width="16" stroke-dasharray="4.4 60.0" stroke-dashoffset="2.2" transform="rotate(-90 150 150)"></circle>
+</svg>
+</sc-if>
+
+<sc-if value="{{c.numerals}}" hint-placeholder-val="{{true}}">
+<svg width="300" height="300" viewBox="0 0 300 300" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<g font-family="Red Hat Display, sans-serif" font-weight="700" font-size="28" fill="#141414" text-anchor="middle" dominant-baseline="central">
+<text x="150" y="53">12</text><text x="199" y="66">1</text><text x="235" y="102">2</text><text x="248" y="150">3</text><text x="235" y="198">4</text><text x="199" y="234">5</text><text x="150" y="247">6</text><text x="101" y="234">7</text><text x="65" y="198">8</text><text x="52" y="150">9</text><text x="65" y="102">10</text><text x="101" y="66">11</text>
+</g>
+</svg>
+</sc-if>
+
+<sc-if value="{{c.isMoment}}" hint-placeholder-val="{{false}}">
+<svg width="300" height="300" viewBox="0 0 300 300" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<path d="M150 150L150 10A140 140 0 0 1 150 290Z" fill="#FFFFFF" stroke="#141414" stroke-width="2.5" stroke-dasharray="7 6" style="fill-opacity: {{c.wedgeOp}}; stroke-opacity: {{c.wedgeStroke}}; transition: fill-opacity .9s, stroke-opacity .9s"></path>
+<g style="opacity: {{c.sealOp}}; transform-origin: 222px 150px; transform: scale({{c.sealS}}); transition: opacity .9s, transform .9s">
+<circle cx="222" cy="150" r="35" fill="#141414"></circle>
+<circle cx="222" cy="150" r="28" fill="none" stroke="#FFFFFF" stroke-width="1.5"></circle>
+<rect x="211" y="150" width="22" height="16" fill="#FFFFFF"></rect>
+<path d="M215 150V144A7 7 0 0 1 229 144V150" fill="none" stroke="#FFFFFF" stroke-width="3"></path>
+</g>
+</svg>
+</sc-if>
+
+<sc-if value="{{c.isFork}}" hint-placeholder-val="{{false}}">
+<svg width="300" height="300" viewBox="0 0 300 300" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<rect x="14" y="14" width="272" height="272" fill="#FFFFFF" stroke="#0B5C6B" stroke-width="8"></rect>
+<rect x="27" y="27" width="246" height="246" fill="none" stroke="#0B5C6B" stroke-width="1.5"></rect>
+<path d="M155.0 78.2A72 72 0 0 1 220.9 162.5" fill="none" stroke="#0B5C6B" stroke-linecap="butt" style="stroke-width: {{c.sw1}}; stroke-dasharray: {{c.sd1}}; transition: stroke-width .8s"></path>
+<path d="M209.7 190.3A72 72 0 0 1 103.7 205.2" fill="none" stroke="#0B5C6B" style="stroke-width: {{c.sw2}}; stroke-dasharray: {{c.sd2}}; transition: stroke-width .8s"></path>
+<path d="M85.3 181.6A72 72 0 0 1 125.4 82.3" fill="none" stroke="#0B5C6B" style="stroke-width: {{c.sw3}}; stroke-dasharray: {{c.sd3}}; transition: stroke-width .8s"></path>
+</svg>
+<span class="eng" style="top: 31px; font-size: 20px; font-weight: 500">{{c.eng1}}</span>
+<span class="eng" style="top: 52px; font-size: 20px; font-weight: 500; color: #0B5C6B">{{c.eng2}}</span>
+</sc-if>
+
+<sc-if value="{{c.isHistory}}" hint-placeholder-val="{{false}}">
+<svg width="300" height="300" viewBox="0 0 300 300" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<circle cx="150" cy="150" r="144" fill="#FFFFFF" stroke="#6B6A64" stroke-width="12"></circle>
+<circle cx="150" cy="150" r="135" fill="none" stroke="#6B6A64" stroke-width="1.5"></circle>
+<circle cx="150" cy="150" r="117" fill="none" stroke="#6B6A64" stroke-width="16" stroke-dasharray="3.5 57.76" stroke-dashoffset="1.75" transform="rotate(-90 150 150)"></circle>
+</svg>
+<span class="eng" style="top: 126px; font-family: 'Red Hat Display', sans-serif; font-weight: 800; font-size: 46px; letter-spacing: .01em">1985–86</span>
+</sc-if>
+
+<sc-if value="{{c.isModel}}" hint-placeholder-val="{{false}}">
+<svg width="300" height="300" viewBox="0 0 300 300" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<circle cx="150" cy="150" r="148" fill="#FFFFFF" stroke="#141414" stroke-width="1.5"></circle>
+<circle cx="150" cy="150" r="138" fill="none" stroke="url(#ckHatch)" stroke-width="18"></circle>
+<circle cx="150" cy="150" r="129" fill="none" stroke="#141414" stroke-width="1.5"></circle>
+<rect x="52" y="116" width="196" height="70" fill="#141414"></rect>
+</svg>
+<span class="eng" style="top: 78px; font-size: 24px; letter-spacing: .3em; font-weight: 600">RUN</span>
+<span class="eng" style="top: 204px; font-size: 22px; font-weight: 500">{{c.ver}}</span>
+<span style="position: absolute; left: 60px; top: 122px; width: 180px; height: 58px; overflow: hidden; display: flex; background: #FFFFFF">
+<sc-for list="{{c.wheels}}" as="w" hint-placeholder-count="3">
+<span style="display: block; width: 60px; height: 58px; overflow: hidden; border-right: 2px solid #141414; box-sizing: border-box">
+<span style="display: block; text-align: center; font-family: 'Red Hat Mono', monospace; font-weight: 600; font-size: 40px; line-height: 58px; transform: translateY({{w.y}}px); transition: transform .8s cubic-bezier(.3,.7,.2,1)">9<br>8<br>7<br>6<br>5<br>4<br>3<br>2<br>1<br>0</span>
+</span>
+</sc-for>
+</span>
+</sc-if>
+
+<sc-if value="{{c.isText}}" hint-placeholder-val="{{false}}">
+<svg width="300" height="300" viewBox="0 0 300 300" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<circle cx="150" cy="150" r="148" fill="#FFFFFF" stroke="#141414" stroke-width="2"></circle>
+<circle cx="150" cy="150" r="139" fill="none" stroke="#141414" stroke-width="2"></circle>
+<path d="{{c.doneD}}" fill="#141414" stroke="#141414" stroke-width="2"></path>
+<path d="{{c.curD}}" fill="#E6E5E1" stroke="#141414" stroke-width="4"></path>
+<path d="{{c.restD}}" fill="none" stroke="#141414" stroke-width="2"></path>
+<rect x="142" y="100" width="6" height="20" fill="#141414"></rect>
+<rect x="152" y="100" width="6" height="20" fill="#141414"></rect>
+</svg>
+<span class="eng" style="top: 128px; font-family: 'Red Hat Display', sans-serif; font-weight: 800; font-size: 30px">{{c.stepText}}</span>
+<span class="eng" style="top: 168px; font-size: 20px; letter-spacing: .04em">{{c.stepSub}}</span>
+</sc-if>
+
+<sc-if value="{{c.isCreator}}" hint-placeholder-val="{{false}}">
+<svg width="300" height="300" viewBox="0 0 300 300" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+<circle cx="150" cy="150" r="146" fill="#FFFFFF" stroke="#141414" stroke-width="2" stroke-dasharray="1 5" stroke-linecap="round"></circle>
+<circle cx="150" cy="150" r="136" fill="none" stroke="url(#ckStip)" stroke-width="18"></circle>
+<circle cx="150" cy="150" r="118" fill="none" stroke="#141414" stroke-width="14" stroke-dasharray="2.5 182.85" stroke-dashoffset="1.25" transform="rotate(-90 150 150)"></circle>
+</svg>
+<span class="eng" style="top: 196px; font-size: 22px; letter-spacing: .04em">unreviewed</span>
+</sc-if>
+
+<sc-if value="{{c.isReality}}" hint-placeholder-val="{{true}}">
+<span class="eng" style="top: 92px; font-size: 17px; letter-spacing: .04em; font-weight: 500">{{c.faceNote}}</span>
+<span class="eng" style="top: 114px; font-size: 17px; letter-spacing: .3em; font-weight: 600">LIVE</span>
+</sc-if>
+
+<sc-for list="{{c.hands}}" as="h" hint-placeholder-count="3">
+<span style="position: absolute; display: block; left: {{h.l}}px; top: {{h.t}}px; width: {{h.w}}px; height: {{h.h}}px; background: {{h.bg}}; clip-path: {{h.clip}}; transform-origin: 50% {{h.oy}}px; transform: rotate({{h.deg}}deg); transition: {{h.tr}}">
+<span style="position: absolute; display: block; left: 50%; margin-left: -{{h.dh}}px; top: {{h.dt}}px; width: {{h.dd}}px; height: {{h.dd}}px; border-radius: 50%; background: {{h.bg}}"></span>
+</span>
+</sc-for>
+<span style="position: absolute; display: block; left: {{c.capL}}px; top: {{c.capL}}px; width: {{c.capD}}px; height: {{c.capD}}px; border-radius: 50%; background: {{c.capBg}}"></span>
+</span>
+</button>
+
+<div style="position: absolute; left: {{c.px}}px; top: {{c.py}}px; width: {{c.pw}}px; box-sizing: border-box; padding: 6px 10px; text-align: center; background: {{c.plBg}}; color: {{c.plFg}}; opacity: {{c.plOp}}; visibility: {{c.plVis}}; transition: left .85s cubic-bezier(.3,.7,.2,1), top .85s cubic-bezier(.3,.7,.2,1), width .85s cubic-bezier(.3,.7,.2,1), opacity .4s {{c.plDelay}}, background .25s, color .25s">
+<div style="font-size: {{c.pfs}}px; font-weight: 800; line-height: 1.12">{{c.name}}</div>
+<div class="mono" style="font-size: 11.5px; line-height: 1.35; margin-top: 5px; letter-spacing: .02em; color: {{c.plMuted}}; display: flex; gap: 7px; justify-content: center; align-items: flex-start; text-align: left"><span style="display: inline-block; flex: none; padding: 2px; background: #FBFBF9; line-height: 0; margin-top: 0"><span class="sw {{c.sw}}"></span></span><span>{{c.tk}}</span></div>
+<sc-if value="{{c.hasTag}}" hint-placeholder-val="{{false}}">
+<div style="font-size: 12.5px; font-weight: 700; line-height: 1.3; margin-top: 7px; display: flex; gap: 6px; justify-content: center; align-items: flex-start"><span class="{{c.tagDot}}" style="display: inline-block; width: 8px; height: 8px; border-radius: 4px; background: {{c.tagDotBg}}; margin-top: 4px; flex: none"></span><span>{{c.tag}}</span></div>
+</sc-if>
+<sc-if value="{{c.hasTag2}}" hint-placeholder-val="{{false}}">
+<div class="mono" style="font-size: 11.5px; line-height: 1.3; margin-top: 4px">{{c.tag2}}</div>
+</sc-if>
+<sc-if value="{{c.showProv}}" hint-placeholder-val="{{false}}">
+<div style="font-size: 11.5px; font-weight: 500; line-height: 1.32; margin-top: 8px; padding-top: 6px; border-top: 1px solid {{c.plMuted}}">{{c.prov}}</div>
+</sc-if>
+</div>
+
+<div class="mono" style="position: absolute; left: {{c.slX}}px; top: 168px; width: 82px; text-align: center; font-size: 11px; line-height: 1.25; color: #141414; opacity: {{c.slOp}}; visibility: {{c.slVis}}; transition: opacity .4s {{c.slDelay}}"><div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600">{{c.sl1}}</div><div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #55534E">{{c.sl2}}</div></div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{hook.on}}" hint-placeholder-val="{{true}}">
+<div>
+<div style="position: absolute; left: {{hook.rx}}px; top: {{hook.ry}}px; width: 3px; height: {{hook.rh}}px; background: #2B2A27"></div>
+<div class="t-unk" style="position: absolute; left: {{hook.x}}px; top: {{hook.y}}px; width: {{hook.d}}px; height: {{hook.d}}px; box-sizing: border-box; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 22px; font-size: 12.5px; line-height: 1.35; color: #3A3935">an empty hook. A fork you cut from a Moment hangs here.</div>
+</div>
+</sc-if>
+
+<sc-if value="{{showRead}}" hint-placeholder-val="{{true}}">
+<aside aria-label="Reading panel" style="position: absolute; left: 1048px; top: 90px; width: 364px; height: 758px; box-sizing: border-box; border: 2px solid #141414; background: #FBFBF9; padding: 18px 20px; overflow: hidden">
+<sc-if value="{{noSel}}" hint-placeholder-val="{{true}}">
+<div>
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55534E">THE HALL</div>
+<div style="font-size: 26px; font-weight: 800; line-height: 1.1; margin-top: 6px">Each system keeps its own kind of time.</div>
+<p style="font-size: 14.5px; line-height: 1.45; margin: 10px 0 12px">The clock face is the first thing you learn about a system. Select one to read it. Open one to step inside.</p>
+<sc-for list="{{index}}" as="ix" hint-placeholder-count="7">
+<button type="button" class="ixb" onClick="{{ix.pick}}">
+<span class="sw {{ix.sw}}"></span>
+<span style="display: block; flex: 1; min-width: 0"><span class="mono" style="display: block; font-size: 11px; letter-spacing: .06em; color: #55534E">{{ix.word}}</span><span style="display: block; font-size: 14.5px; font-weight: 700; line-height: 1.2">{{ix.name}}</span></span>
+</button>
+</sc-for>
+<div style="position: absolute; left: 20px; right: 20px; bottom: 16px; padding-top: 10px; border-top: 2px solid #141414; font-size: 12.5px; line-height: 1.4; color: #3A3935"><span class="mono" style="font-size: 11px; letter-spacing: .1em; color: #55534E">INSIDE, “BACK” IS THREE THINGS</span><br><strong>Leave</strong> keeps the presence and its time. <strong>Rewind</strong> is a read-only replay of the recorded past. <strong>Back to the branch point</strong> takes a fork to its parent at the divergence.</div>
+<sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+<div style="margin-top: 14px; font-size: 12.5px; line-height: 1.4; color: #3A3935">Texture is the epistemic state: solid is observed; inner double rule is recorded in BOW; outline is authored; toned is computed; hatch is modeled; stipple is generated; dashed is unknown or sealed. A branch wears its own ink.</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{false}}">
+<div>
+<div style="display: flex; align-items: center; gap: 10px"><span class="sw {{rd.sw}}"></span><span class="mono" style="font-size: 11.5px; letter-spacing: .08em; color: #55534E">{{rd.word}}</span></div>
+<div style="font-size: 27px; font-weight: 800; line-height: 1.08; margin-top: 8px">{{rd.name}}</div>
+<div class="mono" style="font-size: 12px; margin-top: 6px; color: #55534E; line-height: 1.35">{{rd.tk}}</div>
+<p style="font-size: 14.5px; line-height: 1.45; margin: 12px 0 0">{{rd.about}}</p>
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; margin-top: 14px; color: #55534E">WHAT YOU CAN DO HERE</div>
+<div style="margin-top: 4px">
+<sc-for list="{{rd.verbs}}" as="vb" hint-placeholder-count="6">
+<div style="display: flex; gap: 8px; align-items: baseline; padding: 4px 0; border-bottom: 1px solid #DAD8D1; font-size: 13.5px; line-height: 1.25">
+<span style="width: 96px; flex: none; font-weight: 700">{{vb.v}}</span>
+<span class="mono" style="width: 30px; flex: none; font-size: 11.5px; font-weight: 600; opacity: {{vb.op}}">{{vb.yn}}</span>
+<span style="color: #3A3935">{{vb.note}}</span>
+</div>
+</sc-for>
+</div>
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; margin-top: 14px; color: #55534E">SINCE YOU LEFT</div>
+<div style="font-size: 14px; line-height: 1.4; margin-top: 4px">{{rd.since}}</div>
+<sc-if value="{{rd.hasAgo}}" hint-placeholder-val="{{false}}">
+<div class="mono" style="font-size: 12px; line-height: 1.35; margin-top: 8px; padding: 6px 8px; border: 1px solid #141414">{{rd.ago}}</div>
+</sc-if>
+<sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; margin-top: 12px; color: #55534E">HOW DO WE KNOW?</div>
+<div style="font-size: 12.5px; line-height: 1.4; margin-top: 3px">{{rd.prov}}</div>
+</sc-if>
+<div style="position: absolute; left: 20px; right: 20px; bottom: 18px; display: flex; gap: 10px">
+<button type="button" class="btn btnp" onClick="{{openSel}}" style="flex: 1">Open — step inside</button>
+<button type="button" class="btn" onClick="{{clearSel}}" style="width: 96px">Index</button>
+</div>
+</div>
+</sc-if>
+</aside>
+</sc-if>
+
+<sc-if value="{{isOpen}}" hint-placeholder-val="{{false}}">
+<section aria-label="Inside the system" style="position: absolute; left: 580px; top: 206px; width: 832px; height: 640px; animation: fadein .5s .55s both">
+<div style="height: 96px; position: relative">
+<div style="display: flex; align-items: center; gap: 10px; height: 24px"><span class="sw {{cur.sw}}"></span><span class="mono" style="font-size: 12px; letter-spacing: .08em; color: #55534E">{{cur.word}}</span><sc-if value="{{rewind}}" hint-placeholder-val="{{false}}"><span class="mono" style="font-size: 12px; font-weight: 600; padding: 1px 8px; border: 2px solid #141414">REPLAY · READ-ONLY</span></sc-if></div>
+<div style="font-size: {{cur.fs}}px; font-weight: 800; line-height: 1.06; margin-top: 6px; white-space: nowrap">{{cur.title}}</div>
+<div class="mono" style="font-size: 13px; margin-top: 8px; color: #3A3935">{{cur.role}}</div>
+</div>
+
+<div style="height: 486px; position: relative; overflow: hidden">
+<sc-if value="{{rewind}}" hint-placeholder-val="{{false}}">
+<div>
+<div style="padding: 12px 14px; border: 2px dashed #141414; font-size: 15px; line-height: 1.4"><strong>The recorded past, read-only.</strong> Nothing you do here changes it, and the clock itself has not moved: the dotted hand on its face marks where you are looking. {{rew.note}}</div>
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; margin: 18px 0 2px; color: #55534E">REWIND · {{rew.pos}}</div>
+<input class="rng" type="range" min="0" max="{{rew.max}}" step="1" value="{{rew.idx}}" onChange="{{onRew}}" aria-label="Move through the recorded past" aria-valuetext="{{rew.when}}">
+<div style="display: flex; justify-content: space-between" class="mono"><span style="font-size: 11px; color: #55534E">earliest recorded</span><span style="font-size: 11px; color: #55534E">now</span></div>
+<div style="margin-top: 18px; padding: 16px 18px; border: 2px solid #141414; background: #FFFFFF; box-shadow: inset 0 0 0 4px #FFFFFF, inset 0 0 0 5px #141414">
+<div class="mono" style="font-size: 13px; font-weight: 600; letter-spacing: .04em">{{rew.when}}</div>
+<div style="font-size: 22px; font-weight: 700; line-height: 1.3; margin-top: 8px">{{rew.text}}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{showW.reality}}" hint-placeholder-val="{{false}}">
+<div>
+<div style="display: flex; gap: 14px">
+<div style="flex: 1.25; padding: 10px 14px; border: 2px solid #141414; background: #FBFBF9; font-size: 14px; line-height: 1.4"><strong>OBSERVER.</strong> You can watch this system. You can’t act on the real team. Rule: observed systems take no input. Enter a recorded Moment to fork it.</div>
+<div style="flex: 1; padding: 10px 14px; border: 1px solid #141414; background: #FBFBF9; font-size: 13px; line-height: 1.4"><span class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55534E">SINCE YOU LEFT · Reality feed</span><br>{{ck.since1}}<br>{{ck.since2}}</div>
+</div>
+<sc-if value="{{isBoston}}" hint-placeholder-val="{{true}}">
+<div style="position: relative; height: 200px; margin-top: 8px">
+<sc-for list="{{pay.lines}}" as="ln" hint-placeholder-count="4">
+<div style="position: absolute; left: {{ln.x}}px; top: {{ln.y0}}px; width: 0; height: {{ln.h}}px; border-left: 2px solid #141414"></div>
+<div style="position: absolute; left: {{ln.bx}}px; top: {{ln.by}}px; width: 9px; height: 9px; box-sizing: border-box; border: 2px solid #141414; background: #FBFBF9"></div>
+<span class="mono" style="position: absolute; left: {{ln.lx}}px; top: {{ln.ly}}px; font-size: 12px; font-weight: 500; white-space: nowrap; transform: translateX({{ln.tx}}); color: #141414">{{ln.t}}</span>
+</sc-for>
+<sc-for list="{{pay.segs}}" as="sg" hint-placeholder-count="6">
+<div class="{{sg.cls}}" style="position: absolute; left: {{sg.x}}px; top: 56px; width: {{sg.w}}px; height: 40px; box-sizing: border-box; color: {{sg.fg}}; font-size: 12.5px; font-weight: 700; padding: 0 8px; display: flex; align-items: center; overflow: hidden; white-space: nowrap; border: 0">{{sg.lab}}</div>
+</sc-for>
+<div style="position: absolute; left: 0; top: 130px; display: flex; gap: 8px; flex-wrap: nowrap">
+<sc-for list="{{pay.gaps}}" as="gp" hint-placeholder-count="3">
+<div class="t-com" style="font-size: 13px; font-weight: 700; padding: 5px 9px; white-space: nowrap">{{gp.t}}</div>
+</sc-for>
+</div>
+<div style="position: absolute; left: 0; top: 166px; width: 800px; font-size: 12.5px; line-height: 1.4; color: #3A3935">Committed payroll ≈ $203.6M (BOW Economics Live fixture, verify). Contracts approx., public reporting, verify: Tatum ≈$58.5M · Brown ≈$57.1M · White ≈$30.3M · Hauser ≈$10.8M · Pritchard ≈$7.8M. Toned: rest of roster ≈$39.1M, the computed remainder; its makeup is [from the Reality feed].</div>
+</div>
+</sc-if>
+<sc-if value="{{isSemi}}" hint-placeholder-val="{{false}}">
+<div style="margin-top: 12px; display: flex; gap: 12px">
+<sc-for list="{{feedSlots}}" as="fs" hint-placeholder-count="3">
+<div class="t-unk" style="flex: 1; height: 120px; padding: 12px; box-sizing: border-box; font-size: 13.5px; line-height: 1.35">{{fs.t}}</div>
+</sc-for>
+</div>
+<div style="margin-top: 10px; font-size: 13px; line-height: 1.4; color: #3A3935">No observed values are loaded in this prototype. Dashed slots are holes, not zeros: the Reality feed would fill them, with a source and an as-of date.</div>
+</sc-if>
+<div style="display: flex; gap: 14px; margin-top: 12px">
+<div style="flex: 1; padding: 12px 14px; border: 2px solid #141414; background: #FBFBF9">
+<div class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55534E">FOLLOW = ADD A COMPLICATION</div>
+<button type="button" class="btn" onClick="{{toggleFollow}}" aria-pressed="{{followPressed}}" style="margin-top: 8px; width: 100%; background: {{followBg}}; color: {{followFg}}">{{followLabel}}</button>
+<div style="font-size: 12.5px; line-height: 1.4; margin-top: 8px" role="status">{{followNote}}</div>
+</div>
+<div style="flex: 1; padding: 12px 14px; border: 1px solid #141414; background: #FBFBF9">
+<div class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55534E">RECORDED MOMENTS · DOORS</div>
+<sc-for list="{{doors}}" as="dr" hint-placeholder-count="3">
+<button type="button" class="ixb" onClick="{{dr.go}}" disabled="{{dr.off}}" style="min-height: 40px; padding: 2px 4px; opacity: {{dr.op}}">
+<span style="display: block; flex: 1; line-height: 1.2"><span class="mono" style="font-size: 11.5px; font-weight: 600">{{dr.date}}</span> <span style="font-size: 13px; font-weight: 700">{{dr.q}}</span><span style="display: block; font-size: 11.5px; color: #55534E">{{dr.note}}</span></span>
+</button>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{showW.world}}" hint-placeholder-val="{{false}}">
+<div>
+<div style="display: flex; gap: 14px; align-items: stretch">
+<div style="flex: 1; padding: 8px 14px; border: 2px solid #141414; background: #FBFBF9; box-shadow: inset 0 0 0 4px #FBFBF9, inset 0 0 0 5px #141414; font-size: 14px; line-height: 1.35"><strong>{{wd.banner}}</strong> {{wd.bannerNote}}</div>
+</div>
+<div style="display: flex; gap: 6px; margin-top: 10px">
+<sc-for list="{{wd.days}}" as="dy" hint-placeholder-count="8">
+<div class="{{dy.cls}}" style="flex: 1; height: 80px; box-sizing: border-box; padding: 8px; overflow: hidden; color: {{dy.fg}}; border: {{dy.bd}}; background: {{dy.bg}}">
+<div class="mono" style="font-size: 12px; font-weight: 600">{{dy.d}}</div>
+<div style="font-size: 12px; line-height: 1.25; margin-top: 4px">{{dy.t}}</div>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; gap: 14px; margin-top: 10px">
+<div style="flex: 1; padding: 8px 14px; border: 1px solid #141414; background: #FBFBF9; font-size: 12.5px; line-height: 1.35"><span class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55534E">WHILE YOU WERE AWAY</span><br>{{wd.away}}</div>
+<div style="flex: 1; padding: 8px 14px; border: 1px solid #141414; background: #FBFBF9; font-size: 12.5px; line-height: 1.35"><span class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55534E">THE BOOKS · recorded in this World</span><br>Payroll after moves ≈ $222.8M against the World’s $200M tax line. Projected tax ≈ $34.2M.</div>
+</div>
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; margin-top: 10px; color: #55534E">{{wd.actsHead}}</div>
+<sc-for list="{{wd.acts}}" as="ac" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 12px; padding: 3px 0; border-bottom: 1px solid #C9C7C0">
+<span class="sw {{ac.sw}}"></span>
+<span style="flex: 1; font-size: 13.5px; line-height: 1.3"><strong>{{ac.t}}</strong> <span style="color: #3A3935">{{ac.d}}</span></span>
+<button type="button" class="btn" onClick="{{ac.go}}" disabled="{{ac.off}}" style="min-height: 36px; width: 96px; font-size: 13px; padding: 0">{{ac.b}}</button>
+</div>
+</sc-for>
+<div style="display: flex; gap: 14px; margin-top: 8px; align-items: flex-start">
+<div style="flex: 1">
+<button type="button" class="btn btnp" onClick="{{advNow}}" disabled="{{wd.advOff}}" style="width: 100%">Advance to Week 10</button>
+<div style="font-size: 12px; line-height: 1.35; margin-top: 4px; color: #3A3935" role="status">{{wd.advNote}}</div>
+</div>
+<div style="flex: 1">
+<button type="button" class="btn" onClick="{{advCal}}" disabled="{{wd.calOff}}" style="width: 100%">Let Monday come without me</button>
+<div style="font-size: 12px; line-height: 1.35; margin-top: 4px; color: #3A3935">The calendar advances regardless. Open acts lapse and are recorded as no decision.</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{showW.moment}}" hint-placeholder-val="{{false}}">
+<div>
+<sc-if value="{{mo.back}}" hint-placeholder-val="{{false}}">
+<div class="mono" style="font-size: 12.5px; padding: 6px 10px; border: 2px solid #0B5C6B; color: #0B5C6B; margin-bottom: 8px; font-weight: 600">Back at the branch point. Your branch is still on the wall; the record has not moved.</div>
+</sc-if>
+<div style="font-size: 16px; line-height: 1.45; max-width: 780px">{{mo.situation}}</div>
+<sc-if value="{{mo.sealed}}" hint-placeholder-val="{{true}}">
+<div class="t-unk" style="margin-top: 12px; height: 92px; box-sizing: border-box; padding: 14px 18px; display: flex; align-items: center; gap: 18px">
+<svg width="34" height="40" viewBox="0 0 34 40" aria-hidden="true"><rect x="3" y="18" width="28" height="20" fill="#141414"></rect><path d="M8 18V12A9 9 0 0 1 26 12V18" fill="none" stroke="#141414" stroke-width="4"></path></svg>
+<div><div class="mono" style="font-size: 11.5px; letter-spacing: .08em; color: #55534E">WHAT HAPPENS NEXT · SEALED</div><div style="font-size: 17px; font-weight: 700; line-height: 1.3; margin-top: 3px">You find out by living it. Hindsight opens after you act.</div></div>
+</div>
+</sc-if>
+<sc-if value="{{mo.open}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; gap: 16px; margin-top: 12px">
+<div style="flex: 1; padding: 12px 16px; border-left: 6px solid #141414; background: #FBFBF9; height: 92px; box-sizing: border-box; overflow: hidden"><div class="mono" style="font-size: 11.5px; letter-spacing: .08em; color: #55534E">REALITY · the record</div><div style="font-size: 14px; line-height: 1.35; margin-top: 3px">{{mo.record}}</div></div>
+<div class="t-unk" style="flex: 1; height: 92px; box-sizing: border-box; padding: 12px 16px; border-color: #0B5C6B; color: #0B5C6B; overflow: hidden"><div class="mono" style="font-size: 11.5px; letter-spacing: .08em">YOUR BRANCH · {{mo.lastFork}}</div><div style="font-size: 14px; line-height: 1.35; margin-top: 3px; color: #141414">Begins at this morning, in your ink. What comes after is sealed until you live it.</div></div>
+</div>
+</sc-if>
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; margin: 14px 0 6px; color: #55534E">WHAT DO YOU DO? · ACTING CUTS A FORK</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px">
+<sc-for list="{{mo.acts}}" as="ma" hint-placeholder-count="4">
+<button type="button" class="btn" onClick="{{ma.go}}" style="text-align: left; min-height: 48px; font-size: 14.5px; background: {{ma.bg}}; color: {{ma.fg}}">{{ma.t}}</button>
+</sc-for>
+</div>
+<sc-if value="{{mo.hasMsg}}" hint-placeholder-val="{{false}}">
+<div role="status" style="margin-top: 10px; padding: 10px 14px; border: 2px solid {{mo.msgBd}}; background: #FBFBF9; font-size: 14px; line-height: 1.4; display: flex; gap: 12px; align-items: center"><span style="flex: 1">{{mo.msg}}</span><sc-if value="{{mo.msgGo}}" hint-placeholder-val="{{false}}"><button type="button" class="btn btnp" onClick="{{mo.msgAct}}" style="min-height: 40px; padding: 0 12px; font-size: 14px">{{mo.msgBtn}}</button></sc-if></div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{showW.fork}}" hint-placeholder-val="{{false}}">
+<div>
+<div class="mono" style="font-size: 12.5px; font-weight: 600; padding: 8px 12px; border: 2px solid #0B5C6B; color: #0B5C6B; background: #FBFBF9">YOUR BRANCH · diverged {{fk.div}} · cut 29 Sep 2026 · by you · horizon {{fk.horizon}}</div>
+<div style="display: flex; gap: 16px; margin-top: 12px">
+<div style="flex: 1; padding: 12px 16px; border-left: 6px solid #141414; background: #FBFBF9; box-sizing: border-box"><div class="mono" style="font-size: 11.5px; letter-spacing: .08em; color: #55534E">REALITY · the record, black hand</div><div style="font-size: 14.5px; line-height: 1.4; margin-top: 4px">{{fk.record}}</div></div>
+<div style="flex: 1; padding: 12px 16px; border: 2px solid #0B5C6B; box-shadow: inset 0 0 0 4px #FBFBF9, inset 0 0 0 5px #0B5C6B; background: #FBFBF9; box-sizing: border-box"><div class="mono" style="font-size: 11.5px; letter-spacing: .08em; color: #0B5C6B">YOUR BRANCH · teal hand</div><div style="font-size: 14.5px; line-height: 1.4; margin-top: 4px">{{fk.branch}}</div></div>
+</div>
+<div style="display: flex; gap: 16px; margin-top: 12px">
+<div style="flex: 1; padding: 10px 14px; border: 1px solid #141414; background: #FBFBF9"><div class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55534E">ASSUMPTIONS · authored, every branch lists them</div>
+<sc-for list="{{fk.assume}}" as="as" hint-placeholder-count="3"><div style="font-size: 13px; line-height: 1.35; margin-top: 5px">{{as.t}}</div></sc-for>
+</div>
+<div style="flex: 1; padding: 10px 14px; border: 1px solid #141414; background: #FBFBF9"><div class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55534E">THE BRANCH HAND MOVES WHEN YOU ACT</div>
+<div style="display: flex; gap: 6px; margin-top: 8px">
+<sc-for list="{{fk.seasons}}" as="sn" hint-placeholder-count="3">
+<div class="{{sn.cls}}" style="flex: 1; height: 44px; box-sizing: border-box; padding: 4px 6px; font-size: 12px; line-height: 1.2; color: {{sn.fg}}; border: {{sn.bd}}; background: {{sn.bg}}">{{sn.t}}</div>
+</sc-for>
+</div>
+<button type="button" class="btn btnp" onClick="{{liveSeason}}" disabled="{{fk.liveOff}}" style="margin-top: 10px; width: 100%">{{fk.liveLabel}}</button>
+<div style="font-size: 12px; line-height: 1.35; margin-top: 4px; color: #3A3935" role="status">{{fk.liveNote}}</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{showW.history}}" hint-placeholder-val="{{false}}">
+<div>
+<div style="font-size: 30px; font-weight: 800; line-height: 1.15; max-width: 720px">No hands. No NOW.</div>
+<div style="font-size: 16px; line-height: 1.5; margin-top: 10px; max-width: 700px">A historical state is frozen and fully recorded. The face isn’t broken: nothing here is happening, because there is no now to keep time with. Nothing arrives while you look.</div>
+<div style="margin-top: 16px; padding: 14px 16px; border: 1px solid #141414; background: #FBFBF9; font-size: 14px; line-height: 1.4; max-width: 700px">[the recorded season · from the archive feed; not loaded in this prototype]</div>
+<div style="margin-top: 16px; display: flex; gap: 14px; align-items: flex-start; max-width: 780px">
+<button type="button" class="btn" onClick="{{tryAdvance}}" style="flex: none; width: 250px">Try to advance it</button>
+<div role="status" style="flex: 1; font-size: 14px; line-height: 1.4; padding: 8px 12px; border: 2px solid #141414; background: #FBFBF9; opacity: {{hs.op}}">{{hs.t}}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{showW.model}}" hint-placeholder-val="{{false}}">
+<div>
+<div class="t-aut" style="padding: 12px 16px; background: #FBFBF9; font-size: 13.5px; line-height: 1.45"><span class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55534E">ASSUMPTIONS · authored · {{md.ver}}</span><br>{{md.assume}}</div>
+<div class="mono" style="font-size: 11px; letter-spacing: .1em; margin: 12px 0 6px; color: #55534E">PICK A SCENARIO, THEN RUN</div>
+<div style="display: flex; gap: 8px">
+<sc-for list="{{md.scens}}" as="sc" hint-placeholder-count="3">
+<button type="button" class="btn" onClick="{{sc.go}}" aria-pressed="{{sc.pressed}}" style="flex: 1; background: {{sc.bg}}; color: {{sc.fg}}">{{sc.t}}</button>
+</sc-for>
+<button type="button" class="btn btnp" onClick="{{runModel}}" style="width: 150px">Run it</button>
+</div>
+<sc-if value="{{md.none}}" hint-placeholder-val="{{true}}">
+<div class="t-unk" style="margin-top: 12px; padding: 16px; font-size: 14.5px; line-height: 1.4">Run 0. The counter has not moved, and it will not move until you run it. There is nothing here to read yet.</div>
+</sc-if>
+<sc-if value="{{md.has}}" hint-placeholder-val="{{false}}">
+<div style="margin-top: 12px; padding: 12px 16px; border: 1px solid #141414; background: #FBFBF9">
+<div class="mono" style="font-size: 11.5px; letter-spacing: .06em; color: #55534E">RUN {{md.n}} · {{md.scenName}}</div>
+<div class="t-com" style="display: inline-block; margin-top: 6px; padding: 5px 10px; font-size: 13.5px; font-weight: 700">{{md.line}}</div>
+<div style="position: relative; height: 62px; margin-top: 12px">
+<div style="position: absolute; left: 0; top: 28px; width: 640px; height: 0; border-top: 1px solid #141414"></div>
+<div class="t-aut" style="position: absolute; left: {{md.rl}}px; top: 12px; width: {{md.rw}}px; height: 32px; background: #FFFFFF"></div>
+<span class="mono" style="position: absolute; left: 0; top: 46px; font-size: 11px">0</span>
+<span class="mono" style="position: absolute; left: 640px; top: 46px; font-size: 11px; transform: translateX(-100%)">{{md.axis}}</span>
+</div>
+<div style="font-size: 13px; line-height: 1.4"><strong>{{md.rangeText}}</strong> · illustrative, authored: no model actually ran in this prototype, so this is a range drawn by hand, not a result.</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{showW.text}}" hint-placeholder-val="{{false}}">
+<div>
+<div style="font-size: 16px; line-height: 1.5; max-width: 740px">A course built on Boston’s real books. Its clock is yours: it moves when you move. There is no timer here, and nothing changes while you are away. Track 101 “The Window” EXISTS TODAY in BOW Economics Live; this is a proposal for how it reads as a presence.</div>
+<div style="display: flex; gap: 6px; margin-top: 16px">
+<sc-for list="{{tx.chips}}" as="ch" hint-placeholder-count="9">
+<div class="{{ch.cls}}" style="flex: 1; height: 64px; box-sizing: border-box; padding: 6px 8px; color: {{ch.fg}}; border: {{ch.bd}}; background: {{ch.bg}}"><div class="mono" style="font-size: 12px; font-weight: 600">{{ch.n}}</div><div style="font-size: 11.5px; line-height: 1.2; margin-top: 3px">{{ch.t}}</div></div>
+</sc-for>
+</div>
+<div style="display: flex; gap: 14px; margin-top: 16px; align-items: flex-start">
+<button type="button" class="btn btnp" onClick="{{resume}}" disabled="{{tx.off}}" style="width: 250px">{{tx.btn}}</button>
+<div role="status" style="flex: 1; font-size: 14px; line-height: 1.4">{{tx.note}}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{showW.creator}}" hint-placeholder-val="{{false}}">
+<div>
+<div class="t-gen" style="padding: 8px; max-width: 760px"><div style="background: #FBFBF9; padding: 14px 18px; font-size: 16px; line-height: 1.5"><strong>Unreviewed.</strong> BOW has not checked this system. It was built by a community creator, and its clock is whatever the creator set. BOW can’t vouch for the time it keeps or for anything it says.</div></div>
+<div style="display: flex; gap: 14px; margin-top: 16px; align-items: flex-start">
+<button type="button" class="btn btnp" onClick="{{visit}}" style="width: 250px">Enter as a visitor</button>
+<div role="status" style="flex: 1; font-size: 14px; line-height: 1.4; padding: 8px 12px; border: 2px dotted #141414; opacity: {{cr.op}}">{{cr.t}}</div>
+</div>
+</div>
+</sc-if>
+</div>
+
+<div style="position: absolute; left: 0; bottom: 0; width: 832px; display: flex; gap: 10px">
+<sc-for list="{{backs}}" as="bk" hint-placeholder-count="3">
+<button type="button" class="btn" onClick="{{bk.go}}" style="flex: 1; min-height: 58px; padding: 6px 12px; text-align: left; background: {{bk.bg}}; color: {{bk.fg}}; border-color: {{bk.bd}}"><span style="display: block; font-size: 15px; font-weight: 800">{{bk.t}}</span><span style="display: block; font-size: 12px; font-weight: 500; line-height: 1.25; margin-top: 2px">{{bk.sub}}</span></button>
+</sc-for>
+</div>
+</section>
+</sc-if>
+
+<div class="mono" style="position: absolute; left: 30px; bottom: 10px; width: 780px; font-size: 11px; line-height: 1.25; color: #55534E">COMMERCIAL LENS · Hypothesis: following systems and entering shared Moments is free; keeping a persistent World running on its own clock is the paid thing (it costs compute while you’re away).</div>
+<div class="mono" style="position: absolute; right: 28px; bottom: 10px; width: 500px; text-align: right; font-size: 11px; line-height: 1.25; color: #55534E">PROTOTYPE · DESIGN PROPOSAL · data: prototype, as of 29 Sep 2026; league lines and contracts approx., verify before use</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+ componentDidMount() {
+  this.t0 = Date.now();
+  this.tms = [];
+  this.iv = setInterval(() => this.setState({ now: Date.now() }), 100);
+ }
+ componentWillUnmount() {
+  clearInterval(this.iv);
+  (this.tms || []).forEach(clearTimeout);
+ }
+ enter(id, extra) {
+  const c = this.state || {};
+  const lo = { ...(c.leftAt || {}) };
+  if (c.open) lo[c.open] = Date.now();
+  this.setState({ open: id, sel: id, rewind: false, rewIdx: undefined, leftAt: lo, seen: !!c.seen || id === 'reality', back: false, ...(extra || {}) });
+ }
+ leave() {
+  const c = this.state || {};
+  const lo = { ...(c.leftAt || {}) };
+  if (c.open) lo[c.open] = Date.now();
+  this.setState({ open: null, rewind: false, rewIdx: undefined, leftAt: lo, back: false });
+ }
+ search(text) {
+  const t = (text || '').toLowerCase();
+  let q = 'none';
+  if (/semi|chip|fab|wafer/.test(t)) q = 'semi';
+  else if (/boston|celtic|basketball|nba/.test(t)) q = 'boston';
+  this.setState({ query: q, q: text, open: null, sel: null, rewind: false, rewIdx: undefined, searching: true, forks: [], revealed: false, follow: false, seen: false, week: 9, acts: {}, adv: null, lapsed: 0, runs: 0, scen: 0, runLog: [], step: 4, seasons: {}, mm: null, hist: false, visit: false, leftAt: {}, back: false });
+  const h = setTimeout(() => this.setState({ searching: false }), 380);
+  this.tms.push(h);
+ }
+ renderVals() {
+  const S = this.state || {};
+  const now = S.now || Date.now();
+  const q = S.query || 'boston';
+  const isB = q === 'boston', isS = q === 'semi', none = q === 'none';
+  const how = !!S.how;
+  const open = S.open || null;
+  const sel = S.sel || null;
+  const forks = S.forks || [];
+  const week = S.week || 9;
+  const acts = S.acts || {};
+  const adv = S.adv || null;
+  const lapsed = S.lapsed || 0;
+  const runs = S.runs || 0;
+  const scen = S.scen || 0;
+  const step = S.step || 4;
+  const seasons = S.seasons || {};
+  const revealed = !!S.revealed;
+  const follow = !!S.follow;
+  const seen = !!S.seen;
+  const rewind = !!S.rewind;
+  const leftAt = S.leftAt || {};
+  const runLog = S.runLog || [];
+  const searching = !!S.searching;
+  const INK = '#141414', RED = '#C8102E', TEAL = '#0B5C6B';
+  const f1 = (v) => v.toFixed(1);
+  const pol = (r, d) => [150 + r * Math.sin(d * Math.PI / 180), 150 - r * Math.cos(d * Math.PI / 180)];
+  const arc = (r, d0, d1) => { const a = pol(r, d0), b = pol(r, d1); return 'M' + f1(a[0]) + ' ' + f1(a[1]) + 'A' + r + ' ' + r + ' 0 ' + ((d1 - d0) > 180 ? 1 : 0) + ' 1 ' + f1(b[0]) + ' ' + f1(b[1]); };
+  const sector = (r0, r1, d0, d1) => { const a = pol(r1, d0), b = pol(r1, d1), c = pol(r0, d1), e = pol(r0, d0); return 'M' + f1(a[0]) + ' ' + f1(a[1]) + 'A' + r1 + ' ' + r1 + ' 0 0 1 ' + f1(b[0]) + ' ' + f1(b[1]) + 'L' + f1(c[0]) + ' ' + f1(c[1]) + 'A' + r0 + ' ' + r0 + ' 0 0 0 ' + f1(e[0]) + ' ' + f1(e[1]) + 'Z'; };
+
+  /* live time: unbounded angles so nothing spins backwards at a wrap */
+  const t0 = this.t0 || now;
+  const el = (now - t0) / 1000;
+  const d0 = new Date(t0);
+  const sec0 = d0.getSeconds() + d0.getMilliseconds() / 1000;
+  const min0 = d0.getMinutes() + sec0 / 60;
+  const hr0 = (d0.getHours() % 12) + min0 / 60;
+  const secDeg = sec0 * 6 + el * 6, minDeg = min0 * 6 + el * 0.1, hrDeg = hr0 * 30 + el / 120;
+  const mmss = (ms) => { const s = Math.max(0, Math.floor(ms / 1000)); return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60); };
+
+  const HOURC = 'polygon(50% 0%,100% 34%,100% 100%,0% 100%,0% 34%)';
+  const MINC = 'polygon(50% 0%,100% 14%,100% 100%,0% 100%,0% 14%)';
+  const LIVE = 'transform .1s linear', SLOW = 'transform .9s cubic-bezier(.3,.7,.2,1)';
+  const H = (len, w, tail, deg, bg, tr, clip, disc, discAt) => ({ l: 150 - w / 2, t: 150 - len, w: w, h: len + tail, oy: len, deg: deg.toFixed(2), bg: bg, tr: tr, clip: clip || 'none', dd: disc || 0, dh: (disc || 0) / 2, dt: disc ? (len - discAt - disc / 2) : 0 });
+  const DOT = 'repeating-linear-gradient(to bottom,#55534E 0 4px,transparent 4px 8px)';
+
+  /* ---- what each query hangs ---- */
+  const SLOTS = { s0: [30, 120, 264], s1: [314, 120, 230], s2: [564, 120, 210], s3: [794, 120, 230], r0: [30, 546, 168], r1: [234, 546, 168], r2: [438, 546, 168], r3: [642, 546, 168], r4: [846, 546, 168] };
+  const ASSIGN = {
+   boston: { reality: 's0', world: 's1', moment: 's2', fork: 's3', history: 'r0', model: 'r1', text: 'r2', fork2: 'r3', fork3: 'r4' },
+   semi: { reality: 's0', moment: 's1', creator: 's2', fork2: 's3', model: 'r0', fork3: 'r1' }
+  };
+  const IDS = ['reality', 'world', 'moment', 'fork', 'history', 'model', 'text', 'creator', 'fork2', 'fork3'];
+  const KIND = { reality: 'reality', world: 'world', moment: 'moment', fork: 'fork', history: 'history', model: 'model', text: 'text', creator: 'creator', fork2: 'fork', fork3: 'fork' };
+  const isVis = (id) => none ? false : (id === 'fork2' || id === 'fork3') ? forks.some((f) => f.id === id) : (ASSIGN[q][id] !== undefined);
+  const A = ASSIGN[q] || {};
+
+  /* moment + fork content */
+  const M = isB ? {
+   date: '17 Jun 2017', div: '17 Jun 2017', unit: 'season', horizon: '3 seasons', per: ['2017–18', '2018–19', '2019–20'],
+   situation: 'Boston holds the No. 1 pick. Philadelphia wants it. It is the morning, and the draft is days away. You don’t know what happens next, and neither did the person who stood here.',
+   record: 'The pick went to Philadelphia (agreed that weekend, finalized 19 Jun). Boston took Jayson Tatum at No. 3 on 22 Jun. (Public reporting; verify.)',
+   acts: [
+    { id: 'keep', t: 'Keep No. 1', type: 'have', fid: 'fork' },
+    { id: 'ask', t: 'Ask Philadelphia for more before answering', type: 'cut', sname: 'Ask for more', fname: 'Ask for more', branch: 'You hold the pick and ask Philadelphia for more before you answer.', assume: ['Philadelphia stays interested through the weekend [authored].', 'What they add: [terms authored by you].', 'Later moves replay as recorded unless your ask changes them [authored].'] },
+    { id: 'shop', t: 'Shop the pick to other teams first', type: 'cut', sname: 'Shop it', fname: 'Shop it around', branch: 'You call other teams before you answer Philadelphia.', assume: ['Other teams take your call before the draft [authored].', 'What they offer: [authored].', 'Later moves replay as recorded unless a new offer changes them [authored].'] },
+    { id: 'yes', t: 'Say yes to Philadelphia as offered', type: 'record' }
+   ],
+   keep: { sname: 'Keep No. 1', fname: 'Keep No. 1', branch: 'You keep No. 1 and pick first on 22 Jun 2017.', assume: ['You keep the pick and select at No. 1 [authored].', 'Your pick: [verify: the prospect you would take at No. 1].', 'Later moves replay as recorded unless your pick changes them [authored].'] }
+  } : {
+   date: '19 Mar 2021', div: '19 Mar 2021', unit: 'quarter', horizon: '3 quarters', per: ['Q2 2021', 'Q3 2021', 'Q4 2021'],
+   situation: 'A fab that supplies your chips is on fire. Your line runs on its output. You don’t know how long it will be down, and neither did the person who stood here.',
+   record: '[the recorded aftermath · from the Reality feed; not loaded in this prototype]',
+   acts: [
+    { id: 'ask', t: 'Ask other suppliers for capacity', type: 'cut', sname: 'Ask others', fname: 'Ask other suppliers', branch: 'You call other suppliers for capacity first.', assume: ['Other suppliers have some capacity to give [authored].', 'Price and lead time: [authored].', 'Later events replay as recorded unless your order changes them [authored].'] },
+    { id: 'ration', t: 'Ration what you have', type: 'cut', sname: 'Ration', fname: 'Ration what you have', branch: 'You ration your stock across your customers.', assume: ['Stock on hand is enough to ration for a while [authored].', 'Who gets served first: [authored].', 'Later events replay as recorded unless your rationing changes them [authored].'] }
+   ],
+   keep: null
+  };
+  const forkFor = (id) => {
+   if (id === 'fork') return M.keep;
+   const f = forks.find((x) => x.id === id);
+   return f ? M.acts.find((a) => a.id === f.act) : null;
+  };
+  const forkName = (id) => { const F = forkFor(id); return F ? F.fname : ''; };
+
+  /* ---- per-clock info ---- */
+  const INFO = {
+   reality: { sw: 't-obs', word: 'OBSERVED · LIVE', name: isB ? 'Boston Celtics · Reality' : 'Global chip supply · Reality', tk: 'LIVE · a sweeping second hand', s1: 'Reality', s2: 'live',
+    about: 'A real wall clock. It keeps changing without you, and the red hand only ever means live time. You can observe and follow it; you can’t act on the real thing. You can enter its recorded Moments and fork them.',
+    prov: isB ? 'OBSERVED · Reality feed, as of 29 Sep 2026 · league lines and contracts from the BOW Economics Live fixture, approx., verify.' : 'OBSERVED · Reality feed, as of 29 Sep 2026 · [sources come from the feed; none are loaded in this prototype].', short: isB ? 'OBSERVED · Reality feed · 29 Sep 2026 · figures approx., verify' : 'OBSERVED · Reality feed · 29 Sep 2026 · [sources from the feed]' },
+   world: { sw: 't-rec', word: 'RECORDED · YOUR WORLD', name: 'Boston · Year Two', tk: 'WORLD CALENDAR · Week ' + week + ' · advances Mondays', s1: 'Year Two', s2: 'week ' + week,
+    about: 'A World you run, on its own calendar. It advances Mondays whether you have finished or not, and things happen while you are away. Everything in it is recorded in BOW, not in the NBA’s books.',
+    prov: 'RECORDED · inside BOW · World facts are fixtures from the BOW Worlds branch (EXISTS TODAY); a World event, not NBA history.', short: 'RECORDED · inside BOW · not NBA history' },
+   moment: { sw: 't-obs', word: 'OBSERVED · A MOMENT', name: M.date + ' · ' + (isB ? 'Philadelphia calls about No. 1' : 'Naka fab fire'), tk: revealed ? 'STOPPED · hindsight opened after you acted' : 'STOPPED · the future half is sealed', s1: M.date, s2: 'stopped',
+    about: 'A frozen morning in Reality’s past. The clock is stopped and its future half is sealed with a lock: you find out what happened by acting, not by looking. Acting cuts a fork.',
+    prov: 'OBSERVED · ' + M.date + ', public reporting (verify) · the future half is sealed by BOW so the person in the seat doesn’t inherit hindsight.', short: 'OBSERVED · ' + M.date + ' · future sealed by BOW' },
+   fork: { sw: 't-fork', word: 'YOUR BRANCH · OWN INK', tk: 'TWO HANDS · one pivot, diverged', s1: '', s2: 'diverged',
+    about: 'Your branch. Two hands leave one pivot at the divergence: black is Reality, still running; teal is your branch, which moves only when you act in it. It stops at its horizon.',
+    prov: 'RECORDED · your act, in your own ink · never written onto the record. Assumptions are listed inside.', short: 'RECORDED · your act, your own ink' },
+   history: { sw: 't-obs', word: 'OBSERVED · HISTORICAL STATE', name: '1985–86 Celtics', tk: 'NO HANDS · no NOW', s1: '1985–86', s2: 'no now',
+    about: 'A historical state: frozen and fully recorded. A face with no hands isn’t broken. History has no NOW, so there is nothing to keep time with.',
+    prov: 'OBSERVED · recorded history · frozen · [archive feed].', short: 'OBSERVED · recorded history · frozen' },
+   model: { sw: 't-mod', word: 'MODELED · A MODEL', name: isB ? 'Second-apron model v0.3' : 'Lead-time model v0.2', tk: 'RUN COUNTER · moves when run', s1: 'Model', s2: 'run ' + runs,
+    about: 'A model doesn’t keep time; it keeps a count. The counter moves only when you run it, and every run answers with a range, never a point. Its assumptions are listed and versioned.',
+    prov: 'MODELED · ' + (isB ? 'BOW model v0.3' : 'BOW model v0.2') + ' · assumptions listed · runs on demand. The ranges shown here are illustrative, authored.', short: 'MODELED · ' + (isB ? 'v0.3' : 'v0.2') + ' · runs on demand' },
+   text: { sw: 't-aut', word: 'AUTHORED · NATIVE TEXTBOOK', name: 'BOW Economics · The Cap', tk: 'YOUR PACE · paused at ' + step + ' of 9', s1: 'The Cap', s2: 'step ' + step + ' of 9',
+    about: 'A course built on Boston’s real books. Its clock is yours: it waits at your step, with no timer. Track 101 “The Window” EXISTS TODAY in BOW Economics Live.',
+    prov: 'AUTHORED · BOW Economics Live, Track 101 · your progress is RECORDED.', short: 'AUTHORED · Track 101 · progress RECORDED' },
+   creator: { sw: 't-gen', word: 'GENERATED · CREATOR-BUILT', name: 'Fab 101 · by [creator]', tk: 'A CREATOR’S CLOCK · unreviewed', s1: 'Fab 101', s2: 'unreviewed',
+    about: 'Built by a community creator and not reviewed by BOW. Its clock is whatever the creator set. It looks unlike the official clocks on purpose.',
+    prov: 'GENERATED · community-built, unreviewed · by [creator] · not an official BOW system.', short: 'GENERATED · unreviewed · by [creator]' }
+  };
+
+  const VERBS = {
+   reality: [['observe', 1, 'read everything public'], ['follow', 1, 'adds a complication'], ['enter a Moment', 1, 'from its recorded past'], ['act', 0, 'it is the real thing'], ['fork', 0, 'cut from a Moment, not from now'], ['run', 0, 'no model here']],
+   world: [['observe', 1, 'read your own books'], ['follow', 1, 'it hangs on the wall'], ['enter', 1, 'take the GM’s seat'], ['act', 1, 'your acts are recorded'], ['fork', 0, 'a World is yours, not branched'], ['run', 0, 'no model here']],
+   moment: [['observe', 1, 'the frozen morning'], ['follow', 0, 'it is stopped'], ['enter', 1, 'as the person in the seat'], ['act', 1, 'acting cuts a fork'], ['fork', 1, 'the cut is the act'], ['run', 0, 'no model here']],
+   fork: [['observe', 1, 'both hands, side by side'], ['follow', 1, 'it moves when you act'], ['enter', 1, 'in your own ink'], ['act', 1, 'inside the horizon'], ['fork', 0, 'one cut per choice'], ['run', 0, 'no model here']],
+   history: [['observe', 1, 'read only'], ['follow', 0, 'nothing arrives'], ['enter', 0, 'there is no NOW to enter'], ['act', 0, 'recorded and closed'], ['fork', 0, 'not built in this board'], ['run', 0, 'no model here']],
+   model: [['observe', 1, 'assumptions, versioned'], ['follow', 0, 'it moves only when run'], ['enter', 0, 'not a place'], ['act', 0, 'not a place'], ['fork', 0, 'not a place'], ['run', 1, 'on demand']],
+   text: [['observe', 1, 'your progress'], ['follow', 0, 'it waits for you'], ['enter', 1, 'resume where you paused'], ['act', 1, 'answer the steps'], ['fork', 0, 'not built in this board'], ['run', 0, 'no model here']],
+   creator: [['observe', 1, 'unreviewed'], ['follow', 1, 'at your own risk'], ['enter', 1, 'as a visitor'], ['act', 0, 'not in official Worlds'], ['fork', 0, 'not built in this board'], ['run', 0, 'no model here']]
+  };
+  const DURING = { reality: 'It kept ticking without you.', world: 'Its calendar did not move; it advances Monday.', moment: 'It did not move. It is stopped.', fork: 'It did not move. It moves when you act.', history: 'Nothing. There is no now here.', model: 'The counter did not move.', text: 'It waited at step ' + step + '.', creator: '[the creator’s clock, unreviewed]' };
+
+  const sinceOf = (id) => {
+   if (id === 'reality') return seen ? 'Nothing new since you opened it.' : (isB ? 'Two changes [from the Reality feed]: training camp opened [verify date]; [second change · from the Reality feed].' : 'Two changes [from the Reality feed]: [change one]; [change two].');
+   if (id === 'world') return adv ? 'Week 10 is open. ' + (adv === 'you' ? 'You advanced it.' : 'The calendar advanced it.') : 'One game while you were away: lost 112–115 to Denver, at home. The World advances Monday.';
+   if (id === 'moment') return 'Nothing. It is stopped at the morning.';
+   if (id === 'fork') return 'Nothing moved. Your branch moves only when you act in it.';
+   if (id === 'history') return 'Nothing. There is no now here.';
+   if (id === 'model') return 'Nothing. The counter reads ' + runs + '.';
+   if (id === 'text') return 'Nothing. It waits at step ' + step + ' of 9.';
+   return '[the creator’s changes · unreviewed]';
+  };
+
+  /* ---- clocks ---- */
+  const visIds = IDS.filter(isVis);
+  const stripIdx = {};
+  let si = 0;
+  visIds.forEach((id) => { if (id !== open) { stripIdx[id] = si; si += 1; } });
+  const opening = !!open;
+  const clocks = IDS.map((id) => {
+   const kind = KIND[id];
+   const vis = isVis(id);
+   const I = INFO[kind];
+   const slot = SLOTS[A[id]] || [0, 0, 0];
+   const d = slot[2];
+   const isOpen = open === id;
+   const isSel = sel === id && !opening;
+   let x = slot[0], y = slot[1], k = d / 300;
+   if (opening) { if (isOpen) { x = 64; y = 206; k = 440 / 300; } else { x = 30 + (stripIdx[id] || 0) * 86 + 15; y = 106; k = 56 / 300; } }
+   const name = kind === 'fork' ? 'Your fork · ' + forkName(id) : I.name;
+   let hands = [], capD = 0, capBg = INK;
+   const F = { compOp: follow ? 1 : 0, compDeg: isB ? 29.5 : -120, compDash: isB ? 'none' : '3 4', compNeedleOp: isB ? 1 : 0 };
+   let baseDeg = 0;
+   if (kind === 'reality') {
+    hands = [H(84, 11, 18, hrDeg, INK, LIVE, HOURC), H(120, 7, 20, minDeg, INK, LIVE, MINC), H(124, 3, 36, secDeg, RED, LIVE, 'none', 18, 88)];
+    capD = 18; baseDeg = hrDeg;
+   } else if (kind === 'world') {
+    const wd = (week / 52) * 360;
+    hands = [H(104, 7, 26, wd, INK, SLOW, MINC)]; capD = 16; baseDeg = wd;
+    F.arcDash = (wd / 360 * 678.6).toFixed(1); F.weekText = 'WEEK ' + week;
+   } else if (kind === 'moment') {
+    hands = [H(84, 11, 18, 265, INK, 'none', HOURC), H(120, 7, 20, 300, INK, 'none', MINC)]; capD = 18; baseDeg = 265;
+    F.wedgeOp = revealed ? 0 : 1; F.sealOp = revealed ? 0 : 1; F.sealS = revealed ? 1.5 : 1;
+   } else if (kind === 'fork') {
+    const sl = seasons[id] || 0;
+    const bd = 20 + sl * 120;
+    hands = [H(104, 6, 14, 330, INK, SLOW, MINC), H(90, 7, 14, bd, TEAL, SLOW, MINC)]; capD = 16; capBg = TEAL; baseDeg = bd;
+    F.sw1 = sl >= 1 ? 10 : 3; F.sd1 = sl >= 1 ? 'none' : '3 6'; F.sw2 = sl >= 2 ? 10 : 3; F.sd2 = sl >= 2 ? 'none' : '3 6'; F.sw3 = sl >= 3 ? 10 : 3; F.sd3 = sl >= 3 ? 'none' : '3 6';
+    F.eng1 = 'diverged ' + M.div; F.eng2 = 'horizon ' + M.horizon;
+   } else if (kind === 'model') {
+    F.ver = isB ? 'v0.3' : 'v0.2';
+    const dg = String(runs % 1000);
+    const p = ('000' + dg).slice(-3).split('');
+    F.wheels = p.map((ch) => ({ y: -(9 - Number(ch)) * 58 }));
+   } else if (kind === 'text') {
+    const secs = (i) => sector(58, 128, i * 40 + 2, (i + 1) * 40 - 2);
+    let dn = '', cu = '', rs = '';
+    for (let i = 0; i < 9; i += 1) { if (i < step - 1) dn += secs(i); else if (i === step - 1) cu += secs(i); else rs += secs(i); }
+    F.doneD = dn || 'M0 0'; F.curD = cu || 'M0 0'; F.restD = rs || 'M0 0';
+    F.stepText = step > 9 ? '9 of 9' : step + ' of 9'; F.stepSub = step > 9 ? 'FINISHED' : 'PAUSED';
+   } else if (kind === 'creator') {
+    hands = [H(80, 3, 12, 305, DOT, 'none', 'none'), H(112, 3, 16, 60, DOT, 'none', 'none')]; capD = 12; baseDeg = 305;
+   }
+   const sl1 = kind === 'fork' ? ((forkFor(id) || {}).sname || '') : I.s1;
+   return { sl1: sl1, sl2: I.s2, id: id, kind: kind, vis: vis, x: x, y: y, k: k, d: d, isOpen: isOpen, isSel: isSel, name: name, I: I, hands: hands, capD: capD, capBg: capBg, F: F, baseDeg: baseDeg, slotIdx: Object.keys(SLOTS).indexOf(A[id]) };
+  });
+
+  /* ---- rewind data for the open clock ---- */
+  const REW = (id) => {
+   const kind = KIND[id];
+   if (kind === 'reality') return isB ? { note: 'Observers see outcomes. A person standing inside a Moment does not, until they act.', ev: [
+    ['17 Jun 2017', 'Boston holds the No. 1 pick and Philadelphia wants it. Agreed that weekend, finalized 19 Jun; Boston took Jayson Tatum at No. 3 on 22 Jun (verify).'],
+    ['12 May 2025', 'Tatum ruptures his right Achilles in Game 4 against New York.'],
+    ['Late Jun 2025', 'The apron summer: Jrue Holiday to Portland for Anfernee Simons and two second-round picks; Kristaps Porziņģis to Atlanta in a three-team deal (verify).'],
+    ['13 Aug 2025', 'The NBA approves the sale to a group led by Bill Chisholm, about $6.1B reported; the rest transfers in 2028 (verify).'],
+    ['5 Feb 2026', 'Simons to Chicago for Nikola Vučević; Boston’s projected tax falls from about $39.5M to about $17M (reported, verify).'],
+    ['6 Mar 2026', 'Tatum returns from the Achilles injury against Dallas (verify).']] }
+    : { note: 'Observers see outcomes.', ev: [['19 Mar 2021', 'A fab fire, a recorded Moment (verify details).'], ['[later]', '[recorded events · from the Reality feed]']] };
+   if (kind === 'world') { const e = [['Year One', 'You funded Business over Basketball Ops. The analytics staff was cut.'], ['Week 6', 'You accepted Derrick White (and a backup big as salary filler) for Jimmy Butler.'], ['Week 9', 'Lost to Denver 112–115 at home. 20 recorded possessions; “Butler for three” twice; “Jokić scores” on the last possession after a switch left a big on a guard.']]; if (adv) e.push(['Week 10', 'Opened ' + (adv === 'you' ? 'by you.' : 'by the calendar.') + (lapsed ? ' ' + lapsed + ' open act' + (lapsed > 1 ? 's' : '') + ' lapsed, recorded as no decision.' : '')]); return { note: 'These are RECORDED in BOW, not NBA history.', ev: e }; }
+   if (kind === 'moment') return { note: 'The morning is frozen; nothing before it can be edited.', ev: [['Before', '[recorded lead-up · from the archive]'], [M.date + ' · morning', isB ? 'Philadelphia calls about No. 1. Frozen here.' : 'The fab is on fire. Frozen here.']] };
+   if (kind === 'fork') { const e = [[M.div, 'Diverged from Reality at the Moment.'], ['29 Sep 2026', 'Cut by you.']]; const sl = seasons[id] || 0; for (let i = 0; i < sl; i += 1) e.push([M.per[i], 'Lived in your ink. [outcome not simulated in this board]']); return { note: 'Your acts, in order.', ev: e }; }
+   if (kind === 'history') return { note: 'A closed record.', ev: [['1985–86', '[the recorded season · from the archive feed]']] };
+   if (kind === 'model') return { note: 'Earlier runs are kept, read-only.', ev: runLog.length ? runLog.map((r, i) => ['Run ' + (i + 1), r]) : [['Run 0', 'No runs yet.']] };
+   if (kind === 'text') { const e = []; for (let i = 1; i < Math.min(step, 10); i += 1) e.push(['Step ' + i, 'Completed.']); return { note: 'What you have finished.', ev: e.length ? e : [['—', 'Nothing completed yet.']] }; }
+   return { note: 'Unreviewed history.', ev: [['[date]', '[revision history · unreviewed]']] };
+  };
+  const oc = open ? clocks.find((c) => c.id === open) : null;
+  const rewSrc = open ? REW(open) : { note: '', ev: [] };
+  const rewN = rewSrc.ev.length;
+  const rewIdx = S.rewIdx === undefined ? rewN - 1 : Math.max(0, Math.min(rewN - 1, S.rewIdx));
+  const rewEv = rewSrc.ev[rewIdx] || ['', ''];
+
+  const wallClocks = clocks.map((c, i) => {
+   const I = c.I;
+   const opened = c.isOpen;
+   const showWall = !opening;
+   const rodTopX = c.x + c.d / 2 - 1.5;
+   const beamY = c.y < 300 ? 104 : 536;
+   const tagOn = showWall && ((c.kind === 'reality' && !seen) || (c.kind === 'world'));
+   let tag = '';
+   if (c.kind === 'reality') tag = isB ? '2 changes since you looked' : '2 changes since you looked';
+   if (c.kind === 'world') tag = adv ? 'Week 10 · opened by ' + (adv === 'you' ? 'you' : 'the calendar') : 'while away: 1 game · L 112–115 vs Denver';
+   const tag2On = showWall && c.kind === 'reality' && follow;
+   const selOn = c.isSel;
+   const stripOn = opening && !opened && c.vis;
+   const plaOn = c.vis && (showWall || opened);
+   let pleft = c.x, ptop = c.y + c.d + 6, pw = c.d;
+   if (opened) { pleft = 64; ptop = 656; pw = 440; }
+   const hands = c.hands.slice();
+   if (opened && rewind) hands.push(H(96, 5, 12, c.baseDeg - (rewN - 1 - rewIdx) * 40, DOT, SLOW, 'none'));
+   return {
+    rodX: rodTopX, rodY: beamY - 1, rodH: Math.max(0, c.y - beamY + 1), rodOp: showWall && c.vis ? 1 : 0,
+    aria: (opening ? (opened ? 'Open now: ' : 'Switch to ') : 'Select ') + c.name + ', ' + I.tk,
+    pressed: (opened || selOn) ? 'true' : 'false',
+    pick: () => { const s = this.state || {}; if (s.open) { if (s.open !== c.id) this.enter(c.id); } else this.setState({ sel: c.id }); },
+    x: c.x.toFixed(1), y: c.y.toFixed(1), k: c.k.toFixed(4), op: c.vis ? 1 : 0, vis: c.vis ? 'visible' : 'hidden', z: opened ? 6 : 2,
+    rad: c.kind === 'fork' ? '2px' : '50%', delay: Math.max(0, c.slotIdx) * 70,
+    isReality: c.kind === 'reality', isWorld: c.kind === 'world', isMoment: c.kind === 'moment', isFork: c.kind === 'fork', isHistory: c.kind === 'history', isModel: c.kind === 'model', isText: c.kind === 'text', isCreator: c.kind === 'creator',
+    numerals: c.kind === 'reality' || c.kind === 'moment',
+    compOp: c.F.compOp, compDeg: c.F.compDeg, compDash: c.F.compDash, compNeedleOp: c.F.compNeedleOp,
+    faceNote: '29 SEP 2026', arcDash: c.F.arcDash || 0, weekText: c.F.weekText || '',
+    wedgeOp: c.F.wedgeOp === undefined ? 1 : c.F.wedgeOp, wedgeStroke: c.F.wedgeOp === 0 ? 0.3 : 1, sealOp: c.F.sealOp === undefined ? 1 : c.F.sealOp, sealS: c.F.sealS || 1,
+    sw1: c.F.sw1, sd1: c.F.sd1, sw2: c.F.sw2, sd2: c.F.sd2, sw3: c.F.sw3, sd3: c.F.sd3, eng1: c.F.eng1 || '', eng2: c.F.eng2 || '',
+    ver: c.F.ver || '', wheels: c.F.wheels || [], doneD: c.F.doneD, curD: c.F.curD, restD: c.F.restD, stepText: c.F.stepText || '', stepSub: c.F.stepSub || '',
+    hands: hands, capD: c.capD, capL: 150 - c.capD / 2, capBg: c.capBg,
+    px: pleft.toFixed(1), py: ptop.toFixed(1), pw: pw.toFixed(1), pfs: opened ? 24 : 15,
+    plBg: selOn ? INK : 'transparent', plFg: selOn ? '#FBFBF9' : INK, plMuted: selOn ? '#D4D2CB' : '#55534E',
+    plOp: plaOn ? 1 : 0, plVis: plaOn ? 'visible' : 'hidden', plDelay: opened ? '.55s' : '0s',
+    name: c.name, tk: I.tk, sw: I.sw,
+    hasTag: tagOn && !!tag, tag: tag, tagDot: c.kind === 'reality' ? 'pulse' : '', tagDotBg: c.kind === 'reality' ? RED : (selOn ? '#FBFBF9' : INK),
+    hasTag2: tag2On, tag2: isB ? 'complication: payroll vs second apron' : 'complication: lead times',
+    showProv: how && plaOn, prov: I.short,
+    sl1: c.sl1, sl2: c.sl2, slX: 30 + (stripIdx[c.id] || 0) * 86 + 2, slOp: stripOn ? 1 : 0, slVis: stripOn ? 'visible' : 'hidden', slDelay: stripOn ? '.5s' : '0s'
+   };
+  });
+
+  /* ---- header ---- */
+  const quick = [['Boston basketball', 'boston'], ['semiconductor supply chain', 'semi']].map((p) => ({
+   label: p[0], pressed: q === p[1] ? 'true' : 'false', bg: q === p[1] ? INK : '#FBFBF9', fg: q === p[1] ? '#FBFBF9' : INK, go: () => this.search(p[0])
+  }));
+  const visN = visIds.length;
+  const wallCap = isB ? 'Boston basketball · ' + visN + ' systems hang here, each on its own clock' : isS ? 'semiconductor supply chain · ' + visN + ' systems hang here, each on its own clock' : '';
+
+  /* ---- reading panel ---- */
+  const index = IDS.filter((id) => isVis(id)).map((id) => { const c = clocks.find((z) => z.id === id); return { sw: c.I.sw, word: c.I.tk, name: c.name, pick: () => this.setState({ sel: id }) }; });
+  const selC = sel ? clocks.find((c) => c.id === sel) : null;
+  const rdKind = selC ? selC.kind : 'reality';
+  const rdVerbs = (VERBS[rdKind] || []).map((v) => ({ v: v[0], yn: v[1] ? 'yes' : 'no', op: v[1] ? 1 : 0.7, note: v[2] }));
+  const agoMs = sel && leftAt[sel] ? now - leftAt[sel] : 0;
+  const rd = selC ? {
+   sw: selC.I.sw, word: selC.I.word, name: selC.name, tk: selC.I.tk, about: selC.I.about, verbs: rdVerbs, since: sinceOf(selC.id),
+   hasAgo: !!(sel && leftAt[sel]), ago: 'You left it ' + mmss(agoMs) + ' ago. ' + DURING[selC.kind], prov: selC.I.prov
+  } : { sw: '', word: '', name: '', tk: '', about: '', verbs: [], since: '', hasAgo: false, ago: '', prov: '' };
+
+  /* ---- open pane ---- */
+  const cur = oc ? { fs: oc.name.length > 30 ? 28 : 34, sw: oc.I.sw, word: oc.I.word, title: oc.name, role: {
+   reality: 'You are an observer · 29 Sep 2026 · live', world: 'You are the GM · Year Two · Week ' + week, moment: 'You are the person in the seat · ' + M.date + ' · the morning',
+   fork: 'Your branch · own ink · the record stays readable beside it', history: 'You are a reader · recorded history', model: 'You are running a model · ' + (isB ? 'v0.3' : 'v0.2'),
+   text: 'You are a student · Track 101 · The Window', creator: 'You are a visitor · unreviewed'
+  }[oc.kind] } : { fs: 30, sw: '', word: '', title: '', role: '' };
+  const showContent = !!open && !rewind;
+  const showW = {};
+  ['reality', 'world', 'moment', 'fork', 'history', 'model', 'text', 'creator'].forEach((k) => { showW[k] = showContent && oc && oc.kind === k; });
+
+  /* reality pane */
+  const SC = 780 / 230, px = (v) => Math.round(v * SC * 10) / 10;
+  const CAP = 164.961, TAX = 200.428, A1 = 209.015, A2 = 221.686, PAY = 203.6;
+  const named = [['Tatum', 58.5], ['Brown', 57.1], ['White', 30.3], ['Hauser', 10.8], ['Pritchard', 7.8]];
+  let acc = 0;
+  const segs = named.map((n) => { const s = { x: px(acc), w: px(n[1]) - 2, lab: px(n[1]) > 90 ? n[0] : '', cls: 't-obs', fg: '#FBFBF9' }; acc += n[1]; return s; });
+  segs.push({ x: px(acc), w: px(PAY) - px(acc), lab: 'rest of roster', cls: 't-com', fg: INK });
+  const LN = (v, t, ly, above) => { const x = px(v); return above ? { x: x, y0: ly + 12, h: 56 - ly - 12, bx: x - 4, by: ly + 3, lx: x - 10, ly: ly, tx: '-100%', t: t } : { x: x, y0: 96, h: 20, bx: x - 4, by: 114, lx: x - 10, ly: 111, tx: '-100%', t: t }; };
+  const pay = {
+   segs: segs,
+   lines: [LN(CAP, 'cap $165.0M', 22, true), LN(TAX, 'tax $200.4M', 22, true), LN(A2, 'second apron $221.7M', 0, true), LN(A1, 'first apron $209.0M', 0, false)],
+   gaps: [{ t: 'past the tax line by $' + f1(PAY - TAX) + 'M' }, { t: 'under the first apron by $' + f1(A1 - PAY) + 'M' }, { t: 'under the second apron by $' + f1(A2 - PAY) + 'M' }]
+  };
+  const ck = { since1: seen ? 'Nothing new since you opened it.' : (isB ? 'training camp opened [verify date]' : '[change one · from the Reality feed]'), since2: seen ? '' : '[second change · from the Reality feed]' };
+  const feedSlots = ['[indicator one · from the Reality feed]', '[indicator two · from the Reality feed]', '[indicator three · from the Reality feed]'].map((t) => ({ t: t }));
+  const doors = (isB ? [['17 Jun 2017', 'Philadelphia calls about No. 1', 'moment'], ['Late Jun 2025', 'The second apron is closing in', null], ['5 Feb 2026', 'A ≈$39.5M projected tax bill', null]] : [['19 Mar 2021', 'Naka fab fire', 'moment']]).map((r) => ({
+   date: r[0], q: r[1], note: r[2] ? 'Enter as the person in the seat' : 'not built in this board', off: !r[2], op: r[2] ? 1 : 0.6, go: () => { if (r[2]) this.enter('moment'); }
+  }));
+
+  /* world pane */
+  const todayI = adv ? 0 : 3;
+  const DN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const days = DN.map((n, i) => {
+   const wk = adv ? 10 : 9;
+   let t = '', cls = 't-rec', fg = '#FBFBF9', bd = '0', bg = INK;
+   if (i < todayI) { cls = 't-rec'; t = i === 0 ? 'Week ' + wk + ' opened' : i === 2 ? 'Denver, home. L 112–115' : 'recorded'; }
+   else if (i === todayI) { cls = ''; fg = INK; bd = '3px solid #141414'; bg = '#FFFFFF'; t = adv ? 'Week 10 opened ' + (adv === 'you' ? 'by you' : 'by the calendar') : 'today · your acts'; }
+   else { cls = 't-unk'; fg = '#3A3935'; bd = '2px dashed #141414'; bg = 'transparent'; t = 'sealed. You find out by living it.'; }
+   return { d: n, t: t, cls: cls, fg: fg, bd: bd, bg: bg };
+  });
+  days.push({ d: adv ? 'Mon · Wk 11' : 'Mon · Wk 10', t: 'advances regardless', cls: 't-aut', fg: INK, bd: '2px solid #141414', bg: '#FBFBF9' });
+  const nDone = ['a', 'b', 'c'].filter((k) => acts[k]).length;
+  const ACTS = [['a', 'Set the Week 10 rotation.', 'Nine players, five spots. The World records who plays.'], ['b', 'Answer the payroll question.', '$22.8M over the World’s tax line.'], ['c', 'Read the Denver loss.', '20 recorded possessions; the last one is Jokić.']];
+  const wd = {
+   banner: adv ? 'Week 10 is open.' : 'It advances Monday regardless.', bannerNote: adv ? (adv === 'you' ? 'You advanced it once your acts were done.' : 'The calendar advanced it' + (lapsed ? '; ' + lapsed + ' open act' + (lapsed > 1 ? 's' : '') + ' lapsed, recorded as no decision.' : '.')) : 'Year Two · Week 9 · Thursday. It won’t wait for you to finish.',
+   days: days, away: adv ? 'Week 10 has just opened. Its first report arrives Monday [authored].' : 'One game: lost 112–115 to Denver at home. 20 recorded possessions; “Butler for three” twice; “Jokić scores” on the last possession after a switch left a big on a guard.',
+   actsHead: adv ? 'YOUR ACTS · none open yet, Week 10’s matters arrive with Monday’s report [authored]' : 'YOUR ACTS THIS WEEK · authored, illustrative',
+   acts: adv ? [] : ACTS.map((a) => ({ t: a[1], d: a[2], sw: acts[a[0]] ? 't-rec' : 't-aut', b: acts[a[0]] ? 'Recorded' : 'Do it', off: !!acts[a[0]], go: () => { const c = this.state || {}; this.setState({ acts: { ...(c.acts || {}), [a[0]]: true } }); } })),
+   advOff: !!adv || nDone < 3,
+   advNote: adv ? 'Already advanced.' : nDone < 3 ? 'Refused by the World’s advance rule (authored): early advance needs this week’s acts done. ' + (3 - nDone) + ' open.' : 'All three acts are recorded. You may advance early.',
+   calOff: !!adv
+  };
+
+  /* moment pane */
+  const lastFork = forks.length ? forkName(forks[forks.length - 1].id) : '';
+  const mm = S.mm || null;
+  const mo = {
+   back: !!S.back, situation: M.situation, sealed: !revealed, open: revealed, record: M.record, lastFork: lastFork,
+   acts: M.acts.map((a) => ({ t: a.t, bg: '#FBFBF9', fg: INK, go: () => {
+    const c = this.state || {};
+    const fk0 = c.forks || [];
+    if (a.type === 'have' || (a.type === 'cut' && fk0.some((f) => f.act === a.id))) {
+     this.setState({ mm: { bd: '#141414', msg: 'Refused by the one-branch rule (authored): a Moment holds one branch per choice, per person. You cut “' + (a.type === 'have' ? 'Keep No. 1' : a.fname) + '” already, and its clock hangs on the wall.', go: true, btn: 'Open that fork', fid: a.type === 'have' ? 'fork' : (fk0.find((f) => f.act === a.id) || {}).id } });
+    } else if (a.type === 'record') {
+     this.setState({ mm: { bd: '#141414', msg: 'Refused by the fork rule (authored): a fork has to differ from the record. Saying yes puts you on Reality’s path, so there is nothing to cut.', go: false } });
+    } else {
+     const free = ['fork2', 'fork3'].find((fid) => !fk0.some((f) => f.id === fid));
+     if (!free) { this.setState({ mm: { bd: '#141414', msg: 'Refused by the prototype’s wall limit: two new forks per Moment.', go: false } }); return; }
+     this.setState({ forks: [...fk0, { id: free, act: a.id }], revealed: true, mm: { bd: '#0B5C6B', msg: 'Cut. Hindsight is open, and a new clock is hanging on the wall: “Your fork · ' + a.fname + '”, diverged ' + M.div + ', horizon ' + M.horizon + '.', go: true, btn: 'Open it', fid: free } });
+    }
+   } })),
+   hasMsg: !!mm, msg: mm ? mm.msg : '', msgBd: mm ? mm.bd : '#141414', msgGo: !!(mm && mm.go), msgBtn: mm ? mm.btn : '', msgAct: () => { if (mm && mm.fid) this.enter(mm.fid); }
+  };
+
+  /* fork pane */
+  const fF = open && KIND[open] === 'fork' ? forkFor(open) : null;
+  const fSl = open ? (seasons[open] || 0) : 0;
+  const fk = fF ? {
+   div: M.div, horizon: M.horizon, record: M.record, branch: fF.branch, assume: fF.assume.map((t) => ({ t: t })),
+   seasons: M.per.map((p, i) => ({ t: p + (i < fSl ? ' · lived' : ' · sealed'), cls: i < fSl ? 't-fork' : 't-unk', fg: i < fSl ? '#FBFBF9' : '#0B5C6B', bd: i < fSl ? '0' : '2px dashed #0B5C6B', bg: i < fSl ? TEAL : 'transparent' })),
+   liveOff: fSl >= 3, liveLabel: fSl >= 3 ? 'Horizon reached' : 'Live one ' + M.unit + ' in this branch',
+   liveNote: fSl === 0 ? 'The teal hand has not moved. Past the horizon, nothing is modeled: it is sealed.' : fSl >= 3 ? 'The branch stops here. Nothing past it is modeled.' : fSl + ' of 3 lived, recorded in your ink. [outcomes not simulated in this board]'
+  } : { div: '', horizon: '', record: '', branch: '', assume: [], seasons: [], liveOff: true, liveLabel: '', liveNote: '' };
+
+  /* history / creator */
+  const hs = { t: S.hist ? 'Refused by the recorded-history rule: a historical state can be read, not advanced or acted on. Cut a fork from one of its Moments instead [not built in this board].' : 'Nothing has been tried.', op: S.hist ? 1 : 0.55 };
+  const cr = { t: S.visit ? 'You are in as a visitor. Nothing you do here is recorded to your history, and it can’t carry into an official World (authored rule).' : 'Not entered yet.', op: S.visit ? 1 : 0.55 };
+
+  /* model pane */
+  const MS = isB ? [['Hold payroll', 0], ['Add $10M salary', 10], ['Add $20M salary', 20]] : [['Fab out 2 weeks', 2], ['Fab out 6 weeks', 6], ['Fab out 12 weeks', 12]];
+  const RG = isB ? [[4, 7], [17, 25], [34, 45]] : [[2, 4], [6, 10], [12, 20]];
+  const axisMax = isB ? 50 : 24;
+  const lastRun = S.lastRun === undefined ? null : S.lastRun;
+  const pv = (v) => PAY + v;
+  const lineOf = (i) => {
+   if (!isB) return 'Input: the fab is out ' + MS[i][1] + ' weeks (your input, not observed).';
+   const p = pv(MS[i][1]);
+   const t = p - TAX, a1 = p - A1, a2 = p - A2;
+   return '$' + f1(p) + 'M: ' + (t >= 0 ? f1(t) + 'M past the tax line' : f1(-t) + 'M under the tax line') + ' · ' + (a1 >= 0 ? f1(a1) + 'M past the first apron' : f1(-a1) + 'M under the first apron') + ' · ' + (a2 >= 0 ? f1(a2) + 'M past the second apron' : f1(-a2) + 'M under the second apron') + ' (computed)';
+  };
+  const md = {
+   ver: isB ? 'v0.3' : 'v0.2',
+   assume: isB ? 'Payroll is held at ≈ $203.6M plus whatever you add; tax and apron lines are the 2026–27 fixture lines (verify); no trades happen during the run; nothing here is a forecast.' : 'The fab is out for the stated weeks; customers wait in the order they ordered; no other supplier is added; nothing here is a forecast.',
+   scens: MS.map((m, i) => ({ t: m[0], pressed: scen === i ? 'true' : 'false', bg: scen === i ? INK : '#FBFBF9', fg: scen === i ? '#FBFBF9' : INK, go: () => this.setState({ scen: i }) })),
+   none: lastRun === null, has: lastRun !== null, n: runs,
+   scenName: lastRun !== null ? MS[lastRun][0] : '', line: lastRun !== null ? lineOf(lastRun) : '',
+   rl: lastRun !== null ? Math.round(RG[lastRun][0] / axisMax * 640) : 0, rw: lastRun !== null ? Math.round((RG[lastRun][1] - RG[lastRun][0]) / axisMax * 640) : 0,
+   axis: isB ? '$50M' : '24 wk', rangeText: lastRun !== null ? (isB ? 'Tax bill, a range: $' + RG[lastRun][0] + 'M to $' + RG[lastRun][1] + 'M' : 'Customers wait, a range: ' + RG[lastRun][0] + ' to ' + RG[lastRun][1] + ' weeks') : ''
+  };
+
+  /* textbook pane */
+  const STEPT = ['', '', '', '', '', '', '', '', ''];
+  const tx = {
+   chips: STEPT.map((_, i) => {
+    const n = i + 1;
+    if (n < step) return { n: 'Step ' + n, t: 'done', cls: 't-rec', fg: '#FBFBF9', bd: '0', bg: INK };
+    if (n === step) return { n: 'Step ' + n, t: 'paused here', cls: '', fg: INK, bd: '3px solid #141414', bg: '#FFFFFF' };
+    return { n: 'Step ' + n, t: 'not started', cls: 't-aut', fg: INK, bd: '2px solid #141414', bg: '#FBFBF9' };
+   }),
+   off: step > 9, btn: step > 9 ? 'Course finished' : 'Resume at step ' + step,
+   note: step > 9 ? 'All nine steps are recorded. The clock stops when you do.' : step === 4 && !S.resumed ? 'Paused at step 4 of 9. It has been waiting, and it will keep waiting. [step content lives in BOW Economics Live]' : 'You moved it. Step ' + (step - 1) + ' is recorded; it now waits at step ' + step + '. [step content lives in BOW Economics Live]'
+  };
+
+  /* back / leave / rewind controls */
+  const backs = [];
+  if (open && KIND[open] === 'fork') backs.push({ t: 'Back to the branch point', sub: 'Return to the parent Moment, at the divergence.', bg: '#FBFBF9', fg: INK, bd: TEAL, go: () => this.enter('moment', { back: true }) });
+  backs.push({ t: 'Leave — back to the wall', sub: 'The presence stays. Its clock keeps its own time.', bg: INK, fg: '#FBFBF9', bd: INK, go: () => this.leave() });
+  backs.push({ t: rewind ? 'Return to now' : 'Rewind', sub: rewind ? 'End the replay. The clock never moved.' : 'Read-only replay of the recorded past. You can’t change it.', bg: '#FBFBF9', fg: INK, bd: INK, go: () => this.setState({ rewind: !(this.state || {}).rewind, rewIdx: undefined }) });
+
+  return {
+   q: S.q === undefined ? 'Boston basketball' : S.q,
+   onQ: (e) => this.setState({ q: e && e.target ? e.target.value : '' }),
+   onSubmit: (e) => { if (e && e.preventDefault) e.preventDefault(); this.search((this.state || {}).q === undefined ? 'Boston basketball' : (this.state || {}).q); },
+   quick: quick, how: how, howPressed: how ? 'true' : 'false', howBg: how ? INK : '#FBFBF9', howFg: how ? '#FBFBF9' : INK,
+   toggleHow: () => this.setState({ how: !(this.state || {}).how }),
+   hasWall: !none && !searching, wallOn: !none && !searching, noMatch: none, wallCap: wallCap, capOp: opening ? 0 : 1, beamOp: opening ? 0 : 1, stripCapOp: opening ? 1 : 0,
+   clocks: wallClocks,
+   showRead: !opening && !none && !searching, noSel: !sel, hasSel: !!sel, index: index, rd: rd,
+   openSel: () => { if (sel) this.enter(sel); }, clearSel: () => this.setState({ sel: null }),
+   isOpen: opening && !searching, paneOp: opening ? 1 : 0, cur: cur, rewind: rewind, showW: showW,
+   rew: { note: rewSrc.note, pos: (rewIdx + 1) + ' of ' + rewN, max: Math.max(0, rewN - 1), idx: rewIdx, when: rewEv[0], text: rewEv[1] },
+   onRew: (e) => this.setState({ rewIdx: Number(e && e.target ? e.target.value : 0) }),
+   isBoston: isB, isSemi: isS, pay: pay, ck: ck, feedSlots: feedSlots, doors: doors,
+   followPressed: follow ? 'true' : 'false', followBg: follow ? INK : '#FBFBF9', followFg: follow ? '#FBFBF9' : INK,
+   followLabel: follow ? 'Following · press to remove' : (isB ? 'Follow payroll vs second apron' : 'Follow lead times'),
+   followNote: follow ? 'A small dial now sits on this clock on the wall, low on the face. ' + (isB ? 'Its needle reads payroll against the four lines, so a change in Reality moves it.' : 'Its needle is empty until the Reality feed fills it.') + ' It is not a feed you subscribed to; it is part of the clock.' : 'Following adds a complication to this clock on the wall. It does not subscribe you to a stream.',
+   toggleFollow: () => this.setState({ follow: !(this.state || {}).follow }),
+   wd: wd, advNow: () => { const c = this.state || {}; const nd = ['a', 'b', 'c'].filter((k) => (c.acts || {})[k]).length; if (nd >= 3) this.setState({ adv: 'you', week: 10, lapsed: 0 }); },
+   advCal: () => { const c = this.state || {}; const nd = ['a', 'b', 'c'].filter((k) => (c.acts || {})[k]).length; this.setState({ adv: 'cal', week: 10, lapsed: 3 - nd }); },
+   mo: mo, fk: fk, liveSeason: () => { const c = this.state || {}; const cs = c.seasons || {}; if ((cs[c.open] || 0) < 3) this.setState({ seasons: { ...cs, [c.open]: (cs[c.open] || 0) + 1 } }); },
+   hs: hs, tryAdvance: () => this.setState({ hist: true }), cr: cr, visit: () => this.setState({ visit: true }),
+   md: md, runModel: () => { const c = this.state || {}; const i = c.scen || 0; const n = (c.runs || 0) + 1; this.setState({ runs: n, lastRun: i, runLog: [...(c.runLog || []), MS[i][0] + ' · ' + (isB ? 'tax bill range $' + RG[i][0] + 'M to $' + RG[i][1] + 'M (illustrative, authored)' : 'wait range ' + RG[i][0] + ' to ' + RG[i][1] + ' weeks (illustrative, authored)')] }); },
+   tx: tx, resume: () => { const c = this.state || {}; if ((c.step || 4) <= 9) this.setState({ step: (c.step || 4) + 1, resumed: true }); },
+   backs: backs,
+   hook: (() => { const sl = SLOTS[A.fork2] || [0, 0, 0]; const on = !opening && !none && !searching && forks.length === 0; const top = sl[1] < 300 ? 104 : 536; return { on: on, x: sl[0], y: sl[1], d: sl[2], rx: sl[0] + sl[2] / 2 - 1.5, ry: top - 1, rh: sl[1] - top + 1 }; })()
+  };
+ }
+}
+</script>
+</body>
+</html>

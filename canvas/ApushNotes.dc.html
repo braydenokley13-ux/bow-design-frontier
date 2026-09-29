@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Notes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4EFE3;color:#2A211B;font-family:'EB Garamond',serif}
+a{color:#9B2D20}a:hover{color:#5E1A12}
+.cap{font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.wsc{font-family:'Work Sans',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.t-obs{background:#2A211B}
+.t-rec{background:#2A211B;box-shadow:inset 0 0 0 3px #2A211B,inset 0 0 0 5px #F4EFE3}
+.t-aut{background:transparent;border:2px solid #2A211B}
+.t-com{background:#B9AE95}
+.t-gen{background:radial-gradient(circle,#2A211B 1.1px,transparent 1.4px) 0 0/6px 6px;border:1px dotted #2A211B}
+.t-unk{background:transparent;border:2px dashed #2A211B}
+.sw{flex:none;box-sizing:border-box}
+.pb{display:flex;flex-direction:column;justify-content:flex-start;width:100%;box-sizing:border-box;text-align:left;border:0;border-left:3px solid transparent;border-radius:0;background:transparent;padding:8px 14px 8px 13px;font-family:'EB Garamond',serif;font-size:17px;line-height:1.36;color:#2A211B;cursor:pointer;transition:background .2s,border-color .2s}
+.pb:hover{background:#EFE8D6}
+.pb-on,.pb-on:hover{background:#E9DFC6;border-left-color:#9B2D20}
+.seg{flex:1;min-height:34px;padding:0 8px;border:1.5px solid #2A211B;border-radius:0;background:#F4EFE3;color:#2A211B;font-family:'EB Garamond',serif;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,color .2s}
+.seg:hover{background:#E9DFC6}
+.seg-on,.seg-on:hover{background:#2A211B;color:#F4EFE3}
+.pb:focus-visible,.btn:focus-visible,.tabb:focus-visible,.qbtn:focus-visible,.obtn:focus-visible,.seg:focus-visible{outline:3px solid #1F3A5F;outline-offset:2px}
+.sg-tag{font-size:12px;font-weight:500;letter-spacing:.06em;color:#9B2D20;text-transform:uppercase}
+.sg-par{font-style:italic;color:#4A3F36}
+.sg-q{font-style:normal}
+.sg-sh{text-decoration:underline solid transparent;text-decoration-thickness:2px;text-underline-offset:4px;transition:text-decoration-color .5s ease .25s}
+.sg-sh-on{text-decoration-color:#9B2D20}
+.sg-un{text-decoration:underline dotted #9B2D20;text-decoration-thickness:2px;text-underline-offset:4px}
+.verify{display:block;margin-top:5px;font-size:11.5px;font-weight:500;letter-spacing:.05em;color:#9B2D20;line-height:1.3}
+.btn{font-family:'EB Garamond',serif;font-size:16px;font-weight:600;min-height:44px;padding:0 14px;border:1.5px solid #2A211B;border-radius:0;background:#F4EFE3;color:#2A211B;cursor:pointer;transition:background .2s,color .2s}
+.btn:hover{background:#E9DFC6}
+.btn-on,.btn-on:hover{background:#2A211B;color:#F4EFE3}
+.tabb{flex:1;min-height:42px;padding:0 8px;border:0;border-bottom:3px solid transparent;border-right:1px solid #CFC5AF;border-radius:0;background:transparent;font-family:'EB Garamond',serif;font-size:15px;font-weight:600;color:#5B4F44;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.tabb:hover{background:#EFE8D6}
+.tabb-on,.tabb-on:hover{color:#2A211B;border-bottom-color:#9B2D20;background:#F4EFE3}
+.qbtn{font-family:'JetBrains Mono',monospace;font-size:12.5px;text-align:left;min-height:32px;padding:0 12px;border:1.5px solid #2A211B;border-radius:0;background:#F4EFE3;color:#2A211B;cursor:pointer;transition:background .2s,color .2s}
+.qbtn:hover{background:#E9DFC6}
+.qbtn-on,.qbtn-on:hover{background:#2A211B;color:#F4EFE3}
+.obtn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;min-height:56px;padding:8px 14px;border:1.5px solid #1F3A5F;border-radius:0;background:#E9EDF0;color:#1F3A5F;font-family:'Work Sans',sans-serif;cursor:pointer;transition:background .2s,color .2s}
+.obtn:hover{background:#D5DDE4}
+.obtn-on,.obtn-on:hover{background:#1F3A5F;color:#F4EFE3}
+.hbb{padding:0;background:none;border:2px solid #1F3A5F}
+.unkb{border:2px dashed #1F3A5F;padding:4px 9px 5px}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F4EFE3; color: #2A211B; font-family: 'EB Garamond', serif">
+
+  <header style="position: absolute; left: 40px; right: 40px; top: 10px; height: 50px; display: grid; grid-template-columns: 470px minmax(0, 1fr) 400px; column-gap: 28px; align-items: start">
+    <div style="display: flex; flex-direction: column; gap: 3px">
+      <span class="cap" style="font-size: 11px; color: #5B4F44">BOW · The Notes · the record is the world</span>
+      <h1 style="margin: 0; font-size: 26px; font-weight: 500; line-height: 1.1; white-space: nowrap">Madison’s notes · <span style="color: #9B2D20">Saturday, 30 June 1787</span></h1>
+    </div>
+    <div aria-live="polite" style="padding-top: 2px">
+      <sc-if value="{{hasNaming}}" hint-placeholder-val="{{false}}">
+        <div style="border-left: 3px solid #9B2D20; padding: 2px 0 2px 12px; font-size: 16px; line-height: 1.3"><strong style="font-weight: 600">What you just saw has a name:</strong> {{namingText}}</div>
+      </sc-if>
+      <sc-if value="{{noNaming}}" hint-placeholder-val="{{true}}">
+        <div style="padding: 4px 0 0 15px; font-size: 16px; line-height: 1.3; font-style: italic; color: #5B4F44">{{hint}}</div>
+      </sc-if>
+    </div>
+    <div style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 10px; line-height: 1.5; letter-spacing: .03em; color: #5B4F44">PROTOTYPE · DESIGN PROPOSAL · actor model: PLATFORM HYPOTHESIS<br>quotations: Farrand, Records (1911), vol. 1 · recheck page images before release</div>
+  </header>
+
+  <section aria-label="Madison’s notes for Saturday, 30 June 1787" style="position: absolute; left: 40px; top: 66px; width: 880px; height: 826px; box-sizing: border-box; border: 1px solid #2A211B; box-shadow: inset 0 0 0 4px #F4EFE3, inset 0 0 0 5px #B9AE95; background-color: #F4EFE3; background-image: repeating-linear-gradient(0deg, rgba(42,33,27,.035) 0 1px, transparent 1px 7px); overflow: hidden">
+    <div style="display: grid; grid-template-columns: 38px 528px 30px 282px; padding-top: 4px">
+      <div></div>
+      <div style="padding: 8px 14px 8px 16px; display: flex; flex-direction: column; gap: 3px">
+        <span class="cap" style="color: #9B2D20">Saturday · 30 June 1787</span>
+        <span style="font-size: 15px; font-style: italic; color: #5B4F44; line-height: 1.3">Each paragraph has a history. Select one to trace it.</span>
+      </div>
+      <div></div>
+      <div style="padding: 8px 14px 6px; border-left: 1px solid #CFC5AF; display: flex; flex-direction: column; gap: 4px">
+        <button type="button" class="btn {{witCls}}" onClick="{{toggleWit}}" aria-pressed="{{witPressed}}" style="display: flex; align-items: center; gap: 10px; justify-content: flex-start">
+          <span aria-hidden="true" style="position: relative; flex: none; width: 30px; height: 16px; border: 1.5px solid currentColor; box-sizing: border-box"><span style="position: absolute; top: 2px; left: {{witKnob}}px; width: 9px; height: 9px; background: currentColor; transition: left .25s ease"></span></span>
+          Other witnesses
+        </button>
+        <span style="font-size: 14px; line-height: 1.3; font-style: italic; color: #5B4F44">{{witCaption}}</span>
+      </div>
+    </div>
+
+    <sc-for list="{{paras}}" as="p" hint-placeholder-count="6">
+      <div style="display: grid; grid-template-columns: 38px 528px 30px 282px; border-top: 1px solid #DDD3BE">
+        <div style="padding: 9px 0 0 8px; text-align: center; font-size: 17px; font-weight: 500; color: #9B2D20; font-feature-settings: 'onum'; display: flex; flex-direction: column; align-items: center; gap: 6px">
+          <span>{{p.n}}</span>
+          <sc-if value="{{p.brMark}}" hint-placeholder-val="{{false}}">
+            <span role="img" aria-label="Your branch diverges here; it is written on its own leaf, not in this text" style="display: block; width: 11px; height: 11px; border: 2px solid #1F3A5F; box-sizing: border-box"></span>
+            <span aria-hidden="true" style="font-family: 'Work Sans', sans-serif; font-size: 9px; line-height: 1; margin-top: -3px; color: #1F3A5F">branch</span>
+          </sc-if>
+        </div>
+        <button type="button" class="pb {{p.on}}" onClick="{{p.pick}}" aria-pressed="{{p.pressed}}">
+          <span><sc-for list="{{p.segs}}" as="sg" hint-placeholder-count="3"><span class="{{sg.cls}}">{{sg.t}}</span></sc-for></span>
+          <sc-if value="{{p.hasCite}}" hint-placeholder-val="{{false}}">
+            <span class="verify">{{p.cite}}</span>
+          </sc-if>
+        </button>
+        <div style="position: relative">
+          <sc-if value="{{p.isB}}" hint-placeholder-val="{{false}}">
+            <div aria-hidden="true" style="opacity: {{wOp}}; transition: opacity .5s ease .3s">
+              <div style="position: absolute; left: 0; top: 24px; width: 30px; border-top: 1.5px solid #9B2D20"></div>
+              <div style="position: absolute; left: 14px; top: 24px; bottom: 24px; border-left: 1.5px solid #9B2D20"></div>
+              <div style="position: absolute; left: 0; bottom: 24px; width: 30px; border-top: 1.5px solid #9B2D20"></div>
+              <span style="position: absolute; left: 2px; top: 50%; margin-top: -13px; width: 26px; height: 26px; box-sizing: border-box; border: 1.5px solid #9B2D20; border-radius: 13px; background: #F4EFE3; text-align: center; line-height: 22px; font-size: 16px; font-weight: 600; color: #9B2D20">≈</span>
+            </div>
+          </sc-if>
+        </div>
+        <div style="position: relative; border-left: 1px solid #CFC5AF">
+          <sc-if value="{{p.isB}}" hint-placeholder-val="{{false}}">
+            <div aria-hidden="{{wHid}}" style="padding: {{wPad}}px 14px {{wPad}}px; max-height: {{wMax}}px; overflow: hidden; display: flex; flex-direction: column; gap: 5px; opacity: {{wOp}}; transform: translateX({{wTx}}px); transition: opacity .5s ease, transform .5s ease, max-height .5s ease, padding .5s ease">
+              <span class="cap" style="font-size: 11px; color: #9B2D20">Robert Yates · New York</span>
+              <span style="font-size: 15.5px; line-height: 1.34"><span class="sg-q sg-un">“I do not, gentlemen, trust you.”</span></span>
+              <span style="font-size: 15.5px; line-height: 1.34"><span class="sg-q">“Sooner than be ruined, there are <span class="sg-sh sg-sh-on">foreign powers who will take us by the hand</span>. I say not this to threaten or intimidate…”</span></span>
+              <span class="verify" style="margin-top: 0">Farrand, vol. 1, pp. 500–501</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; line-height: 1.4; color: #5B4F44">solid: in both · dotted: only in Yates</span>
+              <div style="border-left: 3px double #9B2D20; padding: 2px 0 2px 10px; display: flex; flex-direction: column; gap: 3px; margin-top: 2px">
+                <span class="cap" style="font-size: 11px; color: #9B2D20">Two witnesses</span>
+                <span style="font-size: 13px; line-height: 1.3">Both wrote down the foreign-help line and Bedford’s “not a threat.” Only Yates kept “I do not, gentlemen, trust you.” Madison writes him in the third person; Yates keeps his “I”.</span>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-for>
+  </section>
+
+  <section aria-label="The margin" style="position: absolute; left: 952px; top: 66px; width: 448px; height: {{margH}}px; transition: height .3s ease; box-sizing: border-box; border: 1px solid #2A211B; background: #F4EFE3; overflow: hidden">
+    <div role="tablist" aria-label="Margin tools" style="display: flex; height: 42px; border-bottom: 1px solid #2A211B">
+      <sc-for list="{{tabs}}" as="tb" hint-placeholder-count="3">
+        <button type="button" role="tab" class="tabb {{tb.cls}}" aria-selected="{{tb.sel}}" onClick="{{tb.pick}}" style="flex: {{tb.flex}}">{{tb.label}}</button>
+      </sc-for>
+    </div>
+    <div style="padding: 10px 16px">
+
+      <sc-if value="{{tabHow}}" hint-placeholder-val="{{true}}">
+        <div style="display: flex; flex-direction: column">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; min-height: 34px">
+            <span class="cap" style="font-size: 11px; color: #9B2D20">{{selKicker}}</span>
+            <sc-if value="{{showStrand}}" hint-placeholder-val="{{false}}">
+              <div role="group" aria-label="Whose strand of the record" style="display: flex; flex: none; width: 250px">
+                <button type="button" class="seg {{mStrCls}}" onClick="{{pickM}}" aria-pressed="{{mStrPr}}">Madison’s strand</button>
+                <button type="button" class="seg {{yStrCls}}" onClick="{{pickY}}" aria-pressed="{{yStrPr}}" style="border-left: 0">Yates’s strand</button>
+              </div>
+            </sc-if>
+          </div>
+          <span style="font-size: 20px; font-weight: 500; line-height: 1.2; margin: 1px 0 8px">{{selTitle}}</span>
+          <sc-for list="{{chain}}" as="ch" hint-placeholder-count="5">
+            <div style="display: grid; grid-template-columns: 24px minmax(0, 1fr); column-gap: 12px; opacity: {{ch.op}}">
+              <div style="position: relative">
+                <div class="sw {{ch.cls}}" style="width: 20px; height: 20px; margin: 2px 0 0 2px"></div>
+                <sc-if value="{{ch.hasLine}}" hint-placeholder-val="{{true}}">
+                  <div style="position: absolute; left: 11px; top: 25px; bottom: -3px; border-left: 2px {{ch.ls}} #2A211B"></div>
+                </sc-if>
+              </div>
+              <div style="padding-bottom: 7px">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-size: 16px; font-weight: 600; line-height: 1.25">{{ch.title}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .06em; color: #5B4F44">{{ch.word}}</span></div>
+                <sc-if value="{{ch.hasDesc}}" hint-placeholder-val="{{true}}">
+                  <div style="font-size: 14px; line-height: 1.28; color: #4A3F36">{{ch.desc}}</div>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{hasSel}}" hint-placeholder-val="{{true}}">
+            <div style="margin-top: 2px; padding-top: 7px; border-top: 1px solid #CFC5AF; display: flex; align-items: center; justify-content: space-between; gap: 12px">
+              <span style="font-size: 14px; line-height: 1.28; font-style: italic; color: #4A3F36">{{selNote}}</span>
+              <sc-if value="{{showWitBtn}}" hint-placeholder-val="{{false}}">
+                <button type="button" class="btn" onClick="{{toggleWit}}" style="flex: none; min-height: 40px; font-size: 14.5px; white-space: nowrap">Set Yates beside →</button>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{tabAsk}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; flex-direction: column; gap: 7px; font-family: 'JetBrains Mono', monospace">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span class="cap" style="font-family: 'EB Garamond', serif; font-size: 11px; color: #9B2D20">Ask the actor model</span>
+            <span style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600"><span aria-hidden="true" class="t-gen" style="flex: none; width: 16px; height: 16px; box-sizing: border-box"></span>Gunning Bedford Jr. · Delaware</span>
+            <span style="font-size: 10.5px; line-height: 1.45; color: #5B4F44">actor model, not the person · answers about Bedford, never as Bedford (rule: no imitating a real person’s voice) · sample answers authored; no model ran</span>
+          </div>
+          <div role="group" aria-label="Questions for the actor model" style="display: flex; flex-direction: column; gap: 3px">
+            <sc-for list="{{qs}}" as="qb" hint-placeholder-count="3">
+              <button type="button" class="qbtn {{qb.on}}" onClick="{{qb.pick}}" aria-pressed="{{qb.pressed}}">{{qb.label}}</button>
+            </sc-for>
+          </div>
+          <sc-if value="{{hasAns}}" hint-placeholder-val="{{false}}">
+            <div style="display: flex; flex-direction: column; gap: 6px; border-left: 3px dotted #2A211B; padding-left: 10px" aria-live="polite">
+              <sc-for list="{{answer}}" as="la" hint-placeholder-count="3">
+                <div style="display: grid; grid-template-columns: 14px minmax(0, 1fr); column-gap: 8px">
+                  <div class="{{la.cls}}"></div>
+                  <div style="padding-bottom: 1px"><div style="font-size: 10.5px; font-weight: 600; letter-spacing: .1em">{{la.label}}</div><div style="font-size: 13px; line-height: 1.3">{{la.text}}</div></div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{noAns}}" hint-placeholder-val="{{true}}">
+            <div style="font-size: 13px; line-height: 1.5; color: #4A3F36; padding-top: 4px">Choose a question. Each answer is sorted into three layers: what a source supports, what historians infer from it, and what nobody knows.</div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{tabWif}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <div><span class="cap" style="font-size: 11px">Write in the margin</span> <span class="cap" style="font-size: 11px; color: #9B2D20">· what if?</span></div>
+          <p style="margin: 0; font-size: 15.5px; line-height: 1.35">Change one thing about this day. Your change goes on its own leaf, beside the page. It never enters Madison’s text.</p>
+          <sc-for list="{{opts}}" as="o" hint-placeholder-count="3">
+            <button type="button" class="obtn {{o.on}}" onClick="{{o.pick}}" aria-pressed="{{o.pressed}}">
+              <span style="font-size: 15px; font-weight: 600; line-height: 1.25">{{o.label}}</span>
+              <span style="font-size: 12.5px; opacity: .85">{{o.sub}}</span>
+            </button>
+          </sc-for>
+          <sc-if value="{{hasBranch}}" hint-placeholder-val="{{false}}">
+            <button type="button" class="btn" onClick="{{clearBranch}}" style="align-self: flex-start; min-height: 40px; font-size: 14.5px">Take the leaf away</button>
+          </sc-if>
+        </div>
+      </sc-if>
+
+    </div>
+  </section>
+
+  <section aria-label="Your branch, on its own leaf" style="position: absolute; left: 952px; top: {{leafTop}}px; width: 448px; height: {{leafH}}px; transition: height .3s ease, top .3s ease; box-sizing: border-box; background: #E9EDF0; border: 1px solid #1F3A5F; padding: 10px 16px; font-family: 'Work Sans', sans-serif; color: #1F3A5F; overflow: hidden">
+    <sc-if value="{{noBranch}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span class="wsc">Your branch</span>
+        <span style="font-size: 15px; line-height: 1.4">Nothing is written on this leaf yet.</span>
+        <span style="font-size: 13.5px; line-height: 1.45; color: #3A5170">Open Write in the margin and choose one change. It appears here, apart from Madison’s page and in a different hand. It never enters his text.</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{hasBranch}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-direction: column; gap: 5px; height: 100%">
+        <div style="align-self: flex-start; border: 2px solid #1F3A5F; box-shadow: 0 0 0 2px #E9EDF0, 0 0 0 3px #1F3A5F; margin: 2px; padding: 2px 9px; display: flex; flex-direction: column; gap: 1px">
+          <span class="wsc">Your branch · not in any record</span>
+          <span class="wsc" style="font-weight: 500">diverged 30 June 1787 · at {{leaf.at}}</span>
+        </div>
+        <span style="font-size: 15px; font-weight: 600; line-height: 1.25">What if: {{leaf.label}}</span>
+        <span style="font-size: 12px; line-height: 1.4; color: #3A5170"><strong style="font-weight: 600">Assumes:</strong> {{leaf.assumes}}</span>
+        <div class="hbb"><div style="background: #E9EDF0; padding: 4px 9px 5px"><span class="wsc" style="display: block; margin-bottom: 2px">Illustrative, authored · no model ran</span><span style="font-size: 13px; line-height: 1.38">{{leaf.modeled}}</span></div></div>
+        <div class="unkb"><span class="wsc" style="display: block; margin-bottom: 2px">Unknown</span><span style="font-size: 13px; line-height: 1.38">{{leaf.unknown}}</span></div>
+        <div style="margin-top: auto; border-left: 3px solid #2A211B; padding: 1px 0 1px 10px; font-family: 'EB Garamond', serif; font-size: 13px; line-height: 1.3; color: #2A211B">The record goes on: 2 July, a 5–5 tie; 16 July, the compromise passes (verify).</div>
+      </div>
+    </sc-if>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentWillUnmount() { clearTimeout(this.nt); }
+  fire(kind, patch) {
+    const nm = (this.state && this.state.named) || {};
+    if (nm[kind]) { this.setState(patch); return; }
+    clearTimeout(this.nt);
+    this.setState(Object.assign({}, patch, { named: Object.assign({}, nm, { [kind]: true }), naming: kind }));
+    this.nt = setTimeout(() => this.setState({ naming: null }), 7000);
+  }
+  renderVals() {
+    const s = this.state || {};
+    const sel = s.sel === undefined ? 4 : s.sel;
+    const strand = s.strand === 'y' ? 'y' : 'm';
+    const tab = s.tab || 'how';
+    const wit = !!s.wit;
+    const q = s.q === undefined ? -1 : s.q;
+    const br = s.br === undefined ? -1 : s.br;
+
+    const P = [
+      { t: 'Wilson · summarised', segs: [['tag', '[paraphrase] '], ['par', 'James Wilson of Pennsylvania answers that a vote should follow persons, not states.']],
+        note: 'Another compressed speech. What Wilson exactly said is UNKNOWN.' },
+      { t: 'Ellsworth · summarised', segs: [['tag', '[paraphrase] '], ['par', 'Oliver Ellsworth of Connecticut asks that in the second branch each state have one vote, as a security the small states will not do without.']],
+        note: 'Madison compresses a speech into a line. The wording here is ours.' },
+      { t: 'Madison · his own words, as he wrote them', cite: 'Farrand, vol. 1, p. 486', segs: [['tag', '[paraphrase] '], ['par', 'James Madison says the real division is not between large and small states. In his words, the states '], ['q', '“were divided into different interests not by their difference of size, but by other circumstances; the most material of which resulted partly from climate, but principally from the effects of their having or not having slaves.”']],
+        note: 'Speaker and note-taker are one man. In this same speech he later crossed out “as a security agst. the encroachments of each other” (p. 486, n. 8).' },
+      { t: 'Franklin · as Madison wrote him', cite: 'Farrand, vol. 1, p. 488', segs: [['tag', '[paraphrase] '], ['par', 'Benjamin Franklin, before the day’s sharpest exchange, offers a picture from carpentry: '], ['q', '“When a broad table is to be made, and the edges of planks do not fit the artist takes a little from both, and makes a good joint.”']],
+        note: 'These are Madison’s words for the speech. What Franklin exactly said is UNKNOWN.' },
+      { t: 'Bedford · as Madison wrote him', cite: 'Farrand, vol. 1, p. 492', segs: [['tag', '[paraphrase] '], ['par', 'Gunning Bedford of Delaware, in Madison’s notes: '], ['q', '“The Large States dare not dissolve the confederation. If they do the small ones will find some '], ['sh', 'foreign ally'], ['q', ' of more honor and good faith, who will '], ['sh', 'take them by the hand'], ['q', ' and do them justice. He did not mean by this to intimidate or alarm.”']],
+        note: 'Farrand marks the end of this paragraph “Taken from Yates”: Madison copied it in later (vol. 1, p. 492).' },
+      { t: 'King · summarised', segs: [['tag', '[paraphrase] '], ['par', 'Rufus King of Massachusetts answers sharply. He is troubled that anyone would speak of turning to a foreign power.']],
+        note: 'Madison’s version of this reply was copied in later from Yates (vol. 1, p. 493, n. 17).' }
+    ];
+    const paras = P.map((p, i) => {
+      const on = sel === i;
+      return { n: String(i + 1), isB: i === 4, on: on ? 'pb-on' : '', pressed: on ? 'true' : 'false',
+        pick: () => (on ? this.setState({ sel: -1 }) : this.fire('prov', { sel: i, tab: 'how' })),
+        segs: p.segs.map((g) => ({ t: g[1], cls: g[0] === 'q' ? 'sg-q' : g[0] === 'sh' ? (wit ? 'sg-q sg-sh sg-sh-on' : 'sg-q sg-sh') : g[0] === 'tag' ? 'sg-tag' : 'sg-par' })),
+        hasCite: !!p.cite, cite: p.cite || '', brMark: br >= 0 && [3, 4, 2][br] === i };
+    });
+
+    const CHM = [
+      ['t-unk', 'UNKNOWN', 'Spoken in the room', 'Exact words: UNKNOWN. No one recorded them as spoken.'],
+      ['t-rec', 'RECORDED', 'Written by Madison in 1787', 'Written out during the session or within days of its close, by his own account.'],
+      ['t-obs', 'OBSERVED', 'Revised by Madison after 1819', 'In a later ink he matched votes to the printed Journal and, in over fifty places, added passages taken from Yates (Farrand, vol. 1, pp. xvii–xviii).'],
+      ['t-obs', 'OBSERVED', 'Published 1840', 'Four years after his death in 1836.'],
+      ['t-obs', 'OBSERVED', 'Farrand, 1911', 'The edition these quotations come from.']
+    ];
+    const CHY = [
+      ['t-unk', 'UNKNOWN', 'Spoken in the room', 'Exact words: UNKNOWN. No one recorded them as spoken.'],
+      ['t-unk', 'UNKNOWN', 'Yates’s own notes, 1787', 'Manuscript lost; Farrand found none.'],
+      ['t-rec', 'RECORDED', 'Copied by John Lansing Jr.', ''],
+      ['t-obs', 'OBSERVED', 'Printed in Albany, 1821', '20 years after Yates died; Edmond Genêt arranged it and had used the notes against Madison in 1808.'],
+      ['t-obs', 'OBSERVED', 'Farrand, 1911', 'Reprinted from the 1821 print.']
+    ];
+    const hasSel = sel >= 0;
+    const hasBranchNow = br >= 0;
+    const showStrand = sel === 4;
+    const yStr = showStrand && strand === 'y';
+    const CH = yStr ? CHY : CHM;
+    const chain = CH.map((c, i) => ({ cls: c[0], word: c[1], title: c[2], desc: c[3], hasDesc: !!c[3], op: hasSel ? 1 : 0.4, hasLine: i < 4, ls: i === 0 ? 'dashed' : 'solid' }));
+
+    const QS = [
+      ['What do you want from the vote?',
+        ['Delaware’s credentials barred its delegates from changing the Confederation’s one-state-one-vote article (read 25 May; Farrand, vol. 1, p. 4).',
+         'Historians generally read him as speaking for small states that feared being outvoted. [authored summary; cite a historian before release]',
+         'What he would have accepted on 30 June: UNKNOWN. On 2 July he was named to the committee that drafted the compromise (verify).']],
+      ['What will you do if you lose?',
+        ['On 5 July he said he had been misunderstood: foreign nations owed money would take the small states by the hand “in order to do themselves justice” (Farrand, vol. 1, p. 531).',
+         'Historians generally read that as a threat to press the large states, not a plan. [authored summary; cite a historian before release]',
+         'Whether that 5 July account is what he meant on 30 June: UNKNOWN.']],
+      ['What did you privately believe?',
+        ['What survives is what he said in the room, as two note-takers heard it. [paraphrase]',
+         'Historians generally read his anger as conviction, an inference from his speeches. [authored summary; cite a historian before release]',
+         'No surviving source records his private view.']]
+    ];
+    const LAY = [['t-obs', 'SOURCE-SUPPORTED'], ['t-aut', 'INTERPRETATION · AUTHORED SUMMARY'], ['t-unk', 'UNKNOWN']];
+    const answer = q >= 0 ? QS[q][1].map((t, i) => ({ cls: LAY[i][0], label: LAY[i][1], text: t })) : [];
+    const qs = QS.map((x, i) => ({ label: x[0], on: q === i ? 'qbtn-on' : '', pressed: q === i ? 'true' : 'false',
+      pick: () => this.fire('actor', { q: i }) }));
+
+    const BR = [
+      { label: 'Franklin does not speak', sub: 'Removes ¶4 and its picture of a joint.', para: 3,
+        assumes: 'every other speech that day stays as Madison recorded it; Delaware’s instructions do not change.',
+        modeled: 'No carpentry picture is on the table when Bedford rises; the day still ends with King’s rebuke. Illustrative: the same 2 July tie, or a slower road to the committee.',
+        unknown: 'Whether anyone else would have offered a compromise picture: UNKNOWN.' },
+      { label: 'Bedford does not threaten', sub: 'Removes the foreign-ally line in ¶5.', para: 4,
+        assumes: 'Bedford still argues for an equal vote, without the foreign-ally line, and King has nothing to answer.',
+        modeled: 'The room stays cooler, but the equal-vote demand stands. Range: an earlier compromise, or the same deadlock a few days on.',
+        unknown: 'What Bedford would have said in its place: UNKNOWN.' },
+      { label: 'Madison’s slavery argument is accepted as the line of division', sub: 'Changes what ¶3 is taken to mean.', para: 2,
+        assumes: 'from this point delegates treat the split as North against South, not large against small.',
+        modeled: 'The sides re-form; some small and large states swap places, and slavery moves to the centre earlier. Range: a different compromise, or none that holds.',
+        unknown: 'Whether small states would accept a rule built on a line they did not draw: UNKNOWN.' }
+    ];
+    const opts = BR.map((b, i) => ({ label: b.label, sub: b.sub, on: br === i ? 'obtn-on' : '', pressed: br === i ? 'true' : 'false',
+      pick: () => this.fire('branch', { br: i }) }));
+    const bb = br >= 0 ? BR[br] : null;
+
+    const NAMES = {
+      prov: 'provenance, the chain of hands a record passed through before you read it.',
+      witness: 'corroboration: two witnesses agree on what was said, and differ on the words.',
+      actor: 'historical inference, a reading built from sources and kept apart from what they say.',
+      branch: 'a counterfactual, a reasoned what-if kept apart from the record.'
+    };
+    const HINTS = { how: 'Select a paragraph to see where its words came from.', ask: 'Answers come from sources on this page, sorted by how well each is known.', wif: 'Nothing you write here enters Madison’s page. It goes on its own leaf.' };
+    const TABS = [['how', 'How do we know?', 1.1], ['ask', 'Ask Bedford', 0.85], ['wif', 'Write in the margin', 1.25]];
+    const tabs = TABS.map((t) => ({ label: t[1], flex: t[2], sel: tab === t[0] ? 'true' : 'false', cls: tab === t[0] ? 'tabb-on' : '',
+      pick: () => this.setState({ tab: t[0] }) }));
+
+    return {
+      paras, chain, hasSel, tabs, qs, answer, opts,
+      hasNaming: !!s.naming, noNaming: !s.naming, namingText: s.naming ? NAMES[s.naming] : '', hint: HINTS[tab],
+      margH: hasBranchNow ? 490 : 686, leafTop: hasBranchNow ? 562 : 760, leafH: hasBranchNow ? 330 : 132,
+      wPad: wit ? 9 : 0, wMax: wit ? 420 : 0,
+      wOp: wit ? 1 : 0, wTx: wit ? 0 : 70, wHid: wit ? 'false' : 'true',
+      witPressed: wit ? 'true' : 'false', witCls: wit ? 'btn-on' : '', witKnob: wit ? 16 : 3,
+      witCaption: wit ? 'A second witness, not a correction.' : 'Another delegate kept notes too.',
+      toggleWit: () => (wit ? this.setState({ wit: false }) : this.fire('witness', { wit: true })),
+      tabHow: tab === 'how', tabAsk: tab === 'ask', tabWif: tab === 'wif',
+      selKicker: hasSel ? 'Provenance · ¶' + (sel + 1) : 'Provenance',
+      selTitle: hasSel ? (yStr ? 'Bedford · as Yates wrote him' : P[sel].t) : 'Select a paragraph on the page',
+      showStrand: showStrand, mStrCls: yStr ? '' : 'seg-on', yStrCls: yStr ? 'seg-on' : '', mStrPr: yStr ? 'false' : 'true', yStrPr: yStr ? 'true' : 'false',
+      pickM: () => this.setState({ strand: 'm' }), pickY: () => this.setState({ strand: 'y' }),
+      selNote: hasSel ? P[sel].note : '', showWitBtn: sel === 4 && !wit,
+      hasAns: q >= 0, noAns: q < 0,
+      hasBranch: !!bb, noBranch: !bb,
+      leaf: bb ? { label: bb.label, assumes: bb.assumes, modeled: bb.modeled, unknown: bb.unknown, at: '¶' + (bb.para + 1) } : { label: '', assumes: '', modeled: '', unknown: '', at: '' },
+      clearBranch: () => this.setState({ br: -1 })
+    };
+  }
+}
+</script>
+</body>
+</html>

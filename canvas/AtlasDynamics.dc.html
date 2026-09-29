@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Atlas: field guide of dynamics</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&amp;family=Karla:ital,wght@0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F5EF;color:#1E2A24;font-family:'Karla',sans-serif}
+a{color:#1E2A24}
+.fr{font-family:'Fraunces',serif}
+.kr{font-family:'Karla',sans-serif}
+.btn{font-family:'Karla',sans-serif;border-radius:0;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.btn:focus-visible,.slide:focus-visible,.lnk:focus-visible{outline:3px solid #B3341F;outline-offset:2px}
+.btn:disabled{cursor:not-allowed}
+.lnk{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;text-decoration:none;font-family:'Karla',sans-serif;font-weight:700}
+.mv2{transition:left .35s ease,top .35s ease,width .35s ease,height .35s ease,opacity .3s ease,background-color .3s ease}
+.plate{transition:left .7s cubic-bezier(.3,.7,.2,1),top .7s cubic-bezier(.3,.7,.2,1),opacity .4s ease}
+.fd{transition:opacity .35s ease}
+.slide{-webkit-appearance:none;appearance:none;background:transparent;margin:0;padding:0;width:400px;height:36px;cursor:ew-resize}
+.slide::-webkit-slider-runnable-track{height:6px;background:#FBFAF4;border:1.5px solid #1E2A24;border-radius:0}
+.slide::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:32px;margin-top:-13px;background:#B3341F;border:2px solid #1E2A24;border-radius:0}
+.slide::-moz-range-track{height:5px;background:#FBFAF4;border:1.5px solid #1E2A24;border-radius:0}
+.slide::-moz-range-thumb{width:18px;height:28px;background:#B3341F;border:2px solid #1E2A24;border-radius:0}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F6F5EF; color: #1E2A24; font-family: 'Karla', sans-serif">
+
+  <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 64px; box-sizing: border-box; padding: 0 28px; display: flex; align-items: center; gap: 16px; border-bottom: 1.5px solid #1E2A24">
+    <div style="display: flex; flex-direction: column; line-height: 1; flex: none">
+      <span class="kr" style="font-size: 11px; font-weight: 700; letter-spacing: .16em">BOW ATLAS</span>
+      <span class="fr" style="font-size: 22px; font-style: italic; font-weight: 400; margin-top: 4px">Field guide of dynamics</span>
+    </div>
+    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-left: 10px"><circle cx="8" cy="8" r="5.5" fill="none" stroke="#1E2A24" stroke-width="2"></circle><line x1="12.5" y1="12.5" x2="18" y2="18" stroke="#1E2A24" stroke-width="2"></line></svg>
+    <sc-for list="{{queries}}" as="q" hint-placeholder-count="5">
+      <button type="button" class="btn" onClick="{{q.pick}}" aria-pressed="{{q.on}}" style="height: 40px; padding: 0 13px; font-size: 15px; font-weight: 500; white-space: nowrap; border: 1.5px solid #1E2A24; background: {{q.bg}}; color: {{q.fg}}">{{q.text}}</button>
+    </sc-for>
+    <span style="flex: 1"></span>
+    <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{how}}" style="height: 38px; padding: 0 14px; font-size: 15px; font-weight: 700; border: 1.5px solid #1E2A24; background: {{howBg}}; color: {{howFg}}; white-space: nowrap">How do we know?</button>
+  </header>
+
+  <!-- left: the entry and its motif -->
+  <div style="position: absolute; left: 28px; top: 74px; width: 400px; display: flex; gap: 10px; align-items: flex-start">
+    <span style="width: 16px; height: 16px; flex: none; margin-top: 2px; box-sizing: border-box; background: {{chip.bg}}; border: {{chip.bd}}"></span>
+    <div style="flex: 1; min-width: 0">
+      <div class="kr" style="font-size: 11.5px; font-weight: 700; letter-spacing: .1em; line-height: 15px">{{chip.l1}}</div>
+      <div style="font-size: 12.5px; line-height: 15px; color: #55605A">{{chip.l2}}</div>
+    </div>
+    <button type="button" class="btn" onClick="{{backToMatch}}" style="height: 36px; padding: 0 10px; font-size: 13px; font-weight: 700; border: 1.5px solid #1E2A24; background: #F6F5EF; color: #1E2A24; opacity: {{chip.backOp}}; pointer-events: {{chip.backPe}}">Back to match</button>
+  </div>
+  <h1 class="fr fd" style="position: absolute; left: 28px; top: 116px; width: 400px; margin: 0; font-size: 32px; font-weight: 600; line-height: 34px; letter-spacing: -.01em">{{e.name}}</h1>
+  <div class="fr" style="position: absolute; left: 28px; top: {{e.alsoY}}px; font-size: 15px; font-style: italic; color: #55605A">{{e.also}}</div>
+  <div style="position: absolute; left: 28px; top: 204px; width: 400px; font-size: 14.5px; line-height: 19px">{{e.def}}</div>
+
+  <div style="position: absolute; left: 28px; top: 252px; width: 400px; height: 204px; box-sizing: border-box; border: 1.5px solid #1E2A24; background: #FBFAF4; overflow: hidden" role="img" aria-label="{{motifAria}}">
+    <sc-for list="{{mrects}}" as="mr" hint-placeholder-count="40">
+      <div class="mv2" style="position: absolute; left: {{mr.x}}px; top: {{mr.y}}px; width: {{mr.w}}px; height: {{mr.h}}px; box-sizing: border-box; background: {{mr.bg}}; border: {{mr.bd}}; opacity: {{mr.op}}"></div>
+    </sc-for>
+    <sc-for list="{{mlabels}}" as="ml" hint-placeholder-count="8">
+      <span class="fd" style="position: absolute; left: {{ml.x}}px; top: {{ml.y}}px; width: {{ml.w}}px; text-align: {{ml.al}}; font-size: 11.5px; line-height: 13px; font-weight: 500; color: #1E2A24; white-space: nowrap">{{ml.t}}</span>
+    </sc-for>
+    <span style="position: absolute; left: 8px; top: 186px; font-size: 11px; line-height: 13px; color: #55605A; white-space: nowrap">{{legend}}</span>
+  </div>
+
+  <div class="kr" style="position: absolute; left: 28px; top: 466px; font-size: 11.5px; font-weight: 700; letter-spacing: .1em">{{e.slider}}</div>
+  <button type="button" class="btn" onClick="{{replay}}" style="position: absolute; left: 318px; top: 460px; width: 110px; height: 36px; font-size: 13px; font-weight: 700; border: 1.5px solid #B3341F; background: #FBFAF4; color: #8E2413">Send it again</button>
+  <input class="slide" type="range" min="0" max="100" step="1" value="{{vInt}}" onChange="{{onSlide}}" aria-label="{{e.slider}}" aria-valuetext="{{vText}}" style="position: absolute; left: 28px; top: 500px">
+  <span class="kr" style="position: absolute; left: 28px; top: 538px; font-size: 12.5px; color: #55605A">{{e.end0}}</span>
+  <span class="kr" style="position: absolute; left: 228px; top: 538px; width: 200px; text-align: right; font-size: 12.5px; color: #55605A">{{e.end1}}</span>
+  <div class="kr" style="position: absolute; left: 150px; top: 538px; width: 128px; text-align: center; font-size: 12.5px; font-weight: 700">{{vText}}</div>
+
+  <div style="position: absolute; left: 28px; top: 562px; width: 400px; display: flex; align-items: baseline; gap: 12px">
+    <span class="fr" style="font-size: 46px; font-weight: 600; line-height: 50px; color: #B3341F">{{read.big}}</span>
+    <span style="font-size: 14.5px; line-height: 18px; font-weight: 500">{{read.unit}}</span>
+  </div>
+  <div style="position: absolute; left: 28px; top: 616px; width: 400px; font-size: 13.5px; line-height: 17px">{{read.sub}}</div>
+  <div style="position: absolute; left: 28px; top: 648px; width: 400px; box-sizing: border-box; padding-top: 6px; border-top: 1px solid #1E2A24">
+    <div class="kr" style="font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #55605A">RULE · authored for this prototype · computed toy</div>
+    <div style="font-size: 12.5px; line-height: 16px; margin-top: 2px">{{rule}}</div>
+  </div>
+
+  <!-- right: neighbours, plates, ruler -->
+  <sc-for list="{{nbrs}}" as="nb" hint-placeholder-count="4">
+    <button type="button" class="btn" onClick="{{nb.pick}}" style="position: absolute; left: {{nb.x}}px; top: {{nb.y}}px; width: 300px; height: 46px; box-sizing: border-box; padding: 3px 12px; text-align: left; border: 1.5px solid #1E2A24; background: #F6F5EF; color: #1E2A24">
+      <span class="fr" style="display: block; font-size: 17px; font-style: italic; font-weight: 600; line-height: 20px">{{nb.name}}</span>
+      <span class="kr" style="display: block; font-size: 12px; line-height: 15px; color: #55605A">{{nb.hint}}</span>
+    </button>
+  </sc-for>
+  <div class="fr" style="position: absolute; left: 1112px; top: 78px; width: 300px; font-size: 15px; font-style: italic; line-height: 19px; color: #55605A">Related entries. Pick one and the plates re-arrange along its own axis.</div>
+  <div class="fr" style="position: absolute; left: 1112px; top: 636px; width: 300px; font-size: 15px; font-style: italic; line-height: 19px; color: #55605A">Tap a plate’s picture to move the slider to where that system lives.</div>
+
+  <sc-for list="{{plates}}" as="pl" hint-placeholder-count="6">
+    <div class="plate" style="position: absolute; left: {{pl.x}}px; top: {{pl.y}}px; width: 300px; height: 204px; box-sizing: border-box; border: 2px solid #1E2A24; background: #FBFAF4; opacity: {{pl.op}}; outline: {{pl.ol}}; outline-offset: 3px">
+      <button type="button" onClick="{{pl.setV}}" aria-label="{{pl.aria}}" style="position: relative; display: block; width: 296px; height: 96px; margin: 0; padding: 0; border: 0; border-bottom: 1.5px solid #1E2A24; background-color: {{pl.bg}}; background-image: {{pl.tex}}; background-size: {{pl.tsz}}; cursor: pointer; overflow: hidden">
+        <sc-for list="{{pl.mini}}" as="mm" hint-placeholder-count="40">
+          <div class="mv2" style="position: absolute; left: {{mm.x}}px; top: {{mm.y}}px; width: {{mm.w}}px; height: {{mm.h}}px; box-sizing: border-box; background: {{mm.bg}}; border: {{mm.bd}}; opacity: {{mm.op}}"></div>
+        </sc-for>
+        <span class="kr" style="position: absolute; left: 8px; top: 5px; font-size: 11px; font-weight: 700; letter-spacing: .12em; color: #1E2A24; background: {{pl.bg}}; padding: 0 3px">{{pl.no}}</span>
+        <span class="kr" style="position: absolute; left: 0; top: 40px; width: 296px; text-align: center; font-size: 13px; font-style: italic; color: #1E2A24; opacity: {{pl.offOp}}">{{pl.offT}}</span>
+      </button>
+      <div style="padding: 6px 10px 0">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; height: 36px">
+          <span class="fr" style="font-size: 17px; font-weight: 600; line-height: 20px; white-space: nowrap">{{pl.name}}</span>
+          <sc-if value="{{pl.hasLink}}" hint-placeholder-val="{{true}}">
+            <a class="lnk" href="{{pl.href}}" aria-label="{{pl.linkAria}}" style="height: 36px; padding: 0 14px; font-size: 14px; background: #1E2A24; color: #F6F5EF; border: 1.5px solid #1E2A24; white-space: nowrap">Open</a>
+          </sc-if>
+          <sc-if value="{{pl.noLink}}" hint-placeholder-val="{{false}}">
+            <button type="button" class="btn" disabled="{{pl.off}}" style="height: 36px; padding: 0 9px; font-size: 12.5px; font-weight: 500; border: 1.5px solid #8A928C; background: #F1F0E8; color: #4A544E; white-space: nowrap">Open · not built yet</button>
+          </sc-if>
+        </div>
+        <div style="font-size: 12.5px; line-height: 16px; font-style: italic; color: #55605A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{pl.tag}}</div>
+        <div style="font-size: 13px; line-height: 16px; margin-top: 3px">{{pl.l1}}</div>
+        <div style="font-size: 13px; line-height: 16px">{{pl.l2}}</div>
+      </div>
+    </div>
+  </sc-for>
+
+  <sc-for list="{{leaders}}" as="ld" hint-placeholder-count="6">
+    <svg width="964" height="88" viewBox="0 0 964 88" aria-hidden="true" style="position: absolute; left: 448px; top: 330px; overflow: visible; pointer-events: none"><path d="{{ld.d}}" fill="none" stroke="{{ld.c}}" stroke-width="{{ld.w}}"></path></svg>
+    <div class="mv2" style="position: absolute; left: {{ld.mx}}px; top: {{ld.my}}px; width: 10px; height: 10px; margin-left: -5px; box-sizing: border-box; border: 2px solid #1E2A24; background: {{ld.mbg}}; opacity: {{ld.mop}}"></div>
+  </sc-for>
+
+  <div class="kr" style="position: absolute; left: 448px; top: 340px; font-size: 11.5px; font-weight: 700; letter-spacing: .1em">AXIS · {{e.axis}}</div>
+  <div style="position: absolute; left: 470px; top: 362px; width: 920px; height: 24px; box-sizing: border-box; border: 1.5px solid #1E2A24; background: #FBFAF4"></div>
+  <sc-for list="{{rticks}}" as="rt" hint-placeholder-count="21">
+    <div style="position: absolute; left: {{rt.x}}px; top: 363px; width: 1px; height: {{rt.h}}px; background: #1E2A24"></div>
+    <div style="position: absolute; left: {{rt.x}}px; top: {{rt.by}}px; width: 1px; height: {{rt.h}}px; background: #1E2A24"></div>
+  </sc-for>
+  <sc-for list="{{rlabels}}" as="rl" hint-placeholder-count="6">
+    <span class="kr fd" style="position: absolute; left: {{rl.x}}px; top: 366px; transform: translateX({{rl.tx}}); font-size: 11.5px; line-height: 16px; font-weight: 700; white-space: nowrap; background: #FBFAF4; padding: 0 4px">{{rl.t}}</span>
+  </sc-for>
+  <div class="mv2" style="position: absolute; left: {{cur.x}}px; top: 344px; width: 3px; height: 66px; margin-left: -1px; background: #B3341F"></div>
+
+  <div class="fr" style="position: absolute; left: 448px; top: 686px; width: 964px; font-size: 20px; line-height: 26px; font-style: italic">{{near}}</div>
+
+  <div class="fd" style="position: absolute; left: 28px; top: 726px; width: 1384px; height: 58px; box-sizing: border-box; border: 1.5px solid #1E2A24; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; padding: 8px 12px; opacity: {{howOp}}; pointer-events: none">
+    <sc-for list="{{key}}" as="ky" hint-placeholder-count="4">
+      <div style="display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; line-height: 15px"><span style="width: 14px; height: 14px; flex: none; margin-top: 1px; box-sizing: border-box; background: {{ky.bg}}; border: {{ky.bd}}"></span><span>{{ky.t}}</span></div>
+    </sc-for>
+  </div>
+
+  <div class="fr" style="position: absolute; left: 28px; top: 796px; width: 1384px; font-size: 25px; line-height: 30px; font-weight: 600; white-space: nowrap"><span class="kr" style="font-size: 17px; font-weight: 700; letter-spacing: .12em">SEARCH</span>, in this model, is finding the dynamic behind the question, then seeing everywhere it lives.</div>
+
+  <div class="kr" style="position: absolute; left: 28px; bottom: 14px; width: 760px; font-size: 11.5px; line-height: 15px; letter-spacing: .01em; color: #55605A">COMMERCIAL LENS · Hypothesis: the dynamics index is the Native Textbook spine — schools and learners pay for the curriculum built on it; the index itself stays free.</div>
+  <div class="kr" style="position: absolute; right: 28px; bottom: 14px; width: 560px; text-align: right; font-size: 11.5px; line-height: 15px; letter-spacing: .01em; color: #55605A">PROTOTYPE · SPECULATIVE FRONTIER · data: plate positions and motif rules authored for this prototype; Harrow Medical is fictional; real-world lines are general, verify before use</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      const s = this.state || {};
+      const w = typeof s.wave === 'number' ? s.wave : -1;
+      if (w < 12) this.setState({ wave: w + 1 });
+    }, 320);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  entries() {
+    return {
+      prop: { key: 'prop', name: 'Propagation through shared resources', also: 'also: cascade', short: 'Propagation', hint: 'axis: how tightly coupled, loose → tight',
+        def: 'A shock enters one stage. Each stage soaks up what its slack allows and passes the rest on.',
+        axis: 'HOW TIGHTLY COUPLED', slider: 'COUPLING', end0: 'loose', end1: 'tight', def0: 0.5,
+        ticks: [[0, 'loose'], [0.5, 'moderate'], [1, 'tight']] },
+      queue: { key: 'queue', name: 'Queueing', also: 'also: waiting lines', short: 'Queueing', hint: 'axis: utilisation, 50% → 99%',
+        def: 'Work arrives at random and one server handles it. The busier the server, the longer everyone waits, and not in proportion.',
+        axis: 'UTILISATION, 50% → 99%', slider: 'UTILISATION', end0: '50% busy', end1: '99% busy', def0: 0.7,
+        ticks: [[0, '50%'], [0.204, '60%'], [0.408, '70%'], [0.612, '80%'], [0.816, '90%'], [1, '99%']] },
+      buf: { key: 'buf', name: 'Buffers', also: 'also: inventory, slack', short: 'Buffers', hint: 'axis: slack held, none → ample',
+        def: 'Spare capacity kept in reserve. It absorbs shocks, and holding it costs something every day.',
+        axis: 'SLACK HELD', slider: 'BUFFER SIZE', end0: 'none', end1: '3× a typical shock', def0: 0.35,
+        ticks: [[0, 'none'], [0.333, '1×'], [0.667, '2×'], [1, '3× a typical shock']] },
+      bott: { key: 'bott', name: 'Bottlenecks', also: 'also: constraints', short: 'Bottlenecks', hint: 'axis: how hard the slowest step binds',
+        def: 'The slowest step sets the pace of the whole line. Speeding up any other step changes nothing.',
+        axis: 'HOW HARD THE SLOWEST STEP BINDS', slider: 'HOW SLOW THE SLOWEST STEP IS', end0: 'same pace', end1: '4× slower', def0: 0.5,
+        ticks: [[0, 'same pace'], [0.333, '2× slower'], [0.667, '3×'], [1, '4× slower']] },
+      cont: { key: 'cont', name: 'Contagion', also: 'also: viral spread', short: 'Contagion', hint: 'axis: others reached per case, R',
+        def: 'Each case reaches some number of others. Below one it dies out; above one it grows without limit.',
+        axis: 'OTHERS REACHED PER CASE, R', slider: 'OTHERS PER CASE (R)', end0: '0.5', end1: '3', def0: 0.4,
+        ticks: [[0, '0.5'], [0.2, '1 · tipping point'], [0.6, '2'], [1, '3']] }
+    };
+  }
+
+  insts() {
+    return [
+      { id: 'nba', no: 'PLATE 1', name: 'NBA roster injuries', sub: 'the real league', href: 'SportsProof.dc.html', linkAria: 'Open the Boston basketball board',
+        tex: 'repeating-linear-gradient(90deg, rgba(70,45,10,.16) 0 1px, transparent 1px 15px)', tsz: 'auto', bg: '#EBD9B6', tone: '#7A5F2E', shock: '#B23A12',
+        d: {
+          prop: { pos: 0.14, tag: 'loose · a rotation player out', l: ['Bench depth covers a missing starter.', 'Couples via minutes and roles.'] },
+          queue: { pos: null, tag: 'off this axis', off: 'Off this axis: no line forms here.' },
+          buf: { pos: 0.82, tag: 'ample · bench depth', l: ['Depth costs cap room to hold.', ''] },
+          bott: { pos: 0.2, tag: 'barely · many can fill a role', l: ['Several players can fill most roles.', ''] },
+          cont: { pos: null, tag: 'off this axis', off: 'Off this axis: injuries do not spread.' }
+        } },
+      { id: 'bus', no: 'PLATE 2', name: 'School bus route', sub: 'one driver, one loop',
+        tex: 'repeating-linear-gradient(0deg, rgba(60,50,0,.18) 0 2px, transparent 2px 10px)', tsz: 'auto', bg: '#F0E29F', tone: '#7A6A16', shock: '#8F2618',
+        d: {
+          prop: { pos: 0.3, tag: 'loose · layover absorbs', l: ['A late stop delays the next few.', 'Couples via one driver, one loop.'] },
+          queue: { pos: 0.12, tag: 'light · spare seats', l: ['Kids wait at the stop; the bus has room.', ''] },
+          buf: { pos: 0.55, tag: 'some · terminal layover', l: ['Layover costs idle bus time.', ''] },
+          bott: { pos: 0.45, tag: 'middling · the slowest stop', l: ['The slowest stop sets the loop time.', ''] },
+          cont: { pos: null, tag: 'off this axis', off: 'Off this axis: no plate for colds yet.' }
+        } },
+      { id: 'air', no: 'PLATE 3', name: 'Airline day', sub: 'one aircraft, four legs', href: 'AtlasMechanism.dc.html', linkAria: 'Open the airline mechanism answer, board A1',
+        tex: 'linear-gradient(rgba(30,70,110,.17) 1px, transparent 1px), linear-gradient(90deg, rgba(30,70,110,.17) 1px, transparent 1px)', tsz: '12px 12px', bg: '#D6E3EE', tone: '#4E7290', shock: '#B3341F',
+        d: {
+          prop: { pos: 0.52, tag: 'moderate · one aircraft, four legs', l: ['Turn slack absorbs some of a delay.', 'Couples via crew hours, connections.'] },
+          queue: { pos: 0.7, tag: 'near full at the peak', l: ['Aircraft queue for a runway slot.', ''] },
+          buf: { pos: 0.3, tag: 'some · turn slack', l: ['Extra turn time costs aircraft hours.', ''] },
+          bott: { pos: 0.6, tag: 'firm · the runway', l: ['The runway sets the pace of the day.', ''] },
+          cont: { pos: 0.55, tag: 'spreads · flight to flight', l: ['A late flight makes the next one late.', ''] }
+        } },
+      { id: 'jit', no: 'PLATE 4', name: 'JIT car plant', sub: 'parts arrive hours before use',
+        tex: 'conic-gradient(rgba(0,0,0,.11) 25%, transparent 0 50%, rgba(0,0,0,.11) 0 75%, transparent 0)', tsz: '16px 16px', bg: '#D6D9DA', tone: '#5E666B', shock: '#B3341F',
+        d: {
+          prop: { pos: 0.78, tag: 'tight · little stock behind each part', l: ['A late truck halts the line.', 'Couples via parts with no stock behind.'] },
+          queue: { pos: 0.88, tag: 'no spare capacity, by design', l: ['Each station waits for the one before.', ''] },
+          buf: { pos: 0.1, tag: 'almost none · trimmed on purpose', l: ['Stock is cut on purpose; it costs cash.', ''] },
+          bott: { pos: 0.72, tag: 'firm · the slowest station', l: ['The slowest station sets the line’s pace.', ''] },
+          cont: { pos: 0.62, tag: 'spreads · plant to plant', l: ['A stopped plant starves the next one.', ''] }
+        } },
+      { id: 'hosp', no: 'PLATE 5', name: 'Hospital supply', sub: 'Harrow Medical · fictional', href: 'Agent.dc.html', linkAria: 'Open the Harrow Medical board',
+        tex: 'radial-gradient(circle at 50% 50%, transparent 5px, rgba(20,90,60,.22) 5px 6px, transparent 6px)', tsz: '20px 20px', bg: '#D3E8DD', tone: '#3F7A62', shock: '#A32D3A',
+        d: {
+          prop: { pos: 0.88, tag: 'tight · single source', l: ['One chip supplier; about 11 days of stock.', 'A fab fire reaches every promise made.'] },
+          queue: { pos: 0.93, tag: 'one supplier, already busy', l: ['Orders wait in one supplier’s line.', ''] },
+          buf: { pos: 0.38, tag: 'some · about 11 days of stock', l: ['Holding more stock ties up cash.', ''] },
+          bott: { pos: 0.97, tag: 'complete · single source', l: ['One chip source caps every pump.', ''] },
+          cont: { pos: null, tag: 'off this axis', off: 'Off this axis: no plate yet.' }
+        } },
+      { id: 'grid', no: 'PLATE 6', name: 'Power grid', sub: 'supply must match demand',
+        tex: 'radial-gradient(ellipse 12px 6px at 50% 100%, transparent 5px, rgba(120,40,20,.20) 5.5px 6.5px, transparent 7px)', tsz: '24px 12px', bg: '#E8D6CB', tone: '#7A5648', shock: '#B3261E',
+        d: {
+          prop: { pos: 0.96, tag: 'very tight · shared lines', l: ['Supply must match demand all the time.', 'Couples via shared lines, little storage.'] },
+          queue: { pos: null, tag: 'off this axis', off: 'Off this axis: demand is served or shed.' },
+          buf: { pos: 0.05, tag: 'almost none · little storage', l: ['Reserves cost money to keep.', ''] },
+          bott: { pos: 0.8, tag: 'firm · a shared line', l: ['A shared line caps what can move.', ''] },
+          cont: { pos: 0.78, tag: 'spreads · line to line', l: ['An overloaded line trips its neighbour.', ''] }
+        } }
+    ];
+  }
+
+  motif(dyn, v) {
+    const R = [], L = [];
+    const add = (x, y, w, h, k, s, a) => R.push({ x: x, y: y, w: w, h: h, k: k, s: s || 0, a: a === undefined ? 1 : a });
+    const lab = (x, y, t, w, al) => L.push({ x: x, y: y, t: t, w: w || 100, al: al || 'left' });
+    const f1 = (n) => (Math.round(n * 10) / 10).toFixed(1);
+    let read = { big: '', unit: '', sub: '' }, legend = '', rule = '', aria = '';
+    if (dyn === 'prop') {
+      const N = 8, S = 6, u = 15;
+      const slack = 3 * Math.pow(1 - v, 1.4);
+      let inc = S, reach = 0;
+      for (let i = 0; i < N; i++) {
+        const x0 = 14 + i * 47;
+        const ab = Math.min(inc, slack), out = inc - ab;
+        if (inc > 0.02) reach = i + 1;
+        add(x0 + 19, 170 - Math.max(slack * u, 2), 15, Math.max(slack * u, 2), 'cap', 0);
+        if (ab > 0.02) add(x0 + 19, 170 - ab * u, 15, ab * u, 'tone', i);
+        if (inc > 0.02) add(x0, 170 - inc * u, 15, inc * u, 'shock', i);
+        if (i === 0) { lab(x0 - 4, 170 - S * u - 15, 'shock in', 60); lab(x0 + 14, 170 - Math.max(slack * u, 2) - 15, 'slack', 50); }
+        inc = out;
+      }
+      add(8, 170, 384, 2, 'ink', 0);
+      read = { big: reach + ' of ' + N, unit: 'stages feel the shock', sub: inc > 0.02 ? f1(inc) + ' of ' + S + ' units still standing at the far end.' : 'The shock dies out inside the chain.' };
+      legend = 'red = shock · outline = slack · green = absorbed';
+      rule = 'Slack per stage = 3 × (1 − c)^1.4 units. Each stage absorbs up to its slack and passes the rest on. Shock: 6 units, 8 stages.';
+      aria = 'A chain of eight stages. A shock of six units enters the first. It reaches ' + reach + ' stages.';
+    } else if (dyn === 'queue') {
+      const rho = 0.5 + 0.49 * v;
+      const lq = rho * rho / (1 - rho);
+      const n = Math.min(19, Math.round(lq));
+      add(318, 92, 66, 78, 'cap', 0);
+      add(334, 112, 34, 44, 'ink', 0);
+      for (let j = 0; j < n; j++) add(296 - j * 16, 136, 12, 34, 'tone', Math.floor(j / 2));
+      add(12, 148, 12, 22, 'shock', 0);
+      add(8, 170, 384, 2, 'ink', 0);
+      lab(318, 76, 'server', 66, 'center'); lab(6, 128, 'arrivals', 60);
+      if (lq > 19.5) lab(150, 100, '+ ' + (Math.round(lq) - 19) + ' more, off the drawing', 200, 'right');
+      read = { big: lq >= 10 ? String(Math.round(lq)) : f1(lq), unit: 'waiting on average', sub: Math.round(rho * 100) + '% busy. At 99% busy the same rule gives 98 waiting.' };
+      legend = 'green = waiting · black = being served';
+      rule = 'Average waiting = ρ² ÷ (1 − ρ), the textbook rule for one server with random arrivals. ρ is utilisation.';
+      aria = 'A queue of about ' + f1(lq) + ' waiting in front of one server at ' + Math.round(rho * 100) + ' percent utilisation.';
+    } else if (dyn === 'buf') {
+      const b = 3 * v, u = 38, shocks = [0.5, 1, 2], names = ['small shock', 'medium', 'large'];
+      let leak = 0;
+      shocks.forEach((sh, j) => {
+        const x = 26 + j * 126, ab = Math.min(sh, b), sp = sh - ab;
+        leak += sp;
+        add(x, 170 - Math.max(b * u, 2), 64, Math.max(b * u, 2), 'cap', 0);
+        if (ab > 0.01) add(x, 170 - ab * u, 64, ab * u, 'tone', j * 2);
+        if (sp > 0.01) add(x + 12, 170 - sh * u, 40, sp * u, 'shock', j * 2);
+        lab(x - 20, 173, names[j] + ' · ' + sh, 104, 'center');
+      });
+      add(8, 170, 384, 2, 'ink', 0);
+      lab(26, 92, 'buffer', 60);
+      read = { big: f1(leak), unit: 'shock-units leak past the buffer', sub: 'Holding cost: ' + f1(b) + ' units. Past 2.0 the buffer stops buying anything.' };
+      legend = 'red = leaks past · green = absorbed · outline = buffer';
+      rule = 'Three shocks (0.5, 1, 2 units) hit one buffer. Absorbed = the smaller of shock and buffer. The rest leaks. Holding costs 1 per unit.';
+      aria = 'Three shocks hit one buffer of size ' + f1(b) + '. ' + f1(leak) + ' units leak past.';
+    } else if (dyn === 'bott') {
+      const slow = 1 + 3 * v, cap = 10 / slow, u = 9;
+      for (let i = 0; i < 6; i++) {
+        const x = 14 + i * 64, ci = i === 3 ? cap : 10;
+        add(x, 170 - ci * u, 46, ci * u, 'cap', 0);
+        add(x, 170 - cap * u, 46, cap * u, 'tone', i);
+      }
+      const pile = Math.min(12, Math.round((10 - cap) * 1.8));
+      for (let j = 0; j < pile; j++) add(14 + 2 * 64 + 1 + (j % 2) * 22, 170 - cap * u - 10 - Math.floor(j / 2) * 10, 20, 8, 'shock', 4 + Math.floor(j / 2));
+      add(8, 170, 384, 2, 'ink', 0);
+      lab(14 + 3 * 64 - 8, 170 - 90 - 16, 'slowest step', 90);
+      read = { big: f1(cap) + ' / hr', unit: 'line output (it was 10)', sub: 'The other five stages sit idle ' + Math.round((1 - cap / 10) * 100) + '% of the time. Speeding one of them up changes nothing.' };
+      legend = 'outline = can do · green = does · red = work piling up';
+      rule = 'Six stages of 10 units per hour; one is slowed by the factor on the slider. Line output = the slowest stage.';
+      aria = 'Six stages in a row. The fourth is ' + f1(slow) + ' times slower. Line output is ' + f1(cap) + ' per hour.';
+    } else {
+      const Rv = 0.5 + 2.5 * v;
+      let last = 1;
+      for (let g = 0; g < 5; g++) {
+        const cases = Math.pow(Rv, g);
+        last = cases;
+        const nd = cases >= 1 ? Math.min(8, Math.round(cases)) : 1;
+        const a = cases >= 1 ? 1 : Math.max(0.18, cases);
+        for (let j = 0; j < nd; j++) add(30 + g * 76 + (j % 2) * 18, 170 - 18 * (Math.floor(j / 2) + 1), 14, 14, 'shock', g * 2, a);
+        lab(30 + g * 76 - 14, 174, cases >= 100 ? '99+' : cases >= 10 ? String(Math.round(cases)) : f1(cases), 60, 'center');
+      }
+      add(8, 170, 384, 2, 'ink', 0);
+      lab(30 - 4, 72, 'first case', 70);
+      read = { big: last >= 10 ? String(Math.round(last)) : f1(last), unit: 'cases in the 5th round', sub: 'Each case reaches ' + f1(Rv) + ' others. ' + (Rv > 1.005 ? 'Above 1 it keeps growing.' : Rv < 0.995 ? 'Below 1 it dies out.' : 'Exactly 1: it neither grows nor dies.') };
+      legend = 'each column is one round · dots = cases (capped at 8 drawn)';
+      rule = 'Each case reaches R others; round n has Rⁿ cases. The count under each column is the true number.';
+      aria = 'Five rounds of spread. Each case reaches ' + f1(Rv) + ' others. Round five has about ' + f1(last) + ' cases.';
+    }
+    return { R: R, L: L, read: read, legend: legend, rule: rule, aria: aria };
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const dyn = s.dyn || 'prop';
+    const E = this.entries();
+    const e = E[dyn];
+    const v = typeof s.v === 'number' ? s.v : e.def0;
+    const wave = typeof s.wave === 'number' ? s.wave : -1;
+    const how = !!s.how;
+    const qi = s.qi || 0;
+    const QS = [['delays spread', 'prop'], ['the line keeps growing', 'queue'], ['we ran out of slack', 'buf'], ['one part holds it all up', 'bott'], ['it spread through the class', 'cont']];
+    const matched = QS[qi][1];
+    const M = this.motif(dyn, v);
+    const INK = '#1E2A24';
+    const NR = 40;
+
+    const conv = (r, sc, ox, oy, pal, wv, thin) => {
+      const always = r.k === 'cap' || r.k === 'ink';
+      const bg = r.k === 'tone' ? pal.tone : r.k === 'shock' ? pal.shock : r.k === 'ink' ? INK : 'transparent';
+      const bd = r.k === 'cap' ? (thin ? '1px' : '1.5px') + ' solid ' + INK : '0';
+      return {
+        x: Math.round((ox + r.x * sc) * 10) / 10, y: Math.round((oy + r.y * sc) * 10) / 10,
+        w: Math.max(r.w > 0 ? 1.5 : 0, Math.round(r.w * sc * 10) / 10), h: Math.max(r.h > 0 ? 1.5 : 0, Math.round(r.h * sc * 10) / 10),
+        bg: bg, bd: bd, op: (always || wv >= r.s) ? r.a : 0
+      };
+    };
+    const pad = (arr) => { const a = arr.slice(0, NR); while (a.length < NR) a.push({ x: 0, y: 0, w: 0, h: 0, bg: 'transparent', bd: '0', op: 0 }); return a; };
+    const bigPal = { tone: '#8FA48F', shock: '#B3341F' };
+    const mrects = pad(M.R.map((r) => conv(r, 1, 0, 0, bigPal, wave, false)));
+    const mlabels = M.L.slice(0, 8).map((l) => ({ x: l.x, y: l.y, t: l.t, w: l.w, al: l.al }));
+    while (mlabels.length < 8) mlabels.push({ x: 0, y: 0, t: '', w: 10, al: 'left' });
+
+    // plates
+    const insts = this.insts();
+    const items = insts.map((p) => ({ p: p, d: p.d[dyn] }));
+    const ranked = items.slice().sort((a, b) => (a.d.pos === null ? 2 : a.d.pos) - (b.d.pos === null ? 2 : b.d.pos));
+    const COLX = [448, 780, 1112];
+    const AX0 = 470, AXW = 920;
+    const plates = [], leaders = [];
+    const litNames = [];
+    ranked.forEach((it, r) => {
+      const above = r % 2 === 0;
+      const col = Math.floor(r / 2);
+      const x = COLX[col], y = above ? 126 : 418;
+      const p = it.p, d = it.d;
+      const on = d.pos !== null;
+      const lit = on && Math.abs(d.pos - v) <= 0.1;
+      if (lit) litNames.push(p.name);
+      const pal = { tone: p.tone, shock: p.shock };
+      const mini = on ? this.motif(dyn, d.pos).R.map((rr) => conv(rr, 0.68, 12, -34, pal, 99, true)) : [];
+      const ax = on ? AX0 + d.pos * AXW : 1408;
+      const cx = x + 150;
+      const dpath = above ? 'M ' + (cx - 448) + ' 0 L ' + (cx - 448) + ' 14 L ' + (ax - 448) + ' 30 L ' + (ax - 448) + ' 32' : 'M ' + (cx - 448) + ' 88 L ' + (cx - 448) + ' 74 L ' + (ax - 448) + ' 58 L ' + (ax - 448) + ' 56';
+      leaders.push({ d: dpath, c: lit ? '#B3341F' : on ? INK : '#A9AC9F', w: lit ? 2.5 : 1.5, mx: ax, my: above ? 353 : 387, mbg: lit ? '#B3341F' : '#F6F5EF', mop: on ? 1 : 0 });
+      plates.push({
+        x: x, y: y, op: lit || !on ? (on ? 1 : 0.6) : 0.72, ol: lit ? '3px solid #B3341F' : '0 solid transparent',
+        bg: p.bg, tex: p.tex, tsz: p.tsz, no: p.no, name: p.name, mini: pad(mini),
+        offT: on ? '' : d.off, offOp: on ? 0 : 1,
+        tag: d.tag + (how ? ' · placement AUTHORED' : ''), l1: on ? d.l[0] : '', l2: on ? d.l[1] : '',
+        hasLink: !!p.href, noLink: !p.href, off: true, href: p.href || '#', linkAria: p.linkAria || '',
+        aria: on ? 'Move the slider to where ' + p.name + ' lives' : p.name + ' is off this axis',
+        setV: () => { if (on) this.setState({ v: d.pos, wave: 99 }); }
+      });
+    });
+
+    // ruler
+    const rticks = [];
+    for (let i = 0; i <= 20; i++) rticks.push({ x: AX0 + (i / 20) * AXW, h: i % 5 === 0 ? 9 : 5, by: i % 5 === 0 ? 377 : 381 });
+    const rlabels = e.ticks.map((t) => ({ x: AX0 + t[0] * AXW, t: t[1], tx: t[0] <= 0.02 ? '0' : t[0] >= 0.98 ? '-100%' : '-50%' }));
+    // put the leftmost / rightmost label inside the band
+    const cur = { x: AX0 + v * AXW };
+
+    const others = ['prop', 'queue', 'buf', 'bott', 'cont'].filter((k) => k !== dyn);
+    const nbrs = others.map((k, i) => ({
+      name: E[k].short, hint: E[k].hint, x: i % 2 === 0 ? 448 : 780, y: i < 2 ? 76 : 632,
+      pick: () => this.setState({ dyn: k, v: E[k].def0, wave: -1 })
+    }));
+
+    const isMatch = dyn === matched;
+    const chip = isMatch
+      ? { bg: 'radial-gradient(circle, #1E2A24 1.1px, transparent 1.4px) 0 0/6px 6px', bd: '1px dotted #1E2A24', l1: 'ENTRY MATCHED TO “' + QS[qi][0].toUpperCase() + '”', l2: 'generated match · unreviewed', backOp: 0, backPe: 'none' }
+      : { bg: '#F6F5EF', bd: '2px solid #1E2A24', l1: 'NEIGHBOUR ENTRY · YOU CHOSE IT', l2: 'Not the match for “' + QS[qi][0] + '”.', backOp: 1, backPe: 'auto' };
+    const queries = QS.map((q, i) => ({
+      text: q[0], on: i === qi, bg: i === qi ? INK : '#F6F5EF', fg: i === qi ? '#F6F5EF' : INK,
+      pick: () => this.setState({ qi: i, dyn: q[1], v: E[q[1]].def0, wave: -1 })
+    }));
+
+    const near = litNames.length > 0 ? 'Near this setting: ' + litNames.join(' and ') + '.' : 'Nothing in this guide lives at this setting yet.';
+    const vPct = Math.round(v * 100);
+    let vText;
+    if (dyn === 'prop') vText = 'c = ' + v.toFixed(2);
+    else if (dyn === 'queue') vText = Math.round((0.5 + 0.49 * v) * 100) + '% busy';
+    else if (dyn === 'buf') vText = (3 * v).toFixed(1) + '× a shock';
+    else if (dyn === 'bott') vText = (1 + 3 * v).toFixed(1) + '× slower';
+    else vText = 'R = ' + (0.5 + 2.5 * v).toFixed(1);
+
+    const key = [
+      { bg: '#FBFAF4', bd: '2px solid #1E2A24', t: 'OUTLINE · authored: the plates, where they sit on the axis, slack and buffer sizes. Nobody measured them.' },
+      { bg: '#8FA48F', bd: '0', t: 'TONED SOLID · computed from the rule at left and the slider value.' },
+      { bg: '#B3341F', bd: '0', t: 'RED · the shock, an authored input. It is not a measurement.' },
+      { bg: 'radial-gradient(circle, #1E2A24 1.1px, transparent 1.4px) 0 0/6px 6px', bd: '1px dotted #1E2A24', t: 'STIPPLE · generated: the query-to-entry match. Unreviewed.' }
+    ];
+
+    return {
+      queries: queries, how: how, howBg: how ? INK : '#F6F5EF', howFg: how ? '#F6F5EF' : INK,
+      toggleHow: () => this.setState({ how: !(this.state && this.state.how) }),
+      chip: chip, backToMatch: () => this.setState({ dyn: matched, v: E[matched].def0, wave: -1 }),
+      e: { name: e.name, also: e.also, alsoY: dyn === 'prop' ? 184 : 156, def: e.def, slider: e.slider, end0: e.end0, end1: e.end1, axis: e.axis },
+      mrects: mrects, mlabels: mlabels, legend: M.legend, motifAria: M.aria,
+      replay: () => this.setState({ wave: -1 }),
+      vInt: vPct, vText: vText,
+      onSlide: (ev) => { const n = Math.max(0, Math.min(100, parseInt(ev.target.value, 10) || 0)); this.setState({ v: n / 100, wave: 99 }); },
+      read: M.read, rule: M.rule,
+      nbrs: nbrs, plates: plates, leaders: leaders, rticks: rticks, rlabels: rlabels, cur: cur, near: near,
+      key: key, howOp: how ? 1 : 0
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Sentence</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEEAE1;color:#1A1814;font-family:'Fraunces',serif}
+a{color:#7A1F2B}a:hover{color:#4E121B}
+.t-obs{background:#1A1814}
+.t-rec{background:#1A1814;box-shadow:inset 0 0 0 3px #1A1814,inset 0 0 0 5px #EEEAE1}
+.t-aut{background:transparent;border:2px solid #1A1814}
+.t-com{background:#8A8378}
+.t-mod{background:repeating-linear-gradient(135deg,#1A1814 0 1.5px,transparent 1.5px 7px);border:1px solid #1A1814}
+.t-gen{background:radial-gradient(circle,#1A1814 1.1px,transparent 1.4px) 0 0/7px 7px;border:1px dotted #1A1814}
+.t-unk{background:transparent;border:2px dashed #1A1814}
+.t-fork{background:linear-gradient(to top right,transparent calc(50% - 1px),#6F6A62 calc(50% - 1px),#6F6A62 calc(50% + 1px),transparent calc(50% + 1px));border:2px dashed #6F6A62}
+.sw{box-sizing:border-box;display:inline-block;flex:none}
+.mono{font-family:'JetBrains Mono',monospace}
+.cap{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#5B554A}
+.slot{font:inherit;color:inherit;letter-spacing:inherit;background:transparent;border:0;border-bottom:3px solid #7A1F2B;padding:0 2px 1px;margin:0;cursor:pointer;position:relative;display:inline-block;line-height:1.08;text-align:left}
+.slot:hover{color:#7A1F2B}
+.slot:disabled{cursor:default}
+.dim{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:400;font-style:normal;letter-spacing:.14em;color:#5B554A;white-space:nowrap;vertical-align:super;line-height:0;margin-left:8px}
+button{font-family:inherit}
+button:focus-visible,input:focus-visible{outline:2px solid #7A1F2B;outline-offset:4px}
+.tb{background:transparent;border:0;min-height:44px;padding:0 6px;cursor:pointer;color:#1A1814;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.04em}
+.tb:hover{color:#7A1F2B}
+.sug{background:transparent;border:0;border-bottom:1px solid #B9B1A2;min-height:48px;padding:0 2px;cursor:pointer;color:#1A1814;font-family:'Fraunces',serif;font-style:italic;font-size:30px;font-weight:340;transition:color .2s,border-color .2s}
+.sug:hover{color:#7A1F2B;border-color:#7A1F2B}
+.sec{background:transparent;border:1px solid #1A1814;min-height:44px;padding:0 18px;cursor:pointer;color:#1A1814;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.04em}
+.sec:hover,.sec[aria-pressed="true"]{background:#1A1814;color:#EEEAE1}
+.mo{position:absolute;background:transparent;border:0;padding:4px 0;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-height:56px;transition:color .2s}
+.mo:disabled{cursor:default}
+.mo-d{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.mo-l{font-family:'Fraunces',serif;font-size:16px;line-height:1.2}
+.seat{flex:1 1 0;min-width:0;background:transparent;border:0;border-top:2px solid #1A1814;padding:12px 4px 0 0;cursor:pointer;color:#1A1814;display:flex;flex-direction:column;gap:6px;text-align:left;min-height:150px;transition:border-color .2s,opacity .2s}
+.seat:disabled{cursor:default}
+.vw{background:transparent;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;gap:8px;align-items:flex-start;color:#1A1814}
+.br{background:transparent;border:0;padding:8px 0;cursor:pointer;display:flex;flex-direction:column;gap:6px;align-items:flex-start;text-align:left;color:#1A1814;min-height:44px}
+.sy{background:transparent;border:0;padding:0;cursor:pointer;display:flex;align-items:center;gap:12px;min-height:44px;color:#1A1814;font-family:'Fraunces',serif;font-size:25px;text-align:left}
+.sy:hover,.br:hover .br-n,.vw:hover .vw-l,.seat:hover .seat-n,.mo:hover .mo-l{color:#7A1F2B}
+.enter{background:transparent;border:0;border-bottom:3px solid #1A1814;padding:0 4px 2px;min-height:64px;cursor:pointer;color:#1A1814;font-family:'Fraunces',serif;font-size:46px;font-weight:420;letter-spacing:-.01em;transition:color .2s,border-color .2s}
+.enter:hover{color:#7A1F2B;border-color:#7A1F2B}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #EEEAE1; color: #1A1814; font-family: 'Fraunces', serif">
+
+  <div style="position: absolute; top: 26px; left: 72px; right: 72px; display: flex; justify-content: space-between; align-items: center">
+    <span style="font-family: 'Fraunces', serif; font-size: 21px; font-weight: 640; letter-spacing: .06em">BOW</span>
+    <div style="display: flex; align-items: center; gap: 26px">
+      <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; gap: 16px; align-items: center">
+          <sc-for list="{{legend}}" as="l" hint-placeholder-count="7">
+            <span style="display: flex; align-items: center; gap: 6px"><span class="sw t-{{l.tex}}" style="width: 22px; height: 13px"></span><span class="mono" style="font-size: 10px; letter-spacing: .08em">{{l.w}}</span></span>
+          </sc-for>
+          <span style="display: flex; align-items: center; gap: 6px"><span class="sw t-fork" style="width: 22px; height: 13px"></span><span class="mono" style="font-size: 10px; letter-spacing: .08em">FORK</span></span>
+        </div>
+      </sc-if>
+      <button type="button" class="tb" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="border-bottom: {{howRule}}">How do we know?</button>
+    </div>
+  </div>
+
+  <sc-if value="{{isSearch}}" hint-placeholder-val="{{true}}">
+    <div style="position: absolute; top: 110px; left: 72px; width: 1296px; display: flex; flex-direction: column; gap: 40px">
+      <div style="display: flex; align-items: baseline; gap: 16px; font-size: 56px; line-height: 1.34; font-weight: 360; letter-spacing: -0.016em; font-variation-settings: 'opsz' 144">
+        <span>Enter</span>
+        <input aria-label="Search for a system" value="{{q}}" onChange="{{onQ}}" onKeyDown="{{onKey}}" placeholder="a system: a team, a war, a cell, a market" style="flex: 1; min-width: 0; font-family: 'Fraunces', serif; font-size: 56px; font-weight: 360; letter-spacing: -0.016em; background: transparent; border: 0; border-bottom: 3px solid #1A1814; padding: 0 0 4px; color: #1A1814; outline-offset: 8px">
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 30px; flex-wrap: wrap">
+        <span class="cap">or open</span>
+        <sc-for list="{{suggestions}}" as="g" hint-placeholder-count="4">
+          <button type="button" class="sug" onClick="{{g.pick}}">{{g.label}}</button>
+        </sc-for>
+      </div>
+      <div style="min-height: 120px; display: flex; flex-direction: column; gap: 16px">
+        <sc-if value="{{hasMatch}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; align-items: center; gap: 22px">
+            <span class="cap">resolves to</span>
+            <span style="font-size: 30px; font-weight: 380">{{matchName}}</span>
+            <button type="button" class="enter" onClick="{{openMatch}}" style="font-size: 30px; min-height: 48px">Open →</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{noMatch}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-direction: column; gap: 14px; align-items: flex-start">
+            <span style="font-size: 24px; font-style: italic; font-weight: 340; color: #4A453D">BOW has no executable model of “{{qTrim}}” yet.</span>
+            <div style="display: flex; align-items: center; gap: 18px">
+              <button type="button" class="sec" onClick="{{showFoundry}}" aria-expanded="{{foundryExp}}">Start one in Foundry</button>
+              <sc-if value="{{foundry}}" hint-placeholder-val="{{false}}">
+                <span class="mono" style="font-size: 13px; color: #4A453D">Foundry is a separate prototype (P7)</span>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+      <p style="margin: 0; font-size: 21px; font-style: italic; font-weight: 330; color: #4A453D; max-width: 760px">There is no results page. BOW answers with one sentence, and the sentence is the address of where you arrive.</p>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isSentence}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; top: 110px; left: 72px; width: 1296px; display: flex; flex-direction: column; gap: 20px">
+      <div style="opacity: {{sentOp}}; transform: {{sentTf}}; transform-origin: 0 0; transition: opacity .42s ease, transform .5s cubic-bezier(.4,.1,.2,1)">
+        <p style="margin: 0; font-size: 56px; line-height: 1.34; font-weight: 360; letter-spacing: -0.016em; font-variation-settings: 'opsz' 144">Enter <button type="button" class="slot" aria-expanded="{{S.sys.exp}}" onClick="{{S.sys.tap}}" style="opacity: {{S.sys.op}}; transform: translateY({{S.sys.dy}}px); transition: {{S.sys.tr}}; border-bottom: {{S.sys.bb}}; color: {{S.sys.fg}}">{{S.sys.text}}<span class="dim">{{S.sys.dim}}</span></button><span style="opacity: {{restOp}}; transition: opacity .7s ease .1s"> {{prepWhen}} <button type="button" class="slot" aria-expanded="{{S.when.exp}}" disabled="{{S.when.dis}}" onClick="{{S.when.tap}}" style="opacity: {{S.when.op}}; transform: translateY({{S.when.dy}}px); transition: {{S.when.tr}}; border-bottom: {{S.when.bb}}; color: {{S.when.fg}}">{{S.when.text}}<span class="dim">{{S.when.dim}}</span></button> {{prepWho}} <button type="button" class="slot" aria-expanded="{{S.who.exp}}" disabled="{{S.who.dis}}" onClick="{{S.who.tap}}" style="opacity: {{S.who.op}}; transform: translateY({{S.who.dy}}px); transition: {{S.who.tr}}; border-bottom: {{S.who.bb}}; color: {{S.who.fg}}">{{S.who.text}}<span class="dim">{{S.who.dim}}</span></button> in <button type="button" class="slot" aria-expanded="{{S.br.exp}}" disabled="{{S.br.dis}}" onClick="{{S.br.tap}}" style="opacity: {{S.br.op}}; transform: translateY({{S.br.dy}}px); transition: {{S.br.tr}}; border-bottom: {{S.br.bb}}; color: {{S.br.fg}}">{{S.br.text}}<span class="dim">{{S.br.dim}}</span></button> and show me <button type="button" class="slot" aria-expanded="{{S.view.exp}}" disabled="{{S.view.dis}}" onClick="{{S.view.tap}}" style="opacity: {{S.view.op}}; transform: translateY({{S.view.dy}}px); transition: {{S.view.tr}}; border-bottom: {{S.view.bb}}; color: {{S.view.fg}}">{{S.view.text}}<span class="dim">{{S.view.dim}}</span></button>.</span></p>
+      </div>
+
+      <div style="height: {{bandH}}px; opacity: {{bandOp}}; overflow: hidden; visibility: {{bandVis}}; transition: height .42s cubic-bezier(.2,.7,.2,1), opacity .3s ease, visibility 0s linear {{bandVisDelay}}">
+        <div style="border-top: 1px solid #1A1814; padding-top: 6px; display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <span class="cap">{{pk.caption}}</span>
+            <button type="button" class="tb" onClick="{{closePk}}">Done</button>
+          </div>
+
+          <sc-if value="{{pk.isWhen}}" hint-placeholder-val="{{true}}">
+            <div style="position: relative; width: 1296px; height: 214px">
+              <div style="position: absolute; left: 0; right: 0; top: 105px; height: 2px; background: #1A1814"></div>
+              <sc-for list="{{pk.years}}" as="y" hint-placeholder-count="6">
+                <span class="mono" style="position: absolute; left: {{y.x}}px; top: 126px; transform: translateX(-50%); font-size: 11px; color: #5B554A">{{y.t}}</span>
+              </sc-for>
+              <sc-for list="{{pk.marks}}" as="m" hint-placeholder-count="5">
+                <div style="position: absolute; left: {{m.cx}}px; top: {{m.cy}}px; width: 1px; height: {{m.ch}}px; background: #1A1814"></div>
+                <div class="sw t-{{m.tex}}" style="position: absolute; left: {{m.mx}}px; top: {{m.my}}px; width: {{m.mw}}px; height: {{m.mh}}px; outline: {{m.ol}}; outline-offset: 3px; transition: outline-color .25s"></div>
+                <button type="button" class="mo" onClick="{{m.pick}}" aria-pressed="{{m.on}}" disabled="{{m.dis}}" style="left: {{m.bx}}px; top: {{m.by}}px; width: {{m.bw}}px; height: {{m.bh}}px; justify-content: {{m.jc}}; text-align: {{m.al}}; align-items: {{m.ai}}; color: {{m.fg}}">
+                  <span class="mo-d">{{m.short}}{{m.howTxt}}</span>
+                  <span class="mo-l">{{m.label}}</span>
+                </button>
+              </sc-for>
+            </div>
+            <sc-if value="{{pk.hasOut}}" hint-placeholder-val="{{false}}">
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: -2px">
+                <span class="sw t-rec" style="width: 22px; height: 12px"></span>
+                <span class="mono" style="font-size: 12px; color: #1A1814">RECORDED · {{pk.outText}}</span>
+              </div>
+            </sc-if>
+          </sc-if>
+
+          <sc-if value="{{pk.isWho}}" hint-placeholder-val="{{false}}">
+            <div style="display: flex; gap: 22px; padding-top: 6px">
+              <sc-for list="{{pk.seats}}" as="p" hint-placeholder-count="5">
+                <button type="button" class="seat" onClick="{{p.pick}}" aria-pressed="{{p.on}}" disabled="{{p.dis}}" style="border-top: {{p.bt}}; opacity: {{p.op}}">
+                  <span style="display: flex; align-items: center; gap: 10px"><span class="sw t-aut" style="width: 12px; height: 12px"></span><span class="cap" style="font-size: 11px">{{p.kind}}</span></span>
+                  <span class="seat-n" style="font-size: 23px; line-height: 1.12; font-weight: 420; color: {{p.fg}}">{{p.name}}</span>
+                  <span style="font-size: 15px; line-height: 1.35">{{p.can}}</span>
+                  <span style="font-size: 15px; line-height: 1.35; color: #5B554A">{{p.cant}}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{pk.isView}}" hint-placeholder-val="{{false}}">
+            <div style="display: flex; gap: 26px; padding-top: 10px">
+              <sc-for list="{{pk.views}}" as="v" hint-placeholder-count="5">
+                <button type="button" class="vw" onClick="{{v.pick}}" aria-pressed="{{v.on}}">
+                  <svg width="160" height="96" viewBox="0 0 140 84" aria-hidden="true"><rect x="0.5" y="0.5" width="139" height="83" fill="none" stroke="{{v.frame}}" stroke-width="1"></rect><path d="{{v.d}}" fill="none" stroke="{{v.stroke}}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  <span class="vw-l" style="font-size: 20px; padding-bottom: 2px; color: {{v.fg}}; border-bottom: {{v.bb}}">{{v.name}}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{pk.isBr}}" hint-placeholder-val="{{false}}">
+            <div style="display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 44px; padding-top: 8px">
+              <button type="button" class="br" onClick="{{pk.b0.pick}}" aria-pressed="{{pk.b0.on}}" style="border-top: {{pk.b0.bt}}">
+                <span class="sw t-rec" style="width: 46px; height: 26px; margin-top: 10px"></span>
+                <span class="br-n" style="font-size: 25px; font-weight: 420">{{pk.b0.name}}</span>
+                <span style="font-size: 15px; line-height: 1.35; color: #4A453D">The record. Nobody edits it. You can only branch from it.</span>
+              </button>
+              <div style="display: flex; flex-direction: column; gap: 4px; border-top: 2px solid #1A1814; padding-top: 10px">
+                <span class="cap">Public forks</span>
+                <sc-for list="{{pk.forks}}" as="f" hint-placeholder-count="2">
+                  <button type="button" class="br" onClick="{{f.pick}}" aria-pressed="{{f.on}}" style="flex-direction: row; align-items: center; gap: 14px; padding: 4px 0">
+                    <span class="sw t-fork" style="width: 34px; height: 22px"></span>
+                    <span style="display: flex; flex-direction: column; gap: 2px">
+                      <span class="br-n" style="font-size: 21px; font-style: italic; color: {{f.fg}}">{{f.name}}</span>
+                      <span class="mono" style="font-size: 12px; color: #5B554A">fork · diverged {{f.when}} · [author]</span>
+                    </span>
+                  </button>
+                </sc-for>
+              </div>
+              <button type="button" class="br" onClick="{{pk.b2.pick}}" aria-pressed="{{pk.b2.on}}" style="border-top: {{pk.b2.bt}}">
+                <span class="sw t-fork" style="width: 46px; height: 26px; margin-top: 10px"></span>
+                <span class="br-n" style="font-size: 25px; font-weight: 420">Cut a new branch here <span class="mono" style="font-size: 13px; letter-spacing: .1em">WHAT IF?</span></span>
+                <span style="font-size: 15px; line-height: 1.35; color: #4A453D">Stamped “Your branch · diverged {{pk.cutWhen}}”. The record stays as it was.</span>
+              </button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{pk.isSys}}" hint-placeholder-val="{{false}}">
+            <div style="display: flex; gap: 64px; padding-top: 8px">
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <span class="cap">Related systems</span>
+                <sc-for list="{{pk.related}}" as="rs" hint-placeholder-count="4">
+                  <button type="button" class="sy" onClick="{{rs.pick}}" aria-pressed="{{rs.on}}"><span class="sw t-unk" style="width: 14px; height: 14px"></span>{{rs.name}}<span class="mono" style="font-size: 12px; color: #5B554A">no model yet</span></button>
+                </sc-for>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <span class="cap">Also modeled here</span>
+                <sc-for list="{{pk.others}}" as="o" hint-placeholder-count="3">
+                  <button type="button" class="sy" onClick="{{o.pick}}"><span class="sw t-rec" style="width: 14px; height: 14px"></span>{{o.name}}</button>
+                </sc-for>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <span class="cap">Somewhere else</span>
+                <button type="button" class="sy" onClick="{{toSearch}}" style="font-style: italic">Type another system →</button>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+
+      <sc-if value="{{canEnter}}" hint-placeholder-val="{{true}}">
+        <div style="display: flex; align-items: center; gap: 44px; opacity: {{restOp}}; transition: opacity .7s ease .25s">
+          <button type="button" class="enter" onClick="{{enter}}">Enter →</button>
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <span class="cap" style="font-size: 11px">This sentence is the address</span>
+            <span class="mono" style="font-size: 14px; color: #1A1814">{{addr}}</span>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{isStub}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; flex-direction: column; gap: 14px; align-items: flex-start">
+          <span style="font-size: 24px; font-style: italic; font-weight: 340; color: #4A453D">BOW has no executable model of “{{stubName}}” yet.</span>
+          <div style="display: flex; align-items: center; gap: 18px">
+            <button type="button" class="sec" onClick="{{showFoundry}}" aria-expanded="{{foundryExp}}">Start one in Foundry</button>
+            <sc-if value="{{foundry}}" hint-placeholder-val="{{false}}">
+              <span class="mono" style="font-size: 13px; color: #4A453D">Foundry is a separate prototype (P7)</span>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isArrived}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; top: 76px; left: 72px; width: 1296px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1A1814; opacity: {{arrOp}}; transform: translateY({{arrDy}}px); transition: opacity .5s ease, transform .6s cubic-bezier(.2,.7,.2,1)">
+      <span class="mono" style="font-size: 14px">{{addr}}</span>
+      <button type="button" class="tb" onClick="{{back}}">← back to the sentence</button>
+    </div>
+    <div style="position: absolute; top: 150px; left: 72px; width: 1296px; display: grid; grid-template-columns: 820px 1fr; gap: 60px">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <h1 style="margin: 0; font-size: 66px; line-height: 1.02; font-weight: 360; letter-spacing: -0.02em; font-variation-settings: 'opsz' 144; opacity: {{arrOp}}; transform: translateY({{arrDy2}}px); transition: opacity .6s ease .1s, transform .7s cubic-bezier(.2,.7,.2,1) .1s">{{arr.title}}</h1>
+        <span class="mono" style="font-size: 13px; color: #4A453D">{{arr.note}}</span>
+        <p style="margin: 8px 0 10px; font-size: 23px; font-style: italic; font-weight: 340; line-height: 1.3">{{arr.seatLine}}</p>
+        <div style="display: flex; flex-direction: column">
+          <sc-for list="{{arr.rows}}" as="r" hint-placeholder-count="5">
+            <div style="display: grid; grid-template-columns: 58px 1fr auto; gap: 18px; align-items: center; padding: {{arr.rowPad}}px 0; border-top: 1px solid #CBC4B6; opacity: {{r.op}}; transform: translateY({{r.dy}}px); transition: opacity .5s ease {{r.delay}}ms, transform .6s cubic-bezier(.2,.7,.2,1) {{r.delay}}ms">
+              <span class="sw t-{{r.tex}}" style="width: 46px; height: 26px"></span>
+              <span style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+                <span style="font-size: {{arr.rowFs}}px; line-height: 1.15; font-weight: 400">{{r.p}}</span>
+                <sc-if value="{{r.show}}" hint-placeholder-val="{{false}}">
+                  <span class="mono" style="font-size: 12px; color: #4A453D">{{r.tw}} · {{r.src}}</span>
+                </sc-if>
+              </span>
+              <span style="font-size: 19px; font-style: italic; font-weight: 340; text-align: right; max-width: 330px; line-height: 1.25">{{r.v}}</span>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{arr.decOn}}" hint-placeholder-val="{{true}}">
+          <div style="margin-top: 12px; border: 2px solid #1A1814; padding: 10px 16px 12px; display: flex; flex-direction: column; gap: 6px; opacity: {{arrOp}}; transition: opacity .6s ease .9s">
+            <span class="cap">A live decision · this seat can trade</span>
+            <span style="font-size: 23px; line-height: 1.2; font-weight: 420">Philadelphia’s offer: No. 3 + a future first for No. 1</span>
+            <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
+              <button type="button" class="sec" aria-pressed="{{decAccP}}" onClick="{{onAccept}}">Accept</button>
+              <button type="button" class="sec" aria-pressed="{{decHoldP}}" onClick="{{onHold}}">Hold No. 1</button>
+              <span class="mono" style="font-size: 12px; color: #4A453D">reported terms; the future first had conditions · verify</span>
+            </div>
+            <sc-if value="{{decChosen}}" hint-placeholder-val="{{false}}">
+              <div style="display: flex; align-items: center; gap: 12px; border-top: {{decBd}}; padding-top: 10px">
+                <span class="sw t-{{decTex}}" style="width: 34px; height: 20px"></span>
+                <span style="font-size: 16px; font-style: italic; line-height: 1.3">Your call is recorded; a branch is cut if it differs from what happened — see the P5 fork board.</span>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 16px; padding-top: 8px">
+        <svg width="416" height="250" viewBox="0 0 140 84" aria-hidden="true"><rect x="0.5" y="0.5" width="139" height="83" fill="none" stroke="#CBC4B6" stroke-width="0.6"></rect><path d="{{arr.d}}" fill="none" stroke="#1A1814" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1400" style="stroke-dashoffset: {{arr.dash}}; transition: stroke-dashoffset 1.6s cubic-bezier(.3,.6,.2,1) .15s"></path></svg>
+        <span class="mono" style="font-size: 12px; color: #4A453D">{{arr.drawCap}}</span>
+        <sc-if value="{{arr.isReal}}" hint-placeholder-val="{{true}}">
+          <p style="margin: 6px 0 0; padding: 14px 16px; border: 1px solid #1A1814; font-size: 18px; line-height: 1.4">{{arr.realLine}}</p>
+        </sc-if>
+        <sc-if value="{{arr.isFork}}" hint-placeholder-val="{{false}}">
+          <div style="margin-top: 6px; padding: 14px 16px; border: 2px dashed #6F6A62; color: #3F3B35; display: flex; flex-direction: column; gap: 6px; transform: rotate(-0.6deg)">
+            <span class="mono" style="font-size: 13px; letter-spacing: .04em">{{arr.stamp}}</span>
+            <span style="font-size: 17px; font-style: italic; line-height: 1.35">{{arr.assume}}</span>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <div class="mono" style="position: absolute; bottom: 24px; left: 72px; right: 72px; display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .08em; color: #5B554A">
+    <span>PROTOTYPE · DESIGN PROPOSAL (Browser shell) · PLATFORM HYPOTHESIS (address resolution)</span>
+    <span>data: prototype, dated 29 Sep 2026, verify before use</span>
+  </div>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentWillUnmount() { (this.tm || []).forEach((t) => clearTimeout(t)); }
+  later(fn, ms) { this.tm = this.tm || []; this.tm.push(setTimeout(fn, ms)); }
+
+  D() {
+    if (this._D) return this._D;
+    const P = {
+      board: 'M20 14h8M38 14h82M20 28h8M38 28h66M20 42h8M38 42h74M20 56h8M38 56h58M20 70h8M38 70h64',
+      cap: 'M16 30h58v16h-58zM74 30h28v16h-28zM102 30h12v16h-12zM16 62h108M120 18v52M16 22h36',
+      roster: 'M24 30a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M47 30a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M70 30a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M93 30a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M116 30a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M20 56q10 -16 20 0M43 56q10 -16 20 0M66 56q10 -16 20 0M89 56q10 -16 20 0M112 56q10 -16 20 0',
+      court: 'M10 10h120v64h-120zM70 10v64M60 42a10 10 0 1 0 20 0a10 10 0 1 0 -20 0M10 30h16v24h-16M130 30h-16v24h16',
+      ledger: 'M14 14h112M14 28h112M14 42h112M14 56h112M14 70h112M40 14v56M100 14v56',
+      street: 'M8 70h124M14 70v-34l12-10l12 10v34M44 70v-44h22v44M72 70v-28l10-8l10 8v28M98 70v-38h28v38M20 48h6M52 36h6M104 44h6M80 52h4',
+      sources: 'M12 14h116v58h-116zM12 28h116M50 14v58M90 14v58M20 40h22M20 52h18M58 40h24M58 52h20M98 40h22M98 52h16',
+      trade: 'M12 18q10 10 4 22t8 28M128 14q-8 12 -2 22t-4 32M30 44c30 -20 60 -20 86 -6M107 32l9 6l-10 4',
+      factions: 'M24 44a12 12 0 1 0 24 0a12 12 0 1 0 -24 0M58 30a12 12 0 1 0 24 0a12 12 0 1 0 -24 0M92 48a12 12 0 1 0 24 0a12 12 0 1 0 -24 0M47 39l12 -5M81 34l12 8',
+      book: 'M70 20v52M70 20c-14 -8 -40 -8 -56 0v52c16 -8 42 -8 56 0M70 20c14 -8 40 -8 56 0v52c-16 -8 -42 -8 -56 0M24 32h34M24 42h30M82 32h34M82 42h30',
+      body: 'M78 14a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M82 22l-8 22M74 44l10 14l-4 16M74 44l-14 8l-8 14M80 28l12 8l10 -4M80 28l-14 2l-6 10',
+      cell: 'M22 42a48 30 0 1 0 96 0a48 30 0 1 0 -96 0M46 42a12 10 0 1 0 24 0a12 10 0 1 0 -24 0M86 30h16M84 54h18M92 42h10',
+      organelle: 'M22 42c0 -18 16 -22 48 -22s48 4 48 22s-16 22 -48 22s-48 -4 -48 -22zM34 42c6 -12 10 12 16 0s10 12 16 0s10 12 16 0s10 12 16 0s10 12 16 0',
+      molecule: 'M40 42l30 -14l30 14M70 28v34M34 42a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M64 28a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M94 42a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M64 62a6 6 0 1 0 12 0a6 6 0 1 0 -12 0',
+      equation: 'M14 42h22M25 31v22M46 42h18M55 31v22M72 42h26M90 36l8 6l-8 6M106 36h20M106 48h20',
+      graph: 'M18 12v58h110M18 62c20 0 24 -40 44 -40s30 10 60 10',
+      network: 'M18 20h18v12h-18zM62 50h18v12h-18zM104 18h18v12h-18zM104 58h18v12h-18zM36 28l26 24M80 54l24 -26M80 58l24 6',
+      fab: 'M14 16h112v52h-112zM24 26h18v12h-18zM52 26h18v12h-18zM80 26h18v12h-18zM24 48h18v12h-18zM52 48h18v12h-18zM80 48h18v12h-18zM110 26v34',
+      threads: 'M16 20h20M16 42h20M16 64h20M36 20c30 0 40 22 70 22M36 42h70M36 64c30 0 40 -22 70 -22M106 42h18',
+      pl: 'M16 70h110M24 70v-30h14v30M46 70v-44h14v44M68 70v-22h14v22M90 70v-50h14v50M112 70v-12h10v12'
+    };
+    const R = (note, rows) => ({ note, rows });
+    const capLate = R('2025–26 league figures, approx. · verify', [
+      ['obs', 'Salary cap, 2025–26', '$154.6M approx.', 'NBA, June 2025 · verify'],
+      ['obs', 'Second apron, 2025–26', '$207.8M approx.', 'NBA, June 2025 · verify'],
+      ['aut', 'Above the second apron', 'no combining salaries in a trade; a future first can be frozen', '2023 CBA apron rules, simplified · verify'],
+      ['mod', 'Tax bill if nobody is moved', 'a range, not yet run', 'modeled from payroll']
+    ]);
+    const celtics = {
+      search: 'Boston Celtics', name: 'the Boston Celtics', slug: 'celtics', def: 0,
+      prepWhen: 'at', prepWho: 'as', dimWhen: 'WHEN', dimWho: 'WHO', whoCap: 'WHO · each seat bounds what you can see and do',
+      reality: 'Reality, as recorded', axis: [2016.6, 2027.8], years: [2017, 2019, 2021, 2023, 2025, 2027],
+      moments: [
+        { v: 2017.46, row: 0, al: 'l', tex: 'rec', text: '17 June 2017, the call about No. 1', short: '17 Jun 2017', label: 'Philadelphia calls about No. 1', addr: '2017-06-17 morning', out: 'agreed 17 Jun, completed 19 Jun 2017 (verify)' },
+        { v: 2025.36, row: 1, al: 'r', tex: 'rec', text: '12 May 2025, Game 4 in New York', short: '12 May 2025', label: 'Game 4 at New York', addr: '2025-05-12', out: 'Tatum ruptures his right Achilles, Game 4 vs New York (verify)' },
+        { v: 2025.48, row: 0, al: 'r', tex: 'rec', text: 'late June 2025, the apron summer', short: 'Jun 2025 · verify', label: 'Boston is over the second apron', addr: '2025-06 [verify]', out: 'Apron summer: Jrue Holiday traded to Portland (verify)' },
+        { v: 2026.74, row: 1, al: 'l', w: 128, tex: 'obs', text: 'now, as of the Reality feed', short: 'Now', label: 'live, as of the Reality feed', addr: 'now' },
+        { v: 2027.0, v2: 2027.8, row: 0, al: 'r', tex: 'unk', sealed: true, text: 'after NOW, sealed', short: 'After NOW', label: 'sealed; no model has run', addr: 'after now (sealed)' }
+      ],
+      seats: [
+        { name: 'President of Basketball Operations', slug: 'president of basketball ops', can: 'You can trade, draft and sign.', cant: 'You can’t see inside the other team’s room.', np: ['Danny Ainge', 'Brad Stevens', 'Brad Stevens', 'Brad Stevens'] },
+        { name: 'Head coach', slug: 'head coach', can: 'You can set the rotation and the minutes.', cant: 'You can’t sign or trade anyone.', np: ['Brad Stevens', 'Joe Mazzulla', 'Joe Mazzulla', 'Joe Mazzulla'] },
+        { name: 'Capologist', slug: 'capologist', can: 'You can see every contract and the tax bill.', cant: 'You can’t make the deal.' },
+        { name: 'Portland’s general manager', slug: 'portland gm', can: 'You can accept, refuse or counter.', cant: 'You can’t see Boston’s cap sheet.', np: ['', 'Joe Cronin [verify]', 'Joe Cronin [verify]', 'Joe Cronin [verify]'],
+          ov: { 0: { name: 'Philadelphia’s front office', slug: 'philadelphia front office', npName: 'Bryan Colangelo [verify]' } } },
+        { name: 'Season-ticket holder', slug: 'season-ticket holder', can: 'You can renew, resell or walk away.', cant: 'You can’t see inside the front office.' }
+      ],
+      composite: 'This seat is a composite. It is not a real person.',
+      views: [
+        { n: 'the draft board', d: P.board, m: { 0: R('composite of June 2017 boards — they split on Jackson and Tatum · verify', [
+          ['obs', '1   Markelle Fultz', 'Washington', 'composite of June 2017 boards · verify'],
+          ['obs', '2   Lonzo Ball', 'UCLA', 'composite of June 2017 boards · verify'],
+          ['obs', '3–4   Josh Jackson', 'Kansas', 'boards split on 3 and 4 · verify'],
+          ['obs', '3–4   Jayson Tatum', 'Duke', 'boards split on 3 and 4 · verify'],
+          ['obs', '5   De’Aaron Fox', 'Kentucky', 'composite of June 2017 boards · verify'],
+          ['unk', 'The order on the night', 'unknown until 22 June', 'five days away; boards are guesses']
+        ]) } },
+        { n: 'the cap sheet', d: P.cap, m: {
+          0: R('2017–18 league figures, as knowable on 17 June · verify', [
+            ['mod', 'Salary cap, 2017–18', 'projected, not yet set', 'the league set it in July (about $99.1M) · verify'],
+            ['aut', 'What the No. 1 pick will be paid', 'fixed by the rookie scale', 'CBA rookie scale table · amount: verify'],
+            ['obs', 'Offer on the table', 'No. 3 and a future first', 'reported terms; the future first had conditions · verify'],
+            ['unk', 'Philadelphia’s other options', 'not visible from this seat', 'hidden by role']
+          ]), 1: capLate, 2: capLate } },
+        { n: 'the roster', d: P.roster, m: {
+          0: R('2016–17 roster, as of June 2017 · verify', [
+            ['obs', 'Isaiah Thomas', 'guard', 'team roster · verify'], ['obs', 'Al Horford', 'center', 'team roster · verify'],
+            ['obs', 'Avery Bradley', 'guard', 'team roster · verify'], ['obs', 'Jae Crowder', 'forward', 'team roster · verify'],
+            ['obs', 'Jaylen Brown', 'wing, rookie', 'team roster · verify']
+          ]),
+          1: R('May 2025 · verify', [
+            ['obs', 'Jayson Tatum', 'out · right Achilles', 'team announcement, 13 May 2025 · verify'], ['obs', 'Jaylen Brown', 'wing', 'team roster · verify'],
+            ['obs', 'Jrue Holiday', 'guard', 'team roster · verify'], ['obs', 'Derrick White', 'guard', 'team roster · verify'],
+            ['obs', 'Kristaps Porziņģis', 'center', 'team roster · verify']
+          ]),
+          2: R('late June 2025 · verify', [
+            ['obs', 'Jayson Tatum', 'out · recovering', 'team announcement · verify'], ['obs', 'Jaylen Brown', 'wing', 'team roster · verify'],
+            ['obs', 'Derrick White', 'guard', 'team roster · verify'], ['obs', 'Jrue Holiday', 'guard', 'team roster · verify', 'plain'], ['rec', 'Jrue Holiday', 'traded to Portland', 'date and return · verify', 'how'],
+            ['unk', 'Who takes his minutes', 'unknown at this moment', 'kept open']
+          ]) } },
+        { n: 'the court', d: P.court, m: {
+          0: R('17 June is the offseason', [
+            ['com', 'No game today', 'offseason', 'follows from the schedule'],
+            ['obs', 'Last game played', 'lost the conference finals to Cleveland, May 2017', 'box scores · verify'],
+            ['unk', 'Summer league', 'not loaded', 'a hole in this prototype']
+          ]),
+          1: R('Game 4, Madison Square Garden · verify', [
+            ['obs', 'Boston at New York, Game 4', 'Knicks win, 121–113', 'box score · verify'],
+            ['obs', 'Tatum goes down late in the fourth', 'right Achilles', 'team announcement · verify'],
+            ['obs', 'The series', 'New York leads 3–1', 'box scores · verify'],
+            ['unk', 'How long he is out', 'unknown on this night', 'kept open']
+          ]) } },
+        { n: 'the ledger', d: P.ledger, m: {
+          0: R('every act written down, in order', [
+            ['rec', 'No. 1 pick to Philadelphia', 'agreed 17 Jun, completed 19 Jun 2017 (verify)', 'reported 17–19 Jun 2017; conditions · verify', 'how'],
+            ['aut', 'You enter in the morning', 'a time of day BOW chose', 'not a recorded time'],
+            ['unk', 'Your first act', 'not yet', 'the ledger waits for you']
+          ]),
+          2: R('every act written down, in order', [
+            ['rec', 'Jrue Holiday to Portland', 'agreed, late June 2025', 'date and return · verify', 'how'],
+            ['unk', 'Your first act', 'not yet', 'the ledger waits for you']
+          ]) } }
+      ],
+      forks: [{ name: 'Fultz stays in Boston', when: '17 Jun 2017', slug: 'fultz-stays' }, { name: 'Holiday kept', when: 'Jun 2025', slug: 'holiday-kept' }],
+      related: ['the NBA', 'TD Garden', 'the 2008 Celtics', 'Boston']
+    };
+    const rev = {
+      search: 'American Revolution', name: 'the American Revolution', slug: 'american-revolution', def: 0,
+      prepWhen: 'at', prepWho: 'as', dimWhen: 'WHEN', dimWho: 'WHO', whoCap: 'WHO · each seat bounds what you can see and do',
+      reality: 'history, as recorded', axis: [1772.6, 1788.2], years: [1773, 1775, 1777, 1779, 1781, 1783, 1785, 1787],
+      moments: [
+        { v: 1773.96, row: 0, al: 'l', tex: 'rec', text: '16 December 1773, the night of the tea', short: '16 Dec 1773', label: 'Tea destroyed in Boston harbor', addr: '1773-12-16' },
+        { v: 1775.30, row: 1, al: 'l', tex: 'rec', text: '19 April 1775, Lexington and Concord', short: '19 Apr 1775', label: 'Lexington and Concord', addr: '1775-04-19' },
+        { v: 1776.51, row: 0, al: 'l', tex: 'rec', text: '2–4 July 1776, the vote for independence', short: '2–4 Jul 1776', label: 'Independence voted; the Declaration adopted', addr: '1776-07-02' },
+        { v: 1787.71, row: 1, al: 'r', tex: 'rec', text: '17 September 1787, the signing', short: '17 Sep 1787', label: 'The Constitution signed', addr: '1787-09-17' }
+      ],
+      seats: [
+        { name: 'a Boston merchant', slug: 'boston merchant', can: 'You can buy, sell, sign or break a boycott.', cant: 'You can’t vote in Parliament.' },
+        { name: 'a Massachusetts militiaman', slug: 'militiaman', can: 'You can muster, march or stay home.', cant: 'You can’t see the British orders.' },
+        { name: 'a Crown customs officer', slug: 'customs officer', can: 'You can seize cargo and write to London.', cant: 'You can’t count on a Boston jury.', av: [true, true, false, false], why: 'No such seat in Boston after March 1776 · verify' },
+        { name: 'a Loyalist printer', slug: 'loyalist printer', can: 'You can print, refuse to print, or leave.', cant: 'You can’t stay neutral for long.' },
+        { name: 'a delegate to Congress', slug: 'delegate to congress', can: 'You can debate and vote your colony’s instructions.', cant: 'You can’t tax anyone.', av: [false, true, true, true], why: 'No such seat yet: Congress first meets in September 1774' }
+      ],
+      composite: 'This seat is a composite built from the record. You are not any one real person.',
+      views: [
+        { n: 'the street', d: P.street, m: {
+          0: R('Boston, the evening of 16 December 1773', [
+            ['obs', 'Old South Meeting House', 'a crowd waits for the governor’s answer', 'contemporary accounts; crowd size varies · verify'],
+            ['obs', 'Griffin’s Wharf', 'Dartmouth, Eleanor, Beaver', 'standard accounts · verify'],
+            ['obs', 'Chests of tea destroyed', '342, the commonly cited count', 'East India Company records · verify'],
+            ['unk', 'Most of the men on the ships', 'names never recorded', 'a hole in the record, kept open']
+          ]),
+          1: R('Lexington Green, dawn, 19 April 1775', [
+            ['obs', 'Lexington Green', 'militia muster at dawn', 'depositions, April 1775 · verify'],
+            ['obs', 'British regulars', 'marching for the stores at Concord', 'orders and accounts · verify'],
+            ['unk', 'Who fired first', 'not known; accounts disagree', 'depositions from both sides conflict']
+          ]),
+          2: R('Philadelphia, the Pennsylvania State House', [
+            ['obs', 'Congress votes', 'independence, 2 July', 'Journals of Congress · verify'],
+            ['obs', 'The Declaration', 'adopted 4 July', 'Journals of Congress · verify'],
+            ['unk', 'What most delegates said in the room', 'few notes survive', 'kept open']
+          ]),
+          3: R('Philadelphia, the Pennsylvania State House', [
+            ['obs', 'The Constitution', 'signed by 39 delegates', 'the signed document · verify'],
+            ['unk', 'What was said behind closed doors', 'only private notes survive', 'Madison’s are the fullest']
+          ]) } },
+        { n: 'the source table', d: P.sources, m: { 0: R('what we have for this night', [
+          ['obs', 'Boston Gazette', 'the next Monday’s issue', 'newspaper, 20 Dec 1773 · verify'],
+          ['obs', 'Governor Hutchinson’s letters', 'the Crown’s side', 'letterbooks · verify'],
+          ['obs', 'Participant memoirs', 'written decades later', 'e.g. George R. T. Hewes, 1830s · verify'],
+          ['gen', 'The merchant’s voice in this world', 'generated, not quoted', 'phrasing is generated; each claim links to a source']
+        ]) } },
+        { n: 'the trade map', d: P.trade, m: { 0: R('the Atlantic tea trade, 1773', [
+          ['obs', 'London to Boston', 'East India Company tea', 'company and customs records · verify'],
+          ['aut', 'Tea Act, May 1773', 'cheaper legal tea, still taxed here', 'a law: a rule someone chose'],
+          ['unk', 'Smuggled Dutch tea', 'how much? estimates vary', 'kept open']
+        ]) } },
+        { n: 'the factions', d: P.factions, m: { 0: R('who wants what, December 1773', [
+          ['obs', 'Sons of Liberty', 'send the tea back', 'accounts · verify'],
+          ['obs', 'The consignees', 'merchants named to receive it', 'accounts · verify'],
+          ['obs', 'Governor Hutchinson', 'won’t let the ships leave', 'his letters · verify'],
+          ['unk', 'The undecided', 'how many? unknown', 'kept open']
+        ]) } },
+        { n: 'the Native Textbook chapter', d: P.book, m: { 0: R('a chapter written from this world, linked to its sources', [
+          ['aut', '§1  A tax you could avoid', 'outline chosen by a teacher', 'authored structure'],
+          ['gen', '§2  The night on the wharf', 'phrasing generated, every claim linked', 'generated text'],
+          ['unk', '§3  What the crowd believed', 'left open on purpose', 'the record is thin here']
+        ]) } }
+      ],
+      forks: [{ name: 'Conciliation accepted', when: 'Feb 1775', slug: 'conciliation' }],
+      related: ['the British Empire', 'Boston', 'the Continental Congress', 'the Atlantic trade']
+    };
+    const resp = {
+      search: 'cellular respiration', name: 'cellular respiration', slug: 'cellular-respiration', def: 1,
+      prepWhen: 'during', prepWho: 'seen from', dimWhen: 'WHEN · PHASE', dimWho: 'WHO · VANTAGE', whoCap: 'VANTAGE · where you watch from',
+      reality: 'the accepted model', axis: [-6, 24], years: [-5, 0, 5, 10, 15, 20], unit: ' min',
+      moments: [
+        { v: -3, row: 0, al: 'l', tex: 'mod', text: 'rest', short: 'Before the start', label: 'At rest, breathing slow', addr: 'phase: rest' },
+        { v: 1, row: 1, al: 'l', tex: 'mod', text: 'minute 1 of a sprint', short: 'Minute 1', label: 'A sprint: oxygen can’t keep up', addr: 'phase: sprint +1 min' },
+        { v: 20, row: 0, al: 'r', tex: 'mod', text: 'minute 20 of a steady run', short: 'Minute 20', label: 'A steady run: supply meets demand', addr: 'phase: steady run +20 min' }
+      ],
+      seats: [
+        { name: 'the runner', slug: 'the runner', can: 'You can speed up, slow down, breathe.', cant: 'You can’t see a single cell.' },
+        { name: 'a leg-muscle cell', slug: 'a leg-muscle cell', can: 'You can see glucose and oxygen arrive.', cant: 'You can’t see the lungs or the heart.' },
+        { name: 'a mitochondrion', slug: 'a mitochondrion', can: 'You can follow electrons to oxygen.', cant: 'You can’t see the rest of the cell.' },
+        { name: 'the physiologist measuring oxygen uptake', slug: 'the physiologist', can: 'You can read the mask and the treadmill.', cant: 'You can’t see inside the muscle.' }
+      ],
+      composite: 'A vantage, not a person. The runner is a model, not anyone real.',
+      views: [
+        { n: 'the body', d: P.body, m: {
+          0: R('a modeled runner: typical ranges, not one person', [
+            ['mod', 'Breathing', 'slow and even', 'modeled runner'], ['mod', 'Heart rate', 'a resting range', 'modeled; varies by person'],
+            ['com', 'Where the energy comes from', 'mostly burned with oxygen', 'follows from the model']
+          ]),
+          1: R('a modeled runner: typical ranges, not one person', [
+            ['mod', 'Breathing', 'fast, and still behind', 'modeled runner'], ['mod', 'Heart rate', 'climbing hard', 'modeled range'],
+            ['com', 'The legs', 'spending ATP faster than oxygen arrives', 'follows from the model'],
+            ['unk', 'When this runner must slow down', 'not known in advance', 'depends on the person; kept open']
+          ]),
+          2: R('a modeled runner: typical ranges, not one person', [
+            ['mod', 'Breathing', 'deep and steady', 'modeled runner'], ['mod', 'Heart rate', 'high but level', 'modeled range'],
+            ['com', 'Oxygen supply', 'roughly matches demand', 'follows from the model']
+          ]) } },
+        { n: 'the cell', d: P.cell, m: {
+          0: R('one leg-muscle cell, at rest', [
+            ['com', 'Glucose to pyruvate', 'slow and steady', 'glycolysis, in the cytoplasm'],
+            ['com', 'Pyruvate', 'almost all goes into mitochondria', 'textbook model'], ['mod', 'Lactate', 'low', 'modeled range']
+          ]),
+          1: R('one leg-muscle cell, minute 1 of a sprint', [
+            ['com', 'Glycolysis', 'running flat out', 'fast ATP without oxygen'],
+            ['mod', 'Pyruvate', 'piling up faster than mitochondria can take it', 'modeled range'],
+            ['mod', 'Lactate', 'rising', 'modeled range, not a single number'],
+            ['unk', 'This runner’s tipping point', 'not measured', 'kept open']
+          ]),
+          2: R('one leg-muscle cell, minute 20 of a steady run', [
+            ['com', 'Mitochondria', 'taking most of the pyruvate', 'textbook model'],
+            ['mod', 'Fat burned', 'a growing share', 'modeled range'], ['mod', 'Lactate', 'level', 'modeled range']
+          ]) } },
+        { n: 'the organelle', d: P.organelle, all: R('inside one mitochondrion', [
+          ['com', 'Citric acid cycle', 'turning', 'described by Krebs, 1937'],
+          ['com', 'Electron transport chain', 'hands electrons to oxygen', 'textbook model'],
+          ['com', 'ATP synthase', 'spins as protons flow back', 'Mitchell’s chemiosmosis, 1961'],
+          ['obs', 'Its shape', 'known from crystal structures', 'Walker lab, 1994 · verify']
+        ]) },
+        { n: 'the molecule', d: P.molecule, all: R('the molecules that carry the energy', [
+          ['com', 'Glucose', 'C₆H₁₂O₆', 'fixed by chemistry'],
+          ['com', 'Oxygen', 'the last stop for electrons', 'textbook model'],
+          ['obs', 'ATP per glucose, fully aerobic', 'about 30–32', 'textbooks vary; older ones say 36–38']
+        ]) },
+        { n: 'the equation', d: P.equation, all: R('the summary everyone learns', [
+          ['com', 'C₆H₁₂O₆ + 6 O₂ → 6 CO₂ + 6 H₂O', 'balanced', 'follows from counting atoms'],
+          ['com', 'The energy', 'part kept as ATP, the rest leaves as heat', 'textbook model'],
+          ['aut', 'This is a summary', 'the real path has dozens of steps', 'a simplification someone chose']
+        ]) },
+        { n: 'the graph', d: P.graph, all: R('oxygen uptake across a workout', [
+          ['obs', 'The shape of the curve', 'well measured in labs', 'exercise physiology · verify'],
+          ['mod', 'This runner’s curve', 'drawn as a band', 'modeled runner'],
+          ['unk', 'Where the curve bends for you', 'not measured', 'kept open']
+        ]) }
+      ],
+      forks: [{ name: 'A runner at altitude', when: 'minute 1', slug: 'altitude' }],
+      related: ['photosynthesis', 'the heart and lungs', 'a marathon', 'fermentation']
+    };
+    const semi = {
+      search: 'semiconductor supply chain', name: 'the semiconductor supply chain', slug: 'semiconductor-supply-chain', def: 0,
+      prepWhen: 'at', prepWho: 'as', dimWhen: 'WHEN', dimWho: 'WHO', whoCap: 'WHO · each seat bounds what you can see and do',
+      reality: 'reality, as observed', axis: [2019.6, 2028.0], years: [2020, 2022, 2024, 2026],
+      moments: [
+        { v: 2021.21, row: 0, al: 'l', tex: 'obs', text: '19 March 2021, the Naka fab fire', short: '19 Mar 2021 · verify', label: 'Fire at Renesas’s Naka fab in Japan', addr: '2021-03-19' },
+        { v: 2021.0, v2: 2021.99, row: 1, al: 'l', tex: 'obs', text: '2021, the automotive chip shortage', short: '2021', label: 'The automotive chip shortage', addr: '2021' },
+        { v: 2026.74, row: 1, al: 'r', tex: 'obs', text: 'now, as of the Reality feed', short: 'Now', label: 'live, as of the Reality feed', addr: 'now' },
+        { v: 2027.1, v2: 2027.7, row: 0, al: 'r', tex: 'mod', text: 'a 30-day shipping disruption (a scenario)', short: 'Scenario · modeled', label: 'A 30-day shipping disruption. A scenario, not a prediction', addr: 'scenario: shipping-30d' }
+      ],
+      seats: [
+        { name: 'a fab operations manager', slug: 'fab operations manager', can: 'You can restart lines and rank the orders.', cant: 'You can’t build a new fab this year.' },
+        { name: 'an automaker’s procurement VP', slug: 'automaker procurement vp', can: 'You can reorder, pay more or redesign.', cant: 'You can’t jump the fab’s queue.' },
+        { name: 'a logistics planner', slug: 'logistics planner', can: 'You can reroute, rebook and hold stock.', cant: 'You can’t open a closed port.' },
+        { name: 'a trade regulator', slug: 'trade regulator', can: 'You can license exports and set rules.', cant: 'You can’t make a chip.' }
+      ],
+      composite: 'A composite seat. You are not an employee of any real company.',
+      views: [
+        { n: 'the supply network', d: P.network, m: {
+          0: R('observed after 19 March 2021 · verify', [
+            ['obs', 'Renesas Naka fab, Japan', 'fire on a 300 mm line', 'company statements, March 2021 · verify'],
+            ['obs', 'Automakers', 'already short of chips', 'widely reported, 2021 · verify'],
+            ['mod', 'Weeks until output recovers', 'a range, not yet run', 'modeled'],
+            ['unk', 'Which other fabs could take the work', 'not visible from this seat', 'hidden by role']
+          ]),
+          1: R('the 2021 shortage · verify', [
+            ['obs', 'Car plants', 'lines idled for want of chips', 'widely reported, 2021 · verify'],
+            ['obs', 'Causes, as reported', 'demand swings, a fire, a winter storm, a drought', 'reporting varies · verify'],
+            ['unk', 'How much each cause mattered', 'still argued', 'kept open']
+          ]),
+          3: R('a scenario, not a prediction', [
+            ['aut', 'Assumption: shipping lanes shut for 30 days', 'set by the scenario', 'authored'],
+            ['mod', 'When automaker stock runs out', 'a range of weeks, not yet run', 'modeled'],
+            ['mod', 'Which plants pause first', 'a range', 'modeled'],
+            ['unk', 'What the real world would do', 'unknown', 'BOW does not predict']
+          ]) } },
+        { n: 'the fab floor', d: P.fab, m: { 0: R('inside the damaged line · verify', [
+          ['obs', 'Clean room', 'fire and smoke damage', 'company statements · verify'],
+          ['obs', 'Some tools', 'must be replaced', 'company statements · verify'],
+          ['aut', 'Restart order', 'your call in this seat', 'a seat rule'],
+          ['unk', 'When replacement tools arrive', 'depends on suppliers', 'kept open']
+        ]) } },
+        { n: 'the commitments', d: P.threads, all: R('customer names are placeholders', [
+          ['aut', 'Promise to [automaker A]', 'a weekly chip allocation', 'placeholder contract'],
+          ['aut', 'Promise to [automaker B]', 'a weekly chip allocation', 'placeholder contract'],
+          ['mod', 'Which promises slip', 'a range', 'modeled'],
+          ['unk', 'Real contract terms', 'not public', 'kept open']
+        ]) },
+        { n: 'the P&L', d: P.pl, all: R('money in and out, for this seat', [
+          ['mod', 'Lost sales this quarter', 'a range, not yet run', 'modeled'],
+          ['com', 'Cost of air freight instead of sea', 'computed once you choose routes', 'rules plus your choices'],
+          ['unk', 'Insurance recovery', 'unknown at this moment', 'kept open']
+        ]) }
+      ],
+      forks: [{ name: '30-day shipping pause', when: 'scenario', slug: 'shipping-pause' }],
+      related: ['TSMC', 'the auto industry', 'Taiwan', 'global shipping']
+    };
+    this._D = { celtics, rev, resp, semi };
+    return this._D;
+  }
+
+  getSel(k) {
+    const s = this.state || {};
+    const all = s.sel || {};
+    const X = this.D()[k];
+    return all[k] || { m: X.def, who: 0, view: 0, br: 0, fk: 0 };
+  }
+  setSel(k, patch, slot) {
+    const s = this.state || {};
+    const all = Object.assign({}, s.sel || {});
+    all[k] = Object.assign({}, this.getSel(k), patch);
+    this.setState({ sel: all, chg: slot, chgOn: false });
+    this.later(() => this.setState({ chgOn: true }), 40);
+  }
+  seatOk(p, mi) { return !p.av || p.av[mi] !== false; }
+  pickMoment(k, i) {
+    const X = this.D()[k];
+    const cur = this.getSel(k);
+    let who = cur.who;
+    if (!this.seatOk(X.seats[who], i)) who = Math.max(0, X.seats.findIndex((p) => this.seatOk(p, i)));
+    this.setSel(k, { m: i, who }, 'when');
+  }
+  resolve(q) {
+    const t = (q || '').trim().toLowerCase();
+    if (!t) return null;
+    const D = this.D();
+    const order = ['rev', 'celtics', 'resp', 'semi'];
+    for (let i = 0; i < order.length; i++) {
+      const n = D[order[i]].search.toLowerCase();
+      if (n === t || n.indexOf(t) === 0) return order[i];
+    }
+    return null;
+  }
+  openSys(k) {
+    this.setState({ mode: 'sentence', sys: k, stub: null, q: this.D()[k].search, open: null, last: null, grow: false, foundry: false, leaving: false, chg: null, dec: null });
+    this.later(() => this.setState({ grow: true }), 60);
+  }
+  toggle(id) {
+    const s = this.state || {};
+    if (s.open === id) this.setState({ open: null });
+    else this.setState({ open: id, last: id });
+  }
+  enter() {
+    this.setState({ leaving: true, open: null, dec: null });
+    this.later(() => this.setState({ mode: 'arrived', leaving: false, arriveIn: false }), 480);
+    this.later(() => this.setState({ arriveIn: true }), 560);
+  }
+  back() {
+    this.setState({ mode: 'sentence', arriveIn: false, grow: false });
+    this.later(() => this.setState({ grow: true }), 50);
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const D = this.D();
+    const ACC = '#7A1F2B';
+    const TW = { obs: 'OBSERVED', rec: 'RECORDED', aut: 'AUTHORED', com: 'COMPUTED', mod: 'MODELED', gen: 'GENERATED', unk: 'UNKNOWN' };
+    const cap1 = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+    const mode = s.mode || 'search';
+    const how = !!s.how;
+    const q = s.q || '';
+    const match = this.resolve(q);
+    const k = s.sys || 'celtics';
+    const X = D[k];
+    const sel = this.getSel(k);
+    const stub = s.stub || null;
+    const mom = X.moments[sel.m] || X.moments[0];
+    const sf = (p) => Object.assign({}, p, (p.ov && p.ov[sel.m]) || {});
+    const seat = sf(X.seats[sel.who] || X.seats[0]);
+    const view = X.views[sel.view] || X.views[0];
+    const fork = X.forks[sel.fk] || X.forks[0];
+    const chgOn = s.chgOn !== false;
+    let cutAt = mom.short.split(' · ')[0];
+    if (k === 'resp' || /^(Scenario|Now)/.test(cutAt)) cutAt = cutAt.toLowerCase();
+
+    const slot = (id, text, dim, forkHand) => {
+      const moving = s.chg === id && !chgOn;
+      const isOpen = s.open === id;
+      const hole = !!stub && id !== 'sys';
+      return {
+        text: hole ? '[ ? ]' : text, dim,
+        exp: isOpen ? 'true' : 'false', dis: hole,
+        op: moving ? 0 : (hole ? 0.8 : 1), dy: moving ? 20 : 0,
+        tr: moving ? 'none' : 'opacity .5s ease, transform .6s cubic-bezier(.2,.7,.2,1), color .2s',
+        bb: (isOpen ? '5px ' : '3px ') + (hole ? 'dashed #5B554A' : (forkHand ? 'dashed ' + ACC : 'solid ' + ACC)),
+        fg: hole ? '#5B554A' : (isOpen ? ACC : '#1A1814'),
+        tap: () => this.toggle(id)
+      };
+    };
+    const brText = sel.br === 0 ? X.reality : (sel.br === 1 ? 'the public fork “' + fork.name + '”' : 'a new branch, cut at ' + cutAt);
+    const S = {
+      sys: slot('sys', stub || X.name, 'SYSTEM'),
+      when: slot('when', mom.text, X.dimWhen),
+      who: slot('who', seat.name, X.dimWho),
+      br: slot('br', brText, 'BRANCH', sel.br !== 0),
+      view: slot('view', view.n, 'VIEW')
+    };
+
+    const shown = s.open || s.last || 'when';
+    const W = 1296, a0 = X.axis[0], a1 = X.axis[1];
+    const px = (v) => Math.round((v - a0) / (a1 - a0) * W);
+    const TRK = 106;
+    const raw = X.moments.map((m, i) => {
+      const x = px(m.v), span = m.v2 != null;
+      return { m, i, x, x2: span ? px(m.v2) : x, span, right: m.al === 'r', row: m.row ? 1 : 0, w: Math.min(m.w || 240, 240) };
+    });
+    const leftOf = (r) => r.right ? (r.span ? r.x2 - r.w : r.x + 6 - r.w) : (r.span ? r.x : r.x - 6);
+    [0, 1].forEach((row) => {
+      const rr = raw.filter((r) => r.row === row).sort((a, b) => leftOf(a) - leftOf(b));
+      for (let j = 0; j + 1 < rr.length; j++) {
+        const a = rr[j], b = rr[j + 1];
+        const over = leftOf(a) + a.w + 14 - leftOf(b);
+        if (over > 0) {
+          if (!a.right) a.w = Math.max(130, a.w - over);
+          else if (b.right) b.w = Math.max(130, b.w - over);
+        }
+      }
+    });
+    const marks = raw.map((r) => {
+      const m = r.m, x = r.x, x2 = r.x2, span = r.span, w = r.w, right = r.right, on = sel.m === r.i;
+      const my = span ? TRK - 10 : TRK - 14, mh = span ? 20 : 28;
+      const LAB0 = 82, LAB1 = 148;
+      const cy = r.row ? my + mh : LAB0;
+      return {
+        tex: m.tex, short: m.short, label: m.label, howTxt: how ? ' · ' + TW[m.tex] : '', dis: !!m.sealed,
+        mx: span ? x : x - 6, mw: span ? x2 - x : 12, my, mh,
+        ol: on ? '2px solid ' + ACC : '2px solid transparent',
+        cx: right && span ? x2 - 1 : x, cy, ch: r.row ? LAB1 - cy : my - LAB0,
+        bx: Math.max(0, Math.min(W - w, leftOf(r))), by: r.row ? LAB1 : 0, bh: r.row ? 66 : LAB0, jc: r.row ? 'flex-start' : 'flex-end', bw: w,
+        al: right ? 'right' : 'left', ai: right ? 'flex-end' : 'flex-start',
+        fg: on ? ACC : (m.sealed ? '#4A453D' : '#1A1814'), on: on ? 'true' : 'false',
+        pick: () => { if (!m.sealed) this.pickMoment(k, r.i); }
+      };
+    });
+    const years = X.years.map((y) => ({ x: px(y), t: String(y).replace('-', '−') + (X.unit || '') }));
+    const seats = X.seats.map((p0, i) => {
+      const p = sf(p0);
+      const ok = this.seatOk(p, sel.m), on = sel.who === i;
+      return {
+        name: p.name, can: ok ? p.can : p.why, cant: ok ? p.cant : '',
+        kind: how ? 'AUTHORED · the seat’s rules' : (k === 'resp' ? 'vantage' : 'seat'),
+        on: on ? 'true' : 'false', dis: !ok, op: ok ? 1 : 0.62,
+        bt: on ? '5px solid ' + ACC : '2px solid #1A1814', fg: on ? ACC : '#1A1814',
+        pick: () => this.setSel(k, { who: i }, 'who')
+      };
+    });
+    const views = X.views.map((v, i) => {
+      const on = sel.view === i;
+      return {
+        name: v.n, d: v.d, on: on ? 'true' : 'false', stroke: on ? ACC : '#1A1814', frame: on ? ACC : '#B9B1A2',
+        fg: on ? ACC : '#1A1814', bb: on ? '3px solid ' + ACC : '3px solid transparent',
+        pick: () => this.setSel(k, { view: i }, 'view')
+      };
+    });
+    const caps = {
+      when: k === 'resp' ? 'PHASE · the moments of a modeled workout, to scale' : 'WHEN · moments you can enter, drawn to scale',
+      who: X.whoCap, br: 'BRANCH · which version of events', view: 'VIEW · how this moment is drawn', sys: 'SYSTEM · nearby systems'
+    };
+    const pk = {
+      caption: caps[shown],
+      isWhen: shown === 'when', isWho: shown === 'who', isView: shown === 'view', isBr: shown === 'br', isSys: shown === 'sys',
+      years, marks, seats, views, cutWhen: cutAt,
+      hasOut: !!(how && mom.out), outText: mom.out || '',
+      b0: { name: cap1(X.reality), on: sel.br === 0 ? 'true' : 'false', bt: sel.br === 0 ? '5px solid ' + ACC : '2px solid #1A1814', pick: () => this.setSel(k, { br: 0 }, 'br') },
+      b2: { on: sel.br === 2 ? 'true' : 'false', bt: sel.br === 2 ? '5px solid ' + ACC : '2px solid #1A1814', pick: () => this.setSel(k, { br: 2 }, 'br') },
+      forks: X.forks.map((f, i) => {
+        const on = sel.br === 1 && sel.fk === i;
+        return { name: f.name, when: f.when, on: on ? 'true' : 'false', fg: on ? ACC : '#3F3B35', pick: () => this.setSel(k, { br: 1, fk: i }, 'br') };
+      }),
+      related: X.related.map((n) => ({
+        name: n, on: stub === n ? 'true' : 'false',
+        pick: () => { this.setState({ stub: n, open: null, foundry: false, chg: 'sys', chgOn: false }); this.later(() => this.setState({ chgOn: true }), 40); }
+      })),
+      others: ['rev', 'celtics', 'resp', 'semi'].filter((o) => o !== k || !!stub).map((o) => ({ name: D[o].name, pick: () => this.openSys(o) }))
+    };
+    const open = !!s.open && mode === 'sentence';
+    const hs = { when: 286 + (how && mom.out ? 30 : 0), who: 292, view: 206, br: 214, sys: 256 };
+
+    const fb = cutAt;
+    const brSlug = sel.br === 0 ? (k === 'resp' ? 'accepted model' : 'reality') : (sel.br === 1 ? 'fork: ' + fork.slug : 'branch@' + fb.toLowerCase().replace(/\s+/g, '-'));
+    const addr = [X.slug, mom.addr, brSlug, (k === 'resp' ? 'from: ' : 'as: ') + seat.slug, 'view: ' + view.n.replace(/^the /, '')].join(' / ');
+
+    const Rv = view.m && view.m[sel.m] ? view.m[sel.m] : (view.all || null);
+    const data = Rv || { note: 'this view at this moment is not drawn in the prototype', rows: [['unk', cap1(view.n) + ' at ' + cutAt, 'not drawn yet', 'a hole in the prototype, not in the world; the address still resolves']] };
+    const arrIn = !!s.arriveIn;
+    const np = seat.npName || (seat.np && seat.np[sel.m]);
+    const seatLine = mom.tex === 'mod' && k !== 'resp' ? 'A modeled moment: nobody real sits here yet. You hold the seat.' : (np ? 'You are in the seat, not the person: you are not ' + np + '.' : X.composite);
+    const dec = s.dec || null;
+    const decOn = k === 'celtics' && sel.m === 0 && sel.who === 0;
+    const arr = {
+      decOn, rowPad: decOn ? 7 : 11, rowFs: decOn ? 22 : 26,
+      title: cap1(view.n), note: data.note, seatLine, d: view.d, dash: arrIn ? 0 : 1400,
+      drawCap: view.n + ' · one of ' + X.views.length + ' ways to draw this moment',
+      rows: data.rows.filter((r) => (r[4] !== 'how' || how) && (r[4] !== 'plain' || !how)).map((r, i) => ({ tex: r[0], p: r[1], v: r[2], src: r[3], tw: TW[r[0]], show: how, op: arrIn ? 1 : 0, dy: arrIn ? 0 : 22, delay: 260 + i * 110 })),
+      isReal: sel.br === 0, isFork: sel.br !== 0,
+      realLine: cap1(X.reality) + '. Anything you do here is written to a branch, never to the record.',
+      stamp: sel.br === 1 ? 'Public fork · “' + fork.name + '” · diverged ' + fork.when + ' · [author]' : 'Your branch · diverged ' + cutAt,
+      assume: sel.br === 1 ? 'Its assumptions are listed by its author. [placeholder]' : 'Assumptions: none yet. The first thing you change becomes one.'
+    };
+
+    return {
+      how, howPressed: how ? 'true' : 'false', howRule: how ? '2px solid ' + ACC : '2px solid transparent',
+      toggleHow: () => this.setState({ how: !how }),
+      legend: Object.keys(TW).map((t) => ({ tex: t, w: TW[t] })),
+      isSearch: mode === 'search', isSentence: mode === 'sentence', isArrived: mode === 'arrived',
+      q, qTrim: q.trim(),
+      onQ: (e) => this.setState({ q: e.target.value, foundry: false }),
+      onKey: (e) => { if (e.key === 'Enter') { const m = this.resolve((this.state || {}).q); if (m) this.openSys(m); } },
+      suggestions: ['rev', 'celtics', 'resp', 'semi'].map((o) => ({ label: D[o].search, pick: () => this.openSys(o) })),
+      hasMatch: !!match, noMatch: !!q.trim() && !match, matchName: match ? D[match].name : '',
+      openMatch: () => { if (match) this.openSys(match); },
+      foundry: !!s.foundry, foundryExp: s.foundry ? 'true' : 'false', showFoundry: () => this.setState({ foundry: true }),
+      S, prepWhen: X.prepWhen, prepWho: X.prepWho,
+      restOp: s.grow === false ? 0 : 1,
+      sentOp: s.leaving ? 0 : 1, sentTf: s.leaving ? 'translateY(-64px) scale(0.26)' : 'none',
+      pk, bandH: open ? hs[shown] : 0, bandOp: open ? 1 : 0, bandVis: open ? 'visible' : 'hidden', bandVisDelay: open ? '0s' : '.42s',
+      closePk: () => this.setState({ open: null }),
+      toSearch: () => this.setState({ mode: 'search', q: '', open: null, stub: null, foundry: false }),
+      canEnter: mode === 'sentence' && !stub, isStub: !!stub, stubName: stub || '',
+      enter: () => this.enter(), back: () => this.back(),
+      addr, arr, arrOp: arrIn ? 1 : 0, arrDy: arrIn ? 0 : -16, arrDy2: arrIn ? 0 : 30,
+      decChosen: !!dec, decAccP: dec === 'accept' ? 'true' : 'false', decHoldP: dec === 'hold' ? 'true' : 'false',
+      decTex: dec === 'hold' ? 'fork' : 'rec', decBd: dec === 'hold' ? '1px dashed #6F6A62' : '1px solid #1A1814',
+      onAccept: () => this.setState({ dec: 'accept' }), onHold: () => this.setState({ dec: 'hold' })
+    };
+  }
+}
+</script>
+</body>
+</html>

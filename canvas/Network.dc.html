@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Network — The Clearinghouse</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Courier+Prime:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF1EA;color:#1E211D;font-family:'Libre Franklin',sans-serif}
+a{color:#A3261C}a:hover{color:#6E1912}
+.cp{font-family:'Courier Prime',monospace}
+.sc{font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.tb{font-family:'Libre Franklin',sans-serif;cursor:pointer;border-radius:0;min-height:44px;display:inline-flex;align-items:center;gap:8px;padding:0 14px;font-size:13.5px;transition:background .2s,color .2s,border-color .2s}
+.tb:focus-visible,.rowb:focus-visible{outline:2px solid #A3261C;outline-offset:-2px}
+.rowb{position:absolute;left:0;top:0;width:100%;height:100%;margin:0;padding:0;border:0;cursor:pointer;border-radius:0;transition:background .25s}
+.rowb:hover{background:rgba(30,33,29,0.04)}
+.rw{transition:opacity .35s ease}
+.cell{transition:border-color .3s,box-shadow .3s,background .3s}
+.x-obs{background:#EEF1EA;border:1.5px solid #1E211D}
+.x-com{background:#D2D9CB;border:1.5px solid #D2D9CB}
+.x-unk{background:#EEF1EA;border:1.5px dashed #1E211D}
+.x-mod{background:repeating-linear-gradient(135deg,#3B5670 0 1px,transparent 1px 5px) #EEF1EA;border:1.5px solid #3B5670}
+.x-bunk{background:#EEF1EA;border:1.5px dashed #3B5670}
+.x-baut{background:#EEF1EA;border:1.5px solid #3B5670}
+.x-bcom{background:#D2D9CB;border:1.5px solid #3B5670}
+.x-bcom>span{background:#D2D9CB !important}
+.sw{display:inline-block;width:12px;height:12px;box-sizing:border-box;flex:none}
+.cons{transition:stroke-dashoffset 1.5s ease}
+.fade{transition:opacity .45s ease}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #EEF1EA; color: #1E211D; font-family: 'Libre Franklin', sans-serif">
+
+  <header style="position: absolute; left: 28px; right: 28px; top: 12px; height: 56px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #1E211D">
+    <div style="display: flex; align-items: baseline; gap: 16px">
+      <span style="font-size: 28px; font-weight: 700; letter-spacing: -.01em">The Clearinghouse</span>
+      <span style="font-size: 14.5px; color: #545A52">Lanes are institutions. Time runs down. Every bar binds exactly the desks it spans.</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 14px">
+      <span class="cp" style="font-size: 11.5px; line-height: 1.4; color: #545A52; text-align: right">PROTOTYPE · DESIGN PROPOSAL<br>figures: reported, as of 29 Sep 2026 — verify</span>
+      <button type="button" class="tb" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="border: 1.5px solid #1E211D; background: {{howBg}}; color: {{howFg}}">How do we know?</button>
+    </div>
+  </header>
+
+  <div style="position: absolute; left: 28px; right: 28px; top: 76px; height: 44px; display: flex; align-items: center; gap: 8px">
+    <span class="sc" style="color: #545A52; margin-right: 4px">Follow the</span>
+    <sc-for list="{{filters}}" as="f" hint-placeholder-count="4">
+      <button type="button" class="tb" onClick="{{f.pick}}" aria-pressed="{{f.pressed}}" style="border: 1.5px solid #1E211D; background: {{f.bg}}; color: {{f.fg}}">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="{{f.d}}" fill="none" stroke="{{f.fg}}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"></path></svg>{{f.label}}
+      </button>
+    </sc-for>
+    <span style="display: inline-flex; align-items: center; gap: 6px; margin-left: 8px; font-size: 12.5px; color: #545A52">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="{{obligD}}" fill="none" stroke="#A3261C" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"></path></svg>obligation <span class="cp" style="color: #A3261C">red = out / owed</span>
+    </span>
+    <span style="flex: 1"></span>
+    <span class="cp" style="font-size: 11.5px; font-style: italic; letter-spacing: .02em; color: #3B5670; padding: 4px 10px; border: 1.5px solid #3B5670; box-shadow: inset 0 0 0 2px #EEF1EA, inset 0 0 0 3.5px #3B5670; opacity: {{branchOp}}; transition: opacity .35s">LAB BRANCH · not reality</span>
+    <button type="button" class="tb" onClick="{{toggleWhatIf}}" aria-pressed="{{whatIfPressed}}" style="border: 1.5px dashed #3B5670; background: {{wiBg}}; color: {{wiFg}}"><span class="cp" style="font-weight: 700">WHAT IF?</span> The media deal had stayed flat</button>
+  </div>
+
+  <div style="position: absolute; left: 28px; top: 170px; width: 1384px; height: 462px; background: repeating-linear-gradient(to bottom, transparent 0 65px, #C5CDBF 65px 66px)"></div>
+  <sc-for list="{{rules}}" as="r" hint-placeholder-count="9">
+    <div style="position: absolute; left: {{r.x}}px; top: 128px; width: 1px; height: 504px; background: #B9C2B2"></div>
+  </sc-for>
+  <div style="position: absolute; left: 165px; top: 128px; width: 4px; height: 504px; border-left: 1px solid #A3261C; border-right: 1px solid #A3261C; box-sizing: border-box"></div>
+
+  <div class="sc" style="position: absolute; left: 28px; top: 136px; width: 130px; color: #545A52">Date · entry</div>
+  <sc-for list="{{laneHeads}}" as="h" hint-placeholder-count="8">
+    <div style="position: absolute; left: {{h.x}}px; top: 128px; width: 141px; height: 42px; padding-top: 6px; box-sizing: border-box; border-bottom: 2px solid #1E211D">
+      <div class="sc" style="color: #1E211D; white-space: nowrap">{{h.name}}</div>
+      <div style="font-size: 10.5px; color: #545A52; white-space: nowrap; margin-top: 2px">{{h.sub}}</div>
+    </div>
+  </sc-for>
+
+  <sc-for list="{{rows}}" as="w" hint-placeholder-count="7">
+    <div class="rw" style="position: absolute; left: 28px; top: {{w.y}}px; width: 1384px; height: 66px; opacity: {{w.op}}">
+      <button type="button" class="rowb" onClick="{{w.pick}}" aria-pressed="{{w.pressed}}" aria-label="{{w.aria}}" style="background: {{w.bg}}"></button>
+      <div style="position: absolute; left: 0; top: 0; width: 6px; height: 65px; background: {{w.mark}}; pointer-events: none; transition: background .25s"></div>
+      <div style="position: absolute; left: 14px; top: 6px; width: 124px; max-height: 58px; overflow: hidden; pointer-events: none">
+        <div class="cp" style="font-size: 12px; font-weight: 700; line-height: 14px">{{w.date}}</div>
+        <div style="font-size: 12px; font-weight: 600; line-height: 14px; margin-top: 2px">{{w.title}}</div>
+        <div class="cp" style="font-size: 10px; line-height: 12px; color: {{w.subInk}}; margin-top: 2px; white-space: nowrap">{{w.sub}}</div>
+      </div>
+      <sc-for list="{{w.segs}}" as="g" hint-placeholder-count="3">
+        <div style="position: absolute; left: {{g.x}}px; top: 32px; width: {{g.w}}px; height: 0; border-top: {{g.b}}; pointer-events: none"></div>
+      </sc-for>
+      <sc-for list="{{w.cells}}" as="c" hint-placeholder-count="2">
+        <div class="cell {{c.cls}}" style="position: absolute; left: {{c.x}}px; top: 7px; width: 141px; height: 52px; box-sizing: border-box; padding: 4px 6px; pointer-events: none; box-shadow: {{c.glow}}; overflow: hidden">
+          <div class="fade" style="opacity: {{c.op}}; max-height: {{c.lh}}px; overflow: hidden">
+            <sc-for list="{{c.lines}}" as="ln" hint-placeholder-count="2">
+              <div style="display: flex; align-items: center; gap: 4px; height: 13.5px">
+                <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true" style="flex: none"><path d="{{ln.d}}" fill="none" stroke="{{ln.ink}}" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"></path></svg>
+                <span class="cp" style="font-size: 10.5px; white-space: nowrap; color: {{ln.ink}}; background: {{ln.hl}}; transition: background .3s">{{ln.t}}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div class="cp fade {{c.brCls}}" style="position: absolute; left: 4px; right: 4px; bottom: 3px; height: 30px; box-sizing: border-box; padding: 0 3px; display: flex; align-items: center; font-size: 10.5px; font-style: italic; line-height: 13px; color: #3B5670; opacity: {{c.brOp}}"><span style="background: #EEF1EA; padding: 0 3px">{{c.br}}</span></div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-for>
+
+  <svg width="1440" height="900" viewBox="0 0 1440 900" style="position: absolute; left: 0; top: 0; pointer-events: none" aria-hidden="true">
+    <line x1="172" y1="302" x2="1412" y2="302" stroke="#3B5670" stroke-width="1.5" stroke-dasharray="6 4" style="opacity: {{branchOp}}; transition: opacity .35s"></line>
+    <text x="1406" y="298" text-anchor="end" font-family="Courier Prime, monospace" font-style="italic" font-size="11" fill="#3B5670" style="opacity: {{branchOp}}; transition: opacity .35s">your branch diverges here · Jul 2024</text>
+    <path d="{{consD}}" fill="none" stroke="#6E7868" stroke-width="1.2" stroke-linejoin="round"></path>
+    <circle cx="330" cy="268" r="3.2" fill="#1E211D"></circle>
+    <path class="cons" d="{{consD}}" pathLength="1" fill="none" stroke="#1E211D" stroke-width="2.2" stroke-linejoin="round" stroke-dasharray="1 1" style="stroke-dashoffset: {{consOff}}"></path>
+    <path d="{{consHeads}}" fill="none" stroke="#1E211D" stroke-width="1.6" stroke-linejoin="round" style="opacity: {{consOp}}; transition: opacity .4s ease {{consDl}}ms"></path>
+    <path d="{{threadD}}" fill="none" stroke="#A3261C" stroke-width="1.6" stroke-dasharray="4 3" style="opacity: {{threadOp}}; transition: opacity .35s"></path>
+  </svg>
+
+  <div style="position: absolute; left: 344px; top: 305px; width: 286px; pointer-events: none; border-left: 2px solid #1E211D; background: #EEF1EA; padding: 1px 4px 1px 8px; box-sizing: border-box">
+    <span class="cp" style="font-size: 11px; line-height: 1.35; color: #1E211D">2025–26 cap $154.6M = 2024–25 $140.6M + 10% — the CBA’s cap-smoothing limit binding</span>
+    <span class="cp" style="display: inline-block; margin-left: 4px; font-size: 10px; line-height: 12px; padding: 0 5px; border: 1.5px solid #545A52; color: #545A52; vertical-align: 1px">verify</span>
+  </div>
+  <div class="cp" style="position: absolute; right: 28px; top: 633px; font-size: 10px; line-height: 12px; color: #545A52; pointer-events: none">Verdict: PARK as a standalone — superseded by the Wave 2 Handshake board (an actual cross-institution interaction).</div>
+
+  <section aria-label="Entry detail" style="position: absolute; left: 28px; top: 646px; width: 1384px; height: 196px; border-top: 1.5px solid #1E211D; display: grid; grid-template-columns: 492px 1fr 344px; gap: 28px; padding-top: 12px; box-sizing: border-box">
+    <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+      <div class="cp" style="font-size: 12px; color: #545A52">{{dDate}}</div>
+      <div style="font-size: 21px; font-weight: 600; line-height: 1.15">{{dTitle}}</div>
+      <p style="margin: 0; font-size: 14px; line-height: 1.45">{{dTerms}}</p>
+      <div class="cp" style="font-size: 11px; color: #545A52; display: {{dSrcDisp}}">{{dSrc}}</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+      <div class="sc" style="color: #545A52">{{dMidHead}}</div>
+      <sc-for list="{{dState}}" as="st" hint-placeholder-count="3">
+        <div style="display: grid; grid-template-columns: 124px 1fr; gap: 10px; align-items: baseline; padding: 4px 0; border-bottom: 1px solid #C5CDBF">
+          <span class="sc" style="font-size: 10px; color: #1E211D">{{st.lane}}</span>
+          <span style="display: flex; align-items: center; gap: 8px; min-width: 0">
+            <span class="cp" style="font-size: 12.5px; color: #545A52">{{st.before}}</span>
+            <span class="cp" style="font-size: 12.5px; color: #1E211D; display: {{st.arrowDisp}}">→</span>
+            <span class="sw {{st.sw}}"></span>
+            <span class="cp" style="font-size: 12.5px; color: {{st.ink}}; font-style: {{st.style}}">{{st.after}}</span>
+            <span class="cp" style="display: {{st.vDisp}}; flex: none; font-size: 10px; line-height: 12px; padding: 0 5px; border: 1.5px solid #545A52; color: #545A52">verify</span>
+          </span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+      <div class="sc" style="color: #545A52">{{dRightHead}}</div>
+      <div style="display: flex; gap: 8px; align-items: flex-start">
+        <span class="sw {{dValidSw}}" style="margin-top: 3px; display: {{dValidSwDisp}}"></span>
+        <span style="font-size: 14px; line-height: 1.4">{{dValid}}</span>
+      </div>
+      <div style="display: {{dVerifyDisp}}"><span class="cp" style="font-size: 10px; line-height: 12px; padding: 0 5px; border: 1.5px solid #545A52; color: #545A52">{{dVerify}}</span></div>
+      <div style="display: {{dBranchDisp}}; flex-direction: column; gap: 4px; padding: 7px 10px; border: 1.5px solid #3B5670; border-left: 4px solid #3B5670; background: transparent">
+        <span class="cp" style="font-size: 11px; font-weight: 700; color: #3B5670">YOUR BRANCH · diverged Jul 2024 · not reality</span>
+        <span class="cp" style="font-size: 12px; font-style: italic; line-height: 1.35; color: #3B5670">{{dBranch}}</span>
+      </div>
+    </div>
+  </section>
+
+  <footer style="position: absolute; left: 28px; right: 28px; top: 852px; height: 40px; display: flex; align-items: center; gap: 20px; border-top: 1px solid #C5CDBF">
+    <span style="font-size: {{capSize}}px; font-weight: {{capWeight}}; font-style: {{capStyle}}; color: {{capInk}}">{{caption}}</span>
+    <span style="flex: 1"></span>
+    <span class="cp" style="display: {{legendDisp}}; align-items: center; gap: 14px; font-size: 11px; color: #1E211D">
+      <span style="display: inline-flex; align-items: center; gap: 5px"><span class="sw x-obs"></span>reported</span>
+      <span style="display: inline-flex; align-items: center; gap: 5px"><span class="sw x-com"></span>computed</span>
+      <span style="display: inline-flex; align-items: center; gap: 5px"><span class="sw x-mod"></span>hatched = modeled</span>
+      <span style="display: inline-flex; align-items: center; gap: 5px"><span class="sw x-unk"></span>unknown</span>
+    </span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  glyphs() {
+    return {
+      P: 'M10.6 5 A2.6 2.6 0 1 1 5.4 5 A2.6 2.6 0 1 1 10.6 5 Z M3 14.5 C3 10.8 5.2 9.2 8 9.2 C10.8 9.2 13 10.8 13 14.5',
+      M: 'M1.5 4.5 H14.5 V11.5 H1.5 Z M10 8 A2 2 0 1 1 6 8 A2 2 0 1 1 10 8 Z',
+      R: 'M1.5 8 L6 3.5 H14.5 V12.5 H6 Z M7 8 A1.1 1.1 0 1 1 4.8 8 A1.1 1.1 0 1 1 7 8 Z',
+      I: 'M1 8 C3.5 4 12.5 4 15 8 C12.5 12 3.5 12 1 8 Z M10 8 A2 2 0 1 1 6 8 A2 2 0 1 1 10 8 Z',
+      O: 'M3 1.5 H10 L13 4.5 V14.5 H3 Z M5.5 7 H10.5 M5.5 9.5 H10.5 M5.5 12 H8.5',
+      V: 'M2 2 H14 V14 H2 Z M4.5 8.5 L7 11 L11.5 5',
+      '': ''
+    };
+  }
+
+  data() {
+    const legal = { tex: 'com', l: [['V', 'legal under', 0], ['', 'apron rules', 0]] };
+    const capTeam = { tex: 'com', l: [['O', 'cap $154.6M', 0], ['O', 'tax $187.9M', 0], ['O', '2nd apr $207.8M', 0]] };
+    const infoIn = { tex: 'unk', l: [['I', '+ news: re-value', 0], ['', 'Boston’s players', 0]] };
+    const trBr = (teams) => {
+      const c = { 1: ['re-check: UNKNOWN', 'x-bunk'] };
+      teams.forEach((j) => { c[j] = ['legal? UNKNOWN', 'x-bunk']; });
+      return c;
+    };
+    // one-for-one trades where Boston takes back LESS salary than it sends: no apron line can block that, so legality is computed;
+    // whether the clubs would still have agreed is a different question, and it stays UNKNOWN
+    const shedBr = (other) => {
+      const c = { 1: ['still legal (COMPUTED)', 'x-bcom'], 3: ['still legal (COMPUTED)', 'x-bcom'] };
+      c[other] = ['would it happen? UNKNOWN', 'x-bunk'];
+      return c;
+    };
+    const shedNote = 'Lower aprons cannot block this: Boston takes back less salary than it sends (COMPUTED, still legal). Would both clubs still have agreed? UNKNOWN.';
+    const trNote = 'Three teams, and Brooklyn’s legs are not shown here, so legality under lower aprons cannot be computed: UNKNOWN. The branch does not assert it.';
+    return [
+      { id: 'cba', date: 'Jul 2023', title: 'Collective bargaining agreement', rowTitle: 'Labor agreement (CBA)', sub: 'League ↔ players', src: 'reported 2023 · verify', rowSrc: 'reported · verify', types: ['O'],
+        bound: [1, 2], cells: { 1: { tex: 'obs', l: [['O', 'binds: 2nd apron', 1], ['O', 'cap rise ≤ 10%/yr', 1]] }, 2: { tex: 'obs', l: [['O', 'binds players', 1], ['O', 'to the same rules', 1]] } },
+        dDate: 'Effective 1 Jul 2023 · reported, verify',
+        terms: 'One contract between the league and the players’ union governs the whole sport. It adds a second apron — a payroll line above which a club loses trade and signing tools — and lets the cap rise at most 10% a season.',
+        state: [['LEAGUE OFFICE', '2017 rules', '2023 rules', 'obs'], ['NBPA', '2017 rules', '2023 rules', 'obs'], ['EVERY TEAM', 'one apron', 'two aprons', 'obs']],
+        valid: ['Ratified by team owners and by the players, 2023 [verify date].', 'obs'],
+        brNote: 'Before the divergence — the same in both.' },
+      { id: 'media', date: 'Jul 2024', title: 'Media rights, 11 years', sub: 'League ↔ networks', src: 'announced Jul 2024 · verify', rowSrc: 'announced · verify', types: ['R', 'M'],
+        bound: [0, 1], cells: { 0: { tex: 'obs', l: [['R', '+ games ’25–’36', 0], ['M', '− ≈ $76B total', 1]] }, 1: { tex: 'obs', l: [['M', '+ ≈ $76B total', 0], ['R', '− game rights', 1]] } },
+        dDate: 'Announced Jul 2024 · starts 2025–26 · reported, verify',
+        terms: 'Disney/ESPN, NBC and Amazon: eleven years, about $76 billion in total — about $6.9 billion a year (computed: 76 ÷ 11). They buy the right to show games. No team signs it.',
+        state: [['MEDIA PARTNERS', 'no NBA rights', 'games 2025–26 to 2035–36', 'obs'], ['LEAGUE OFFICE', '≈ $2.7B a year [verify]', '≈ $6.9B a year', 'com'], ['EVERY TEAM', 'not a party', 'follow the line to the cap row', 'com']],
+        valid: ['A contract between the league and each partner. No team signs it — yet every team is bound by what follows.', 'obs'],
+        br: { 0: ['flat (assumed)', 'x-baut'], 1: ['revenue flat', 'x-baut'] },
+        brState: [['MEDIA PARTNERS', 'no NBA rights', 'rights at a flat price (assumed)', 'aut'], ['LEAGUE OFFICE', '≈ $2.7B a year', 'stays flat (assumed)', 'aut'], ['EVERY TEAM', 'not a party', 'follow the line to the cap row', 'com']],
+        brNote: 'Premise (yours, not the record’s): the deal renews at about the old price.' },
+      { id: 'tatum', date: '12 May 2025', title: 'Tatum’s Achilles', sub: 'information only', src: 'game reports · verify', rowSrc: 'reports · verify', types: ['I'], info: true,
+        bound: [3, 4, 5, 6], cells: { 3: { tex: 'obs', l: [['I', 'Tatum: torn', 0], ['I', 'right Achilles', 0], ['', 'G4 vs New York', 0]] }, 4: infoIn, 5: infoIn, 6: infoIn },
+        dDate: '12 May 2025 · Game 4 vs New York · reported',
+        terms: 'Nothing is signed and no money moves. The news crosses every boundary anyway: each desk re-values Boston’s roster, its contracts and its picks.',
+        state: [['CELTICS', 'Tatum available', 'out; return date UNKNOWN then', 'unk'], ['OTHER TEAMS', 'their view of Boston', 'changed — by how much: UNKNOWN', 'unk']],
+        valid: ['No rule needed. Information crosses without a signature.', 'obs'],
+        brNote: 'Unaffected: information, not money. The same in both.' },
+      { id: 'cap', date: 'Jun 2025', title: '2025–26 cap lines', sub: 'League → every team', src: 'NBA.com Jun 2025 · verify', rowSrc: 'NBA.com · verify', types: ['O', 'M'],
+        bound: [1, 3, 4, 5, 6, 7], cells: { 1: { tex: 'com', l: [['V', 'COMPUTED by the', 0], ['', 'CBA formula', 0], ['M', 'from revenue', 0]] }, 3: capTeam, 4: capTeam, 5: capTeam, 6: capTeam,
+          7: { tex: 'com', l: [['O', 'max deals are a', 0], ['', 'share of the cap', 0]] } },
+        dDate: 'Set Jun 2025 for the 2025–26 season · reported, verify',
+        terms: 'Salary cap ≈ $154.6M, up 10% — the most smoothing allows. Tax line ≈ $187.9M · first apron ≈ $195.9M · second apron ≈ $207.8M.',
+        state: [['EVERY TEAM', 'cap ≈ $140.6M [verify]', 'cap ≈ $154.6M', 'com'], ['EVERY TEAM', '2nd apron ≈ $188.9M [verify]', '2nd apron ≈ $207.8M', 'com'], ['A PLAYER’S AGENT', 'max contract, 2024–25', 'rises with the cap', 'com']],
+        valid: ['COMPUTED — the CBA formula turns league revenue into these lines; smoothing holds the rise to 10%.', 'com'],
+        br: { 1: ['slower growth', 'x-mod'], 3: ['cap: lower · range', 'x-mod'], 4: ['cap: lower · range', 'x-mod'], 5: ['cap: lower · range', 'x-mod'], 6: ['cap: lower · range', 'x-mod'], 7: ['max: lower', 'x-mod'] },
+        brState: [['EVERY TEAM', 'cap ≈ $140.6M', 'MODELED: below $154.6M — not computed', 'mod'], ['EVERY TEAM', '2nd apron ≈ $188.9M', 'MODELED: below $207.8M — not computed', 'mod'], ['A PLAYER’S AGENT', 'max contract, 2024–25', 'MODELED: rises less', 'mod']],
+        brNote: 'Illustrative — cap growth would follow revenue under the CBA formula; exact values not computed here.' },
+      { id: 'holiday', date: 'Jul 2025', title: 'Holiday ↔ Simons', sub: 'agreed late Jun', src: 'press reports · verify', rowSrc: 'press · verify', types: ['P', 'O', 'R'],
+        bound: [1, 3, 4], cells: { 1: legal, 3: { tex: 'obs', l: [['P', '− Holiday', 1], ['P', '+ Simons', 0], ['R', '+ 2 × 2nd-rd', 0]] }, 4: { tex: 'obs', l: [['P', '+ Holiday', 0], ['P', '− Simons', 1], ['R', '− 2 × 2nd-rd', 1]] } },
+        dDate: 'Agreed late Jun 2025 · Boston ↔ Portland · reported, verify',
+        terms: 'Boston sends Jrue Holiday. Portland sends Anfernee Simons and two second-round picks.',
+        state: [['CELTICS', 'Holiday ≈ $32.4M [verify]', 'Simons ≈ $27.7M, expiring', 'obs'], ['CELTICS', 'payroll', '≈ −$4.7M (computed)', 'com'], ['TRAIL BLAZERS', 'Simons + 2 picks', 'Holiday', 'obs']],
+        valid: ['League office: trade legal under apron rules — COMPUTED.', 'com'],
+        br: shedBr(4), brState: [['LEAGUE OFFICE', 'legal (recorded)', 'still legal (COMPUTED)', 'bcom'], ['CELTICS', 'sends ≈$32.4M, gets ≈$27.7M', 'not blocked (COMPUTED) [verify]', 'bcom'], ['TRAIL BLAZERS', 'as recorded', 'would it still happen? UNKNOWN', 'bunk']],
+        brNote: shedNote },
+      { id: 'kp', date: 'Jul 2025', title: 'Porziņģis to Atlanta', sub: '3-team, w/ Brooklyn', src: 'NBA.com, Hoops Rumors · verify', rowSrc: 'NBA.com · verify', types: ['P', 'O', 'R'],
+        bound: [1, 3, 5], cells: { 1: legal, 3: { tex: 'obs', l: [['P', '− Porziņģis', 1], ['P', '+ Niang', 0], ['R', '+ ’31 2nd, − ’26', 0]] }, 5: { tex: 'obs', l: [['P', '+ Porziņģis', 0], ['', 'other legs via', 0], ['', 'Brooklyn', 0]] } },
+        dDate: 'Agreed late Jun 2025 · three-team deal · reported, verify details',
+        terms: 'Boston sends Kristaps Porziņģis to Atlanta and a 2026 second-round pick, and receives Georges Niang and a 2031 second-round pick. Brooklyn is the third team; its legs are not shown here.',
+        state: [['CELTICS', 'Porziņģis + ’26 2nd', 'Niang + ’31 2nd', 'obs'], ['CELTICS', 'over the 2nd apron', 'under it after both June deals [reported, verify]', 'obs'], ['HAWKS', '—', '+ Porziņģis', 'obs']],
+        valid: ['League office: trade legal under apron rules — COMPUTED.', 'com'],
+        br: trBr([3, 5]), brState: [['LEAGUE OFFICE', 'legal (recorded)', 're-check: UNKNOWN', 'bunk'], ['CELTICS', 'as recorded', 'may not have happened: UNKNOWN', 'bunk'], ['HAWKS', 'as recorded', 'may not have happened: UNKNOWN', 'bunk']],
+        brNote: trNote },
+      { id: 'vuc', date: '5 Feb 2026', title: 'Simons ↔ Vučević', sub: 'Boston ↔ Chicago', src: 'Hoops Rumors · verify', rowSrc: 'Hoops Rumors, verify', types: ['P', 'O', 'R', 'M'],
+        bound: [1, 3, 6], cells: { 1: legal, 3: { tex: 'obs', l: [['P', '− Simons, a 2nd', 1], ['P', '+ Vučević, a 2nd', 0], ['M', 'tax $39.5M→$17M', 0]] }, 6: { tex: 'obs', l: [['P', '+ Simons, a 2nd', 0], ['P', '− Vučević, a 2nd', 1]] } },
+        dDate: '5 Feb 2026 · Boston ↔ Chicago · reported (source noted in BOW repo), verify',
+        terms: 'Boston sends Anfernee Simons (≈ $27.7M, expiring) and a second-round pick. Chicago sends Nikola Vučević (≈ $21.5M, expiring) and a future second.',
+        state: [['CELTICS', 'tax bill ≈ $39.5M', '≈ $17M (reported)', 'obs'], ['CELTICS', 'over the 1st apron', 'under it (reported)', 'obs'], ['BULLS', 'Vučević + a 2nd', 'Simons + a 2nd', 'obs']],
+        valid: ['League office: trade legal under apron rules — COMPUTED.', 'com'],
+        br: shedBr(6), brState: [['LEAGUE OFFICE', 'legal (recorded)', 'still legal (COMPUTED)', 'bcom'], ['CELTICS', 'sends ≈$27.7M, gets ≈$21.5M', 'not blocked (COMPUTED) [verify]', 'bcom'], ['BULLS', 'as recorded', 'would it still happen? UNKNOWN', 'bunk']],
+        brNote: shedNote }
+    ];
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const sel = s.sel || null;
+    const how = !!s.how;
+    const wi = !!s.wi;
+    const fl = s.fl || {};
+    const active = ['M', 'P', 'R', 'I'].filter((k) => fl[k]);
+    const G = this.glyphs();
+    const INK = '#1E211D', RED = '#A3261C', GREY = '#545A52', BR = '#3B5670';
+    const LW = 155, L0 = 144, TOP = 170, RH = 66;
+    const D = this.data();
+    const lit = sel === 'media';
+    const people = !!fl.P;
+
+    const FIL = [['M', 'money'], ['P', 'people'], ['R', 'rights'], ['I', 'information']];
+    const filters = FIL.map((f) => ({
+      label: f[1], d: G[f[0]], pressed: fl[f[0]] ? 'true' : 'false',
+      bg: fl[f[0]] ? INK : 'transparent', fg: fl[f[0]] ? '#EEF1EA' : INK,
+      pick: () => { const n = Object.assign({}, fl); n[f[0]] = !n[f[0]]; this.setState({ fl: n }); }
+    }));
+
+    const LANES = [['Media partners', 'ESPN, NBC, Amazon'], ['League office', 'NBA'], ['NBPA', 'players’ union'], ['Celtics', 'Boston'],
+      ['Trail Blazers', 'Portland'], ['Hawks', 'Atlanta'], ['Bulls', 'Chicago'], ['A player’s agent', 'any certified agent']];
+    const laneHeads = LANES.map((l, j) => ({ name: l[0], sub: l[1], x: 172 + LW * j + 7 }));
+    const rules = [0, 1, 2, 3, 4, 5, 6, 7, 8].map((j) => ({ x: 172 + LW * j }));
+
+    const rows = D.map((r, i) => {
+      const a = Math.min.apply(null, r.bound), b = Math.max.apply(null, r.bound);
+      const segs = [];
+      for (let j = a; j <= b; j++) {
+        const left = L0 + LW * j, cx = left + LW / 2;
+        const x0 = j === a ? cx : left, x1 = j === b ? cx : left + LW;
+        const isB = r.bound.indexOf(j) >= 0;
+        segs.push({ x: x0, w: Math.max(0, x1 - x0), b: r.info ? '1.5px dotted ' + INK : (isB ? '2px solid ' + INK : '1px dashed #8E978A') });
+      }
+      const brMap = r.br || {};
+      const cells = Object.keys(r.cells).map((k) => {
+        const j = Number(k), c = r.cells[k];
+        const br = brMap[j];
+        const showBr = wi && !!br;
+        const glow = lit && (r.id === 'media' || r.id === 'cap') ? '0 0 0 2px ' + INK : '0 0 0 0 rgba(0,0,0,0)';
+        return {
+          x: L0 + LW * j + 7, cls: 'x-' + c.tex, glow: glow,
+          op: showBr ? 0.28 : 1, lh: showBr ? 14 : 60, br: br ? br[0] : '', brCls: br ? br[1] : '', brOp: showBr ? 1 : 0,
+          lines: c.l.map((ln) => {
+            const t = ln[1];
+            let hl = 'transparent';
+            if (people && t.indexOf('Simons') >= 0) hl = 'rgba(163,38,28,0.16)';
+            else if (active.length && ln[0] && active.indexOf(ln[0]) >= 0) hl = 'rgba(30,33,29,0.10)';
+            return { d: G[ln[0]], t: t, ink: ln[2] ? RED : INK, hl: hl };
+          })
+        };
+      });
+      const match = !active.length || r.types.some((t) => active.indexOf(t) >= 0);
+      const on = sel === r.id;
+      return {
+        y: TOP + RH * i, op: match ? 1 : 0.16, segs: segs, cells: cells,
+        date: r.date, title: r.rowTitle || r.title, sub: how ? r.rowSrc : r.sub, subInk: how ? RED : GREY,
+        pressed: on ? 'true' : 'false', aria: 'Entry: ' + r.date + ', ' + r.title,
+        bg: on ? 'rgba(163,38,28,0.07)' : 'transparent', mark: on ? RED : 'transparent',
+        pick: () => this.setState({ sel: on ? null : r.id })
+      };
+    });
+
+    // consequence line: media row (League lane) → cap row → every team lane and the agent
+    // one continuous posting line: down the League lane gutter from the media bar, past the cap row, out along a bus, then into every team lane and the agent
+    const lx = 172 + LW + 3;
+    const fanX = [3, 4, 5, 6, 7].map((j) => 172 + LW * j + 3);
+    let consD = 'M' + lx + ' 268 V431 H' + fanX[fanX.length - 1];
+    let consHeads = 'M' + (lx - 5) + ' 330 L' + lx + ' 336 L' + (lx + 5) + ' 330';
+    fanX.forEach((x) => { consD += ' M' + x + ' 431 V629'; consHeads += ' M' + (x - 4) + ' 623 L' + x + ' 629 L' + (x + 4) + ' 623'; });
+    const threadD = 'M785 467 H790 V599 H785';
+
+    // detail strip
+    const r = D.find((x) => x.id === sel) || null;
+    const SW = { obs: 'x-obs', com: 'x-com', unk: 'x-unk', mod: 'x-mod', aut: 'x-baut', bcom: 'x-bcom', bunk: 'x-bunk' };
+    const inBranch = (k) => ['mod', 'aut', 'bcom', 'bunk'].indexOf(k) >= 0;
+    // a [verify] tag never sits inside a fact: it is lifted out into its own outlined chip
+    const VRE = /\s*\[[^\]]*verify[^\]]*\]/;
+    const stateOf = (list) => list.map((t) => ({
+      lane: t[0], before: t[1].replace(VRE, ''), after: t[2].replace(VRE, ''), sw: SW[t[3]], arrowDisp: t[1] ? 'inline' : 'none',
+      vDisp: VRE.test(t[1]) || VRE.test(t[2]) ? 'inline-block' : 'none',
+      ink: inBranch(t[3]) ? BR : INK, style: inBranch(t[3]) ? 'italic' : 'normal'
+    }));
+    const assume = 'Held as recorded: the CBA formula and every other entry. Real desks would not have held still.';
+    let d;
+    if (!r) {
+      d = {
+        dDate: 'THE LEDGER · 7 entries · 8 desks', dTitle: 'Who is bound by what, and since when',
+        dTerms: 'Each row is one dated entry. A bar starts and ends on the desks it binds; where it passes a desk it does not bind, it thins to a dashed bridge. Red ink is what leaves a desk or is owed by it.',
+        dSrc: '', dMidHead: 'How to read a posting',
+        dState: stateOf([['SOLID BOX', '', 'reported fact', 'obs'], ['TONED BOX', '', 'computed from rules', 'com'], ['DASHED BOX', '', 'unknown — marked, not filled', 'unk']]),
+        dRightHead: 'Try', dValid: 'Select Jul 2024 — the media deal — and watch where it lands. Then turn on WHAT IF?', dValidSw: 'x-obs', dValidSwDisp: 'none',
+        dVerify: '', dVerifyDisp: 'none',
+        dBranch: assume
+      };
+    } else {
+      d = {
+        dDate: r.dDate, dTitle: r.title, dTerms: r.terms, dSrc: 'Source: ' + r.src + ' · figures approximate',
+        dMidHead: wi && r.brState ? 'Your branch · before → after' : 'What changed · before → after',
+        dState: stateOf(wi && r.brState ? r.brState : r.state),
+        dRightHead: 'What made it valid', dValid: r.valid[0].replace(VRE, ''), dValidSw: SW[r.valid[1]], dValidSwDisp: 'inline-block',
+        dVerify: VRE.test(r.valid[0]) ? 'verify' + (/verify date/.test(r.valid[0]) ? ' · date' : '') : '', dVerifyDisp: VRE.test(r.valid[0]) ? 'block' : 'none',
+        dBranch: r.brNote + (r.id === 'media' ? ' ' + assume : '')
+      };
+    }
+
+    let caption, capBig = false;
+    if (lit) { caption = 'One contract between the league and broadcasters changes what every team can afford.'; capBig = true; }
+    else if (people) caption = 'Follow the people: Anfernee Simons crossed two boundaries in about seven months — Portland → Boston → Chicago.';
+    else if (wi) caption = 'The branch changes what could have been legal. It never rewrites what was.';
+    else if (r) caption = 'This entry binds ' + r.bound.length + ' desks. A dashed bridge crosses desks it does not bind.';
+    else caption = 'Select an entry. Every entry is posted once and binds only the desks it spans.';
+
+    return Object.assign({
+      toggleHow: () => this.setState({ how: !how }),
+      howPressed: how ? 'true' : 'false', howBg: how ? INK : 'transparent', howFg: how ? '#EEF1EA' : INK,
+      filters: filters, obligD: G.O,
+      toggleWhatIf: () => this.setState({ wi: !wi }),
+      whatIfPressed: wi ? 'true' : 'false', wiBg: wi ? BR : 'transparent', wiFg: wi ? '#EEF1EA' : BR,
+      branchOp: wi ? 1 : 0,
+      rules: rules, laneHeads: laneHeads, rows: rows,
+      consD: consD, consOff: lit ? 0 : 1, consHeads: consHeads, consOp: lit ? 1 : 0, consDl: lit ? 1300 : 0,
+      threadD: threadD, threadOp: people ? 1 : 0,
+      dSrcDisp: how && r ? 'block' : 'none', dBranchDisp: wi ? 'flex' : 'none',
+      caption: caption, capSize: capBig ? 18 : 14, capWeight: capBig ? 600 : 400, capStyle: capBig ? 'normal' : 'italic', capInk: capBig ? INK : GREY,
+      legendDisp: how ? 'inline-flex' : 'none'
+    }, d);
+  }
+}
+</script>
+</body>
+</html>

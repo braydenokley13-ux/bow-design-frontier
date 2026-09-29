@@ -1,0 +1,4 @@
+node_modules/
+tools/render/shots/
+tools/render/support.js
+*.bak

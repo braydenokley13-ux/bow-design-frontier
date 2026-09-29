@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Arrive</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAFAF7;color:#111;font-family:'Instrument Sans',sans-serif}
+button{font-family:'Instrument Sans',sans-serif;color:#111}
+input::placeholder{color:#8A8983;opacity:1}
+.serif{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400}
+.cap{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6B6B64}
+.acc{color:#2C3FD6}
+.scene{position:absolute;left:0;top:0;width:1440px;height:900px}
+.sc-hid{visibility:hidden;pointer-events:none}
+.sc-in-r{animation:inR .65s .22s cubic-bezier(.2,.7,.2,1) both}
+.sc-in-l{animation:inL .65s .22s cubic-bezier(.2,.7,.2,1) both}
+.sc-out-l{pointer-events:none;animation:outL .32s cubic-bezier(.5,0,.8,.4) both}
+.sc-out-r{pointer-events:none;animation:outR .32s cubic-bezier(.5,0,.8,.4) both}
+@keyframes inR{0%{opacity:0;transform:translateX(150px)}100%{opacity:1;transform:none}}
+@keyframes inL{0%{opacity:0;transform:translateX(-150px)}100%{opacity:1;transform:none}}
+@keyframes outL{0%{opacity:1;transform:none;visibility:visible}100%{opacity:0;transform:translateX(-150px);visibility:hidden}}
+@keyframes outR{0%{opacity:1;transform:none;visibility:visible}100%{opacity:0;transform:translateX(150px);visibility:hidden}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.15}}
+@keyframes hint{0%{opacity:0}18%{opacity:1}72%{opacity:1}100%{opacity:0}}
+.pulse{display:inline-block;width:8px;height:8px;border-radius:4px;background:#111;animation:pulse 1.6s infinite}
+.ghost{background:transparent;border:0;cursor:pointer;padding:0;transition:color .2s,opacity .3s}
+.ghost:hover{color:#2C3FD6}
+.ghost:focus-visible,.edge:focus-visible,.pill:focus-visible,.cta:focus-visible,.out:focus-visible,.chip:focus-visible,.sug:focus-visible,.seatb:focus-visible,.rb:focus-visible,.fbtn:focus-visible,.stab:focus-visible{outline:2px solid #2C3FD6;outline-offset:2px}
+.cta{min-height:48px;padding:0 22px;font-size:17px;font-weight:600;background:#2C3FD6;color:#fff;border:2px solid #2C3FD6;border-radius:0;cursor:pointer;transition:background .2s}
+.cta:hover{background:#1F2FB0}
+.out{min-height:48px;padding:0 22px;font-size:17px;font-weight:600;background:transparent;color:#111;border:2px solid #111;border-radius:0;cursor:pointer}
+.out:hover{background:#111;color:#FAFAF7}
+.chip{min-height:40px;padding:0 16px;font-size:16px;font-weight:500;border:1.5px solid #111;background:transparent;border-radius:0;cursor:pointer;transition:background .2s,color .2s}
+.chip:hover{background:#111;color:#FAFAF7}
+.fbtn{min-height:38px;padding:0 14px;font-size:14px;font-weight:600;border:1.5px solid #111;background:#FAFAF7;border-radius:0;cursor:pointer}
+.fbtn:hover{background:#111;color:#FAFAF7}
+.sug{display:flex;align-items:center;gap:14px;min-height:46px;padding:0;background:transparent;border:0;font-size:23px;font-weight:500;color:#6B6B64;text-align:left;cursor:pointer;transition:color .2s}
+.sug:hover{color:#111}
+.sug:hover .ar{color:#2C3FD6;transform:translateX(6px)}
+.ar{display:inline-block;transition:transform .25s,color .2s;color:#8A8983}
+.edge{position:absolute;padding:0;margin:0;border:0;background:transparent;cursor:pointer;pointer-events:auto}
+.rl{position:absolute;opacity:0;transition:opacity .2s}
+.edge:hover .rl,.edge:focus-visible .rl,.edge.on .rl,.edge:hover .el,.edge:focus-visible .el,.edge.on .el{opacity:1}
+.rl.hint,.el.hint{animation:hint 2.4s ease both}
+.rl-top{left:0;right:0;top:0;height:9px;background:linear-gradient(#111,#111) 0 0/100% 2px no-repeat,repeating-linear-gradient(90deg,#111 0 1px,transparent 1px 24px) 0 0/100% 9px no-repeat}
+.rl-bot{left:0;right:0;bottom:0;height:9px;background:linear-gradient(#111,#111) 0 100%/100% 2px no-repeat,repeating-linear-gradient(90deg,#111 0 1px,transparent 1px 24px) 0 100%/100% 9px no-repeat}
+.rl-left{left:0;top:0;bottom:0;width:9px;background:linear-gradient(#111,#111) 0 0/2px 100% no-repeat,repeating-linear-gradient(180deg,#111 0 1px,transparent 1px 24px) 0 0/9px 100% no-repeat}
+.rl-right{right:0;top:0;bottom:0;width:9px;background:linear-gradient(#111,#111) 100% 0/2px 100% no-repeat,repeating-linear-gradient(180deg,#111 0 1px,transparent 1px 24px) 100% 0/9px 100% no-repeat}
+.el{position:absolute;font-size:11px;font-weight:700;letter-spacing:.14em;color:#111;white-space:nowrap;opacity:0;transition:opacity .2s}
+.pn{position:absolute;background:#FFFFFF;box-sizing:border-box;transition:opacity .28s,transform .34s cubic-bezier(.2,.7,.2,1)}
+.fd{transition:opacity .5s}
+.sw{display:inline-block;width:18px;height:18px;box-sizing:border-box;flex:none}
+.t-obs{background:#111}
+.t-rec{background:#111;box-shadow:inset 0 0 0 2px #111,inset 0 0 0 4px #FAFAF7}
+.t-aut{background:transparent;border:2px solid #111}
+.t-com{background:#8F8E86}
+.t-gen{background:radial-gradient(circle,#111 1.1px,transparent 1.4px) 0 0/7px 7px;border:1px dotted #111}
+.t-unk{background:transparent;border:2px dashed #111}
+.t-brn{background:transparent;border:2px solid #2C3FD6}
+.t-his{background:#8F8E86}
+.wc-obs{background:#111}
+.wc-rec{background:#111;box-shadow:inset 0 0 0 2px #111,inset 0 0 0 4px #FAFAF7}
+.wc-mom{background:linear-gradient(#111 0 38%,#FAFAF7 38% 62%,#111 62%)}
+.wc-his{background:#8F8E86}
+.wc-gen{background:radial-gradient(circle,#111 1.1px,transparent 1.4px) 0 0/5px 5px;border:1px dotted #111}
+.wc-brn{background:transparent;border:2px solid #2C3FD6}
+.seatb{display:block;width:100%;box-sizing:border-box;text-align:left;padding:12px 14px;background:transparent;border-radius:0;cursor:pointer}
+.rb{position:absolute;padding:0;border:0;background:transparent;text-align:left;cursor:pointer}
+.rb:hover .rbn{color:#2C3FD6}
+.stab{background:#FAFAF7;border:2px dashed #2C3FD6;cursor:pointer;color:#2C3FD6;font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important;animation-duration:.01s!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #FAFAF7; color: #111; font-family: 'Instrument Sans', sans-serif">
+
+  <!-- SCENE 0 · ASK -->
+  <div class="scene {{sc.ask}}">
+    <span style="position:absolute;left:72px;top:34px;font-size:15px;font-weight:700;letter-spacing:.18em">BOW</span>
+    <p class="serif" style="position:absolute;left:72px;top:168px;width:1000px;margin:0;font-size:32px;line-height:1.2;color:#55544E">You won’t get a page back. You’ll be placed inside the state that answers.</p>
+    <input aria-label="Ask a question about a system" value="{{q}}" onChange="{{onQ}}" onKeyDown="{{onKey}}" placeholder="Ask a question." style="position:absolute;left:72px;top:236px;width:1296px;box-sizing:border-box;height:122px;font-family:'Instrument Sans',sans-serif;font-size:82px;font-weight:500;letter-spacing:-.03em;background:transparent;border:0;border-bottom:3px solid #111;border-radius:0;padding:0 0 8px;color:#111;outline-offset:6px">
+    <sc-if value="{{hasMsg}}" hint-placeholder-val="{{false}}">
+      <p class="serif" role="status" style="position:absolute;left:72px;top:372px;width:1000px;margin:0;font-size:26px;color:#2C3FD6">{{msg}}</p>
+    </sc-if>
+    <button type="button" class="cta" onClick="{{onAsk}}" style="position:absolute;right:72px;top:376px">Arrive</button>
+    <span class="cap" style="position:absolute;left:72px;top:446px">Or try one of these</span>
+    <div style="position:absolute;left:72px;top:474px;width:1100px">
+      <sc-for list="{{sugs}}" as="g" hint-placeholder-count="5">
+        <div style="display:flex;align-items:center;min-height:52px">
+          <button type="button" class="sug" onClick="{{g.pick}}"><span class="ar"><svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><path d="M0 7 H19 M13 1 L19 7 L13 13" fill="none" stroke="currentColor" stroke-width="2"></path></svg></span><span>{{g.q}}</span></button>
+          <span class="cap" style="margin-left:18px">{{g.tag}}</span>
+        </div>
+      </sc-for>
+    </div>
+    <p style="position:absolute;left:72px;top:790px;width:1000px;margin:0;font-size:14px;line-height:1.5;color:#6B6B64">Nothing is missing; it is out of the way. Once you have arrived, move to an edge: top, how do we know? · bottom, time · left, who am I? · right, what if.</p>
+  </div>
+
+  <!-- SCENE A1 · Reality cap sheet -->
+  <div class="scene {{sc.a1}}">
+    <span class="cap" style="position:absolute;left:72px;top:88px">Boston payroll · 2026–27 · approx.</span>
+    <div style="position:absolute;left:64px;top:106px;font-size:150px;font-weight:600;letter-spacing:-.045em;line-height:1">$203.6M</div>
+    <p class="serif" style="position:absolute;left:700px;top:118px;width:668px;margin:0;font-size:42px;line-height:1.12">Yes, by about <span class="acc">{{a1.gapSA}}</span>. It’s {{a1.gapTax}} past the tax line and {{a1.gapFA}} short of the first apron.</p>
+    <sc-for list="{{a1.lines}}" as="ln" hint-placeholder-count="4">
+      <div style="position:absolute;left:{{ln.x}}px;top:{{ln.top}}px;width:2px;height:{{ln.h}}px;background:#111"></div>
+      <span style="position:absolute;left:{{ln.lx}}px;top:{{ln.ly}}px;width:270px;text-align:{{ln.al}};font-size:12.5px;font-weight:700;letter-spacing:.07em">{{ln.t}}</span>
+    </sc-for>
+    <div style="position:absolute;left:72px;top:420px;width:{{a1.barW}}px;height:90px;background:#111;overflow:hidden;transition:width 1.1s cubic-bezier(.2,.7,.2,1)">
+      <span style="position:absolute;left:126px;top:12px;font-size:28px;font-weight:600;color:#FAFAF7;white-space:nowrap">Payroll ≈ $203.6M</span>
+      <span style="position:absolute;left:126px;top:56px;font-size:12.5px;color:#FAFAF7;white-space:nowrap">approx. · BOW Economics Live fixture · verify</span>
+      <sc-for list="{{a1.notches}}" as="nt" hint-placeholder-count="2">
+        <div style="position:absolute;left:{{nt.x}}px;top:0;width:4px;height:90px;background:#FAFAF7"></div>
+      </sc-for>
+      <div style="position:absolute;left:14px;top:-10px;width:3px;height:110px;background:#FAFAF7;transform:rotate(14deg)"></div>
+      <div style="position:absolute;left:24px;top:-10px;width:3px;height:110px;background:#FAFAF7;transform:rotate(14deg)"></div>
+    </div>
+    <div style="position:absolute;left:72px;top:518px;width:869px;height:40px;opacity:{{a1.stripOp}};transition:opacity .5s">
+      <sc-for list="{{a1.segs}}" as="sg" hint-placeholder-count="6">
+        <div style="position:absolute;left:{{sg.x}}px;top:0;width:{{sg.w}}px;height:40px;box-sizing:border-box;border-right:2px solid #FAFAF7;background:{{sg.bg}}"></div>
+        <span style="position:absolute;left:{{sg.lx}}px;top:{{sg.ly}}px;font-size:11.5px;font-weight:600;white-space:nowrap;color:{{sg.c}}">{{sg.t}}</span>
+      </sc-for>
+    </div>
+    <div style="position:absolute;left:940px;top:510px;width:2px;height:{{a1.plumbH}}px;background:#111;transition:height .6s .9s"></div>
+    <div style="position:absolute;left:0;top:0;width:1440px;height:900px;opacity:{{a1.gapOp}};transition:opacity .7s">
+      <div style="position:absolute;left:{{a1.b1.x}}px;top:616px;width:{{a1.b1.w}}px;height:8px;background:#8F8E86"></div>
+      <span style="position:absolute;left:{{a1.b1.tx}}px;top:606px;width:340px;text-align:right;font-size:17px;font-weight:500"><span style="background:#FAFAF7;padding:0 4px">+{{a1.gapTax}} past the tax line</span></span>
+      <div style="position:absolute;left:{{a1.b2.x}}px;top:654px;width:{{a1.b2.w}}px;height:8px;background:#8F8E86"></div>
+      <span style="position:absolute;left:{{a1.b2.tx}}px;top:644px;width:300px;font-size:17px;font-weight:500"><span style="background:#FAFAF7;padding:0 4px">{{a1.gapFA}} under the first apron</span></span>
+      <div style="position:absolute;left:{{a1.b3.x}}px;top:698px;width:{{a1.b3.w}}px;height:10px;background:#2C3FD6"></div>
+      <div style="position:absolute;left:{{a1.b3.x}}px;top:690px;width:2px;height:26px;background:#2C3FD6"></div>
+      <div style="position:absolute;left:{{a1.b3.x2}}px;top:690px;width:2px;height:26px;background:#2C3FD6"></div>
+      <span style="position:absolute;left:{{a1.b3.x}}px;top:722px;width:430px;font-size:30px;font-weight:600;letter-spacing:-.015em;color:#2C3FD6"><span style="background:#FAFAF7;padding:0 4px">{{a1.gapSA}} under the second apron</span></span>
+    </div>
+    <div style="position:absolute;left:72px;top:786px;width:1296px;height:1px;background:#111"></div>
+    <sc-for list="{{a1.ticks}}" as="tk" hint-placeholder-count="7">
+      <div style="position:absolute;left:{{tk.x}}px;top:786px;width:1px;height:7px;background:#111"></div>
+      <span style="position:absolute;left:{{tk.lx}}px;top:794px;width:60px;text-align:center;font-size:11.5px;color:#6B6B64">{{tk.t}}</span>
+    </sc-for>
+    <span style="position:absolute;left:72px;top:812px;font-size:11.5px;color:#6B6B64">axis starts at $160M, so the bar is cut where the two slashes are</span>
+  </div>
+
+  <!-- SCENE A2 · Moment, late Jun 2025 -->
+  <div class="scene {{sc.a2}}">
+    <div style="position:absolute;left:66px;top:96px;font-size:104px;font-weight:600;letter-spacing:-.045em;line-height:1;white-space:nowrap">Late June 2025</div>
+    <p class="serif" style="position:absolute;left:72px;top:216px;width:860px;margin:0;font-size:40px;line-height:1.12">The apron summer. What do you do about the payroll?</p>
+    <span class="cap" style="position:absolute;left:72px;top:318px">On the desk</span>
+    <sc-for list="{{a2.desk}}" as="dk" hint-placeholder-count="4">
+      <div style="position:absolute;left:72px;top:{{dk.y}}px;display:flex;align-items:center;gap:20px">
+        <span class="{{dk.cls}}" style="display:inline-block;width:26px;height:26px;box-sizing:border-box;flex:none"></span>
+        <span style="font-size:32px;font-weight:500;letter-spacing:-.015em">{{dk.a}}<span style="color:#6B6B64;font-weight:400"> · {{dk.b}}</span></span>
+      </div>
+    </sc-for>
+    <div style="position:absolute;left:72px;top:604px;width:858px;height:176px;box-sizing:border-box;border:{{a2.sealBorder}};padding:16px 22px">
+      <span class="cap">What Reality did next · {{a2.sealTag}}</span>
+      <p style="margin:8px 0 0;font-size:19px;line-height:1.35">{{a2.sealText}}</p>
+      <sc-if value="{{a2.canPeek}}" hint-placeholder-val="{{false}}">
+        <button type="button" class="out" onClick="{{a2.peek}}" style="margin-top:10px;min-height:40px;font-size:15px">Ask for hindsight</button>
+      </sc-if>
+    </div>
+    <div style="position:absolute;left:968px;top:100px;width:400px;height:680px;box-sizing:border-box;border:{{a2.frameBorder}};background:#FAFAF7;padding:22px 26px;transform:translateX({{a2.frameX}}px);transition:transform .6s cubic-bezier(.2,.7,.2,1)">
+      <sc-if value="{{a2.pre}}" hint-placeholder-val="{{true}}">
+        <div>
+          <span class="cap acc">Your branch · staged</span>
+          <div style="font-size:82px;font-weight:600;letter-spacing:-.045em;line-height:.95;margin:18px 0 16px;color:#2C3FD6">Cut here?</div>
+          <p style="margin:0 0 12px;font-size:19px;line-height:1.35">If Boston had kept Jrue Holiday. Nothing has forked. Reality stays as recorded whether you cut or not.</p>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.4;color:#55544E">Assumption, authored: Holiday is not traded. Everything else starts as recorded.</p>
+          <sc-if value="{{a2.canCut}}" hint-placeholder-val="{{true}}">
+            <div style="display:flex;gap:10px">
+              <button type="button" class="cta" onClick="{{a2.cut}}">Cut here</button>
+              <button type="button" class="out" onClick="{{a2.later}}" style="border-color:#2C3FD6;color:#2C3FD6">Not yet</button>
+            </div>
+          </sc-if>
+          <p style="position:absolute;left:26px;right:26px;bottom:22px;margin:0;font-size:13.5px;line-height:1.4;color:#55544E">A branch is drawn beside the record, never over it. The record stays on the left, exactly as written.</p>
+          <sc-if value="{{a2.cannotCut}}" hint-placeholder-val="{{false}}">
+            <p style="margin:0;padding:10px 12px;border:1.5px dashed #111;font-size:14px;line-height:1.4">Seat rule: an observer reads the record and cannot cut. Take the GM seat at the left edge to cut here.</p>
+          </sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{a2.post}}" hint-placeholder-val="{{false}}">
+        <div>
+          <span class="cap acc">Your branch</span>
+          <div style="font-size:58px;font-weight:600;letter-spacing:-.04em;line-height:1;margin:12px 0 14px;color:#2C3FD6">Holiday kept</div>
+          <div style="padding:8px 12px;border:1.5px solid #2C3FD6;font-size:13.5px;font-weight:600;line-height:1.35;color:#2C3FD6">YOUR BRANCH · cut 29 Sep 2026 · diverges from Reality at late Jun 2025{{a2.hind}}</div>
+          <span class="cap" style="display:block;margin-top:18px">Assumptions · authored, yours</span>
+          <p style="margin:6px 0 0;font-size:16px;line-height:1.4">Holiday is not traded to Portland, so Simons and the two second-round picks don’t arrive. Everything else begins as recorded until your next act.</p>
+          <div style="margin-top:18px;padding:12px 14px;border:2px dashed #2C3FD6;font-size:16px;line-height:1.35"><strong>Your branch’s future is sealed.</strong> You find out by living it.</div>
+          <p style="margin:16px 0 0;font-size:12.5px;line-height:1.4;color:#55544E">A deeper run of BOW model v0.3 on this branch is metered · not built here. Asking and arriving stay free.</p>
+        </div>
+      </sc-if>
+      <button type="button" class="stab" onClick="{{a2.again}}" aria-label="Bring back the staged branch: Cut here?" style="position:absolute;left:0;top:0;width:56px;height:100%;writing-mode:vertical-rl;font-size:22px;letter-spacing:.02em;opacity:{{a2.tabOp}};pointer-events:{{a2.tabPe}};transition:opacity .3s">Cut here?</button>
+    </div>
+  </div>
+
+  <!-- SCENE A3 · Your World, last possession -->
+  <div class="scene {{sc.a3}}">
+    <svg width="700" height="520" viewBox="0 0 700 520" style="position:absolute;left:72px;top:92px" aria-label="Coach’s diagram of the last possession">
+      <rect x="20" y="10" width="660" height="500" fill="none" stroke="#B4B3AA" stroke-width="2"></rect>
+      <rect x="245" y="10" width="210" height="250" fill="none" stroke="#B4B3AA" stroke-width="2"></rect>
+      <circle cx="350" cy="260" r="79" fill="none" stroke="#B4B3AA" stroke-width="2"></circle>
+      <path d="M 60 10 L 60 198 A 313 313 0 0 0 640 198 L 640 10" fill="none" stroke="#B4B3AA" stroke-width="2"></path>
+      <path d="M 297 80 A 53 53 0 0 0 403 80" fill="none" stroke="#B4B3AA" stroke-width="2"></path>
+      <line x1="311" y1="62" x2="389" y2="62" stroke="#111" stroke-width="3"></line>
+      <circle cx="350" cy="80" r="9" fill="none" stroke="#111" stroke-width="2.5"></circle>
+      <g style="opacity:{{a3.f0}};transition:opacity .5s"><line x1="338" y1="392" x2="356" y2="418" stroke="#111" stroke-width="5"></line></g>
+      <g style="opacity:{{a3.f1}};transition:opacity .5s" fill="none" stroke="#111" stroke-width="2" stroke-dasharray="6 5">
+        <path d="M 364 412 Q 372 372 340 336"></path>
+        <path d="M 328 352 Q 380 334 424 344"></path>
+      </g>
+      <g style="opacity:{{a3.f2}};transition:opacity .5s"><path d="M 442 366 L 330 168" fill="none" stroke="#111" stroke-width="2" stroke-dasharray="3 6"></path><path d="M 318 146 L 344 96" fill="none" stroke="#111" stroke-width="4"></path><path d="M 335 100 L 345 92 L 348 106" fill="none" stroke="#111" stroke-width="4"></path></g>
+      <g style="opacity:{{a3.link}};transition:opacity .5s"><ellipse cx="438" cy="356" rx="36" ry="38" fill="none" stroke="#2C3FD6" stroke-width="3.5"></ellipse><text x="482" y="352" font-size="17" font-weight="700" fill="#2C3FD6" font-family="Instrument Sans">a big on a guard</text></g>
+      <g style="transform:{{a3.p.o2}};transition:transform .9s cubic-bezier(.4,0,.2,1)"><circle r="14" fill="#FAFAF7" stroke="#111" stroke-width="2.5"></circle><text y="5" text-anchor="middle" font-size="14" font-weight="700" font-family="Instrument Sans">2</text></g>
+      <g style="transform:{{a3.p.o3}};transition:transform .9s cubic-bezier(.4,0,.2,1)"><circle r="14" fill="#FAFAF7" stroke="#111" stroke-width="2.5"></circle><text y="5" text-anchor="middle" font-size="14" font-weight="700" font-family="Instrument Sans">3</text></g>
+      <g style="transform:{{a3.p.o4}};transition:transform .9s cubic-bezier(.4,0,.2,1)"><circle r="14" fill="#FAFAF7" stroke="#111" stroke-width="2.5"></circle><text y="5" text-anchor="middle" font-size="14" font-weight="700" font-family="Instrument Sans">4</text></g>
+      <g style="transform:{{a3.p.o1}};transition:transform .9s cubic-bezier(.4,0,.2,1)"><circle r="14" fill="#FAFAF7" stroke="#111" stroke-width="2.5"></circle><text y="5" text-anchor="middle" font-size="14" font-weight="700" font-family="Instrument Sans">1</text></g>
+      <g style="transform:{{a3.p.o5}};transition:transform .9s cubic-bezier(.4,0,.2,1)"><circle r="17" fill="#111" stroke="#111" stroke-width="2.5"></circle><text y="5" text-anchor="middle" font-size="14" font-weight="700" fill="#FAFAF7" font-family="Instrument Sans">5</text><text x="24" y="5" font-size="15" font-weight="700" font-family="Instrument Sans">Jokić</text></g>
+      <g style="transform:{{a3.p.x2}};transition:transform .9s cubic-bezier(.4,0,.2,1)"><path d="M -9 -9 L 9 9 M 9 -9 L -9 9" stroke="#111" stroke-width="3.5"></path></g>
+      <g style="transform:{{a3.p.x3}};transition:transform .9s cubic-bezier(.4,0,.2,1)"><path d="M -9 -9 L 9 9 M 9 -9 L -9 9" stroke="#111" stroke-width="3.5"></path></g>
+      <g style="transform:{{a3.p.x4}};transition:transform .9s cubic-bezier(.4,0,.2,1)"><path d="M -9 -9 L 9 9 M 9 -9 L -9 9" stroke="#111" stroke-width="3.5"></path></g>
+      <g style="transform:{{a3.p.x1}};transition:transform .9s cubic-bezier(.4,0,.2,1)"><path d="M -9 -9 L 9 9 M 9 -9 L -9 9" stroke="#111" stroke-width="3.5"></path><text x="-52" y="26" font-size="12.5" font-weight="600" font-family="Instrument Sans">guard</text></g>
+      <g style="transform:{{a3.p.x5}};transition:transform .9s cubic-bezier(.4,0,.2,1)"><path d="M -12 -12 L 12 12 M 12 -12 L -12 12" stroke="#111" stroke-width="4.5"></path><text x="-46" y="-16" font-size="12.5" font-weight="600" font-family="Instrument Sans">big</text></g>
+      <g style="transform:{{a3.p.ball}};transition:transform .9s cubic-bezier(.4,0,.2,1)"><circle r="6" fill="#111"></circle></g>
+      <text x="34" y="500" font-size="12" font-family="Instrument Sans" fill="#55544E">positions illustrative (authored); the screen, the switch and the score are recorded events</text>
+    </svg>
+    <div style="position:absolute;left:104px;top:548px;font-size:19px;font-weight:700;letter-spacing:-.005em">{{a3.cap1}}</div>
+    <div role="group" aria-label="Frames of the last possession" style="position:absolute;left:72px;top:618px;display:flex;gap:8px">
+      <sc-for list="{{a3.frames}}" as="fr" hint-placeholder-count="3">
+        <button type="button" class="fbtn" onClick="{{fr.pick}}" aria-pressed="{{fr.pressed}}" style="background:{{fr.bg}};color:{{fr.fg}}">{{fr.t}}</button>
+      </sc-for>
+    </div>
+    <p class="serif" style="position:absolute;left:72px;top:672px;width:700px;margin:0;font-size:34px;line-height:1.1">Boston lost by 3 because&nbsp;<span style="display:inline-block;min-width:120px;box-sizing:border-box;padding:0 10px;border:{{a3.slotBorder}};font-size:26px;vertical-align:1px;color:{{a3.slotColor}}">{{a3.slotText}}</span></p>
+    <div role="group" aria-label="Attach a because to something on the record" style="position:absolute;left:72px;top:738px;display:flex;gap:8px">
+      <sc-for list="{{a3.chips}}" as="ch" hint-placeholder-count="3">
+        <button type="button" class="chip" onClick="{{ch.pick}}" aria-pressed="{{ch.pressed}}" style="background:{{ch.bg}};color:{{ch.fg}}">{{ch.t}}</button>
+      </sc-for>
+    </div>
+    <span style="position:absolute;left:72px;top:786px;width:700px;font-size:12.5px;line-height:1.4;color:#55544E">{{a3.slotNote}}</span>
+
+    <div style="position:absolute;left:832px;top:96px;width:536px;box-sizing:border-box;padding:14px 22px 16px;background:#FAFAF7" class="t-rec-box">
+      <div style="border:2px solid #111;box-shadow:inset 0 0 0 4px #FAFAF7,inset 0 0 0 6px #111;padding:18px 26px;display:flex;justify-content:space-between;align-items:flex-end">
+        <div><span class="cap">Boston · your World</span><div style="font-size:46px;font-weight:600;letter-spacing:-.03em;line-height:1.05">Boston 112</div><div style="font-size:46px;font-weight:600;letter-spacing:-.03em;line-height:1.05">Denver 115</div></div>
+        <div style="text-align:right;font-size:14px;line-height:1.4"><strong>Year Two · Week 9</strong><br>home · final<br>20 recorded possessions</div>
+      </div>
+    </div>
+    <p class="serif" style="position:absolute;left:846px;top:296px;width:510px;margin:0;font-size:31px;line-height:1.12">Jokić scored on the last possession, after a switch left <span class="acc">a big on a guard</span>. Denver won by 3.</p>
+    <div style="position:absolute;left:846px;top:440px;width:510px;opacity:{{a3.evOp}};transition:opacity .4s;pointer-events:{{a3.evPe}}">
+      <span class="cap">Recorded in your World</span>
+      <sc-for list="{{a3.events}}" as="ev" hint-placeholder-count="3">
+        <div style="display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;padding:13px 0;border-top:1px solid #D5D4CC;font-size:18px;line-height:1.3"><span class="cap" style="padding-top:3px">{{ev.w}}</span><span>{{ev.t}}</span></div>
+      </sc-for>
+    </div>
+    <div style="position:absolute;left:846px;top:660px;width:510px;box-sizing:border-box;padding:14px 18px;opacity:{{a3.actOp}};transition:opacity .4s" class="t-gen">
+      <span class="cap" style="color:#111;background:#FAFAF7;padding:2px 6px">Actor model · Denver’s bench · generated</span>
+      <p style="margin:6px 0 0;font-size:18px;line-height:1.35;background:#FAFAF7;padding:4px 6px">Their read of the same possession: “Set the screen for the guard. If they switch, go to the five.” A generated read, not a quote and not a source.</p>
+    </div>
+    <div style="position:absolute;left:846px;top:440px;width:510px;height:350px;box-sizing:border-box;border:2px solid #2C3FD6;padding:18px 22px;background:#FAFAF7;opacity:{{a3.brOp}};transition:opacity .5s;pointer-events:none">
+      <span class="cap acc">Your branch</span>
+      <div style="font-size:46px;font-weight:600;letter-spacing:-.035em;line-height:1;color:#2C3FD6;margin:10px 0 12px">No switch</div>
+      <div style="padding:8px 12px;border:1.5px solid #2C3FD6;font-size:13.5px;font-weight:600;line-height:1.35;color:#2C3FD6">YOUR BRANCH · cut 29 Sep 2026 · diverges from your World at Week 9, possession 20 (before the switch)</div>
+      <p style="margin:14px 0 0;font-size:16px;line-height:1.4"><span class="cap">Assumption · authored, yours</span><br>Boston does not switch on the screen. Possessions 1–19 stay as recorded.</p>
+      <div style="margin-top:14px;padding:12px 14px;border:2px dashed #2C3FD6;font-size:16px;line-height:1.35"><strong>What happens on possession 20 is sealed.</strong> You find out by playing it, not by looking it up.</div>
+    </div>
+  </div>
+
+  <!-- SCENE A4 · 1985-86 -->
+  <div class="scene {{sc.a4}}">
+    <div style="position:absolute;left:60px;top:84px;font-size:236px;font-weight:600;letter-spacing:-.055em;line-height:1;white-space:nowrap">1985–86</div>
+    <div style="position:absolute;left:1000px;top:130px;width:368px;box-sizing:border-box;border:2px solid #111;padding:16px 20px">
+      <span class="cap" style="color:#111">Boston Celtics</span>
+      <div style="font-size:26px;font-weight:600;line-height:1.15;margin-top:6px">recorded history · nothing here changes</div>
+    </div>
+    <p class="serif" style="position:absolute;left:72px;top:322px;width:900px;margin:0;font-size:40px;line-height:1.12">That’s the 1985–86 Celtics as the record has them. It is finished, so there is no NOW to catch up to.</p>
+    <span class="cap" style="position:absolute;left:72px;top:452px">Roster · public record · verify</span>
+    <sc-for list="{{a4.roster}}" as="pl" hint-placeholder-count="6">
+      <div style="position:absolute;left:{{pl.x}}px;top:{{pl.y}}px;font-size:40px;font-weight:500;letter-spacing:-.02em;white-space:nowrap">{{pl.n}}</div>
+    </sc-for>
+    <div style="position:absolute;left:1000px;top:440px;font-size:124px;font-weight:600;letter-spacing:-.05em;line-height:1">67–15</div>
+    <span style="position:absolute;left:1004px;top:572px;font-size:16px;color:#55544E">regular season [verify]</span>
+    <span style="position:absolute;left:1004px;top:604px;font-size:28px;font-weight:600">Won the title <span style="font-size:14px;font-weight:400;color:#55544E">[verify]</span></span>
+    <div class="t-unk" style="position:absolute;left:72px;top:704px;width:1296px;height:64px;box-sizing:border-box;padding:0 22px;display:flex;align-items:center;font-size:17px">Payroll and cap in 1985–86: [verify: not in this prototype’s fixture]. Left as a hole, not guessed.</div>
+  </div>
+
+  <!-- SCENE A5 · Air network -->
+  <div class="scene {{sc.a5}}">
+    <p class="serif" style="position:absolute;left:72px;top:88px;width:1200px;margin:0;font-size:42px;line-height:1.12">The same aircraft flies the next leg, so a late arrival becomes a late departure. Slack absorbs some of it: <span class="acc">{{a5.slackTxt}}</span>.</p>
+    <span style="position:absolute;left:72px;top:236px;font-size:12px;font-weight:700;letter-spacing:.1em;color:#2C3FD6">ONE AIRCRAFT</span>
+    <sc-for list="{{a5.threads}}" as="th" hint-placeholder-count="2">
+      <div class="fd" style="position:absolute;left:{{th.x}}px;top:{{th.y}}px;width:{{th.w}}px;height:3px;background:#2C3FD6;opacity:{{th.op}}"></div>
+    </sc-for>
+    <sc-for list="{{a5.nodes}}" as="nd" hint-placeholder-count="10">
+      <div class="fd" style="position:absolute;left:{{nd.x}}px;top:{{nd.y}}px;width:11px;height:11px;border-radius:6px;background:#2C3FD6;opacity:{{nd.op}}"></div>
+    </sc-for>
+    <sc-for list="{{a5.sched}}" as="sb" hint-placeholder-count="8">
+      <div class="fd" style="position:absolute;left:{{sb.x}}px;top:{{sb.y}}px;width:{{sb.w}}px;height:44px;box-sizing:border-box;border:2px solid #111;padding:3px 7px;opacity:{{sb.op}};overflow:hidden"><div style="font-size:14px;font-weight:700;white-space:nowrap">{{sb.n}}</div><div style="font-size:11.5px;color:#55544E;white-space:nowrap">sched {{sb.t}}</div></div>
+    </sc-for>
+    <sc-for list="{{a5.act}}" as="ab" hint-placeholder-count="8">
+      <div class="fd t-gen" style="position:absolute;left:{{ab.x}}px;top:{{ab.y}}px;width:{{ab.w}}px;height:40px;box-sizing:border-box;opacity:{{ab.op}}"></div>
+      <span class="fd" style="position:absolute;left:{{ab.x}}px;top:{{ab.ty}}px;font-size:12px;font-weight:600;white-space:nowrap;opacity:{{ab.op}}">actual {{ab.t}}</span>
+    </sc-for>
+    <sc-for list="{{a5.holds}}" as="hd" hint-placeholder-count="3">
+      <div class="fd" style="position:absolute;left:{{hd.x}}px;top:{{hd.y}}px;width:{{hd.w}}px;height:40px;box-sizing:border-box;border:2px solid #111;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;background:#FAFAF7;opacity:{{hd.op}}">{{hd.t}}</div>
+    </sc-for>
+    <sc-for list="{{a5.delays}}" as="dl" hint-placeholder-count="4">
+      <div class="fd" style="position:absolute;left:{{dl.x}}px;top:{{dl.y}}px;width:{{dl.w}}px;height:14px;background:#8F8E86;opacity:{{dl.op}}"></div>
+      <span class="fd" style="position:absolute;left:{{dl.tx}}px;top:{{dl.ty}}px;font-size:15px;font-weight:700;white-space:nowrap;opacity:{{dl.op}}">{{dl.t}}</span>
+    </sc-for>
+    <p class="fd" style="position:absolute;left:72px;top:430px;width:1296px;margin:0;font-size:22px;font-weight:500;line-height:1.3;opacity:{{a5.recOp}}">{{a5.recLine}}</p>
+    <div style="position:absolute;left:56px;top:470px;width:1328px;height:290px;box-sizing:border-box;border:{{a5.frameBorder}}"></div>
+    <sc-if value="{{a5.pre}}" hint-placeholder-val="{{true}}">
+      <div style="position:absolute;left:82px;top:490px;width:1000px">
+        <span class="cap acc">Your branch · staged</span>
+        <div style="font-size:64px;font-weight:600;letter-spacing:-.04em;line-height:1;color:#2C3FD6;margin:10px 0 10px">Cut here?</div>
+        <p style="margin:0 0 16px;width:760px;font-size:19px;line-height:1.35">If the PHL turn had 30 more minutes of slack. Nothing has forked; the row above stays as it is.</p>
+        <button type="button" class="cta" onClick="{{a5.cut}}">Cut here</button>
+      </div>
+    </sc-if>
+    <span class="cap acc fd" style="position:absolute;left:82px;top:487px;opacity:{{a5.postOp}}">Your branch</span>
+    <span class="fd" style="position:absolute;left:226px;top:480px;padding:5px 10px;border:1.5px solid #2C3FD6;font-size:13px;font-weight:700;color:#2C3FD6;opacity:{{a5.postOp}}">YOUR BRANCH · cut now · scratch, not saved · diverges at the PHL turn before leg 4 · +30 min slack, authored</span>
+    <p class="fd" style="position:absolute;left:82px;top:702px;width:1270px;margin:0;font-size:19px;line-height:1.3;opacity:{{a5.postOp}}">{{a5.brLine}}</p>
+    <div class="t-gen" style="position:absolute;left:72px;top:782px;box-sizing:border-box;padding:0 12px;height:32px;display:flex;align-items:center"><span style="background:#FAFAF7;padding:0 4px;font-size:13px">assembled for this question from BOW’s air-network model · not a reviewed system</span></div>
+  </div>
+
+  <!-- CHROME: absent until approached -->
+  <div style="position:absolute;left:0;top:20px;width:1440px;height:28px;display:flex;justify-content:center;align-items:center;gap:10px;pointer-events:none;z-index:45;opacity:{{whisper.op}};transition:opacity .4s">
+    <span class="{{whisper.chip}}" style="display:inline-block;width:14px;height:14px;box-sizing:border-box;flex:none"></span>
+    <span style="font-size:14px;letter-spacing:.01em;white-space:nowrap">{{whisper.text}}</span>
+    <sc-if value="{{whisper.live}}" hint-placeholder-val="{{false}}"><span class="pulse"></span><span style="font-size:14px;font-weight:600">live</span></sc-if>
+  </div>
+  <div style="position:absolute;left:20px;top:10px;height:40px;display:flex;align-items:center;gap:2px;z-index:40;visibility:{{chromeVis}}">
+    <button type="button" class="ghost" onClick="{{back}}" aria-label="Back to the previous arrival" style="width:40px;height:40px;opacity:{{backOp}}"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M11 2 L4 9 L11 16" fill="none" stroke="currentColor" stroke-width="2"></path></svg></button>
+    <button type="button" class="ghost" onClick="{{askAgain}}" style="height:40px;padding:0 8px;font-size:14px;color:#6B6B64;max-width:460px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" aria-label="Ask again. Current question: {{question}}">{{question}}</button>
+  </div>
+  <button type="button" class="ghost" onClick="{{share.toggle}}" aria-pressed="{{share.pressed}}" style="position:absolute;right:24px;top:10px;height:40px;padding:0 14px;font-size:14px;font-weight:600;z-index:40;visibility:{{chromeVis}};border-bottom:2px solid {{share.ul}}">Share</button>
+
+  <button type="button" aria-label="Close panel" onClick="{{closeEdge}}" style="position:absolute;left:0;top:0;width:1440px;height:900px;border:0;padding:0;background:transparent;cursor:default;z-index:20;display:{{scrimDisplay}}"></button>
+
+  <!-- SHARE: the address, pulled down as a readable coordinate -->
+  <div class="pn" style="left:0;top:0;width:1440px;height:268px;border-bottom:2px solid #111;padding:58px 72px 0;z-index:36;opacity:{{share.op}};transform:translateY({{share.ty}}px);visibility:{{share.vis}};pointer-events:{{share.pe}};transition:opacity .28s,transform .34s cubic-bezier(.2,.7,.2,1),visibility 0s linear {{share.vd}}s">
+    <div style="display:flex;justify-content:space-between;align-items:center;height:36px"><span class="cap" style="color:#111">Share · the address, read out as a coordinate</span><button type="button" class="ghost" onClick="{{closeEdge}}" style="min-height:36px;padding:0 10px;font-size:14px;font-weight:600">Close</button></div>
+    <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:24px;margin-top:8px">
+      <sc-for list="{{share.coords}}" as="c" hint-placeholder-count="5">
+        <div style="border-top:2px solid #111;padding-top:8px"><span class="cap">{{c.k}}</span><div style="font-size:21px;font-weight:600;line-height:1.2;margin-top:4px;letter-spacing:-.01em">{{c.v}}</div></div>
+      </sc-for>
+    </div>
+    <div style="display:flex;align-items:center;gap:18px;margin-top:16px"><span style="font-size:14px;color:#55544E">{{share.url}}</span><button type="button" class="out" onClick="{{share.copy}}" style="min-height:40px;font-size:15px;padding:0 16px">{{share.copyLabel}}</button></div>
+    <div class="rl rl-bot" style="opacity:1"></div>
+  </div>
+
+  <!-- TOP EDGE · how do we know? -->
+  <div onMouseLeave="{{top.leave}}" onBlur="{{top.blur}}" style="position:absolute;left:0;top:0;width:1440px;height:900px;pointer-events:none;z-index:30">
+    <button type="button" class="edge {{top.on}}" onMouseEnter="{{top.enter}}" onFocus="{{top.enter}}" onClick="{{top.click}}" aria-label="How do we know? Top edge: where what you see comes from" aria-expanded="{{top.open}}" style="left:300px;top:0;width:840px;height:36px;visibility:{{edgeVis}}"><span class="rl rl-top {{hint}}"></span><span class="el {{hint}}" style="left:0;right:0;top:14px;text-align:center">HOW DO WE KNOW?</span></button>
+    <div class="pn" style="left:0;top:0;width:1440px;height:{{tp.h}}px;border-bottom:2px solid #111;padding:58px 72px 0;opacity:{{top.op}};transform:translateY({{top.ty}}px);visibility:{{top.vis}};pointer-events:{{top.pe}};transition:opacity .28s,transform .34s cubic-bezier(.2,.7,.2,1),visibility 0s linear {{top.vd}}s">
+      <div style="display:flex;justify-content:space-between;align-items:center;height:36px"><span class="cap" style="color:#111">How do we know? · {{tp.sub}}</span><button type="button" class="ghost" onClick="{{closeEdge}}" style="min-height:36px;padding:0 10px;font-size:14px;font-weight:600">Close</button></div>
+      <sc-for list="{{tp.rows}}" as="r" hint-placeholder-count="5">
+        <div style="display:grid;grid-template-columns:22px 118px 500px minmax(0,1fr);gap:16px;align-items:start;padding:8px 0;border-top:1px solid #D5D4CC">
+          <span class="sw {{r.cls}}"></span>
+          <span class="cap" style="color:#111;padding-top:2px">{{r.tag}}</span>
+          <span style="font-size:15.5px;font-weight:600;line-height:1.3">{{r.claim}}</span>
+          <span style="font-size:13.5px;line-height:1.35;color:#55544E">{{r.how}}</span>
+        </div>
+      </sc-for>
+      <div class="rl rl-bot" style="opacity:1"></div>
+    </div>
+  </div>
+
+  <!-- LEFT EDGE · who am I? -->
+  <div onMouseLeave="{{left.leave}}" onBlur="{{left.blur}}" style="position:absolute;left:0;top:0;width:1440px;height:900px;pointer-events:none;z-index:30">
+    <button type="button" class="edge {{left.on}}" onMouseEnter="{{left.enter}}" onFocus="{{left.enter}}" onClick="{{left.click}}" aria-label="Who am I? Left edge: the seat you are in" aria-expanded="{{left.open}}" style="left:0;top:64px;width:36px;height:700px;visibility:{{edgeVis}}"><span class="rl rl-left {{hint}}"></span><span class="el {{hint}}" style="left:16px;top:300px;writing-mode:vertical-rl;transform:rotate(180deg)">WHO AM I?</span></button>
+    <div class="pn" style="left:0;top:64px;width:430px;height:700px;border-right:2px solid #111;padding:14px 26px 0 72px;opacity:{{left.op}};transform:translateX({{left.ty}}px);visibility:{{left.vis}};pointer-events:{{left.pe}};transition:opacity .28s,transform .34s cubic-bezier(.2,.7,.2,1),visibility 0s linear {{left.vd}}s">
+      <div style="display:flex;justify-content:space-between;align-items:center;height:36px"><span class="cap" style="color:#111">Who am I?</span><button type="button" class="ghost" onClick="{{closeEdge}}" style="min-height:36px;padding:0 10px;font-size:14px;font-weight:600">Close</button></div>
+      <p style="margin:6px 0 14px;font-size:15px;line-height:1.4;color:#55544E">The seat you take decides what you see and what you can do. Same state, different room.</p>
+      <sc-for list="{{lf.seats}}" as="st" hint-placeholder-count="3">
+        <button type="button" class="seatb" onClick="{{st.pick}}" aria-pressed="{{st.pressed}}" style="border:{{st.border}};margin-bottom:10px;background:{{st.bg}}">
+          <span style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:21px;font-weight:600">{{st.name}}</span><span class="cap" style="color:{{st.tagc}}">{{st.tag}}</span></span>
+          <span style="display:block;margin-top:5px;font-size:14.5px;line-height:1.35">{{st.can}}</span>
+          <span style="display:block;margin-top:3px;font-size:13.5px;line-height:1.35;color:#55544E">{{st.cant}}</span>
+        </button>
+      </sc-for>
+      <div class="rl rl-right" style="opacity:1"></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM EDGE · time -->
+  <div onMouseLeave="{{bot.leave}}" onBlur="{{bot.blur}}" style="position:absolute;left:0;top:0;width:1440px;height:900px;pointer-events:none;z-index:30">
+    <button type="button" class="edge {{bot.on}}" onMouseEnter="{{bot.enter}}" onFocus="{{bot.enter}}" onClick="{{bot.click}}" aria-label="Time. Bottom edge: this system’s moments" aria-expanded="{{bot.open}}" style="left:300px;top:824px;width:840px;height:36px;visibility:{{edgeVis}}"><span class="rl rl-bot {{hint}}"></span><span class="el {{hint}}" style="left:0;right:0;bottom:14px;text-align:center">TIME</span></button>
+    <div class="pn" style="left:0;top:596px;width:1440px;height:262px;border-top:2px solid #111;opacity:{{bot.op}};transform:translateY({{bot.ty}}px);visibility:{{bot.vis}};pointer-events:{{bot.pe}};transition:opacity .28s,transform .34s cubic-bezier(.2,.7,.2,1),visibility 0s linear {{bot.vd}}s">
+      <div style="position:absolute;left:72px;top:10px;right:72px;display:flex;justify-content:space-between;align-items:center;height:36px"><span class="cap" style="color:#111">Time · {{bt.sub}}</span><button type="button" class="ghost" onClick="{{closeEdge}}" style="min-height:36px;padding:0 10px;font-size:14px;font-weight:600">Close</button></div>
+      <div style="position:absolute;left:{{bt.solidL}}px;top:77px;width:{{bt.solidW}}px;height:3px;background:#111"></div>
+      <div style="position:absolute;left:{{bt.dashL}}px;top:77px;width:{{bt.dashW}}px;height:0;border-top:3px dashed #111"></div>
+      <div style="position:absolute;left:72px;top:68px;width:3px;height:21px;background:#111;opacity:{{bt.capOp}}"></div>
+      <div style="position:absolute;left:1368px;top:68px;width:3px;height:21px;background:#111;opacity:{{bt.capOp}}"></div>
+      <sc-if value="{{bt.hasNow}}" hint-placeholder-val="{{false}}">
+        <div><span class="pulse" style="position:absolute;left:{{bt.nowX}}px;top:72px;margin-left:-6px;width:13px;height:13px;border-radius:7px"></span><span style="position:absolute;left:{{bt.nowLx}}px;top:46px;width:200px;text-align:right;font-size:12px;font-weight:700;letter-spacing:.08em">NOW · 29 SEP 2026</span></div>
+      </sc-if>
+      <sc-if value="{{bt.hasPlay}}" hint-placeholder-val="{{false}}">
+        <div><span style="position:absolute;left:{{bt.playX}}px;top:68px;margin-left:-8px;width:16px;height:21px;background:#111"></span><span style="position:absolute;left:{{bt.playLx}}px;top:46px;width:200px;font-size:12px;font-weight:700;letter-spacing:.08em">YOU ARE HERE</span></div>
+      </sc-if>
+      <span style="position:absolute;left:{{bt.brkX}}px;top:62px;width:26px;height:30px;background:#FFFFFF;text-align:center;font-size:22px;line-height:30px;font-weight:700;opacity:{{bt.brkOp}}">≈</span>
+      <span style="position:absolute;left:{{bt.noteX}}px;top:{{bt.noteY}}px;width:250px;font-size:12px;line-height:1.3;color:#55544E;text-align:right">{{bt.note}}</span>
+      <sc-for list="{{bt.items}}" as="it" hint-placeholder-count="6">
+        <button type="button" class="rb" onClick="{{it.pick}}" aria-pressed="{{it.pressed}}" style="left:{{it.bx}}px;top:80px;width:150px;height:{{it.bh}}px">
+          <span style="position:absolute;left:5px;top:0;width:2px;height:{{it.th}}px;background:{{it.tc}};border-left:{{it.tb}}"></span>
+          <span style="position:absolute;left:0;top:{{it.ty}}px;width:150px">
+            <span class="cap" style="display:block;color:{{it.dc}}">{{it.date}}</span>
+            <span class="rbn" style="display:block;font-size:15px;font-weight:600;line-height:1.25;color:{{it.nc}}">{{it.name}}</span>
+          </span>
+        </button>
+      </sc-for>
+      <div style="position:absolute;left:72px;top:206px;width:1090px;font-size:17px;line-height:1.35"><span class="cap" style="margin-right:12px;color:#111">{{bt.rdDate}}</span>{{bt.rdText}}</div>
+      <sc-if value="{{bt.canGo}}" hint-placeholder-val="{{false}}">
+        <button type="button" class="cta" onClick="{{bt.go}}" style="position:absolute;right:72px;top:200px">Arrive here</button>
+      </sc-if>
+      <div class="rl rl-top" style="opacity:1"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT EDGE · what if -->
+  <div onMouseLeave="{{right.leave}}" onBlur="{{right.blur}}" style="position:absolute;left:0;top:0;width:1440px;height:900px;pointer-events:none;z-index:30">
+    <button type="button" class="edge {{right.on}}" onMouseEnter="{{right.enter}}" onFocus="{{right.enter}}" onClick="{{right.click}}" aria-label="What if? Right edge: the branch field" aria-expanded="{{right.open}}" style="left:1404px;top:64px;width:36px;height:700px;visibility:{{edgeVis}}"><span class="rl rl-right {{hint}}"></span><span class="el {{hint}}" style="right:16px;top:300px;writing-mode:vertical-rl">WHAT IF</span></button>
+    <div class="pn" style="left:1010px;top:64px;width:430px;height:700px;border-left:2px solid #111;padding:14px 72px 0 26px;opacity:{{right.op}};transform:translateX({{right.ty}}px);visibility:{{right.vis}};pointer-events:{{right.pe}};transition:opacity .28s,transform .34s cubic-bezier(.2,.7,.2,1),visibility 0s linear {{right.vd}}s">
+      <div style="display:flex;justify-content:space-between;align-items:center;height:36px"><span class="cap" style="color:#111">What if</span><button type="button" class="ghost" onClick="{{closeEdge}}" style="min-height:36px;padding:0 10px;font-size:14px;font-weight:600">Close</button></div>
+      <div style="margin-top:8px;border:{{rt.border}};padding:14px 16px">
+        <div style="font-size:23px;font-weight:600;letter-spacing:-.01em;line-height:1.15;color:{{rt.tc}}">{{rt.title}}</div>
+        <p style="margin:6px 0 0;font-size:14.5px;line-height:1.4">{{rt.body}}</p>
+        <sc-if value="{{rt.canCut}}" hint-placeholder-val="{{true}}"><button type="button" class="cta" onClick="{{rt.cut}}" style="margin-top:12px;min-height:44px;font-size:16px">{{rt.cutLabel}}</button></sc-if>
+      </div>
+      <span class="cap" style="display:block;margin-top:18px">Forks other people made</span>
+      <sc-for list="{{rt.forks}}" as="f" hint-placeholder-count="2">
+        <div style="margin-top:8px;border:1.5px solid #5A5A52;padding:10px 14px"><div style="font-size:17px;font-weight:600;color:#3D3D38">{{f.name}}</div><div style="font-size:12.5px;color:#55544E;margin-top:2px">{{f.stamp}}</div></div>
+      </sc-for>
+      <p style="margin:10px 0 0;font-size:12.5px;line-height:1.4;color:#55544E">{{rt.forkNote}}</p>
+      <div class="rl rl-left" style="opacity:1"></div>
+    </div>
+  </div>
+
+  <span style="position:absolute;left:28px;bottom:8px;width:800px;font-size:11px;line-height:1.35;color:#6B6B64;z-index:60">COMMERCIAL LENS · Hypothesis: asking and arriving is free (it spreads the medium); running deep models or persistent branches from an arrival is metered.</span>
+  <span style="position:absolute;right:28px;bottom:8px;width:540px;text-align:right;font-size:11px;line-height:1.35;color:#6B6B64;z-index:60">PROTOTYPE · DESIGN PROPOSAL · data: BOW Economics Live fixture, as of 29 Sep 2026, approx., verify before use</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      const s = this.state || {};
+      const patch = {};
+      const a = s.aT == null ? 99 : s.aT;
+      if (a < 20) patch.aT = a + 1;
+      if ((s.hintT || 0) > 0) patch.hintT = s.hintT - 1;
+      if (Object.keys(patch).length) this.setState(patch);
+    }, 500);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  resolve(q) {
+    const t = (q || '').toLowerCase();
+    if (/apron|roster|payroll|tax|salary cap/.test(t)) return 'a1';
+    if (/holiday|jrue|kept/.test(t)) return 'a2';
+    if (/denver|lose|lost|loss|jokic|jokić/.test(t)) return 'a3';
+    if (/1986|1985|86\b/.test(t)) return 'a4';
+    if (/airline|delay|flight|plane|aircraft/.test(t)) return 'a5';
+    return null;
+  }
+
+  go(id, isBack, extra) {
+    const s = this.state || {};
+    const cur = s.arr || 'ask';
+    if (id === cur) { this.setState({ edge: null, pin: false }); return; }
+    const stack = (s.stack || []).slice();
+    if (!isBack) stack.push(cur);
+    this.setState(Object.assign({ arr: id, prev: cur, dir: isBack ? -1 : 1, an: (s.an || 0) + 1, aT: 0, hintT: 5, edge: null, pin: false, stack: stack, msg: '', railSel: null, fu: null, because: null, retr: false, copied: false }, extra || {}));
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const cur = s.arr || 'ask';
+    const prev = s.prev || null;
+    const dir = s.dir || 1;
+    const aT = s.aT == null ? 99 : s.aT;
+    const seatMap = Object.assign({ a1: 'observer', a2: 'gm', a3: 'gm', a4: 'observer', a5: 'dispatcher' }, s.seat || {});
+    const cut = s.cut || {};
+    const peek = s.peek || {};
+    const edge = s.edge || null;
+    const pin = !!s.pin;
+    const fmt = (v) => '$' + v.toFixed(1) + 'M';
+    const R = Math.round;
+    const seat = seatMap[cur] || '';
+
+    const QS = {
+      a1: 'Can Boston keep this roster under the second apron?',
+      a2: 'What if Boston had kept Jrue Holiday?',
+      a3: 'Why did we lose to Denver?',
+      a4: 'Show me Boston in 1986',
+      a5: 'Why do airline delays spread?'
+    };
+    const scls = (id) => id === cur ? (s.an ? 'sc-in-' + (dir > 0 ? 'r' : 'l') : '') : (id === prev ? 'sc-out-' + (dir > 0 ? 'l' : 'r') : 'sc-hid');
+    const sc = {};
+    ['ask', 'a1', 'a2', 'a3', 'a4', 'a5'].forEach((k) => { sc[k] = scls(k); });
+
+    // ---------- ASK ----------
+    const SUGS = ['a1', 'a2', 'a3', 'a4', 'a5'].map((k) => ({
+      q: QS[k], tag: k === 'a5' ? 'not sports' : '',
+      pick: () => this.go(k, false, { q: QS[k] })
+    }));
+    const onAsk = () => {
+      const q = (this.state || {}).q || '';
+      const r = this.resolve(q);
+      if (r) this.go(r, false);
+      else this.setState({ msg: q.trim() ? 'No arrival is built for that. Prototype rule (authored): five questions are built. Pick one below.' : 'Type a question, or pick one below.' });
+    };
+
+    // ---------- A1 · Reality cap sheet ----------
+    const PAY = 203.6, CAP = 164.961, TAX = 200.428, FA = 209.015, SA = 221.686;
+    const X1 = (v) => 72 + (v - 160) * (1296 / 65);
+    const barEnd = X1(PAY);
+    const capo = seatMap.a1 === 'capologist';
+    const named = [['Tatum', 58.5], ['Brown', 57.1], ['White', 30.3], ['Hauser', 10.8], ['Pritchard', 7.8]];
+    const restV = PAY - named.reduce((a, b) => a + b[1], 0);
+    const scale = (barEnd - 72) / PAY;
+    let acc = 0;
+    const segs = named.concat([['rest of roster', restV]]).map((n, i) => {
+      const x = acc * scale, w = n[1] * scale; acc += n[1];
+      const wide = w > 110;
+      const label = n[0] + ' ≈' + fmt(n[1]).replace('$', '$');
+      return { x: R(x), w: R(w), bg: i === 5 ? '#8F8E86' : '#111', lx: wide ? R(x) + 8 : R(x), ly: wide ? 12 : (i === 3 ? 46 : 62), c: wide ? (i === 5 ? '#111' : '#FAFAF7') : '#111', t: i === 5 ? 'rest ≈' + fmt(n[1]) + ' · computed' : label };
+    });
+    const lineDefs = [[CAP, 'CAP $164.961M', 372, 350, 'left'], [TAX, 'TAX LINE $200.428M', 372, 350, 'right'], [FA, 'FIRST APRON $209.015M', 372, 350, 'left'], [SA, 'SECOND APRON $221.686M', 348, 326, 'right']];
+    const a1 = {
+      gapTax: fmt(PAY - TAX), gapFA: fmt(FA - PAY), gapSA: fmt(SA - PAY),
+      lines: lineDefs.map((d) => ({ x: R(X1(d[0])) - 1, t: d[1], top: d[2], h: 780 - d[2], ly: d[3], al: d[4], lx: d[4] === 'left' ? R(X1(d[0])) + 8 : R(X1(d[0])) - 278 })),
+      barW: aT >= 1 ? R(barEnd - 72) : 0,
+      notches: [CAP, TAX].map((v) => ({ x: R(X1(v)) - 72 - 2 })),
+      segs: segs, stripOp: capo && cur === 'a1' ? 1 : 0,
+      plumbH: aT >= 2 ? 190 : 0, gapOp: aT >= 3 ? 1 : 0,
+      b1: { x: R(X1(TAX)), w: R(barEnd - X1(TAX)), tx: R(X1(TAX)) - 350 },
+      b2: { x: R(barEnd), w: R(X1(FA) - barEnd), tx: R(X1(FA)) + 12 },
+      b3: { x: R(barEnd), x2: R(X1(SA)) - 1, w: R(X1(SA) - barEnd) - 1 },
+      ticks: [160, 170, 180, 190, 200, 210, 220].map((v) => ({ x: R(X1(v)), lx: R(X1(v)) - 30, t: '$' + v + 'M' }))
+    };
+
+    // ---------- A2 · Moment ----------
+    const revealed = !!cut.a2 || !!peek.a2;
+    const retr = !!s.retr && !cut.a2;
+    const a2 = {
+      desk: [
+        { y: 344, cls: 't-obs', a: 'Tatum', b: 'out, Achilles, 12 May 2025' },
+        { y: 402, cls: 't-aut', a: 'Jrue Holiday', b: 'keep, or move him?' },
+        { y: 460, cls: 't-aut', a: 'Kristaps Porziņģis', b: 'keep, or move him?' },
+        { y: 518, cls: 't-aut', a: 'The payroll', b: 'how far past the line can Boston go?' }
+      ],
+      sealBorder: revealed ? '2px solid #111' : '2px dashed #111',
+      sealTag: revealed ? (cut.a2 ? 'opened because you acted' : 'opened because you asked') : 'sealed',
+      sealText: revealed ? 'Holiday went to Portland for Anfernee Simons and two second-round picks. Porziņģis went to Atlanta in a three-team deal; Boston received Georges Niang and a 2031 second-round pick and sent a 2026 second. (NBA.com / Hoops Rumors · verify)' : 'Hindsight is withheld. A seat finds out by acting. An observer can ask for it, and a branch cut after asking says so on its stamp.',
+      canPeek: seat === 'observer' && !revealed && cur === 'a2',
+      peek: () => this.setState({ peek: Object.assign({}, (this.state || {}).peek, { a2: true }) }),
+      frameBorder: cut.a2 ? '3px solid #2C3FD6' : '2px dashed #2C3FD6',
+      frameX: retr ? 416 : 0,
+      pre: !cut.a2, post: !!cut.a2, canCut: seatMap.a2 === 'gm', cannotCut: seatMap.a2 !== 'gm',
+      hind: peek.a2 ? ' · cut with hindsight' : '',
+      cut: () => this.setState({ cut: Object.assign({}, (this.state || {}).cut, { a2: true }), retr: false }),
+      later: () => this.setState({ retr: true }),
+      again: () => this.setState({ retr: false }),
+      tabOp: retr ? 1 : 0, tabPe: retr ? 'auto' : 'none'
+    };
+
+    // ---------- A3 · World ----------
+    const fIdx = s.fu != null ? s.fu : (aT < 2 ? 0 : aT < 4 ? 1 : 2);
+    const OTH = { o2: [110, 300], x2: [140, 275], o3: [590, 300], x3: [560, 275], o4: [630, 100], x4: [600, 118] };
+    const FR = [
+      Object.assign({ o1: [360, 440], o5: [330, 385], x1: [362, 410], x5: [325, 350], ball: [376, 426] }, OTH),
+      Object.assign({ o1: [445, 370], o5: [330, 300], x1: [340, 330], x5: [430, 342], ball: [461, 356] }, OTH),
+      Object.assign({ o1: [445, 370], o5: [318, 160], x1: [330, 190], x5: [430, 342], ball: [334, 146] }, OTH)
+    ];
+    const tr = (a) => 'translate(' + a[0] + 'px,' + a[1] + 'px)';
+    const pp = {};
+    Object.keys(FR[fIdx]).forEach((k) => { pp[k] = tr(FR[fIdx][k]); });
+    const because = s.because || null;
+    const BEC = { switch: 'the switch on the last possession', butler: 'Butler’s threes, twice', wk6: 'the Week 6 trade for Butler' };
+    const CH = [['switch', 'The switch on the last possession'], ['butler', 'Butler for three, twice'], ['wk6', 'The Week 6 trade']];
+    const a3 = {
+      f0: fIdx === 0 ? 1 : 0, f1: fIdx === 1 ? 1 : 0, f2: fIdx === 2 ? 1 : 0, link: fIdx >= 1 ? 1 : 0, p: pp,
+      cap1: ['1 · The screen: Jokić sets it for the ball handler', '2 · The switch: Boston’s big takes Denver’s guard', '3 · Jokić scores: a guard is on him'][fIdx],
+      frames: ['1 · The screen', '2 · The switch', '3 · Jokić scores'].map((t, i) => ({ t: t, pressed: i === fIdx ? 'true' : 'false', bg: i === fIdx ? '#111' : '#FAFAF7', fg: i === fIdx ? '#FAFAF7' : '#111', pick: () => this.setState({ fu: i }) })),
+      slotText: because ? BEC[because] : 'pick something on the record',
+      slotBorder: because ? '2px solid #111' : '2px dashed #111',
+      slotColor: because ? '#111' : '#6B6B64',
+      slotNote: because ? 'Your because · authored by you · a claim laid over the record, not a finding. The margin was 3 (115 − 112); one possession is a candidate, not the whole game.' : 'A because is yours. It attaches to something recorded and stays a claim, drawn in outline beside the record.',
+      chips: CH.map((c) => ({ t: c[1], pressed: because === c[0] ? 'true' : 'false', bg: because === c[0] ? '#111' : 'transparent', fg: because === c[0] ? '#FAFAF7' : '#111', pick: () => this.setState({ because: because === c[0] ? null : c[0] }) })),
+      events: [{ w: 'Week 6', t: 'You accepted White for Butler, with a backup big as salary filler.' }, { w: 'Week 9', t: '“Butler for three,” twice.' }, { w: 'Last poss.', t: 'A switch on the screen. “Jokić scores.”' }],
+      evOp: cut.a3 ? 0 : 1, evPe: cut.a3 ? 'none' : 'auto',
+      actOp: seatMap.a3 === 'bench' && !cut.a3 ? 1 : 0, brOp: cut.a3 ? 1 : 0
+    };
+
+    // ---------- A4 ----------
+    const a4 = { roster: [['Larry Bird', 72, 486], ['Kevin McHale', 72, 542], ['Robert Parish', 72, 598], ['Dennis Johnson', 520, 486], ['Danny Ainge', 520, 542], ['Bill Walton', 520, 598]].map((r) => ({ n: r[0], x: r[1], y: r[2] })) };
+
+    // ---------- A5 · air network ----------
+    const T = (m) => 72 + m * 1296 / 570;
+    const clk = (m) => { const t = 360 + m; const h = Math.floor(t / 60), mm = t % 60; return (h < 10 ? '0' : '') + h + ':' + (mm < 10 ? '0' : '') + mm; };
+    const LEGS = [['BOS → PHL', 0, 80], ['PHL → ORD', 125, 245], ['ORD → PHL', 290, 400], ['PHL → BOS', 445, 525]];
+    const HOLD = 40, MINT = 30;
+    const model = (extra) => {
+      const sch = LEGS.map((l) => ({ n: l[0], s: l[1], e: l[2] }));
+      sch[3].s += extra; sch[3].e += extra;
+      const act = [{ s: sch[0].s, e: sch[0].e }, { s: sch[1].s, e: sch[1].e }, { s: sch[2].s + HOLD, e: sch[2].e + HOLD }];
+      const s4 = Math.max(sch[3].s, act[2].e + MINT);
+      act.push({ s: s4, e: s4 + (sch[3].e - sch[3].s) });
+      return { sch: sch, act: act, late: [0, 0, HOLD, s4 - sch[3].s] };
+    };
+    const passenger = seatMap.a5 === 'passenger';
+    const row = (extra, y0, vis) => {
+      const m = model(extra);
+      const op = (i) => (passenger && i < 3 ? 0.18 : 1) * vis;
+      const o = { m: m };
+      o.sched = m.sch.map((l, i) => ({ x: R(T(l.s)), y: y0 + 18, w: R(T(l.e) - T(l.s)), n: l.n, t: clk(l.s) + '–' + clk(l.e), op: op(i) }));
+      o.act = m.act.map((a, i) => ({ x: R(T(a.s)), y: y0 + 72, w: R(T(a.e) - T(a.s)), ty: y0 + 114, t: clk(a.s) + '–' + clk(a.e), op: op(i) }));
+      o.holds = [{ x: R(T(290)), y: y0 + 72, w: R(T(290 + HOLD) - T(290)), t: 'HOLD +40', op: passenger ? 0 : vis }];
+      if (extra) o.holds.push({ x: R(T(445)), y: y0 + 72, w: R(T(445 + extra) - T(445)), t: '+' + extra + ' slack', op: vis });
+      o.delays = [];
+      m.late.forEach((L, i) => { if (L > 0) { const xs = R(T(m.sch[i].s)), xe = R(T(m.act[i].s)); o.delays.push({ x: xs, y: y0 + 132, w: xe - xs, tx: xe + 8, ty: y0 + 128, t: 'late ' + L, op: op(i) }); } });
+      o.nodes = m.act.map((a) => ({ x: R(T(a.s)) - 5, y: y0 - 4, op: vis })).concat([{ x: R(T(m.act[3].e)) - 5, y: y0 - 4, op: vis }]);
+      o.thread = { x: R(T(0)), y: y0, w: R(T(m.act[3].e) - T(0)), op: vis };
+      return o;
+    };
+    const cutA5 = !!cut.a5;
+    const recRow = row(0, 262, aT >= 1 ? 1 : 0);
+    const brRow = row(30, 540, cutA5 && aT >= 0 ? 1 : 0);
+    const late4 = recRow.m.late[3];
+    const a5 = {
+      slackTxt: 'here, ' + (HOLD - late4) + ' minutes',
+      threads: [recRow.thread, brRow.thread], nodes: recRow.nodes.concat(brRow.nodes),
+      sched: recRow.sched.concat(brRow.sched), act: recRow.act.concat(brRow.act), holds: recRow.holds.concat(brRow.holds), delays: recRow.delays.concat(brRow.delays),
+      recOp: aT >= 1 ? 1 : 0,
+      recLine: passenger ? 'You see one line: “PHL → BOS is ' + late4 + ' min late.” You can’t see why. The cause is on other legs.' : HOLD + ' min hold at ORD → leg 3 leaves ' + HOLD + ' late → ' + (HOLD - late4) + ' min absorbed at the PHL turn → leg 4 leaves ' + late4 + ' late',
+      pre: !cutA5, postOp: cutA5 ? 1 : 0,
+      frameBorder: cutA5 ? '3px solid #2C3FD6' : '2px dashed #2C3FD6',
+      cut: () => this.setState({ cut: Object.assign({}, (this.state || {}).cut, { a5: true }) }),
+      brLine: passenger ? 'On your leg: it leaves on time, against a schedule 30 min later. You still can’t see why.' : 'With 45 min of slack at the PHL turn, the same ' + HOLD + ' min hold is absorbed: leg 4 leaves on time, against a schedule 30 min later. Slack has a price: everyone on leg 4 leaves 30 min later, even on a good day.'
+    };
+
+    // ---------- WHISPER ----------
+    const SN = { a1: { observer: 'observer', capologist: 'capologist' }, a2: { gm: 'GM in the room', observer: 'observer of the record' }, a3: { gm: 'GM (you)', bench: 'Denver’s bench, actor model' }, a4: { observer: 'observer', historian: 'historian' }, a5: { dispatcher: 'dispatcher', passenger: 'passenger on the last leg' } };
+    const seatName = cur === 'ask' ? '' : SN[cur][seat];
+    const W = {
+      a1: { t: 'Boston Celtics · Reality · 29 Sep 2026 · ' + seatName, c: 'wc-obs', live: true },
+      a2: cut.a2 ? { t: 'Your branch · diverged from Reality at late Jun 2025 · GM', c: 'wc-brn' } : { t: 'Reality · a recorded Moment · late Jun 2025 · frozen · ' + seatName, c: 'wc-mom' },
+      a3: cut.a3 ? { t: 'Your branch · diverged from Boston · Year Two at Week 9 · GM', c: 'wc-brn' } : { t: 'Boston · Year Two · your World · Week 9 · ' + seatName, c: 'wc-rec' },
+      a4: { t: 'Boston Celtics · 1985–86 · recorded history · ' + seatName, c: 'wc-his' },
+      a5: cut.a5 ? { t: 'Your scratch branch · +30 min slack at PHL · ' + seatName, c: 'wc-brn' } : { t: 'Air network · assembled for this question · not reviewed · ' + seatName, c: 'wc-gen' }
+    };
+    const wh = W[cur] || { t: '', c: 'wc-obs' };
+    const whisper = { op: cur === 'ask' ? 0 : 1, text: wh.t, chip: wh.c, live: !!wh.live };
+
+    // ---------- TOP · how do we know ----------
+    const TOPS = {
+      a1: { sub: 'the cap sheet', rows: [
+        ['obs', 'OBSERVED', 'Payroll ≈ $203.6M, past the tax line', 'Reported from outside BOW: BOW Economics Live fixture, approx., verify. As of 29 Sep 2026.'],
+        ['obs', 'OBSERVED', 'Cap, tax line, first apron, second apron', '2026–27 league lines: $164.961M · $200.428M · $209.015M · $221.686M. Fixture, verify.'],
+        ['com', 'COMPUTED', 'The gaps: +$3.2M, $5.4M, $18.1M', 'Arithmetic: payroll minus each line. If either input moves, these move with it.'],
+        ['obs', 'OBSERVED', 'Five contracts (capologist seat)', 'Tatum ≈$58.5M · Brown ≈$57.1M · White ≈$30.3M · Hauser ≈$10.8M · Pritchard ≈$7.8M. Public reporting, approx., verify.'],
+        ['com', 'COMPUTED', 'Rest of roster ≈ ' + fmt(restV), 'Payroll minus the five contracts. The players in it are [from the Reality feed].'],
+        ['unk', 'UNKNOWN', 'Ownership’s tolerance for the tax', 'Nobody outside the building knows. No number is drawn and none is guessed.']] },
+      a2: { sub: 'a recorded Moment', rows: [
+        ['obs', 'OBSERVED', 'The date, and Tatum out since 12 May 2025', 'NBA.com and public reporting. Verify the exact date of this Moment.'],
+        ['aut', 'AUTHORED', 'The four items on the desk', 'Written by BOW to name the situation someone in the room faced. Not the record’s words.'],
+        ['unk', 'UNKNOWN', 'Payroll on the day: [verify]', 'Not in this prototype’s fixture. A marked hole, not a guess.'],
+        [revealed ? 'obs' : 'unk', revealed ? 'OBSERVED' : 'SEALED', 'What Reality did next', revealed ? 'NBA.com / Hoops Rumors, verify. Opened ' + (cut.a2 ? 'because you acted.' : 'because you asked.') : 'Withheld from a seat. An observer can ask; a seat finds out by acting.']
+      ].concat(cut.a2 ? [['brn', 'YOUR BRANCH', 'Holiday kept. Everything else starts as recorded.', 'An authored assumption of yours. A frame beside the record, never on top of it.']] : []) },
+      a3: { sub: 'your World, Week 9', rows: [
+        ['rec', 'RECORDED', 'Lost 112–115 at home · 20 possessions · Butler for three, twice · Jokić scores last', 'Your World’s own log. Written by acts inside BOW. A World event, not NBA history.'],
+        ['aut', 'AUTHORED', 'Where the players stand in the diagram', 'Illustrative. Drawn from the recorded events, not from tracked coordinates.'],
+        ['com', 'COMPUTED', 'Denver won by 3', '115 − 112. Arithmetic on two recorded numbers.']
+      ].concat(because ? [['aut', 'YOUR CLAIM', 'Because: ' + BEC[because], 'Authored by you. A claim laid over the record, in outline. It is not a finding.']] : []).concat(seatMap.a3 === 'bench' ? [['gen', 'GENERATED', 'Denver’s bench: “Set the screen for the guard…”', 'An actor model’s read. Stippled and labelled; never a quote and never a source.']] : []).concat(cut.a3 ? [['brn', 'YOUR BRANCH', 'No switch on possession 20', 'Authored assumption. What happens next is sealed.']] : []) },
+      a4: { sub: '1985–86', rows: [
+        ['obs', 'OBSERVED', 'Roster, 67–15, the title', 'Public record. Not from the BOW fixture: verify each before use.'],
+        ['unk', 'UNKNOWN', 'Payroll and cap that year: [verify]', 'Not in this prototype’s fixture. A marked hole.'],
+        ['obs', 'OBSERVED', 'Nothing here changes', 'Recorded history has no NOW. The ground is the same as everywhere else: old does not mean tinted.']] },
+      a5: { sub: 'the air-network state', rows: [
+        ['gen', 'GENERATED', 'The whole structure: one aircraft, four legs, turn limits', 'Assembled for this question from BOW’s air-network model. Not a reviewed system.'],
+        ['aut', 'AUTHORED', 'Leg times and the 30-minute minimum turn', 'Illustrative, authored. No real airline, no real schedule.'],
+        ['aut', 'AUTHORED', 'The 40-minute hold at ORD', 'An input stated with the question, not observed.'],
+        ['com', 'COMPUTED', 'Every late departure', 'Each departure = the later of its schedule or (arrival + minimum turn). Arithmetic on the rows above.']
+      ].concat(cut.a5 ? [['brn', 'YOUR BRANCH', '+30 min slack at the PHL turn', 'Authored assumption. A scratch frame; nothing is saved.']] : []) }
+    };
+    const tp = TOPS[cur] || { sub: '', rows: [] };
+    tp.h = 112 + tp.rows.length * 38 + (cur === 'a1' ? 20 : 0);
+    tp.rows = tp.rows.map((r) => ({ cls: 't-' + r[0], tag: r[1], claim: r[2], how: r[3] }));
+
+    // ---------- LEFT · who am I ----------
+    const SEATS = {
+      a1: [
+        { id: 'observer', name: 'Observer', can: 'Read everything public about the real team.', cant: 'Sign, trade or change a number. The team is real.' },
+        { id: 'capologist', name: 'Capologist', can: 'Take the payroll apart, contract by contract.', cant: 'Sign anyone. A scenario stays a scenario.' },
+        { id: 'gm', name: 'General manager', refused: true, cant: 'Reality rule (authored): the real team has one GM, and it isn’t you. Your World has a GM seat. Tap to go there.', can: 'Refused here.', go: 'a3' }
+      ],
+      a2: [
+        { id: 'gm', name: 'GM in the room', can: 'Decide. Cut a branch. Nobody tells you what happened next.', cant: 'Read the record’s outcome before you act.' },
+        { id: 'observer', name: 'Observer of the record', can: 'Ask for hindsight: the outcome opens.', cant: 'Cut a branch. An observer changes nothing.' }
+      ],
+      a3: [
+        { id: 'gm', name: 'GM (you)', can: 'Read the recorded possession. Attach a because. Cut a branch.', cant: 'Rewrite what was recorded.' },
+        { id: 'bench', name: 'Denver’s bench', tag: 'actor model', gen: true, can: 'Hear a generated read of the same possession.', cant: 'Treat it as a source. It is an actor model, drawn stippled.' }
+      ],
+      a4: [
+        { id: 'observer', name: 'Observer', can: 'Read the whole season. It is finished.', cant: 'Change anything, or catch up to a NOW.' },
+        { id: 'historian', name: 'Historian', can: 'Read the record and mark what you think it shows.', cant: 'Alter it. Marks stay yours, beside the record. [not built here]' },
+        { id: 'gm', name: 'Decider in 1986', refused: true, can: 'Refused here.', cant: 'Prototype rule (authored): a frozen season needs an authored Moment before anyone can decide in it. None exist for 1985–86 yet.' }
+      ],
+      a5: [
+        { id: 'dispatcher', name: 'Dispatcher', can: 'See the whole rotation and the hold.', cant: 'Move the weather.' },
+        { id: 'passenger', name: 'Passenger on the last leg', can: 'See one line: your flight and its status.', cant: 'See why it is late. The cause is on other legs.' }
+      ]
+    };
+    const lf = { seats: (SEATS[cur] || []).map((st) => {
+      const on = !st.refused && seat === st.id;
+      return { name: st.name, can: st.can, cant: st.cant, tag: st.refused ? 'refused' : (on ? 'you are here' : (st.tag || '')), tagc: st.refused ? '#111' : '#2C3FD6',
+        pressed: on ? 'true' : 'false', border: st.refused ? '2px dashed #111' : (on ? '2px solid #111' : '1px solid #C9C8C0'),
+        bg: st.gen ? '#FAFAF7' : (on ? '#FAFAF7' : '#FFFFFF'),
+        pick: () => { if (st.refused) { if (st.go) this.go(st.go, false); return; } this.setState({ seat: Object.assign({}, (this.state || {}).seat, { [cur]: st.id }) }); } };
+    }) };
+
+    // ---------- BOTTOM · time ----------
+    const DOORS = [
+      { id: 'd17', x: 40, lvl: 0, date: '17 JUN 2017', name: 'Philadelphia calls', q: 'Philadelphia wants the No. 1 pick. Do you move it?' },
+      { id: 'd12', x: 330, lvl: 1, date: '12 MAY 2025', name: 'Tatum is hurt', q: 'Tatum’s Achilles goes in Game 4 against New York. What does the next year look like?' },
+      { id: 'dj', x: 470, lvl: 0, date: 'LATE JUN 2025', name: 'The apron summer', q: 'The apron summer. What do you do about the payroll?', go: 'a2' },
+      { id: 'd13', x: 620, lvl: 1, date: '13 AUG 2025', name: 'The sale vote', q: 'The league votes on a sale of the team. What changes for the people who work here?' },
+      { id: 'd5', x: 870, lvl: 0, date: '5 FEB 2026', name: 'Deadline week', q: 'Deadline week, and the projected tax bill is ≈$39.5M [verify]. What do you do?' },
+      { id: 'd6', x: 990, lvl: 1, date: '6 MAR 2026', name: 'Tatum is back', q: 'Tatum’s first game back is tonight, against Dallas [verify]. How do you use him?' }
+    ];
+    const RAILS = {
+      a1: { sub: 'Boston Celtics · Reality', items: DOORS, solid: [0, 1180], dash: [1180, 1296], now: 1180, note: 'not yet', noteX: 1160, noteY: 120,
+        dflt: ['DOORS', 'Each door is named by the question someone standing in it faced, never by what happened next. Only the late-Jun-2025 door is built here.'] },
+      a2: { sub: 'Reality · a recorded Moment', items: DOORS.map((d) => (d.x > 470 ? Object.assign({}, d, { sealed: true, name: 'sealed', date: d.date }) : d)), solid: [0, 470], dash: [470, 1296], play: 470, note: 'the record continues, sealed', noteX: 1046, noteY: 96,
+        dflt: ['LATE JUN 2025', 'You are standing here. Everything to the right is sealed until you act, or an observer asks.'] },
+      a3: { sub: 'Boston · Year Two · your World', items: [
+        { id: 'y1', x: 60, lvl: 0, date: 'YEAR ONE', name: 'Funded Business', q: 'You funded Business over Basketball Ops; analytics staff cut. Recorded in your World.' },
+        { id: 'w6', x: 470, lvl: 1, date: 'WEEK 6', name: 'White for Butler', q: 'You accepted White-for-Butler, with a backup big as salary filler. Recorded in your World.' },
+        { id: 'w9', x: 820, lvl: 0, date: 'WEEK 9', name: 'Lost 112–115', q: 'Home loss to Denver. 20 recorded possessions. You are here.' },
+        { id: 'w10', x: 1020, lvl: 1, date: 'WEEK 10', name: 'sealed', sealed: true, q: 'Sealed. The World advances on Monday, with or without you. You find out by living it.' }],
+        solid: [0, 820], dash: [820, 1296], play: 820, note: 'advances Mondays, with or without you', noteX: 1046, noteY: 96,
+        dflt: ['YEAR TWO · WEEK 9', 'Your World keeps its own calendar. Pick a mark to read what you did there.'] },
+      a4: { sub: '1985–86 · no NOW', items: [{ id: 'h', x: 560, lvl: 0, date: '1985–86', name: 'Fully recorded', q: 'History has no NOW. This rail is closed at both ends: every point on it is already written. Moments inside this season are not authored yet.' }],
+        solid: [0, 1296], dash: [0, 0], closed: true, note: '', noteX: 0, noteY: 0, dflt: ['CLOSED', 'This rail has no live edge. Nothing on it is waiting to happen.'] },
+      a5: { sub: 'one day, one aircraft · illustrative', items: [
+        { id: 'p1', x: 40, lvl: 0, date: '06:00', name: 'BOS departure', q: 'Leg 1 leaves on time. Times are illustrative, authored.' },
+        { id: 'p2', x: 210, lvl: 1, date: '07:20', name: 'PHL turn', q: 'Turn: 45 min scheduled, 30 minimum. That is 15 min of slack, authored.' },
+        { id: 'p3', x: 560, lvl: 0, date: '10:05', name: 'ORD hold', q: 'A 40-minute weather hold at ORD. Authored input, as stated with the question.' },
+        { id: 'p4', x: 900, lvl: 1, date: '12:40', name: 'PHL turn again', q: 'The late aircraft lands 40 late. 15 min are absorbed; 25 carry into leg 4. Computed.' },
+        { id: 'p5', x: 1150, lvl: 0, date: '14:45', name: 'BOS, scheduled', q: 'Scheduled arrival. Actual: ' + clk(model(0).act[3].e) + '. Computed.' }],
+        solid: [0, 1296], dash: [0, 0], note: '', noteX: 0, noteY: 0, dflt: ['THE DAY', 'One aircraft, four legs. Pick a mark to read it.'] }
+    };
+    const rl = RAILS[cur] || { sub: '', items: [], solid: [0, 0], dash: [0, 0], note: '', noteX: 0, noteY: 0, dflt: ['', ''] };
+    const sel = s.railSel || null;
+    const selIt = rl.items.filter((i) => i.id === sel)[0] || null;
+    const bt = {
+      sub: rl.sub, solidL: 72 + rl.solid[0], solidW: rl.solid[1] - rl.solid[0], dashL: 72 + rl.dash[0], dashW: rl.dash[1] - rl.dash[0],
+      capOp: rl.closed ? 1 : 0, hasNow: cur === 'a1', nowX: 72 + (rl.now || 0), nowLx: 72 + (rl.now || 0) - 214, hasPlay: !!rl.play, playX: 72 + (rl.play || 0), playLx: 72 + (rl.play || 0) + 14,
+      note: rl.note, noteX: 72 + rl.noteX - 250 + 250 - 0, noteY: rl.noteY,
+      items: rl.items.map((it) => ({
+        date: it.date, name: it.name, bx: 72 + it.x - 5, bh: 30 + it.lvl * 58 + 40, th: 14 + it.lvl * 58, ty: 16 + it.lvl * 58,
+        tc: sel === it.id ? '#2C3FD6' : '#111', tb: it.sealed ? '2px dashed #111' : '0', dc: '#6B6B64', nc: sel === it.id ? '#2C3FD6' : (it.sealed ? '#6B6B64' : '#111'),
+        pressed: sel === it.id ? 'true' : 'false', pick: () => this.setState({ railSel: it.id })
+      })),
+      rdDate: selIt ? selIt.date : rl.dflt[0],
+      rdText: selIt ? (selIt.sealed && cur === 'a2' ? 'Sealed. This comes after the Moment you are standing in. You find out by acting, or an observer can ask.' : selIt.q + (selIt.go && cur !== 'a2' ? '' : (cur === 'a1' && !selIt.go ? ' Not built in this prototype: only the late-Jun-2025 door is.' : ''))) : rl.dflt[1],
+      canGo: !!(selIt && selIt.go && cur === 'a1'),
+      go: () => this.go('a2', false)
+    };
+    bt.noteX = rl.noteX ? 72 + rl.noteX : 0;
+    bt.brkX = 72 + 200; bt.brkOp = (cur === 'a1' || cur === 'a2') ? 1 : 0;
+
+    // ---------- RIGHT · what if ----------
+    const FORKS = {
+      a1: [{ name: 'Keep No. 1 — Fultz', stamp: '[author] · diverged 17 Jun 2017' }, { name: 'Holiday kept', stamp: '[author] · diverged Jun 2025' }],
+      a2: [{ name: 'Holiday kept', stamp: '[author] · diverged Jun 2025' }],
+      a3: [], a4: [], a5: []
+    };
+    const RT = {
+      a1: { title: 'The live present can’t be forked', body: 'Refused. Reality rule (authored): only a recorded Moment can be forked, never the live present. Pick a door on the time edge, then cut there.', avail: false },
+      a2: { title: cut.a2 ? 'Holiday kept: cut' : 'Holiday kept', body: cut.a2 ? 'Your branch is cut and stamped. Reality stays beside it, unchanged.' : 'Staged, not cut. Assumption, authored: Holiday is not traded. Nothing forks until you say so.', avail: true, done: !!cut.a2, label: 'Cut here' },
+      a3: { title: cut.a3 ? 'No switch: cut' : 'What if Boston hadn’t switched?', body: cut.a3 ? 'Your branch is cut at possession 20. The recorded game stays as it is.' : 'A branch of your World at Week 9, possession 20, before the switch. Authored assumption: Boston stays with its man.', avail: true, done: !!cut.a3, label: 'Cut your World here' },
+      a4: { title: 'Nothing to cut yet', body: 'Refused. Prototype rule (authored): a frozen season can be forked only from an authored Moment, and none exist for 1985–86.', avail: false },
+      a5: { title: cut.a5 ? '+30 min slack: cut' : 'What if the PHL turn had 30 more minutes of slack?', body: cut.a5 ? 'Your scratch branch sits under the record. Nothing is saved.' : 'A scratch branch of this small state. Authored assumption: the PHL turn before leg 4 is 30 min longer.', avail: true, done: !!cut.a5, label: 'Cut a scratch branch' }
+    };
+    const rc = RT[cur] || { title: '', body: '', avail: false };
+    const cutFor = (k) => () => this.setState({ cut: Object.assign({}, (this.state || {}).cut, { [k]: true }), retr: false });
+    const rt = {
+      title: rc.title, body: rc.body, border: rc.avail ? (rc.done ? '3px solid #2C3FD6' : '2px dashed #2C3FD6') : '2px dashed #111', tc: rc.avail ? '#2C3FD6' : '#111',
+      canCut: !!(rc.avail && !rc.done && (cur !== 'a2' || seatMap.a2 === 'gm')), cutLabel: rc.label || '', cut: cutFor(cur),
+      forks: (FORKS[cur] || []), forkNote: (FORKS[cur] || []).length ? 'Someone else’s branch, in their ink. Arriving in another person’s fork is not built in this prototype.' : 'No public forks of this state yet.'
+    };
+
+    // ---------- SHARE ----------
+    const branchTxt = { a2: cut.a2, a3: cut.a3, a5: cut.a5 }[cur] ? 'your branch, cut 29 Sep 2026' : 'none · this is the record';
+    const SH = {
+      a1: { where: 'Boston Celtics · Reality', when: '29 Sep 2026 · live', view: 'the cap sheet, 2026–27', url: 'bow://celtics/reality?t=live&as=' + seat + '&view=cap-sheet' },
+      a2: { where: 'Boston Celtics · Reality', when: 'late Jun 2025 · a frozen Moment', view: 'the desk', url: 'bow://celtics/reality?t=2025-06-late&as=' + seat + '&view=desk' + (cut.a2 ? '&fork=holiday-kept' : '') },
+      a3: { where: 'Boston · Year Two · your World', when: 'Week 9 · last possession', view: 'coach’s diagram, frame ' + (fIdx + 1), url: 'bow://boston-y2/world?t=y2w9p20&as=' + seat + '&view=diagram-' + (fIdx + 1) + (cut.a3 ? '&fork=no-switch' : '') },
+      a4: { where: 'Boston Celtics · 1985–86', when: 'the whole season · no NOW', view: 'the season’s book', url: 'bow://celtics/history/1985-86?as=' + seat },
+      a5: { where: 'Air network · assembled for this question', when: 'one day · hold at ORD', view: 'the rotation', url: 'bow://air/assembled?q=delays-spread&as=' + seat + (cut.a5 ? '&fork=phl+30' : '') }
+    };
+    const shv = SH[cur] || { where: '', when: '', view: '', url: '' };
+    const shOpen = edge === 'share';
+    const share = {
+      pressed: shOpen ? 'true' : 'false', ul: shOpen ? '#2C3FD6' : 'transparent',
+      op: shOpen ? 1 : 0, ty: shOpen ? 0 : -40, vis: shOpen ? 'visible' : 'hidden', pe: shOpen ? 'auto' : 'none', vd: shOpen ? 0 : 0.35,
+      toggle: () => { const st = this.state || {}; if (st.edge === 'share') this.setState({ edge: null, pin: false }); else this.setState({ edge: 'share', pin: true, copied: false }); },
+      coords: [{ k: 'Where', v: shv.where }, { k: 'When', v: shv.when }, { k: 'Who', v: seatName }, { k: 'View', v: shv.view }, { k: 'What if', v: branchTxt }],
+      url: shv.url, copy: () => this.setState({ copied: true }), copyLabel: s.copied ? 'Copied' : 'Copy link'
+    };
+
+    // ---------- EDGES ----------
+    const mk = (k, off) => {
+      const open = edge === k;
+      return {
+        open: open ? 'true' : 'false', on: open ? 'on' : '', op: open ? 1 : 0, ty: open ? 0 : off, vis: open ? 'visible' : 'hidden', pe: open ? 'auto' : 'none', vd: open ? 0 : 0.35,
+        enter: () => { const st = this.state || {}; if (st.edge !== k) this.setState({ edge: k, pin: false }); },
+        click: () => { const st = this.state || {}; if (st.edge === k && st.pin) this.setState({ edge: null, pin: false }); else this.setState({ edge: k, pin: true }); },
+        leave: () => { const st = this.state || {}; if (st.edge === k && !st.pin) this.setState({ edge: null }); },
+        blur: (e) => { if (e && e.currentTarget && e.relatedTarget && e.currentTarget.contains(e.relatedTarget)) return; const st = this.state || {}; if (st.edge === k && !st.pin) this.setState({ edge: null }); }
+      };
+    };
+    const stack = s.stack || [];
+
+    return {
+      sc: sc, q: s.q || '', msg: s.msg || '', hasMsg: !!s.msg,
+      onQ: (e) => this.setState({ q: e.target.value }),
+      onKey: (e) => { if (e.key === 'Enter') onAsk(); },
+      onAsk: onAsk, sugs: SUGS,
+      a1: a1, a2: a2, a3: a3, a4: a4, a5: a5,
+      whisper: whisper, question: QS[cur] || '',
+      chromeVis: cur === 'ask' ? 'hidden' : 'visible', edgeVis: cur === 'ask' ? 'hidden' : 'visible',
+      hint: (s.hintT || 0) > 0 && cur !== 'ask' ? 'hint' : '',
+      backOp: stack.length ? 1 : 0.3,
+      back: () => { const st = this.state || {}; const sk = (st.stack || []).slice(); if (!sk.length) return; const to = sk.pop(); this.setState({ stack: sk }); this.go(to, true); },
+      askAgain: () => this.go('ask', false, { q: '' }),
+      closeEdge: () => this.setState({ edge: null, pin: false }),
+      scrimDisplay: edge && pin ? 'block' : 'none',
+      share: share, top: mk('top', -30), left: mk('left', -40), bot: mk('bottom', 30), right: mk('right', 40),
+      tp: tp, lf: lf, bt: bt, rt: rt
+    };
+  }
+}
+</script>
+</body>
+</html>

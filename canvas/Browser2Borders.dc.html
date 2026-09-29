@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Borders</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@400;500;700;800&amp;family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;0,800;1,400;1,500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F3EA;color:#1F2A24;font-family:'Alegreya Sans',sans-serif}
+.sc{font-family:'Alegreya Sans SC',sans-serif;letter-spacing:.14em}
+.btn{font-family:'Alegreya Sans',sans-serif;font-weight:700;font-size:16px;min-height:40px;padding:0 14px;border:2px solid #1F2A24;background:#FBF9F2;color:#1F2A24;border-radius:0;cursor:pointer;transition:background .2s,color .2s}
+.btn:hover:not(:disabled){background:#1F2A24;color:#FBF9F2}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible,.plq:focus-visible,.lmk:focus-visible,.chip:focus-visible,.stp:focus-visible{outline:3px solid #B5421F;outline-offset:2px}
+.chip{font-family:'Alegreya Sans',sans-serif;font-weight:700;font-size:15px;min-height:36px;padding:0 10px;border:1.5px solid #1F2A24;background:transparent;color:#1F2A24;border-radius:0;cursor:pointer;transition:background .2s,color .2s}
+.chip:hover{background:#1F2A24;color:#FBF9F2}
+.stp{font-family:'Alegreya Sans SC',sans-serif;letter-spacing:.12em;font-weight:700;font-size:16px;min-height:38px;padding:0 12px;border:1.5px solid #1F2A24;background:#FBF9F2;color:#1F2A24;border-radius:0;cursor:pointer}
+.plq{position:absolute;box-sizing:border-box;width:400px;padding:0;margin:0;border:3px solid #1F2A24;background:#FBF9F2;color:#1F2A24;text-align:left;cursor:pointer;display:flex;transform:translate(-50%,-50%);transition:opacity .8s,box-shadow .2s}
+.plq:hover:not(:disabled){box-shadow:6px 6px 0 #1F2A24}
+.plq:disabled{cursor:default;color:#4A574E;border-color:#4A574E;background:#F1EEE4}
+.lmk{position:absolute;display:flex;align-items:center;gap:8px;padding:0;margin:0;border:0;background:transparent;cursor:pointer;transform:translate(-28px,-28px);transition:opacity .8s;font-family:'Alegreya Sans',sans-serif}
+.dot{width:56px;height:56px;flex:none;display:flex;align-items:center;justify-content:center}
+.dot i{display:block;width:20px;height:20px;box-sizing:border-box;border:4px solid #1F2A24;background:#FBF9F2;border-radius:50%}
+.nm{font-size:25px;font-weight:700;background:rgba(251,249,242,.86);padding:1px 8px;white-space:nowrap}
+.arw{position:absolute;width:0;height:0;transition:opacity .8s}
+.arw i{position:absolute;left:-20px;top:-20px;display:block;width:40px;height:40px;animation:nudge 2.4s ease-in-out infinite}
+@keyframes nudge{0%{transform:translateX(-26px);opacity:0}45%{opacity:1}100%{transform:translateX(26px);opacity:0}}
+@keyframes ping{0%{transform:scale(.7);opacity:.9}100%{transform:scale(1.7);opacity:0}}
+.here{position:absolute;left:8px;top:8px;width:40px;height:40px;box-sizing:border-box;border:4px solid #B5421F;border-radius:50%;animation:ping 1.8s ease-out infinite}
+.t-obs{background:#1F2A24}
+.t-rec{background:#1F2A24;box-shadow:inset 0 0 0 3px #1F2A24,inset 0 0 0 5px #FBF9F2}
+.t-aut{background:transparent;border:2px solid #1F2A24}
+.t-com{background:#A3A79C}
+.t-mod{background:repeating-linear-gradient(135deg,#1F2A24 0 2px,transparent 2px 8px);border:1.5px solid #1F2A24}
+.t-gen{background:radial-gradient(circle,#1F2A24 1.2px,transparent 1.5px) 0 0/7px 7px;border:1.5px dotted #1F2A24}
+.t-unk{background:transparent;border:2px dashed #1F2A24}
+.sw{display:inline-block;width:16px;height:16px;box-sizing:border-box;flex:none}
+</style>
+</helmet>
+<div style="width:1440px;height:900px;box-sizing:border-box;position:relative;overflow:hidden;background:#F6F3EA;color:#1F2A24;font-family:'Alegreya Sans',sans-serif">
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="stip" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="2" fill="#1F2A24"></circle><circle cx="9" cy="9" r="2" fill="#1F2A24"></circle></pattern></defs></svg>
+
+  <header style="position:absolute;left:0;top:0;width:1440px;height:60px;box-sizing:border-box;padding:0 28px;display:flex;align-items:center;gap:10px;border-bottom:2px solid #1F2A24">
+    <span class="sc" style="font-weight:800;font-size:24px;margin-right:8px">BOW</span>
+    <input type="text" aria-label="Search for a system" value="{{qText}}" onChange="{{onQ}}" onKeyDown="{{onKey}}" style="width:300px;height:40px;box-sizing:border-box;border:2px solid #1F2A24;background:#FFFFFF;padding:0 12px;font-family:'Alegreya Sans',sans-serif;font-size:18px;font-weight:500;color:#1F2A24;border-radius:0">
+    <button type="button" class="btn" onClick="{{doSearch}}">Search</button>
+    <span class="sc" style="font-size:13px;color:#4A574E;margin-left:6px">Try</span>
+    <button type="button" class="chip" onClick="{{chipB}}">Boston basketball</button>
+    <button type="button" class="chip" onClick="{{chipS}}">semiconductor supply chain</button>
+    <sc-if value="{{miss}}" hint-placeholder-val="{{false}}"><span style="font-size:15px;font-weight:700;color:#B5421F">No map for that yet. Two exist here.</span></sc-if>
+    <span style="flex:1"></span>
+    <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="background:{{howBg}};color:{{howFg}}">How do we know?</button>
+  </header>
+
+  <nav aria-label="Path of borders crossed" style="position:absolute;left:28px;top:66px;width:1384px;height:46px;display:flex;align-items:center;gap:8px">
+    <span class="sc" style="font-size:13px;color:#4A574E;margin-right:4px">Path</span>
+    <sc-for list="{{pathItems}}" as="it" hint-placeholder-count="5">
+      <sc-if value="{{it.isT}}" hint-placeholder-val="{{true}}"><button type="button" class="stp" onClick="{{it.go}}" aria-current="{{it.cur}}" style="background:{{it.bg}};color:{{it.fg}};opacity:{{it.op}}">{{it.label}}</button></sc-if>
+      <sc-if value="{{it.isV}}" hint-placeholder-val="{{false}}"><span style="display:flex;align-items:center;gap:4px;font-size:16px;font-weight:700;font-style:italic;opacity:{{it.op}}">
+        <span style="display:block;width:22px;height:0;border-top:3px solid #1F2A24"></span>{{it.label}}<span style="display:block;width:22px;height:0;border-top:3px solid #1F2A24"></span><span style="font-style:normal">▸</span></span></sc-if>
+    </sc-for>
+    <span style="flex:1"></span>
+    <button type="button" class="btn" onClick="{{retrace}}" disabled="{{noRetrace}}" style="min-height:38px">{{retraceLabel}}</button>
+    <button type="button" class="btn" onClick="{{forward}}" disabled="{{noForward}}" style="min-height:38px">Forward</button>
+  </nav>
+
+  <section style="position:absolute;left:28px;top:118px;width:1384px;height:574px;box-sizing:border-box;border:2px solid #1F2A24;box-shadow:0 0 0 4px #F6F3EA,0 0 0 5.5px #1F2A24;background:#D3E3EC;overflow:hidden">
+    <sc-if value="{{is.empty}}" hint-placeholder-val="{{true}}">
+      <div style="position:absolute;left:0;top:0;width:1384px;height:574px;background:repeating-linear-gradient(90deg,transparent 0 171px,rgba(31,42,36,.14) 171px 172px),repeating-linear-gradient(0deg,transparent 0 143px,rgba(31,42,36,.14) 143px 144px)"></div>
+      <div style="position:absolute;left:70px;top:150px;width:760px">
+        <span class="sc" style="font-size:15px;color:#3A4A40">Unmapped water</span>
+        <h1 class="sc" style="margin:4px 0 12px;font-size:52px;line-height:1.02;font-weight:800;letter-spacing:.08em">Ask for a system.</h1>
+        <p style="margin:0;font-size:24px;line-height:1.3;max-width:640px">BOW does not hand back a list of pages. It draws the system as a territory and shows the borders it shares: each border is a variable, with a value and a direction of flow.</p>
+      </div>
+    </sc-if>
+    <sc-if value="{{is.built}}" hint-placeholder-val="{{false}}">
+      <div style="position:absolute;left:0;top:0;width:3000px;height:2000px;transform-origin:0 0;transform:translate({{cam.tx}}px,{{cam.ty}}px) scale({{cam.k}});transition:transform 1.2s cubic-bezier(.6,.05,.25,1)">
+        <div style="position:absolute;left:-1000px;top:-800px;width:5000px;height:3600px;background:repeating-linear-gradient(90deg,transparent 0 199px,rgba(31,42,36,.13) 199px 200px),repeating-linear-gradient(0deg,transparent 0 199px,rgba(31,42,36,.13) 199px 200px)"></div>
+        <sc-for list="{{terrs}}" as="tr" hint-placeholder-count="7">
+          <svg width="{{tr.w}}" height="{{tr.h}}" viewBox="{{tr.vb}}" style="position:absolute;left:{{tr.x}}px;top:{{tr.y}}px;opacity:{{tr.op}};transition:opacity .9s" aria-hidden="true">
+            <path d="{{tr.d}}" fill="none" stroke="#BDD3E0" stroke-width="46" stroke-linejoin="round" opacity=".45"></path>
+            <path d="{{tr.d}}" fill="none" stroke="#B2CBDA" stroke-width="20" stroke-linejoin="round" opacity=".55"></path>
+            <path d="{{tr.d}}" fill="{{tr.fill}}" stroke="none"></path>
+            <path d="{{tr.d}}" fill="{{tr.tex}}" stroke="none"></path>
+            <path d="{{tr.d}}" fill="none" stroke="#1F2A24" stroke-width="{{tr.sw}}" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="{{tr.dash}}" stroke-dashoffset="{{tr.off}}" style="transition:stroke-dashoffset 1.8s ease"></path>
+          </svg>
+          <div style="position:absolute;left:{{tr.lx}}px;top:{{tr.ly}}px;transform:translateX(-50%);text-align:center;width:560px;pointer-events:none;opacity:{{tr.lop}};transition:opacity .9s">
+            <span class="sc" style="display:inline-block;font-size:44px;font-weight:700;letter-spacing:.2em;line-height:1.05;background:{{tr.lbg}};padding:{{tr.lpad}};border:{{tr.lbd}}">{{tr.name}}</span>
+            <sc-if value="{{tr.showSub}}" hint-placeholder-val="{{false}}"><span style="display:block;margin-top:6px;font-size:27px;font-style:italic;font-weight:600;color:#1F2A24"><span style="background:{{tr.lbg}};padding:0 8px">{{tr.sub}}</span></span></sc-if>
+          </div>
+        </sc-for>
+        <sc-for list="{{bords}}" as="bd" hint-placeholder-count="6">
+          <svg width="{{bd.w}}" height="{{bd.h}}" viewBox="{{bd.vb}}" style="position:absolute;left:{{bd.x}}px;top:{{bd.y}}px;opacity:{{bd.op}};transition:opacity .8s" aria-hidden="true">
+            <path d="{{bd.d}}" fill="none" stroke="#1F2A24" stroke-width="{{bd.sw}}" stroke-linecap="{{bd.cap}}" stroke-linejoin="round" stroke-dasharray="{{bd.dash}}"></path>
+            <path d="{{bd.d}}" fill="none" stroke="#FBF9F2" stroke-width="{{bd.sw2}}" stroke-linejoin="round" stroke-dasharray="{{bd.dash2}}"></path>
+          </svg>
+        </sc-for>
+        <sc-for list="{{arrows}}" as="ar" hint-placeholder-count="16">
+          <div class="arw" style="left:{{ar.x}}px;top:{{ar.y}}px;transform:rotate({{ar.rot}}deg);opacity:{{ar.op}}"><i style="animation-delay:{{ar.dl}}s"><svg width="40" height="40" viewBox="0 0 28 28" aria-hidden="true"><path d="M8 4 L22 14 L8 24" fill="none" stroke="#1F2A24" stroke-width="5" stroke-linejoin="miter"></path></svg></i></div>
+        </sc-for>
+        <sc-if value="{{lab.s1}}" hint-placeholder-val="{{false}}">
+          <div style="position:absolute;left:2520px;top:448px;width:440px;box-sizing:border-box;padding:8px 14px;border:3px solid #B5421F;background:#FBF9F2;transform:translateX(-50%);font-size:26px;font-weight:800;color:#8C2F1B;line-height:1.1">LAB · media deal held flat<br><span style="font-weight:500;font-size:23px">authored assumption, not a fact</span></div>
+        </sc-if>
+        <sc-if value="{{lab.s2}}" hint-placeholder-val="{{false}}">
+          <div style="position:absolute;left:2170px;top:1230px;width:660px;height:300px">
+            <span style="position:absolute;left:0;top:0;font-size:25px;font-weight:800;color:#8C2F1B">LAB · the cap, League’s side of the border</span>
+            <div class="t-mod" style="position:absolute;left:{{lab.bandX}}px;top:104px;width:{{lab.bandW}}px;height:40px;box-sizing:border-box"></div>
+            <div class="t-obs" style="position:absolute;left:{{lab.realX}}px;top:92px;width:5px;height:64px"></div>
+            <span style="position:absolute;left:{{lab.realX}}px;top:56px;font-size:23px;font-weight:700;transform:translateX(-80%);white-space:nowrap">Reality $164.961M · observed</span>
+            <div style="position:absolute;left:0;top:158px;width:660px;height:0;border-top:3px solid #1F2A24"></div>
+            <sc-for list="{{lab.ticks}}" as="tk" hint-placeholder-count="3"><span style="position:absolute;left:{{tk.x}}px;top:166px;font-size:22px;transform:translateX(-50%)">{{tk.t}}</span></sc-for>
+            <span style="position:absolute;left:{{lab.bandX}}px;top:202px;font-size:24px;font-weight:800;white-space:nowrap">MODELED · {{lab.rangeT}}</span>
+            <span style="position:absolute;left:{{lab.bandX}}px;top:232px;font-size:22px;font-style:italic;white-space:nowrap">cap sketch v0.1 · run {{lab.runs}} · illustrative</span>
+            <sc-if value="{{lab.hasPick}}" hint-placeholder-val="{{false}}"><div class="t-aut" style="position:absolute;left:{{lab.pickX}}px;top:80px;width:26px;height:26px;margin-left:-13px;transform:rotate(45deg);background:#FBF9F2"></div><span style="position:absolute;left:{{lab.pickX}}px;top:262px;font-size:23px;font-weight:700;transform:translateX(-50%);white-space:nowrap">you assume {{lab.pickT}} · authored</span></sc-if>
+          </div>
+        </sc-if>
+        <sc-if value="{{lab.s3}}" hint-placeholder-val="{{false}}">
+          <div style="position:absolute;left:1190px;top:872px;width:640px;height:400px">
+            <span style="position:absolute;left:0;top:0;font-size:25px;font-weight:800;color:#8C2F1B;white-space:nowrap">LAB · Boston’s lines if the cap were {{lab.pickT}}</span>
+            <span style="position:absolute;left:0;top:38px;font-size:23px;font-weight:700">In Reality</span>
+            <sc-for list="{{lab.real}}" as="rl" hint-placeholder-count="3"><div class="t-obs" style="position:absolute;left:{{rl.x}}px;top:108px;width:4px;height:30px;margin-left:-2px"></div><span style="position:absolute;left:{{rl.x}}px;top:50px;font-size:22px;font-weight:700;line-height:1.1;transform:translateX(-50%);text-align:center;white-space:nowrap">{{rl.t1}}<br>{{rl.t2}}</span></sc-for>
+            <div style="position:absolute;left:0;top:138px;width:640px;height:0;border-top:3px solid #1F2A24"></div>
+            <span style="position:absolute;left:0;top:152px;font-size:23px;font-weight:700">If your pick held</span>
+            <sc-for list="{{lab.asm}}" as="al" hint-placeholder-count="3"><div class="t-com" style="position:absolute;left:{{al.x}}px;top:238px;width:8px;height:32px;margin-left:-4px"></div><span style="position:absolute;left:{{al.x}}px;top:180px;font-size:22px;font-weight:700;line-height:1.1;transform:translateX(-50%);text-align:center;white-space:nowrap">{{al.t1}}<br>{{al.t2}}</span></sc-for>
+            <div style="position:absolute;left:0;top:270px;width:640px;height:0;border-top:3px solid #1F2A24"></div>
+            <div class="t-obs" style="position:absolute;left:{{lab.payX}}px;top:112px;width:3px;height:160px;margin-left:-1px"></div>
+            <div class="t-rec" style="position:absolute;left:{{lab.payX}}px;top:126px;width:26px;height:26px;margin-left:-14px;border-radius:13px"></div>
+            <div class="t-rec" style="position:absolute;left:{{lab.payX}}px;top:258px;width:26px;height:26px;margin-left:-14px;border-radius:13px"></div>
+            <span style="position:absolute;left:{{lab.payX}}px;top:288px;font-size:24px;font-weight:800;transform:translateX(-50%);white-space:nowrap">Payroll ≈ $203.6M</span>
+            <span style="position:absolute;left:0;top:326px;font-size:23px;font-weight:700;line-height:1.2;width:640px">{{lab.verdict}}</span>
+          </div>
+        </sc-if>
+        <sc-for list="{{lms}}" as="lm" hint-placeholder-count="6">
+          <button type="button" class="lmk" onClick="{{lm.go}}" aria-label="{{lm.aria}}" style="left:{{lm.x}}px;top:{{lm.y}}px;opacity:{{lm.op}}"><span class="dot"><i></i></span><sc-if value="{{lm.here}}" hint-placeholder-val="{{false}}"><span class="here"></span></sc-if><span class="nm">{{lm.name}}</span></button>
+        </sc-for>
+        <sc-for list="{{bords}}" as="bd" hint-placeholder-count="6">
+          <button type="button" class="plq" onClick="{{bd.go}}" disabled="{{bd.dis}}" aria-label="{{bd.aria}}" style="left:{{bd.lx}}px;top:{{bd.ly}}px;opacity:{{bd.pop}}">
+            <span class="{{bd.tex}}" style="width:24px;flex:none;border-width:0 2px 0 0;border-style:{{bd.bst}};border-color:#1F2A24;box-sizing:border-box"></span>
+            <span style="padding:9px 14px;display:block;min-width:0">
+              <span class="sc" style="display:block;font-size:25px;font-weight:800;letter-spacing:.1em;line-height:1.05">{{bd.title}}</span>
+              <span style="display:block;font-size:27px;font-weight:700;line-height:1.15;margin-top:2px">{{bd.value}}</span>
+              <span style="display:block;font-size:22px;font-style:italic;font-weight:500;line-height:1.15;color:#33413A">{{bd.flow}}</span>
+              <sc-if value="{{bd.showHow}}" hint-placeholder-val="{{false}}"><span style="display:block;margin-top:5px;padding-top:4px;border-top:1px solid #1F2A24;font-size:21px;line-height:1.15">{{bd.prov}}</span></sc-if>
+            </span>
+          </button>
+        </sc-for>
+      </div>
+      <sc-if value="{{lab.on}}" hint-placeholder-val="{{false}}">
+        <div style="position:absolute;right:20px;top:16px;padding:6px 16px;border:3px double #B5421F;background:#FBF9F2;color:#8C2F1B;transform:rotate(-2.5deg)"><span class="sc" style="font-size:22px;font-weight:800;letter-spacing:.16em">Lab · not reality</span></div>
+        <button type="button" class="btn" onClick="{{lab.exit}}" style="position:absolute;right:20px;top:70px;min-height:40px">Back to reality</button>
+      </sc-if>
+    </sc-if>
+  </section>
+
+  <section style="position:absolute;left:28px;top:704px;width:1384px;height:148px;box-sizing:border-box;padding-top:4px">
+    <sc-if value="{{is.plain}}" hint-placeholder-val="{{true}}">
+    <div style="display:grid;grid-template-columns:660px 1fr 340px;gap:26px">
+      <div><span class="sc" style="display:block;font-size:14px;color:#4A574E">{{note.kick}}</span><span class="sc" style="display:block;font-size:26px;font-weight:800;letter-spacing:.06em;line-height:1.1;margin:2px 0 4px">{{note.head}}</span><p style="margin:0;font-size:19px;line-height:1.28">{{note.text}}</p></div>
+      <div>
+        <span class="sc" style="font-size:14px;color:#4A574E">Made of</span>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px"><sc-for list="{{note.kinds}}" as="kd" hint-placeholder-count="2"><div style="display:flex;gap:8px;align-items:center"><span class="sw {{kd.cls}}"></span><sc-if value="{{kd.show}}" hint-placeholder-val="{{false}}"><span style="font-size:16px;font-weight:700">{{kd.w}}</span></sc-if></div></sc-for></div>
+        <sc-if value="{{how}}" hint-placeholder-val="{{false}}"><span style="display:block;margin-top:6px;font-size:15px;line-height:1.2">{{note.src}}</span></sc-if>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:stretch">
+        <sc-if value="{{note.canLab}}" hint-placeholder-val="{{false}}"><button type="button" class="btn" onClick="{{startLab}}" style="min-height:64px;text-align:left;font-size:18px;line-height:1.1">What if the media deal had stayed flat?</button></sc-if>
+        <sc-if value="{{note.noLab}}" hint-placeholder-val="{{true}}"><span style="font-size:16px;line-height:1.2;font-style:italic">{{note.noLabT}}</span></sc-if>
+      </div>
+    </div>
+    </sc-if>
+    <sc-if value="{{is.lab}}" hint-placeholder-val="{{false}}">
+    <div style="display:grid;grid-template-columns:660px 1fr 340px;gap:26px">
+      <div><span class="sc" style="display:block;font-size:14px;color:#8C2F1B">Lab · step {{lab.n}} of 3 · not reality</span><span class="sc" style="display:block;font-size:26px;font-weight:800;letter-spacing:.06em;line-height:1.1;margin:2px 0 4px">{{lab.head}}</span><p style="margin:0;font-size:19px;line-height:1.28">{{lab.text}}</p></div>
+      <div>
+        <span class="sc" style="font-size:14px;color:#4A574E">Made of</span>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px"><sc-for list="{{lab.kinds}}" as="kd" hint-placeholder-count="3"><div style="display:flex;gap:8px;align-items:center"><span class="sw {{kd.cls}}"></span><span style="font-size:16px;font-weight:700">{{kd.w}}</span></div></sc-for></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:stretch"><sc-for list="{{lab.btns}}" as="bt" hint-placeholder-count="3"><button type="button" class="btn" onClick="{{bt.go}}" style="min-height:40px;text-align:left;font-size:16px;line-height:1.05;background:{{bt.bg}};color:{{bt.fg}}">{{bt.t}}</button></sc-for></div>
+    </div>
+    </sc-if>
+  </section>
+
+  <footer style="position:absolute;left:0;top:858px;width:1440px;height:42px;box-sizing:border-box;padding:0 28px;display:flex;justify-content:space-between;gap:40px;align-items:center">
+    <span style="font-size:13px;line-height:1.2;color:#4A574E;max-width:660px">COMMERCIAL LENS · Hypothesis: borders are where BOW Network value appears. Official institutions pay to publish authoritative shared state; everyone else follows it free.</span>
+    <span style="font-size:13px;line-height:1.2;color:#4A574E;max-width:660px;text-align:right">PROTOTYPE · DESIGN PROPOSAL · SPECULATIVE FRONTIER (system-to-system linking) · data: fixture, as of 29 Sep 2026, verify before use</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      const s = this.state || {};
+      if (s.q && (s.dt || 0) < 50) this.setState({ dt: (s.dt || 0) + 1 });
+    }, 110);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  renderVals() {
+    const s = this.state || {};
+    const upd = (o) => this.setState(o);
+    const q = s.q || '';
+    const dt = s.dt || 0;
+    const how = !!s.how;
+    const qText = s.qText === undefined ? 'Boston basketball' : s.qText;
+    const trail = s.trail || [{ t: 'c', v: null, lm: null }];
+    const at = Math.min(s.at || 0, trail.length - 1);
+    const lab = s.lab || 0;
+    const pick = s.pick || null;
+    const runs = s.runs || 0;
+
+    const runSearch = (text) => {
+      const t = (text || '').toLowerCase();
+      const k = /semiconductor|chip|fab|wafer/.test(t) ? 'semis' : /boston|basketball|celtics|nba/.test(t) ? 'boston' : '';
+      if (!k) { upd({ miss: true, qText: text }); return; }
+      upd({ q: k, qText: k === 'boston' ? 'Boston basketball' : 'semiconductor supply chain', dt: 0, trail: [{ t: 'c', v: null, lm: null }], at: 0, lab: 0, pick: null, miss: false });
+    };
+
+    /* ---------- the plane: shared edges, region polygons ---------- */
+    const E = {
+      BU: [[950, 640], [935, 760], [965, 880], [930, 1010], [960, 1140], [940, 1260], [950, 1360]],
+      BL: [[2050, 640], [2068, 760], [2040, 880], [2072, 1010], [2045, 1130], [2066, 1250], [2050, 1360]],
+      BA: [[950, 1360], [1090, 1378], [1230, 1350], [1380, 1385], [1530, 1352], [1690, 1382], [1850, 1350], [2050, 1360]],
+      BC: [[950, 640], [1100, 622], [1240, 655], [1390, 628], [1550, 660], [1700, 630], [1860, 652], [2050, 640]],
+      LM: [[2050, 640], [2200, 655], [2350, 625], [2520, 660], [2700, 632], [2900, 650]],
+      CM: [[2050, 640], [2035, 500], [2065, 340], [2040, 180], [2050, 100]],
+      LA: [[2050, 1360], [2070, 1480], [2040, 1620], [2065, 1760], [2050, 1900]],
+      AG: [[950, 1360], [935, 1480], [965, 1600], [940, 1720], [950, 1900]],
+      UG: [[950, 1360], [800, 1378], [650, 1345], [500, 1380], [350, 1352], [100, 1370]],
+      UC: [[950, 640], [940, 520], [965, 380], [945, 240], [950, 100]],
+      nC: [[950, 100], [1200, 88], [1500, 112], [1800, 90], [2050, 100]],
+      nM: [[2050, 100], [2300, 115], [2600, 90], [2900, 110]],
+      eM: [[2900, 110], [2915, 300], [2890, 500], [2900, 650]],
+      eL: [[2900, 650], [2925, 900], [2890, 1200], [2910, 1500], [2900, 1900]],
+      sL: [[2900, 1900], [2600, 1915], [2300, 1890], [2050, 1900]],
+      sA: [[2050, 1900], [1750, 1920], [1450, 1890], [1150, 1915], [950, 1900]],
+      sG: [[950, 1900], [700, 1920], [400, 1890], [100, 1910]],
+      wG: [[100, 1910], [85, 1700], [110, 1500], [100, 1370]],
+      wU: [[100, 1370], [80, 1100], [115, 800], [90, 500], [100, 300], [110, 100]],
+      nU: [[110, 100], [400, 90], [700, 112], [950, 100]]
+    };
+    const rev = (a) => a.slice().reverse();
+    const join = (...parts) => { const out = []; parts.forEach((p) => p.forEach((pt, i) => { const l = out[out.length - 1]; if (l && i === 0 && l[0] === pt[0] && l[1] === pt[1]) return; out.push(pt); })); return out; };
+    const REG = {
+      c: join(E.BC, E.BL, rev(E.BA), rev(E.BU)), n: join(E.BC, E.CM, rev(E.nC), rev(E.UC)), ne: join(E.LM, rev(E.eM), rev(E.nM), rev(E.CM)),
+      e: join(E.BL, E.LA, rev(E.sL), rev(E.eL), rev(E.LM)), s: join(E.BA, E.LA, E.sA, rev(E.AG)), sw: join(E.AG, E.sG, E.wG, rev(E.UG)), w: join(E.BU, E.UG, E.wU, E.nU, rev(E.UC))
+    };
+    const CEN = { c: [1500, 1000], w: [520, 900], e: [2480, 1100], n: [1500, 380], s: [1500, 1640], sw: [520, 1660], ne: [2480, 330] };
+    const LBL = { c: [1500, 770], w: [650, 700], e: [2480, 790], n: [1500, 215], s: [1500, 1800], sw: [525, 1790], ne: [2480, 190] };
+    const ORDER = ['c', 'n', 'ne', 'e', 's', 'sw', 'w'];
+
+    /* ---------- the two systems ---------- */
+    const LAND = '#E8EFE3', SAND = '#F1EBDD', AIR = '#E4EEF3';
+    const SYS = {
+      boston: {
+        terr: {
+          c: { name: 'Boston Celtics', sub: 'Reality · observed · live', fill: LAND, short: 'Boston' }, w: { name: 'Players’ union & agents', sub: 'the player’s side', fill: LAND, short: 'Union' },
+          e: { name: 'NBA League', sub: 'sets the rules · official', fill: SAND, short: 'League' }, n: { name: 'City of Boston', sub: 'public body', fill: SAND, short: 'City' },
+          s: { name: 'Arena operator · TD Garden', sub: 'private operator', fill: LAND, short: 'Arena' }, sw: { name: 'Garden nights', sub: 'by [creator] · unreviewed', fill: LAND, short: 'Garden nights', gen: true },
+          ne: { name: 'Media partners', sub: 'Disney/ESPN · NBC · Amazon', fill: AIR, short: 'Media' }
+        },
+        bords: [
+          { id: 'cap', edge: 'BL', a: 'e', b: 'c', from: 'e', kind: 'obs', title: 'Salary cap', value: '$164.961M · tax $200.428M', flow: 'League computes it. Boston is bound by it.', short: 'salary cap', land: { c: 'pay', e: 'capc' }, prov: 'OBSERVED · BOW Economics Live fixture, verify. The League’s own number.' },
+          { id: 'tat', edge: 'BU', a: 'c', b: 'w', both: true, kind: 'obs', title: 'Tatum contract', value: '≈ $58.5M · approx., verify', flow: 'Shared obligation, both ways.', short: 'Tatum contract', land: { c: 'ledger', w: 'agt' }, prov: 'OBSERVED · public reporting, approx., verify. Both sides hold this number.' },
+          { id: 'lease', edge: 'BA', a: 'c', b: 's', kind: 'unk', title: 'Lease & arena revenue', value: '[terms: not public]', flow: 'UNKNOWN. Direction unknown.', short: 'lease', land: { c: 'bl', s: 'lease' }, prov: 'UNKNOWN · terms not public. Dashed on purpose.' },
+          { id: 'city', edge: 'BC', a: 'c', b: 'n', kind: 'unk', title: 'Permits & taxes', value: '[UNKNOWN in this prototype]', flow: 'Not drawn: nothing is known.', short: 'permits & taxes', land: { c: 'bc', n: 'perm' }, prov: 'UNKNOWN in this prototype.' },
+          { id: 'media', edge: 'LM', a: 'e', b: 'ne', from: 'ne', kind: 'obs', title: 'Media rights', value: '≈ $76B · 11 years from 2025–26', flow: 'Media partners → League. Reported, verify.', short: 'media rights', land: { e: 'inc', ne: 'deal' }, prov: 'OBSERVED (reported) · verify.' },
+          { id: 'gn', edge: 'AG', a: 's', b: 'sw', kind: 'gen', title: 'Attendance & price', value: '[creator’s assumptions]', flow: 'Binds nobody. Unreviewed.', short: 'attendance & price', land: { s: 'lease', sw: 'gn' }, prov: 'Creator-built · unreviewed · the creator’s own assumptions.' }
+        ],
+        lms: [
+          { id: 'pay', slot: 'c', x: 1500, y: 925, name: 'Payroll ledger', kinds: ['obs', 'com'], src: 'Payroll and lines: OBSERVED, fixture, verify. Gaps: COMPUTED from them.', text: 'Committed payroll ≈ $203.6M (verify). Against the League’s lines: $3.172M past the tax line, $5.415M under the first apron, $18.086M under the second apron. The gaps are computed here. The lines themselves come across the cap border.' },
+          { id: 'ledger', slot: 'c', x: 1000, y: 1215, name: 'Contract ledger', kinds: ['obs'], src: 'Public reporting, approx., verify.', text: 'Tatum ≈ $58.5M · Brown ≈ $57.1M · White ≈ $30.3M · Hauser ≈ $10.8M · Pritchard ≈ $7.8M · rest of the roster [from the Reality feed]. Each figure is a number two parties hold.' },
+          { id: 'bl', slot: 'c', x: 1850, y: 1240, name: 'Boston’s lease', kinds: ['unk'], src: 'Terms not public.', text: 'What Boston pays and earns under the lease: UNKNOWN. Nothing is drawn because nothing is known.' },
+          { id: 'bc', slot: 'c', x: 1180, y: 880, name: 'Local obligations', kinds: ['unk'], src: 'Not in this prototype.', text: 'Permits and taxes Boston owes the city: [UNKNOWN in this prototype].' },
+          { id: 'capc', slot: 'e', x: 2480, y: 1130, name: 'Cap computation', kinds: ['obs', 'aut'], src: 'Lines: OBSERVED, fixture, verify. The rule: AUTHORED by the 2023 CBA (verify).', text: 'Cap = share of basketball-related income under the CBA; growth limited to 10% a season (2023 CBA, verify). 2026–27: cap $164.961M · tax line $200.428M · first apron $209.015M · second apron $221.686M. The League computes it. Every team is bound by it.' },
+          { id: 'inc', slot: 'e', x: 2480, y: 960, name: 'Income pool', kinds: ['obs', 'unk'], src: 'Media share of the pool: not in this prototype.', text: 'Media rights money is one input to the income the cap is a share of. How much of it: [share not in this prototype]. Follow media rights into Media partners, or ask what if.' },
+          { id: 'deal', slot: 'ne', x: 2480, y: 350, name: 'Rights deal', kinds: ['obs'], src: 'Reported, verify.', text: '11-year rights deal ≈ $76B from 2025–26 (reported, verify). Partners named in reports: Disney/ESPN, NBC, Amazon. The money starts here. The League’s income, and so the cap, follow it.' },
+          { id: 'agt', slot: 'w', x: 520, y: 900, name: 'Player’s side', kinds: ['obs', 'unk'], src: 'Number: approx., verify. Their state: not in this prototype.', text: 'The same ≈ $58.5M is an obligation the player’s side holds. What agents and the union hold about it: [not in this prototype].' },
+          { id: 'lease', slot: 's', x: 1500, y: 1640, name: 'Lease', kinds: ['unk'], src: 'Terms not public.', text: 'Lease and arena revenue terms: not public. UNKNOWN.' },
+          { id: 'perm', slot: 'n', x: 1500, y: 380, name: 'Permits & taxes', kinds: ['unk'], src: 'Not in this prototype.', text: '[Permits, taxes: UNKNOWN in this prototype.]' },
+          { id: 'gn', slot: 'sw', x: 520, y: 1660, name: 'Arena economics', kinds: ['gen'], src: 'Creator-built. Unreviewed.', text: 'Creator-built and unreviewed. Its numbers are the creator’s assumptions, not TD Garden’s. It binds nobody. Read it for ideas, not for facts.' }
+        ],
+        intro: { head: 'Boston Celtics · Reality', text: 'You are in the territory of the real team: observed, live, not yours to act on. Its borders are the variables it shares with its neighbours. Follow one across.', kinds: ['obs'], src: 'Territory: OBSERVED. Heavy solid line: a known shared value. Dashed: shared, but unknown.' },
+        what: 'e ne'
+      },
+      semis: {
+        terr: {
+          c: { name: 'A leading-edge fab', sub: 'Reality · observed', fill: LAND, short: 'Fab' }, w: { name: 'Scanner supplier', sub: 'equipment maker', fill: SAND, short: 'Scanners' },
+          e: { name: 'A chip designer', sub: 'no fab of its own', fill: LAND, short: 'Designer' }, ne: { name: 'An automaker', sub: 'buys chips', fill: AIR, short: 'Automaker' }
+        },
+        bords: [
+          { id: 'euv', edge: 'BU', a: 'w', b: 'c', from: 'w', kind: 'obs', title: 'EUV scanners', value: 'one supplier', flow: 'Scanner supplier → fab. As given.', short: 'EUV scanners', land: { c: 'fleet', w: 'euv' }, prov: 'OBSERVED · as given for this example.' },
+          { id: 'wafer', edge: 'BL', a: 'c', b: 'e', both: true, kind: 'unk', title: 'Wafer starts', value: '[wafers a month: feed]', flow: 'Orders one way, wafers the other.', short: 'wafer starts', land: { c: 'wafers', e: 'ord' }, prov: 'UNKNOWN value · [from the Reality feed].' },
+          { id: 'alloc', edge: 'LM', a: 'e', b: 'ne', from: 'e', kind: 'unk', title: 'Allocation', value: '[share per customer: UNKNOWN]', flow: 'Designer → automaker.', short: 'allocation', land: { e: 'sup', ne: 'alloc' }, prov: 'UNKNOWN · not public.' }
+        ],
+        lms: [
+          { id: 'wafers', slot: 'c', x: 1480, y: 880, name: 'Wafer starts', kinds: ['unk', 'obs'], src: 'Number: not in this prototype.', text: 'Wafers started a month: [from the Reality feed]. Set by what the designer orders and by the scanners the fab owns. Adding starts needs more scanner capacity.' },
+          { id: 'fleet', slot: 'c', x: 1200, y: 1180, name: 'Scanner fleet', kinds: ['unk'], src: 'Not in this prototype.', text: 'How many EUV scanners this fab runs: [from the Reality feed].' },
+          { id: 'euv', slot: 'w', x: 520, y: 900, name: 'EUV scanners', kinds: ['obs', 'unk'], src: 'One supplier: as given. Lead time: not known.', text: 'One supplier makes them (as given). What it can ship is the ceiling on every fab that needs them. Lead time: [UNKNOWN].' },
+          { id: 'ord', slot: 'e', x: 2480, y: 1130, name: 'Wafer orders', kinds: ['unk'], src: 'Volume: not in this prototype.', text: 'The designer commits wafer starts at the fab. Volume: [from the feed]. If it orders more, the fab needs scanners it may not be able to get.' },
+          { id: 'sup', slot: 'e', x: 2480, y: 960, name: 'Chip supply', kinds: ['unk'], src: 'Not public.', text: 'What the designer has to divide among its customers: [UNKNOWN].' },
+          { id: 'alloc', slot: 'ne', x: 2480, y: 350, name: 'Chip allocation', kinds: ['unk'], src: 'Not public.', text: 'How scarce chips are split among customers, the automaker among them: [UNKNOWN: not public].' }
+        ],
+        intro: { head: 'A leading-edge fab', text: 'A second territory, to show the idea travels. Three borders: one known, two whose values are not. The dashed lines are honest about that.', kinds: ['obs', 'unk'], src: 'Fictional-generic example. Nothing here is a real company’s data.' },
+        what: ''
+      }
+    };
+    const SD = SYS[q] || SYS.boston;
+    const NTERR = q === 'semis' ? 4 : 7;
+
+    /* ---------- territories ---------- */
+    const terrs = [];
+    ORDER.forEach((slot, oi) => {
+      const T = SD.terr[slot];
+      if (!q || !T) return;
+      const pts = REG[slot];
+      const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+      const pad = 60, bx = Math.min(...xs) - pad, by = Math.min(...ys) - pad, bw = Math.max(...xs) - bx + pad, bh = Math.max(...ys) - by + pad;
+      const d = 'M ' + pts.map((p) => p[0] + ' ' + p[1]).join(' L ') + ' Z';
+      let len = 0; pts.forEach((p, i) => { const n = pts[(i + 1) % pts.length]; len += Math.hypot(n[0] - p[0], n[1] - p[1]); });
+      const vis = slot === 'c' ? dt >= 1 : dt >= 6 + oi;
+      terrs.push({ x: bx, y: by, w: bw, h: bh, vb: bx + ' ' + by + ' ' + bw + ' ' + bh, d, fill: T.fill, tex: T.gen ? 'url(#stip)' : 'none', sw: 4,
+        dash: T.gen ? '2 12' : String(Math.round(len)), off: T.gen || vis ? 0 : Math.round(len), op: vis ? 1 : 0,
+        lbg: T.gen ? '#FBF9F2' : 'transparent', lpad: T.gen ? '4px 14px' : '0', lbd: T.gen ? '2px dotted #1F2A24' : '0', lx: LBL[slot][0], ly: LBL[slot][1], name: T.name, sub: T.sub, showSub: how || !!T.gen, lop: dt >= 9 ? 1 : 0 });
+    });
+
+    /* ---------- borders and flow arrows ---------- */
+    const bords = [], arrows = [];
+    SD.bords.forEach((b, bi) => {
+      const pts = E[b.edge];
+      const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+      const pad = 24, bx = Math.min(...xs) - pad, by = Math.min(...ys) - pad, bw = Math.max(...xs) - bx + pad, bh = Math.max(...ys) - by + pad;
+      const d = 'M ' + pts.map((p) => p[0] + ' ' + p[1]).join(' L ');
+      const mid = pts[Math.floor(pts.length / 2)];
+      const kind = b.kind;
+      const here = trail[at].t;
+      const adj = b.a === here || b.b === here;
+      const shown = dt >= 12 + bi;
+      const tex = kind === 'obs' ? 't-obs' : kind === 'unk' ? 't-unk' : 't-gen';
+      bords.push({ x: bx, y: by, w: bw, h: bh, vb: bx + ' ' + by + ' ' + bw + ' ' + bh, d, op: shown ? 1 : 0,
+        sw: kind === 'obs' ? 12 : 9, sw2: kind === 'obs' ? 4 : 0, cap: kind === 'gen' ? 'round' : 'butt', dash: kind === 'unk' ? '22 16' : kind === 'gen' ? '1 15' : 'none', dash2: 'none',
+        lx: mid[0], ly: mid[1], title: b.title, value: b.value, flow: b.flow, prov: b.prov, showHow: how, tex, bst: kind === 'obs' ? 'solid' : 'dashed',
+        dis: !adj, pop: shown ? 1 : 0, aria: b.title + ': ' + b.value + '. ' + b.flow,
+        go: () => {
+          const st = this.state || {}; const tr = st.trail || [{ t: 'c', v: null, lm: null }]; const a0 = Math.min(st.at || 0, tr.length - 1); const h = tr[a0].t;
+          if (b.a !== h && b.b !== h) return;
+          const dest = b.a === h ? b.b : b.a;
+          const nt = tr.slice(0, a0 + 1).concat([{ t: dest, v: b.id, lm: b.land[dest] }]);
+          upd({ trail: nt, at: nt.length - 1 });
+        } });
+      if (kind === 'obs' && shown) {
+        const src = b.both ? null : b.from, dst = b.both ? null : (b.a === b.from ? b.b : b.a);
+        [1, 2, pts.length - 3, pts.length - 2].forEach((i, k) => {
+          const p = pts[i], t = [pts[i + 1][0] - pts[i - 1][0], pts[i + 1][1] - pts[i - 1][1]], L = Math.hypot(t[0], t[1]) || 1;
+          let n = [-t[1] / L, t[0] / L];
+          const A = CEN[src || b.a], Bc = CEN[dst || b.b], dv = [Bc[0] - A[0], Bc[1] - A[1]];
+          if (n[0] * dv[0] + n[1] * dv[1] < 0) n = [-n[0], -n[1]];
+          const rot = Math.round(Math.atan2(n[1], n[0]) * 180 / Math.PI);
+          arrows.push({ x: p[0], y: p[1], rot: b.both && k % 2 ? rot + 180 : rot, dl: (k * 0.5).toFixed(1), op: 1 });
+        });
+      }
+    });
+
+    /* ---------- landmarks, camera, path ---------- */
+    const lmById = {}; SD.lms.forEach((l) => { lmById[l.id + '|' + l.slot] = l; });
+    const lmFind = (id, slot) => lmById[id + '|' + slot];
+    const step = trail[at];
+    const curLm = step.lm ? lmFind(step.lm, step.t) : null;
+    const lms = SD.lms.filter((l) => SD.terr[l.slot]).map((l) => ({ x: l.x, y: l.y, name: l.name, aria: 'Landmark: ' + l.name, op: dt >= 15 && !(lab >= 3 && l.id === 'pay') ? 1 : 0, here: !!curLm && curLm.id === l.id && curLm.slot === l.slot,
+      go: () => { const st = this.state || {}; const tr = (st.trail || [{ t: 'c', v: null, lm: null }]).slice(); const a0 = Math.min(st.at || 0, tr.length - 1); if (tr[a0].t !== l.slot) return; tr[a0] = { ...tr[a0], lm: l.id }; upd({ trail: tr }); } }));
+    const FOC = { c: [1580, 1000], w: [520, 900], e: [2480, 1000], n: [1500, 380], s: [1500, 1640], sw: [520, 1660], ne: [2480, 330] };
+    let foc = curLm ? [curLm.x, curLm.y] : FOC[step.t];
+    const BORD = SD.bords;
+    if (lab === 1) foc = [2500, 640]; else if (lab === 2) foc = [2480, 1230]; else if (lab === 3) foc = [1500, 1060];
+    const K = 0.6;
+    const cam = { k: K, tx: Math.round(692 - K * foc[0]), ty: Math.round(287 - K * foc[1]) };
+
+    const pathItems = [];
+    trail.forEach((st, i) => {
+      if (i > 0) { const b = BORD.find((x) => x.id === st.v); pathItems.push({ isT: false, isV: true, label: b ? b.short : '', op: i > at ? 0.45 : 1 }); }
+      const T = SD.terr[st.t];
+      pathItems.push({ isT: true, isV: false, label: T ? T.short : '', cur: i === at ? 'step' : 'false', bg: i === at ? '#1F2A24' : '#FBF9F2', fg: i === at ? '#FBF9F2' : '#1F2A24', op: i > at ? 0.5 : 1, go: () => upd({ at: i, lab: 0 }) });
+    });
+    const lastB = at > 0 ? BORD.find((x) => x.id === trail[at].v) : null;
+
+    /* ---------- notes ---------- */
+    const KIND = { obs: ['t-obs', 'OBSERVED'], com: ['t-com', 'COMPUTED'], aut: ['t-aut', 'AUTHORED'], unk: ['t-unk', 'UNKNOWN'], gen: ['t-gen', 'CREATOR-BUILT'], mod: ['t-mod', 'MODELED'], rec: ['t-rec', 'RECORDED'] };
+    const mkKinds = (arr, show) => arr.map((k) => ({ cls: KIND[k][0], w: KIND[k][1], show }));
+    const atLeagueOrMedia = q === 'boston' && (step.t === 'e' || step.t === 'ne');
+    const note = curLm ? {
+      kick: at > 0 ? 'Arrived · ' + SD.terr[step.t].name + ' · where “' + (lastB ? lastB.short : '') + '” lives' : SD.terr[step.t].name, head: curLm.name, text: curLm.text, kinds: mkKinds(curLm.kinds, how), src: curLm.src
+    } : { kick: 'In', head: SD.intro.head, text: SD.intro.text, kinds: mkKinds(SD.intro.kinds, how), src: SD.intro.src };
+    note.canLab = atLeagueOrMedia; note.noLab = !atLeagueOrMedia;
+    note.noLabT = q === 'boston' ? 'What if: offered at the media border, from the League or Media partners.' : 'What if: not offered here. Refused by rule: a what-if needs a named, versioned model at that border, and none is published.';
+
+    /* ---------- the lab: media flat -> League cap -> Boston lines ---------- */
+    const CAP = 164.961, TAX = 200.428, A1 = 209.015, A2 = 221.686, PAY = 203.6;
+    const lowC = CAP * (1 - 0.3 * 0.3), highC = CAP * (1 - 0.2 * 0.2), midC = (lowC + highC) / 2;
+    const f1 = (v) => (Math.round(v * 10) / 10).toFixed(1);
+    const f2 = (v) => (Math.round(v * 1000) / 1000).toString();
+    const pv = pick === 'low' ? lowC : pick === 'high' ? highC : pick === 'mid' ? midC : null;
+    const CX = (v) => Math.round((v - 145) * 22.4);
+    const RX = (v) => Math.round((v - 180) * 14);
+    const asm = pv ? [[TAX, 'tax'], [A1, 'apron 1'], [A2, 'apron 2']].map((l) => { const v = pv * l[0] / CAP; const gap = PAY - v; return { v, x: RX(v), g: gap, w: l[1] }; }) : [];
+    const gapT = (g) => (g >= 0 ? 'over by $' : 'under by $') + f1(Math.abs(g)) + 'M';
+    const labS = { on: lab > 0, s1: lab >= 1, s2: lab >= 2, s3: lab >= 3, runs,
+      bandX: CX(lowC), bandW: CX(highC) - CX(lowC), realX: CX(CAP), rangeT: '$' + f1(lowC) + 'M to $' + f1(highC) + 'M',
+      ticks: [150, 160, 170].map((v) => ({ x: CX(v), t: '$' + v + 'M' })), hasPick: !!pv, pickX: pv ? CX(pv) : 0, pickT: pv ? '$' + f1(pv) + 'M' : '',
+      real: [[TAX, 'tax', '$200.4M'], [A1, 'apron 1', '$209.0M'], [A2, 'apron 2', '$221.7M']].map((l) => ({ x: RX(l[0]), t1: l[1], t2: l[2] })),
+      asm: asm.map((a) => ({ x: a.x, t1: a.w, t2: '$' + f1(a.v) + 'M' })), payX: RX(PAY),
+      verdict: pv ? 'Payroll ≈ $203.6M would be ' + asm.map((a) => (a.g >= 0 ? 'over ' : 'under ') + (a.w === 'tax' ? 'the tax line' : a.w) + ' by $' + f1(Math.abs(a.g)) + 'M').join(', ') + '.' : '' };
+    const labDo = {
+      1: { n: 1, head: 'What if the media deal had stayed flat?', text: 'Two authored assumptions, shown so you can see them: media is 20–30% of the income that sets the cap, and the new deal added 20–30% to that. Nobody measured either. Run the sketch and it gives a range, not an answer.', kinds: ['aut'] },
+      2: { n: 2, head: 'The cap moves inside a range', text: 'Cap sketch v0.1 ran in this page: with those assumptions the 2026–27 cap lands between $' + f1(lowC) + 'M and $' + f1(highC) + 'M, not $164.961M. A range, not a prediction. To follow it across the border into Boston you must pick a number, and that pick is yours.', kinds: ['obs', 'aut', 'mod'] },
+      3: { n: 3, head: 'Across the cap border, into Boston', text: 'You assumed a cap of ' + labS.pickT + '. Every line moves with it, at the fixture’s ratios (simplified; the CBA sets each line by its own formula, verify). The gaps below are computed from your pick, so they inherit its uncertainty.', kinds: ['obs', 'aut', 'com'] }
+    };
+    const L = labDo[lab] || labDo[1];
+    const labBtns = lab === 1 ? [{ t: 'Run cap sketch v0.1', bg: '#1F2A24', fg: '#FBF9F2', go: () => upd({ lab: 2, pick: null, runs: runs + 1 }) }]
+      : lab === 2 ? [['low', 'Assume the low end $' + f1(lowC) + 'M'], ['mid', 'Assume the middle $' + f1(midC) + 'M'], ['high', 'Assume the high end $' + f1(highC) + 'M']].map((p) => ({ t: p[1], bg: pick === p[0] ? '#1F2A24' : '#FBF9F2', fg: pick === p[0] ? '#FBF9F2' : '#1F2A24', go: () => upd({ pick: p[0], lab: 3 }) }))
+      : [{ t: 'Try another end of the range', bg: '#FBF9F2', fg: '#1F2A24', go: () => upd({ lab: 2 }) }];
+    const labView = { ...labS, n: L.n, head: L.head, text: L.text, kinds: mkKinds(L.kinds, true), btns: labBtns, exit: () => upd({ lab: 0, pick: null }) };
+
+    return {
+      qText, miss: !!s.miss, how, howPressed: how ? 'true' : 'false', howBg: how ? '#1F2A24' : '#FBF9F2', howFg: how ? '#FBF9F2' : '#1F2A24',
+      onQ: (e) => upd({ qText: e.target.value, miss: false }),
+      onKey: (e) => { if (e.key === 'Enter') runSearch((this.state && this.state.qText !== undefined ? this.state.qText : 'Boston basketball')); },
+      doSearch: () => runSearch((this.state && this.state.qText !== undefined ? this.state.qText : 'Boston basketball')),
+      chipB: () => runSearch('Boston basketball'), chipS: () => runSearch('semiconductor supply chain'),
+      toggleHow: () => upd({ how: !(this.state && this.state.how) }),
+      is: { empty: !q, built: !!q, plain: !!q && lab === 0, lab: !!q && lab > 0 },
+      pathItems, noRetrace: at === 0, noForward: at >= trail.length - 1,
+      retraceLabel: at > 0 ? 'Retrace: back across ' + (lastB ? lastB.short : '') : 'Retrace',
+      retrace: () => upd({ at: Math.max(0, at - 1), lab: 0 }), forward: () => upd({ at: Math.min(trail.length - 1, at + 1), lab: 0 }),
+      cam, terrs, bords, arrows, lms, lab: labView, note, startLab: () => upd({ lab: 1, pick: null })
+    };
+  }
+}
+</script>
+</body>
+</html>

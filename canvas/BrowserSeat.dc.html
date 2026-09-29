@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Seat</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400;1,700&amp;family=Libre+Franklin:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F2EDE3;color:#221A16;font-family:'Libre Franklin',sans-serif}
+a{color:#6B1D1D}a:hover{color:#3F1010}
+.disp{font-family:'Bodoni Moda',serif;font-style:italic;font-weight:400}
+.cap{font-family:'Libre Franklin',sans-serif;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+.btn{font-family:'Libre Franklin',sans-serif;font-weight:600;font-size:16px;min-height:44px;padding:0 20px;border-radius:0;cursor:pointer;transition:background .2s,color .2s}
+.chip{font-family:'Libre Franklin',sans-serif;font-weight:500;font-size:15px;min-height:44px;padding:0 16px;border-radius:0;cursor:pointer;text-underline-offset:5px;transition:background .2s,color .2s}
+.btn:focus-visible,.chip:focus-visible,.seat:focus-visible{outline:3px solid #221A16;outline-offset:3px}
+.arr .btn:focus-visible{outline-color:#F2EDE3}
+input:focus-visible{outline:3px solid #8C6418;outline-offset:2px}
+input::placeholder{color:#6A5F55;opacity:1}
+.seat{position:absolute;width:44px;height:44px;padding:0;border:2px solid #6B1D1D;border-radius:12px 12px 5px 5px;font-family:'Libre Franklin',sans-serif;font-weight:600;font-size:13px;cursor:pointer}
+.seat::before{content:'';position:absolute;left:-2px;top:-11px;width:44px;height:8px;box-sizing:border-box;border:2px solid #6B1D1D;border-radius:3px 3px 0 0;background:inherit;pointer-events:none}
+.k-open{background:#6B1D1D;color:#F2EDE3}
+.k-actor{background:radial-gradient(circle,#6B1D1D 1.2px,transparent 1.5px) 0 0/6px 6px,#F2EDE3;color:#221A16}
+.k-obs{background:#F2EDE3;color:#6B1D1D}
+.k-rule{background:#8C8374;color:#F2EDE3}
+.k-rule .num{background:#F2EDE3;color:#221A16}
+.num{padding:1px 3px}
+.k-actor .num{background:#F2EDE3}
+.slab{position:absolute;width:124px;text-align:center;pointer-events:none}
+.sw{display:block;width:26px;height:13px;box-sizing:border-box;flex:none}
+.kk-open{background:#6B1D1D}
+.kk-actor{background:radial-gradient(circle,#6B1D1D 1.2px,transparent 1.5px) 0 0/6px 6px;border:1px dotted #6B1D1D}
+.kk-obs{border:2px solid #6B1D1D}
+.kk-rule{background:#8C8374;border:1px solid #6B1D1D}
+.t-obs{background:#221A16}
+.t-aut{background:transparent;border:2px solid #221A16}
+.t-unk{background:transparent;border:2px dashed #221A16}
+.opt{display:flex;align-items:center;gap:14px;min-height:64px;box-sizing:border-box;padding:0 18px;border:2px solid #F2EDE3;font-family:'Bodoni Moda',serif;font-style:italic;font-size:21px}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important;animation-duration:.01s!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F2EDE3; color: #221A16; font-family: 'Libre Franklin', sans-serif">
+
+  <div style="position: absolute; left: 40px; top: 8px; width: 1360px; height: 0; border-top: 4px double #6B1D1D"></div>
+  <span class="cap" style="position: absolute; left: 40px; top: 26px; color: #6B1D1D">THE SEAT · ROLE IS THE FRONT DOOR</span>
+  <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="position: absolute; right: 40px; top: 18px; border: 2px solid #6B1D1D; background: {{howBg}}; color: {{howFg}}; white-space: nowrap">How do we know?</button>
+
+  <form onSubmit="{{onSubmit}}" style="position: absolute; left: 40px; top: 58px; width: 640px; display: flex; gap: 10px; margin: 0">
+    <input type="text" value="{{q}}" onChange="{{onQ}}" aria-label="Search a system" placeholder="Search a system, then find your seat" class="disp" style="flex: 1; min-width: 0; height: 52px; box-sizing: border-box; border: 2px solid #221A16; border-radius: 0; background: #FAF7F0; color: #221A16; padding: 0 16px; font-size: 23px">
+    <button type="button" class="btn" onClick="{{onOpen}}" style="height: 52px; border: 2px solid #6B1D1D; background: #6B1D1D; color: #F2EDE3">Open</button>
+  </form>
+  <sc-if value="{{miss}}" hint-placeholder-val="{{false}}">
+    <span class="disp" role="status" style="position: absolute; left: 700px; top: 68px; width: 700px; font-size: 20px; line-height: 1.3">{{missMsg}}</span>
+  </sc-if>
+  <div role="group" aria-label="Suggested systems" style="position: absolute; left: 40px; top: 120px; display: flex; gap: 10px">
+    <sc-for list="{{chips}}" as="c" hint-placeholder-count="4">
+      <button type="button" class="chip" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="border: 1.5px solid #221A16; background: {{c.bg}}; color: {{c.fg}}; text-decoration: {{c.deco}}">{{c.label}}</button>
+    </sc-for>
+  </div>
+
+  <span class="cap" style="position: absolute; right: 40px; bottom: 14px; font-size: 10.5px; letter-spacing: .08em; color: #5E544A">PROTOTYPE · DESIGN PROPOSAL · actor models: PLATFORM HYPOTHESIS</span>
+
+  <sc-if value="{{noSys}}" hint-placeholder-val="{{true}}">
+    <div>
+      <h1 class="disp" style="position: absolute; left: 40px; top: 196px; margin: 0; font-size: 84px; line-height: 1.05; white-space: nowrap">Who could you be?</h1>
+      <p style="position: absolute; left: 40px; top: 300px; width: 760px; margin: 0; font-size: 19px; line-height: 1.5">Search a system. It comes back as a house: rows of seats, and the people who sit in them at one consequential moment. Pick a seat and see what its chair can know.</p>
+      <div style="position: absolute; left: {{ghostRx}}px; top: {{ghostRy}}px; width: 240px; height: 30px; box-sizing: border-box; border: 1px solid rgba(34,26,22,.25)"></div>
+      <span class="cap" style="position: absolute; left: {{ghostRx}}px; top: {{ghostRl}}px; width: 240px; text-align: center; font-size: 11px; color: #5E544A">NO SYSTEM OPEN</span>
+      <sc-for list="{{ghosts}}" as="g" hint-placeholder-count="8">
+        <div style="position: absolute; left: {{g.x}}px; top: {{g.y}}px; width: 44px; height: 44px; box-sizing: border-box; border: 1px solid rgba(34,26,22,.25); border-radius: 12px 12px 5px 5px"></div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{hasSys}}" hint-placeholder-val="{{true}}">
+    <div>
+      <h1 class="disp" style="position: absolute; left: 40px; top: 172px; margin: 0; font-size: 42px; line-height: 1.05; white-space: nowrap">{{sysTitle}}</h1>
+      <span class="cap" style="position: absolute; left: 40px; top: 216px; color: #6B1D1D; letter-spacing: .1em; white-space: nowrap">{{caption}}</span>
+
+      <section aria-label="Seating plan: {{sysTitle}}" style="position: absolute; left: 0; top: 0; width: 1440px; height: 640px">
+        <svg width="1440" height="640" viewBox="0 0 1440 640" style="position: absolute; left: 0; top: 0; opacity: {{houseOp}}; transition: opacity .8s ease" aria-hidden="true">
+          <path d="{{arcsD}}" fill="none" stroke="#6B1D1D" stroke-width="1.2"></path>
+        </svg>
+        <sc-for list="{{rowLabs}}" as="rl" hint-placeholder-count="3">
+          <span class="cap" style="position: absolute; left: {{rl.x}}px; top: {{rl.y}}px; transform: translate(-50%, -50%); white-space: nowrap; padding: 1px 6px; background: #F2EDE3; font-size: 10px; letter-spacing: .08em; color: #6B1D1D; opacity: {{houseOp}}; transition: opacity .8s ease">{{rl.t}}</span>
+        </sc-for>
+        <div style="position: absolute; left: {{stageX}}px; top: {{stageY}}px; width: 240px; height: 30px; box-sizing: border-box; border: 2px solid #221A16; background: #F2EDE3; display: flex; align-items: center; justify-content: center; opacity: {{houseOp}}; transition: opacity .8s ease">
+          <span class="cap" style="font-size: 11px; letter-spacing: .12em">{{focus}}</span>
+        </div>
+        <sc-if value="{{hasGallery}}" hint-placeholder-val="{{false}}">
+          <div style="position: absolute; left: 40px; top: 566px; width: 840px; height: 0; border-top: 1px solid #6B1D1D; opacity: {{houseOp}}; transition: opacity .8s ease"></div>
+          <div style="position: absolute; left: 40px; top: 578px; width: 250px; opacity: {{houseOp}}; transition: opacity .8s ease">
+            <span class="cap" style="display: block; font-size: 11px; color: #6B1D1D">GALLERY</span>
+            <span style="display: block; margin-top: 3px; font-size: 13px; line-height: 1.3">Seats you can observe but not take.</span>
+          </div>
+        </sc-if>
+        <sc-for list="{{seats}}" as="s" hint-placeholder-count="8">
+          <button type="button" class="seat {{s.kcls}}" onClick="{{s.pick}}" aria-label="{{s.aria}}" aria-pressed="{{s.pressed}}" style="left: {{s.bx}}px; top: {{s.by}}px; box-shadow: {{s.ring}}; opacity: {{s.op}}; transform: translateY({{s.ty}}px); transition: opacity .5s {{s.delay}}s, transform .5s {{s.delay}}s"><span class="num">{{s.num}}</span></button>
+          <div class="slab" style="left: {{s.lx}}px; top: {{s.ly}}px; width: {{s.lw}}px; text-align: {{s.ta}}; opacity: {{s.op}}; transition: opacity .5s {{s.delay}}s">
+            <span style="display: inline; background: #F2EDE3; padding: 0 4px; -webkit-box-decoration-break: clone; box-decoration-break: clone; font-size: 12px; line-height: 1.35; font-weight: {{s.fw}}">{{s.tag}}</span>
+            <sc-if value="{{s.hasKw}}" hint-placeholder-val="{{false}}">
+              <span class="cap" style="display: block; margin-top: 1px; font-size: 9.5px; letter-spacing: .06em; color: #5E544A"><span style="background: #F2EDE3; padding: 0 4px">{{s.kw}}</span></span>
+            </sc-if>
+          </div>
+        </sc-for>
+        <sc-if value="{{showKey}}" hint-placeholder-val="{{false}}">
+          <div style="position: absolute; left: 920px; top: 166px; width: 480px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px 16px">
+            <sc-for list="{{kinds}}" as="kd" hint-placeholder-count="3">
+              <div style="display: flex; align-items: center; gap: 8px"><span class="sw {{kd.cls}}"></span><span style="font-size: 11px; line-height: 1.2">{{kd.t}}</span></div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </section>
+
+      <div style="position: absolute; left: 920px; top: 236px; width: 480px; height: 392px; box-sizing: border-box; border: 2px solid #221A16; background: #FAF7F0; padding: 20px 24px">
+        <sc-if value="{{noSel}}" hint-placeholder-val="{{true}}">
+          <div>
+            <span class="cap" style="color: #6B1D1D">THE HOUSE</span>
+            <p class="disp" style="margin: 8px 0 0; font-size: 34px; line-height: 1.1">Choose a seat.</p>
+            <p style="margin: 10px 0 14px; font-size: 15px; line-height: 1.45">Each seat is a person you could be at this moment. Select one to see what that chair can know, what it can do, and what nobody in it could know.</p>
+            <div style="display: flex; flex-direction: column; gap: 9px">
+              <sc-for list="{{kinds}}" as="kd" hint-placeholder-count="3">
+                <div style="display: flex; align-items: center; gap: 10px"><span class="sw {{kd.cls}}"></span><span style="font-size: 14px; line-height: 1.3">{{kd.t}}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{hasSel}}" hint-placeholder-val="{{false}}">
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <span class="sw {{selKcls}}"></span>
+              <span class="cap" style="font-size: 11px">{{selKind}}</span>
+              <span class="cap" style="margin-left: auto; font-size: 11px; color: #5E544A">{{selId}}</span>
+            </div>
+            <h2 class="disp" style="margin: 12px 0 0; font-size: 32px; line-height: 1.1">{{selName}}</h2>
+            <p style="margin: 10px 0 0; font-size: 14.5px; line-height: 1.45">{{selNote}}</p>
+            <sc-if value="{{canTake}}" hint-placeholder-val="{{true}}">
+              <button type="button" class="btn" onClick="{{take}}" style="margin-top: 18px; border: 2px solid #6B1D1D; background: #6B1D1D; color: #F2EDE3; min-height: 52px; padding: 0 26px; font-size: 18px">Take this seat →</button>
+            </sc-if>
+            <sc-if value="{{isActor}}" hint-placeholder-val="{{false}}">
+              <div style="margin-top: 18px; padding: 10px 14px; border: 2px dotted #6B1D1D; font-size: 13.5px; line-height: 1.4">This seat is held by an actor model. You cannot take it; you can read what it is built from. <span class="cap" style="font-size: 10.5px">[sources: inspectable]</span></div>
+            </sc-if>
+            <sc-if value="{{isRule}}" hint-placeholder-val="{{false}}">
+              <div style="margin-top: 18px; padding: 10px 14px; background: #8C8374; color: #1A1410; font-size: 13.5px; line-height: 1.4"><span class="cap" style="font-size: 11px">COMPUTED · THE RULEBOOK ANSWERS</span><br>{{ruleText}}</div>
+            </sc-if>
+            <sc-if value="{{isObs}}" hint-placeholder-val="{{false}}">
+              <div style="margin-top: 18px; padding: 10px 14px; border: 2px solid #6B1D1D; font-size: 13.5px; line-height: 1.4"><span class="cap" style="font-size: 11px; color: #6B1D1D">OBSERVE WITH SOURCES</span><br>Studied through what was written, not role-played. Read the columns below.</div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{noSel}}" hint-placeholder-val="{{true}}">
+        <p class="disp" style="position: absolute; left: 40px; top: 672px; width: 900px; margin: 0; font-size: 24px; line-height: 1.35; color: #5E544A">Select a seat to see its knowledge horizon: what it knows, what it can do, what it can’t, and what nobody in the chair knows.</p>
+      </sc-if>
+      <sc-if value="{{hasSel}}" hint-placeholder-val="{{false}}">
+        <span class="cap" style="position: absolute; left: 40px; top: 642px; color: #6B1D1D; white-space: nowrap">KNOWLEDGE HORIZON · {{selName}}</span>
+        <div style="position: absolute; left: 40px; top: 668px; width: 1360px; height: 200px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px">
+          <sc-for list="{{cols}}" as="col" hint-placeholder-count="4">
+            <div style="box-sizing: border-box; padding: 11px 16px 4px; border: {{col.border}}; background: {{col.bg}}; opacity: {{col.op}}; transform: translateY({{col.ty}}px); transition: opacity .4s {{col.delay}}s, transform .4s {{col.delay}}s">
+              <div style="display: flex; align-items: center; gap: 8px"><span class="sw {{col.cls}}"></span><span class="cap" style="font-size: 11px; letter-spacing: .1em">{{col.head}}</span></div>
+              <span class="cap" style="display: block; min-height: 12px; margin-top: 3px; font-size: 9.5px; letter-spacing: .06em; color: #5E544A">{{col.how}}</span>
+              <ul style="list-style: none; margin: 6px 0 0; padding: 0">
+                <sc-for list="{{col.items}}" as="it" hint-placeholder-count="2">
+                  <li style="font-size: 14px; line-height: 1.38; padding: 0 0 7px">{{it.t}}</li>
+                </sc-for>
+              </ul>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isArrival}}" hint-placeholder-val="{{false}}">
+    <div class="arr" style="position: absolute; left: 0; top: 0; width: 1440px; height: 900px; background: #6B1D1D; color: #F2EDE3; animation: rise .7s ease both">
+      <div style="position: absolute; left: 40px; top: 34px; width: 760px; height: 92px; box-sizing: border-box; border: 2px solid #F2EDE3; display: grid; grid-template-columns: 150px minmax(0, 1fr)">
+        <div style="border-right: 2px dashed #F2EDE3; display: flex; flex-direction: column; justify-content: center; padding: 0 16px">
+          <span class="cap" style="font-size: 10.5px; letter-spacing: .14em">ADMIT ONE</span>
+          <span class="disp" style="font-size: 30px; line-height: 1.1">{{selId}}</span>
+        </div>
+        <div style="display: flex; flex-direction: column; justify-content: center; padding: 0 18px; min-width: 0">
+          <span class="disp" style="font-size: 26px; line-height: 1.15">{{selName}}</span>
+          <span class="cap" style="margin-top: 4px; font-size: 10.5px; letter-spacing: .08em; color: #EADFCB">{{caption}}</span>
+        </div>
+      </div>
+
+      <p class="disp" style="position: absolute; left: 40px; top: 168px; width: 700px; margin: 0; font-size: 33px; line-height: 1.34">{{thr}}</p>
+
+      <div style="position: absolute; left: 800px; top: 168px; width: 600px">
+        <span class="cap" style="font-size: 12px; color: #EADFCB">THE FIRST REAL CHOICE · shown, not played</span>
+        <p class="disp" style="margin: 10px 0 16px; font-size: 27px; line-height: 1.25">{{choiceQ}}</p>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <sc-for list="{{choiceOpts}}" as="o" hint-placeholder-count="3">
+            <div class="opt"><span class="cap" style="font-style: normal; font-size: 12px">{{o.k}}</span><span>{{o.t}}</span></div>
+          </sc-for>
+        </div>
+        <p style="margin: 14px 0 0; font-size: 13px; line-height: 1.45; color: #EADFCB">This prototype shows the choice and stops. The room behind it is not built on this board.</p>
+      </div>
+
+      <div style="position: absolute; left: 40px; top: 604px; width: 1200px; display: flex; flex-direction: column; gap: 10px">
+        <p class="disp" style="margin: 0; font-size: 34px; line-height: 1.25">You are in the seat; you are not {{notWho}}.</p>
+        <sc-if value="{{hasNotMeta}}" hint-placeholder-val="{{false}}">
+          <span class="cap" style="font-size: 11px; letter-spacing: .1em; color: #EADFCB">{{notMeta}}</span>
+        </sc-if>
+      </div>
+
+      <div style="position: absolute; left: 40px; top: 740px; display: flex; gap: 14px">
+        <button type="button" class="btn" onClick="{{back}}" style="border: 2px solid #F2EDE3; background: #F2EDE3; color: #6B1D1D; min-height: 52px; padding: 0 28px; font-size: 18px">Back to the house</button>
+        <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="border: 2px solid #F2EDE3; background: {{howBgA}}; color: {{howFgA}}; min-height: 52px">How do we know?</button>
+      </div>
+      <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+        <p class="cap" style="position: absolute; left: 40px; top: 812px; width: 1100px; margin: 0; font-size: 11px; line-height: 1.6; letter-spacing: .06em; font-weight: 500">AUTHORED · the seat, the paragraph and the choice are written by BOW’s designers; the options are outlined because nothing here is computed. OBSERVED · the date and place, from the record [verify].</p>
+      </sc-if>
+      <span class="cap" style="position: absolute; right: 40px; bottom: 14px; font-size: 10.5px; letter-spacing: .08em; color: #EADFCB">PROTOTYPE · DESIGN PROPOSAL · actor models: PLATFORM HYPOTHESIS</span>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentWillUnmount() { clearTimeout(this.tD); clearTimeout(this.tF); clearTimeout(this.tH); }
+
+  getSys() {
+    const O = 'open', A = 'actor', V = 'obs', R = 'rule';
+    return {
+      rev: {
+        label: 'American Revolution', title: 'The American Revolution',
+        caption: '18–19 April 1775 · Massachusetts · Lexington Green, before dawn', focus: 'LEXINGTON GREEN',
+        seats: [
+          { id: 'adams', kind: A, row: 0, ang: 128, tag: 'Samuel Adams', name: 'Samuel Adams', sub: 'Massachusetts patriot leader. The seat is held by an actor model, not the person: source-grounded, inspectable.',
+            k: ['Boston is under military occupation, and the town has been organising against it.', 'Reports of British troop movements out of Boston. [verify]'],
+            c: ['Write, speak and organise through the committees he sits on.', 'Travel toward Concord, or on to Philadelphia.'],
+            x: ['Command the militia in the field.', 'Read London’s mind.'],
+            u: ['Whether the march is meant to seize supplies, people, or both. Historians debate it.', 'How the day will end.'] },
+          { id: 'gage', kind: A, row: 0, ang: 52, tag: 'Thomas Gage', name: 'Thomas Gage', sub: 'Commander of British forces in North America and governor of Massachusetts. The seat is held by an actor model, not the person: source-grounded, inspectable.',
+            k: ['His orders from London, and how many troops he has in Boston. [verify]', 'That the countryside is arming.'],
+            c: ['Order troops out, or hold them in Boston.', 'Write to London for more men or new orders.'],
+            x: ['Control how the countryside responds.', 'Get an answer from London within days.'],
+            u: ['Whether the countryside will fight.', 'What London will think of his choice.'] },
+          { id: 'mil', kind: O, row: 1, ang: 150, tag: 'Militiaman', name: 'Massachusetts militiaman at Lexington', sub: 'You are one of the men on the Green.',
+            k: ['Word has come that regulars may march out of Boston.', 'Your neighbours, and your captain’s orders.'],
+            c: ['Stand with your company, or step back.', 'Load your musket, or leave it.'],
+            x: ['See what is happening in Boston or Concord.', 'Know what London wants.'],
+            u: ['Who will fire first.', 'Whether this becomes a war.'],
+            thr: 'It is still dark, and cold on the Green. Your musket is heavier than it was yesterday. Someone says the regulars are coming. Your neighbours are looking at each other.',
+            q: 'The regulars are near. What do you do?', o: ['Stand with your company on the Green', 'Watch from the edge of the Green', 'Leave before they arrive'], not: 'any one real militiaman. This seat is a composite' },
+          { id: 'mer', kind: O, row: 1, ang: 90, tag: 'Boston merchant', name: 'Boston merchant', sub: 'You keep a ledger, a warehouse and a few debts.',
+            k: ['The port is closed to most trade, and soldiers are in the streets.', 'Which of your goods the Crown counts as restricted. [verify]'],
+            c: ['Trade quietly, or stop trading.', 'Move goods, money or family out of town.'],
+            x: ['Trade freely through your own harbour.', 'Tell which side will win.'],
+            u: ['Whether the port will reopen.', 'Whether a war would ruin your business, or make it.'],
+            thr: 'The harbour is quiet, and quiet means lost trade. Your ledger holds debts and goods and no clear way to move either. The talk in the street is of soldiers.',
+            q: 'The port is closed and the army is in the streets. What do you do with your stock?', o: ['Keep trading under Crown rules', 'Send goods out of town quietly', 'Close your books and wait'], not: 'any one real merchant. This seat is a composite' },
+          { id: 'cus', kind: O, row: 1, ang: 30, tag: 'Customs commissioner', name: 'Crown customs commissioner', sub: 'You enforce the Crown’s trade laws in a town that has stopped obeying them.',
+            k: ['The Crown’s trade laws, and the fines for breaking them.', 'That many Bostonians no longer accept your authority.'],
+            c: ['Enforce the rules, or report and wait.', 'Stay at your post, or move under the army’s protection.'],
+            x: ['Make the town pay duties by force.', 'Be sure who is loyal.'],
+            u: ['Whether London will back you.', 'Whether staying is safe.'],
+            thr: 'You still sign papers that few people obey. The clerks are nervous. The army is close, and you are glad of it.',
+            q: 'Trouble is growing. What do you do?', o: ['Stay at your post', 'Send a report to London', 'Move under the army’s protection'], not: 'any one real commissioner. This seat is a composite' },
+          { id: 'pri', kind: O, row: 2, ang: 165, tag: 'Loyalist printer', name: 'Loyalist printer', sub: 'Your press prints what people will read, and some of it makes enemies.',
+            k: ['Which pamphlets sell, and which get your shop threatened.', 'What the Crown’s officials say they want printed. [verify]'],
+            c: ['Set a Loyalist pamphlet in type, or the town’s notices.', 'Keep your shop open, or shut it.'],
+            x: ['Print without being noticed.', 'Reach readers outside town quickly.'],
+            u: ['Whether your customers will stay.', 'Which side will call you a traitor.'],
+            thr: 'Ink on your fingers, a press that never rests. Every sheet you print says something about you. You can hear people outside.',
+            q: 'A Loyalist pamphlet is ready. A town notice is waiting. What do you set in type tonight?', o: ['The Loyalist pamphlet', 'The town’s notices', 'Neither: keep the press still'], not: 'any one real printer. This seat is a composite' },
+          { id: 'off', kind: O, row: 2, ang: 78, tag: 'British officer', name: 'British regular officer under General Gage', sub: 'You march where the orders send you.',
+            k: ['Your orders, and what the column is meant to do.', 'That the countryside may be ready for you. [verify]'],
+            c: ['Keep the column moving, or halt it.', 'Send a scout ahead.'],
+            x: ['Change the orders yourself.', 'See what waits at the next village.'],
+            u: ['Whether anyone will fire.', 'How the countryside will answer.'],
+            thr: 'You have marched through the night and your men are cold and tired. Ahead are villages you cannot see. Orders never tell you who will be on the road.',
+            q: 'The column reaches a village green. What do you do?', o: ['Keep the column moving', 'Halt and send a scout', 'Halt and wait for orders'], not: 'any one real officer. This seat is a composite' },
+          { id: 'del', kind: O, row: 2, ang: 15, tag: 'Delegate-to-be', name: 'Delegate-to-be to the Second Continental Congress', sub: 'Your town has chosen you. You have not left yet.',
+            k: ['Your town has chosen you, and expects something from you.', 'The next Congress is to meet in Philadelphia.'],
+            c: ['Carry instructions from home, or use your own judgement.', 'Write to leaders in other colonies.'],
+            x: ['Speak for all thirteen colonies.', 'Know what Congress will decide.'],
+            u: ['Whether the colonies will stay united.', 'Whether London will listen.'],
+            thr: 'A trunk half-packed, a road south you have never taken. People at home hand you letters and hopes. You are not sure yet what you are carrying.',
+            q: 'You are leaving for Philadelphia. What do you carry?', o: ['Your town’s instructions', 'A petition to the King', 'Both, and your own judgement'], not: 'any one real delegate. This seat is a composite' }
+        ],
+        gallery: [
+          { id: 'ens', kind: V, tag: 'Enslaved man in Boston', name: 'An enslaved man in Boston', sub: 'Studied through sources, not role-played. Playing a person who could not choose would turn a real loss of freedom into a game move.',
+            k: ['His life is history to study, not a part to perform.', 'Nobody in this house is asked to speak for him.'],
+            c: ['Petitions, newspaper notices, church and probate records. [verify which survive]', 'What others wrote about people in his position.'],
+            x: ['Most of his own words. Few were recorded. [verify]', 'What he wanted, in his own voice.'],
+            u: ['What he expected from either side that morning.', 'What he would have chosen, if anyone had asked.'] },
+          { id: 'wam', kind: V, tag: 'Wampanoag community leader', name: 'A Wampanoag community leader', sub: 'Studied through sources, not role-played. A living people, not a costume.',
+            k: ['Their history is studied with care, and from their own sources where those exist.', 'Nobody in this house is asked to speak for them.'],
+            c: ['Colonial records, treaties and land deeds. [verify]', 'Later histories by Wampanoag scholars. [verify]'],
+            x: ['Most colonial records were written by others.', 'Many voices were never written down. [verify]'],
+            u: ['How a leader would have weighed a fight between two colonial powers.', 'What the community wanted most that spring.'] }
+        ]
+      },
+      celtics: {
+        label: 'Boston Celtics', title: 'The Boston Celtics',
+        caption: 'Sunday 22 June 2025 · after Tatum’s injury, before the first trade [verify]', focus: 'THE SALARY SHEET',
+        rowNames: ['ROW A · DECIDES', 'ROW B · ADVISES AND ENFORCES', 'ROW C · OUTSIDE THE BUILDING'], rowAng: [90, 128, 125],
+        seats: [
+          { id: 'own', kind: A, row: 0, ang: 128, tag: 'Ownership · actor model', name: 'Team ownership', sub: 'Pays the tax bill. The team’s sale was pending (verify).',
+            k: ['What the tax bill will cost.', 'That the team’s sale was pending. [verify]'],
+            c: ['Approve a payroll, or refuse one.', 'Ask the front office for a plan.'],
+            x: ['Make a trade itself.', 'Change the cap rules.'],
+            u: ['When Tatum will return.', 'What the sale will change.'] },
+          { id: 'pres', kind: O, row: 0, ang: 52, tag: 'President of Basketball Operations', name: 'President of Basketball Operations', sub: 'You make the trades. Ownership pays the tax.',
+            k: ['The roster, the payroll, and where the tax lines sit. [reported, verify]', 'That Jayson Tatum is out with an Achilles injury.'],
+            c: ['Trade a player, sign one, or wait.', 'Decide how far over the tax line to go.'],
+            x: ['Make a trade without a team on the other end.', 'Ignore the rulebook.'],
+            u: ['When Tatum will return.', 'How the team plays without him.'],
+            thr: 'The season ended in May and the bills did not. Every contract on your sheet is a promise, and two of the biggest are in front of you. The rulebook is the other voice in the room.',
+            q: 'Boston is over the second apron (reported, verify). What do you do?', o: ['Trade a starter for salary relief', 'Keep the roster and pay the tax', 'Wait for news on Tatum'], not: 'Brad Stevens', meta: 'REAL PRESIDENT OF BASKETBALL OPERATIONS · JUNE 2025 · VERIFY' },
+          { id: 'coach', kind: O, row: 1, ang: 150, tag: 'Head coach', name: 'Head coach', sub: 'You shape how the team plays, not who is on it.',
+            k: ['Who is healthy and who is not.', 'What the roster looks like on paper.'],
+            c: ['Set the rotation and the style of play.', 'Tell the front office what you need.'],
+            x: ['Sign or trade anyone.', 'Change the payroll.'],
+            u: ['When Tatum will return.', 'Who will step up in his place.'],
+            thr: 'Your best player is out and the summer feels long. You can shape how the team plays, but not who is on it. Someone else decides that.',
+            q: 'You have to build a rotation without your best player. What do you do?', o: ['Shorten the rotation', 'Play the younger players', 'Ask the front office for a veteran'], not: 'Joe Mazzulla', meta: 'REAL HEAD COACH · JUNE 2025 · VERIFY' },
+          { id: 'cap', kind: O, row: 1, ang: 90, tag: 'Capologist', name: 'Capologist', sub: 'You know every contract and every line. You do not make the call.',
+            k: ['Every contract, and the 2025–26 lines, as projected: cap ≈ $154.6M · tax ≈ $187.9M · first apron ≈ $195.9M · second apron ≈ $207.8M (final numbers due 30 Jun, verify).', 'What each trade does to the payroll.'],
+            c: ['Build trade scenarios from any contract.', 'Show what crossing a line would cost.'],
+            x: ['Make the call.', 'Move a player yourself.'],
+            u: ['When Tatum will return.', 'What other teams would really pay.'],
+            thr: 'A spreadsheet full of names is a spreadsheet full of limits. You know the numbers better than anyone in the building. You do not get to decide what to do with them.',
+            q: 'A trade only works if the salaries fit. How do you build it?', o: ['Around cash', 'Around a swap of contracts', 'Around a future pick'], not: 'any one real capologist. This seat is a composite' },
+          { id: 'nba', kind: R, row: 1, ang: 30, tag: 'The rulebook', name: 'The rulebook', sub: 'Not a person. Its answers are computed from the 2023 CBA.',
+            rule: 'Over the second apron, a team cannot combine salaries in a trade or take back more salary than it sends (verify).',
+            k: ['The rules as written, and how each team stands against them.', 'Which trades have been proposed. [verify]'],
+            c: ['Apply the cap and apron rules.', 'Show which line a deal would cross.'],
+            x: ['Pick winners.', 'Bend a rule for one team.'],
+            u: ['How teams will try to work around a line.', 'Where the next dispute will come from.'] },
+          { id: 'por', kind: A, row: 2, ang: 78, tag: 'Rival GM · actor model', name: 'A rival general manager', sub: 'Held by an actor model built from public reporting, not any real GM. Which team stays sealed until you leave this moment.',
+            k: ['Its own payroll and picks.', 'That Boston needs to shed salary. [reported, verify]'],
+            c: ['It can take on long money Boston wants gone.', 'Ask for picks as well, or pass.'],
+            x: ['See Boston’s books.', 'Make Boston trade with it.'],
+            u: ['What other teams have offered.', 'Whether the veteran will help it win.'] },
+          { id: 'fan', kind: O, row: 2, ang: 15, tag: 'Season-ticket holder', name: 'Season-ticket holder', sub: 'You love the team. The renewal letter does not care.',
+            k: ['What the tickets cost, and what you have paid before.', 'That the star is hurt.'],
+            c: ['Renew, change your seats, or wait.', 'Tell the team what you think, loudly or not.'],
+            x: ['Change the roster.', 'See the salary sheet.'],
+            u: ['Whether next season is worth it.', 'When the star returns.'],
+            thr: 'The renewal letter is on the kitchen table. You love this team, and the letter does not care. You have already told your friends what you think.',
+            q: 'Renewal letters go out this summer. What do you do?', o: ['Renew as usual', 'Change your seats', 'Wait to see the roster'], not: 'any one real fan. This seat is a composite' }
+        ],
+        gallery: [
+          { id: 'agent', kind: V, hw: 'AUTHORED · a design choice about privacy', tag: 'A player’s agent', name: 'A player’s agent', sub: 'Observed through sources, not role-played. An agent’s talks with a client are private; no source records what Holiday wanted.',
+            k: ['An agent’s talks with a client are private.', 'A role-played agent would have to invent them.'],
+            c: ['The player’s contract, as reported. [verify]', 'What the team and the player said in public. [verify which exist]'],
+            x: ['What Holiday wanted. No source records it.', 'What was said between him and his agent.'],
+            u: ['Which teams will call.', 'Whether the team will keep him.'] }
+        ]
+      },
+      cell: {
+        label: 'cellular respiration', title: 'Cellular respiration',
+        caption: 'In a process, a seat is a vantage point · a runner, mid-race', focus: 'THE RUN',
+        seats: [
+          { id: 'mito', kind: O, row: 0, ang: 90, tag: 'Mitochondrion', name: 'A mitochondrion', sub: 'You are a small machine inside a muscle cell.',
+            k: ['Local oxygen and ADP.', 'How much fuel has just arrived.'],
+            c: ['Make more ATP when ADP is high and oxygen is there.', 'Slow down when they are not.'],
+            x: ['Sense the race or the finish line.', 'Ask for more oxygen.'],
+            u: ['Whether the fibre will keep asking.', 'What the runner is trying to do.'],
+            thr: 'It is warm and crowded. Oxygen comes and goes, and ADP piles up when the fibre works. You do not know there is a race. You only know what arrives.',
+            q: 'ADP is piling up and oxygen is available. What does the machinery do?', o: ['Make ATP faster', 'Hold the rate', 'Wait for more signals'], not: 'a person. This seat is a vantage point' },
+          { id: 'fib', kind: O, row: 1, ang: 145, tag: 'Leg-muscle fibre', name: 'A leg-muscle fibre', sub: 'You contract when the signal arrives.',
+            k: ['Signals to contract, and local ATP and oxygen.', 'What fuel is near.'],
+            c: ['Burn fat or glucose.', 'Run without oxygen for a while, and pay for it.'],
+            x: ['Know the race.', 'Choose how hard to work.'],
+            u: ['Whether the next signal is a sprint or a stop.', 'How long oxygen will keep up.'],
+            thr: 'A signal arrives and you shorten. Another arrives and you shorten again. You have never seen the runner.',
+            q: 'Demand rises faster than oxygen arrives. What does the fibre do?', o: ['Burn more glucose', 'Burn more fat', 'Run partly without oxygen'], not: 'a person. This seat is a vantage point' },
+          { id: 'phy', kind: O, row: 1, ang: 40, tag: 'Physiologist', name: 'The physiologist with a gas analyser', sub: 'You see breath, not cells.',
+            k: ['Oxygen in and carbon dioxide out, breath by breath.', 'The runner’s pace on the treadmill.'],
+            c: ['Change the pace or the slope.', 'Ask the runner to stop.'],
+            x: ['See inside a single cell.', 'Feel what the runner feels.'],
+            u: ['What each mitochondrion is doing right now.', 'Exactly where the runner’s limit is.'],
+            thr: 'The gas analyser hums. Numbers scroll: oxygen in, carbon dioxide out. It is a good instrument and a small window.',
+            q: 'The runner is near the limit. What do you do?', o: ['Raise the pace a little', 'Hold and record', 'Stop the test'], not: 'any one real physiologist. This seat is a composite' },
+          { id: 'run', kind: O, row: 2, ang: 160, tag: 'The runner', name: 'The runner', sub: 'You feel the whole thing and see none of it.',
+            k: ['Your breath, your legs, your pace.', 'How far is left.'],
+            c: ['Hold, ease off or push the pace.', 'Take a drink, or not.'],
+            x: ['See your own muscle fibres.', 'Change how your cells make energy.'],
+            u: ['How much you have left.', 'When your legs will give out.'],
+            thr: 'Your legs burn a little, then a little more. Your breathing is loud in your own ears. There is a hill ahead, and you do not know what you have left.',
+            q: 'A hill is ahead. What do you do?', o: ['Hold your pace', 'Ease off for the hill', 'Surge to the top'], not: 'any one real runner. This seat is a composite' },
+          { id: 'coa', kind: O, row: 2, ang: 20, tag: 'The coach', name: 'The coach', sub: 'You see splits and posture, not oxygen.',
+            k: ['Split times and the watch’s heart rate.', 'How the runner looks.'],
+            c: ['Call a change of pace.', 'Tell the runner what you see.'],
+            x: ['Feel the burn.', 'See oxygen use in the muscle.'],
+            u: ['How close the runner is to the limit.', 'What the runner would do if you said nothing.'],
+            thr: 'You call numbers from the side: splits, pace, a reminder to breathe. You cannot feel any of it, and you have to decide as if you could.',
+            q: 'The runner is slowing. What do you say?', o: ['Hold on for one more lap', 'Slow down and recover', 'Say nothing'], not: 'any one real coach. This seat is a composite' }
+        ],
+        gallery: []
+      },
+      semi: {
+        label: 'semiconductor supply chain', title: 'The semiconductor supply chain',
+        caption: '19 March 2021 · after the fire at Renesas’s Naka fab [verify]', focus: 'THE NAKA FAB',
+        seats: [
+          { id: 'fab', kind: O, row: 0, ang: 90, tag: 'Fab operations manager', name: 'Fab operations manager', sub: 'It is your plant, and it is quiet.',
+            k: ['What the fire damaged in your own fab.', 'Which customers are waiting on you.'],
+            c: ['Clear the site and order inspections.', 'Tell customers what you know.'],
+            x: ['Promise a restart date.', 'See what customers will do.'],
+            u: ['When the fab restarts.', 'How much of the damage you have not found yet.'],
+            thr: 'The alarm is off and the smell is not. The floor is quiet. Customers are already calling, and you have no date to give them.',
+            q: 'Customers want a date. What do you tell them?', o: ['Say nothing until you know', 'Give a rough range', 'Tell them the fab is closed'], not: 'any one real manager. This seat is a composite' },
+          { id: 'pro', kind: O, row: 1, ang: 145, tag: 'Automaker procurement VP', name: 'Automaker procurement VP', sub: 'Your plants run on parts that arrive when they should.',
+            k: ['How many chips you hold and what your plants need this month.', 'That the fab has stopped. [verify]'],
+            c: ['Ask other chip makers for supply, or slow your lines.', 'Pay more to keep parts coming.'],
+            x: ['See competitors’ stock.', 'Know when the fab will restart.'],
+            u: ['When supply returns.', 'Whether rivals are buying up what is left.'],
+            thr: 'Your plants run on parts that arrive when they should. This week that may end. The news is one line long, and everything depends on it.',
+            q: 'A key supplier has stopped. What do you do?', o: ['Ask other suppliers for chips', 'Slow the lines and wait', 'Pay more to secure stock'], not: 'any one real executive. This seat is a composite' },
+          { id: 'bro', kind: O, row: 1, ang: 40, tag: 'Chip broker', name: 'Chip broker', sub: 'You know a price. You do not know why it should hold.',
+            k: ['Which buyers are asking, and what they will pay.', 'Where spare chips might be.'],
+            c: ['Buy, hold or resell chips.', 'Change your price by the hour.'],
+            x: ['Make chips.', 'See inside the fab.'],
+            u: ['Whether prices will keep rising.', 'Whether buyers will find another way.'],
+            thr: 'The phone rings before you have had coffee. Everyone wants the same small parts. You know a price, and you do not know why it should hold.',
+            q: 'Buyers are calling. What do you do?', o: ['Sell now', 'Hold for a higher price', 'Buy more stock'], not: 'any one real broker. This seat is a composite' },
+          { id: 'gov', kind: O, row: 2, ang: 160, tag: 'Government trade official', name: 'Government trade official', sub: 'You cannot repair a factory from an office.',
+            k: ['Which industries lean on the fab, from trade data.', 'Which companies are asking for help.'],
+            c: ['Ask, negotiate, or set rules.', 'Speak to other governments.'],
+            x: ['Run the fab.', 'Force a restart.'],
+            u: ['How long the disruption lasts.', 'Who will ask you for help next.'],
+            thr: 'A short cable arrives, and then a longer list of names. You cannot repair a factory from an office. You can decide who you call.',
+            q: 'Industries are asking for help. What do you do?', o: ['Call the company', 'Call other governments', 'Wait for a clearer picture'], not: 'any one real official. This seat is a composite' },
+          { id: 'buy', kind: O, row: 2, ang: 20, tag: 'Car buyer', name: 'A car buyer waiting for delivery', sub: 'You only know the date has changed.',
+            k: ['Your delivery date has slipped.', 'What you were promised.'],
+            c: ['Wait, switch models, or cancel.', 'Call the dealer.'],
+            x: ['See the supply chain behind your car.', 'Make the car arrive faster.'],
+            u: ['When your car will arrive.', 'Whether waiting costs you more than cancelling.'],
+            thr: 'The date on the dealer’s message has changed again. You liked this car. You do not know why it is late, only that you are waiting.',
+            q: 'Your delivery date has slipped. What do you do?', o: ['Wait', 'Switch to another model', 'Cancel the order'], not: 'any one real buyer. This seat is a composite' }
+        ],
+        gallery: []
+      }
+    };
+  }
+
+  choose(k) {
+    const S = this.getSys()[k];
+    clearTimeout(this.tD); clearTimeout(this.tF); clearTimeout(this.tH);
+    this.setState({ sys: k, q: S.label, sel: '', phase: 'house', drawn: false, fresh: true, hzOn: false });
+    this.tD = setTimeout(() => this.setState({ drawn: true }), 90);
+    this.tF = setTimeout(() => this.setState({ fresh: false }), 3200);
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const q = s.q || '';
+    const sysKey = s.sys || '';
+    const sel = s.sel || '';
+    const phase = s.phase || 'house';
+    const how = !!s.how;
+    const drawn = !!s.drawn;
+    const fresh = !!s.fresh;
+    const hzOn = !!s.hzOn;
+    const ALL = this.getSys();
+    const ORDER = ['rev', 'celtics', 'cell', 'semi'];
+    const S = ALL[sysKey || 'rev'];
+    const hasSys = !!sysKey;
+
+    const ql = q.trim().toLowerCase();
+    const match = ql ? ORDER.find((k) => ALL[k].label.toLowerCase().indexOf(ql) === 0) : '';
+    const miss = !!ql && !match;
+    const chips = ORDER.map((k) => {
+      const on = k === sysKey;
+      return { label: ALL[k].label, pressed: on ? 'true' : 'false', bg: on ? '#221A16' : '#F2EDE3', fg: on ? '#F2EDE3' : '#221A16',
+        deco: (!on && match === k) ? 'underline' : 'none', pick: () => this.choose(k) };
+    });
+
+    const FX = 460, FY = 502, R = [90, 168, 232];
+    const pos = (row, ang, fy) => {
+      const a = ang * Math.PI / 180;
+      return { cx: Math.round(FX + 1.5 * R[row] * Math.cos(a)), cy: Math.round(fy - R[row] * Math.sin(a)) };
+    };
+    const arcsD = R.map((r) => {
+      const a1 = 172 * Math.PI / 180, a2 = 8 * Math.PI / 180;
+      return 'M ' + (FX + 1.5 * r * Math.cos(a1)).toFixed(1) + ' ' + (FY - r * Math.sin(a1)).toFixed(1) + ' A ' + (1.5 * r) + ' ' + r + ' 0 0 1 ' + (FX + 1.5 * r * Math.cos(a2)).toFixed(1) + ' ' + (FY - r * Math.sin(a2)).toFixed(1);
+    }).join(' ');
+    const GHOST = [[0, 128], [0, 52], [1, 150], [1, 90], [1, 30], [2, 165], [2, 78], [2, 15]];
+    const ghosts = GHOST.map((g) => { const p = pos(g[0], g[1], 690); return { x: p.cx - 22, y: p.cy - 22 }; });
+
+    const rows = [[], [], []];
+    S.seats.forEach((st) => rows[st.row].push(st));
+    rows.forEach((r, ri) => { r.sort((a, b) => b.ang - a.ang); r.forEach((st, j) => { st.num = 'ABC'.charAt(ri) + (j + 1); }); });
+    const items = S.seats.concat(S.gallery.map((g, i) => Object.assign({}, g, { num: 'G' + (i + 1), gi: i })));
+    const KIND = { open: 'OPEN TO YOU', actor: 'ACTOR MODEL', obs: 'OBSERVE ONLY', rule: 'THE RULEBOOK' };
+    const KCLS = { open: 'k-open', actor: 'k-actor', obs: 'k-obs', rule: 'k-rule' };
+    const SWC = { open: 'kk-open', actor: 'kk-actor', obs: 'kk-obs', rule: 'kk-rule' };
+    const seats = items.map((st, i) => {
+      const gal = st.kind === 'obs';
+      const p = gal ? { cx: 330 + st.gi * 270, cy: 596 } : pos(st.row, st.ang, FY);
+      const on = st.id === sel;
+      const actorInTag = /actor model/i.test(st.tag);
+      const kw = st.kind === 'actor' ? (actorInTag ? (how ? 'GENERATED' : '') : (how ? 'ACTOR MODEL · GENERATED' : 'ACTOR MODEL'))
+        : (st.kind === 'rule' ? (how ? 'COMPUTED' : '') : (how ? KIND[st.kind] : ''));
+      return { kcls: KCLS[st.kind], num: st.num, tag: st.tag, kw, hasKw: !!kw,
+        aria: (gal ? 'Observe only: ' : st.kind === 'actor' ? 'Actor model: ' : st.kind === 'rule' ? 'The rulebook, not a person: ' : 'Seat ' + st.num + ': ') + st.name,
+        pressed: on ? 'true' : 'false', bx: p.cx - 22, by: p.cy - 22,
+        ring: on ? '0 0 0 3px #F2EDE3, 0 0 0 6px #8C6418' : 'none', op: drawn ? 1 : 0, ty: drawn ? 0 : 14,
+        delay: fresh && drawn ? (0.3 + i * 0.09).toFixed(2) : '0',
+        lx: gal ? p.cx + 30 : p.cx - (st.tag.length > 30 ? 78 : 62), ly: gal ? p.cy - 14 : p.cy + 27, lw: gal ? 200 : (st.tag.length > 30 ? 156 : 124), ta: gal ? 'left' : 'center',
+        fw: on ? 600 : 400,
+        pick: () => {
+          const c = this.state || {};
+          if (c.sel === st.id) return;
+          clearTimeout(this.tH);
+          this.setState({ sel: st.id, hzOn: false });
+          this.tH = setTimeout(() => this.setState({ hzOn: true }), 40);
+        } };
+    });
+
+    const cur = items.find((st) => st.id === sel) || null;
+    const obs = !!cur && cur.kind === 'obs';
+    const act = !!cur && cur.kind === 'actor';
+    const rul = !!cur && cur.kind === 'rule';
+    const heads = obs ? ['WHY IT IS OBSERVED', 'WHAT SOURCES SHOW', 'WHAT SOURCES CAN’T', 'NOBODY KNOWS']
+      : (act || rul) ? ['IT KNOWS', 'IT CAN', 'IT CAN’T', 'NOBODY IN THIS SEAT KNOWS'] : ['YOU KNOW', 'YOU CAN', 'YOU CAN’T', 'NOBODY IN THIS SEAT KNOWS'];
+    const hows = obs ? [cur.hw || 'AUTHORED · a design choice about dignity', 'OBSERVED · from sources [verify]', 'UNKNOWN · silence in the record', 'UNKNOWN · a marked hole']
+      : ['OBSERVED · from sources [verify]', 'AUTHORED · what this seat’s rules allow', 'AUTHORED · what this seat can’t reach', 'UNKNOWN · a marked hole, never filled'];
+    const clss = obs ? ['t-aut', 't-obs', 't-unk', 't-unk'] : ['t-obs', 't-aut', 't-aut', 't-unk'];
+    const cols = cur ? [cur.k, cur.c, cur.x, cur.u].map((arr, i) => ({
+      head: heads[i], cls: clss[i], how: how ? hows[i] : '', items: arr.map((t) => ({ t })),
+      border: i === 3 ? '2px dashed #221A16' : '1.5px solid #221A16', bg: i === 3 ? 'transparent' : '#FAF7F0',
+      op: hzOn ? 1 : 0, ty: hzOn ? 0 : 10, delay: hzOn ? (i * 0.07).toFixed(2) : '0'
+    })) : [];
+
+    const present = {};
+    items.forEach((st) => { present[st.kind] = true; });
+    const KT = { open: 'Solid: open to you. You can take the seat.', actor: 'Stipple: held by an actor model, not the person.', obs: 'Outline: observe with sources. Not role-played.', rule: 'Toned: computed from the rules. Not a person.' };
+    const kinds = ['open', 'actor', 'obs', 'rule'].filter((k) => present[k]).map((k) => ({ cls: SWC[k], t: KT[k] }));
+
+    const key = (cur && cur.kind === 'open') ? cur : null;
+    const rowLabs = S.rowNames ? S.rowNames.map((t, ri) => { const p = pos(ri, S.rowAng[ri], FY); return { x: p.cx, y: p.cy, t }; }) : [];
+    return {
+      q, chips, miss, missMsg: 'BOW has no executable model of “' + q.trim() + '” yet.',
+      onQ: (e) => this.setState({ q: e && e.target ? e.target.value : '' }),
+      onOpen: () => { if (match) this.choose(match); },
+      onSubmit: (e) => { if (e && e.preventDefault) e.preventDefault(); if (match) this.choose(match); },
+      how, howPressed: how ? 'true' : 'false', howBg: how ? '#6B1D1D' : 'transparent', howFg: how ? '#F2EDE3' : '#6B1D1D',
+      howBgA: how ? '#F2EDE3' : 'transparent', howFgA: how ? '#6B1D1D' : '#F2EDE3',
+      toggleHow: () => this.setState({ how: !how }),
+      noSys: !hasSys, hasSys, ghosts, ghostRx: FX - 120, ghostRy: 690, ghostRl: 724,
+      sysTitle: S.title, caption: S.caption, focus: S.focus, houseOp: drawn ? 1 : 0,
+      arcsD, rowLabs, stageX: FX - 120, stageY: FY + 16, seats, hasGallery: S.gallery.length > 0,
+      showKey: how && phase === 'house' && hasSys, kinds,
+      noSel: !cur, hasSel: !!cur,
+      selKcls: cur ? SWC[cur.kind] : '', selKind: cur ? KIND[cur.kind] : '', selId: cur ? cur.num : '', selName: cur ? cur.name : '', selNote: cur ? cur.sub : '',
+      canTake: !!key, isActor: act, isObs: obs, isRule: rul, ruleText: rul ? cur.rule : '', cols,
+      take: () => this.setState({ phase: 'arrival' }),
+      back: () => this.setState({ phase: 'house' }),
+      isArrival: phase === 'arrival' && !!key,
+      thr: key ? key.thr : '', choiceQ: key ? key.q : '',
+      choiceOpts: key ? key.o.map((t, i) => ({ k: 'ABC'.charAt(i), t })) : [],
+      notWho: key ? key.not : '', hasNotMeta: !!(key && key.meta), notMeta: key && key.meta ? key.meta : ''
+    };
+  }
+}
+</script>
+</body>
+</html>

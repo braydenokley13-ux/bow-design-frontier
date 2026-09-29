@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Descent</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&amp;family=Archivo+Narrow:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF2F4;color:#15191B;font-family:'Archivo',sans-serif}
+.an{font-family:'Archivo Narrow',sans-serif}
+.k1{stroke:#15191B;stroke-width:1}.k15{stroke:#15191B;stroke-width:1.5}.k2{stroke:#15191B;stroke-width:2}.k25{stroke:#15191B;stroke-width:2.5}.k3{stroke:#15191B;stroke-width:3}.k4{stroke:#15191B;stroke-width:4}.k5{stroke:#15191B;stroke-width:5}.k6{stroke:#15191B;stroke-width:6}.k7{stroke:#15191B;stroke-width:7}
+.wb{fill:none;stroke:#7D8A90;stroke-width:4;stroke-dasharray:5 6;opacity:.6}
+.ar{font-family:'Archivo',sans-serif}
+.tb{font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;min-height:38px;padding:0 12px;border:2px solid #15191B;border-radius:0;background:#FBFBF8;color:#15191B;cursor:pointer;transition:background-color .2s,color .2s}
+.tb:hover{background:#15191B;color:#FBFBF8}
+.tb:focus-visible{outline:3px solid #15191B;outline-offset:2px}
+.tb.amber{background:#F2B632}
+.tb.amber:hover{background:#15191B;color:#F2B632}
+.tb:disabled{opacity:.38;cursor:not-allowed}
+.tb:disabled:hover{background:#FBFBF8;color:#15191B}
+.tb.on{background:#15191B;color:#FBFBF8}
+.hit{position:absolute;background:transparent;border:0;padding:0;margin:0;cursor:pointer;border-radius:0}
+.hit:hover{outline:2px solid #15191B;outline-offset:1px;background:rgba(21,25,27,.05)}
+.hit:focus-visible{outline:3px solid #15191B;outline-offset:2px}
+.gt{position:absolute;left:4px;width:64px;height:56px;box-sizing:border-box;padding:6px 0 0;border:2px solid #15191B;background:#FBFBF8;color:#15191B;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:11px;letter-spacing:.1em;border-radius:0}
+.gt:hover{background:#15191B;color:#FBFBF8}
+.gt:focus-visible{outline:3px solid #15191B;outline-offset:2px}
+.gt:disabled{cursor:default}
+.gt .ic{width:12px;height:12px;border:2px solid currentColor;box-sizing:border-box}
+.t-rec{background:#15191B;box-shadow:inset 0 0 0 2px #15191B,inset 0 0 0 4px #FBFBF8}
+.t-aut{background:transparent;border:2px solid #15191B;box-sizing:border-box}
+.t-com{background:#8A9499}
+.t-blank{background:transparent}
+.t-rep{background:#F5EBCB;border:2px solid #15191B;box-sizing:border-box}
+.sw{display:inline-block;width:18px;height:18px;flex:none}
+.h{font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:11px;letter-spacing:.14em;color:#15191B}
+@keyframes blink{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}
+.ring{animation:blink 1.3s infinite}
+@keyframes rise{0%{opacity:0;transform:translateY(5px)}100%{opacity:1;transform:translateY(0)}}
+.rise{animation:rise .35s ease both}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #EEF2F4; color: #15191B; font-family: 'Archivo', sans-serif">
+
+  <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 52px; box-sizing: border-box; padding: 0 12px; display: flex; align-items: center; gap: 14px; border-bottom: 2px solid #15191B; background: #FBFBF8; z-index: 8">
+    <span style="font-size: 25px; font-weight: 800; letter-spacing: .03em">BOW</span>
+    <span class="an" style="font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase">Boston · Year Two · the front office</span>
+    <span style="flex: 1"></span>
+    <sc-if value="{{moving}}" hint-placeholder-val="{{false}}">
+      <button type="button" class="tb amber" onClick="{{skip}}">{{skipLabel}}</button>
+    </sc-if>
+    <button type="button" class="tb {{listCls}}" onClick="{{toggleList}}" aria-pressed="{{listPressed}}">Show as a list</button>
+    <button type="button" class="tb {{howCls}}" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}">How do we know?</button>
+  </header>
+
+  <sc-if value="{{drawing}}" hint-placeholder-val="{{true}}">
+    <!-- altitude gauge -->
+    <div style="position: absolute; left: 12px; top: 60px; width: 72px; height: 766px">
+      <span class="h" style="position: absolute; left: 0; top: 0; width: 72px; text-align: center">BREADTH</span>
+      <svg width="72" height="766" viewBox="0 0 72 766" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+        <path d="M 14 30 L 58 30 L 39 700 L 33 700 Z" style="fill: #FBFBF8; stroke: #15191B; stroke-width: 2"></path>
+        <g style="transform: translateY({{g.markY}}px)"><rect x="0" y="-2" width="72" height="4" style="fill: #15191B"></rect><path d="M 0 -9 L 12 0 L 0 9 Z" style="fill: #F2B632; stroke: #15191B; stroke-width: 2"></path></g>
+      </svg>
+      <sc-for list="{{g.ticks}}" as="t" hint-placeholder-count="4">
+        <button type="button" class="gt" onClick="{{t.go}}" aria-label="{{t.aria}}" aria-current="{{t.current}}" style="top: {{t.top}}px; background: {{t.bg}}; color: {{t.fg}}"><span class="ic" style="background: {{t.icBg}}"></span><span>{{t.label}}</span></button>
+      </sc-for>
+      <span class="h" style="position: absolute; left: 0; top: 748px; width: 72px; text-align: center">DEPTH</span>
+    </div>
+
+    <!-- the drawing -->
+    <div style="position: absolute; left: 92px; top: 60px; width: 984px; height: 766px; overflow: hidden; background: #EEF2F4">
+      
+    <sc-if value="{{s1.on}}" hint-placeholder-val="{{true}}">
+      <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; opacity: {{s1.op}}">
+        <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; transform-origin: {{s1.o}}; transform: {{s1.b}}"><svg width="984" height="766" viewBox="0 0 984 766" style="position:absolute;left:0;top:0" aria-hidden="true"><path d="M 70 210 q 25.5 -12 51.0 0 t 51.0 0 t 51.0 0" fill="none" stroke="#C7D2D8" stroke-width="2" ></path><path d="M 560 230 q 30.0 -12 60.0 0 t 60.0 0 t 60.0 0" fill="none" stroke="#C7D2D8" stroke-width="2" ></path><path d="M 780 190 q 22.5 -12 45.0 0 t 45.0 0 t 45.0 0" fill="none" stroke="#C7D2D8" stroke-width="2" ></path><path d="M 330 250 q 21.0 -12 42.0 0 t 42.0 0 t 42.0 0" fill="none" stroke="#C7D2D8" stroke-width="2" ></path><rect x="40" y="58" width="290" height="100" fill="#FBFBF8" class="k2" ></rect><rect x="45" y="63" width="280" height="90" fill="none" class="k1" ></rect><text x="58" y="84" class="an" fill="#15191B" font-size="11" font-weight="700" letter-spacing=".12em" >WEEK 9 · TUE 09:00 · YEAR TWO</text><text x="58" y="118" class="ar" fill="#15191B" font-size="27" font-weight="800" letter-spacing=".01em" >DEN 115 · BOS 112</text><text x="58" y="142" class="ar" fill="#48535A" font-size="12" font-weight="400" >Final, at home · standings [World feed]</text><line x1="185" y1="158" x2="185" y2="262" stroke="#8A959A" stroke-width="1" stroke-dasharray="2 4"></line><rect x="360" y="40" width="350" height="134" fill="#FBFBF8" class="k2" ></rect><rect x="365" y="45" width="340" height="124" fill="none" class="k1" ></rect><text x="378" y="64" class="an" fill="#15191B" font-size="11" font-weight="700" letter-spacing=".1em" >PAYROLL vs THE LINES</text><rect x="384" y="98" width="246.0" height="20" fill="#15191B" class="k1" ></rect><rect x="387" y="101" width="240.0" height="14" fill="none" stroke="#FBFBF8" stroke-width="1.2" ></rect><line x1="459.0" y1="82" x2="459.0" y2="128" class="k2" ></line><line x1="621.6" y1="82" x2="621.6" y2="128" class="k2" ></line><text x="459.0" y="78" class="an" fill="#15191B" font-size="11" font-weight="700" text-anchor="middle" letter-spacing=".06em" >TAX $200M</text><text x="621.6" y="78" class="an" fill="#15191B" font-size="11" font-weight="700" text-anchor="middle" letter-spacing=".06em" >2ND APRON $221.7M</text><text x="378" y="148" class="ar" fill="#15191B" font-size="13" font-weight="600" >≈ $222.8M · about $1.1M over the second apron</text><text x="378" y="164" class="ar" fill="#48535A" font-size="11" font-weight="400" >illustrative scale; lines are World rules</text><g style="opacity:{{c.followOp}};transition:opacity .4s"><rect x="612" y="47" width="86" height="18" fill="#15191B" class="k1" ></rect><text x="655" y="60" class="an" fill="#FBFBF8" font-size="11" font-weight="700" text-anchor="middle" letter-spacing=".08em" >FOLLOWING</text></g><line x1="535" y1="174" x2="535" y2="262" stroke="#8A959A" stroke-width="1" stroke-dasharray="2 4"></line><rect x="740" y="66" width="210" height="78" fill="#FBFBF8" class="k2" ></rect><text x="754" y="88" class="an" fill="#15191B" font-size="11" font-weight="700" letter-spacing=".08em" >TRADE DEADLINE · CALENDAR</text><text x="754" y="116" class="ar" fill="#15191B" font-size="18" font-weight="800" >WEEK 14 · THU 15:00</text><text x="754" y="135" class="ar" fill="#48535A" font-size="11" font-weight="400" >[authored placeholder]</text><line x1="845" y1="144" x2="845" y2="262" stroke="#8A959A" stroke-width="1" stroke-dasharray="2 4"></line><text x="40" y="34" class="an" fill="#48535A" font-size="11" font-weight="700" letter-spacing=".14em" >PUBLIC FACTS FLOAT AT THIS ALTITUDE</text></svg></div>
+        <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; transform-origin: {{s1.o}}; transform: {{s1.m}}"><svg width="984" height="766" viewBox="0 0 984 766" style="position:absolute;left:0;top:0" aria-hidden="true"><rect x="-10" y="419" width="58" height="121" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="44" y="433" width="59" height="107" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="99" y="415" width="62" height="125" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="157" y="467" width="42" height="73" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="195" y="430" width="62" height="110" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="253" y="478" width="41" height="62" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="290" y="452" width="58" height="88" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="344" y="479" width="39" height="61" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="379" y="485" width="64" height="55" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="439" y="433" width="55" height="107" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="490" y="411" width="40" height="129" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="526" y="423" width="30" height="117" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="552" y="483" width="34" height="57" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="582" y="466" width="32" height="74" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="610" y="414" width="45" height="126" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="651" y="431" width="31" height="109" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="678" y="434" width="50" height="106" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="724" y="424" width="42" height="116" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="762" y="453" width="44" height="87" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="802" y="490" width="61" height="50" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="859" y="432" width="35" height="108" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="890" y="438" width="47" height="102" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="933" y="458" width="35" height="82" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="964" y="461" width="50" height="79" fill="#F1F4F5" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="6" y="424" width="66" height="116" fill="#FBFBF8" class="k15" ></rect><path d="M13 440h52M13 464h52M13 488h52M13 512h52" class="wb"></path><rect x="74" y="388" width="38" height="152" fill="#FBFBF8" class="k15" ></rect><path d="M81 404h24M81 428h24M81 452h24M81 476h24M81 500h24" class="wb"></path><rect x="307" y="388" width="38" height="152" fill="#FBFBF8" class="k15" ></rect><path d="M314 404h24M314 428h24M314 452h24M314 476h24M314 500h24" class="wb"></path><rect x="741" y="460" width="47" height="80" fill="#FBFBF8" class="k15" ></rect><path d="M748 476h33M748 500h33M748 524h33" class="wb"></path><rect x="794" y="347" width="53" height="193" fill="#FBFBF8" class="k15" ></rect><path d="M801 363h39M801 387h39M801 411h39M801 435h39M801 459h39M801 483h39M801 507h39" class="wb"></path><rect x="849" y="437" width="47" height="103" fill="#FBFBF8" class="k15" ></rect><path d="M856 453h33M856 477h33M856 501h33" class="wb"></path><rect x="904" y="448" width="70" height="92" fill="#FBFBF8" class="k15" ></rect><path d="M911 464h56M911 488h56M911 512h56" class="wb"></path><rect x="976" y="433" width="43" height="107" fill="#FBFBF8" class="k15" ></rect><path d="M983 449h29M983 473h29M983 497h29M983 521h29" class="wb"></path><rect x="132" y="250" width="34" height="290" fill="#FBFBF8" class="k2" ></rect><rect x="140" y="226" width="18" height="24" fill="#FBFBF8" class="k2" ></rect><line x1="149" y1="226" x2="149" y2="176" class="k2" ></line><path d="M140 268h18M140 292h18M140 316h18M140 340h18M140 364h18M140 388h18M140 412h18M140 436h18M140 460h18M140 484h18M140 508h18" class="wb"></path><path d="M 232 540 L 232 300 L 284 284 L 284 540 Z" fill="#FBFBF8" class="k2" ></path><line x1="258" y1="292" x2="258" y2="540" stroke="#7D8A90" stroke-width="1" ></line><path d="M238 318h40M238 342h40M238 366h40M238 390h40M238 414h40M238 438h40M238 462h40M238 486h40M238 510h40" class="wb"></path><path d="M 398 540 L 398 500 Q 398 478 424 476 L 566 476 Q 592 478 592 500 L 592 540 Z" fill="#FBFBF8" class="k2" ></path><line x1="398" y1="508" x2="592" y2="508" class="k15" ></line><line x1="414" y1="512" x2="414" y2="540" stroke="#7D8A90" stroke-width="1.5" ></line><line x1="440" y1="512" x2="440" y2="540" stroke="#7D8A90" stroke-width="1.5" ></line><line x1="466" y1="512" x2="466" y2="540" stroke="#7D8A90" stroke-width="1.5" ></line><line x1="492" y1="512" x2="492" y2="540" stroke="#7D8A90" stroke-width="1.5" ></line><line x1="518" y1="512" x2="518" y2="540" stroke="#7D8A90" stroke-width="1.5" ></line><line x1="544" y1="512" x2="544" y2="540" stroke="#7D8A90" stroke-width="1.5" ></line><line x1="570" y1="512" x2="570" y2="540" stroke="#7D8A90" stroke-width="1.5" ></line><text x="495" y="500" class="an" fill="#15191B" font-size="11" font-weight="700" text-anchor="middle" letter-spacing=".2em" >ARENA</text><rect x="672" y="320" width="56" height="220" fill="#FBFBF8" class="k25" ></rect><line x1="672" y1="364" x2="728" y2="364" class="k15" ></line><line x1="672" y1="408" x2="728" y2="408" class="k15" ></line><line x1="672" y1="452" x2="728" y2="452" class="k15" ></line><line x1="672" y1="496" x2="728" y2="496" class="k15" ></line><line x1="700" y1="320" x2="700" y2="300" class="k2" ></line><rect x="690" y="306" width="20" height="14" fill="#FBFBF8" class="k15" ></rect><rect x="684" y="336" width="8" height="14" fill="#F5EBCB" class="k1" ></rect><rect x="700" y="336" width="8" height="14" fill="#F5EBCB" class="k1" ></rect><rect x="716" y="336" width="8" height="14" fill="#F5EBCB" class="k1" ></rect><rect x="684" y="380" width="8" height="14" fill="#F5EBCB" class="k1" ></rect><rect x="700" y="380" width="8" height="14" fill="#F5EBCB" class="k1" ></rect><rect x="716" y="380" width="8" height="14" fill="#F5EBCB" class="k1" ></rect><rect x="684" y="424" width="8" height="14" fill="#C4CBCF" class="k1" ></rect><rect x="700" y="424" width="8" height="14" fill="#F5EBCB" class="k1" ></rect><rect x="716" y="424" width="8" height="14" fill="#C4CBCF" class="k1" ></rect><rect x="684" y="468" width="8" height="14" fill="#F5EBCB" class="k1" ></rect><rect x="700" y="468" width="8" height="14" fill="#F5EBCB" class="k1" ></rect><rect x="716" y="468" width="8" height="14" fill="#F5EBCB" class="k1" ></rect><rect x="684" y="512" width="8" height="14" fill="#F5EBCB" class="k1" ></rect><rect x="700" y="512" width="8" height="14" fill="#F5EBCB" class="k1" ></rect><rect x="716" y="512" width="8" height="14" fill="#F5EBCB" class="k1" ></rect><rect x="716" y="424" width="8" height="14" fill="#F2B632" stroke="#15191B" stroke-width="1" style="opacity:{{c.lightOp}};transition:opacity .5s"></rect><g style="opacity:{{c.lightOp}};transition:opacity .5s"><line x1="650" y1="431" x2="672" y2="431" class="k15" ></line><text x="646" y="435" class="an" fill="#15191B" font-size="11" font-weight="700" text-anchor="end" letter-spacing=".08em" >GM’S LIGHT ON</text></g><line x1="700" y1="292" x2="700" y2="304" class="k2" ></line><circle cx="700" cy="282" r="10" fill="#15191B" class="k1" ></circle><text x="716" y="276" class="an" fill="#15191B" font-size="11" font-weight="700" letter-spacing=".14em" >FRONT OFFICE</text><line x1="495" y1="458" x2="495" y2="474" class="k2" ></line><circle cx="495" cy="448" r="10" fill="#15191B" class="k1" ></circle><text x="511" y="452" class="an" fill="#15191B" font-size="11" font-weight="700" letter-spacing=".08em" >ARENA [TD Garden · verify]</text></svg></div>
+        <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; transform-origin: {{s1.o}}; transform: {{s1.f}}"><svg width="984" height="766" viewBox="0 0 984 766" style="position:absolute;left:0;top:0" aria-hidden="true"><rect x="0" y="540" width="984" height="112" fill="#D3DEE4" stroke="none" ></rect><path d="M -10 566 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0" fill="none" stroke="#9FB2BC" stroke-width="1.2" ></path><path d="M 4 586 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0" fill="none" stroke="#9FB2BC" stroke-width="1.2" ></path><path d="M -10 606 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0" fill="none" stroke="#9FB2BC" stroke-width="1.2" ></path><path d="M 4 626 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0" fill="none" stroke="#9FB2BC" stroke-width="1.2" ></path><path d="M -10 646 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0 q 12 -6 24 0 t 24 0" fill="none" stroke="#9FB2BC" stroke-width="1.2" ></path><text x="44" y="630" class="ar" fill="#48535A" font-size="14" font-weight="400" style="font-style:italic" >the Charles</text><rect x="770" y="538" width="214" height="10" fill="#15191B" class="k1" ></rect><rect x="800" y="546" width="9" height="56" fill="#15191B" class="k1" ></rect><rect x="870" y="546" width="9" height="56" fill="#15191B" class="k1" ></rect><rect x="940" y="546" width="9" height="56" fill="#15191B" class="k1" ></rect><line x1="770" y1="538" x2="984" y2="538" class="k2" ></line><rect x="0" y="652" width="984" height="114" fill="#FBFBF8" stroke="none" ></rect><line x1="0" y1="652" x2="984" y2="652" class="k25" ></line><line x1="0" y1="712" x2="984" y2="712" stroke="#C7D2D8" stroke-width="2" ></line><line x1="90" y1="690" x2="90" y2="652" class="k2" ></line><circle cx="90" cy="668" r="20" fill="#F4F6F6" class="k15" ></circle><line x1="230" y1="690" x2="230" y2="652" class="k2" ></line><circle cx="230" cy="668" r="20" fill="#F4F6F6" class="k15" ></circle><line x1="420" y1="690" x2="420" y2="652" class="k2" ></line><circle cx="420" cy="668" r="20" fill="#F4F6F6" class="k15" ></circle><line x1="610" y1="690" x2="610" y2="652" class="k2" ></line><circle cx="610" cy="668" r="20" fill="#F4F6F6" class="k15" ></circle><line x1="800" y1="690" x2="800" y2="652" class="k2" ></line><circle cx="800" cy="668" r="20" fill="#F4F6F6" class="k15" ></circle><line x1="930" y1="690" x2="930" y2="652" class="k2" ></line><circle cx="930" cy="668" r="20" fill="#F4F6F6" class="k15" ></circle></svg></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{s2.on}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; opacity: {{s2.op}}">
+        <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; transform-origin: {{s2.o}}; transform: {{s2.b}}"><svg width="984" height="766" viewBox="0 0 984 766" style="position:absolute;left:0;top:0" aria-hidden="true"><rect x="4" y="450" width="40" height="200" fill="#F4F6F6" stroke="#A9B3B8" stroke-width="1.5" ></rect><path d="M12 470h24M12 500h24M12 530h24M12 560h24M12 590h24M12 620h24" class="wb"></path><rect x="940" y="350" width="44" height="300" fill="#F4F6F6" stroke="#A9B3B8" stroke-width="1.5" ></rect><path d="M948 370h28M948 400h28M948 430h28M948 460h28M948 490h28M948 520h28M948 550h28M948 580h28M948 610h28M948 640h28" class="wb"></path><path d="M 60 90 q 24.0 -12 48.0 0 t 48.0 0 t 48.0 0" fill="none" stroke="#C7D2D8" stroke-width="2" ></path><path d="M 620 70 q 30.0 -12 60.0 0 t 60.0 0 t 60.0 0" fill="none" stroke="#C7D2D8" stroke-width="2" ></path><path d="M 800 120 q 18.0 -12 36.0 0 t 36.0 0 t 36.0 0" fill="none" stroke="#C7D2D8" stroke-width="2" ></path></svg></div>
+        <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; transform-origin: {{s2.o}}; transform: {{s2.m}}"><svg width="984" height="766" viewBox="0 0 984 766" style="position:absolute;left:0;top:0" aria-hidden="true"><rect x="224" y="138" width="540" height="12" fill="#15191B" class="k1" ></rect><rect x="300" y="120" width="80" height="18" fill="#FBFBF8" class="k2" ></rect><line x1="620" y1="138" x2="620" y2="84" class="k2" ></line><circle cx="620" cy="80" r="4" fill="#15191B" class="k1" ></circle><rect x="240" y="153" width="508" height="94" fill="#F5EBCB" class="k25" ></rect><rect x="240" y="253" width="254" height="94" fill="#F5EBCB" class="k25" ></rect><rect x="494" y="253" width="254" height="94" fill="#F5EBCB" class="k25" ></rect><rect x="240" y="353" width="124" height="94" fill="#C4CBCF" class="k25" ></rect><rect x="364" y="353" width="130" height="94" fill="#F5EBCB" class="k25" ></rect><rect x="494" y="353" width="130" height="94" fill="#F5EBCB" class="k25" ></rect><rect x="624" y="353" width="124" height="94" fill="{{b.gmFill}}" class="k25" style="transition:fill .5s"></rect><rect x="240" y="453" width="180" height="94" fill="#F5EBCB" class="k25" ></rect><rect x="420" y="453" width="160" height="94" fill="#F5EBCB" class="k25" ></rect><rect x="580" y="453" width="168" height="94" fill="#F5EBCB" class="k25" ></rect><rect x="240" y="553" width="508" height="94" fill="#F5EBCB" class="k25" ></rect><rect x="360" y="216" width="280" height="8" fill="#15191B" class="k1" ></rect><rect x="380" y="204" width="14" height="12" fill="#15191B" class="k1" ></rect><rect x="430" y="204" width="14" height="12" fill="#15191B" class="k1" ></rect><rect x="480" y="204" width="14" height="12" fill="#15191B" class="k1" ></rect><rect x="540" y="204" width="14" height="12" fill="#15191B" class="k1" ></rect><rect x="590" y="204" width="14" height="12" fill="#15191B" class="k1" ></rect><circle cx="340" cy="218" r="4.5" fill="#15191B" class="k1" ></circle><path d="M 335 228 Q 335 224 340 224 Q 345 224 345 228 L 344 250 L 336 250 Z" fill="#15191B" class="k1" ></path><circle cx="660" cy="218" r="4.5" fill="#15191B" class="k1" ></circle><path d="M 655 228 Q 655 224 660 224 Q 665 224 665 228 L 664 250 L 656 250 Z" fill="#15191B" class="k1" ></path><rect x="260" y="316" width="200" height="6" fill="#15191B" class="k1" ></rect><rect x="280" y="302" width="26" height="14" fill="#FBFBF8" class="k15" ></rect><rect x="340" y="302" width="26" height="14" fill="#FBFBF8" class="k15" ></rect><rect x="516" y="316" width="200" height="6" fill="#15191B" class="k1" ></rect><rect x="536" y="302" width="26" height="14" fill="#FBFBF8" class="k15" ></rect><rect x="596" y="302" width="26" height="14" fill="#FBFBF8" class="k15" ></rect><circle cx="300" cy="318" r="4.5" fill="#15191B" class="k1" ></circle><path d="M 295 328 Q 295 324 300 324 Q 305 324 305 328 L 304 350 L 296 350 Z" fill="#15191B" class="k1" ></path><circle cx="560" cy="318" r="4.5" fill="#15191B" class="k1" ></circle><path d="M 555 328 Q 555 324 560 324 Q 565 324 565 328 L 564 350 L 556 350 Z" fill="#15191B" class="k1" ></path><rect x="250" y="416" width="100" height="6" fill="#15191B" class="k1" ></rect><rect x="262" y="400" width="24" height="16" fill="#6B767B" class="k15" ></rect><rect x="300" y="400" width="24" height="16" fill="#6B767B" class="k15" ></rect><rect x="376" y="416" width="100" height="6" fill="#15191B" class="k1" ></rect><circle cx="400" cy="418" r="4.5" fill="#15191B" class="k1" ></circle><path d="M 395 428 Q 395 424 400 424 Q 405 424 405 428 L 404 450 L 396 450 Z" fill="#15191B" class="k1" ></path><rect x="430" y="402" width="26" height="14" fill="#FBFBF8" class="k15" ></rect><rect x="504" y="416" width="100" height="6" fill="#15191B" class="k1" ></rect><circle cx="560" cy="418" r="4.5" fill="#15191B" class="k1" ></circle><path d="M 555 428 Q 555 424 560 424 Q 565 424 565 428 L 564 450 L 556 450 Z" fill="#15191B" class="k1" ></path><rect x="640" y="416" width="90" height="6" fill="#15191B" class="k1" ></rect><rect x="652" y="402" width="20" height="14" fill="#FBFBF8" class="k15" ></rect><text x="686" y="380" class="an" fill="#15191B" font-size="12" font-weight="800" text-anchor="middle" letter-spacing=".12em" >GM</text><text x="302" y="380" class="an" fill="#48535A" font-size="11" font-weight="700" text-anchor="middle" letter-spacing=".06em" >ANALYTICS</text><text x="429" y="380" class="an" fill="#15191B" font-size="12" font-weight="800" text-anchor="middle" letter-spacing=".12em" >CAP</text><text x="559" y="380" class="an" fill="#15191B" font-size="12" font-weight="800" text-anchor="middle" letter-spacing=".12em" >COACH</text><circle cx="290" cy="518" r="4.5" fill="#15191B" class="k1" ></circle><path d="M 285 528 Q 285 524 290 524 Q 295 524 295 528 L 294 550 L 286 550 Z" fill="#15191B" class="k1" ></path><circle cx="330" cy="518" r="4.5" fill="#15191B" class="k1" ></circle><path d="M 325 528 Q 325 524 330 524 Q 335 524 335 528 L 334 550 L 326 550 Z" fill="#15191B" class="k1" ></path><circle cx="500" cy="518" r="4.5" fill="#15191B" class="k1" ></circle><path d="M 495 528 Q 495 524 500 524 Q 505 524 505 528 L 504 550 L 496 550 Z" fill="#15191B" class="k1" ></path><circle cx="680" cy="518" r="4.5" fill="#15191B" class="k1" ></circle><path d="M 675 528 Q 675 524 680 524 Q 685 524 685 528 L 684 550 L 676 550 Z" fill="#15191B" class="k1" ></path><rect x="250" y="516" width="110" height="6" fill="#15191B" class="k1" ></rect><rect x="430" y="516" width="110" height="6" fill="#15191B" class="k1" ></rect><rect x="596" y="516" width="110" height="6" fill="#15191B" class="k1" ></rect><rect x="470" y="580" width="40" height="67" fill="#FBFBF8" class="k2" ></rect><rect x="514" y="580" width="40" height="67" fill="#FBFBF8" class="k2" ></rect><rect x="300" y="624" width="120" height="10" fill="#15191B" class="k1" ></rect><circle cx="700" cy="618" r="4.5" fill="#15191B" class="k1" ></circle><path d="M 695 628 Q 695 624 700 624 Q 705 624 705 628 L 704 650 L 696 650 Z" fill="#15191B" class="k1" ></path><line x1="364" y1="350" x2="364" y2="450" class="k3" ></line><line x1="494" y1="350" x2="494" y2="450" class="k3" ></line><line x1="624" y1="350" x2="624" y2="450" class="k3" ></line><line x1="494" y1="250" x2="494" y2="350" class="k3" ></line><line x1="420" y1="450" x2="420" y2="550" class="k3" ></line><line x1="580" y1="450" x2="580" y2="550" class="k3" ></line><line x1="234" y1="250" x2="754" y2="250" class="k6" ></line><line x1="234" y1="350" x2="754" y2="350" class="k6" ></line><line x1="234" y1="450" x2="754" y2="450" class="k6" ></line><line x1="234" y1="550" x2="754" y2="550" class="k6" ></line><rect x="234" y="150" width="520" height="500" fill="none" class="k7" ></rect><g style="opacity:{{c.lightOp}};transition:opacity .5s"><circle cx="716" cy="370" r="6" fill="#F2B632" class="k15" ></circle></g><rect x="224" y="{{b.selY}}" width="540" height="100" fill="none" stroke="#15191B" stroke-width="2.5" stroke-dasharray="9 6" style="opacity:{{b.selOp}}"></rect><line x1="208" y1="200" x2="222" y2="200" class="k15" ></line><text x="202" y="204" class="an" fill="#15191B" font-size="12" font-weight="700" text-anchor="end" letter-spacing=".08em" >OWNER’S SUITE</text><text x="202" y="219" class="an" fill="#48535A" font-size="11" font-weight="500" text-anchor="end" letter-spacing=".1em" >FLOOR 5</text><line x1="208" y1="300" x2="222" y2="300" class="k15" ></line><text x="202" y="304" class="an" fill="#15191B" font-size="12" font-weight="700" text-anchor="end" letter-spacing=".08em" >BUSINESS</text><text x="202" y="319" class="an" fill="#48535A" font-size="11" font-weight="500" text-anchor="end" letter-spacing=".1em" >FLOOR 4</text><line x1="208" y1="400" x2="222" y2="400" class="k15" ></line><text x="202" y="404" class="an" fill="#15191B" font-size="12" font-weight="700" text-anchor="end" letter-spacing=".08em" >BASKETBALL OPS</text><text x="202" y="419" class="an" fill="#48535A" font-size="11" font-weight="500" text-anchor="end" letter-spacing=".1em" >FLOOR 3</text><line x1="208" y1="500" x2="222" y2="500" class="k15" ></line><text x="202" y="504" class="an" fill="#15191B" font-size="12" font-weight="700" text-anchor="end" letter-spacing=".08em" >SCOUTING &amp; PLAYER DEV</text><text x="202" y="519" class="an" fill="#48535A" font-size="11" font-weight="500" text-anchor="end" letter-spacing=".1em" >FLOOR 2</text><line x1="208" y1="600" x2="222" y2="600" class="k15" ></line><text x="202" y="604" class="an" fill="#15191B" font-size="12" font-weight="700" text-anchor="end" letter-spacing=".08em" >LOBBY</text><text x="202" y="619" class="an" fill="#48535A" font-size="11" font-weight="500" text-anchor="end" letter-spacing=".1em" >FLOOR 1</text><line x1="766" y1="200" x2="780" y2="200" class="k15" ></line><text x="786" y="204" class="ar" fill="#15191B" font-size="12" font-weight="500" >lit · funded</text><line x1="766" y1="300" x2="780" y2="300" class="k15" ></line><text x="786" y="304" class="ar" fill="#15191B" font-size="12" font-weight="500" >lit · funded first (Year One)</text><line x1="766" y1="400" x2="780" y2="400" class="k15" ></line><text x="786" y="404" class="ar" fill="#15191B" font-size="12" font-weight="500" style="opacity:{{b.opsA}}" >3 of 4 rooms lit · GM vacant</text><text x="786" y="404" class="ar" fill="#15191B" font-size="12" font-weight="500" style="opacity:{{b.opsB}}" >GM’s light on · analytics dark</text><line x1="766" y1="500" x2="780" y2="500" class="k15" ></line><text x="786" y="504" class="ar" fill="#15191B" font-size="12" font-weight="500" >lit · funded</text><line x1="766" y1="600" x2="780" y2="600" class="k15" ></line><text x="786" y="604" class="ar" fill="#15191B" font-size="12" font-weight="500" >open</text></svg></div>
+        <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; transform-origin: {{s2.o}}; transform: {{s2.f}}"><svg width="984" height="766" viewBox="0 0 984 766" style="position:absolute;left:0;top:0" aria-hidden="true"><rect x="0" y="650" width="984" height="116" fill="#D9DEE0" stroke="none" ></rect><rect x="224" y="650" width="540" height="16" fill="#15191B" class="k1" ></rect><line x1="0" y1="650" x2="984" y2="650" class="k3" ></line><line x1="0" y1="712" x2="984" y2="712" stroke="#B9C1C4" stroke-width="3" stroke-dasharray="26 18"></line><line x1="70" y1="690" x2="70" y2="650" class="k2" ></line><circle cx="70" cy="668" r="18" fill="#F4F6F6" class="k15" ></circle><line x1="150" y1="690" x2="150" y2="650" class="k2" ></line><circle cx="150" cy="668" r="18" fill="#F4F6F6" class="k15" ></circle><line x1="850" y1="690" x2="850" y2="650" class="k2" ></line><circle cx="850" cy="668" r="18" fill="#F4F6F6" class="k15" ></circle><line x1="930" y1="690" x2="930" y2="650" class="k2" ></line><circle cx="930" cy="668" r="18" fill="#F4F6F6" class="k15" ></circle></svg></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{s3.on}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; opacity: {{s3.op}}">
+        <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; transform-origin: {{s3.o}}; transform: {{s3.b}}"><svg width="984" height="766" viewBox="0 0 984 766" style="position:absolute;left:0;top:0" aria-hidden="true"><rect x="24" y="150" width="936" height="480" fill="#FBFBF8" class="k7" ></rect><rect x="24" y="150" width="936" height="26" fill="#E4EAED" class="k2" ></rect><rect x="60" y="158" width="56" height="8" fill="#FBFBF8" class="k15" ></rect><rect x="164" y="158" width="56" height="8" fill="#FBFBF8" class="k15" ></rect><rect x="268" y="158" width="56" height="8" fill="#FBFBF8" class="k15" ></rect><rect x="372" y="158" width="56" height="8" fill="#FBFBF8" class="k15" ></rect><rect x="476" y="158" width="56" height="8" fill="#FBFBF8" class="k15" ></rect><rect x="580" y="158" width="56" height="8" fill="#FBFBF8" class="k15" ></rect><rect x="684" y="158" width="56" height="8" fill="#FBFBF8" class="k15" ></rect><rect x="788" y="158" width="56" height="8" fill="#FBFBF8" class="k15" ></rect><rect x="892" y="158" width="56" height="8" fill="#FBFBF8" class="k15" ></rect><line x1="262" y1="176" x2="262" y2="610" class="k4" ></line><line x1="498" y1="176" x2="498" y2="610" class="k4" ></line><line x1="734" y1="176" x2="734" y2="610" class="k2" ></line><line x1="742" y1="176" x2="742" y2="610" class="k15" ></line><rect x="24" y="610" width="936" height="20" fill="#DDE2E1" class="k2" ></rect><line x1="24" y1="610" x2="960" y2="610" class="k5" ></line><rect x="65" y="182" width="156" height="24" fill="#FBFBF8" class="k2" ></rect><text x="143" y="199" class="an" fill="#15191B" font-size="12" font-weight="800" text-anchor="middle" letter-spacing=".14em" >ANALYTICS</text><rect x="302" y="182" width="156" height="24" fill="#FBFBF8" class="k2" ></rect><text x="380" y="199" class="an" fill="#15191B" font-size="12" font-weight="800" text-anchor="middle" letter-spacing=".14em" >CAP &amp; CONTRACTS</text><rect x="538" y="182" width="156" height="24" fill="#FBFBF8" class="k2" ></rect><text x="616" y="199" class="an" fill="#15191B" font-size="12" font-weight="800" text-anchor="middle" letter-spacing=".14em" >COACH</text><rect x="773" y="182" width="156" height="24" fill="#FBFBF8" class="k2" ></rect><text x="851" y="199" class="an" fill="#15191B" font-size="12" font-weight="800" text-anchor="middle" letter-spacing=".14em" >GM’S OFFICE</text></svg></div>
+        <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; transform-origin: {{s3.o}}; transform: {{s3.m}}"><svg width="984" height="766" viewBox="0 0 984 766" style="position:absolute;left:0;top:0" aria-hidden="true"><rect x="28" y="208" width="230" height="402" fill="#C4CBCF" stroke="none" opacity=".5"></rect><rect x="44" y="548" width="62" height="8" fill="#15191B" class="k1" ></rect><line x1="48" y1="556" x2="48" y2="610" class="k3" ></line><line x1="102" y1="556" x2="102" y2="610" class="k3" ></line><rect x="56" y="512" width="38" height="28" fill="#6B767B" class="k2" ></rect><line x1="75" y1="540" x2="75" y2="548" class="k3" ></line><rect x="116" y="548" width="62" height="8" fill="#15191B" class="k1" ></rect><line x1="120" y1="556" x2="120" y2="610" class="k3" ></line><line x1="174" y1="556" x2="174" y2="610" class="k3" ></line><rect x="128" y="512" width="38" height="28" fill="#6B767B" class="k2" ></rect><line x1="147" y1="540" x2="147" y2="548" class="k3" ></line><rect x="188" y="548" width="62" height="8" fill="#15191B" class="k1" ></rect><line x1="192" y1="556" x2="192" y2="610" class="k3" ></line><line x1="246" y1="556" x2="246" y2="610" class="k3" ></line><rect x="200" y="512" width="38" height="28" fill="#6B767B" class="k2" ></rect><line x1="219" y1="540" x2="219" y2="548" class="k3" ></line><path d="M 78 604 q -10 -50 10 -70 q 20 -10 28 10 q 10 40 0 60 Z" fill="#FBFBF8" class="k2" ></path><rect x="60" y="236" width="150" height="84" fill="#FBFBF8" class="k2" ></rect><line x1="78" y1="262" x2="190" y2="262" stroke="#B9C1C4" stroke-width="3" stroke-dasharray="4 8"></line><rect x="66" y="330" width="138" height="22" fill="#FBFBF8" class="k2" ></rect><rect x="69" y="333" width="132" height="16" fill="none" class="k1" ></rect><text x="135" y="346" class="an" fill="#15191B" font-size="11" font-weight="700" text-anchor="middle" letter-spacing=".08em" >DARK SINCE YEAR ONE</text><rect x="292" y="214" width="190" height="96" fill="#FBFBF8" class="k2" ></rect><text x="302" y="232" class="an" fill="#15191B" font-size="11" font-weight="700" letter-spacing=".1em" >PAYROLL vs LINES</text><rect x="302" y="244" width="152" height="16" fill="#15191B" class="k1" ></rect><rect x="305" y="247" width="146" height="10" fill="none" stroke="#FBFBF8" stroke-width="1" ></rect><line x1="400" y1="238" x2="400" y2="270" class="k2" ></line><line x1="448" y1="238" x2="448" y2="270" class="k2" ></line><text x="302" y="288" class="ar" fill="#15191B" font-size="12" font-weight="600" >≈ $222.8M · $1.1M over</text><rect x="306" y="520" width="176" height="10" fill="#15191B" class="k1" ></rect><line x1="312" y1="530" x2="312" y2="610" class="k4" ></line><line x1="476" y1="530" x2="476" y2="610" class="k4" ></line><path d="M 380 520 L 396 490 L 448 490 L 462 520 Z" fill="#FBFBF8" class="k2" ></path><g ><circle cx="324" cy="484" r="15" fill="#15191B" class="k1" ></circle><path d="M 296 510 Q 296 502 308 501 L 336 501 Q 348 502 348 512 L 346 564 L 386 564 L 388 606 L 374 606 L 372 578 L 300 578 Z" fill="#15191B" class="k1" ></path></g><rect x="522" y="214" width="174" height="108" fill="#FBFBF8" class="k2" ></rect><circle cx="552" cy="250" r="8" fill="none" class="k2" ></circle><circle cx="588" cy="238" r="8" fill="none" class="k2" ></circle><circle cx="620" cy="268" r="8" fill="none" class="k2" ></circle><line x1="561" y1="283" x2="575" y2="297" class="k2" ></line><line x1="575" y1="283" x2="561" y2="297" class="k2" ></line><line x1="599" y1="289" x2="613" y2="303" class="k2" ></line><line x1="613" y1="289" x2="599" y2="303" class="k2" ></line><line x1="643" y1="251" x2="657" y2="265" class="k2" ></line><line x1="657" y1="251" x2="643" y2="265" class="k2" ></line><path d="M 560 250 Q 590 250 608 262" fill="none" class="k15" stroke-dasharray="5 4"></path><rect x="516" y="566" width="60" height="10" fill="#15191B" class="k1" ></rect><line x1="522" y1="576" x2="522" y2="610" class="k4" ></line><line x1="570" y1="576" x2="570" y2="610" class="k4" ></line><circle cx="546" cy="550" r="15" fill="#FBFBF8" class="k2" ></circle><path d="M 531 550 L 561 550 M 546 535 L 546 565 M 536 539 Q 546 550 536 561 M 556 539 Q 546 550 556 561" fill="none" stroke="#15191B" stroke-width="1.2" ></path><g ><circle cx="628" cy="456" r="16" fill="#15191B" class="k1" ></circle><path d="M 600 482 Q 600 473 612 472 L 644 472 Q 656 473 656 482 L 652 540 L 648 606 L 632 606 L 630 546 L 626 546 L 624 606 L 608 606 L 604 540 Z" fill="#15191B" class="k1" ></path></g><rect x="646" y="486" width="20" height="26" fill="#FBFBF8" class="k2" ></rect><rect x="748" y="208" width="208" height="402" fill="{{f.gmFill}}" stroke="none" opacity=".55" style="transition:fill .5s"></rect><rect x="780" y="528" width="152" height="10" fill="#15191B" class="k1" ></rect><rect x="786" y="538" width="140" height="72" fill="#FBFBF8" class="k2" ></rect><rect x="808" y="470" width="30" height="58" fill="#FBFBF8" class="k2" ></rect><line x1="808" y1="470" x2="838" y2="470" class="k3" ></line><rect x="884" y="500" width="26" height="16" fill="#FBFBF8" class="k2" ></rect><line x1="920" y1="528" x2="934" y2="470" class="k25" ></line><line x1="934" y1="470" x2="914" y2="452" class="k25" ></line><path d="M 900 446 L 930 446 L 940 468 L 890 468 Z" fill="{{f.lampFill}}" class="k2" style="transition:fill .5s"></path><g ><circle cx="704" cy="456" r="16" fill="#15191B" class="k1" ></circle><path d="M 676 482 Q 676 473 688 472 L 720 472 Q 732 473 732 482 L 728 540 L 724 606 L 708 606 L 706 546 L 702 546 L 700 606 L 684 606 L 680 540 Z" fill="#15191B" class="k1" ></path></g><rect x="716" y="474" width="24" height="30" fill="#FBFBF8" class="k2" ></rect><line x1="720" y1="484" x2="736" y2="484" class="k15" ></line><line x1="720" y1="492" x2="732" y2="492" class="k15" ></line></svg></div>
+        <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; transform-origin: {{s3.o}}; transform: {{s3.f}}"><svg width="984" height="766" viewBox="0 0 984 766" style="position:absolute;left:0;top:0" aria-hidden="true"><rect x="0" y="630" width="984" height="136" fill="#D9DEE0" stroke="none" ></rect><line x1="0" y1="630" x2="984" y2="630" class="k3" ></line><rect x="0" y="700" width="984" height="12" fill="#15191B" class="k1" ></rect><path d="M 66 726 Q 20 690 12 640 Q 60 660 66 726 Z" fill="#FBFBF8" class="k25" ></path><path d="M 66 726 Q 74 670 62 620 Q 100 664 66 726 Z" fill="#FBFBF8" class="k25" ></path><path d="M 66 726 Q 110 700 128 652 Q 118 700 66 726 Z" fill="#FBFBF8" class="k25" ></path><path d="M 36 722 L 96 722 L 90 766 L 42 766 Z" fill="#FBFBF8" class="k25" ></path><text x="880" y="750" class="an" fill="#48535A" font-size="11" font-weight="700" text-anchor="end" letter-spacing=".14em" >DEPTH GROWS AS YOU DROP</text></svg></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{s4.on}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; opacity: {{s4.op}}">
+        <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; transform-origin: {{s4.o}}; transform: {{s4.b}}"><svg width="984" height="766" viewBox="0 0 984 766" style="position:absolute;left:0;top:0" aria-hidden="true"><rect x="0" y="0" width="984" height="766" fill="#DCE1DF" stroke="none" ></rect><rect x="0" y="0" width="984" height="92" fill="#EEF2F4" stroke="none" ></rect><rect x="0" y="62" width="39" height="30" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="37" y="56" width="43" height="36" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="78" y="37" width="45" height="55" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="121" y="77" width="36" height="15" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="155" y="49" width="46" height="43" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="199" y="63" width="44" height="29" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="241" y="75" width="40" height="17" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="279" y="71" width="25" height="21" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="302" y="48" width="31" height="44" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="331" y="54" width="27" height="38" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="356" y="72" width="37" height="20" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="391" y="63" width="38" height="29" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="427" y="65" width="20" height="27" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="445" y="61" width="33" height="31" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="476" y="54" width="25" height="38" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="499" y="74" width="25" height="18" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="522" y="39" width="24" height="53" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="544" y="50" width="39" height="42" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="581" y="70" width="24" height="22" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="603" y="78" width="20" height="14" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="621" y="65" width="26" height="27" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="645" y="68" width="25" height="24" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="668" y="58" width="29" height="34" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="695" y="44" width="26" height="48" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="719" y="38" width="41" height="54" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="758" y="67" width="26" height="25" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="782" y="66" width="42" height="26" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="822" y="59" width="32" height="33" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="852" y="55" width="20" height="37" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="870" y="68" width="33" height="24" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="901" y="62" width="24" height="30" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="923" y="57" width="22" height="35" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="943" y="40" width="29" height="52" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><rect x="970" y="78" width="38" height="14" fill="#F4F6F6" stroke="#9AA6AB" stroke-width="1" ></rect><line x1="0" y1="92" x2="984" y2="92" class="k5" ></line><text x="24" y="22" class="an" fill="#48535A" font-size="12" font-weight="700" letter-spacing=".1em" >THE CITY · visible from here, out of reach</text><path d="M 24 152 Q 492 98 960 152" fill="none" class="k2" stroke-dasharray="9 7"></path><text x="940" y="126" class="an" fill="#48535A" font-size="11" font-weight="700" text-anchor="end" letter-spacing=".14em" >EVERYTHING BELOW THIS LINE IS WITHIN REACH</text><rect x="300" y="470" width="460" height="230" rx="10" fill="#D2D8D6" stroke="#B4BDBC" stroke-width="1.5" ></rect></svg></div>
+        <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; transform-origin: {{s4.o}}; transform: {{s4.m}}"><svg width="984" height="766" viewBox="0 0 984 766" style="position:absolute;left:0;top:0" aria-hidden="true"><rect x="100" y="190" width="400" height="230" rx="26" fill="#FBFBF8" class="k3" ></rect><path d="M 100 330 q -12 -14 -24 0 t -24 0 q -12 -14 -24 0 t -24 0 q -12 -14 -24 0 t -24 0 L 0 330" fill="none" class="k2" ></path><rect x="124" y="208" width="100" height="46" rx="8" fill="#FBFBF8" class="k25" ></rect><circle cx="142" cy="231" r="7" fill="#F2B632" stroke="#15191B" stroke-width="1.5" class="ring" style="animation-delay:0.0s"></circle><text x="182" y="238" class="ar" fill="#15191B" font-size="18" font-weight="800" text-anchor="middle" >1</text><text x="174" y="270" class="an" fill="#15191B" font-size="11" font-weight="700" text-anchor="middle" letter-spacing=".04em" >DENVER</text><rect x="236" y="208" width="100" height="46" rx="8" fill="#FBFBF8" class="k25" ></rect><circle cx="254" cy="231" r="7" fill="#F2B632" stroke="#15191B" stroke-width="1.5" class="ring" style="animation-delay:0.3s"></circle><text x="294" y="238" class="ar" fill="#15191B" font-size="18" font-weight="800" text-anchor="middle" >2</text><text x="286" y="270" class="an" fill="#15191B" font-size="11" font-weight="700" text-anchor="middle" letter-spacing=".04em" >BUTLER’S AGENT</text><rect x="348" y="208" width="100" height="46" rx="8" fill="#FBFBF8" class="k25" ></rect><circle cx="366" cy="231" r="7" fill="#F2B632" stroke="#15191B" stroke-width="1.5" class="ring" style="animation-delay:0.6s"></circle><text x="406" y="238" class="ar" fill="#15191B" font-size="18" font-weight="800" text-anchor="middle" >3</text><text x="398" y="270" class="an" fill="#15191B" font-size="11" font-weight="700" text-anchor="middle" letter-spacing=".04em" >TWO-WAY’S AGENT</text><rect x="124" y="292" width="200" height="40" rx="4" fill="#E8ECEA" class="k2" ></rect><text x="138" y="318" class="an" fill="#15191B" font-size="13" font-weight="700" letter-spacing=".1em" >THREE LINES LIT</text><circle cx="374" cy="306" r="12" fill="#FBFBF8" class="k2" ></circle><circle cx="414" cy="306" r="12" fill="#FBFBF8" class="k2" ></circle><circle cx="454" cy="306" r="12" fill="#FBFBF8" class="k2" ></circle><circle cx="374" cy="339" r="12" fill="#FBFBF8" class="k2" ></circle><circle cx="414" cy="339" r="12" fill="#FBFBF8" class="k2" ></circle><circle cx="454" cy="339" r="12" fill="#FBFBF8" class="k2" ></circle><circle cx="374" cy="372" r="12" fill="#FBFBF8" class="k2" ></circle><circle cx="414" cy="372" r="12" fill="#FBFBF8" class="k2" ></circle><circle cx="454" cy="372" r="12" fill="#FBFBF8" class="k2" ></circle><circle cx="374" cy="405" r="12" fill="#FBFBF8" class="k2" ></circle><circle cx="414" cy="405" r="12" fill="#FBFBF8" class="k2" ></circle><circle cx="454" cy="405" r="12" fill="#FBFBF8" class="k2" ></circle><rect x="124" y="352" width="200" height="50" rx="6" fill="none" class="k15" stroke-dasharray="5 5"></rect><text x="224" y="382" class="ar" fill="#48535A" font-size="12" font-weight="400" text-anchor="middle" >speaker</text><g style="transform:{{d.handsetTf}};transform-box:fill-box;transform-origin:50% 50%;transition:transform .5s ease"><rect x="112" y="146" width="376" height="38" rx="6" fill="#B4BDBC" stroke="none" transform="translate(9 12)" style="opacity:{{d.handsetShadow}}"></rect><rect x="112" y="146" width="376" height="38" rx="19" fill="#FBFBF8" class="k3" ></rect><circle cx="138" cy="165" r="11" fill="none" class="k2" ></circle><circle cx="462" cy="165" r="11" fill="none" class="k2" ></circle></g><rect x="570" y="150" width="116" height="26" rx="5" fill="#FBFBF8" class="k3" ></rect><text x="584" y="168" class="an" fill="#15191B" font-size="11" font-weight="700" letter-spacing=".14em" >SCOUTING</text><rect x="584" y="178" width="262" height="34" fill="#F4F6F6" class="k15" ></rect><line x1="596" y1="196" x2="830" y2="196" stroke="#9AA6AB" stroke-width="3" stroke-dasharray="4 6"></line><rect x="570" y="202" width="290" height="200" rx="8" fill="#FBFBF8" class="k3" ></rect><text x="590" y="306" class="ar" fill="#15191B" font-size="18" font-weight="800" letter-spacing=".06em" >ONLY YOURS</text><text x="590" y="328" class="ar" fill="#48535A" font-size="13" font-weight="400" >your scouts’ private reports</text><rect x="806" y="352" width="24" height="18" fill="#15191B" class="k1" ></rect><path d="M 812 352 L 812 344 Q 818 334 824 344 L 824 352" fill="none" class="k25" ></path><g transform="rotate(-3 765 520)"><rect x="640" y="440" width="250" height="160" fill="#FBFBF8" class="k2" ></rect><rect x="736" y="430" width="46" height="18" fill="#E2E6E4" class="k15" ></rect><text x="660" y="486" class="an" fill="#15191B" font-size="24" font-weight="500" style="font-style:italic" >Stay under the</text><text x="660" y="516" class="an" fill="#15191B" font-size="24" font-weight="500" style="font-style:italic" >second apron by</text><text x="660" y="546" class="an" fill="#15191B" font-size="24" font-weight="500" style="font-style:italic" >the deadline.</text><text x="870" y="584" class="ar" fill="#48535A" font-size="13" font-weight="600" text-anchor="end" >— the owner</text></g><g transform="translate(-200 -30) rotate(-14 610 560)"><rect x="530" y="552" width="140" height="13" rx="6.5" fill="#FBFBF8" class="k2" ></rect><path d="M 530 552 L 506 558.5 L 530 565 Z" fill="#15191B" class="k1" ></path><line x1="640" y1="552" x2="640" y2="543" class="k25" ></line><line x1="606" y1="552" x2="606" y2="565" class="k15" ></line></g></svg></div>
+        <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; transform-origin: {{s4.o}}; transform: {{s4.f}}"><svg width="984" height="766" viewBox="0 0 984 766" style="position:absolute;left:0;top:0" aria-hidden="true"><rect x="246" y="646" width="500" height="108" rx="24" fill="none" class="k2" stroke-dasharray="9 7"></rect><text x="496" y="636" class="an" fill="#48535A" font-size="11" font-weight="700" text-anchor="middle" letter-spacing=".2em" >YOUR HANDS</text><g transform="translate(300 660) rotate(5)"><g><rect x="6" y="-4" width="13" height="44" rx="6.5" fill="#FBFBF8" class="k25" ></rect><rect x="21" y="-14" width="13" height="54" rx="6.5" fill="#FBFBF8" class="k25" ></rect><rect x="36" y="-10" width="13" height="50" rx="6.5" fill="#FBFBF8" class="k25" ></rect><rect x="51" y="2" width="13" height="38" rx="6.5" fill="#FBFBF8" class="k25" ></rect><rect x="-14" y="54" width="32" height="15" rx="7.5" fill="#FBFBF8" class="k25" transform="rotate(-38 2 61)"></rect><path d="M 12 150 L 8 92 L 62 92 L 58 150 Z" fill="#FBFBF8" class="k25" ></path><rect x="4" y="30" width="62" height="66" rx="18" fill="#FBFBF8" class="k25" ></rect><line x1="10" y1="100" x2="60" y2="100" class="k2" ></line></g></g><g transform="translate(694 660) scale(-1 1) rotate(5)"><g><rect x="6" y="-4" width="13" height="44" rx="6.5" fill="#FBFBF8" class="k25" ></rect><rect x="21" y="-14" width="13" height="54" rx="6.5" fill="#FBFBF8" class="k25" ></rect><rect x="36" y="-10" width="13" height="50" rx="6.5" fill="#FBFBF8" class="k25" ></rect><rect x="51" y="2" width="13" height="38" rx="6.5" fill="#FBFBF8" class="k25" ></rect><rect x="-14" y="54" width="32" height="15" rx="7.5" fill="#FBFBF8" class="k25" transform="rotate(-38 2 61)"></rect><path d="M 12 150 L 8 92 L 62 92 L 58 150 Z" fill="#FBFBF8" class="k25" ></path><rect x="4" y="30" width="62" height="66" rx="18" fill="#FBFBF8" class="k25" ></rect><line x1="10" y1="100" x2="60" y2="100" class="k2" ></line></g></g></svg></div>
+      </div>
+    </sc-if>
+
+      <sc-if value="{{h1.on}}" hint-placeholder-val="{{true}}">
+        <button type="button" class="hit" onClick="{{h1.descend}}" aria-label="Descend into the front office building" style="left: 664px; top: 262px; width: 150px; height: 44px"></button>
+        <button type="button" class="hit" onClick="{{h1.descend}}" aria-label="Descend into the front office building, the tall building" style="left: 672px; top: 320px; width: 56px; height: 220px"></button>
+        <button type="button" class="hit" onClick="{{h1.arena}}" aria-label="The arena" style="left: 470px; top: 424px; width: 210px; height: 44px"></button>
+        <button type="button" class="hit" onClick="{{h1.follow}}" aria-label="Follow Boston payroll against the lines" aria-pressed="{{h1.followPressed}}" style="left: 360px; top: 40px; width: 350px; height: 134px"></button>
+        <sc-if value="{{h1.arenaNote}}" hint-placeholder-val="{{false}}">
+          <div class="rise" style="position: absolute; left: 380px; top: 346px; width: 250px; box-sizing: border-box; padding: 8px 12px; background: #FBFBF8; border: 2px solid #15191B; box-shadow: 4px 4px 0 #B4BDBC; font-size: 13px; line-height: 1.35">The arena is a different building. This prototype descends into the front office only.</div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{h2.on}}" hint-placeholder-val="{{false}}">
+        <sc-for list="{{h2.floors}}" as="fl" hint-placeholder-count="5">
+          <button type="button" class="hit" onClick="{{fl.go}}" aria-label="{{fl.label}}" aria-pressed="{{fl.pressed}}" style="left: 234px; top: {{fl.top}}px; width: 520px; height: 100px"></button>
+        </sc-for>
+        <sc-if value="{{h2.pill}}" hint-placeholder-val="{{false}}">
+          <button type="button" class="tb amber" onClick="{{h2.descend}}" style="position: absolute; left: 780px; top: 414px; width: 190px">Descend to this floor ↓</button>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{h3.on}}" hint-placeholder-val="{{false}}">
+        <sc-for list="{{h3.people}}" as="pp" hint-placeholder-count="4">
+          <button type="button" class="hit" onClick="{{pp.go}}" aria-label="{{pp.label}}" aria-pressed="{{pp.pressed}}" style="left: {{pp.l}}px; top: {{pp.t}}px; width: {{pp.w}}px; height: {{pp.h}}px"></button>
+        </sc-for>
+        <button type="button" class="hit" onClick="{{h3.sit}}" aria-label="Sit at the GM desk" style="left: 772px; top: 440px; width: 176px; height: 170px"></button>
+        <span class="an" style="position: absolute; left: 780px; top: 612px; width: 170px; text-align: center; font-size: 12px; font-weight: 700; letter-spacing: .12em; pointer-events: none">YOUR DESK · SIT DOWN ↓</span>
+        <sc-if value="{{h3.bubOn}}" hint-placeholder-val="{{false}}">
+          <div class="rise" style="position: absolute; left: {{h3.bub.l}}px; top: {{h3.bub.t}}px; width: {{h3.bub.w}}px; box-sizing: border-box; padding: 10px 12px; background: #FBFBF8; border: 2px solid #15191B; box-shadow: 4px 4px 0 #B4BDBC; font-size: 13.5px; line-height: 1.35; pointer-events: none">
+            <span class="an" style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .14em; color: #48535A">{{h3.bub.who}}</span>{{h3.bub.text}}
+            <div style="position: absolute; left: {{h3.bub.tail}}px; bottom: -8px; width: 12px; height: 12px; background: #FBFBF8; border-right: 2px solid #15191B; border-bottom: 2px solid #15191B; transform: rotate(45deg)"></div>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{h4.on}}" hint-placeholder-val="{{false}}">
+        <sc-for list="{{h4.lines}}" as="ln" hint-placeholder-count="3">
+          <button type="button" class="hit" onClick="{{ln.go}}" aria-label="{{ln.label}}" aria-pressed="{{ln.pressed}}" style="left: {{ln.l}}px; top: 204px; width: 108px; height: 72px"></button>
+        </sc-for>
+        <button type="button" class="hit" onClick="{{h4.folder}}" aria-label="Open the scouting folder, only yours" aria-pressed="{{h4.folderPressed}}" style="left: 570px; top: 150px; width: 290px; height: 252px"></button>
+        <sc-if value="{{h4.slipOn}}" hint-placeholder-val="{{false}}">
+          <div class="rise" style="position: absolute; left: 500px; top: 240px; width: 420px; box-sizing: border-box; padding: 14px 18px; background: #FBFBF8; border: 2px solid #15191B; box-shadow: 5px 5px 0 #B4BDBC">
+            <span class="h" style="display: block">{{h4.head}}</span>
+            <span style="display: block; margin-top: 6px; font-size: 16px; line-height: 1.35; font-weight: 500">{{h4.text}}</span>
+            <sc-if value="{{h4.decide}}" hint-placeholder-val="{{false}}">
+              <div style="display: flex; gap: 10px; margin-top: 12px">
+                <button type="button" class="tb" onClick="{{h4.accept}}" style="flex: 1">Accept</button>
+                <button type="button" class="tb" onClick="{{h4.decline}}" style="flex: 1">Decline</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{h4.hasResult}}" hint-placeholder-val="{{false}}">
+              <div style="display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; padding-top: 10px; border-top: 1px solid #15191B">
+                <span class="sw {{h4.resCls}}" style="margin-top: 2px"></span>
+                <span style="font-size: 13.5px; line-height: 1.35">{{h4.result}}</span>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+        <button type="button" class="tb" onClick="{{h4.leave}}" style="position: absolute; left: 774px; top: 700px; width: 190px">Leave the seat ↑</button>
+      </sc-if>
+
+      <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+        <div style="position: absolute; left: 14px; bottom: 14px; width: 600px; box-sizing: border-box; padding: 12px 16px; background: #FBFBF8; border: 2px solid #15191B; z-index: 5">
+          <span class="h" style="display: block; margin-bottom: 4px">HOW DO WE KNOW?</span>
+          <sc-for list="{{howLines}}" as="l" hint-placeholder-count="5">
+            <div style="display: flex; gap: 10px; padding: 6px 0; border-top: 1px solid #C7D2D8">
+              <span class="sw {{l.cls}}" style="margin-top: 1px"></span>
+              <span style="font-size: 12.5px; line-height: 1.32"><strong>{{l.k}}</strong> {{l.t}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <div style="position: absolute; left: 0; top: 0; width: 984px; height: 766px; box-sizing: border-box; border: 2px solid #15191B; pointer-events: none; z-index: 6"></div>
+    </div>
+
+    <!-- title block -->
+    <aside style="position: absolute; left: 1092px; top: 60px; width: 324px; height: 766px; box-sizing: border-box; background: #FBFBF8; border: 2px solid #15191B; padding: 14px 16px 12px; display: flex; flex-direction: column; overflow: hidden">
+      <div style="display: flex; justify-content: space-between; align-items: center; height: 16px">
+        <span class="h">SHEET {{pn.n}} OF 4 · {{pn.kind}}</span>
+        <span class="h ring" style="color: #48535A">{{pn.moveTag}}</span>
+      </div>
+      <span style="display: block; margin-top: 6px; font-size: 40px; font-weight: 800; line-height: 1; letter-spacing: .01em">{{pn.name}}</span>
+      <span style="display: block; margin-top: 6px; font-size: 14px; line-height: 1.3; color: #48535A">{{pn.cap}}</span>
+      <span class="h" style="display: block; margin-top: 12px; padding-top: 8px; border-top: 2px solid #15191B">WHAT YOU CAN SEE</span>
+      <sc-for list="{{pn.see}}" as="it" hint-placeholder-count="3">
+        <div style="font-size: 13px; line-height: 1.32; margin-top: 5px">· {{it.t}}</div>
+      </sc-for>
+      <span class="h" style="display: block; margin-top: 12px; padding-top: 8px; border-top: 2px solid #15191B">WHAT YOU CAN DO</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px">
+        <sc-for list="{{pn.acts}}" as="a" hint-placeholder-count="4">
+          <button type="button" class="tb {{a.cls}}" onClick="{{a.go}}" disabled="{{a.off}}" aria-pressed="{{a.pressed}}" style="flex: {{a.flex}}; min-height: 38px; padding: 0 10px; font-size: 14px">{{a.label}}</button>
+        </sc-for>
+      </div>
+      <div class="rise" style="font-size: 13.5px; line-height: 1.35; margin-top: 8px; font-weight: 500">{{pn.say}}</div>
+      <span style="display: block; margin-top: auto; padding-top: 8px; font-size: 12px; line-height: 1.3; color: #48535A; border-top: 1px solid #C7D2D8">{{pn.no}}</span>
+      <sc-if value="{{pn.hasRec}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; gap: 10px; align-items: flex-start; margin-top: 8px; padding-top: 8px; border-top: 1px solid #C7D2D8">
+          <span class="sw t-rec" style="margin-top: 2px"></span>
+          <span style="font-size: 12.5px; line-height: 1.32"><strong>ON THE RECORD</strong> {{pn.rec}}</span>
+        </div>
+      </sc-if>
+    </aside>
+  </sc-if>
+
+  <!-- the plain list: the simpler challenger -->
+  <sc-if value="{{list}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 40px; top: 60px; width: 1360px; height: 766px; box-sizing: border-box; background: #FBFBF8; border: 2px solid #15191B; padding: 12px 22px; overflow: hidden">
+      <span class="h" style="display: block; margin-bottom: 4px">PLAIN LIST · the same four altitudes, the same information, the same actions. The drawing is switched off.</span>
+      <div style="width: 880px">
+        <sc-for list="{{sections}}" as="sec" hint-placeholder-count="4">
+          <div style="margin-left: {{sec.indent}}px; margin-top: 6px; padding: 2px 0 4px 14px; border-left: 3px solid #15191B">
+            <div><span style="font-size: 17px; font-weight: 800; letter-spacing: .02em">{{sec.n}} · {{sec.name}}</span> <span style="font-size: 13.5px; color: #48535A">{{sec.cap}}</span></div>
+            <sc-for list="{{sec.see}}" as="it" hint-placeholder-count="3">
+              <div style="font-size: 13px; line-height: 1.3; margin-top: 2px">· {{it.t}}</div>
+            </sc-for>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px">
+              <sc-for list="{{sec.acts}}" as="a" hint-placeholder-count="4">
+                <button type="button" class="tb {{a.cls}}" onClick="{{a.go}}" disabled="{{a.off}}" aria-pressed="{{a.pressed}}" style="min-height: 36px; padding: 0 10px; font-size: 13.5px">{{a.label}}</button>
+              </sc-for>
+            </div>
+            <div style="font-size: 13px; line-height: 1.3; margin-top: 5px; font-weight: 600">{{sec.say}}</div>
+            <sc-if value="{{sec.hasRec}}" hint-placeholder-val="{{false}}"><div style="font-size: 12.5px; line-height: 1.3; margin-top: 3px"><strong>ON THE RECORD</strong> {{sec.rec}}</div></sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+        <div style="position: absolute; left: 940px; top: 44px; width: 400px; box-sizing: border-box; padding: 12px 16px; background: #FBFBF8; border: 2px solid #15191B">
+          <span class="h" style="display: block; margin-bottom: 4px">HOW DO WE KNOW?</span>
+          <sc-for list="{{howLines}}" as="l" hint-placeholder-count="5">
+            <div style="display: flex; gap: 10px; padding: 6px 0; border-top: 1px solid #C7D2D8">
+              <span class="sw {{l.cls}}" style="margin-top: 1px"></span>
+              <span style="font-size: 12.5px; line-height: 1.32"><strong>{{l.k}}</strong> {{l.t}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <div style="position: absolute; left: 12px; top: 834px; width: 1416px; font-size: 13px; line-height: 1.3; font-weight: 500">ENTER, in this model, means going down: less of the city, more of one desk, and hands that can touch what the eyes can read.</div>
+  <div style="position: absolute; left: 12px; top: 858px; width: 700px; font-size: 11px; line-height: 1.35; color: #48535A">COMMERCIAL LENS · Hypothesis: embodied entry sells premium Worlds (sports fans); it must beat the plain list in comprehension or it’s a cost with no return.</div>
+  <div style="position: absolute; left: 740px; top: 858px; width: 688px; text-align: right; font-size: 11px; line-height: 1.35; color: #48535A">PROTOTYPE · DESIGN PROPOSAL · the Boston building EXISTS TODAY as a 3D slice in the BOW Worlds branch; this is a 2.5D redrawing · World facts as given; times, names of roles and what people say are authored; verify</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+const INK = '#15191B', PLASTER = '#FBFBF8', LAMP = '#F2B632';
+const SS = [0, 9.5, 1.8, 6.5];
+const CEN = { x: 492, y: 383 };
+const FOC = [null, { x: 700, y: 430 }, { x: 494, y: 400 }, { x: 856, y: 540 }];
+const QIN = [null, null, { x: 494, y: 400 }, { x: 492, y: 393 }, { x: 492, y: 383 }];
+const sm = (x) => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
+const tf = (tx, ty, sc) => 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px) scale(' + sc.toFixed(4) + ')';
+const NAMES = ['', 'CITY', 'BUILDING', 'FLOOR', 'DESK'];
+const KINDS = ['', 'SKYLINE', 'SECTION', 'ELEVATION', 'PLAN'];
+const FLOORS = [
+  { k: 'own', label: 'Owner’s suite', idx: 0, t: 'Owner’s suite: the owner and the owner’s staff [names: from the World]. Lit. The note on your desk started here.' },
+  { k: 'biz', label: 'Business', idx: 1, t: 'Business: tickets, sponsors, arena events [staff: from the World]. Lit. Funded first, in Year One.' },
+  { k: 'ops', label: 'Basketball Ops', idx: 2, t: 'Basketball Ops: the GM’s office, the capologist, the coach, and the analytics room. Three rooms lit; the analytics room has been dark since Year One.' },
+  { k: 'scout', label: 'Scouting', idx: 3, t: 'Scouting and player development: scouts and skills coaches [staff: from the World]. Lit.' },
+  { k: 'lobby', label: 'Lobby', idx: 4, t: 'Lobby and team entrance. Open. Nobody here decides anything.' }
+];
+const PEOPLE = [
+  { k: 'cap', label: 'Capologist', who: 'CAPOLOGIST [name: from the World]', l: 292, t: 430, w: 190, h: 184, bl: 262, bt: 302, bw: 240, tail: 70,
+    text: 'You are about $1.1M over the second apron: $222.8M against $221.7M. That is what the owner’s note is about.' },
+  { k: 'coach', label: 'Coach', who: 'COACH [name: from the World]', l: 592, t: 430, w: 72, h: 184, bl: 486, bt: 302, bw: 252, tail: 130,
+    text: 'Butler’s agent wants a word about the fourth quarter. And last night, on Denver’s last possession, we switched and left a big on a guard. Jokić scored.' },
+  { k: 'agm', label: 'Interim Assistant GM', who: 'INTERIM ASSISTANT GM [fictional]', l: 676, t: 430, w: 56, h: 184, bl: 470, bt: 302, bw: 268, tail: 228,
+    text: 'Denver called at 08:50 about your backup guard. The offer runs out at 11:00. Your desk is through that door. I stay on as an advisor.' },
+  { k: 'ana', label: 'Analytics room', who: 'ANALYTICS ROOM', l: 28, t: 400, w: 232, h: 212, bl: 36, bt: 376, bw: 214, tail: 100,
+    text: 'Nobody here. The chairs have been empty since Year One.' }
+];
+const SLIPS = {
+  l1: { head: 'LINE 1 · 08:50 · DENVER’S GM', text: '“We’d like your backup guard. Terms: [from the call]. The offer expires at 11:00.”' },
+  l2: { head: 'LINE 2 · BUTLER’S AGENT', text: '“Jimmy would like a meeting about his role in the fourth quarter.”' },
+  l3: { head: 'LINE 3 · [the two-way player’s agent]', text: '“About the call-up. You have to be at 15 or fewer before the Week 10 games.”' },
+  folder: { head: 'SCOUTING FOLDER · ONLY YOUR SEAT SEES THIS', text: 'Private notes on your backup guard and on Denver’s roster. [contents: from the World]' }
+};
+class Component extends DCLogic {
+  componentDidMount() { this.timer = setInterval(() => this.tick(), 33); }
+  componentWillUnmount() { clearInterval(this.timer); }
+  tick() {
+    const s = this.state || {};
+    const z = s.z == null ? 1 : s.z, zt = s.zt == null ? 1 : s.zt;
+    if (z === zt) return;
+    const nz = z < zt ? Math.min(zt, z + 0.03) : Math.max(zt, z - 0.03);
+    const patch = { z: nz };
+    if (nz === zt && zt === 4) { patch.sat = true; patch.light = true; }
+    this.setState(patch);
+  }
+  scene(k, z) {
+    const d = z - k;
+    if (Math.abs(d) >= 1) return { on: false, op: 0, o: '0px 0px', b: 'none', m: 'none', f: 'none' };
+    if (d === 0) return { on: true, op: 1, o: '492px 383px', b: 'none', m: 'none', f: 'none' };
+    if (d > 0) {
+      const e = sm(d), S = SS[k], P = FOC[k];
+      const tx = (CEN.x - P.x) * e, ty = (CEN.y - P.y) * e;
+      const op = 1 - sm((e - 0.45) / 0.45);
+      const lay = (m) => tf(tx * m, ty * m, Math.pow(S, e * m));
+      return { on: op > 0.002, op: op.toFixed(3), o: P.x + 'px ' + P.y + 'px', b: lay(0.55), m: lay(1), f: lay(1.35) };
+    }
+    const e = sm(1 + d), S = SS[k - 1], P = FOC[k - 1], Q = QIN[k];
+    const tx = (P.x - Q.x) * (1 - e), ty = (P.y - Q.y) * (1 - e);
+    const op = sm((e - 0.15) / 0.5);
+    const lay = (m) => tf(tx * m, ty * m, Math.pow(S, -(1 - e) * m));
+    return { on: op > 0.002, op: op.toFixed(3), o: Q.x + 'px ' + Q.y + 'px', b: lay(0.55), m: lay(1), f: lay(1.35) };
+  }
+  renderVals() {
+    const s = this.state || {};
+    const z = s.z == null ? 1 : s.z;
+    const zt = s.zt == null ? 1 : s.zt;
+    const moving = z !== zt;
+    const alt = Math.max(1, Math.min(4, Math.round(z)));
+    const list = !!s.list, how = !!s.how;
+    const sat = !!s.sat, light = !!s.light;
+    const sel = s.sel || null, person = s.person || null, focus = s.focus || null;
+    const denver = s.denver || null, follow = !!s.follow, poke = s.poke || null;
+    const set = (p) => () => this.setState(p);
+    const goAlt = (k) => () => { const p = { zt: k }; if (k < 4) p.sat = false; this.setState(p); };
+    const toggleFollow = () => this.setState({ follow: !((this.state || {}).follow) });
+    const sitList = () => this.setState({ sat: true, light: true, z: 4, zt: 4 });
+    const leaveList = () => this.setState({ sat: false, z: 1, zt: 1 });
+    const decide = (v) => () => { if ((this.state || {}).sat) this.setState({ denver: v, focus: 'l1' }); };
+
+    const recText = denver === 'yes' ? 'Accepted Denver’s offer for your backup guard. Roster 14. Attributed to you.' : denver === 'no' ? 'Declined Denver’s offer. Backup guard stays; roster 15. Attributed to you.' : '';
+    const off = (n, needSat) => (list ? (needSat ? !sat : false) : !(!moving && alt === n && (!needSat || sat)));
+    const flexN = list ? '0 0 auto' : '1 1 46%', flexW = '1 1 100%';
+
+    // ---- content, shared by the drawing's title block and the plain list
+    const A = (label, go, o) => ({ label, go, off: !!(o && o.off), pressed: (o && o.pressed !== undefined) ? String(!!o.pressed) : 'false', cls: (o && o.amber) ? 'amber' : (o && o.pressed) ? 'on' : '', flex: (o && o.wide) ? flexW : flexN });
+    const sections = [];
+    // 1 city
+    const see1 = [
+      'Week 9, Tuesday 09:00, Year Two. Last night: Denver 115, Boston 112, at home.',
+      'Boston payroll ≈ $222.8M. The World’s lines: tax $200M, second apron $221.7M. That is about $1.1M over.',
+      'Standings: [from the World feed]. Trade deadline: Week 14, Thu 15:00 [authored placeholder].'
+    ];
+    if (follow) see1.push('You are following Boston’s payroll against the lines.');
+    const acts1 = [A(follow ? 'Following the payroll' : 'Follow payroll vs the lines', toggleFollow, { off: off(1), pressed: follow })];
+    if (!list) { acts1.push(A('Descend to the front office ↓', goAlt(2), { off: off(1), wide: true })); acts1.push(A('Enter: straight down to the desk ↓↓', goAlt(4), { off: off(1), amber: true, wide: true })); }
+    const say1 = denver && light ? 'Kept from your time in the seat: ' + recText : light ? 'Left on the building: GM’s light on.' : 'You are outside the glass. Everything public is readable; nothing here is yours yet.';
+    sections.push({ n: 1, name: 'CITY', kind: KINDS[1], cap: 'Breadth. Everything public, nothing you can touch.', see: see1, acts: acts1, say: say1, no: 'Not from here: talk to anyone, sign anyone, answer a call.', rec: recText, hasRec: false });
+    // 2 building
+    const see2 = [
+      'Five floors, one organization. Lit rooms are funded this year; dark rooms are not.',
+      'The analytics room has been dark since Year One, when you funded Business over Basketball Ops.',
+      light ? 'The GM’s window is lit: someone sat at that desk.' : 'The GM’s window is dark: the seat has been vacant since 06:00.'
+    ];
+    const acts2 = FLOORS.map((f) => A(f.label, set({ sel: f.k }), { off: off(2), pressed: sel === f.k }));
+    if (!list) acts2.push(A('Descend to the Basketball Ops floor ↓', goAlt(3), { off: off(2), amber: true, wide: true }));
+    const flr = FLOORS.filter((f) => f.k === sel)[0];
+    sections.push({ n: 2, name: 'BUILDING', kind: KINDS[2], cap: 'One organization. Who works here, and what is funded.', see: see2, acts: acts2, say: flr ? flr.t : 'Select a floor to see who works there.', no: 'Not from here: talk to people or decide anything.', rec: '', hasRec: false });
+    // 3 floor
+    const see3 = [
+      'Three people: the capologist, the coach, and the interim Assistant GM [fictional] at the GM’s door.',
+      'The analytics room: chairs empty, screens off.',
+      'The GM’s office: a desk, a phone, and a lamp that is ' + (light ? 'on.' : 'off. Vacant since 06:00.')
+    ];
+    const acts3 = PEOPLE.map((p) => A(p.label, set({ person: p.k }), { off: off(3), pressed: person === p.k }));
+    if (!list) acts3.push(A('Sit at the desk ↓', goAlt(4), { off: off(3), amber: true, wide: true }));
+    const pp = PEOPLE.filter((p) => p.k === person)[0];
+    sections.push({ n: 3, name: 'FLOOR', kind: KINDS[3], cap: 'Four rooms, three people, one room with no one in it.', see: see3, acts: acts3, say: pp ? pp.who + ': “' + pp.text + '”' : 'Choose someone to hear from.', no: 'Not from here: sign, trade or answer. You can only hear.', rec: '', hasRec: false });
+    // 4 desk
+    const see4 = [
+      'Phone: three lines lit. 1 Denver’s GM · 2 Butler’s agent · 3 [the two-way player’s agent].',
+      'Folder: your scouts’ private reports. Only your seat sees them.',
+      'The owner’s note: “Stay under the second apron by the deadline.” A pen.'
+    ];
+    const canDecide = focus === 'l1' && !denver;
+    const acts4 = [];
+    if (list) acts4.push(A('Sit at the desk', sitList, { off: sat, pressed: sat }));
+    acts4.push(A('Line 1 · Denver', set({ focus: 'l1' }), { off: off(4, true), pressed: focus === 'l1' }));
+    acts4.push(A('Line 2 · Butler’s agent', set({ focus: 'l2' }), { off: off(4, true), pressed: focus === 'l2' }));
+    acts4.push(A('Line 3 · two-way’s agent', set({ focus: 'l3' }), { off: off(4, true), pressed: focus === 'l3' }));
+    acts4.push(A('Read the folder', set({ focus: 'folder' }), { off: off(4, true), pressed: focus === 'folder' }));
+    acts4.push(A('Accept Denver', decide('yes'), { off: off(4, true) || !canDecide, amber: canDecide }));
+    acts4.push(A('Decline Denver', decide('no'), { off: off(4, true) || !canDecide }));
+    acts4.push(A('Leave the seat ↑', list ? leaveList : goAlt(1), { off: off(4, true), wide: !list }));
+    let slipRes = '', slipCls = 't-aut';
+    if (focus === 'l1' && denver === 'yes') { slipRes = 'Accepted. Your backup guard goes to Denver [terms: from the call]. Roster falls from 15 to 14 (computed). Recorded, attributed to you.'; slipCls = 't-rec'; }
+    else if (focus === 'l1' && denver === 'no') { slipRes = 'Declined. Your backup guard stays. Roster stays 15, and you are still about $1.1M over the second apron. Recorded, attributed to you.'; slipCls = 't-rec'; }
+    else if (focus === 'l2' || focus === 'l3') slipRes = 'Held. This prototype lets one matter be decided at the desk.';
+    const slip = focus ? SLIPS[focus] : null;
+    sections.push({ n: 4, name: 'DESK', kind: KINDS[4], cap: 'Depth. One desk, three calls, one decision.', see: see4, acts: acts4, say: slip ? slip.head + ': ' + slip.text + (slipRes ? ' ' + slipRes : '') : 'Pick up a line or open the folder.', no: 'Not from here: see another team’s desk, or anyone else’s folder.', rec: recText, hasRec: !!recText });
+
+    const pn = sections[alt - 1];
+    const secItems = sections.map((sc, i) => ({ ...sc, indent: i * 28, see: sc.see.map((t) => ({ t })) }));
+    const pnv = { ...pn, see: pn.see.map((t) => ({ t })), moveTag: moving ? (z < zt ? 'DESCENDING' : 'ASCENDING') : '', hasRec: pn.n === 4 ? !!recText : false };
+    if (pn.n === 1 && denver && light) pnv.hasRec = false;
+
+    // ---- gauge
+    const ticks = [1, 2, 3, 4].map((k) => {
+      const cur = alt === k;
+      return { top: 60 + (k - 1) * 190 - 14, label: NAMES[k], aria: 'Altitude ' + k + ' of 4, ' + NAMES[k].toLowerCase(), current: cur ? 'step' : 'false',
+        bg: cur ? INK : PLASTER, fg: cur ? PLASTER : INK, icBg: cur ? LAMP : (k < alt ? INK : 'transparent'), go: goAlt(k) };
+    });
+    const g = { markY: 60 + (z - 1) * 190, ticks };
+
+    // ---- scenes and their hit layers
+    const s1 = this.scene(1, z), s2 = this.scene(2, z), s3 = this.scene(3, z), s4 = this.scene(4, z);
+    const settled = !moving;
+    const h1 = { on: !list && settled && alt === 1, descend: goAlt(2), arena: () => this.setState({ poke: (this.state || {}).poke === 'arena' ? null : 'arena' }),
+      follow: toggleFollow, followPressed: follow ? 'true' : 'false', arenaNote: poke === 'arena' };
+    const h2 = { on: !list && settled && alt === 2, pill: sel === 'ops', descend: goAlt(3),
+      floors: FLOORS.map((f) => ({ top: 150 + 100 * f.idx, label: 'Floor: ' + f.label, pressed: sel === f.k ? 'true' : 'false', go: set({ sel: f.k }) })) };
+    const cur = PEOPLE.filter((p) => p.k === person)[0];
+    const h3 = { on: !list && settled && alt === 3, sit: goAlt(4), bubOn: !!cur,
+      people: PEOPLE.map((p) => ({ l: p.l, t: p.t, w: p.w, h: p.h, label: 'Talk to: ' + p.label, pressed: person === p.k ? 'true' : 'false', go: set({ person: p.k }) })),
+      bub: cur ? { l: cur.bl, t: cur.bt, w: cur.bw, tail: cur.tail, who: cur.who, text: cur.text } : { l: 0, t: 0, w: 200, tail: 20, who: '', text: '' } };
+    const h4 = { on: !list && settled && alt === 4 && sat, leave: goAlt(1), folder: set({ focus: 'folder' }), folderPressed: focus === 'folder' ? 'true' : 'false',
+      lines: [1, 2, 3].map((k) => ({ l: 120 + (k - 1) * 112, label: 'Line ' + k + ': ' + ['Denver’s GM', 'Butler’s agent', 'the two-way player’s agent'][k - 1], pressed: focus === 'l' + k ? 'true' : 'false', go: set({ focus: 'l' + k }) })),
+      slipOn: !!slip, head: slip ? slip.head : '', text: slip ? slip.text : '', decide: canDecide, accept: decide('yes'), decline: decide('no'),
+      hasResult: !!slipRes, result: slipRes, resCls: slipCls };
+    const inCall = focus === 'l1' || focus === 'l2' || focus === 'l3';
+    const c = { lightOp: light ? 1 : 0, followOp: follow ? 1 : 0 };
+    const b = { gmFill: light ? LAMP : '#E6E9E8', opsA: light ? 0 : 1, opsB: light ? 1 : 0, selY: 150 + 100 * (flr ? flr.idx : 0), selOp: flr ? 1 : 0 };
+    const f = { gmFill: light ? '#F8DFA0' : '#E6E9E8', lampFill: light ? LAMP : PLASTER };
+    const d = { handsetTf: inCall ? 'translate(-14px,-12px) rotate(-3deg)' : 'none', handsetShadow: inCall ? 0.55 : 0 };
+
+    const howLines = [
+      { cls: 't-rec', k: 'RECORDED', t: 'Denver 115, Boston 112; payroll ≈ $222.8M; which rooms are funded (Year One: Business over Basketball Ops). Written in the World’s own history.' },
+      { cls: 't-aut', k: 'AUTHORED', t: 'The World’s lines ($200M tax, $221.7M second apron), the Week 14 deadline, the 08:50 call, the interim Assistant GM [fictional], and everything people say.' },
+      { cls: 't-com', k: 'COMPUTED', t: '“About $1.1M over” is $222.8M minus $221.7M. Roster 14 after accepting is 15 minus 1.' },
+      { cls: 't-rep', k: 'REPRESENTATION', t: 'A 2.5D redrawing; a 3D slice of this building EXISTS TODAY in the BOW Worlds branch. People are roles, not portraits. A lit window is a funded room.' },
+      { cls: 't-blank', k: 'NOT MODELED', t: 'No model ran here, so nothing is hatched. Bracketed text stands in for the World feed.' }
+    ];
+
+    return {
+      moving, drawing: !list, list, how, sections: secItems, pn: pnv, g, s1, s2, s3, s4, h1, h2, h3, h4, c, b, f, d, howLines,
+      skipLabel: z < zt ? 'Skip the descent' : 'Skip the ascent',
+      skip: () => { const st = this.state || {}; const zt2 = st.zt == null ? 1 : st.zt; const p = { z: zt2 }; if (zt2 === 4) { p.sat = true; p.light = true; } this.setState(p); },
+      toggleList: () => { const st = this.state || {}; const zt2 = st.zt == null ? 1 : st.zt; const p = { list: !st.list, z: zt2 }; if (zt2 === 4) { p.sat = true; p.light = true; } this.setState(p); },
+      listPressed: list ? 'true' : 'false', listCls: list ? 'on' : '',
+      toggleHow: () => this.setState({ how: !((this.state || {}).how) }),
+      howPressed: how ? 'true' : 'false', howCls: how ? 'on' : ''
+    };
+  }
+}
+
+</script>
+</body>
+</html>

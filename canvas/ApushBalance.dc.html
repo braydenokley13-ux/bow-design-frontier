@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Arithmetic of Union</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F7F4EE;color:#16140F;font-family:'Source Serif 4',serif}
+a{color:#B23A1B}a:hover{color:#7E2711}
+.g{font-family:'Bricolage Grotesque',sans-serif}
+.k{font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#4A463F}
+.t-obs{background:#16140F}
+.t-ens{background:#5B4636}
+.t-com{background:#8A857C}
+.t-aut{background:transparent;border:2px solid #16140F;box-sizing:border-box}
+.t-unk{background:transparent;border:2px dashed #16140F;box-sizing:border-box}
+.btn{cursor:pointer;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid #16140F;border-radius:0;min-height:44px;transition:background .2s,color .2s}
+.btn:hover{box-shadow:inset 0 -3px 0 #B23A1B}
+.col{cursor:pointer;font-family:'Bricolage Grotesque',sans-serif;border-radius:0;background:transparent;padding:0;transition:border-color .2s,color .2s}
+.col:hover{border-color:#16140F}
+.btn:focus-visible,.col:focus-visible{outline:3px solid #B23A1B;outline-offset:2px}
+.seat{position:absolute;width:11px;height:11px;transition:left .8s cubic-bezier(.65,0,.25,1),top .8s cubic-bezier(.65,0,.25,1),background-color .4s,opacity .5s}
+.mv{transition:top .7s cubic-bezier(.65,0,.25,1),height .7s cubic-bezier(.65,0,.25,1),opacity .4s,background .3s}
+.fade{transition:opacity .45s}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: #F7F4EE; color: #16140F; font-family: 'Source Serif 4', serif">
+
+  <div class="k" style="position: absolute; left: 40px; right: 40px; top: 14px; height: 28px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #16140F">
+    <span>BOW · APUSH · Philadelphia, summer 1787 · Challenger C — the mechanism</span>
+    <span>PROTOTYPE · DESIGN PROPOSAL · data: 1790 census &amp; Art. I §2, verify</span>
+  </div>
+
+  <h1 class="g" style="position: absolute; left: 38px; top: 54px; margin: 0; font-size: 56px; line-height: 1; font-weight: 800; letter-spacing: -0.025em">The Arithmetic of Union</h1>
+  <p style="position: absolute; left: 760px; top: 54px; width: 430px; height: 60px; margin: 0; font-size: 15px; line-height: 20px; color: #2B2822">Choose a rule for counting the thirteen states and watch the seats move. Then sit with a delegation and ask whether the room would take it.</p>
+  <button type="button" class="btn" aria-pressed="{{howPressed}}" onClick="{{toggleHow}}" style="position: absolute; left: 1210px; top: 56px; width: 190px; height: 48px; background: {{howBg}}; color: {{howFg}}; font-size: 15px; font-weight: 600">How do we know?</button>
+
+  <div role="group" aria-label="Apportionment rule" style="position: absolute; left: 40px; top: 124px; display: flex; gap: 8px; align-items: center">
+    <span class="k" style="margin-right: 8px">Apply a rule</span>
+    <sc-for list="{{rules}}" as="r" hint-placeholder-count="5">
+      <button type="button" class="btn" aria-pressed="{{r.pressed}}" onClick="{{r.pick}}" style="height: 48px; padding: 0 17px; background: {{r.bg}}; color: {{r.fg}}; font-size: 15px; font-weight: 600">{{r.label}}</button>
+    </sc-for>
+  </div>
+  <div class="g" style="position: absolute; left: 1150px; top: 124px; width: 250px; height: 48px; display: flex; align-items: center; gap: 10px; font-size: 13px; line-height: 1.3; color: #2B2822">
+    <span style="width: 14px; height: 14px; flex: none; background: #B23A1B"></span>
+    <span>Your delegation. Choose any state’s name to sit with it.</span>
+  </div>
+  <div style="position: absolute; left: 40px; right: 40px; top: 184px; height: 1px; background: #16140F"></div>
+
+  <div class="t-unk" style="position: absolute; left: 160px; top: 196px; width: 832px; min-height: 34px; display: flex; align-items: center; padding: 6px 16px; font-size: 14px; line-height: 20px; color: #2B2822">
+    <span style="white-space: nowrap"><strong class="g" style="font-weight: 800">1787 populations: unknown.</strong> No census existed. The bars show the 1790 census, the nearest observed count.</span>
+  </div>
+
+  <div class="g" style="position: absolute; left: 40px; top: 246px; width: 112px; display: flex; flex-direction: column; gap: 3px; font-size: 12px; line-height: 15px; white-space: nowrap">
+    <span class="k" style="color: #16140F; font-weight: 800">People</span>
+    <span style="color: #4A463F">1790 census</span>
+    <span style="display: flex; align-items: center; gap: 6px"><span class="t-obs" style="width: 12px; height: 12px; flex: none"></span>free</span>
+    <span style="display: flex; align-items: center; gap: 6px"><span class="t-ens" style="width: 12px; height: 12px; flex: none"></span>enslaved</span>
+    <span style="display: flex; align-items: center; gap: 6px"><span class="t-com" style="width: 6px; height: 14px; flex: none; margin: 0 3px"></span>House count</span>
+  </div>
+  <div class="k fade" style="position: absolute; left: 40px; top: 340px; width: 112px; line-height: 15px; white-space: nowrap; opacity: {{howOp}}; color: #16140F">Observed ·<br>rail computed</div>
+  <div class="g" style="position: absolute; left: 40px; top: 386px; width: 112px; font-size: 12px; line-height: 15px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; white-space: nowrap">Sit with a<br>delegation</div>
+  <div class="g" style="position: absolute; left: 40px; top: 434px; width: 112px; display: flex; flex-direction: column; gap: 3px; font-size: 12px; line-height: 15px">
+    <span class="k" style="color: #16140F; font-weight: 800">House</span>
+    <span style="color: #4A463F">{{houseSub}}</span>
+    <span style="color: #4A463F; white-space: nowrap; min-height: 15px">{{qHint}}</span>
+    <span class="k fade" style="opacity: {{howOp}}; color: #16140F">Computed</span>
+  </div>
+  <div class="g" style="position: absolute; left: 40px; top: 528px; width: 112px; display: flex; flex-direction: column; gap: 1px; font-size: 12px; line-height: 15px; white-space: nowrap">
+    <span class="k" style="color: #16140F; font-weight: 800">Art. I §2</span>
+    <span style="color: #4A463F">first House, 1787</span>
+  </div>
+  <div class="g" style="position: absolute; left: 40px; top: 566px; width: 112px; display: flex; flex-direction: column; gap: 3px; font-size: 12px; line-height: 15px; white-space: nowrap">
+    <span class="k" style="color: #16140F; font-weight: 800">Senate</span>
+    <span style="color: #4A463F">{{senSub}}</span>
+  </div>
+  <div class="g" style="position: absolute; left: 40px; top: 610px; width: 112px; display: flex; flex-direction: column; gap: 2px; font-size: 12px; line-height: 15px; white-space: nowrap">
+    <span class="k" style="color: #16140F; font-weight: 800">vs Articles</span>
+    <span style="color: #4A463F">each state: H 5, S 2</span>
+  </div>
+  <div class="g" style="position: absolute; left: 40px; top: 656px; width: 106px; display: flex; flex-direction: column; gap: 5px; font-size: 13px; line-height: 18px; text-align: right; color: #2B2822">
+    <span>likely yes</span>
+    <span>contested</span>
+    <span>likely no</span>
+  </div>
+  <div class="k fade" style="position: absolute; left: 40px; top: 726px; width: 106px; text-align: right; opacity: {{howOp}}; color: #16140F">Authored</div>
+
+  <div class="fade g" style="position: absolute; left: 160px; top: 578px; width: 832px; text-align: center; font-size: 14px; font-weight: 600; color: #4A463F; opacity: {{senNoneOp}}">No second chamber under this rule.</div>
+
+  <sc-for list="{{cols}}" as="c" hint-placeholder-count="13">
+    <div class="mv" style="position: absolute; left: {{c.x}}px; top: 240px; width: 64px; height: 486px; background: {{c.band}}"></div>
+    <div class="mv" style="position: absolute; left: {{c.bx}}px; top: {{c.fTop}}px; width: 30px; height: {{c.fH}}px; background: #16140F"></div>
+    <div class="mv" style="position: absolute; left: {{c.bx}}px; top: {{c.eTop}}px; width: 30px; height: {{c.eH}}px; background: #5B4636"></div>
+    <div class="mv" style="position: absolute; left: {{c.rx}}px; top: {{c.rTop}}px; width: 7px; height: {{c.rH}}px; background: #8A857C"></div>
+    <div class="fade" style="position: absolute; left: {{c.ox}}px; top: {{c.oTop}}px; width: 38px; height: {{c.oH}}px; box-sizing: border-box; border: 2px solid #B23A1B; opacity: {{c.selOp}}"></div>
+    <button type="button" class="col" aria-pressed="{{c.pressed}}" aria-label="{{c.aria}}" onClick="{{c.pick}}" style="position: absolute; left: {{c.lx}}px; top: 378px; width: 60px; height: 46px; border: 2px solid {{c.btnBd}}; color: {{c.btnC}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px">
+      <span style="font-size: 17px; font-weight: 800; line-height: 1">{{c.a}}</span>
+      <span style="font-size: 12px; font-weight: 400; line-height: 1; color: #4A463F">{{c.k}}</span>
+    </button>
+    <div class="g mv" style="position: absolute; left: {{c.qx}}px; top: {{c.hLabTop}}px; width: 60px; text-align: center; font-size: 12px; line-height: 15px; white-space: nowrap"><span style="font-weight: 400; color: #4A463F">{{c.qN}}</span><span style="font-size: 13px; font-weight: 800; color: {{c.numC}}">{{c.hN}}</span></div>
+    <div class="t-aut g" style="position: absolute; left: {{c.sx}}px; top: 528px; width: 53px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">{{c.au}}</div>
+    <div class="g mv" style="position: absolute; left: {{c.sx}}px; top: {{c.sLabTop}}px; width: 53px; text-align: center; font-size: 13px; line-height: 15px; font-weight: 800; color: {{c.numC}}; opacity: {{c.sOp}}">{{c.sN}}</div>
+    <div class="g" style="position: absolute; left: {{c.sx}}px; top: 614px; width: 53px; text-align: center; font-size: 13px; line-height: 16px; color: {{c.gC}}; font-weight: {{c.gW}}">
+      <span style="display: block">{{c.gH}}</span>
+      <span style="display: block">{{c.gS}}</span>
+    </div>
+    <sc-if value="{{c.present}}" hint-placeholder-val="{{true}}">
+      <sc-for list="{{c.cells}}" as="m" hint-placeholder-count="3">
+        <div class="mv" style="position: absolute; left: {{c.sx}}px; top: {{m.y}}px; width: 53px; height: 21px; box-sizing: border-box; border: 1px solid {{m.bd}}">
+          <div class="t-aut fade" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; opacity: {{m.op}}"></div>
+        </div>
+      </sc-for>
+    </sc-if>
+    <sc-if value="{{c.absent}}" hint-placeholder-val="{{false}}">
+      <div class="t-unk g" style="position: absolute; left: {{c.sx}}px; top: 656px; width: 53px; height: 67px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 12px; line-height: 1.15; color: #4A463F">not in the room</div>
+    </sc-if>
+  </sc-for>
+
+  <sc-for list="{{hs}}" as="h" hint-placeholder-count="65">
+    <div class="seat" style="left: {{h.x}}px; top: {{h.y}}px; background: {{h.f}}; transition-delay: {{h.d}}ms"></div>
+  </sc-for>
+  <sc-for list="{{ss}}" as="q" hint-placeholder-count="26">
+    <div class="seat" style="left: {{q.x}}px; top: {{q.y}}px; background: {{q.f}}; opacity: {{q.o}}; transition-delay: {{q.d}}ms"></div>
+  </sc-for>
+
+  <div class="g" style="position: absolute; left: 160px; top: 429px; width: 420px; font-size: 12px; line-height: 15px; color: #4A463F; white-space: nowrap">* Massachusetts includes Maine (counted with Massachusetts in 1790)</div>
+
+  <div style="position: absolute; left: 40px; top: 742px; width: 952px; height: 3px; background: #16140F"></div>
+  <p style="position: absolute; left: 40px; top: 758px; width: 540px; margin: 0; font-size: 22px; line-height: 1.34; font-weight: {{moralW}}; color: #16140F">{{moralBig}}</p>
+  <div style="position: absolute; left: 612px; top: 760px; width: 380px; display: flex; gap: 10px; align-items: flex-start">
+    <span class="t-com" style="width: 14px; height: 14px; flex: none; margin-top: 3px"></span>
+    <p class="g" style="margin: 0; font-size: 14px; line-height: 1.45; color: #16140F">{{moralCalc}}</p>
+  </div>
+
+  <p class="g" style="position: absolute; left: 40px; top: 874px; width: 952px; margin: 0; font-size: 12px; line-height: 16px; font-style: italic; color: #4A463F">Verdict pending: this may belong inside THE ROOM as Caleb Strong’s tally sheet.</p>
+
+  <div style="position: absolute; left: 1012px; top: 196px; width: 1px; height: 700px; background: #D5CEC0"></div>
+
+  <div style="position: absolute; left: 1036px; top: 188px; width: 364px; display: flex; flex-direction: column; gap: 14px">
+
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <span class="k">The rule</span>
+      <span style="white-space: nowrap; font-family: {{rName.font}}; font-style: {{rName.style}}; font-weight: {{rName.weight}}; font-size: 26px; line-height: 1.05; letter-spacing: -0.01em">{{rName.text}}</span>
+      <p style="margin: 0; min-height: 40px; font-size: 14px; line-height: 1.36; font-style: {{rName.style}}; color: #2B2822">{{rSrc}}</p>
+      <div role="group" aria-label="Senate basis" style="display: flex; align-items: center; gap: 6px">
+        <span class="g" style="width: 118px; font-size: 13px; font-weight: 600; line-height: 1.2">Senate</span>
+        <sc-for list="{{senCtl}}" as="o" hint-placeholder-count="2">
+          <button type="button" class="btn" aria-pressed="{{o.pressed}}" onClick="{{o.pick}}" style="height: 44px; padding: 0 14px; background: {{o.bg}}; color: {{o.fg}}; font-size: 14px; font-weight: 600">{{o.label}}</button>
+        </sc-for>
+      </div>
+      <div role="group" aria-label="How the House counts enslaved people" style="display: flex; align-items: center; gap: 6px">
+        <span class="g" style="width: 118px; font-size: 13px; font-weight: 600; line-height: 1.2">House counts enslaved people at</span>
+        <sc-for list="{{cntCtl}}" as="o" hint-placeholder-count="3">
+          <button type="button" class="btn" aria-pressed="{{o.pressed}}" aria-label="{{o.aria}}" onClick="{{o.pick}}" style="height: 44px; min-width: 64px; padding: 0 12px; background: {{o.bg}}; color: {{o.fg}}; font-size: 14px; font-weight: 600">{{o.label}}</button>
+        </sc-for>
+      </div>
+      <span class="g" style="font-size: 12px; line-height: 16px; color: #2B2822"><strong style="font-weight: 800">full</strong> — more seats for the states that enslaved people; no rights for the people counted</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <div style="height: 2px; background: #B23A1B; margin-bottom: 2px"></div>
+      <span class="k">You sit with</span>
+      <span class="g" style="font-size: 26px; line-height: 1; font-weight: 800; color: #B23A1B">{{d.name}}</span>
+      <span class="g" style="font-size: 13px; color: #4A463F">Leaned toward: <span>{{d.lean}}</span></span>
+      <p style="margin: 2px 0 0; font-size: 14px; line-height: 1.38; min-height: 38px">{{d.pos}}</p>
+      <div class="g" style="display: flex; gap: 8px; align-items: baseline; font-size: 14px">
+        <span style="color: #4A463F">Under this rule</span>
+        <strong style="font-weight: 800">{{d.read}}</strong>
+      </div>
+      <div style="display: flex; gap: 10px; align-items: flex-start; margin-top: 2px">
+        <span class="{{d.chip}}" style="width: 26px; height: 16px; flex: none; margin-top: 2px; box-sizing: border-box"></span>
+        <span class="g" style="font-size: 13px; line-height: 1.38"><strong style="font-weight: 800">{{d.model}}</strong> <span>{{d.why}}</span></span>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 5px">
+      <div style="height: 1px; background: #16140F"></div>
+      <span class="k" style="color: #16140F; font-weight: 800">Would this rule pass the room?</span>
+      <span class="g" style="font-size: 12px; line-height: 1.3; color: #4A463F">The ten delegations present in mid-July.</span>
+      <sc-for list="{{trows}}" as="t" hint-placeholder-count="3">
+        <div class="g" style="display: flex; align-items: center; gap: 8px; height: 26px">
+          <span style="width: 70px; font-size: 13px">{{t.label}}</span>
+          <div style="position: relative; width: 168px; height: 26px">
+            <sc-for list="{{t.slots}}" as="sl" hint-placeholder-count="10">
+              <div style="position: absolute; left: {{sl.x}}px; top: 0; width: 15px; height: 17px; box-sizing: border-box; border: 1px solid #CFC7B8">
+                <div class="t-aut fade" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; opacity: {{sl.op}}"></div>
+              </div>
+            </sc-for>
+            <div class="t-obs mv" style="position: absolute; left: 0; top: 21px; height: 4px; width: {{t.recW}}px; opacity: {{t.recOp}}"></div>
+          </div>
+          <span style="font-size: 14px; font-weight: 800; width: 30px">{{t.txt}}</span>
+          <span class="fade" style="font-size: 12px; color: #16140F; opacity: {{t.recOp}}">{{t.recTxt}}</span>
+        </div>
+      </sc-for>
+      <p class="g" style="margin: 2px 0 0; font-size: 12px; line-height: 1.4; color: #2B2822">This is illustrative, authored: the designers’ reading of positions from the sources, not a prediction. The recorded vote is 5–4–1 for the Committee’s compromise. <span style="color: #16140F; font-weight: 600">{{recNote}}</span></p>
+    </div>
+  </div>
+
+  <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+    <div style="position: absolute; left: 1024px; top: 426px; width: 388px; height: 466px; box-sizing: border-box; padding: 14px 12px 12px; background: #F7F4EE; border-top: 3px solid #16140F; display: flex; flex-direction: column; gap: 9px">
+      <span class="k" style="color: #16140F; font-weight: 800">How do we know?</span>
+      <div style="display: flex; gap: 10px"><span class="t-obs" style="width: 22px; height: 14px; flex: none; margin-top: 3px"></span><span style="font-size: 13.5px; line-height: 1.38"><strong class="g">People — observed.</strong> First U.S. census, 1790. Kentucky and the Southwest Territory were counted apart from Virginia and North Carolina [verify]. 1787 counts: unknown.</span></div>
+      <div style="display: flex; gap: 10px"><span class="t-aut" style="width: 22px; height: 14px; flex: none; margin-top: 3px"></span><span style="font-size: 13.5px; line-height: 1.38"><strong class="g">First House — authored.</strong> U.S. Constitution, Art. I §2: 65 seats named state by state, fixed before any census.</span></div>
+      <div style="display: flex; gap: 10px"><span class="t-com" style="width: 22px; height: 14px; flex: none; margin-top: 3px"></span><span style="font-size: 13.5px; line-height: 1.38"><strong class="g">Seats — computed here.</strong> Largest remainder on a 65-seat House and a 26-seat Senate, sizes chosen so rules compare. A population Senate gets no minimum per state; that is our choice too.</span></div>
+      <div style="display: flex; gap: 10px"><span class="t-aut" style="width: 22px; height: 14px; flex: none; margin-top: 3px"></span><span style="font-size: 13.5px; line-height: 1.38"><strong class="g">Pass the room? — authored.</strong> Positions read from Madison’s notes by the designers (Farrand, <em>Records</em>, 1911), each marked verify. A reading, not a forecast.</span></div>
+      <div style="display: flex; gap: 10px"><span class="t-unk" style="width: 22px; height: 14px; flex: none; margin-top: 3px"></span><span style="font-size: 13.5px; line-height: 1.38"><strong class="g">Not in the room — unknown.</strong> New Hampshire’s delegates arrived 23 July; New York’s had left; Rhode Island never came [verify].</span></div>
+      <span style="font-size: 12.5px; line-height: 1.4; color: #4A463F">Recorded vote, 16 July: ay CT, NJ, DE, MD, NC; no PA, VA, SC, GA; MA divided [verify].</span>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const rule = s.rule || 'art';
+    const ysen = s.ysen || 'eq';
+    const ycnt = typeof s.ycnt === 'number' ? s.ycnt : 0.6;
+    const yfrom = s.yfrom || 'cc';
+    const del = typeof s.del === 'number' ? s.del : 7;
+    const how = !!s.how;
+    const INK = '#16140F', TONE = '#8A857C', VER = '#B23A1B', PAPER = '#F7F4EE', LINE = '#CFC7B8';
+
+    const ST = [
+      { a: 'NH', n: 'New Hampshire', t: 141885, e: 158, au: 3, lean: 'not yet known on 16 July', pos: 'Not in the room yet: its delegates arrived on 23 July [verify].', cnt: '', m: null },
+      { a: 'MA', n: 'Massachusetts', t: 475327, e: 0, au: 8, lean: 'population in both houses, but split', pos: 'Divided on 16 July: Gerry and Strong for the compromise, King and Gorham against [verify].', cnt: 'Gerry and King objected to counting enslaved people for seats [verify].', m: { EQ: [0, 0], MIX: [1, 1], POP: [2, 2], c0: [2, 2], c6: [1, 1], c1: [0, 0] } },
+      { a: 'RI', n: 'Rhode Island', t: 68825, e: 948, au: 1, lean: 'absent all summer', pos: 'Never sent delegates to the Convention.', cnt: '', m: null },
+      { a: 'CT', n: 'Connecticut', t: 237946, e: 2764, au: 5, lean: 'the compromise', pos: 'Sherman and Ellsworth pressed for population in one house and equal votes in the other [verify].', cnt: 'Voted for the 3/5 count on 11 July [verify].', m: { EQ: [1, 1], MIX: [2, 2], POP: [0, 0], c0: [2, 2], c6: [2, 2], c1: [0, 1] } },
+      { a: 'NY', n: 'New York', t: 340120, e: 21324, au: 6, lean: 'the New Jersey Plan', pos: 'Yates and Lansing backed the New Jersey Plan, then left on 10 July; no New York vote on 16 July [verify].', cnt: '', m: null },
+      { a: 'NJ', n: 'New Jersey', t: 184139, e: 11423, au: 4, lean: 'the New Jersey Plan', pos: 'William Paterson brought the New Jersey Plan: keep one state, one vote [verify].', cnt: 'Paterson objected to counting enslaved people at all [verify].', m: { EQ: [2, 2], MIX: [2, 2], POP: [0, 0], c0: [2, 2], c6: [1, 2], c1: [0, 0] } },
+      { a: 'PA', n: 'Pennsylvania', t: 434373, e: 3737, au: 8, lean: 'the Virginia Plan', pos: 'Wilson and Gouverneur Morris wanted population to count in both houses [verify].', cnt: 'Wilson moved the 3/5 ratio in June; Morris attacked counting enslaved people [verify].', m: { EQ: [0, 0], MIX: [0, 0], POP: [2, 2], c0: [2, 2], c6: [1, 2], c1: [0, 0] } },
+      { a: 'DE', n: 'Delaware', t: 59094, e: 8887, au: 1, lean: 'the Articles, the New Jersey Plan', pos: 'Its delegates were instructed not to accept any change to equal state votes [verify].', cnt: 'Voted with SC and GA to count enslaved people fully on 11 July [verify].', m: { EQ: [2, 2], MIX: [2, 2], POP: [0, 0], c0: [2, 2], c6: [2, 2], c1: [1, 2] } },
+      { a: 'MD', n: 'Maryland', t: 319728, e: 103036, au: 6, lean: 'equal votes, then the compromise', pos: 'Luther Martin argued at length for equal state votes; Maryland voted for the compromise [verify].', cnt: 'Voted against counting enslaved people fully on 11 July [verify].', m: { EQ: [1, 2], MIX: [2, 2], POP: [0, 1], c0: [1, 2], c6: [2, 2], c1: [1, 1] } },
+      { a: 'VA', n: 'Virginia', t: 747610, e: 292627, au: 10, lean: 'the Virginia Plan', pos: 'Madison and Randolph’s plan: population in both houses [verify].', cnt: 'Its delegates backed counting enslaved people at 3/5 [verify].', m: { EQ: [0, 0], MIX: [0, 0], POP: [2, 2], c0: [0, 1], c6: [2, 2], c1: [2, 2] } },
+      { a: 'NC', n: 'North Carolina', t: 393751, e: 100572, au: 5, lean: 'population, with 3/5 at least', pos: 'A large state that voted for the compromise on 16 July [verify].', cnt: 'Davie: North Carolina would not join unless enslaved people counted at least 3/5 [verify].', m: { EQ: [0, 0], MIX: [1, 2], POP: [2, 2], c0: [0, 0], c6: [2, 2], c1: [2, 2] } },
+      { a: 'SC', n: 'South Carolina', t: 249073, e: 107094, au: 5, lean: 'population, counted in full', pos: 'Butler and C. C. Pinckney pressed to count enslaved people fully [verify].', cnt: 'Their motion to count enslaved people fully lost 3–7 on 11 July [verify].', m: { EQ: [0, 0], MIX: [0, 0], POP: [2, 2], c0: [0, 0], c6: [1, 1], c1: [2, 2] } },
+      { a: 'GA', n: 'Georgia', t: 82548, e: 29264, au: 3, lean: 'the Virginia Plan', pos: 'Voted with the large states, and against the compromise on 16 July [verify].', cnt: 'Voted with SC to count enslaved people fully on 11 July [verify].', m: { EQ: [0, 0], MIX: [0, 0], POP: [1, 2], c0: [0, 0], c6: [1, 2], c1: [2, 2] } }
+    ];
+
+    const NAMED = {
+      art: { label: 'Articles of Confederation', name: 'Articles of Confederation', house: 'eq', senate: 'none', c: 0, src: 'In force since 1781. One chamber; each state casts one vote, whatever its size. This rule counts states, not people.' },
+      va: { label: 'Virginia Plan', name: 'Virginia Plan', house: 'pop', senate: 'pop', c: 0, src: 'Randolph, 29 May. Seats by “quotas of contribution, or … free inhabitants” — shown here: free inhabitants [verify].' },
+      nj: { label: 'New Jersey Plan', name: 'New Jersey Plan', house: 'eq', senate: 'none', c: 0, src: 'Paterson, 15 June. Keeps the Articles’ one state, one vote in a single chamber. This rule counts states, not people.' },
+      cc: { label: 'Committee’s compromise', name: 'Committee’s compromise', house: 'pop', senate: 'eq', c: 0.6, src: 'Adopted 16 July, 5–4–1. Compare the outlined row: Art. I §2’s first House, fixed from estimates.' }
+    };
+    const ORDER = ['art', 'va', 'nj', 'cc', 'your'];
+    let R;
+    if (rule === 'your') {
+      const match = (ysen === 'eq' && ycnt === 0.6) ? 'cc' : ((ysen === 'pop' && ycnt === 0) ? 'va' : null);
+      R = { name: 'Your rule', house: 'pop', senate: ysen, c: ycnt, your: true,
+        src: 'Your variation, begun from the ' + NAMED[yfrom].name + '. ' + (match ? 'Same arithmetic as the ' + NAMED[match].name + '.' : 'Not proposed at the Convention in this form.') };
+    } else {
+      R = NAMED[rule];
+    }
+
+    const lr = (w, n) => {
+      const T = w.reduce((a, b) => a + b, 0);
+      const q = w.map(x => x / T * n);
+      const f = q.map(x => Math.floor(x));
+      const r = n - f.reduce((a, b) => a + b, 0);
+      const o = q.map((x, i) => [x - Math.floor(x), i]).sort((a, b) => b[0] - a[0]);
+      for (let k = 0; k < r; k++) f[o[k][1]] += 1;
+      return f;
+    };
+    const wOf = c => ST.map(x => (x.t - x.e) + c * x.e);
+    const popRule = R.house === 'pop';
+    const W = popRule ? wOf(R.c) : null;
+    const house = popRule ? lr(W, 65) : ST.map(() => 5);
+    const senOn = R.senate !== 'none';
+    const senate = R.senate === 'pop' ? lr(W, 26) : ST.map(() => 2);
+
+    const colX = j => 160 + j * 64;
+    const POPB = 372, KP = 124 / 747610, HB = 520, SB = 604, P = 14, PER = 4;
+    const hs = [];
+    let k = 0;
+    house.forEach((n, j) => {
+      for (let i = 0; i < n; i++) {
+        hs.push({ x: colX(j) + 6 + (i % PER) * P, y: HB - (Math.floor(i / PER) + 1) * P, f: j === del ? VER : TONE, d: k * 6 });
+        k++;
+      }
+    });
+    const ss = [];
+    k = 0;
+    senate.forEach((n, j) => {
+      for (let i = 0; i < n; i++) {
+        ss.push({ x: colX(j) + 6 + (i % PER) * P, y: SB - (Math.floor(i / PER) + 1) * P, f: j === del ? VER : TONE, o: senOn ? 1 : 0, d: k * 12 });
+        k++;
+      }
+    });
+
+    const skey = !popRule ? 'EQ' : (R.senate === 'eq' ? 'MIX' : 'POP');
+    const ckey = !popRule ? null : (R.c === 0 ? 'c0' : (R.c === 1 ? 'c1' : 'c6'));
+    const est = x => {
+      if (!x.m) return null;
+      const a = x.m[skey];
+      if (!ckey) return { lo: a[0], hi: a[1], why: 'pos' };
+      const b = x.m[ckey];
+      const lo = Math.min(a[0], b[0]), hi = Math.min(a[1], b[1]);
+      const why = (b[0] < a[0] || (b[0] === a[0] && b[1] < a[1])) ? 'cnt' : 'pos';
+      return { lo, hi, why };
+    };
+
+    const TOT = ST.reduce((a, x) => a + x.t, 0);
+    const sign = n => n > 0 ? '+' + n : (n < 0 ? '−' + Math.abs(n) : '±0');
+    const Wsum = popRule ? W.reduce((a, b) => a + b, 0) : 0;
+    const cols = ST.map((x, j) => {
+      const free = x.t - x.e;
+      const fH = free * KP, eH = x.e * KP;
+      const gap = eH > 0.6 ? 2 : 0;
+      const wgt = popRule ? W[j] : TOT / 13;
+      const rH = wgt * KP;
+      const sel = j === del;
+      const hr = Math.ceil(house[j] / PER), sr = Math.ceil(senate[j] / PER);
+      const e = est(x);
+      const cells = [2, 1, 0].map((v, i) => {
+        const on = !!e && v >= e.lo && v <= e.hi;
+        return { y: 656 + i * 23, op: on ? 1 : 0, bd: LINE };
+      });
+      return {
+        a: x.a, k: Math.round(x.t / 1000) + 'k' + (x.a === 'MA' ? '*' : ''),
+        qx: colX(j) + 3, qN: popRule ? (W[j] / Wsum * 65).toFixed(1) + '\u00a0→\u00a0' : '',
+        x: colX(j), bx: colX(j) + 12, rx: colX(j) + 46, sx: colX(j) + 6, lx: colX(j) + 2, ox: colX(j) + 8,
+        fTop: POPB - fH, fH: fH, eTop: POPB - fH - gap - eH, eH: eH,
+        rTop: POPB - rH, rH: rH,
+        oTop: POPB - fH - gap - eH - 5, oH: fH + gap + eH + 9, selOp: sel ? 1 : 0,
+        band: sel ? 'rgba(178,58,27,0.07)' : 'rgba(178,58,27,0)',
+        pressed: sel ? 'true' : 'false', aria: 'Sit with the ' + x.n + ' delegation',
+        btnBd: sel ? VER : 'transparent', btnC: sel ? VER : INK,
+        pick: () => this.setState({ del: j }),
+        numC: sel ? VER : INK,
+        hN: house[j], hLabTop: HB - hr * P - 17,
+        sN: senate[j], sLabTop: SB - sr * P - 17, sOp: senOn ? 1 : 0,
+        au: x.au,
+        gH: 'H ' + sign(house[j] - 5), gS: senOn ? 'S ' + sign(senate[j] - 2) : 'S —',
+        gC: sel ? VER : INK, gW: sel ? 800 : 500,
+        present: !!x.m, absent: !x.m, cells
+      };
+    });
+
+    const pres = ST.filter(x => x.m);
+    const ests = pres.map(est);
+    const N = pres.length;
+    const yesLo = ests.filter(e => e.lo === 2).length, yesHi = ests.filter(e => e.hi === 2).length;
+    const noLo = ests.filter(e => e.hi === 0).length, noHi = ests.filter(e => e.lo === 0).length;
+    const conLo = N - yesHi - noHi, conHi = N - yesLo - noLo;
+    const rng = (a, b) => a === b ? String(a) : a + '–' + b;
+    const isCC = rule === 'cc';
+    const rec = [5, 1, 4];
+    const recLab = ['5 ayes', '1 divided', '4 noes'];
+    const trows = [['Likely yes', yesLo, yesHi], ['Contested', conLo, conHi], ['Likely no', noLo, noHi]].map((r, i) => ({
+      label: r[0], txt: rng(r[1], r[2]),
+      slots: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(q => ({ x: q * 17, op: q < r[1] ? 1 : (q < r[2] ? 0.35 : 0) })),
+      recW: isCC ? rec[i] * 17 - 2 : 0, recOp: isCC ? 1 : 0, recTxt: recLab[i]
+    }));
+
+    const D = ST[del], De = est(D);
+    const LAB = ['likely no', 'contested', 'likely yes'];
+    const d = {
+      name: D.n, lean: D.lean, pos: D.pos,
+      read: popRule ? ('House ' + house[del] + ' of 65 (' + sign(house[del] - 5) + ') · Senate ' + (senOn ? senate[del] + ' of 26 (' + sign(senate[del] - 2) + ')' : 'none')) : '1 of 13 votes, as under the Articles',
+      chip: D.m ? 't-aut' : 't-unk',
+      model: D.m ? ('Reading: ' + (De.lo === De.hi ? LAB[De.lo] : LAB[De.lo] + ' to ' + LAB[De.hi]) + '.') : 'Not in the room in mid-July.',
+      why: D.m ? (De.why === 'cnt' ? 'Deciding factor, the count: ' + D.cnt : (skey === 'EQ' ? 'Deciding factor: its stand on equal state votes (above).' : 'Deciding factor: how the two chambers share power (above).')) : 'The reading holds no position for it: unknown.'
+    };
+
+    const ENS = 681834;
+    const f0 = lr(wOf(0), 65);
+    const names = idx => {
+      const n = idx.map(i => ST[i].n);
+      if (n.length === 0) return 'no state';
+      return n.length === 1 ? n[0] : n.slice(0, -1).join(', ') + ' and ' + n[n.length - 1];
+    };
+    const shift = (a, b) => {
+      let m = 0;
+      const g = [];
+      a.forEach((v, i) => { if (v > b[i]) { m += v - b[i]; g.push(i); } });
+      return { m, g };
+    };
+    const fmt = n => n.toLocaleString('en-US');
+    const h35 = shift(lr(wOf(0.6), 65), f0);
+    let moralBig, moralCalc, moralW;
+    if (popRule && R.c > 0) {
+      const h = shift(house, f0);
+      const counted = R.c === 1 ? 'in full' : 'as about ' + fmt(Math.round(0.6 * ENS / 100) * 100);
+      moralBig = 'Counting enslaved people added seats — and power — to the states that enslaved them. The people counted had no vote.';
+      moralCalc = fmt(ENS) + ' enslaved people (1790) enter this count ' + counted + '. Against a count of free people only, ' + h.m + ' of 65 House seats move to ' + names(h.g) + '.';
+      if (R.senate === 'pop') {
+        const sh = shift(senate, lr(wOf(0), 26));
+        moralCalc += ' In the Senate, ' + sh.m + ' of 26 move to ' + names(sh.g) + '.';
+      }
+      moralW = 600;
+    } else if (popRule) {
+      moralBig = 'This rule counts free people only. The enslaved people of the 1790 count add no seats — and under every rule on this board, they had no vote.';
+      moralCalc = 'At 3/5, the same arithmetic would move ' + h35.m + ' of 65 House seats to ' + names(h35.g) + '.';
+      moralW = 400;
+    } else {
+      moralBig = 'One state, one vote: this arithmetic counts states, not people. Who gets counted becomes the fight only when seats follow population.';
+      moralCalc = 'Under the Committee’s compromise, the 3/5 count moves ' + h35.m + ' of 65 House seats to ' + names(h35.g) + ', against a free-only count.';
+      moralW = 400;
+    }
+
+    const fork = patch => {
+      const base = { ysen: R.senate === 'none' ? 'eq' : R.senate, ycnt: popRule ? R.c : 0.6 };
+      this.setState(Object.assign({ rule: 'your', yfrom: rule === 'your' ? yfrom : rule }, base, patch));
+    };
+    const senCtl = [['eq', 'equal'], ['pop', 'by population']].map(o => {
+      const on = R.senate === o[0];
+      return { label: o[1], pressed: on ? 'true' : 'false', bg: on ? INK : 'transparent', fg: on ? PAPER : INK, pick: () => fork({ ysen: o[0] }) };
+    });
+    const cntCtl = [[0, '0', 'zero'], [0.6, '3/5', 'three fifths'], [1, 'full', 'full']].map(o => {
+      const on = popRule && R.c === o[0];
+      return { label: o[1], aria: 'Count enslaved people at ' + o[2], pressed: on ? 'true' : 'false', bg: on ? INK : 'transparent', fg: on ? PAPER : INK, pick: () => fork({ ycnt: o[0] }) };
+    });
+
+    return {
+      how,
+      howPressed: how ? 'true' : 'false', howBg: how ? INK : 'transparent', howFg: how ? PAPER : INK,
+      toggleHow: () => this.setState({ how: !how }),
+      howOp: how ? 1 : 0,
+      rules: ORDER.map(id => ({ label: id === 'your' ? 'Your rule' : NAMED[id].label, pressed: rule === id ? 'true' : 'false', bg: rule === id ? INK : 'transparent', fg: rule === id ? PAPER : INK, pick: () => this.setState({ rule: id }) })),
+      houseSub: popRule ? ('65 seats by ' + (R.c === 0 ? 'free people' : (R.c === 1 ? 'all people' : 'free + 3/5 enslaved'))) : '13 votes, one per state',
+      qHint: popRule ? 'share → seats' : '',
+      senSub: R.senate === 'eq' ? '26 seats, 2 each' : (R.senate === 'pop' ? '26 seats, by count' : 'none: one chamber'),
+      senNoneOp: senOn ? 0 : 1,
+      cols, hs, ss, trows, d,
+      recNote: isCC ? 'Solid bars: that recorded vote.' : '',
+      moralBig, moralCalc, moralW,
+      rName: { text: R.name, font: R.your ? "'Source Serif 4', serif" : "'Bricolage Grotesque', sans-serif", style: R.your ? 'italic' : 'normal', weight: R.your ? 600 : 800 },
+      rSrc: R.src,
+      senCtl, cntCtl
+    };
+  }
+}
+</script>
+</body>
+</html>

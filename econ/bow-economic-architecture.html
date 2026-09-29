@@ -1,0 +1,266 @@
+<title>BOW Economic Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single ledger column — opening, the surface map (a filterable table), then free vs paid, flows, implications, open questions. */
+:root {
+  --bg: #F4F6F6;
+  --paper: #FFFFFF;
+  --ink: #16202A;
+  --muted: #4E5A63;
+  --rule: #D5DCDE;
+  --accent: #0B6E58;
+  --accent-soft: #E1F0EB;
+  --warn: #8A4B08;
+  --warn-soft: #F7EBDC;
+  --font-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1519; --paper: #161E23; --ink: #E4EAEC; --muted: #9AA8AF; --rule: #2B373E;
+    --accent: #58C3A6; --accent-soft: #15302A; --warn: #E3A35C; --warn-soft: #33261A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1519; --paper: #161E23; --ink: #E4EAEC; --muted: #9AA8AF; --rule: #2B373E;
+  --accent: #58C3A6; --accent-soft: #15302A; --warn: #E3A35C; --warn-soft: #33261A; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); padding-block: 40px 72px; display: flex; flex-direction: column; gap: 48px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--font-display); font-stretch: 78%; font-weight: 800; font-size: clamp(40px, 7vw, 76px); line-height: .95; letter-spacing: -.01em; margin: 10px 0 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-stretch: 85%; font-weight: 750; font-size: clamp(26px, 3.4vw, 36px); line-height: 1.05; margin: 0; text-wrap: balance; }
+h3 { font-family: var(--font-display); font-weight: 700; font-size: 18px; margin: 0; }
+p { margin: 0; max-width: 68ch; }
+.lede { font-size: clamp(17px, 2vw, 20px); color: var(--ink); max-width: 64ch; }
+.note { font-size: 14px; color: var(--muted); }
+section { display: flex; flex-direction: column; gap: 18px; }
+.head-row { display: flex; flex-wrap: wrap; gap: 12px 32px; align-items: flex-end; justify-content: space-between; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; }
+.legend span { display: inline-flex; gap: 8px; align-items: center; }
+.glyph { font-family: var(--font-mono); font-weight: 500; display: inline-grid; place-items: center; width: 26px; height: 22px; border: 1px solid var(--ink); font-size: 12px; flex: none; }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.filters button { font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; min-height: 36px; padding: 0 12px; border: 1px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; }
+.filters button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.filters button:focus-visible, .copy:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.tablewrap { overflow-x: auto; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule); background: var(--paper); }
+table { border-collapse: collapse; width: 100%; min-width: 1060px; font-size: 14px; line-height: 1.45; }
+th { text-align: left; font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); padding: 12px 12px 8px; border-bottom: 1px solid var(--rule); vertical-align: bottom; }
+td { padding: 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+td.surface { font-family: var(--font-display); font-stretch: 85%; font-weight: 750; font-size: 17px; white-space: nowrap; }
+td.models { white-space: nowrap; }
+td.models .glyph { margin-right: 4px; }
+tr[hidden] { display: none; }
+.free { display: inline-block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; padding: 3px 7px; border: 1px solid currentColor; white-space: nowrap; }
+.free.critical { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); }
+.free.useful { color: var(--ink); }
+.free.no { color: var(--muted); border-style: dashed; }
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.panel { background: var(--paper); border: 1px solid var(--rule); padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.panel.free-side { border-top: 4px solid var(--accent); }
+.panel.paid-side { border-top: 4px solid var(--ink); }
+.panel ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
+.flows { display: flex; flex-direction: column; gap: 0; border-top: 2px solid var(--ink); }
+.flow { display: grid; grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr) minmax(0, 1.1fr); gap: 12px; align-items: start; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.flow .arrow { font-family: var(--font-mono); color: var(--accent); font-size: 20px; text-align: center; line-height: 1.2; }
+.flow .from { font-weight: 650; }
+.flow .to { font-weight: 650; }
+.flow .why { font-size: 14px; color: var(--muted); }
+@media (max-width: 720px) {
+  .flow { grid-template-columns: 1fr; gap: 4px; }
+  .flow .arrow { text-align: left; }
+}
+.implications { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0; border-top: 2px solid var(--ink); }
+.imp { padding: 16px 20px 18px 0; border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.imp p { font-size: 15px; }
+.questions { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; max-width: 80ch; }
+.status { display: flex; flex-wrap: wrap; gap: 10px 24px; padding: 14px 16px; background: var(--warn-soft); color: var(--ink); border-left: 4px solid var(--warn); font-size: 14px; }
+.status strong { color: var(--warn); font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; font-weight: 500; }
+@media (prefers-reduced-motion: no-preference) { tr { transition: opacity .2s ease; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">BOW Design Frontier · Wave 2 · L</div>
+    <h1>BOW Economic Architecture</h1>
+    <p class="lede" style="margin-top: 18px">Sixteen places money could plausibly enter an executable-world medium, what each one costs to serve, and what that means for design. This is an input to pricing work. It commits BOW to nothing and contains no prices.</p>
+  </header>
+
+  <div class="status" role="note">
+    <strong>STATUS</strong>
+    <span>Everything below is a hypothesis for founder review.</span>
+    <span>No market sizes, prices or revenue figures are stated, on purpose.</span>
+    <span>“Free” and “open” recommendations are design proposals, not policy.</span>
+  </div>
+
+  <section aria-labelledby="map-title">
+    <div class="head-row">
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <div class="eyebrow">The surface map</div>
+        <h2 id="map-title">Who buys, what they buy, what it costs to serve</h2>
+      </div>
+      <div class="legend" aria-label="Revenue model key">
+        <span><span class="glyph" aria-hidden="true">S</span>subscription</span>
+        <span><span class="glyph" aria-hidden="true">U</span>usage</span>
+        <span><span class="glyph" aria-hidden="true">T</span>transaction</span>
+        <span><span class="glyph" aria-hidden="true">L</span>licence</span>
+      </div>
+    </div>
+    <div class="filters" role="group" aria-label="Filter surfaces by revenue model">
+      <button type="button" data-f="all" aria-pressed="true">All sixteen</button>
+      <button type="button" data-f="S" aria-pressed="false">Subscription</button>
+      <button type="button" data-f="U" aria-pressed="false">Usage</button>
+      <button type="button" data-f="T" aria-pressed="false">Transaction</button>
+      <button type="button" data-f="L" aria-pressed="false">Licence</button>
+      <button type="button" data-f="free" aria-pressed="false">Free access is critical</button>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Surface</th>
+            <th scope="col">Likely buyer</th>
+            <th scope="col">Value unit</th>
+            <th scope="col">Model</th>
+            <th scope="col">Major marginal costs</th>
+            <th scope="col">Free access</th>
+            <th scope="col">Cross-subsidy</th>
+            <th scope="col">Keep open or free</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="note">Free access: <strong>critical</strong> means the medium probably does not spread without it; <strong>useful</strong> means it helps adoption; <strong>not needed</strong> means buyers expect to pay.</p>
+  </section>
+
+  <section aria-labelledby="spread-title">
+    <div class="eyebrow">The distribution question</div>
+    <h2 id="spread-title">What must be free for the medium to spread</h2>
+    <p>A shared Moment that asks for payment before the door is a dead link. Executable reality travels the way video did: the object moves freely, and the business sits behind persistence, depth, data and scale. The line between free and paid should fall <em>after</em> the door, never before it.</p>
+    <div class="split">
+      <div class="panel free-side">
+        <h3>Free, and designed to travel</h3>
+        <ul>
+          <li>Entering any shared Moment, with one decision, without an account.</li>
+          <li>Opening a public system as an observer, and following it.</li>
+          <li>Reading provenance. “How do we know?” is never behind a paywall.</li>
+          <li>Forking a Moment once, and sharing that branch.</li>
+          <li>The World format, truth tags and renderer contract, so others can build and render.</li>
+          <li>A creator tier that can publish small Moments.</li>
+          <li>A teacher trial with a real lesson, not a demo.</li>
+        </ul>
+      </div>
+      <div class="panel paid-side">
+        <h3>Where money plausibly lives</h3>
+        <ul>
+          <li>Persistent Worlds that keep running while you are away.</li>
+          <li>Deep Lab runs and model execution, metered where they happen.</li>
+          <li>Licensed live Reality data.</li>
+          <li>Premium and official Worlds and institutions.</li>
+          <li>Professional and enterprise seats with warrants and receipts.</li>
+          <li>Creator, studio and publisher plans; marketplace commerce.</li>
+          <li>Runtime for companies building their own Worlds.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="flows-title">
+    <div class="eyebrow">Cross-subsidies</div>
+    <h2 id="flows-title">How the free layers feed the paid ones</h2>
+    <div class="flows">
+      <div class="flow"><span class="from">Free Moments in feeds and news</span><span class="arrow" aria-hidden="true">→</span><span class="to">Persistent World seats</span><span class="why">A Moment is a one-decision trial of a World. The door converts only if what is behind it keeps running.</span></div>
+      <div class="flow"><span class="from">Free observer Browser</span><span class="arrow" aria-hidden="true">→</span><span class="to">Reality data and professional seats</span><span class="why">Fans who follow a system become the audience for live, licensed depth.</span></div>
+      <div class="flow"><span class="from">Open World format and truth tags</span><span class="arrow" aria-hidden="true">→</span><span class="to">Cloud runtime and Network fees</span><span class="why">An open format grows the number of Worlds; hosting them and connecting them is where usage and contract fees arise.</span></div>
+      <div class="flow"><span class="from">Creator free tier</span><span class="arrow" aria-hidden="true">→</span><span class="to">Marketplace take and studio plans</span><span class="why">Supply comes first; creators upgrade when their Worlds need persistence, scale or sales.</span></div>
+      <div class="flow"><span class="from">Teacher trials and homework Moments</span><span class="arrow" aria-hidden="true">→</span><span class="to">School and district licences, family plans</span><span class="why">Classroom use builds the evidence districts buy; families meet BOW through homework.</span></div>
+      <div class="flow"><span class="from">Enterprise systems</span><span class="arrow" aria-hidden="true">→</span><span class="to">Platform rigour for everyone</span><span class="why">Enterprise pays for security, audit and reliability that every other surface then inherits.</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="imp-title">
+    <div class="eyebrow">Design implications</div>
+    <h2 id="imp-title">What the economics asks of the design</h2>
+    <div class="implications">
+      <div class="imp"><h3>The door is always free</h3><p>Every Moment needs a free first decision and one honest line showing where paid begins. The paywall sits after the door and names what it pays for: persistence, depth or data.</p></div>
+      <div class="imp"><h3>Persistence is the premium feeling</h3><p>“Your World kept running while you were away” is the paid experience. Design the return: what changed, what waited for you, what you missed.</p></div>
+      <div class="imp"><h3>Show compute where it is spent</h3><p>A Lab run or a model call should carry a visible cost line, like the provenance line beside it. A meter is part of telling the truth about a system.</p></div>
+      <div class="imp"><h3>Bring your own intelligence</h3><p>A provider setting (BOW-managed, your own key, an enterprise gateway, a local model) is a first-class control. Price the orchestration and the seat, not the tokens.</p></div>
+      <div class="imp"><h3>Licences live in the provenance</h3><p>A licensed live value should know its licence the way it knows its source. The same tag that says OBSERVED can say who may see it, and for how long.</p></div>
+      <div class="imp"><h3>Attribution travels with the object</h3><p>Remix and fork chains carry creator credit inside the Moment itself, so marketplace revenue shares can follow the object wherever it goes.</p></div>
+      <div class="imp"><h3>Student data stays inside the evidence boundary</h3><p>Schools and districts buy trust. No advertising model, no student data in public forks, and a clear line between a child’s run and anything shared.</p></div>
+      <div class="imp"><h3>Receipts are the enterprise product</h3><p>Warrants, receipts and escalations are what an enterprise audits and pays for. Design them to hold up as evidence, not as an activity feed.</p></div>
+      <div class="imp"><h3>Never charge for the format</h3><p>Network and Cloud revenue depend on many parties adopting one open format. Charge for hosting, running and connecting Worlds, never for describing one.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="q-title">
+    <div class="eyebrow">For the pricing work that follows</div>
+    <h2 id="q-title">Open questions</h2>
+    <ol class="questions">
+      <li>Is the paid unit a World, a seat inside a World, or time a World spends running? Each implies a different product.</li>
+      <li>Who pays for Reality data when a free Moment shows a live value: the publisher, the viewer, or BOW as a distribution cost?</li>
+      <li>Should model execution be pass-through with a margin, bundled into seats, or free up to a quota with bring-your-own-provider beyond it?</li>
+      <li>How much of Foundry can be free before authoring cost (review, compilation) outruns creator revenue?</li>
+      <li>Do team and league rights holders become buyers, sellers or partners? The answer changes the whole sports surface. Escalate before assuming.</li>
+      <li>What is the cheapest commercial falsifier for each surface, run before building it? The Commercial Lens board on the design canvas proposes one per frontier.</li>
+    </ol>
+  </section>
+</div>
+
+<script>
+const SURFACES = [
+  ["Consumer", "Individuals: fans, the curious", "A persistent presence: a World that runs, deep Lab runs", "S U", "Persistent compute, model runs, live data", "critical", "Paid by Worlds and publisher licences", "Browser shell, entering Moments, observing, following"],
+  ["Family", "Parents", "Household plan across Learn and Worlds", "S", "Content, support", "useful", "Grows out of school use", "Homework Moments"],
+  ["Learn", "Self-directed learners, parents", "A subject: its systems, Moments and explanations", "S", "Authoring (dominant)", "useful", "Subsidized by school licences on the same content", "First chapter, shared Moments"],
+  ["School", "Schools, departments", "Per-subject or per-class licence", "L", "Authoring, support, privacy compliance", "useful", "Builds the evidence districts buy", "Teacher trial with a real lesson"],
+  ["District", "Districts", "District licence plus evidence reporting", "L", "Implementation, compliance, support", "no", "Pays for classroom-grade reliability", "Pilot terms, not free product"],
+  ["Creator", "Individual authors and teachers", "Publishing and hosting Moments and Worlds", "S T", "Hosting, model compilation, review", "critical", "Feeds the marketplace", "A tier that can publish small Moments"],
+  ["Studio / professional creator", "Studios, media teams", "Seats plus runtime for large Worlds", "S U", "Compute, review", "no", "Pays for authoring tools everyone later gets", "Nothing extra"],
+  ["Developer", "Developers and companies", "API calls, SDK, support", "U", "Support, compute", "useful", "Grows the number of Worlds on Cloud", "World format, truth tags, a developer quota"],
+  ["Cloud / runtime", "Companies hosting their own Worlds", "Ticks, stored branches, storage", "U", "Compute and storage", "useful", "Subsidizes the open format", "A small hosting quota"],
+  ["AI / compute", "Anyone running models inside BOW", "Model execution with a margin, or orchestration on your own key", "U", "Model calls (large and variable)", "no", "Priced so free layers stay inside a bounded quota", "Bring-your-own-provider setting"],
+  ["Reality data", "Professionals, publishers", "Licensed live feeds and history", "L U", "Data licensing (large, often fixed)", "useful", "Premium follow and pro seats pay for it", "Delayed or public facts"],
+  ["Marketplace", "Buyers of Worlds, Moments and models", "Take rate on sales", "T", "Moderation, review, disputes", "useful", "Pays creators; funds review", "Listing and browsing"],
+  ["Publisher", "Media organizations, documentary producers", "Per-Moment or per-season licence; share of paid continuations", "L T", "Per-story authoring (must be templated), branch hosting", "critical", "Brings audiences into Browser", "Reader entry is always free"],
+  ["Enterprise", "Companies", "System licence, seats, runtime", "L S U", "Integration labour, connectors, security", "no", "Pays for platform rigour", "Nothing extra"],
+  ["Partners", "Leagues, teams, rights holders, content partners", "Revenue share, co-marketing, rights", "L T", "Rights fees", "no", "Could fund sports content, or cost it", "To be decided with rights holders"],
+  ["Network / commerce", "Institutions that transact", "Fee per committed cross-World contract; commerce take", "T", "Trust and dispute handling", "useful", "Rewards an open protocol", "The protocol itself"]
+];
+const FREE_LABEL = { critical: "critical", useful: "useful", no: "not needed" };
+const tbody = document.getElementById("rows");
+for (const s of SURFACES) {
+  const tr = document.createElement("tr");
+  tr.dataset.models = s[3];
+  tr.dataset.free = s[5];
+  const cells = [
+    ["surface", s[0]], ["", s[1]], ["", s[2]], ["models", null], ["", s[4]], ["", null], ["", s[6]], ["", s[7]]
+  ];
+  cells.forEach(([cls, text], i) => {
+    const td = document.createElement("td");
+    if (cls) td.className = cls;
+    if (i === 3) {
+      s[3].split(" ").forEach((g) => { const span = document.createElement("span"); span.className = "glyph"; span.textContent = g; span.title = { S: "subscription", U: "usage", T: "transaction", L: "licence" }[g]; td.appendChild(span); });
+    } else if (i === 5) {
+      const span = document.createElement("span"); span.className = "free " + s[5]; span.textContent = FREE_LABEL[s[5]]; td.appendChild(span);
+    } else {
+      td.textContent = text;
+    }
+    tr.appendChild(td);
+  });
+  tbody.appendChild(tr);
+}
+const buttons = document.querySelectorAll(".filters button");
+function applyFilter(f) {
+  buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.f === f)));
+  tbody.querySelectorAll("tr").forEach((tr) => {
+    const show = f === "all" || (f === "free" ? tr.dataset.free === "critical" : tr.dataset.models.split(" ").includes(f));
+    tr.hidden = !show;
+  });
+}
+buttons.forEach((b) => b.addEventListener("click", () => applyFilter(b.dataset.f)));
+</script>

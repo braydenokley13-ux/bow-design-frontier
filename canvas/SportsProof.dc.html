@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Boston basketball — entering the system</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Barlow:wght@400;500;600;700&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F2F1EC;color:#111;font-family:'Barlow',sans-serif}
+a{color:#006B2D}a:hover{color:#004A1F}
+.mono{font-family:'DM Mono',monospace}
+.disp{font-family:'Big Shoulders Display',sans-serif}
+.btn{font-family:'Barlow',sans-serif;font-weight:600;font-size:15px;min-height:44px;padding:0 16px;border-radius:0;cursor:pointer;transition:background .25s,color .25s,border-color .25s,opacity .25s}
+.btn:focus-visible{outline:3px solid #007A33;outline-offset:2px}
+.t-rec{background:#111;box-shadow:inset 0 0 0 2px #111,inset 0 0 0 4px #F2F1EC}
+.t-recg{background:#007A33;box-shadow:inset 0 0 0 2px #007A33,inset 0 0 0 4px #FFFFFF}
+.t-aut{border:1.5px solid #111;background:transparent}
+.t-com{background:#8C8A82}
+.t-mod{background:repeating-linear-gradient(135deg,#111 0 1.2px,transparent 1.2px 6px);border:1px solid #111}
+.t-gen{background:radial-gradient(circle,#111 1px,transparent 1.3px) 0 0/6px 6px;border:1px dotted #111}
+.t-unk{border:1.5px dashed #111;background:transparent}
+.sw{display:inline-block;width:12px;height:12px;box-sizing:border-box;flex:none;vertical-align:-1px}
+.stage{transition:opacity .5s ease}
+.skin{transition:background-color .9s ease}
+.fadeable{transition:opacity .7s ease, filter .7s ease}
+@keyframes pulse{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}
+.live{animation:pulse 1.6s infinite}
+</style>
+</helmet>
+<div class="skin" style="width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; background: {{skin.bg}}; color: #111; font-family: 'Barlow', sans-serif">
+
+  <header style="position: absolute; left: 0; top: 0; width: 1440px; height: 60px; box-sizing: border-box; padding: 0 28px; display: grid; grid-template-columns: 300px minmax(0, 1fr) auto; gap: 20px; align-items: center; border-bottom: 1px solid #C9C7BF; background: {{skin.bar}}">
+    <div style="display: flex; align-items: center; gap: 10px; min-width: 0">
+      <span class="disp" style="font-size: 22px; font-weight: 900; letter-spacing: .04em">BOW</span>
+      <span style="padding: 6px 12px; border: 1.5px solid #111; background: #FFFFFF; font-size: 15px; font-weight: 600; white-space: nowrap">Boston basketball</span>
+    </div>
+    <span class="mono" style="font-size: 12px; padding: 6px 10px; border: 1px solid #9C9A92; background: #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{address}}</span>
+    <div style="display: flex; gap: 10px; align-items: center">
+      <sc-if value="{{following}}" hint-placeholder-val="{{false}}"><span class="mono" style="font-size: 11px; padding: 5px 8px; border: 1px solid #111; white-space: nowrap">FOLLOWING · payroll vs tax line</span></sc-if>
+      <button type="button" class="btn" onClick="{{toggleHow}}" aria-pressed="{{howPressed}}" style="border: 1.5px solid #111; background: {{howBg}}; color: {{howFg}}; min-height: 38px">How do we know?</button>
+    </div>
+  </header>
+
+  <nav aria-label="Journey" style="position: absolute; left: 28px; right: 28px; top: 68px; height: 28px; display: flex; gap: 6px; align-items: center">
+    <sc-for list="{{rail}}" as="r" hint-placeholder-count="7">
+      <button type="button" class="btn" onClick="{{r.go}}" aria-current="{{r.current}}" style="min-height: 28px; padding: 0 10px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; border: 1px solid {{r.border}}; background: {{r.bg}}; color: {{r.fg}}; opacity: {{r.op}}">{{r.label}}</button>
+    </sc-for>
+    <span style="flex: 1"></span>
+    <sc-if value="{{inSeat}}" hint-placeholder-val="{{false}}">
+      <span class="mono" style="font-size: 12px; padding: 4px 10px; background: #111; color: #FFF; white-space: nowrap">WORLD TIME · {{clock}}</span>
+    </sc-if>
+  </nav>
+
+  <sc-if value="{{is.ask}}" hint-placeholder-val="{{true}}">
+    <section class="stage" style="position: absolute; left: 28px; right: 28px; top: 108px; bottom: 34px">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end">
+        <h1 class="disp" style="margin: 0; font-size: 52px; font-weight: 900; line-height: .95; text-transform: uppercase">Boston basketball is not one thing.</h1>
+        <p style="margin: 0; font-size: 15px; max-width: 520px; line-height: 1.4; color: #3A3A36">It is a live Reality, a past you can step into, a World you run, other people’s branches, and a few things built on top. BOW shows the whole system before you pick where to stand.</p>
+      </div>
+      <div style="position: relative; height: 420px; margin-top: 16px; border-top: 1px solid #C9C7BF; border-bottom: 1px solid #C9C7BF">
+        <div style="position: absolute; left: 0; top: 18px; width: 230px; display: flex; flex-direction: column; gap: 10px">
+          <span class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55544F">HISTORICAL STATES · no NOW</span>
+          <div style="height: 64px; background: #CFCBC0; border: 1px solid #8F8B80; display: flex; flex-direction: column; justify-content: center; padding: 0 12px"><span class="disp" style="font-size: 26px; font-weight: 800">1985–86</span><span style="font-size: 12px">recorded · nothing here changes</span></div>
+          <div style="height: 64px; background: #CFCBC0; border: 1px solid #8F8B80; display: flex; flex-direction: column; justify-content: center; padding: 0 12px"><span class="disp" style="font-size: 26px; font-weight: 800">2007–08</span><span style="font-size: 12px">recorded · nothing here changes</span></div>
+        </div>
+        <svg width="1384" height="420" viewBox="0 0 1384 420" style="position: absolute; left: 0; top: 0" aria-hidden="true">
+          <line x1="270" y1="150" x2="{{p.nowX}}" y2="150" stroke="#111" stroke-width="6"></line>
+          <line x1="{{p.nowX}}" y1="150" x2="1384" y2="150" stroke="#111" stroke-width="2" stroke-dasharray="3 6"></line>
+          <path d="{{p.fork1}}" fill="none" stroke="#6F6C64" stroke-width="2" stroke-dasharray="5 4"></path>
+          <path d="{{p.fork2}}" fill="none" stroke="#6F6C64" stroke-width="2" stroke-dasharray="5 4"></path>
+          <path d="{{p.world}}" fill="none" stroke="#007A33" stroke-width="7"></path>
+          <path d="{{p.world}}" fill="none" stroke="#FFFFFF" stroke-width="2"></path>
+          <line x1="{{p.nowX}}" y1="40" x2="{{p.nowX}}" y2="300" stroke="#111" stroke-width="1"></line>
+        </svg>
+        <span class="mono" style="position: absolute; left: 300px; top: 164px; font-size: 11px; letter-spacing: .08em">CURRENT REALITY · observed · live</span>
+        <span class="mono" style="position: absolute; left: 752px; top: 136px; font-size: 14px; background: {{skin.bg}}; padding: 0 3px">≈</span>
+        <sc-for list="{{p.doors}}" as="d" hint-placeholder-count="5">
+          <div style="position: absolute; left: {{d.x}}px; top: 140px; width: 10px; height: 20px; margin-left: -5px; background: #111"></div>
+          <div style="position: absolute; left: {{d.lx}}px; top: {{d.ly}}px; width: 150px; font-size: 12px; line-height: 1.2"><span class="mono" style="font-size: 10px; color: #55544F">{{d.date}}</span><br><strong>{{d.t}}</strong></div>
+        </sc-for>
+        <span class="mono" style="position: absolute; left: {{p.nowLx}}px; top: 26px; font-size: 11px; white-space: nowrap"><span class="live" style="display: inline-block; width: 8px; height: 8px; border-radius: 4px; background: #C8102E; margin-right: 5px"></span>NOW · 29 SEP 2026</span>
+        <span style="position: absolute; left: {{p.nowLx}}px; top: 42px; width: 150px; font-size: 12px; line-height: 1.25">Live event: [next preseason game · Reality feed]</span>
+        <span class="mono" style="position: absolute; left: {{p.f1x}}px; top: 44px; font-size: 10px; color: #55544F; white-space: nowrap">PUBLIC FORK · Keep No. 1 — Fultz · [author]</span>
+        <span class="mono" style="position: absolute; left: {{p.f2x}}px; top: 60px; font-size: 10px; color: #55544F; white-space: nowrap">PUBLIC FORK · Holiday kept · [author]</span>
+        <span class="mono" style="position: absolute; left: {{p.wLx}}px; top: 234px; width: 330px; text-align: right; font-size: 11px; line-height: 1.5; letter-spacing: .06em; color: #006B2D">BOW WORLD · Boston · Year Two · yours<br>branched from Reality at Year 0 · runs on its own calendar</span>
+        <sc-for list="{{p.acts}}" as="a" hint-placeholder-count="2">
+          <div class="t-recg" style="position: absolute; left: {{a.x}}px; top: 262px; width: 14px; height: 14px; margin-left: -7px"></div>
+          <span style="position: absolute; left: {{a.x}}px; top: 282px; width: 150px; font-size: 12px; line-height: 1.2; transform: translateX({{a.tx}}px); text-align: {{a.al}}"><span class="mono" style="font-size: 10px; color: #006B2D">YOUR ACT · {{a.when}}</span><br>{{a.t}}</span>
+        </sc-for>
+        <span style="position: absolute; left: {{p.wEndX}}px; top: 256px; font-size: 12px; font-weight: 700; color: #006B2D; white-space: nowrap">Week 9 · running</span>
+        <div style="position: absolute; left: 270px; top: 346px; right: 0; display: flex; gap: 14px; align-items: stretch">
+          <span class="mono" style="font-size: 11px; letter-spacing: .08em; color: #55544F; width: 140px; padding-top: 6px">ALSO IN THIS SYSTEM</span>
+          <div style="flex: 1; padding: 8px 12px; border: 1.5px solid #111; background: #FFFFFF; font-size: 13px; line-height: 1.3"><strong>BOW Economics · The Cap</strong><br>a course on Boston’s real books · paused at step 4 of 9</div>
+          <div style="flex: 1; display: flex; background: #FFFFFF; border: 1px solid #111"><div class="t-mod" style="width: 14px; flex: none; border: 0"></div><div style="padding: 8px 12px; font-size: 13px; line-height: 1.3"><strong>Second-apron consequences</strong><br>BOW model v0.3 · runs on demand</div></div>
+          <div style="flex: 1; display: flex; background: #FFFFFF; border: 1px dotted #111"><div class="t-gen" style="width: 14px; flex: none; border: 0"></div><div style="padding: 8px 12px; font-size: 13px; line-height: 1.3"><strong>Garden nights</strong> · by [creator]<br>arena economics · creator-built · unreviewed</div></div>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 18px">
+        <button type="button" class="btn" onClick="{{goObserve}}" style="min-height: 104px; text-align: left; padding: 14px 18px; border: 2px solid #111; background: #E9EEF0; color: #111; display: flex; flex-direction: column; gap: 4px; align-items: flex-start">
+          <span class="disp" style="font-size: 30px; font-weight: 900; text-transform: uppercase">Observe Reality</span>
+          <span style="font-size: 14px; font-weight: 500">Read everything public about the real Celtics. Touch nothing.</span>
+        </button>
+        <button type="button" class="btn" onClick="{{goEnter}}" style="min-height: 104px; text-align: left; padding: 14px 18px; border: 2px solid #007A33; background: #007A33; color: #FFFFFF; display: flex; flex-direction: column; gap: 4px; align-items: flex-start">
+          <span class="disp" style="font-size: 30px; font-weight: 900; text-transform: uppercase">Enter your World</span>
+          <span style="font-size: 14px; font-weight: 500">Take the GM’s seat in Boston · Year Two. The clock starts.</span>
+        </button>
+        <a href="Fork.dc.html" style="min-height: 104px; box-sizing: border-box; text-decoration: none; padding: 14px 18px; border: 2px solid #111; background: #FFFFFF; color: #111; display: flex; flex-direction: column; gap: 4px">
+          <span class="disp" style="font-size: 30px; font-weight: 900; text-transform: uppercase">Enter a recorded Moment</span>
+          <span style="font-size: 14px; font-weight: 500">Step into Reality’s past — 17 June 2017 — and cut a branch. (P5 board)</span>
+        </a>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{is.observe}}" hint-placeholder-val="{{false}}">
+    <section class="stage" style="position: absolute; left: 28px; right: 28px; top: 108px; bottom: 34px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 36px">
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <div style="padding: 10px 14px; border: 1px solid #9DB0B8; background: rgba(255,255,255,.55); display: flex; justify-content: space-between; align-items: center">
+          <span style="font-size: 15px"><strong>You’re outside the glass.</strong> Everything public is readable. Nothing here can be touched — this is the real team.</span>
+          <span class="mono" style="font-size: 11px">OBSERVER</span>
+        </div>
+        <h2 class="disp" style="margin: 0; font-size: 44px; font-weight: 900; text-transform: uppercase">Boston Celtics · Reality · 2026–27</h2>
+        <div style="position: relative; height: 150px; background: #FFFFFF; border: 1px solid #C9D3D7">
+          <sc-for list="{{obs.lines}}" as="ln" hint-placeholder-count="3">
+            <div style="position: absolute; left: {{ln.x}}px; top: 30px; width: 0; height: 66px; border-left: 2px solid {{ln.c}}"></div>
+            <span class="mono" style="position: absolute; left: {{ln.x}}px; top: {{ln.ty}}px; font-size: 10px; transform: translateX(-50%); white-space: nowrap; background: #FFFFFF; padding: 0 2px">{{ln.t}}</span>
+          </sc-for>
+          <div style="position: absolute; left: 20px; top: 56px; width: {{obs.barW}}px; height: 34px; background: #111"></div>
+          <span style="position: absolute; left: 20px; top: 104px; font-size: 14px"><strong>Payroll ≈ $203.6M</strong> — past the tax line, under the first apron <span class="mono" style="font-size: 11px">(BOW Economics Live fixture · verify)</span></span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px">
+          <sc-for list="{{obs.roster}}" as="pl" hint-placeholder-count="5">
+            <div style="padding: 8px 10px; background: #FFFFFF; border: 1px solid #C9D3D7"><strong style="font-size: 14px">{{pl.n}}</strong><br><span class="mono" style="font-size: 11px">{{pl.s}}</span></div>
+          </sc-for>
+        </div>
+        <span style="font-size: 12px; color: #55544F">Contracts approx., public reporting, verify · rest of the roster [from the Reality feed]</span>
+        <div style="display: flex; gap: 12px; margin-top: 4px">
+          <button type="button" class="btn" onClick="{{follow}}" aria-pressed="{{followPressed}}" style="border: 2px solid #111; background: {{followBg}}; color: {{followFg}}">{{followLabel}}</button>
+          <button type="button" class="btn" onClick="{{goEnter}}" style="border: 2px solid #007A33; background: #007A33; color: #FFF">Enter your World instead →</button>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span class="mono" style="font-size: 11px; letter-spacing: .08em">RECORDED MOMENTS · doors into Reality’s past</span>
+        <sc-for list="{{obs.moments}}" as="m" hint-placeholder-count="4">
+          <div style="display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; padding: 8px 0; border-bottom: 1px solid #C9D3D7; font-size: 14px; line-height: 1.3"><span class="mono" style="font-size: 11px">{{m.d}}</span><span>{{m.t}}</span></div>
+        </sc-for>
+        <div style="margin-top: 10px; padding: 12px 14px; border: 1.5px dashed #111; font-size: 14px; line-height: 1.4">What nobody outside knows: Boston’s internal board, the owner’s tax tolerance, Tatum’s return date. <strong>Observers see a lot and decide nothing.</strong></div>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{is.enter}}" hint-placeholder-val="{{false}}">
+    <section class="stage" style="position: absolute; left: 28px; right: 28px; top: 108px; bottom: 34px; display: grid; grid-template-columns: minmax(0, 1fr) 520px; gap: 36px">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <span class="mono" style="font-size: 11px; letter-spacing: .08em">1 · THE VIEW NARROWS</span>
+        <h2 class="disp" style="margin: 0; font-size: 40px; font-weight: 900; text-transform: uppercase; line-height: .95">Taking a seat costs you omniscience.</h2>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <sc-for list="{{nar}}" as="nr" hint-placeholder-count="6">
+            <div class="fadeable" style="padding: 10px 12px; min-height: 64px; box-sizing: border-box; border: {{nr.border}}; background: {{nr.bg}}; opacity: {{nr.op}}; font-size: 14px; line-height: 1.3"><strong>{{nr.t}}</strong><br><span style="font-size: 12px">{{nr.s}}</span></div>
+          </sc-for>
+        </div>
+        <p style="margin: 0; font-size: 15px; line-height: 1.45">{{narLine}}</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; padding: 18px 20px; background: #FFFFFF; border: 2px solid #111; box-shadow: 0 8px 0 rgba(0,0,0,.08)">
+        <span class="mono" style="font-size: 11px; letter-spacing: .08em">2 · THE HANDOVER · from the interim (Assistant GM, fictional)</span>
+        <sc-for list="{{hand}}" as="h" hint-placeholder-count="3">
+          <button type="button" class="btn" onClick="{{h.ack}}" aria-pressed="{{h.pressed}}" style="text-align: left; display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; min-height: 64px; padding: 8px 10px; border: 1px solid #C9C7BF; background: {{h.bg}}; color: #111; font-weight: 500">
+            <span style="width: 18px; height: 18px; border: 2px solid #111; box-sizing: border-box; background: {{h.box}}; margin-top: 2px"></span>
+            <span style="font-size: 14px; line-height: 1.3"><strong>{{h.t}}</strong><br><span style="font-size: 12px">{{h.c}}</span></span>
+          </button>
+        </sc-for>
+        <span class="mono" style="font-size: 11px; letter-spacing: .08em; margin-top: 4px">3 · SIGN, AND THE CLOCK STARTS</span>
+        <button type="button" class="btn" onClick="{{sign}}" style="min-height: 52px; font-size: 17px; border: 2px solid #007A33; background: {{signBg}}; color: {{signFg}}; opacity: {{signOp}}">{{signLabel}}</button>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{is.act}}" hint-placeholder-val="{{false}}">
+    <section class="stage" style="position: absolute; left: 28px; right: 360px; top: 108px; bottom: 34px; display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 24px">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline">
+          <h2 class="disp" style="margin: 0; font-size: 40px; font-weight: 900; text-transform: uppercase">The front office · Week 9</h2>
+          <span class="mono" style="font-size: 11px">WORLD · RECORDED · you are GM</span>
+        </div>
+        <div style="position: relative; height: 150px; background: #FFFFFF; border: 1px solid #C9C7BF">
+          <sc-for list="{{cap.lines}}" as="cl" hint-placeholder-count="3">
+            <div style="position: absolute; left: {{cl.x}}px; top: 30px; width: 0; height: 66px; border-left: 2px solid {{cl.c}}"></div>
+            <span class="mono" style="position: absolute; left: {{cl.x}}px; top: {{cl.ty}}px; font-size: 10px; transform: translateX(-50%); white-space: nowrap; background: #FFFFFF; padding: 0 2px">{{cl.t}}</span>
+          </sc-for>
+          <div style="position: absolute; left: 20px; top: 52px; width: {{cap.barW}}px; height: 34px; background: #007A33; transition: width .8s ease"></div>
+          <span style="position: absolute; left: 20px; right: 16px; top: 104px; font-size: 14px; line-height: 1.3"><strong>World payroll {{cap.pay}}</strong> — {{cap.status}}</span>
+        </div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px">
+          <div style="padding: 10px 12px; background: #FFFFFF; border: 1px solid #C9C7BF; display: flex; flex-direction: column; gap: 5px">
+            <span class="mono" style="font-size: 11px; letter-spacing: .06em">RULES IN FORCE · AUTHORED (2023 CBA, simplified)</span>
+            <sc-for list="{{cap.rules}}" as="ru" hint-placeholder-count="3">
+              <span style="font-size: 13px; line-height: 1.3; text-decoration: {{ru.strike}}; color: {{ru.c}}">{{ru.t}}</span>
+            </sc-for>
+          </div>
+          <div style="padding: 10px 12px; background: #FFFFFF; border: 1px solid #C9C7BF; display: flex; flex-direction: column; gap: 5px">
+            <span class="mono" style="font-size: 11px; letter-spacing: .06em">OWNER’S NOTE · the mandate</span>
+            <span style="font-size: 15px; line-height: 1.35">“Get us under the second apron before the deadline. I won’t freeze a first-round pick for a regular season.”</span>
+            <span style="font-size: 12px; color: #55544F">Analytics room: unfunded since Year One (blinds drawn).</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap">
+          <sc-for list="{{roster}}" as="rp" hint-placeholder-count="8">
+            <span style="padding: 5px 9px; border: 1px solid {{rp.b}}; background: {{rp.bg}}; font-size: 13px; text-decoration: {{rp.strike}}">{{rp.n}}</span>
+          </sc-for>
+        </div>
+        <span style="font-size: 11px; color: #55544F">World roster · real names inside a BOW World; moves here are World events, not NBA history.</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; background: #111; color: #FFF">
+        <span class="mono" style="font-size: 11px; letter-spacing: .08em">THE PHONE · 1 CALL</span>
+        <strong class="disp" style="font-size: 28px; font-weight: 800; text-transform: uppercase; line-height: 1">Denver’s GM</strong>
+        <span style="font-size: 15px; line-height: 1.4">“We’ll take Baylor Scheierman ($2.7M) for our 2029 second-rounder. Offer’s good until 11:00.”</span>
+        <div style="height: 8px; background: #333"><div style="height: 8px; width: {{callPct}}%; background: #E8A317; transition: width .9s linear"></div></div>
+        <span class="mono" style="font-size: 12px">{{callLeft}}</span>
+        <sc-if value="{{undecided}}" hint-placeholder-val="{{true}}">
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <button type="button" class="btn" onClick="{{accept}}" style="border: 2px solid #FFF; background: #FFF; color: #111">Accept — trade Scheierman</button>
+            <button type="button" class="btn" onClick="{{decline}}" style="border: 2px solid #FFF; background: transparent; color: #FFF">Decline — keep him, stay over</button>
+            <button type="button" class="btn" onClick="{{fast}}" style="border: 1px solid #777; background: transparent; color: #CCC; font-size: 13px">Let the clock run (×15, authored speed)</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{decided}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 15px; line-height: 1.4; padding: 10px; border: 1px solid #555">{{decisionLine}}</span>
+            <button type="button" class="btn" onClick="{{goCourt}}" style="border: 2px solid #E8A317; background: #E8A317; color: #111">Advance to Wednesday’s game →</button>
+          </div>
+        </sc-if>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{is.court}}" hint-placeholder-val="{{false}}">
+    <section class="stage" style="position: absolute; left: 28px; right: 360px; top: 108px; bottom: 34px; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <h2 class="disp" style="margin: 0; font-size: 40px; font-weight: 900; text-transform: uppercase">Wednesday · Boston vs Miami</h2>
+        <span class="mono" style="font-size: 11px">WORLD GAME · the World runs it once</span>
+      </div>
+      <sc-if value="{{notPlayed}}" hint-placeholder-val="{{true}}">
+        <div style="display: flex; flex-direction: column; gap: 14px; padding: 28px; background: #E9D3AE; border: 2px solid #111">
+          <p style="margin: 0; font-size: 18px; line-height: 1.45; max-width: 760px">Your World will now play this game one time. Whatever happens is <strong>recorded</strong> — it is what happened in your World. It is not a forecast, and it is not proof of anything.</p>
+          <button type="button" class="btn" onClick="{{play}}" style="align-self: flex-start; border: 2px solid #111; background: #111; color: #FFF; font-size: 17px; min-height: 52px">Play the game</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{played}}" hint-placeholder-val="{{false}}">
+        <div style="display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 20px">
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <div style="padding: 16px; background: #111; color: #FFF; display: flex; flex-direction: column; gap: 4px">
+              <span class="mono" style="font-size: 11px; letter-spacing: .08em">FINAL · RECORDED · World seed #{{game.seed}}</span>
+              <span class="disp" style="font-size: 64px; font-weight: 900; line-height: 1">{{game.score}}</span>
+              <span style="font-size: 16px; font-weight: 600">{{game.result}}</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); background: #FFF; border: 1px solid #C9C7BF; font-size: 13px; text-align: center">
+              <span class="mono" style="padding: 6px 0; border-bottom: 1px solid #C9C7BF">TEAM</span><span class="mono" style="padding: 6px 0; border-bottom: 1px solid #C9C7BF">Q1</span><span class="mono" style="padding: 6px 0; border-bottom: 1px solid #C9C7BF">Q2</span><span class="mono" style="padding: 6px 0; border-bottom: 1px solid #C9C7BF">Q3</span><span class="mono" style="padding: 6px 0; border-bottom: 1px solid #C9C7BF">Q4</span>
+              <sc-for list="{{game.q}}" as="gq" hint-placeholder-count="2">
+                <strong style="padding: 6px 0">{{gq.t}}</strong><span style="padding: 6px 0">{{gq.a}}</span><span style="padding: 6px 0">{{gq.b}}</span><span style="padding: 6px 0">{{gq.c}}</span><span style="padding: 6px 0">{{gq.d}}</span>
+              </sc-for>
+            </div>
+          </div>
+          <div style="position: relative; height: 330px; background: #E9D3AE; border: 2px solid #111">
+            <svg width="100%" height="100%" viewBox="0 0 600 330" preserveAspectRatio="xMidYMid meet" aria-label="Key possession diagram">
+              <rect x="20" y="20" width="560" height="290" fill="none" stroke="#111" stroke-width="2"></rect>
+              <line x1="300" y1="20" x2="300" y2="310" stroke="#111" stroke-width="1.5"></line>
+              <rect x="20" y="115" width="110" height="100" fill="none" stroke="#111" stroke-width="1.5"></rect>
+              <path d="M 20 60 A 170 170 0 0 1 20 270" fill="none" stroke="#111" stroke-width="1.5"></path>
+              <circle cx="300" cy="165" r="36" fill="none" stroke="#111" stroke-width="1.5"></circle>
+              <path d="{{game.path}}" fill="none" stroke="#B3261E" stroke-width="3" stroke-dasharray="7 5"></path>
+            </svg>
+            <sc-for list="{{game.marks}}" as="gm" hint-placeholder-count="6">
+              <span class="disp" style="position: absolute; left: {{gm.x}}%; top: {{gm.y}}%; transform: translate(-50%,-50%); font-size: 22px; font-weight: 900; color: {{gm.c}}">{{gm.m}}</span>
+            </sc-for>
+            <div style="position: absolute; left: 14px; right: 14px; bottom: 12px; padding: 8px 10px; background: rgba(255,255,255,.92); border: 1px solid #111; font-size: 14px; line-height: 1.35">{{game.key}}</div>
+          </div>
+        </div>
+        <button type="button" class="btn" onClick="{{goLens}}" style="align-self: flex-start; border: 2px solid #111; background: #111; color: #FFF">Why? Open the Lens →</button>
+      </sc-if>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{is.lens}}" hint-placeholder-val="{{false}}">
+    <section class="stage" style="position: absolute; left: 28px; right: 360px; top: 108px; bottom: 34px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px">
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span class="mono" style="font-size: 11px; letter-spacing: .08em">LENS · because… (each link is RECORDED in your World)</span>
+        <h2 class="disp" style="margin: 0 0 4px; font-size: 34px; font-weight: 900; text-transform: uppercase; line-height: 1">{{lens.q}}</h2>
+        <sc-for list="{{lens.chain}}" as="lc" hint-placeholder-count="5">
+          <div style="display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 10px; align-items: start; padding: 8px 10px; background: #FFF; border-left: 4px solid {{lc.c}}">
+            <span class="disp" style="font-size: 20px; font-weight: 900">{{lc.n}}</span>
+            <span style="font-size: 14px; line-height: 1.35"><span class="mono" style="font-size: 10px; letter-spacing: .06em">{{lc.scale}}</span><br>{{lc.t}}</span>
+          </div>
+        </sc-for>
+        <p style="margin: 4px 0 0; font-size: 13px; line-height: 1.4; color: #3A3A36">Recorded is not the same as proven. Every link happened in your World; whether each one <em>caused</em> the next is what the Lab can test.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span class="mono" style="font-size: 11px; letter-spacing: .08em">WHAT IF? · the Lab · same Tuesday state, both calls</span>
+        <sc-if value="{{noLab}}" hint-placeholder-val="{{true}}">
+          <div style="padding: 16px; background: #FFF; border: 2px solid #111; display: flex; flex-direction: column; gap: 10px">
+            <span style="font-size: 15px; line-height: 1.45">Your World played the game once. The Lab replays Wednesday 200 times from Tuesday’s state — once with the trade, once without — without touching your World.</span>
+            <button type="button" class="btn" onClick="{{runLab}}" style="align-self: flex-start; border: 2px solid #111; background: #111; color: #FFF">Run the Lab (200 × 2, modeled)</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{lab}}" hint-placeholder-val="{{false}}">
+          <div style="padding: 14px 16px; background: #FFF; border: 2px solid #111; display: flex; flex-direction: column; gap: 10px">
+            <sc-for list="{{labRows}}" as="lr" hint-placeholder-count="2">
+              <div style="display: flex; flex-direction: column; gap: 4px">
+                <span style="font-size: 14px"><strong>{{lr.t}}</strong> — wins {{lr.r}} of runs</span>
+                <div style="position: relative; height: 22px; background: #EEE">
+                  <div style="position: absolute; left: {{lr.x}}%; width: {{lr.w}}%; top: 0; height: 22px; box-sizing: border-box; border: 2px solid #111; background: #FFFFFF"></div>
+                  <div style="position: absolute; left: 50%; top: -3px; width: 1px; height: 28px; background: #111"></div>
+                </div>
+              </div>
+            </sc-for>
+            <span class="mono" style="font-size: 10px; color: #55544F">RANGES AUTHORED FOR THIS PROTOTYPE · the Lab has not really run · a real run would be drawn hatched (MODELED)</span>
+            <span style="font-size: 15px; line-height: 1.4"><strong>Your call moved the odds a little. The result moved a lot.</strong> Both are true. One recorded game is not a verdict on the call.</span>
+            <sc-if value="{{noBranch}}" hint-placeholder-val="{{true}}">
+              <button type="button" class="btn" onClick="{{cut}}" style="align-self: flex-start; border: 2px solid #C2410C; background: #C2410C; color: #FFF">{{cutLabel}}</button>
+            </sc-if>
+            <sc-if value="{{branch}}" hint-placeholder-val="{{false}}">
+              <div style="padding: 8px 10px; border: 2px solid #C2410C; color: #8A2E08; font-size: 13px; line-height: 1.35"><strong class="mono" style="font-size: 11px">LAB BRANCH · diverged Week 9 Tue 09:{{branchMin}} · by you · not your World</strong><br>{{branchLine}}</div>
+            </sc-if>
+          </div>
+        </sc-if>
+        <button type="button" class="btn" onClick="{{goHistory}}" style="align-self: flex-start; border: 2px solid #111; background: transparent; color: #111">See your history →</button>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{is.history}}" hint-placeholder-val="{{false}}">
+    <section class="stage" style="position: absolute; left: 28px; right: 360px; top: 108px; bottom: 34px; display: flex; flex-direction: column; gap: 14px">
+      <h2 class="disp" style="margin: 0; font-size: 40px; font-weight: 900; text-transform: uppercase">What exists now that didn’t this morning</h2>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px">
+        <div style="padding: 14px; background: #FFF; border-top: 6px solid #111; font-size: 14px; line-height: 1.4"><span class="mono" style="font-size: 11px">CURRENT REALITY</span><br><strong>Unchanged.</strong> Nothing you did touched the real Celtics. Still 29 Sep 2026, training camp.</div>
+        <div style="padding: 14px; background: #FFF; border-top: 6px solid #007A33; font-size: 14px; line-height: 1.4"><span class="mono" style="font-size: 11px">YOUR WORLD</span><br><strong>Changed, for good.</strong> {{hist.world}}</div>
+        <div style="padding: 14px; background: #FFF; border-top: 6px dashed #C2410C; font-size: 14px; line-height: 1.4"><span class="mono" style="font-size: 11px">YOUR LAB BRANCH</span><br><strong>{{hist.branchHead}}</strong> {{hist.branch}}</div>
+      </div>
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px">
+        <div style="padding: 14px; background: #FFF; border: 1px solid #C9C7BF; display: flex; flex-direction: column; gap: 8px">
+          <span class="mono" style="font-size: 11px; letter-spacing: .08em">PUBLISH THIS MOMENT · free to enter</span>
+          <span style="font-size: 14px; line-height: 1.4">“Boston · Year Two · Week 9 Tuesday. Denver wants your backup. You’re $1.1M over the second apron. What do you do?”</span>
+          <button type="button" class="btn" onClick="{{publish}}" style="align-self: flex-start; border: 2px solid #111; background: {{pubBg}}; color: {{pubFg}}">{{pubLabel}}</button>
+          <sc-if value="{{published}}" hint-placeholder-val="{{false}}"><span class="mono" style="font-size: 11px; word-break: break-all">bow://boston-y2/wk9-tue-0900/moment · by you · sources ›</span></sc-if>
+        </div>
+        <div style="padding: 14px; background: #FFF; border: 1px solid #C9C7BF; display: flex; flex-direction: column; gap: 8px">
+          <span class="mono" style="font-size: 11px; letter-spacing: .08em">PUBLIC FORKS OF THIS MOMENT</span>
+          <span style="font-size: 14px">{{pubForks}}</span>
+          <span style="font-size: 12px; color: #55544F">Others’ branches appear here as the network finds the Moment — [from the network]. No counts are invented.</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px">
+        <button type="button" class="btn" onClick="{{leave}}" style="border: 2px solid #111; background: #111; color: #FFF">Leave the seat (hand over)</button>
+        <button type="button" class="btn" onClick="{{goObserve}}" style="border: 2px solid #111; background: transparent; color: #111">Back to Reality (observer)</button>
+      </div>
+      <sc-if value="{{left}}" hint-placeholder-val="{{false}}"><span style="font-size: 14px; padding: 8px 10px; border: 1px solid #111; align-self: flex-start">Handover drafted from your open matters · the seat is vacant · your World keeps running and will advance on Monday without you.</span></sc-if>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{showRail}}" hint-placeholder-val="{{false}}">
+    <aside aria-label="Your active history" style="position: absolute; right: 28px; top: 108px; width: 310px; bottom: 34px; display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; background: #FFFFFF; border: 1px solid #C9C7BF; box-sizing: border-box">
+      <span class="mono" style="font-size: 11px; letter-spacing: .08em">YOUR ACTIVE HISTORY · World · recorded</span>
+      <sc-for list="{{history}}" as="hi" hint-placeholder-count="4">
+        <div style="display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 8px; align-items: start; font-size: 13px; line-height: 1.35; padding: 5px 0; border-bottom: 1px solid #EEE">
+          <span class="sw {{hi.cls}}" style="margin-top: 3px"></span><span><span class="mono" style="font-size: 10px; color: #55544F">{{hi.when}}</span><br>{{hi.t}}</span>
+        </div>
+      </sc-for>
+      <sc-if value="{{how}}" hint-placeholder-val="{{false}}">
+        <div style="margin-top: auto; padding: 8px 10px; border: 1px solid #111; font-size: 12px; line-height: 1.4">Green double rule: RECORDED in your World. Orange outline: a Lab branch. Black: observed Reality. Hatched: modeled runs. Dashed: unknown. The Denver offer, the game and the Lab ranges are authored for this prototype.</div>
+      </sc-if>
+    </aside>
+  </sc-if>
+
+  <span class="mono" style="position: absolute; left: 28px; bottom: 20px; font-size: 10px; letter-spacing: .06em; color: #55544F">COMMERCIAL LENS · hypothesis: observing Reality and entering shared Moments are free; the persistent World seat is the subscription; Lab runs are metered compute</span>
+  <span class="mono" style="position: absolute; left: 28px; bottom: 6px; font-size: 10px; letter-spacing: .06em; color: #55544F">WAVE 2 · SPORTS MEDIUM PROOF · DESIGN PROPOSAL · World facts: BOW Worlds fixtures + authored</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      const s = this.state || {};
+      if (s.stage === 'enter' && (s.narT || 0) < 4) { this.setState({ narT: (s.narT || 0) + 1 }); return; }
+      if (s.stage === 'act' && !s.decision) {
+        const m = (s.min || 0) + (s.fast ? 15 : 1);
+        if (m >= 120) this.setState({ min: 120, decision: 'lapse', decMin: 120 });
+        else this.setState({ min: m });
+      }
+    }, 900);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  renderVals() {
+    const s = this.state || {};
+    const stage = s.stage || 'ask';
+    const how = !!s.how;
+    const acks = s.acks || {};
+    const min = s.min || 0;
+    const decision = s.decision || null;
+    const traded = decision === 'trade';
+    const seated = !!s.seated;
+    const pad = (n) => (n < 10 ? '0' : '') + n;
+    const hh = 9 + Math.floor(min / 60), mm = min % 60;
+    const clock = s.played ? 'Year Two · Wk 9 · Wed · final' : 'Year Two · Wk 9 · Tue ' + pad(hh) + ':' + pad(mm);
+
+    const ORDER = ['ask', 'observe', 'enter', 'act', 'court', 'lens', 'history'];
+    const LABEL = { ask: 'The system', observe: 'Observe', enter: 'Enter', act: 'Act', court: 'Court', lens: 'Lens · What if?', history: 'History' };
+    const reached = s.reached || { ask: true };
+    const go = (st) => () => this.setState({ stage: st, reached: { ...((this.state && this.state.reached) || { ask: true }), [st]: true } });
+    const rail = ORDER.map((k) => {
+      const cur = k === stage, ok = !!reached[k];
+      return { label: LABEL[k], current: cur ? 'step' : 'false', go: ok ? go(k) : () => {}, op: ok ? 1 : 0.35,
+        bg: cur ? '#111' : 'transparent', fg: cur ? '#FFF' : '#111', border: cur ? '#111' : '#9C9A92' };
+    });
+
+    const inWorld = ['enter', 'act', 'court', 'lens', 'history'].indexOf(stage) >= 0;
+    const skin = stage === 'observe' ? { bg: '#E3EAED', bar: '#EEF3F5' } : inWorld && seated ? { bg: '#F4EEE3', bar: '#FBF7EF' } : { bg: '#F2F1EC', bar: '#F7F6F2' };
+    const address = stage === 'ask' ? 'bow://boston-basketball · the system · all kinds'
+      : stage === 'observe' ? 'bow://celtics · reality · 2026-09-29 live · as: observer · view: books'
+      : seated ? 'bow://boston-y2 · world · year2/wk9/tue ' + pad(hh) + ':' + pad(mm) + ' · as: GM (signed) · view: ' + (stage === 'court' ? 'court' : stage === 'lens' ? 'lens' : 'front office')
+      : 'bow://boston-y2 · world · year2/wk9 · as: (taking the seat)';
+
+    const X = (t) => t < 2024.9 ? Math.round(300 + (t - 2016.9) / 8 * 460) : Math.round(760 + (t - 2024.9) / 2.2 * 620);
+    const nowX = X(2026.74);
+    const wx0 = X(2025.5), wEnd = X(2026.74);
+    const p = {
+      nowX: nowX, nowLx: nowX - 160,
+      fork1: 'M ' + X(2017.46) + ' 150 C ' + (X(2017.46) + 40) + ' 150 ' + (X(2017.46) + 40) + ' 70 ' + (X(2017.46) + 90) + ' 70 L ' + X(2019.6) + ' 70',
+      fork2: 'M ' + X(2025.48) + ' 150 C ' + (X(2025.48) + 30) + ' 150 ' + (X(2025.48) + 30) + ' 86 ' + (X(2025.48) + 70) + ' 86 L ' + (X(2026.2)) + ' 86',
+      f1x: X(2017.46) + 96, f2x: X(2025.48) - 250,
+      world: 'M ' + wx0 + ' 150 C ' + (wx0 + 40) + ' 150 ' + (wx0 + 40) + ' 250 ' + (wx0 + 90) + ' 250 L ' + wEnd + ' 250',
+      wLx: X(2017.9), wEndX: wEnd + 8,
+      doors: [
+        [2017.46, '17 JUN 2017', 'The No. 1 pick', 0], [2024.46, '17 JUN 2024', 'Champions', 0], [2025.36, '12 MAY 2025', 'Tatum’s Achilles', 1],
+        [2025.48, 'LATE JUN 2025', 'Apron summer', 0], [2026.1, '5 FEB 2026', 'Simons ↔ Vučević', 1]
+      ].map((d) => ({ x: X(d[0]), lx: X(d[0]) + 6, ly: d[3] ? 164 : 100, date: d[1], t: d[2] })),
+      acts: [[2025.9, 'Year One', 'Funded Business over Basketball Ops', -140, 'right'], [2026.45, 'Week 6', 'Traded White for Butler', -10, 'left']].map((a) => ({ x: X(a[0]), when: a[1], t: a[2], tx: a[3], al: a[4] }))
+    };
+    p.wLx = wx0 - 345;
+
+    const PX = (v) => Math.round((v - 150) / 80 * 760);
+    const obs = {
+      lines: [[200.428, 'TAX $200.4M', '#B7791F'], [209.015, 'FIRST APRON $209.0M', '#B4461D'], [221.686, 'SECOND APRON $221.7M', '#8E1B1B']].map((l, i) => ({ x: 20 + PX(l[0]), t: l[1], c: l[2], ty: i % 2 ? 16 : 2 })),
+      barW: PX(203.6),
+      roster: [['Jayson Tatum', '≈$58.5M'], ['Jaylen Brown', '≈$57.1M'], ['Derrick White', '≈$30.3M'], ['Sam Hauser', '≈$10.8M'], ['Payton Pritchard', '≈$7.8M']].map((r) => ({ n: r[0], s: r[1] })),
+      moments: [['17 Jun 2017', 'Boston holds the No. 1 pick; Philadelphia wants it'], ['12 May 2025', 'Tatum ruptures his right Achilles'], ['Late Jun 2025', 'Apron summer: Holiday to Portland, Porziņģis to Atlanta'], ['5 Feb 2026', 'Simons to Chicago for Vučević (reported · verify)']].map((m) => ({ d: m[0], t: m[1] }))
+    };
+
+    const nAck = ['a', 'b', 'c'].filter((k) => acks[k]).length;
+    const narStep = stage === 'enter' ? Math.min(3, (s.narT || 0)) : 0;
+    const NAR = [
+      ['Denver’s internal board', 'hidden from your seat — UNKNOWN', 'unk'],
+      ['Miami’s plans for Wednesday', 'hidden from your seat — UNKNOWN', 'unk'],
+      ['League rumours', 'unverified now — you hear them like everyone else', 'gen'],
+      ['Boston’s private scouting notes', 'yours now', 'own'],
+      ['Your authority', 'offer · accept · waive · call up — not above the second apron without the owner', 'own'],
+      ['Three open matters', 'handed to you — see the sheet', 'own']
+    ];
+    const nt = s.narT || 0;
+    const nar = NAR.map((n, i) => {
+      const flipped = n[2] === 'own' ? nt >= 3 : nt >= (i + 1);
+      if (!flipped) return { t: n[0], s: n[2] === 'own' ? 'not yours yet' : 'visible to you as an observer', border: '1px solid #111', bg: n[2] === 'own' ? 'transparent' : '#FFFFFF', op: n[2] === 'own' ? 0.35 : 1 };
+      return { t: n[0], s: n[1], border: n[2] === 'unk' ? '1.5px dashed #111' : n[2] === 'gen' ? '1px dotted #111' : '2px solid #007A33', bg: n[2] === 'own' ? '#FFFFFF' : 'transparent', op: 1 };
+    });
+    const narLine = nt < 3 ? 'Narrowing… an observer sees across every desk. A seat sees across one.' : 'You gave up other teams’ private notes. You got the pen, the phone and three deadlines.';
+    const HAND = [
+      ['a', 'Denver called at 08:50 about Baylor Scheierman.', 'Offer expires 11:00. If nobody answers, it lapses — and the lapse is recorded as no decision, not a decision.'],
+      ['b', 'You are $1.1M over the second apron.', 'If still over at the deadline: salaries can’t be aggregated in trades and a first-round pick seven years out is frozen (2023 CBA, simplified).'],
+      ['c', 'Roster is at 15; a two-way call-up is pending.', 'At 16 on game day the league refuses the lineup.']
+    ];
+    const hand = HAND.map((h) => ({ t: h[1], c: h[2], pressed: acks[h[0]] ? 'true' : 'false', bg: acks[h[0]] ? '#EEF6F1' : '#FFFFFF', box: acks[h[0]] ? '#007A33' : 'transparent',
+      ack: () => this.setState({ acks: { ...((this.state && this.state.acks) || {}), [h[0]]: true } }) }));
+    const canSign = nAck === 3;
+
+    const WX = (v) => Math.round((v - 180) / 50 * 520);
+    const pay = traded ? 220.1 : 222.8;
+    const over2 = pay > 221.686;
+    const cap = {
+      lines: [[200.428, 'TAX $200.4M', '#B7791F'], [209.015, 'FIRST APRON $209.0M', '#B4461D'], [221.686, 'SECOND APRON $221.7M', '#8E1B1B']].map((l, i) => ({ x: 20 + WX(l[0]), t: l[1], c: l[2], ty: i % 2 ? 16 : 2 })),
+      barW: WX(pay), pay: '$' + pay.toFixed(1) + 'M',
+      status: over2 ? 'over the second apron by $' + (pay - 221.686).toFixed(1) + 'M (COMPUTED)' : 'under the second apron by $' + (221.686 - pay).toFixed(1) + 'M (COMPUTED) · tax recomputed by the World at Monday’s close',
+      rules: [
+        ['Pays luxury tax (over the tax line)', false],
+        ['Can’t aggregate salaries in trades', !over2],
+        ['Can’t take back more salary than you send', !over2],
+        ['First-round pick seven years out: frozen', !over2]
+      ].map((r) => ({ t: r[0] + (r[1] ? ' — lifted' : ''), strike: r[1] ? 'line-through' : 'none', c: r[1] ? '#6A6A64' : '#111' }))
+    };
+    const roster = ['Jayson Tatum', 'Jimmy Butler', 'Paul George', 'Payton Pritchard', 'Sam Hauser', 'Mitchell Robinson', 'Baylor Scheierman', '+ 8 more [World roster]'].map((n) => {
+      const gone = traded && n === 'Baylor Scheierman';
+      return { n: n, b: gone ? '#B3261E' : '#C9C7BF', bg: gone ? 'transparent' : '#FFFFFF', strike: gone ? 'line-through' : 'none' };
+    });
+    const left = Math.max(0, 120 - min);
+    const callPct = Math.round(left / 120 * 100);
+    const callLeft = decision ? 'call closed' : left + ' World minutes left · ' + (s.fast ? 'running ×15' : 'running');
+    const decisionLine = decision === 'trade' ? 'Accepted at ' + pad(9 + Math.floor((s.decMin || 0) / 60)) + ':' + pad((s.decMin || 0) % 60) + '. Scheierman goes to Denver for a 2029 second. You are under the second apron; the frozen pick unfreezes. Roster 14.'
+      : decision === 'decline' ? 'Declined. Scheierman stays. You are still $1.1M over the second apron with the deadline ahead.'
+      : decision === 'lapse' ? 'No decision by 11:00 — Denver’s offer lapsed. Recorded as no decision. You are still over the second apron.' : '';
+
+    const G = traded ? {
+      seed: '51120', score: '104–108', result: 'Lost to Miami',
+      q: [{ t: 'BOS', a: '27', b: '26', c: '29', d: '22' }, { t: 'MIA', a: '25', b: '27', c: '24', d: '32' }],
+      key: 'Q4 7:12 — Pritchard picks up his fifth foul. With Scheierman gone, the two-way call-up plays six minutes. Miami runs 12–4. Recorded in your World.',
+      path: 'M 470 200 L 400 150 L 330 180 L 110 165',
+      marks: [[78, 61, 'O', '#B3261E'], [66, 45, 'O', '#B3261E'], [55, 54, 'O', '#B3261E'], [70, 50, 'X', '#111'], [60, 62, 'X', '#111'], [33, 50, 'X', '#111']]
+    } : {
+      seed: '51120', score: '109–104', result: 'Beat Miami',
+      q: [{ t: 'BOS', a: '27', b: '26', c: '29', d: '27' }, { t: 'MIA', a: '25', b: '27', c: '24', d: '28' }],
+      key: 'Q4 7:12 — Pritchard picks up his fifth foul. Scheierman plays six minutes; Boston holds the lead. Recorded in your World.',
+      path: 'M 470 200 L 400 150 L 360 120',
+      marks: [[78, 61, 'O', '#B3261E'], [66, 45, 'O', '#B3261E'], [55, 54, 'O', '#B3261E'], [70, 50, 'X', '#111'], [60, 62, 'X', '#111'], [62, 38, 'X', '#111']]
+    };
+    G.marks = G.marks.map((m) => ({ x: m[0], y: m[1], m: m[2], c: m[3] }));
+    const played = !!s.played;
+    const lens = {
+      q: traded ? 'Why did we lose?' : 'Why did we win?',
+      chain: (traded ? [
+        ['GAME', '104–108: Miami outscored Boston by 10 in the fourth.'],
+        ['POSSESSIONS', 'A 12–4 run over six minutes of Q4.'],
+        ['ROTATION', 'Pritchard in foul trouble; the two-way call-up played those minutes.'],
+        ['ROSTER', 'No backup guard: Scheierman was traded Tuesday.'],
+        ['YOUR CALL · MANDATE', 'You accepted Denver’s offer to get under the second apron, as the owner asked.']
+      ] : [
+        ['GAME', '109–104: Boston held on in the fourth.'],
+        ['POSSESSIONS', 'Six minutes of Q4 without a scoring drought.'],
+        ['ROTATION', 'Pritchard in foul trouble; Scheierman covered those minutes.'],
+        ['ROSTER', 'The backup guard was still here: you declined Tuesday.'],
+        ['YOUR CALL · MANDATE', 'You stayed over the second apron, against the owner’s note.']
+      ]).map((c, i) => ({ n: String(i + 1), scale: c[0], t: c[1], c: i === 4 ? '#007A33' : '#111' }))
+    };
+    const lab = !!s.lab;
+    const labRows = [
+      { t: 'With the trade', r: '41–55%', x: 41, w: 14 },
+      { t: 'Without the trade', r: '44–58%', x: 44, w: 14 }
+    ];
+    const branch = !!s.branch;
+    const cutLabel = traded ? 'Cut a Lab branch: keep Scheierman' : 'Cut a Lab branch: take the trade';
+    const branchLine = traded ? 'In this branch Scheierman stays, you stay $1.1M over, and Wednesday is re-run as a modeled range — your World keeps its recorded 104–108.' : 'In this branch you trade Scheierman and get under the apron; Wednesday is re-run as a modeled range — your World keeps its recorded 109–104.';
+
+    const hist = [];
+    hist.push({ when: 'Year One', t: 'Funded Business over Basketball Ops', cls: 't-recg' });
+    hist.push({ when: 'Week 6', t: 'Traded White (+ backup big) for Butler', cls: 't-recg' });
+    if (seated) hist.push({ when: 'Wk 9 · Tue 09:0' + Math.min(9, s.signMin || 0), t: 'Took the GM’s seat — signed the handover', cls: 't-recg' });
+    if (decision) hist.push({ when: 'Wk 9 · Tue ' + pad(9 + Math.floor((s.decMin || 0) / 60)) + ':' + pad((s.decMin || 0) % 60), t: decision === 'trade' ? 'Traded Scheierman to Denver for a 2029 second' : decision === 'decline' ? 'Declined Denver’s offer' : 'No decision — Denver’s offer lapsed', cls: 't-recg' });
+    if (played) hist.push({ when: 'Wk 9 · Wed', t: (traded ? 'Lost to Miami 104–108' : 'Beat Miami 109–104') + ' (the World ran it once)', cls: 't-recg' });
+    if (lab) hist.push({ when: 'Lab', t: 'Ran Wednesday 200 × 2 from Tuesday’s state (ranges authored in this prototype)', cls: 't-aut' });
+    if (branch) hist.push({ when: 'Lab', t: 'Cut a branch from Tuesday 09:' + pad((s.decMin || 0) % 60), cls: 't-aut' });
+    if (s.published) hist.push({ when: 'Now', t: 'Published the Tuesday Moment', cls: 't-aut' });
+
+    const worldTxt = (decision === 'trade' ? 'Scheierman is in Denver; you are under the second apron; ' : decision === 'decline' ? 'Scheierman stayed; you are still over the apron; ' : 'The offer lapsed; ') + (played ? (traded ? 'Miami beat you 108–104.' : 'you beat Miami 109–104.') : 'Wednesday hasn’t been played.');
+
+    return {
+      how, address, rail, skin, clock, inSeat: seated && inWorld,
+      is: { ask: stage === 'ask', observe: stage === 'observe', enter: stage === 'enter', act: stage === 'act', court: stage === 'court', lens: stage === 'lens', history: stage === 'history' },
+      p, obs, nar, narLine, hand, cap, roster, callPct, callLeft, decisionLine,
+      following: !!s.following, followPressed: s.following ? 'true' : 'false', followBg: s.following ? '#111' : '#FFF', followFg: s.following ? '#FFF' : '#111',
+      followLabel: s.following ? 'Following payroll vs the tax line' : 'Follow payroll vs the tax line',
+      follow: () => this.setState({ following: !(this.state && this.state.following) }),
+      toggleHow: () => this.setState({ how: !how }),
+      howPressed: how ? 'true' : 'false', howBg: how ? '#111' : 'transparent', howFg: how ? '#FFF' : '#111',
+      goObserve: go('observe'),
+      goEnter: () => this.setState({ stage: 'enter', narT: 0, reached: { ...((this.state && this.state.reached) || { ask: true }), enter: true } }),
+      signBg: canSign ? '#007A33' : '#FFFFFF', signFg: canSign ? '#FFFFFF' : '#007A33', signOp: canSign ? 1 : 0.5,
+      signLabel: canSign ? 'Sign and take the seat →' : 'Acknowledge all three to sign (' + nAck + '/3)',
+      sign: () => { if (canSign) this.setState({ seated: true, signMin: 0, stage: 'act', min: 0, reached: { ...((this.state && this.state.reached) || {}), act: true } }); },
+      undecided: !decision, decided: !!decision,
+      accept: () => this.setState({ decision: 'trade', decMin: min }),
+      decline: () => this.setState({ decision: 'decline', decMin: min }),
+      fast: () => this.setState({ fast: true }),
+      goCourt: go('court'),
+      notPlayed: !played, played: played, game: G,
+      play: () => this.setState({ played: true }),
+      goLens: go('lens'), lens, noLab: !lab, lab, labRows,
+      runLab: () => this.setState({ lab: true }),
+      noBranch: !branch, branch, cutLabel, branchLine, branchMin: pad((s.decMin || 0) % 60),
+      cut: () => this.setState({ branch: true }),
+      goHistory: go('history'),
+      hist: { world: worldTxt, branchHead: branch ? 'Kept, beside your World.' : 'None yet.', branch: branch ? 'A modeled possibility history from Tuesday 09:' + pad((s.decMin || 0) % 60) + '. It never overwrites what your World recorded.' : 'Cut one in the Lens to compare a possibility with what happened.' },
+      published: !!s.published, publish: () => this.setState({ published: true }),
+      pubBg: s.published ? '#111' : '#FFF', pubFg: s.published ? '#FFF' : '#111', pubLabel: s.published ? 'Published' : 'Publish this Moment',
+      pubForks: s.published ? (branch ? 'Yours — one Lab branch attached.' : 'Yours — your recorded call.') : 'None — publish the Moment first.',
+      leave: () => this.setState({ left: true }), left: !!s.left,
+      showRail: inWorld && seated, history: hist
+    };
+  }
+}
+</script>
+</body>
+</html>
