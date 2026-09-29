@@ -1,0 +1,7 @@
+# W2-B — Time, order and clocks (DRAFT 1: code facts verified, model pending)
+
+## Verified code facts (EARNED)
+- W NBA: `state.clock` indexes authored `state.stops`; only `advance(state, expectStop)` increments it (commissioner.ts:48-50,118). `nextSeq` is one counter shared by events, commissionerLog, repairs (league.ts:173; commissioner.ts:35). Obligations carry `dueAt` = stop index, delivered at `dueAt === clock` (types.ts:248; seasonTwo.ts:427-439). Wall time enters the reducer only as `ctx.now`, passed only to Commissioner actions and consumed only by `countdown` theatre (index.ts:204; commissioner.ts:~255). `Stop.date` is "display only".
+- W host: idempotency by `clientActionId` receipts; storage CAS `version_conflict` (retryable); `stale_round` refusal (sessionService.ts:2063-2221).
+- DC: `sequence = log.length+1`; `timestamp = max(at, meta.updatedAt)` (reducer.ts:43-56). v5 server: `now` from handler (handler.ts:956), `requestId` replay check precedes `expectedRevision` CAS (v5Attempt.ts:199-212); `advance` is a learner command (v5Attempt.ts:44). Assignment `dueAt` enforces nothing (classes/types.ts:~305-318). Per-user rate ceiling 80/5min (v5Attempt.ts:56-57).
+- DF Live World: `fold(canon, acts, now)`; tick = floor((now-epoch)/1000); acts sorted `(tMs, id)`; deadlines rank 0 < acts rank 1 at equal t; acts with t > tau+skew dropped; NO lower bound except epoch (live-world.src.html:372-401,407-419,493).
