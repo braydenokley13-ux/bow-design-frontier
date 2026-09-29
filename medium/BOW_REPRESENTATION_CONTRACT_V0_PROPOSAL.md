@@ -76,6 +76,13 @@ The same shape appears independently in both products. W's `HARBOR_SPATIAL_PLACE
 
 **Suggested sentence:** *"A place is a state-free address plus carrier slots keyed by canonical object id. A place view is a pure function of a labelled state cut, with a Direct reading of the same words and no authority."*
 
+**Real geography (from the founder's two-meanings test, Contract §6).** Drawing a system on real geography is a representation of **grounding references**. The rules below are HYPOTHESIS; the base-geography reuse is subject to licence.
+
+- **Base geography** (streets, footprints) is Reality, shown as OBSERVED with its source, date and licence. It is **atmosphere unless a rule reads it**.
+- **An authored facility placed on real ground** (a BOW-authored headquarters on a real street) is a carrier with relation **located-at** or **depicts** and status **AUTHORED**. It must be perceptibly different from observed buildings, and its Direct line must say it is authored. **3D realism must never imply physical existence** (L3, L9).
+- **Two systems at one real site are drawn as co-located, never as connected**, unless a recorded contract or feed connects them (co-reference is not coupling).
+- Geometry from share-alike sources (OSM/ODbL) is streamed from its source at view time, not stored in records or capsules (K34).
+
 ## 5. Representation families and their build economics
 
 From W2-C. Cost classes:

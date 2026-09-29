@@ -196,7 +196,7 @@ Answers are labelled. "Open" means explicitly left unresolved in `BOW_OPEN_QUEST
     - A place's *geometry and topology* are **never canonical state**: REJECTED, see K14.
     - A spatial attribute that a rule reads (capacity, travel time) is ordinary state.
     - A place used to organize a system is a **state-free index** (HYPOTHESIS).
-    - Whether *externally grounded* place (real geography that many systems attach to) is a separate meaning is tested in §6.
+    - *Externally grounded* place (real geography that many systems attach to) is **not a place in the medium**. It is a Reality entity plus a typed, dated, statused reference (§6).
 22. **What is REALITY?** The referent **as observed**: sourced, dated, licensed OBSERVED facts, corrected by new observations, **never forked, never written by a branch, never contained by BOW**. A World may start from a Reality snapshot and diverge, and then its facts are RECORDED in the World, not OBSERVED. HYPOTHESIS, partly EARNED (W real identity as a frozen dated snapshot; the "real clubs and players, a simulated season" disclosure).
 23. **How should BOW represent UNKNOWN?** As a typed value with a reason, never absence, zero or a default look. Candidate kinds:
     - not-yet
@@ -215,11 +215,77 @@ Answers are labelled. "Open" means explicitly left unresolved in `BOW_OPEN_QUEST
     DC Receipt v1 is a synthetic instance of the capsule. EARNED (synthetic); HYPOTHESIS as the medium's unit.
 25. **What would a BOW-compatible runtime have to implement?** §8.
 
-## 6. Place in two meanings
+## 6. Place: the founder's two-meanings test
 
-**Result of the founder's targeted test (W2-E).** This section is filled from `research/wave2/W2E_PLACE_TWO_MEANINGS.md` and the parent's adjudication. It appears in the final version below.
+**Question (founder, mid-run).** Does PLACE/GEOGRAPHY need two separate meanings?
+- (1) a representation of one system, such as Boston's office;
+- (2) an externally grounded spatial substrate, such as actual NYC geography that many autonomous systems attach to.
 
-*(Pending the W2-E report at the time of drafting; see the final section 6 below.)*
+And does attachment to real place belong in the protocol, address or composition layer, or stay a Browser/Reality concern? Promote nothing without cross-domain evidence.
+
+**Test.** Seven domains, each asked the same six questions: sports city, museums/history, chemistry labs, hospitals, transit, enterprise and public Reality.
+- Checked against mature standards: OGC/W3C SDW, CIDOC-CRM/Linked Art, Wikidata, OSM, Overture GERS, CityGML, IndoorGML, IfcSite, GTFS, NeTEx, NaPTAN, FHIR `Location`, NHS ODS, GS1 GLN and NYC BBL/BIN.
+- Checked against BOW's code.
+- Source: `research/wave2/W2E_PLACE_TWO_MEANINGS.md`.
+
+### 6.1 Verdict: the founder's two meanings are real, but there are **three**, and only one is a medium "place"
+
+| Meaning | Definition | Who is authoritative | Label |
+|---|---|---|---|
+| **1. PLACE (index)** | A state-free, per-system index (id, role, adjacency) plus carrier slots keyed by object id. It implies nothing about the outside world. | The system's designer | EARNED locally (W Harbor topology: 8 places, 13 edges, no coordinates; DC district geography, fictional); medium object HYPOTHESIS |
+| **2. GROUNDING** | **Not a kind of place.** A **Reality spatial entity** (an id in an external namespace: Wikidata QID, Overture GERS, NYC BIN or BBL, a GTFS stop within its feed, an FHIR `Location`, a GS1 GLN) plus a **typed, dated, statused REFERENCE** from an OBJECT or PLACE to it. The reference carries:<br>• a relation: **is** / **located-at** / **modeled-on** / **depicts**<br>• a STATUS: OBSERVED, ASSERTED or AUTHORED<br>• an as-of cut<br>• source and licence<br>• no geometry by default | Reality owns the entity; BOW is authoritative **only over its own claim** | HYPOTHESIS |
+| **3. SPATIAL ATTRIBUTE** | Ordinary state or parameter that a rule reads: capacity, distance, travel time, jurisdiction, adjacency cost. When sourced from Reality it is a recorded input with source, date and licence. | The system (if authored) or Reality (if observed) | EARNED (W rules read arena capacity and metro population; no rule reads distance or travel time today) |
+
+**Why grounding is a reference and not a substrate.** Every standard checked keeps the place record apart from the party or system at that place, joined by a **typed assignment**, never by a coordinate:
+- FHIR `Location.managingOrganization`;
+- NHS ODS, where each organisation holds its own site code for a shared location;
+- GS1 GLN, which allocates legal entity, function, physical and digital location as separate categories;
+- NeTEx `PassengerStopAssignment`;
+- CityGML `ExternalReference`.
+
+Three registries also *removed* meaning from their place ids (Overture GERS dropped the embedded H3 cell in 2025; NHS site codes dropped the parent trust; OSM ids do not survive reshaping). CIDOC-CRM defines a place as time-independent, so **time lives in the reference** ("located at X *as of* T"), not in the place. HYPOTHESIS, with external facts dated in W2-E.
+
+**Co-reference is not coupling.** Two systems that reference the same real building are *not thereby connected*. In five of seven domains, systems at the same place couple through **contracts and feeds**, not through geography:
+- an arena calendar between club and operator;
+- orders in supply chains;
+- co-located hospital organisations keeping separate site records.
+
+A Browser may *join* on a shared reference for discovery (opt-in, recognition-only). This is what keeps a city of club, museum, hospital, agency and port from becoming one hidden god-simulation. HYPOTHESIS.
+
+### 6.2 Where attachment belongs
+
+| Option | Verdict | Reason |
+|---|---|---|
+| A. A spatial coordinate in every address | **REJECTED** | Most systems have no ground: chemistry, biology and both fictional topologies. A coordinate is not identity, because one site hosts many organisations (ODS, GLN, GTFS). It embeds meaning in ids, the error three registries reversed. It would spread licence-bound coordinates and build a location graph of people and institutions, which is K7 by another door. |
+| B. A shared "substrate" instance that systems attach to | **SPECULATIVE FRONTIER** | Composition law C1 says authority never crosses. A substrate would have to be authoritative, and BOW would then own geography. The only legitimate form is a **governed registry that is itself an instance**, as NaPTAN is an institution. No BOW case exists. |
+| **C. A typed REFERENCE to a Reality entity, carried in the record and in exports** | **Chosen (HYPOTHESIS, medium confidence)** | It covers all seven domains. It reuses STATUS, cuts, the licence axis and recognition-only boundaries. It is the COUNTERPART mechanism with a Reality endpoint. **It must live in the record**, because a capsule shared outside the Browser must carry its own honesty ("this building is authored"). If it lived only in Browser metadata, exports would silently downgrade. |
+| **D. Browser and Reality handle discovery** | **Chosen for discovery** | "What is at this place?" is a Reality query joined against references, i.e. a product feature, not protocol |
+
+**So:** the *claim* of attachment is a generic record-level reference (C). *Navigating by geography* is a Browser/Reality capability (D). **Nothing place-specific enters the protocol, the address or the composition layer.** The founder's second meaning is accommodated by the Reality layer plus a reference type, not by a new medium primitive.
+
+### 6.3 Promotion test: what would move grounding above C
+
+Promote to the protocol or composition layer only if **all** of these are *observed* (W2-E §6):
+1. Two independently governed systems whose rules or evidence change *because of* a shared place, and the coupling **cannot** be re-expressed as a bilateral contract or a Reality feed.
+2. At least three materially different domains hand-roll the same reference shape (namespace, as-of, status, rights). Today there is **one**, as a bare string.
+3. A cross-system query ("all systems attached to X at cut T") that a Browser join over references answers *wrongly* against ground truth.
+4. A grounding broken by id churn that corrupts a replayed capsule.
+5. A second independent host (trigger T5).
+
+**Kill criterion:** if every coupling re-expresses as a contract, grounding stays at C or drops to D.
+
+### 6.4 What BOW's code shows, and one honesty gap to hand to the product lanes
+
+- Real geography enters BOW only as **strings and numbers**: `arena:"TD Garden"`, `arenaCapacity:18624`, metro area and population, with a dated snapshot 2026-09-22. There is no place id, coordinate, QID, OSM or GTFS identifier anywhere in W, W-3D or DC source.
+- **The same real arena carries two dated capacities with nothing reconciling them.** 18,624 in the identity snapshot; 19,156 elsewhere (`fullHouse.ts:329-332`, tdgarden.com as of 2026-09-14). This is a small concrete case for a grounding reference with as-of and source.
+- **Gap:** Boston's on-screen disclosure reads "real clubs and players, a simulated season". It discloses the *season* as simulated, but not the *building* as authored; the building's authored status lives only in a design doc (`ART_DIRECTION.md:90`). Under relation type **depicts / AUTHORED**, the scene would say so. This is a product-lane fix, **not made here**: this run edits no product repository.
+
+**Risks named and bounded:**
+- god-simulation drift (answered by C1 and co-reference ≠ coupling);
+- metaverse drift (E-main §10);
+- **ODbL share-alike** on OSM-derived geometry. Store ids, as-of, source and licence, never geometry; never use OSM ids as canonical ids; escalate classification to counsel;
+- privacy: never ground a student, patient or school; references are recognition-only;
+- false physical implication: enforce by relation type and status, not prose alone.
 
 ## 7. One record for two products (W2-A): the cheapest falsifier, run on paper
 

@@ -67,7 +67,9 @@ They are ordered by how much they block.
 
 | # | Question | Source |
 |---|---|---|
-| F1 | Does PLACE need two meanings (a system's representation vs externally grounded geography shared by many systems), and where does attachment to real place belong? | Founder's targeted test; W2-E; Contract §6 |
+| F1 | ~~Does PLACE need two meanings?~~ **Answered provisionally (Contract §6):** there are three meanings, and only the index is a medium place. Grounding is a Reality entity plus a typed reference in the record. Nothing place-specific enters protocol, address or composition. Promotion test in §6.3. | W2-E |
+| F2 | **Namespace policy for grounding references.** QID, GERS, BIN, BBL and GTFS ids have different lifetimes (a BIN survives demolition; OSM ids do not survive reshaping). Which namespaces may a record cite, and how is churn handled in replayed capsules? | W2-E §3, §6.4 |
+| F3 | **ODbL classification** of capsules that reference OSM-derived data. This needs counsel, not design. | W2-E §7 |
 
 ## G. Strategy
 

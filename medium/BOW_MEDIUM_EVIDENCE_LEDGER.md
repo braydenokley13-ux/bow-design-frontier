@@ -55,6 +55,9 @@ Status: 2026-09-29. This ledger lists every claim the Medium Contract relies on,
 | E28 | W's league simulation uses engine-approximated `Math.exp`, `log` and `cos`; DC domain code uses none, with integer-cent money. | W2-D §2.2: `sim.ts:53`, `handover.ts:26`, `draftV4.ts:65`, `seasonTwo.ts:632`; DC grep | Cross-engine League replay unproven |
 | E29 | DC Receipt v1 replays through `ruleBundleId`, a label resolved to in-tree code, not a digest. It is a capsule with in-tree replay, not a portable replay. | W2-D §2.1: `decisionReceiptV1.ts:66,235-249` | — |
 | E30 | W-3D place props are rebuilt on every rebind from facts and never baked. Only Boston has a baked building (1,335-line level script; 29 MB glb). | W2-C §5; `stateProps.ts:1-15` | — |
+| E31 | Real geography enters BOW only as strings and numbers (`arena:"TD Garden"`, `arenaCapacity:18624`, metro area and population, dated 2026-09-22). There is no place id, coordinate, QID, OSM or GTFS id in W, W-3D or DC source, and `bow-bridge-1` and DC `refs.ts` have no place field. | W2-E §2: `nbaIdentity.ts:46`, grep | — |
+| E32 | The same real arena carries two dated capacities (18,624; 19,156 from tdgarden.com as of 2026-09-14), each with a hand-rolled `{source, asOf, verified}`, and no id reconciles them. | W2-E §2: `fullHouse.ts:329-332` | — |
+| E33 | Boston's on-screen disclosure ("real clubs and players, a simulated season") discloses the season, not the authored building; the building's authored status lives only in a design doc. | W2-E §2: `bostonFacts.ts:16`, `bostonBuilding.ts:67,484`, `ART_DIRECTION.md:90` | Product-lane fix, not made here |
 
 ## B. RECURRING: both products reach the same semantics through different code
 
