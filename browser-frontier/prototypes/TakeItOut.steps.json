@@ -1,0 +1,282 @@
+[
+ {
+  "wait": 900
+ },
+ {
+  "expectText": "Hold an act to lift it out."
+ },
+ {
+  "shot": "record-at-rest"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "shot": "how-do-we-know"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "click": "real?"
+ },
+ {
+  "shot": "whats-real"
+ },
+ {
+  "click": "real?"
+ },
+ {
+  "click": "What counted",
+  "exact": true
+ },
+ {
+  "expectText": "a zero is a finding"
+ },
+ {
+  "shot": "weighed-reach"
+ },
+ {
+  "click": "Projected tax"
+ },
+ {
+  "shot": "weighed-by-tax"
+ },
+ {
+  "click": "Act",
+  "exact": true
+ },
+ {
+  "click": "Act: Week 6"
+ },
+ {
+  "expectText": "What will the projected tax be without it?"
+ },
+ {
+  "shot": "predict-before-lift"
+ },
+ {
+  "range": [
+   "#predRange",
+   8
+  ]
+ },
+ {
+  "shot": "guess-set"
+ },
+ {
+  "click": "Lift it out"
+ },
+ {
+  "expectText": "Lifted out"
+ },
+ {
+  "shot": "lifted-present-reforms"
+ },
+ {
+  "click": "Act: Week 7"
+ },
+ {
+  "expectText": "Impossible without Week 6 trade"
+ },
+ {
+  "shot": "dashes-week7"
+ },
+ {
+  "click": "Show the act it needed"
+ },
+ {
+  "shot": "shows-needed-act"
+ },
+ {
+  "click": "Act: League"
+ },
+ {
+  "click": "Try to lift it"
+ },
+ {
+  "expectText": "not your act"
+ },
+ {
+  "shot": "locked-league"
+ },
+ {
+  "click": "Week 9: lost"
+ },
+ {
+  "click": "Try to lift it"
+ },
+ {
+  "expectText": "outcomes are not acts"
+ },
+ {
+  "shot": "locked-outcome"
+ },
+ {
+  "click": "Compare",
+  "exact": true
+ },
+ {
+  "shot": "compare-needles"
+ },
+ {
+  "click": "Run it again"
+ },
+ {
+  "expectText": "the same present"
+ },
+ {
+  "shot": "luck-fixed"
+ },
+ {
+  "click": "Gap: Week 6"
+ },
+ {
+  "click": "Put it back"
+ },
+ {
+  "click": "Compare",
+  "exact": true
+ },
+ {
+  "expectText": "the hashes match"
+ },
+ {
+  "shot": "put-back-hash-matches"
+ },
+ {
+  "click": "Two at once"
+ },
+ {
+  "click": "Try Week 1 + Week 4"
+ },
+ {
+  "expectText": "These matter only together"
+ },
+ {
+  "shot": "two-at-once"
+ },
+ {
+  "click": "Try Week 1 + Week 6"
+ },
+ {
+  "shot": "two-at-once-overlap"
+ },
+ {
+  "click": "Put both back"
+ },
+ {
+  "click": "Act",
+  "exact": true
+ },
+ {
+  "click": "Act: Week 6"
+ },
+ {
+  "click": "Lift it out"
+ },
+ {
+  "click": "Keep this world"
+ },
+ {
+  "expectText": "cut with hindsight"
+ },
+ {
+  "shot": "kept-branch"
+ },
+ {
+  "click": "What counted",
+  "exact": true
+ },
+ {
+  "click": "Act: Year One"
+ },
+ {
+  "click": "Score",
+  "exact": true
+ },
+ {
+  "click": "Clamp: tell me when"
+ },
+ {
+  "expectText": "reaching"
+ },
+ {
+  "shot": "clamp-set-while-reaching"
+ },
+ {
+  "click": "Play on"
+ },
+ {
+  "shot": "play-on"
+ },
+ {
+  "click": "Reopened Analytics"
+ },
+ {
+  "expectText": "Week 10 played"
+ },
+ {
+  "shot": "played-week10"
+ },
+ {
+  "click": "What counted",
+  "exact": true
+ },
+ {
+  "expectText": "tripped"
+ },
+ {
+  "shot": "clamp-tripped-weights-then-now"
+ },
+ {
+  "click": "Return to the record"
+ },
+ {
+  "click": "Compare",
+  "exact": true
+ },
+ {
+  "shot": "return-to-record"
+ },
+ {
+  "click": "Boston Celtics · Reality"
+ },
+ {
+  "shot": "reality-at-rest"
+ },
+ {
+  "click": "Move: Late Jun 2025"
+ },
+ {
+  "shot": "reality-holiday-selected"
+ },
+ {
+  "click": "Lift it out"
+ },
+ {
+  "shot": "reality-lifted"
+ },
+ {
+  "click": "Move: 5 Feb 2026"
+ },
+ {
+  "shot": "reality-dashed-simons"
+ },
+ {
+  "click": "Outcome, not an act: 12 May 2025"
+ },
+ {
+  "click": "Try to lift it"
+ },
+ {
+  "shot": "reality-outcome-refused"
+ },
+ {
+  "click": "Compare",
+  "exact": true
+ },
+ {
+  "shot": "reality-compare"
+ }
+]

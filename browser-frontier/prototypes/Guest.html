@@ -28,21 +28,30 @@ button{font:inherit;color:inherit;cursor:pointer}
 .bar h1{margin:0;font:600 13px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--dt)}
 .bar h1 small{font-weight:400;letter-spacing:.02em;text-transform:none;color:var(--dm);margin-left:8px}
 .sw{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-.tb{border:1.5px solid var(--dt);background:transparent;padding:5px 10px;min-height:32px;font-size:12.5px;font-weight:500;border-radius:3px;color:var(--dt)}
+.tb{border:1.5px solid var(--dt);background:transparent;padding:5px 10px;min-height:40px;font-size:12.5px;font-weight:500;border-radius:3px;color:var(--dt)}
 .tb[aria-pressed=true]{background:var(--dt);color:var(--desk)}
 .tb[aria-pressed=true]::before{content:"\25A0\00a0"}
 .eps{display:flex;gap:3px;border-top:1.5px solid var(--dt);border-bottom:1px solid var(--rule);padding:4px 0}
-.ep{flex:1 1 0;min-width:0;border:0;background:transparent;padding:6px 4px;min-height:36px;font-size:12.5px;font-weight:500;text-align:left;border-bottom:3px solid transparent;color:var(--dt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ep{flex:1 1 0;min-width:0;border:0;background:transparent;padding:6px 4px;min-height:40px;font-size:12.5px;font-weight:500;text-align:left;border-bottom:3px solid transparent;color:var(--dt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ep b{font-weight:600;margin-right:5px;color:var(--dm)}
 .ep[aria-current=step]{border-bottom-color:var(--ink);font-weight:600;background:rgba(255,255,255,.35)}
 .legend{display:flex;flex-wrap:wrap;gap:4px 14px;padding:5px 0;font-size:12px;color:var(--dt)}
 .legend span{white-space:nowrap}
 .main{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:16px;margin-top:10px;align-items:start}
 .stage{min-width:0}
-.stage>h2{margin:0 0 6px;font:600 12px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--dm)}
-.stage>h2:focus{outline:none}
+.sthead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 6px}
+.sthead .tb{min-height:34px;padding:3px 10px}
+.sthead h2{margin:0;font:600 12px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--dm)}
+.sthead h2:focus{outline:none}
 .cols{display:grid;grid-template-columns:minmax(0,1fr) 258px;gap:14px;align-items:start}
 .cols.wide{grid-template-columns:minmax(0,1fr) 300px}
+.cols.sheet{grid-template-columns:minmax(0,1fr) 440px}
+.cols.text{grid-template-columns:352px minmax(0,1fr)}
+.cols.stand{grid-template-columns:minmax(0,1.75fr) minmax(0,1fr)}
+.cols.even{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pair .phone{width:100%;border-width:6px;border-radius:22px}
+.pair .who{font-size:12.5px}
 .note{font-size:12.5px;line-height:1.4;color:var(--dt);border-left:3px solid var(--dt);padding:2px 0 2px 10px}
 .note h3{margin:0 0 4px;font:600 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--dm)}
 .note p{margin:0 0 7px}
@@ -120,6 +129,8 @@ body.cap-on .cap{display:block}
 .bb.pri:hover{background:#3a332b}
 .bb[aria-pressed=true]{background:var(--ink);color:var(--paper)}
 .bb[aria-pressed=true]::before{content:"\25CF\00a0"}
+.bb .tiny{color:inherit;opacity:.85}
+.bb.sm .tiny{opacity:1}
 .bb[disabled]{opacity:1;color:var(--muted);border-style:dashed;background:transparent;cursor:not-allowed}
 .bb.you{border-color:var(--you);color:var(--you)}
 .bb.you.pri{background:var(--you);color:#fff}
@@ -147,10 +158,10 @@ body.cap-on .cap{display:block}
 .hh{display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid #C8C4BA;font:600 12.5px var(--sans);background:#F1F1EF}
 .hh em{font:400 11px var(--sans);color:#5B564B;margin-left:auto;font-style:normal}
 .hh .dot{width:9px;height:9px;border-radius:50%;background:#8B8F95}
-.hb{border:0;border-radius:8px;background:#E3E4E6;padding:7px 14px;min-height:38px;font:500 13px var(--sans);color:#1F2226}
+.hb{border:0;border-radius:8px;background:#E3E4E6;padding:7px 14px;min-height:44px;font:500 13px var(--sans);color:#1F2226}
 .hb:hover{background:#D6D8DB}
 .hb.pri{background:#3B3F45;color:#fff}
-.asst .tr{background:#EEF0F2;padding:14px;overflow:auto;height:calc(100vh - 285px);min-height:330px;max-height:640px;display:flex;flex-direction:column;gap:10px;font-family:var(--sans)}
+.asst .tr{background:#EEF0F2;padding:14px;overflow:auto;height:calc(100vh - 350px);min-height:320px;max-height:600px;display:flex;flex-direction:column;gap:10px;font-family:var(--sans)}
 .bub{max-width:72%;padding:9px 13px;border-radius:14px;font:400 14.5px/1.45 var(--sans)}
 .bub.u{align-self:flex-end;background:#D3D8DE}
 .bub.a{align-self:flex-start;background:#fff;border:1px solid #D5D8DC}
@@ -181,9 +192,9 @@ body.cap-on .cap{display:block}
 .pm{max-width:88%;padding:8px 11px;border-radius:14px;background:#E6E6E2;font-size:14px;line-height:1.4}
 .pm.me{align-self:flex-end;background:#D5E7D2}
 .pm .plain{display:block;font:500 12.5px/1.35 ui-monospace,'DejaVu Sans Mono',monospace;margin-top:4px;word-break:break-word}
-.pm .hb{margin-top:6px;font-size:12.5px;min-height:34px;padding:5px 12px}
+.pm .hb{display:block;margin-top:6px;font-size:12.5px;min-height:34px;padding:5px 12px}
 .voice{background:#F0EEE8;border:1px solid #9A9384}
-.voice .vt{padding:12px 16px;display:flex;flex-direction:column;gap:8px;min-height:300px;font-family:var(--sans)}
+.voice .vt{padding:12px 16px;display:flex;flex-direction:column;gap:8px;min-height:300px;max-height:calc(100vh - 385px);overflow:auto;font-family:var(--sans)}
 .vl{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:start;font-size:14.5px}
 .vl>b{font:600 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#4B4739;padding-top:3px}
 .vl .bow{margin:0}
@@ -204,10 +215,46 @@ body.cap-on .cap{display:block}
 .phone .bow{margin:8px}
 </style>
 <style>
-.drift{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border:2px solid var(--ink);border-left-width:8px;padding:6px 10px;margin:8px 0}
+.drift{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:2px solid var(--ink);border-left-width:8px;padding:6px 10px;margin:6px 0}
+.drift .bb{min-height:38px;padding:5px 10px;font-size:13px}
+.stops{display:flex;gap:6px;flex:1 1 320px}
+.stp{flex:1;font:600 11.5px/1.25 var(--serif);letter-spacing:.03em;color:var(--muted);border-top:7px solid transparent;padding-top:3px;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left}
+.stp::before{content:"";display:block}
+.stp.done{border-top-color:var(--ink);color:var(--tx)}
+.stp.cur{border-top:7px double var(--ink);color:var(--tx);border-top-width:9px}
+.stp.nxt{border-top:3px solid var(--rule)}
 .ticks{display:inline-flex;gap:4px}
 .tick{display:inline-block;width:14px;height:14px;border:2px solid var(--ink);background:transparent}
 .tick.on{background:var(--ink)}
+</style>
+<style>
+.fr{position:relative;display:block;padding:9px 10px;background:var(--paper);color:var(--tx);font:500 14.5px/1.3 var(--serif);min-height:46px}
+.fr .tiny{font-size:11.5px}
+.fr-OFFICIAL{border:6px double var(--ink)}
+.fr-VERIFIED{border:2px solid var(--guest);border-top:5px solid var(--ink);border-left:5px solid var(--ink);box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--guest)}
+.fr-UNVERIFIED{border:2px solid var(--guest);background:repeating-linear-gradient(0deg,rgba(31,107,76,.16) 0 2px,transparent 2px 5px),var(--paper);clip-path:polygon(0 0,100% 0,100% calc(100% - 7px),96% 100%,92% calc(100% - 5px),88% 100%,83% calc(100% - 6px),78% 100%,73% calc(100% - 4px),68% 100%,62% calc(100% - 6px),56% 100%,50% calc(100% - 5px),44% 100%,38% calc(100% - 7px),31% 100%,25% calc(100% - 4px),18% 100%,11% calc(100% - 6px),5% 100%,0 calc(100% - 3px))}
+.fr-LOCAL{border:1px solid var(--you);background:#fff;color:#8E3313}
+.fr-TEMPORARY{border:clamp(1px,calc(var(--d,3)*.3px),3px) solid rgba(22,18,14,.62);background:rgba(251,248,240,.5);color:var(--tx)}
+.fr-LIVE{background:var(--ink);color:var(--paper);border:2px solid var(--ink);padding-right:56px}
+.fr-LIVE::after{content:"LIVE";position:absolute;right:8px;top:8px;font:800 10px var(--sans);letter-spacing:.14em;border:1px solid var(--paper);padding:1px 5px}
+.fr-MODELED{border:2px solid var(--ink);background:repeating-linear-gradient(135deg,rgba(22,18,14,.2) 0 1px,transparent 1px 6px),var(--paper)}
+.fr-ARCHIVED{border:9px solid #DCD4BF;background:var(--paper);box-shadow:inset 0 0 0 1px var(--ink),0 0 0 1px var(--ink)}
+.hrow{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) 108px;gap:10px;align-items:center;margin:0 0 5px}
+.hmeta{font-size:12px;line-height:1.3;color:var(--dt)}
+.hmeta .lbl{color:var(--dm)}
+.bb.sm{font-size:12.5px;min-height:44px;padding:4px 8px;max-width:118px;line-height:1.2}
+.edge{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:0 0 8px;padding:0 0 6px;border-bottom:1px solid var(--rule)}
+.notches{display:inline-flex;gap:5px;align-items:center}
+.nt{display:inline-block;width:20px;height:8px;border:2px solid var(--ink);background:transparent}
+.nt.done{background:var(--ink)}
+.nt.cur{height:14px;border-width:3px}
+.mx{border-collapse:collapse;width:100%;font-size:13px;margin-top:8px}
+.mx th,.mx td{border-bottom:1px solid var(--rule);padding:3px 6px;text-align:left;vertical-align:top;font-weight:400}
+.mx thead th{font:600 11px var(--serif);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.mx tbody th{font-weight:600}
+.mx .cur{background:#EDE6D2;font-weight:600}
+.bow code{font:12px ui-monospace,'DejaVu Sans Mono',monospace}
+.bow.quiet .fr{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -222,7 +269,7 @@ const FX = window.BOW_FIXTURE, L = FX.league.season2627, R = FX.reality, W = FX.
 const $ = (s, r) => (r || document).querySelector(s);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const Mx = v => '$' + (+(v / 1e6).toFixed(3)) + 'M';
-const M1 = v => '$' + (v / 1e6).toFixed(1) + 'M';
+const M1 = v => '$' + (+(v / 1e6).toFixed(1)) + 'M';
 const M2 = v => '$' + (+(v / 1e6).toFixed(2)) + 'M';
 const USD = v => '$' + Math.round(v).toLocaleString('en-US');
 /* Values invented for this prototype are AUTHORED and say so; derived values are COMPUTED. */
@@ -238,6 +285,7 @@ const CAPS = { R: 'REAL CURRENT PRODUCT CAPABILITY', P: 'PROPOSED PLATFORM CAPAB
 const cap = (c, cost) => '<span class="cap" data-c="' + c + '">' + CAPS[c] + (cost ? ' · ' + cost : '') + '</span>';
 const B = (label, a, p, cls, x) => '<button type="button" class="' + (cls || 'bb') + '" data-a="' + a + '"' + (p != null ? ' data-p="' + esc(p) + '"' : '') + ' data-fk="' + a + '|' + (p == null ? '' : esc(p)) + '"' + (x ? ' ' + x : '') + '>' + label + '</button>';
 const TG = (label, a, p, on, cls) => B(label, a, p, cls || 'bb', 'aria-pressed="' + (on ? 'true' : 'false') + '"');
+const PV = { pay: 'RECORDED · World record, Boston · Year Two (fixture)', ros: 'AUTHORED · illustrative roster count', tax: 'COMPUTED · 1.5 × (payroll − the World’s line); World rule, authored' };
 const hash = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return ('0000000' + (h >>> 0).toString(16)).slice(-8); };
 
 /* ---------------------------------------------------------------- canonical state */
@@ -254,7 +302,7 @@ const S = {
   art: { mark: null, door: null, moment: null },
   msg: { later: false, open: null, see: false, kept: false },
   voice: { step: 0, miss: false, typed: false, opened: false },
-  offer: { id: 'owner', phase: 'arrival', taken: [false, false, false], carrier: 'text', second: false, ghost: false, redeemed: { owner: false, maya: false } },
+  offer: { id: 'owner', phase: 'arrival', taken: { owner: [false, false, false], maya: [false] }, carrier: 'text', second: false, ghost: false, redeemed: { owner: false, maya: false } },
   ring: { phase: 'ringing', hold: null, answer: null, hung: false, note: null },
   w: { payroll: W.payroll.v, roster: 15, guard: true, callup: 'open', owner: 'open', denver: 'open', tradeBy: null },
   orders: { away: false, fired: null, ratified: false, takeout: false },
@@ -269,7 +317,7 @@ function log(who, what, o) {
   S.log.unshift({ n: ++S.n, who: who, what: what, real: o.real || T().real, world: o.world !== undefined ? o.world : (S.seat ? T().world : 'no seat yet'), hist: o.hist || 'Reality (read only)', k: o.k || 'RECORDED', abs: !!o.abs, fork: !!o.fork });
 }
 function say(t) { const l = $('#live'); if (l) { say.n = (say.n || 0) + 1; l.textContent = t + (say.n % 2 ? '' : '​'); } }
-/* World rule (authored): flat 1.5x over the World's own $200M line — not the NBA's incremental tax. */
+/* World rule (authored): flat 1.5x over the World's own line — not the NBA's incremental tax. */
 const projTax = p => Math.max(0, p - W.taxLine.v) * 1.5;
 const ACTS = {}, SCENE = {};
 function act(kind, p) {
@@ -282,7 +330,7 @@ function act(kind, p) {
 /* ---------------------------------------------------------------- shared pieces */
 const bow = (kind, body, o) => {
   o = o || {};
-  return '<section class="bow ' + (o.cls || '') + '"' + (o.aria ? ' aria-label="' + esc(o.aria) + '"' : '') + '><header class="bowhd"><span class="wm">BOW</span><span class="bk">' + kind + '</span><span class="drawn">' + (o.drawn || 'drawn by BOW · the host cannot restyle this') + '</span></header><div class="bowbd">' + body + '</div>' + (o.cap || '') + '</section>';
+  return '<section class="bow ' + (o.cls || '') + '"' + (o.aria ? ' aria-label="' + esc(o.aria) + '"' : '') + '><header class="bowhd"><span class="wm">BOW</span><span class="bk">' + kind + '</span><span class="drawn">' + (o.drawn || (o.own ? 'BOW’s own room' : 'drawn by BOW inside a host')) + '</span></header><div class="bowbd">' + body + '</div>' + (o.cap || '') + '</section>';
 };
 const ln = (k, html) => '<div class="ln">' + KD(k) + '<span>' + html + '</span></div>';
 const sealedBox = t => '<div class="sealed"><b>Sealed.</b> ' + (t.charAt(0).toUpperCase() + t.slice(1)) + '</div>';
@@ -297,7 +345,7 @@ function sealedDoor(id) {
     (open ? ln(m.sealed.k, esc(m.sealed.v) + '<span class="prov">' + esc(provOf(m.sealed)) + '</span>') + '<p class="tiny">You asked as an observer: nobody sat in the seat. In the seat, this stays sealed until you act.</p>'
       : sealedBox('The outcome is not on the door. In the seat you find out by acting; as an observer you can ask.') + '<div class="row">' + B('Ask as an observer', 'observe', id) + '</div>') + '</div>';
 }
-ACTS.observe = id => { S.revealed[id] = true; const m = FX.moments.find(x => x.id === id); log('you', 'asked as an observer: ' + (m ? m.question : id), { hist: 'Reality (observer; no seat)', k: 'OBSERVED' }); say('Outcome revealed to you as an observer.'); };
+ACTS.observe = id => { S.revealed[id] = true; const m = FX.moments.find(x => x.id === id); log('you', 'asked as an observer: ' + (m ? m.question : id === 'cut-deadline' ? 'hindsight on the 5 Feb 2026 cut' : id), { hist: 'Reality (observer; no seat)', k: 'OBSERVED' }); say('Outcome revealed to you as an observer.'); };
 
 /* layered cut: state / known / sealed */
 function cutData(id) {
@@ -338,7 +386,7 @@ function cutView(id, rid) {
 /* ---------------------------------------------------------------- chrome */
 const SCENES = [['assistant', 'Assistant'], ['article', 'Article'], ['text', 'Text'], ['voice', 'Voice'], ['offer', 'Offer'], ['ring', 'Ring'], ['orders', 'Orders'], ['round', 'Round'], ['standing', 'Standing'], ['floor', 'Floor']];
 function header() {
-  return '<p class="status">PROTOTYPE · The Guest — BOW as the executable layer inside other rooms; the Browser appears only at thresholds · data: shared fixture, dated 29 Sep 2026, verify · every host surface here is fictional</p>' +
+  return '<p class="status">PROTOTYPE · The Guest — BOW as the executable layer inside other rooms; the Browser appears only at thresholds · data: shared fixture, dated 29 Sep 2026, verify · every host surface here is fictional' + (S.floor ? ' · MODELS UNAVAILABLE' : '') + '</p>' +
     '<div class="bar"><h1>The Guest <small>a person’s day, in borrowed rooms</small></h1><div class="sw">' +
     TG('How do we know?', 'know', null, S.know, 'tb') + TG('What’s real?', 'cap', null, S.cap, 'tb') + TG('Models unavailable', 'floor', null, S.floor, 'tb') + TG('Host or BOW?', 'panel', null, S.panel, 'tb') + '</div></div>' +
     '<nav class="eps" aria-label="Where you are today">' + SCENES.map((s, i) => '<button type="button" class="ep" data-a="goto" data-p="' + s[0] + '" data-fk="goto|' + s[0] + '" aria-label="' + (i + 1) + ' ' + s[1] + '"' + (S.scene === s[0] ? ' aria-current="step"' : '') + '><b>' + (i + 1) + '</b>' + s[1] + '</button>').join('') + '</nav>' +
@@ -348,8 +396,7 @@ function rail() {
   const w = S.w, wr = { open: 'open', declined: 'declined', accepted: 'accepted', 'declined-default': 'declined by default (no act)', 'accepted-order': 'accepted by standing order §2', 'declined-order': 'declined by standing order §1' };
   return '<h2>The record<small>Stage view of canonical state — the prototype’s, not BOW’s</small></h2>' +
     '<p class="clk">Real · ' + esc(T().real) + '<br>World · Boston · ' + esc(T().world) + (S.seat ? '' : ' <span class="tiny">(no seat yet)</span>') + '</p>' +
-    '<ol class="log" aria-label="Acts, newest first">' + (S.log.length ? S.log.slice(0, 40).map(e => '<li class="' + (e.fork ? 'fk ' : '') + (e.abs ? 'abs' : '') + '"><span class="n">' + e.n + '</span>' + KD(e.k) + '<b>' + esc(e.who) + '</b> ' + esc(e.what) + '<span class="m">' + esc(e.real) + ' · ' + esc(e.world) + ' · ' + esc(e.hist) + '</span></li>').join('') : '<li>Nothing yet. Every act you make lands here, with whose it is and in which history.</li>') + '</ol>' +
-    '<h3>Books · Boston · Year Two</h3><dl>' +
+    '<h3 style="margin-top:0">Books · Boston · Year Two</h3><dl>' +
     '<dt>Seat</dt><dd>' + (S.seat ? 'GM · this device' : 'none') + '</dd>' +
     '<dt>Payroll</dt><dd>' + KD('RECORDED') + M2(w.payroll) + '</dd>' +
     '<dt>Projected tax</dt><dd>' + KD('COMPUTED') + M2(projTax(w.payroll)) + '</dd>' +
@@ -357,12 +404,17 @@ function rail() {
     '<dt>Denver’s offer</dt><dd>' + esc(wr[w.denver] || w.denver) + '</dd>' +
     '<dt>Two-way call-up</dt><dd>' + esc(w.callup === 'lapsed' ? 'lapsed · no act' : w.callup) + '</dd>' +
     '<dt>Owner’s note</dt><dd>' + esc(w.owner === 'open' ? 'open' : w.owner === 'answered' ? 'answered' : 'no act') + '</dd></dl>' +
-    '<p class="tiny" style="margin-top:8px;color:var(--dm)">Payroll and roster are World record; the roster count and matters are illustrative (authored).</p>';
+    '<h3>Acts · newest first</h3><ol class="log" aria-label="Acts, newest first">' + (S.log.length ? S.log.slice(0, 40).map(e => '<li class="' + (e.fork ? 'fk ' : '') + (e.abs ? 'abs' : '') + '"><span class="n">' + e.n + '</span>' + KD(e.k) + '<b>' + esc(e.who) + '</b> ' + esc(e.what) + '<span class="m">' + esc(e.real) + ' · ' + esc(e.world) + ' · ' + esc(e.hist) + '</span></li>').join('') : '<li>Nothing yet. Every act you make lands here, with whose it is and in which history.</li>') + '</ol>' +
+    '<p class="tiny" style="margin-top:8px;color:var(--dm)">Payroll is the World record; the roster count and matters are illustrative (authored).</p>';
 }
 function panelHTML() {
   if (!S.panel) return '';
   return '<div style="position:fixed;z-index:30;top:118px;right:22px;width:min(600px,calc(100vw - 44px))" role="region" aria-label="What a host can do, and what only BOW can">' +
-    bow('what a host can · what only BOW can', '<div class="two"><div><h4 style="margin-top:0">In a host surface you can</h4><ul><li>read a claim</li><li>verify a sentence</li><li>open a cut</li><li>carry an offer</li></ul><p class="tiny">A host may quote, point and carry. It never signs, never holds your branch, never sees your seat.</p></div><div><h4 style="margin-top:0">Only in BOW</h4><ul><li>sign a seat</li><li>hold a branch</li><li>compare</li><li>run your Round</li><li>see the frame BOW alone draws</li></ul></div></div><div class="row">' + B('Close', 'panel', null, 'bb') + '</div>', { cap: cap('P', 'NO AI REQUIRED'), drawn: 'always reachable' }) + '</div>';
+    bow('what a host can · what only BOW can', '<div class="two"><div><h4 style="margin-top:0">In a host surface you can</h4><ul><li>read a claim</li><li>verify a sentence</li><li>open a cut</li><li>carry an offer</li></ul><p class="tiny">A host may quote, point and carry. It never signs, never holds your branch, never sees your seat.</p></div><div><h4 style="margin-top:0">Only in BOW</h4><ul><li>sign a seat</li><li>hold a branch</li><li>compare</li><li>run your Round</li><li>see the frame BOW alone draws</li></ul></div></div><p class="sm" style="margin:6px 0 0"><b>What is home?</b> There is no home page. When you return, BOW opens inside the first stop of a finite Round and says how long it is.</p><div class="row">' + B('Close', 'panel', null, 'bb') + '</div>', { cap: cap('P', 'NO AI REQUIRED'), drawn: 'always reachable' }) + '</div>';
+}
+function nextBtn() {
+  const i = SCENES.findIndex(s => s[0] === S.scene), nx = SCENES[i + 1];
+  return nx ? '<button type="button" class="tb" data-a="goto" data-p="' + nx[0] + '" data-fk="next|' + nx[0] + '">Next room · ' + nx[1] + ' →</button>' : '';
 }
 function render(top) {
   const ae = document.activeElement, fk = ae && ae.getAttribute ? ae.getAttribute('data-fk') : null;
@@ -370,7 +422,7 @@ function render(top) {
   document.body.classList.toggle('cap-on', S.cap);
   const fn = SCENE[S.scene];
   const title = { assistant: 'Inside an assistant', article: 'Inside an article', text: 'A text from a friend', voice: 'Spoken', offer: 'The Offer', ring: 'A ring · on call', orders: 'Standing orders', round: 'Return after 14 days · the Round', standing: 'Standing · what you hold', floor: 'Models unavailable' }[S.scene];
-  $('#app').innerHTML = header() + '<div class="main"><section class="stage" aria-label="' + esc(title) + '"><h2 id="st" tabindex="-1">' + esc(title) + '</h2>' + (fn ? fn() : '') + '</section><aside class="rail" aria-label="The record">' + rail() + '</aside></div>' + panelHTML();
+  $('#app').innerHTML = header() + '<main class="main"><section class="stage" aria-label="' + esc(title) + '"><div class="sthead"><h2 id="st" tabindex="-1">' + esc(title) + '</h2>' + nextBtn() + '</div>' + (fn ? fn() : '') + '</section><aside class="rail" aria-label="The record">' + rail() + '</aside></main>' + panelHTML();
   let el = fk && !top ? document.querySelector('[data-fk="' + fk.replace(/"/g, '\\"') + '"]') : null;
   if (!el && top) el = $('#st');
   if (el) el.focus({ preventScroll: true });
@@ -383,7 +435,10 @@ document.addEventListener('click', e => {
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.panel) { S.panel = false; render(); const t = document.querySelector('[data-fk="panel|"]'); if (t) t.focus(); } });
 
-ACTS.goto = id => { S.scene = id; say('Now in: ' + id); };
+ACTS.goto = id => {
+  S.scene = id; say('Now in: ' + id);
+  if (id === 'ring' && S.seat) ensureRing();
+};
 ACTS.know = () => { S.know = !S.know; say(S.know ? 'How we know: on' : 'How we know: off'); };
 ACTS.cap = () => { S.cap = !S.cap; say(S.cap ? 'What is real: on' : 'What is real: off'); };
 ACTS.panel = () => { S.panel = !S.panel; };
@@ -419,11 +474,12 @@ SCENE.assistant = function () {
       '<p class="sm">Rule that refused: an act needs your present signature in BOW’s own threshold. A host can carry an offer; it can never redeem or sign one. Nothing was signed and no act was recorded.</p>' +
       '<p class="sm">Reality cannot be acted on, so BOW hands you into your own copy, not into the real club’s chair.</p>' +
       '<div class="row">' + B('Hand me over to BOW', 'asst-handin') + '</div>', { cap: cap('P', 'NO AI REQUIRED') }) : '';
-    tr = '<div class="bub u"><small>You</small>Is Boston over the tax line?</div><div class="bub a"><small>Assistant</small>Boston is past the tax line this season, so expect a luxury tax bill.</div>' + card + cut + enter;
+    const forged = a.forged ? '<div class="bub a"><small>Assistant</small><span style="display:block;border:1px solid #9AA0A6;border-radius:10px;padding:6px 10px;background:#F4F6F8">Verified by BOW: “Boston is past the tax line.”</span></div><p class="hint" style="margin:0;font-size:12.5px;text-align:left">The assistant wrote that itself. It can copy the words, not the frame: no threshold rule, no cut corner, no wordmark. Only the frames above are BOW’s.</p>' : '';
+    tr = '<div class="bub u"><small>You</small>Is Boston over the tax line?</div><div class="bub a"><small>Assistant</small>Boston is past the tax line this season, so expect a luxury tax bill.</div>' + card + cut + enter + forged;
   }
   const wire = a.sent ? '<p><code>resolve("Boston tax line") → boston.reality</code></p><p>BOW’s closed, quotable text handed to the assistant:</p><p><code>c2 tax salary ' + USD(q.ts.v) + ' · c3 line ' + USD(q.tx.v) + ' · c4 ' + USD(q.d) + ' under · c1 cap payroll ≈ ' + M1(q.cp.v) + '</code></p><p>The assistant kept its own phrasing. <code>verify(sentence, c1–c4)</code> → <b>mismatch</b>. Claim set hash <code>' + q.hash + '</code> (computed here from the four values).</p><p>Deltas ship as claims so nobody subtracts by eye. BOW cannot force faithful quoting; it makes the truth cheap to quote and the deviation cheap to catch.</p>' : '<p>Nothing has crossed yet. When the assistant asks BOW, it gets back claims with ids, a state hash and closed text — never a style.</p>';
-  return '<div class="cols"><div class="host asst rel"><div class="hh"><span class="dot"></span>Assistant<em>fictional host · generic</em></div><div class="tr" id="tr">' + tr + '</div>' +
-    '<div class="comp"><input aria-label="Message to the assistant" readonly value="' + (a.sent ? '' : 'Is Boston over the tax line?') + '" placeholder="Message">' + (a.sent ? '<button type="button" class="hb" disabled>Sent</button>' : B('Send', 'send', null, 'hb pri')) + '</div></div>' +
+  return '<div class="cols"><div class="host asst rel"><div class="hh"><span class="dot"></span>Assistant<em>fictional host · generic</em></div>' + cap('S', 'assistants honouring the card at scale') + '<div class="tr" id="tr">' + tr + '</div>' +
+    (a.sent ? '<div class="stagectl" style="margin:0;padding:6px 12px;border-top:1px solid #C8C4BA;background:#F7F7F6">Stage test: ' + TG('Show a forged card', 'asst-forge', null, !!a.forged, 'tb') + '</div>' : '') + '<div class="comp"><input aria-label="Message to the assistant" readonly value="' + (a.sent ? '' : 'Is Boston over the tax line?') + '" placeholder="Message">' + (a.sent ? '<button type="button" class="hb" disabled>Sent</button>' : B('Send', 'send', null, 'hb pri')) + '</div></div>' +
     seam('the seam', wire + '<p class="tiny">SPECULATIVE at scale: whether assistants honour the card and quote it faithfully. MCP, MCP Apps and WebMCP exist outside BOW; no BOW server does.</p>') + '</div>';
 };
 ACTS.send = () => {
@@ -433,6 +489,7 @@ ACTS.send = () => {
   log('BOW', 'verified the assistant’s sentence against the record: mismatch (claim set ' + q.hash + ')', { hist: 'Reality (read only)', k: 'COMPUTED' });
   say('BOW drew a claim card. It flags the assistant’s sentence: does not match the record.');
 };
+ACTS['asst-forge'] = () => { S.asst.forged = !S.asst.forged; if (S.asst.forged) log('host', 'the assistant drew its own “verified” card: no BOW frame, so BOW did not draw it', { hist: 'Host transcript (not in any record)', k: 'GENERATED' }); };
 ACTS['asst-cut'] = () => { S.asst.cut = !S.asst.cut; if (S.asst.cut) log('you', 'opened the cut · ' + cutData(S.asst.cutAt).title, { hist: 'Reality (read only)', k: 'OBSERVED' }); };
 ACTS['asst-cutat'] = p => { S.asst.cutAt = p; log('you', 'moved the read-only cut to ' + cutData(p).title, { hist: 'Reality (read only)', k: 'OBSERVED' }); };
 ACTS['asst-enter'] = () => { S.asst.enter = true; log('BOW', 'refused “Enter as owner” from the assistant: signing happens in BOW. No act recorded.', { hist: 'nowhere (refused)', k: 'AUTHORED', abs: true }); say('Signing happens in BOW, not here. The assistant cannot sign.'); };
@@ -441,7 +498,7 @@ ACTS['asst-handin'] = () => { S.offer.carrier = 'assistant'; S.scene = 'offer'; 
 /* ================================================================ 2 · INSIDE AN ARTICLE */
 const tax395 = C0.state.find(s => /^Projected luxury tax/.test(s.what)).value;
 const tax17 = (function () { const m = FX.moments.find(x => x.id === 'm2026-02-05').sealed, mm = /to ≈\$(\d+(?:\.\d+)?)M/.exec(m.v); return { v: +mm[1] * 1e6, k: m.k, src: m.src, asOf: m.asOf, verify: true, note: 'read from the fixture sentence' }; })();
-const d22 = Cp(tax395.v - tax17.v, '≈ $39.5M − ≈ $17M (two reported figures, subtracted here)');
+const d22 = Cp(tax395.v - tax17.v, '≈ ' + M1(tax395.v) + ' − ≈ ' + M1(tax17.v) + ' (two reported figures, subtracted here)');
 const MARKS = {
   t395: {
     txt: '≈ ' + M1(tax395.v), f: tax395, label: 'Projected luxury tax before any deadline move · 5 Feb 2026',
@@ -480,7 +537,7 @@ const MARKS = {
   },
   d22: {
     txt: '≈ ' + M1(d22.v), f: d22, label: 'The fall in the projection',
-    doors: { because: [{ k: 'COMPUTED', t: '≈ $39.5M − ≈ $17M = ≈ ' + M1(d22.v) + '. Both inputs are reported, approximate figures.', f: d22 }] }
+    doors: { because: [{ k: 'COMPUTED', t: '≈ ' + M1(tax395.v) + ' − ≈ ' + M1(tax17.v) + ' = ≈ ' + M1(d22.v) + '. Both inputs are reported, approximate figures.', f: d22 }] }
   },
   f12: {
     txt: '$12M', none: true, label: 'A figure the paper prints about a season not yet played',
@@ -490,36 +547,38 @@ const MARKS = {
 const DOORS = [['because', 'Because'], ['meanwhile', 'Meanwhile'], ['who', 'Who'], ['yes', 'Who says yes'], ['diff', 'What’s different']];
 function markSheet() {
   const id = S.art.mark, m = id && MARKS[id];
-  if (!m) return bow('true marks', '<p>Every number underlined in the paragraph is a mark BOW can check against the record. Press one.</p><p class="sm">A solid hairline: the record backs it. A dashed hairline: BOW holds no record for it.</p><p class="sm">The paper draws its own page. BOW draws only this frame and the marks’ provenance.</p>', { cap: cap('P', 'NO AI REQUIRED · a small model only to phrase third-party strata') });
+  if (!m) return bow('true marks', '<p>Every number underlined in the paragraph is a mark BOW can check against the record. Press one.</p><p class="sm">A solid hairline: the record backs it. A dashed hairline: BOW holds no record for it.</p><p class="sm">The paper draws its own page. BOW draws only this frame and each mark’s provenance.</p>', { cap: cap('P', 'NO AI REQUIRED · a small model only to phrase third-party strata') });
   if (m.none) return bow('no record',
-    '<h3 style="margin-bottom:8px"><span class="kv" data-k="UNKNOWN">' + m.txt + '</span></h3><p class="lbl">' + esc(m.label) + '</p>' +
+    '<p class="lbl" style="margin:0 0 4px">' + esc(m.label) + '</p><h3 style="margin-bottom:8px"><span class="kv" data-k="UNKNOWN">' + m.txt + '</span></h3>' +
     '<div class="hole"><b>No record.</b> This is the Ledger’s own projection. BOW holds nothing to back a bill for a season that has not been played.</div>' +
     sealedBox('A forecast is not a record. You find out by living it.') +
     '<p class="sm">What the record does hold today is a fact about now, not a forecast: tax salary ' + fv(R.taxSalary, USD(R.taxSalary.v)) + ' against a tax line of ' + fv(L.tax, Mx(L.tax.v)) + '.</p>' +
     '<p class="tiny">Doors that exist for this mark: none.</p>', { cap: cap('P', 'NO AI REQUIRED') });
+  if (S.art.moment) {
+    const back = DOORS.find(d => d[0] === S.art.door);
+    return bow('a door · focused', sealedDoor(S.art.moment) + '<div class="row" style="margin-top:8px">' + B('Back to ' + esc(back ? back[1] : 'the doors'), 'moment-back', null, 'bb') + '</div>', { cap: cap('P', 'NO AI REQUIRED') });
+  }
   const doorKeys = DOORS.filter(d => m.doors[d[0]]);
   const open = S.art.door && m.doors[S.art.door];
   let list = '';
-  if (open) {
-    list = '<h4>' + esc(DOORS.find(d => d[0] === S.art.door)[1]) + ' · ' + open.length + '</h4>' + open.map(it => it.k === 'UNKNOWN' ? '<div class="hole"><b>' + esc(it.t) + '</b> — no record. <span class="tiny">' + esc(it.f.note || '') + '</span></div>' : ln(it.k, esc(it.t) + (it.f ? '<span class="prov">' + esc(provOf(it.f)) + '</span>' : '') + (it.door ? '<br>' + B('Open the door · ' + esc(FX.moments.find(x => x.id === it.door).question), 'moment', it.door, 'bb') : ''))).join('') +
-      (S.art.moment && open.some(it => it.door === S.art.moment) ? sealedDoor(S.art.moment) : '');
-  }
+  if (open) list = '<h4>' + esc(DOORS.find(d => d[0] === S.art.door)[1]) + ' · ' + open.length + '</h4>' + open.map(it => it.k === 'UNKNOWN' ? '<div class="hole"><b>' + esc(it.t) + '</b> — no record. <span class="tiny">' + esc(it.f.note || '') + '</span></div>' : ln(it.k, esc(it.t) + (it.f ? '<span class="prov">' + esc(provOf(it.f)) + '</span>' : '') + (it.door ? '<br>' + B('Open the door · ' + esc(FX.moments.find(x => x.id === it.door).question), 'moment', it.door, 'bb sm', 'style="max-width:none"') : ''))).join('');
   return bow('true mark · provenance',
-    '<p class="lbl" style="margin:0 0 4px">' + esc(m.label) + '</p><h3>' + fv(m.f, m.txt, 'big') + '</h3>' +
-    '<p class="sm"><b>' + m.f.k + '</b> · ' + esc(m.f.src || 'no source') + (m.f.asOf ? ' · as of ' + esc(m.f.asOf) : '') + (m.f.verify ? ' · <b>verify</b>' : '') + (m.f.note ? '<br>' + esc(m.f.note) : '') + '</p>' +
-    '<h4>Doors that exist · before you open any</h4><div class="row">' + doorKeys.map(d => TG(d[1] + ' <b>' + m.doors[d[0]].length + '</b>', 'door', d[0], S.art.door === d[0])).join('') + '</div>' + list,
+    '<p class="lbl" style="margin:0 0 3px">' + esc(m.label) + '</p><div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap"><span style="font:600 22px var(--serif)">' + kv(m.f.k, m.txt) + '</span><span class="sm"><b>' + m.f.k + '</b> · ' + esc(m.f.src || 'no source') + (m.f.asOf ? ' · as of ' + esc(m.f.asOf) : '') + (m.f.verify ? ' · <b>verify</b>' : '') + '</span></div>' + (m.f.note ? '<p class="tiny" style="margin:2px 0 0">' + esc(m.f.note) + '</p>' : '') +
+    '<h4>Doors that exist · before you open any</h4><div class="row">' + doorKeys.map(d => TG(d[1] + ' <b>' + m.doors[d[0]].length + '</b>', 'door', d[0], S.art.door === d[0], 'bb sm" style="max-width:none')).join('') + '</div>' + list,
     { cap: cap('P', 'NO AI REQUIRED · counts come from the record') });
 }
 SCENE.article = function () {
   const mk = (id, t) => '<button type="button" class="mark' + (MARKS[id].none ? ' none' : '') + '" data-a="mark" data-p="' + id + '" data-fk="mark|' + id + '" aria-pressed="' + (S.art.mark === id) + '">' + t + '</button>';
-  return '<div class="cols wide"><div class="host paper rel"><div class="mast"><b>The Harbour Ledger</b><small>a fictional paper · text authored for this prototype</small></div><div class="art">' +
+  return '<div class="cols sheet"><div class="host paper rel"><div class="mast"><b>The Harbour Ledger</b><small>a fictional paper · text authored for this prototype</small></div><div class="art">' +
     '<div class="kick">Sport · Business</div><h3>The February squeeze: how Boston’s tax bill got cut down</h3><div class="by">The Ledger desk · Tue 29 Sep 2026</div>' +
     '<p>On deadline day last season, 5 February 2026, Boston’s projected luxury tax stood at ' + mk('t395', MARKS.t395.txt) + '. Before the window closed, Anfernee Simons went to Chicago for Nikola Vučević, and the projection fell to ' + mk('t17', MARKS.t17.txt) + ' — a cut of ' + mk('d22', MARKS.d22.txt) + '. The Ledger’s own model puts this season’s bill near ' + mk('f12', MARKS.f12.txt) + '.</p>' +
+    '<p>The squeeze began the summer before. In late June 2025 Boston sent Jrue Holiday to Portland for Anfernee Simons and two second-round picks, and Kristaps Porziņģis to Atlanta in a three-team deal.</p>' +
     '</div>' + cap('P', 'NO AI REQUIRED') + '</div>' + markSheet() + '</div>' +
     '<div class="stagectl">Underlined numbers are BOW’s marks (a hairline). Press one; nothing else on the page changes.</div>';
 };
 ACTS.mark = id => { S.art.mark = id; S.art.door = null; S.art.moment = null; log('you', 'pressed the mark ' + MARKS[id].txt + ' in The Harbour Ledger', { hist: 'Reality (read only)', k: MARKS[id].none ? 'UNKNOWN' : MARKS[id].f.k }); say(MARKS[id].none ? 'No record for that figure.' : 'Provenance for ' + MARKS[id].txt); };
 ACTS.door = d => { S.art.door = S.art.door === d ? null : d; S.art.moment = null; if (S.art.door) log('you', 'opened the door ' + d.toUpperCase() + ' on ' + MARKS[S.art.mark].txt + ' (traced to recorded causes)', { hist: 'Reality (read only)', k: 'OBSERVED' }); };
+ACTS['moment-back'] = () => { S.art.moment = null; };
 ACTS.moment = id => { S.art.moment = id; log('you', 'opened a door named by its question: ' + FX.moments.find(x => x.id === id).question, { hist: 'Reality (read only)', k: 'OBSERVED' }); };
 
 /* ================================================================ 3 · A TEXT FROM A FRIEND */
@@ -527,38 +586,38 @@ function drift() { return S.msg.later ? 3 : 0; }
 function driftStripe() {
   const n = drift();
   if (!n) return '<div class="drift"><span>Reality recorded nothing since Maya looked, six minutes ago.</span></div>';
-  return '<div class="drift"><span class="ticks" aria-hidden="true"><i class="tick"></i><i class="tick"></i><i class="tick on"></i></span><span><b>Reality recorded 3 things since Maya looked; 1 touches this.</b></span>' + TG('See the 3', 'msg-see', null, S.msg.see) + '</div>' +
-    (S.msg.see ? '<div class="sm" style="margin-top:6px">' + [['A roster transaction', false], ['A schedule item', false], ['A contract report', true]].map(x => '<div class="hole" style="' + (x[1] ? 'border-left:6px solid var(--ink)' : '') + '"><b>' + x[0] + '</b>' + (x[1] ? ' — <b>touches this</b>: it moves the payroll figures Maya saw' : '') + ' <span class="tiny">[Reality feed: none exists yet — staged; contents deliberately not invented]</span></div>').join('') + '</div>' : '');
+  return '<div class="drift"><span class="ticks" aria-hidden="true"><i class="tick"></i><i class="tick"></i><i class="tick on"></i></span><span style="flex:1 1 180px"><b>Reality recorded 3 things since Maya looked; 1 touches this.</b></span>' + TG('See the 3', 'msg-see', null, S.msg.see) + '</div>' +
+    (S.msg.see ? '<div class="sm" style="margin-top:4px">' + [['A roster transaction', false], ['A schedule item', false], ['A contract report', true]].map(x => '<div class="hole" style="padding:3px 8px;' + (x[1] ? 'border-left:6px solid var(--ink)' : '') + '"><b>' + x[0] + '</b>' + (x[1] ? ' — <b>touches this</b> (the payroll Maya saw)' : '') + ' <span class="tiny">[Reality feed: none exists yet; contents not invented]</span></div>').join('') + '</div>' : '');
 }
 function seenNow(withNow) {
-  const num = () => '<p style="margin:0 0 3px">Cap payroll ' + fv(R.capPayroll, '≈ ' + M1(R.capPayroll.v)) + '</p><p style="margin:0">Tax salary ' + fv(R.taxSalary, USD(R.taxSalary.v)) + '</p>';
-  return '<div class="two" style="margin-top:8px"><div class="rec"><p class="recl">Maya saw · 29 Sep 2026, 14:03</p>' + num() + '</div>' +
-    (withNow ? (S.msg.later ? '<div class="hole" style="margin:0;padding:10px 12px"><p class="recl" style="margin:0 0 4px">Now · 20 Oct 2026</p><b>No number here.</b> <span class="tiny">A live Reality feed would answer beside Maya’s. This prototype has only the dated 29 Sep fixture; it will not pretend.</span></div>' : '<div class="rec"><p class="recl">Now · 29 Sep 2026, 14:09</p>' + num() + '<p class="tiny" style="margin:4px 0 0">Nothing recorded since.</p></div>') : '') + '</div>';
+  const num = () => '<p style="margin:0 0 2px">Cap payroll ' + fv(R.capPayroll, '≈ ' + M1(R.capPayroll.v)) + '</p><p style="margin:0">Tax salary ' + fv(R.taxSalary, USD(R.taxSalary.v)) + '</p>';
+  return '<div class="two" style="margin-top:6px"><div class="rec"><p class="recl">Maya saw · 29 Sep 2026, 14:03</p>' + num() + '</div>' +
+    (withNow ? (S.msg.later ? '<div class="hole" style="margin:0;padding:8px 10px"><p class="recl" style="margin:0 0 3px">Now · 20 Oct 2026</p><b>No number here.</b> <span class="tiny">A live Reality feed would answer beside Maya’s. This prototype holds only the dated 29 Sep fixture and will not pretend.</span></div>' : '<div class="rec"><p class="recl">Now · 29 Sep 2026, 14:09</p>' + num() + '<p class="tiny" style="margin:3px 0 0">Nothing recorded since.</p></div>') : '') + '</div>';
 }
 function arrival() {
-  const o = S.msg.open, later = S.msg.later;
-  if (!o) return bow('arrival note', '<p>A Reading arrives here first, kind first. Opening never acts.</p><p class="sm">Open one of Maya’s messages. Three weeks on, it will say what changed since she looked.</p>', { cap: cap('P', 'NO AI REQUIRED') });
-  if (o === 'follow') return bow('arrival note · opening never acts',
-    '<p class="lbl" style="margin:0">Kind</p><h3 style="font-size:26px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px">Following</h3>' +
-    '<p style="font-size:17px;margin:0 0 6px"><b>Boston Celtics · Reality</b></p>' +
-    '<p class="sm">From <b>Maya</b> (a fictional friend) · she saw it 29 Sep 2026, 14:03 · check words <b>maple-otter</b></p>' +
-    '<p class="sm"><b>What this is.</b> A Follow keeps you beside Reality’s head and carries when Maya looked. You can ' + esc(R.youCan.join(', ')) + '. You cannot ' + esc(R.youCannot.join(', ')) + '.</p>' +
-    driftStripe() + seenNow(true) + '<div class="row" style="margin-top:10px">' + TG('Keep following', 'msg-keep', null, S.msg.kept, 'bb pri') + '</div>', { cap: cap('P', 'NO AI REQUIRED · the Reality feed does not exist yet') });
-  return bow('arrival note · opening never acts',
-    '<p class="lbl" style="margin:0">Kind</p><h3 style="font-size:26px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px">Snapshot</h3>' +
-    '<p style="font-size:17px;margin:0 0 6px"><b>Boston Celtics · as Reality stood 29 Sep 2026, 14:03</b></p>' +
-    '<p class="sm">From <b>Maya</b> (a fictional friend) · check words <b>maple-otter</b></p><p class="sm"><b>What this is.</b> A Snapshot opens exactly as it stood, dated. It never turns into “now” by itself.</p>' +
-    '<p><span class="stamp">As it stood · 29 Sep 2026, 14:03</span></p>' + seenNow(false) + '<div style="margin-top:8px">' + driftStripe() + '</div>', { cap: cap('P', 'NO AI REQUIRED') });
+  const o = S.msg.open;
+  if (!o) return '<aside class="note"><h3>Stage note · nothing opened yet</h3><p>BOW has drawn nothing here. A Reading opens as an arrival note, kind first, and opening never acts.</p><p>Open one of Maya’s messages. Three weeks on, it will say what Reality recorded since she looked.</p></aside>';
+  if (o === 'follow') return bow('arrival note',
+    '<div class="two"><div><p class="lbl" style="margin:0">Kind</p><h3 style="font-size:26px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:0">Following</h3>' +
+    '<p style="font-size:17px;margin:0 0 4px"><b>Boston Celtics · Reality</b></p>' +
+    '<p class="sm" style="margin:0 0 4px">From <b>Maya</b> (a fictional friend) · she saw it 29 Sep 2026, 14:03 · check words <b>maple-otter</b></p>' +
+    '<p class="sm" style="margin:0 0 4px"><b>What this is.</b> A Follow keeps you beside Reality’s head and carries when Maya looked. You can ' + esc(R.youCan.join(', ')) + '. You cannot ' + esc(R.youCannot.join(', ')) + '. <b>Opening never acts.</b></p></div>' +
+    '<div>' + driftStripe() + '</div></div>' + seenNow(true) + '<div class="row" style="margin-top:8px">' + TG('Keep following', 'msg-keep', null, S.msg.kept, 'bb pri') + '</div>', { cap: cap('P', 'NO AI REQUIRED · the Reality feed does not exist yet') });
+  return bow('arrival note',
+    '<div class="two"><div><p class="lbl" style="margin:0">Kind</p><h3 style="font-size:26px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:0">Snapshot</h3>' +
+    '<p style="font-size:17px;margin:0 0 4px"><b>Boston Celtics · as Reality stood 29 Sep 2026, 14:03</b></p>' +
+    '<p class="sm" style="margin:0 0 4px">From <b>Maya</b> (a fictional friend) · check words <b>maple-otter</b></p><p class="sm" style="margin:0 0 4px"><b>What this is.</b> A Snapshot opens exactly as it stood, dated. It never turns into “now” by itself. <b>Opening never acts.</b></p>' +
+    '<p style="margin:0"><span class="stamp">As it stood · 29 Sep 2026, 14:03</span></p></div><div>' + driftStripe() + '</div></div>' + seenNow(false), { cap: cap('P', 'NO AI REQUIRED') });
 }
 SCENE.text = function () {
   const later = S.msg.later;
-  return '<div class="cols wide"><div><div class="phonewrap"><div class="phone rel"><div class="sb"><span>' + (later ? '09:12' : '14:09') + '</span><span>' + (later ? 'Tue 20 Oct (simulated)' : 'Tue 29 Sep') + '</span></div><div class="who">Maya<small>fictional friend · generic messages</small></div><div class="msgs">' +
+  return '<div class="cols text"><div><div class="phonewrap"><div class="phone rel"><div class="sb"><span>' + (later ? '09:12' : '14:09') + '</span><span>' + (later ? 'Tue 20 Oct (simulated)' : 'Tue 29 Sep') + '</span></div><div class="who">Maya<small>fictional friend · generic messages</small></div><div class="msgs">' +
     '<div class="pm">You need to see this before you argue about their payroll.</div>' +
-    '<div class="pm">Follow · Boston Celtics · Maya saw it 29 Sep 2026, 14:03 · maple-otter<span class="plain">as plain text; it survives being pasted</span>' + B('Open the Follow', 'msg-open', 'follow', 'hb pri') + '</div>' +
+    '<div class="pm">Follow · Boston Celtics · Maya saw it 29 Sep 2026, 14:03 · maple-otter<span class="plain">plain text; it survives being pasted</span>' + B('Open the Follow', 'msg-open', 'follow', 'hb pri') + '</div>' +
     '<div class="pm">and this is exactly how it looked when I did</div>' +
-    '<div class="pm">Snapshot · Boston Celtics · as Reality stood 29 Sep 2026, 14:03 · maple-otter' + B('Open the Snapshot', 'msg-open', 'snap', 'hb pri') + '</div></div></div></div>' +
+    '<div class="pm">Snapshot · Boston Celtics · as Reality stood 29 Sep 2026, 14:03 · maple-otter' + B('Open the Snapshot', 'msg-open', 'snap', 'hb pri') + '</div></div>' + cap('P', 'a host quoting a Reading') + '</div></div>' +
     '<div class="stagectl" style="justify-content:center">Stage clock (not BOW): ' + TG('Same day', 'msg-later', '0', !later, 'tb') + TG('Three weeks later (simulated)', 'msg-later', '1', later, 'tb') + '</div></div>' +
-    '<div>' + arrival() + '<div style="margin-top:12px">' + seam('what the message holds', '<p>Only a sentence. It has no authority and no state: the cut, the seen-at and the check words live in BOW.</p><p>Pasted anywhere, it degrades to its own sentence. A screenshot is a pointer, not proof: type the words and the record answers.</p>') + '</div></div></div>';
+    '<div>' + arrival() + '<div style="margin-top:10px">' + seam('what the message holds', '<p>Only a sentence: no authority, no state. The cut, the seen-at and the check words live in BOW. Pasted anywhere it degrades to its own sentence; a screenshot is a pointer, not proof.</p>') + '</div></div></div>';
 };
 ACTS['msg-later'] = p => { S.msg.later = p === '1'; S.msg.see = false; say(S.msg.later ? 'Simulated: three weeks later.' : 'Same day.'); };
 ACTS['msg-open'] = p => {
@@ -570,6 +629,466 @@ ACTS['msg-open'] = p => {
 ACTS['msg-see'] = () => { S.msg.see = !S.msg.see; };
 ACTS['msg-keep'] = () => { S.msg.kept = !S.msg.kept; log('you', S.msg.kept ? 'kept following Boston Celtics · Reality (Maya’s Follow)' : 'stopped following Boston Celtics · Reality', { real: S.msg.later ? 'Tue 20 Oct 2026, 09:12 (simulated)' : undefined, hist: 'Your standing (private)', k: 'RECORDED' }); say(S.msg.kept ? 'Following kept.' : 'Following ended.'); };
 /*@@SCENES2@@*/
+
+/* ================================================================ 4 · SPOKEN */
+const CWS = { 'm2017-06-17': 'harbor, linen', 'm2025-05-12': 'birch, ember', 'm2025-06': 'reed, copper', 'm2026-02-05': 'lantern, moss', 'm2026-03-06': 'tide, cinder' };
+const DANA = 'm2017-06-17';
+function momentParts(id) { const m = FX.moments.find(x => x.id === id), p = m.question.split(' · '); return { m: m, date: p[0], q: p.slice(1).join(' · ') }; }
+function readBack(id) {
+  const mp = momentParts(id), nb = FX.forks.filter(f => f.diverged === mp.date).length;
+  return { kind: 'Recorded', place: 'Boston', q: mp.q, when: mp.date + ', reported', branches: nb };
+}
+SCENE.voice = function () {
+  const v = S.voice, pick = v.pick, rb = pick && readBack(pick), say1 = { desc: 'Boston, the Philadelphia call, June 2017.', exact: 'Exact.', open: 'Open it.', 'w-ok': 'Harbor, linen.', 'w-bad': 'Harbor, lemon.' };
+  const yl = t => '<div class="vl"><b>You, spoken</b><div>“' + esc(t) + '”</div></div>';
+  const bl = html => '<div class="vl"><b>BOW, read back</b><div>' + html + '</div></div>';
+  let out = '<div class="vl"><b>Dana, on the call</b><div>“Boston, the Philadelphia call, June 2017. Check words: harbor, linen.”</div></div>';
+  (v.said || []).forEach(x => {
+    if (x.t === 'desc') out += yl(say1.desc) + bl(bow('read-back · fixed order', '<p style="margin:0" class="lbl">Fixed order: kind · place · question · when · check words</p><p style="margin:2px 0 4px;font-size:16.5px">Recorded. ' + esc(rb.place) + '. <b>' + esc(rb.q) + '.</b> ' + esc(rb.when) + '. ' + (rb.branches ? rb.branches + ' public branch starts here' : 'No public branch starts here') + '.</p><p class="sm" style="margin:0"><b>Check words:</b> not read yet. Say <b>“exact”</b> to give them. Nothing has opened.</p>', { cap: cap('P', 'NO AI REQUIRED') }));
+    if (x.t === 'pick') out += '<div class="vl"><b>You, typed</b><div>Chose from the list: ' + esc(momentParts(x.id).q) + '</div></div>' + bl(bow('read-back · fixed order', '<p style="margin:2px 0 4px;font-size:16.5px">Recorded. Boston. <b>' + esc(readBack(x.id).q) + '.</b> ' + esc(readBack(x.id).when) + '. ' + (readBack(x.id).branches ? readBack(x.id).branches + ' public branch starts here' : 'No public branch starts here') + '.</p><p class="sm" style="margin:0">Say <b>“exact”</b> for the check words. Nothing has opened.</p>'));
+    if (x.t === 'open') out += yl(say1.open) + bl('<p style="margin:0"><b>Not yet.</b> <span class="sm">Rule: anything with stakes is read back and checked before it opens. Say “exact.”</span></p>');
+    if (x.t === 'exact') out += yl(say1.exact) + bl('<p style="margin:0">Say the two check words you were given.</p>');
+    if (x.t === 'w-bad') out += yl(say1['w-bad']) + bl('<p style="margin:0"><b>Did you mean “' + esc(CWS[pick]) + '”?</b> <span class="sm">Nothing opened. A near-miss never lands on a neighbour; it asks.</span></p>');
+    if (x.t === 'w-ok') out += yl(say1['w-ok']) + bl('<p style="margin:0">Matched. <b>Opening on your screen.</b></p>');
+    if (x.t === 'w-other') out += yl(say1['w-ok']) + bl('<p style="margin:0"><b>Those words belong to another reading.</b> <span class="sm">They open the 17 Jun 2017 door, not this one. Nothing opened. Did you mean that one?</span></p>');
+    if (x.t === 'yes') out += yl('Yes, that one.') + bl('<p style="margin:0">Matched. <b>Opening the 17 Jun 2017 door on your screen.</b></p>');
+  });
+  let say = '';
+  if (!pick) {
+    say = S.floor ? '<p class="sm" style="margin:0 0 6px"><b>Models unavailable.</b> Loose speech is not matched right now, so the ask becomes a typed choice. Nothing is waiting or spinning.</p><div class="row">' + FX.moments.map(m => B(esc(momentParts(m.id).q), 'voice-say', 'pick:' + m.id, 'hb')).join('') + '</div>'
+      : '<div class="row">' + B('Say: “Boston, the Philadelphia call, June 2017”', 'voice-say', 'desc', 'hb pri') + '</div><p class="tiny" style="margin:6px 0 0">Matching loose speech is a SMALL / CHEAP MODEL job in a real product. Here it is an authored stand-in; no model ran.</p>';
+  } else if (!v.exactSaid) {
+    say = '<div class="row">' + B('Say: “Exact”', 'voice-say', 'exact', 'hb pri') + B('Say: “Open it”', 'voice-say', 'open', 'hb') + '</div>';
+  } else if (!v.opened) {
+    const last = v.said[v.said.length - 1];
+    say = '<div class="row">' + B('Say: “Harbor, linen”', 'voice-say', 'w-ok', 'hb pri') + B('Say: “Harbor, lemon”', 'voice-say', 'w-bad', 'hb') + (last && last.t === 'w-other' ? B('Say: “Yes, that one”', 'voice-say', 'yes', 'hb') : '') + '</div>';
+  }
+  let door = '';
+  if (v.opened) {
+    const nb = FX.forks.filter(f => f.diverged === momentParts(pick).date);
+    door = '<div style="margin-top:10px">' + bow('opened on your screen · a door',
+      '<p class="sm" style="margin:0 0 6px">The hand-off carries the reading, not a seat. Opening never acts.</p>' + sealedDoor(pick) +
+      (nb.length ? '<h4>Branches that start here</h4>' + nb.map(f => ln('AUTHORED', '<b>' + esc(f.name) + '</b> · by ' + esc(f.author) + ' · ' + esc(f.clock.label))).join('') : '') +
+      '<p class="tiny">Taking the seat, holding a branch and comparing: only in BOW.</p>', { own: 1, cap: cap('P', 'NO AI REQUIRED') }) + '</div>';
+  }
+  const spk = '<div class="speaker"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="3" y="3" width="28" height="28" rx="14" fill="none" stroke="#3A362D" stroke-width="2"/><rect x="11" y="9" width="12" height="16" rx="6" fill="#3A362D"/></svg><b style="font:600 13px var(--sans)">Voice · a fictional speaker</b><span style="margin-left:auto;font-size:11px;color:#4B4739">only a transcript is shown</span></div>';
+  return '<div class="cols sheet"><div class="host voice rel">' + spk + '<div class="vt" id="tr">' + out + '</div><div style="padding:10px 16px;border-top:1px solid #B0AA9A;background:#E9E6DD">' + say + '</div>' + cap('P', 'read-back NO AI · loose speech SMALL / CHEAP MODEL') + '</div>' +
+    '<div>' + (door || seam('spoken addresses', '<p>A Reading is a sentence in fixed order, so it survives voice: <b>kind, place, question, when, check words</b>. Names are unique only inside one system; the check words bind the sentence to its id.</p><p>Two words is about 16 bits: it catches accident, not attack. Read aloud, a dropped or swapped word is audible (two-syllable and three-syllable words alternate).</p><p><span class="ks" data-k="OBSERVED"></span>REAL seed: the classroom join code drops I, O, S, Z, 0, 1, 5, 2 so a code read across a room cannot be misheard. Words and read-back are PROPOSED.</p>')) + '</div></div>';
+};
+ACTS['voice-say'] = p => {
+  const v = S.voice; v.said = v.said || [];
+  const hist = 'Voice transcript (not a record)';
+  if (p === 'desc') { v.pick = DANA; v.said.push({ t: 'desc' }); log('you', 'said “Boston, the Philadelphia call, June 2017” (loose speech, matched by an authored stand-in)', { hist: hist, k: 'AUTHORED' }); log('BOW', 'read back in fixed order: Recorded · Boston · Philadelphia calls about the No. 1 pick · 17 Jun 2017 · 1 public branch', { hist: 'Reality (read only)', k: 'RECORDED' }); say('BOW read the reading back. Say exact for the check words.'); }
+  else if (p.indexOf('pick:') === 0) { v.pick = p.slice(5); v.said.push({ t: 'pick', id: v.pick }); v.typed = true; log('you', 'chose from typed choices: ' + momentParts(v.pick).q + ' (models unavailable)', { hist: hist, k: 'AUTHORED' }); say('Typed choice read back. Say exact for the check words.'); }
+  else if (p === 'exact') { v.exactSaid = true; v.said.push({ t: 'exact' }); log('you', 'said “exact”; BOW asked for the check words', { hist: hist, k: 'AUTHORED' }); }
+  else if (p === 'open') { v.said.push({ t: 'open' }); log('BOW', 'refused “open it”: anything with stakes is read back and checked first. Nothing opened.', { hist: 'nowhere (refused)', k: 'AUTHORED', abs: true }); say('Not yet. Say exact.'); }
+  else if (p === 'w-bad') { v.said.push({ t: 'w-bad' }); log('BOW', 'heard “harbor, lemon”: asked “did you mean harbor, linen?” Nothing opened.', { hist: 'nowhere (near-miss, no landing)', k: 'AUTHORED', abs: true }); say('Did you mean harbor, linen? Nothing opened.'); }
+  else if (p === 'yes') { v.pick = DANA; v.said.push({ t: 'yes' }); v.opened = true; log('you', 'said “yes, that one”; the door opened on screen: ' + FX.moments[0].question, { hist: 'Reality (read only)', k: 'OBSERVED' }); say('Opened the 17 Jun 2017 door.'); }
+  else if (p === 'w-ok') {
+    if (v.pick !== DANA) { v.said.push({ t: 'w-other' }); log('BOW', 'those words belong to another reading; nothing opened', { hist: 'nowhere (refused)', k: 'AUTHORED', abs: true }); return; }
+    v.said.push({ t: 'w-ok' }); v.opened = true; log('you', 'said the check words; the door opened on screen: ' + FX.moments[0].question, { hist: 'Reality (read only)', k: 'OBSERVED' }); say('Matched. Door opened on your screen.');
+  }
+};
+
+/* ================================================================ 5 · THE OFFER */
+const OFFERS = {
+  owner: {
+    from: 'the owner', fromLong: 'The owner of Boston · Year Two — an authenticated account, not a string', seat: W.seat.name, world: W.name, until: 'Fri 2 Oct 2026', days: 3, phrase: 'cedar · quill · fern',
+    line: 'Offer from the owner · the GM seat of Boston · Year Two · until Friday',
+    matters: W.openMatters.map(m => ({ what: m.what, due: m.due })),
+    sees: 'The seat’s books, the Week 6 trade file, four department rooms (two funded, two dark), three open matters.',
+    gives: 'The observer’s chair: from the seat, the sealed future stays sealed until you live it. Denver’s desk and every other seat stay unreadable. Your clock starts beside the World’s and does not stop when you close this.',
+    priv: 'Your books, holds and orders stay private: not shown to the text app that carried this, to an assistant, or to Maya. The public board shows only that the seat is taken.'
+  },
+  maya: {
+    from: 'Maya (a fictional friend)', fromLong: 'Maya, a fictional friend, who holds a copy of the Week 6 trade file', seat: 'General manager, Golden State — in your own copy', world: 'Your copy of the Week 6 trade file', until: 'Fri 6 Nov 2026', days: 18, phrase: 'plum · heron · ash',
+    line: 'Invitation from Maya · Golden State’s seat on the Week 6 trade file · until 6 Nov',
+    matters: [{ what: 'Golden State’s side of the Week 6 file: send ' + W.tradeFile.get[0].player + ', get ' + W.tradeFile.send[0].player, due: 'before the file is signed in your copy' }],
+    sees: 'Golden State’s side of one signed trade file, in a copy that touches nobody’s record.',
+    gives: 'The view from Boston’s desk. Your copy diverges from the record the moment you act; the record stays readable beside it.',
+    priv: 'Your copy is yours. Maya sees only that you took the invitation.'
+  }
+};
+function notForYou() {
+  return '<section class="bow" aria-label="Not for you"><header class="bowhd"><span class="wm">BOW</span><span class="bk">not for you</span></header><div class="bowbd" style="padding-bottom:12px"><h3 style="margin:0 0 4px">Not for you.</h3><p class="sm" style="margin:0">This reads the same whether the seat is held by someone else, never existed, or has ended.</p></div></section>';
+}
+SCENE.offer = function () {
+  const id = S.offer.id, o = OFFERS[id], done = S.offer.redeemed[id];
+  if (done) return offerSigned(id, o);
+  if (S.offer.phase === 'threshold') return threshold(id, o);
+  const carrier = S.offer.carrier === 'assistant' && id === 'owner' ? 'An assistant’s hand-in: it asked BOW for the owner’s seat; BOW found one Offer addressed to you.' : 'A text message. The message holds a phrase, not authority.';
+  return '<div class="cols text"><div class="phonewrap"><div class="phone rel"><div class="sb"><span>' + (id === 'owner' ? '10:02' : '18:22') + '</span><span>' + (id === 'owner' ? 'Tue 29 Sep' : 'Mon 19 Oct') + '</span></div><div class="who">' + (id === 'owner' ? 'The owner' : 'Maya') + '<small>fictional · generic messages</small></div><div class="msgs"><div class="pm">' + esc(o.line) + '<span class="plain">phrase: ' + esc(o.phrase) + '</span></div><div class="pm">Open it whenever you’re ready. It won’t do anything until you sign.</div></div>' + cap('P', 'a host carrying an Offer') + '</div></div>' +
+    '<div>' + bow('arrival note',
+      '<p class="lbl" style="margin:0">Kind</p><h3 style="font-size:26px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px">Offer</h3>' +
+      '<p style="font-size:17px;margin:0 0 6px"><b>' + esc(o.seat) + '</b> · ' + esc(o.world) + '</p>' +
+      '<p class="sm"><b>From.</b> ' + esc(o.fromLong) + '.<br><b>Until.</b> ' + esc(o.until) + '.<br><b>Carried by.</b> ' + esc(carrier) + '</p>' +
+      '<div class="fr fr-TEMPORARY" style="--d:' + o.days + ';margin:8px 0"><b>Temporary</b> · ' + o.days + ' days left · a number, not a name</div>' +
+      '<p class="sm">Opening never acts. To redeem it, BOW draws its threshold; nothing here can sign for you.</p>' +
+      '<div class="row">' + B('Redeem it in BOW', 'offer-open', id, 'bb pri') + '</div>', { cap: cap('P', 'NO AI REQUIRED · REAL seeds: teacher key apart from the join code, device-bound seats') }) + '</div></div>';
+};
+function threshold(id, o) {
+  const taken = S.offer.taken[id], all = taken.every(Boolean);
+  const books = id === 'owner' ? '<p class="sm" style="margin:0 0 4px">Payroll ' + fv(W.payroll, M2(S.w.payroll)) + ' · projected tax ' + fv(W.projectedTax, M2(projTax(S.w.payroll))) + ' <span class="tiny">under the World’s flat 1.5× rule (authored); the NBA’s real tax is incremental</span></p><p class="sm" style="margin:0">Week 6: traded ' + esc(W.tradeFile.send[0].player) + ' for ' + esc(W.tradeFile.get[0].player) + ', signed by both owners. Analytics and Scouting rooms dark; Ticketing and Partnerships funded.</p>' : '<p class="sm" style="margin:0">' + esc(o.sees) + '</p>';
+  return bow('threshold · the only place a seat is signed',
+    '<div class="two"><div>' +
+    '<h4 style="margin-top:0">Who offers</h4><p style="margin:0">' + esc(o.fromLong) + '. Redeemed in front of you; not by the text that carried it.</p>' +
+    '<h4>Which seat</h4><p style="margin:0"><b>' + esc(o.seat) + '</b> · ' + esc(o.world) + '</p>' +
+    '<h4>What you will see</h4>' + books +
+    '<h4>What you give up</h4><p class="sm" style="margin:0">' + esc(o.gives) + '</p>' +
+    '<h4>What stays private</h4><p class="sm" style="margin:0">' + esc(o.priv) + '</p></div>' +
+    '<div><div class="fr fr-TEMPORARY" style="--d:' + o.days + '"><b>The Offer</b> · temporary · ' + o.days + ' days left</div>' +
+    '<h4>Sign for what is open, line by line</h4>' + o.matters.map((m, i) => TG('Take on: ' + esc(m.what) + ' <span class="tiny">· due ' + esc(m.due) + '</span>', 'offer-take', i, taken[i])).map(x => '<div style="margin:0 0 6px">' + x + '</div>').join('') +
+    '<p class="tiny" style="margin:6px 0">' + (all ? 'Every line taken. Signing binds the seat to this device.' : 'Sign is blocked until each named matter is taken on. Rule: a seat is never signed with matters unread.') + '</p>' +
+    '<div class="row">' + B('Sign · bind this seat to this device', 'offer-sign', id, 'bb pri', all ? '' : 'disabled') + B('Not now', 'offer-back', id, 'bb') + '</div></div></div>',
+    { own: 1, cap: cap('P', 'NO AI REQUIRED · REAL seeds: device-token hash, rejoin PIN with lockout, seats by lease (prototype-grade)') });
+}
+function offerSigned(id, o) {
+  const s2 = S.offer.second, g = S.offer.ghost, h1 = hash(notForYou()), h2 = hash(notForYou());
+  const clk = id === 'owner' ? '<div class="two"><div class="rec"><p class="recl">Your clock · real</p>' + esc(TIMES[0].real) + '</div><div class="rec"><p class="recl">The World’s clock · its own calendar</p>' + esc(TIMES[0].world) + '</div></div><p class="tiny" style="margin:4px 0 0">Your clock started beside the World’s. The World keeps running while you are away.</p>' : '';
+  const dev = (name, sub, phrase, body) => '<div class="phone rel"><div class="sb"><span>' + name + '</span><span>simulated</span></div><div class="who">Phrase: ' + phrase + '<small>' + sub + '</small></div><div class="msgs" style="min-height:150px;padding:6px">' + body + '</div></div>';
+  return '<div class="cols even"><div>' + bow('seat bound · ' + (id === 'owner' ? 'this device' : 'your copy'),
+    '<h3>You hold it: ' + esc(o.seat) + '</h3><p class="sm" style="margin:0 0 6px">' + esc(o.world) + '. Bound to <b>this device</b>. The phrase now opens nothing for anyone else.</p>' + clk +
+    '<h4>The ledger</h4>' + ln('RECORDED', '<b>Got:</b> ' + esc(o.sees)) + ln('AUTHORED', '<b>Gave up:</b> ' + esc(o.gives.split('. ')[0]) + '.') + ln('RECORDED', 'Signed for ' + o.matters.length + ' open matter' + (o.matters.length > 1 ? 's' : '') + ', line by line.') +
+    '<h4>What the carrier was told</h4><p class="sm" style="margin:0">Public facts only: “' + esc(o.from.charAt(0).toUpperCase() + o.from.slice(1)) + '’s offer was redeemed · ' + esc(o.seat) + ' · ' + esc(TIMES[0].world) + '.” Not sent: books, holds, orders, this ledger.</p>' +
+    (id === 'maya' ? '<div class="row" style="margin-top:10px">' + B('Back to the Round', 'goto', 'round', 'bb pri') + '</div>' : ''),
+    { own: 1, cap: cap('P', 'NO AI REQUIRED') }) + '</div>' +
+    '<div><p style="margin:0 0 6px;font:600 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--dm)">Stage: other devices (simulated)</p><div class="stagectl" style="margin:0 0 8px">' + TG('Open the phrase on a second device', 'offer-second', null, s2, 'tb') + TG('Try a seat that doesn’t exist', 'offer-ghost', null, g, 'tb') + '</div>' +
+    '<div class="pair">' + dev('Device B', 'opened the real phrase on a different phone', esc(o.phrase), s2 ? notForYou() : '<div class="pm">Nothing tried yet.</div>') + dev('Device C', 'a seat that never existed', 'plum · otter · wren', g ? notForYou() : '<div class="pm">Nothing tried yet.</div>') + '</div>' +
+    (s2 && g ? '<p class="sm" style="margin-top:8px"><b>Identical:</b> the two refusals render to the same hash, <code>' + h1 + '</code> = <code>' + h2 + '</code>. Nobody can tell a held seat from an empty one by asking.</p>' : '<p class="tiny" style="margin-top:8px">Try both. A held seat and an empty one must answer identically.</p>') + '</div></div>';
+}
+ACTS['offer-open'] = id => { S.offer.id = id; S.offer.phase = 'threshold'; log('you', 'opened the ' + (id === 'owner' ? 'Offer' : 'invitation') + ' (opening never acts)', { hist: 'Offer (no seat yet)', k: 'OBSERVED' }); say('BOW’s threshold: sign line by line.'); };
+ACTS['offer-back'] = id => { S.offer.phase = 'arrival'; };
+ACTS['offer-take'] = i => { const id = S.offer.id; S.offer.taken[id][+i] = !S.offer.taken[id][+i]; };
+ACTS['offer-sign'] = id => {
+  const o = OFFERS[id]; if (!S.offer.taken[id].every(Boolean)) return;
+  S.offer.redeemed[id] = true;
+  if (id === 'owner') { S.seat = true; S.bound = 'device A'; }
+  log('you', 'signed ' + o.seat + ' · ' + o.world + ', and ' + o.matters.length + ' open matter' + (o.matters.length > 1 ? 's' : '') + '; seat bound to this device', { hist: id === 'owner' ? 'Boston · Year Two (your seat)' : 'Your copy of the Week 6 file', k: 'RECORDED', world: id === 'owner' ? TIMES[0].world : 'your copy' });
+  say('Signed. The seat is bound to this device.');
+};
+ACTS['offer-second'] = () => { S.offer.second = true; log('BOW', 'second device opened the phrase: “Not for you”', { hist: 'nowhere (refused)', k: 'AUTHORED', abs: true }); say('Second device: Not for you.'); };
+ACTS['offer-ghost'] = () => { S.offer.ghost = true; log('BOW', 'a seat that does not exist was tried: “Not for you”', { hist: 'nowhere (refused)', k: 'AUTHORED', abs: true }); say('Not for you.'); };
+
+/* ================================================================ 6 · A RING (ON CALL) */
+const DEN = { pick: 'a 2029 second-round pick', salary: L.exceptions.minimum.v };
+function gauge(payroll, ghost) {
+  const LN = W.taxLine.v, HL = W.hardLimit.v, lo = LN - 20e6, hi = HL + 10e6, X = v => 16 + (v - lo) / (hi - lo) * 388, y = 46;
+  const tri = (v, cls, fill, lbl, up) => '<path d="M' + X(v) + ' ' + (y - 2) + ' l-7 -13 h14 z" fill="' + fill + '" stroke="' + cls + '" stroke-width="2"/><text x="' + X(v) + '" y="' + (y - 19) + '" font-size="11" text-anchor="middle" fill="' + cls + '" font-family="Spectral,serif" font-weight="600">' + lbl + '</text>';
+  return '<svg viewBox="0 0 420 92" width="100%" role="img" aria-label="Payroll gauge: ' + M2(payroll) + (ghost ? ', held answer ' + M2(ghost) : '') + ', World tax line ' + M1(LN) + ', hard limit ' + M1(HL) + '"><line x1="16" x2="404" y1="' + y + '" y2="' + y + '" stroke="#16120E" stroke-width="3"/>' +
+    '<line x1="' + X(LN) + '" x2="' + X(LN) + '" y1="' + (y - 8) + '" y2="' + (y + 12) + '" stroke="#16120E" stroke-width="2"/><text x="' + X(LN) + '" y="' + (y + 26) + '" font-size="11" text-anchor="middle" font-family="Spectral,serif" fill="#16120E">World tax line ' + M1(LN) + '</text>' +
+    '<line x1="' + X(HL) + '" x2="' + X(HL) + '" y1="' + (y - 8) + '" y2="' + (y + 12) + '" stroke="#16120E" stroke-width="2" stroke-dasharray="3 2"/><text x="' + X(HL) + '" y="' + (y + 26) + '" font-size="11" text-anchor="middle" font-family="Spectral,serif" fill="#16120E">hard limit ' + M1(HL) + '</text>' +
+    tri(payroll, '#16120E', '#16120E', M2(payroll), true) + (ghost ? '<path d="M' + X(ghost) + ' ' + (y + 2) + ' l-7 13 h14 z" fill="none" stroke="#B0401A" stroke-width="2"/><text x="' + X(ghost) + '" y="' + (y + 40) + '" font-size="11" text-anchor="middle" fill="#B0401A" font-family="Spectral,serif" font-weight="600">' + M2(ghost) + '</text>' : '') + '</svg>';
+}
+function lastActLine() { const e = S.log.find(x => x.who === 'you' && /signed/.test(x.what)); return e ? 'your last act here: signed the seat, Week 9' : 'no act of yours here yet'; }
+function orderVerdict() { return S.w.guard ? { c: 2, txt: 'accept', why: '§2: accept seconds for players on minimum deals' } : { c: 1, txt: 'decline', why: '§1' }; }
+function receiptFor(payroll, roster) { return { payroll: payroll, roster: roster, tax: projTax(payroll) }; }
+SCENE.ring = function () {
+  const r = S.ring, w = S.w;
+  if (!S.seat) return bow('no seat, no ring', '<p style="font-size:17px"><b>Nothing can ring you: you hold no seat.</b></p><p class="sm">A ring comes only from a seat you hold. Redeem the Offer first.</p><div class="row">' + B('Go to the Offer', 'goto', 'offer', 'bb pri') + '</div>');
+  const wk = 'Boston · Year Two · Week 10 · you: GM';
+  const ringLine = wk + ' — Denver’s offer expires 11:00. If nobody acts: declined.';
+  let phoneBody, bowSide = '';
+  if (r.phase === 'ringing') {
+    phoneBody = '<div class="cn">Boston · Year Two</div><div class="cs">' + esc(ringLine) + '</div><div class="cbtn">' + B('Pick up', 'ring-pickup', null, 'yes') + B('Let it ring out', 'ring-lapse', null, 'no') + '</div>';
+    bowSide = seam('why it rings', '<p>The phone rings <b>from the seat</b>, not from an app. Every ring says why: a paper on your desk expires at 11:00 and defaults to decline.</p><p>A ring carries its own default. If nobody acts, the default applies and it is recorded as <b>no act</b>.</p><p>Picking up is entering the seat for the length of the call.</p>');
+  } else if (r.phase === 'ended') {
+    const a = r.answer, pub = a === 'accept' ? 'accepted' : 'declined';
+    phoneBody = '<div class="cn">Call ended</div><div class="cs">Boston · Year Two · Week 10 · Monday</div><div class="cs" style="margin-top:8px;text-align:left"><b>Sent back to the host — public facts only:</b><br>“Denver’s offer was ' + pub + (a === 'lapse' ? ' by default' : '') + ' · Boston · Year Two · Week 10 Monday.”<br><br><b>Not sent:</b> payroll, roster, your hold, your orders.</div>';
+    bowSide = bow('what the call left behind', ringResult(), { own: 1, cap: cap('P', 'NO AI REQUIRED') });
+  } else {
+    phoneBody = '<div class="cn">On call · in the seat</div><div class="cs">Brief · about 20 seconds<br>You are in the seat until you hang up.</div><div class="cbtn">' + B('Hang up', 'ring-hangup', null, 'no') + '</div>';
+    bowSide = r.phase === 'answered' ? bow('answered · still on the call', ringResult(), { own: 1, cap: cap('P', 'NO AI REQUIRED') }) : ringBrief();
+  }
+  return '<div class="cols text"><div class="phonewrap"><div class="phone call rel"><div class="sb"><span>09:41</span><span>Mon 5 Oct</span></div><div class="who">Incoming · from a seat<small>generic phone · no BOW app open</small></div><div class="cbody">' + phoneBody + '</div>' + cap('P', 'a ring from a seat') + '</div></div><div>' + bowSide + '</div></div>';
+};
+function ringBrief() {
+  const r = S.ring, w = S.w, held = r.phase === 'held', v = orderVerdict();
+  const head = '<p class="lbl" style="margin:0">Five slots, spoken first</p><p style="font-size:16px;margin:0 0 6px"><b>Boston · Year Two · Week 10 · this history · you: GM</b> — ' + esc(lastActLine()) + '.</p>';
+  const offer = '<div class="two"><div><h4 style="margin-top:0">The offer</h4><p class="sm" style="margin:0">Denver offers <b>' + DEN.pick + '</b> for the guard you signed in Week 1 on a minimum deal (' + fv(L.exceptions.minimum, M2(DEN.salary)) + '). <span class="tiny">pick year illustrative</span></p></div><div><h4 style="margin-top:0">The deadline · the default</h4><p class="sm" style="margin:0">Expires <b>11:00</b>. If nobody acts: <b>declined</b>.</p></div></div>';
+  const gz = '<h4>The gauge</h4>' + gauge(w.payroll, held && r.hold ? r.hold.payroll : null);
+  const why = '<p class="tiny" style="margin:0">Why it rang: a paper on your desk expires at 11:00 and defaults to decline (' + KD('RECORDED') + 'World record). The brief is a fixed template; a small model would only smooth the phrasing' + (S.floor ? ' — and models are off, so this is the template.' : '.') + '</p>';
+  if (!held) return bow('on call · the 20-second brief', head + offer + gz + why + '<div class="row" style="margin-top:8px">' + B('Hold: try accepting it first', 'ring-hold', null, 'bb pri') + B('Decline now', 'ring-answer', 'decline', 'bb') + '</div>', { own: 1, cap: cap('P', 'NO AI REQUIRED (template) · phrasing SMALL / CHEAP MODEL') });
+  const h = r.hold, ve = v.txt === 'accept';
+  return bow('held · nothing committed', head + '<div class="two"><div class="rec"><p class="recl">The record · unchanged</p><p style="margin:0">Payroll ' + kv('RECORDED', M2(w.payroll), PV.pay) + '<br>Roster ' + kv('AUTHORED', w.roster, PV.ros) + '<br>Projected tax ' + kv('COMPUTED', M2(projTax(w.payroll)), PV.tax) + '</p><p class="tiny" style="margin:4px 0 0">Denver’s paper is still open on your desk.</p></div>' +
+    '<div class="forkbox fork"><p class="recl">Your branch · diverged Week 10 Monday, 09:52</p><p style="margin:0"><b>Receipt: payroll would become ' + kv('COMPUTED', M2(h.payroll), PV.tax.replace('1.5 × (payroll − the World’s line); World rule, authored','the receipt of a dry run in a private fork')) + '; roster ' + kv('AUTHORED', h.roster, PV.ros) + '.</b><br>Projected tax ' + kv('COMPUTED', M2(h.tax), PV.tax) + ' <span class="tiny">World rule, authored</span></p><p class="tiny" style="margin:4px 0 0">Assumes: Denver’s offer stands as written · nothing else moves this week · the guard leaves, the pick arrives.</p></div></div>' + gz +
+    '<p class="sm" style="margin:4px 0 6px"><b>Your standing orders would answer: ' + esc(v.txt) + '</b> (' + esc(v.why) + '). BOW will say where your hand differs.</p>' +
+    '<div class="row">' + B('Commit: accept', 'ring-answer', 'accept', 'bb pri') + B('Decline instead', 'ring-answer', 'decline', 'bb') + B('Drop the hold', 'ring-drop', null, 'bb') + '</div>', { own: 1, cap: cap('P', 'NO AI REQUIRED · engine replay in a private fork') });
+}
+function ringResult() {
+  const r = S.ring, a = r.answer, v = r.verdict || orderVerdict(), af = r.after || { payroll: S.w.payroll, roster: S.w.roster };
+  let t = '<h3>' + (a === 'accept' ? 'Accepted.' : a === 'decline' ? 'Declined.' : 'Declined by default.') + '</h3>';
+  t += a === 'lapse' ? '<p class="sm">Nobody acted, so the paper’s default applied. Recorded as <b>no act</b> by you — an absence, not a choice.</p>' : '<p class="sm">Recorded as your act, Week 10 Monday, 09:52, in Boston · Year Two.</p>';
+  if (a === 'accept') t += ln('RECORDED', 'Payroll ' + M2(af.payroll) + ' · roster ' + af.roster + ' · projected tax ' + M2(projTax(af.payroll)) + ' — now the record, and shown in the books, the rail and later in your Round.');
+  if (a === 'decline' || a === 'lapse') t += ln('RECORDED', 'Payroll stays ' + M2(af.payroll) + ' · roster ' + af.roster + '.');
+  if (a !== 'lapse') {
+    const same = (a === 'accept') === (v.txt === 'accept');
+    t += '<h4>Compared with your standing orders</h4><p class="sm">' + (same ? 'Same as standing order §' + v.c + '.' : '<b>Differs from standing order §' + v.c + '</b>, which would have answered “' + esc(v.txt) + '”. Noted. The order stays as written until you edit it; while you are away it would answer as written.') + '</p>';
+  }
+  return t;
+}
+ACTS['ring-pickup'] = () => { S.ring.phase = 'call'; log('you', 'picked up: entered the GM seat for the length of the call', { hist: 'Boston · Year Two (your seat)', k: 'RECORDED' }); say('You are in the seat. 20-second brief.'); };
+ACTS['ring-lapse'] = () => { S.ring.phase = 'ended'; S.ring.answer = 'lapse'; S.w.denver = 'declined-default'; S.ring.after = { payroll: S.w.payroll, roster: S.w.roster }; log('World', 'Denver’s offer lapsed at 11:00 and defaulted to declined: no act by you', { hist: 'Boston · Year Two (your seat)', k: 'RECORDED', abs: true }); say('It rang out. The default applied: declined. Recorded as no act.'); };
+ACTS['ring-hold'] = () => { const w = S.w; S.ring.phase = 'held'; S.ring.hold = receiptFor(w.payroll - DEN.salary, w.roster - 1); log('you', 'held: ran “accept Denver’s offer” as a dry run — payroll would become ' + M2(S.ring.hold.payroll) + ', roster ' + S.ring.hold.roster, { hist: 'Private fork · dry run (not in the record)', k: 'COMPUTED', fork: true }); say('Held. Receipt: payroll would become ' + M2(S.ring.hold.payroll) + '; roster ' + S.ring.hold.roster + '.'); };
+ACTS['ring-drop'] = () => { S.ring.phase = 'call'; S.ring.hold = null; log('you', 'dropped the hold; the private fork was discarded', { hist: 'Private fork · dry run (not in the record)', k: 'AUTHORED', fork: true }); };
+ACTS['ring-answer'] = a => {
+  const w = S.w, v = orderVerdict(); S.ring.answer = a; S.ring.phase = 'answered'; S.ring.verdict = v;
+  if (a === 'accept') { w.payroll -= DEN.salary; w.roster -= 1; w.guard = false; w.denver = 'accepted'; w.tradeBy = 'you'; }
+  else w.denver = 'declined';
+  S.ring.after = { payroll: w.payroll, roster: w.roster };
+  log('you', (a === 'accept' ? 'accepted' : 'declined') + ' Denver’s offer' + ((a === 'accept') === (v.txt === 'accept') ? '' : ' (differs from standing order §' + v.c + ', noted)'), { hist: 'Boston · Year Two (your seat)', k: 'RECORDED' });
+  say((a === 'accept' ? 'Accepted' : 'Declined') + '. Hang up when ready.');
+  S.ring.phase = 'answered';
+};
+ACTS['ring-hangup'] = () => {
+  if (S.ring.phase === 'answered') { S.ring.phase = 'ended'; log('BOW', 'call ended; the host was sent public facts only: “Denver’s offer was ' + (S.ring.answer === 'accept' ? 'accepted' : 'declined') + ' · Boston · Year Two · Week 10 Monday”', { hist: 'Host receipt (public)', k: 'OBSERVED' }); say('Call ended. Public receipt sent.'); }
+  else { ACTS['ring-lapse'](); }
+};
+/*@@SCENES3@@*/
+
+/* ================================================================ shared: the World rolls forward to the ring */
+function ensureRing() {
+  if (S.time >= 1) return;
+  S.time = 1;
+  log('World', 'two-way call-up lapsed: the roster deadline passed and nobody converted it. Recorded as no act by you.', { real: 'Fri 2 Oct 2026', world: 'Year Two · Week 9 · Friday', hist: 'Boston · Year Two (World record)', k: 'RECORDED', abs: true });
+  log('BOW', 'rang from the seat: Denver’s offer expires 11:00; if nobody acts, declined', { hist: 'Boston · Year Two (your seat)', k: 'RECORDED' });
+  S.w.callup = 'lapsed';
+}
+function stockSeat() {
+  if (S.seat) return;
+  S.seat = true; S.bound = 'device A'; S.offer.redeemed.owner = true;
+  log('stage', 'fast-forward: the seat was signed earlier (a stock franchise, so this room can be played on its own)', { world: TIMES[0].world, hist: 'Boston · Year Two (your seat)', k: 'AUTHORED' });
+}
+const goto0 = ACTS.goto;
+ACTS.goto = id => { goto0(id); if (id === 'round' && S.orders.away) S.round.started = true; };
+
+/* ================================================================ 7 · STANDING ORDERS */
+const ORDERS = [{ n: 1, t: 'Decline any offer for a first-round pick.' }, { n: 2, t: 'Accept seconds for players on minimum deals.' }];
+function firedText() {
+  const f = S.orders.fired; if (!f) return '';
+  return f.c === 2 ? 'Denver’s second call: ' + DEN.pick + ' for the guard on a minimum deal, same terms.' : 'Denver’s second call asks about your 2027 first-round pick (illustrative).';
+}
+SCENE.orders = function () {
+  if (!S.seat) return bow('no seat, no orders', '<p style="font-size:17px"><b>Orders answer for a seat. You hold none yet.</b></p><div class="row">' + B('Go to the Offer', 'goto', 'offer', 'bb pri') + '</div>');
+  const o = S.orders, f = o.fired;
+  const left = bow('standing orders · yours',
+    '<h4 style="margin-top:0">While you are away, these answer for you</h4>' + ORDERS.map(x => ln('AUTHORED', '<b>§' + x.n + '</b> ' + esc(x.t))).join('') +
+    '<p class="sm">An order answers only what its words say. Anything else waits and lapses to the paper’s own default. Every act an order takes is stamped by its number, never as you.</p>' +
+    (o.away ? '<p class="sm"><b>You were away 14 days.</b> Week 10 Monday → Week 12 Monday.</p>' : '<div class="row">' + B('Be away for 14 days', 'away', null, 'bb pri') + '</div><p class="tiny" style="margin:6px 0 0">Stage clock: this simulates the time passing. Nothing waits for you; the World keeps its own calendar.</p>'),
+    { own: 1, cap: cap('P', 'NO AI REQUIRED · reading orders written in words: SMALL / CHEAP MODEL') });
+  let right = '';
+  if (o.away && f) {
+    const acc = f.c === 2;
+    right = bow('while you were away',
+      '<p class="lbl" style="margin:0">' + esc(f.world) + ' · ' + esc(f.real) + '</p><p style="font-size:17px;margin:2px 0 6px"><b>' + esc(firedText()) + '</b></p>' +
+      '<p><span class="stamp">by your standing order §' + f.c + '</span> <span class="sm">not by you</span></p>' +
+      ln('RECORDED', acc ? 'Answered <b>accepted</b>. Payroll ' + M2(S.w.payroll) + ' · roster ' + S.w.roster + ' · projected tax ' + M2(projTax(S.w.payroll)) + '.' : 'Answered <b>declined</b>. Nothing on the books moved.') +
+      '<p class="sm"><b>The clause that fired:</b> “§' + f.c + ' ' + esc(ORDERS[f.c - 1].t) + '”</p>' +
+      (o.ratified ? '<p class="sm"><b>You ratified it</b>, Week 12 Monday. It stands as your act.</p>' : '<div class="row">' + B('Ratify it', 'order-ratify', null, 'bb pri') + TG('Take it out', 'order-takeout', null, o.takeout, 'bb you') + '</div>') +
+      (o.takeout ? '<div style="margin-top:10px">' + takeOut() + '</div>' : ''), { own: 1, cap: cap('P', 'NO AI REQUIRED · a covered act is stamped by whom') });
+  } else right = seam('how orders differ from a chat agent', '<p>A notification says “something happened”. A chat agent acts for you with no boundary. A standing order carries its own limits: it answers before a paper lapses, only inside your words, and reports after.</p><p>Where your hand and your order differ, the browser says so; the exceptions show what you actually decide on.</p>');
+  return '<div class="cols sheet"><div>' + left + '</div><div>' + right + '</div></div>';
+};
+function takeOut() {
+  const f = S.orders.fired, acc = f.c === 2;
+  const nowP = S.w.payroll, wouldP = acc ? nowP + DEN.salary : nowP, wouldR = acc ? S.w.roster + 1 : S.w.roster;
+  return '<div class="two"><div class="rec"><p class="recl">The record · stays as it is</p><p style="margin:0">Payroll ' + kv('RECORDED', M2(nowP), PV.pay) + '<br>Roster ' + kv('AUTHORED', S.w.roster, PV.ros) + '</p></div>' +
+    '<div class="forkbox fork"><p class="recl">Your branch · diverged ' + esc(f.world) + '</p>' + (acc ? '<p style="margin:0">Payroll ' + kv('COMPUTED', M2(wouldP), PV.tax) + '<br>Roster ' + kv('AUTHORED', wouldR, PV.ros) + '<br>Projected tax ' + kv('COMPUTED', M2(projTax(wouldP)), PV.tax) + '</p>' : '<div class="sealed"><b>Sealed.</b> What accepting a first-round request would have led to. You find out by living it.</div>') +
+    '<p class="tiny" style="margin:4px 0 0">Assumes: order §' + f.c + ' does not fire · nothing else differs. The record is not undone; this is a branch beside it.</p></div></div>';
+}
+ACTS.away = () => {
+  if (S.orders.away) return;
+  stockSeat(); ensureRing();
+  const p = S.ring.phase;
+  if (p === 'held') ACTS['ring-drop']();
+  if (S.ring.phase === 'ringing' || S.ring.phase === 'call') ACTS['ring-lapse']();
+  else if (S.ring.phase === 'answered') ACTS['ring-hangup']();
+  S.time = 2;
+  const v = orderVerdict(), t2 = TIMES[2];
+  if (S.w.guard) { S.w.payroll -= DEN.salary; S.w.roster -= 1; S.w.guard = false; S.w.denver = 'accepted-order'; }
+  S.orders.fired = { c: v.c, real: t2.real, world: t2.world };
+  log('standing order §' + v.c, (v.c === 2 ? 'accepted ' : 'declined ') + firedText().replace('Denver’s second call: ', 'Denver’s second call — ') + ' (“§' + v.c + ' ' + ORDERS[v.c - 1].t + '”)', { real: t2.real, world: t2.world, hist: 'Boston · Year Two (your seat)', k: 'RECORDED' });
+  S.time = 3; S.orders.away = true;
+  log('you', 'was away 14 days: one ring answered by a standing order, one matter lapsed', { hist: 'Your standing (private)', k: 'AUTHORED' });
+  say('You were away 14 days. Standing order §' + v.c + ' answered one ring. It is stamped by the order, not by you.');
+};
+ACTS['order-ratify'] = () => { S.orders.ratified = true; log('you', 'ratified what standing order §' + S.orders.fired.c + ' did in your name', { hist: 'Boston · Year Two (your seat)', k: 'RECORDED' }); say('Ratified.'); };
+ACTS['order-takeout'] = () => { S.orders.takeout = !S.orders.takeout; if (S.orders.takeout) log('you', 'took the order’s act out into a branch (the record is not undone)', { real: TIMES[3].real, world: TIMES[3].world, hist: 'Your branch · order §' + S.orders.fired.c + ' does not fire', k: 'COMPUTED', fork: true }); };
+
+/* ================================================================ 8 · THE ROUND */
+const STOPS = [
+  { id: 'seat', name: 'Your seat', tonight: true },
+  { id: 'fracture', name: 'A branch you kept' },
+  { id: 'invite', name: 'Addressed to you' },
+  { id: 'live', name: 'Live' }
+];
+function notches() {
+  const R_ = S.round;
+  return '<span class="stops">' + STOPS.map((s, i) => '<span class="stp ' + (R_.res[i] ? 'done' : i === R_.stop ? 'cur' : 'nxt') + '">' + (i + 1) + ' · ' + esc(s.name) + (R_.res[i] ? (R_.res[i].t === 'pass' ? ' <span class="tiny">no act</span>' : ' <span class="tiny">done</span>') : '') + '</span>').join('') + '</span>';
+}
+function payrollChain() {
+  const rec = W.record, w1 = rec.find(r => r.id === 'w1-minimum'), w6 = rec.find(r => r.id === 'w6-trade'), sg = M => (M < 0 ? '− ' : '+ ') + M2(Math.abs(M));
+  const items = [
+    { k: 'AUTHORED', t: 'Start of Year Two', v: W.payrollStartYearTwo.v, first: true, note: 'illustrative; chosen so the record sums to the World’s ' + M1(W.payroll.v) },
+    { k: w1.k, t: w1.when + ' · ' + w1.what, v: w1.effects.payroll },
+    { k: w6.k, t: w6.when + ' · ' + w6.what, v: w6.effects.payroll }
+  ];
+  const ord = S.log.find(e => e.who === 'standing order §2'), me = S.log.find(e => e.who === 'you' && /^accepted Denver/.test(e.what));
+  if (S.w.denver === 'accepted-order' && ord) items.push({ k: 'RECORDED', t: TIMES[2].world + ' · standing order §2 accepted Denver’s second call — act #' + ord.n + ', stamped by the order', v: -DEN.salary });
+  if (S.w.denver === 'accepted' && me) items.push({ k: 'RECORDED', t: TIMES[1].world + ' · you accepted Denver’s offer at the ring — act #' + me.n, v: -DEN.salary });
+  const sum = items.reduce((a, x) => a + x.v, 0);
+  return { items: items, sum: sum, ok: Math.abs(sum - S.w.payroll) < 1 };
+}
+function whyTax() {
+  const c = payrollChain(), tax = projTax(S.w.payroll);
+  return '<div class="rec"><p class="recl">Why is the projected tax ' + M2(tax) + '? Traced to recorded acts</p>' +
+    ln('COMPUTED', '<b>Projected tax ' + M2(tax) + '</b> = 1.5 × (payroll ' + Mx(S.w.payroll) + ' − World line ' + Mx(W.taxLine.v) + ') <span class="tiny">World rule, authored; not the NBA’s incremental tax</span>') +
+    ln('RECORDED', '<b>Payroll ' + Mx(c.sum) + '</b> is the sum of these acts' + (c.ok ? '' : ' (does not reconcile: verify)') + ':') +
+    c.items.map(x => '<div class="ln" style="margin-left:22px">' + KD(x.k) + '<span>' + esc(x.t) + ' <b>' + (x.first ? Mx(x.v) : (x.v < 0 ? '− ' : '+ ') + Mx(Math.abs(x.v))) + '</b>' + (x.note ? ' <span class="tiny">' + esc(x.note) + '</span>' : '') + '</span></div>').join('') + '</div>';
+}
+function seatDiff() {
+  const w = S.w, dn = { accepted: 'accepted by you at the ring', 'accepted-order': 'accepted by your standing order §2, stamped by the order', declined: 'declined by you', 'declined-default': 'declined by default (no act by you)' }[w.denver] || w.denver;
+  const denverLine = S.orders.fired && S.orders.fired.c === 1 ? 'Denver’s second call (a first-round pick) was declined by your standing order §1.' : 'Denver’s public notice: the guard trade is ' + dn + ' — signed facts only.';
+  return '<div class="three">' +
+    '<div><p class="lbl">You can see now that you couldn’t</p>' + ln('RECORDED', esc(denverLine)) + ln('AUTHORED', 'The owner’s note on the tax bill is readable: “What is the plan?” <span class="tiny">(authored)</span>') + ln('COMPUTED', 'Projected tax reads ' + M2(projTax(w.payroll)) + ' <span class="tiny">World rule, authored</span>') + '</div>' +
+    '<div><p class="lbl">You can no longer do</p>' + ln('RECORDED', 'Convert the two-way call-up: the roster deadline passed in Week 9. The World recorded: <b>no act</b> by you.') + ln('RECORDED', 'Answer Denver’s Week 10 offer: it closed at 11:00.') + '</div>' +
+    '<div><p class="lbl">What is due</p>' + ln('AUTHORED', '<b>Answer the owner’s note</b> before tonight’s owners’ call. <b>Closes tonight.</b>') + '</div></div>';
+}
+function roundStop() {
+  const R_ = S.round, i = R_.stop, res = R_.res[i];
+  const acts = (a, p, bl) => (res ? '<div class="ln">' + KD(res.t === 'act' ? 'RECORDED' : 'UNKNOWN') + '<span>' + esc(res.txt) + '</span></div><div class="row" style="margin-top:6px">' + B(i === 3 ? 'Finish the Round' : 'Next stop', 'r-next', null, 'bb pri') + '</div>' : bl);
+  if (i === 0) {
+    const head = '<div class="fr fr-OFFICIAL" style="margin:0 0 8px"><b>' + esc(TIMES[3].world) + ' · your seat</b> · Boston · Year Two, General manager · signed Week 9 · you last held it Week 10 Monday · now ' + esc(TIMES[3].real) + '</div>';
+    const body = R_.whytax ? whyTax() : '<p class="sm" style="margin:0 0 6px">The seat diff — what changed for this seat since you left.</p>' + seatDiff();
+    return head + body + '<div style="margin-top:10px"></div>' +
+      acts(0, 0, '<div class="row">' + B('Act: answer the owner’s note', 'r-act', 'owner', 'bb pri') + B('Pass — no act', 'r-pass', 'owner', 'bb') + B('Leave the Round', 'r-leave', null, 'bb') + TG('Why is the tax ' + M2(projTax(S.w.payroll)) + '?', 'r-whytax', null, !!R_.whytax, 'bb') + '</div>');
+  }
+  if (i === 1) {
+    const d = R_.door, sim = C0.sealed[0].value;
+    const detail = d === 'branch' ? '<p style="font-size:16.5px;margin:0 0 4px"><b>Impossible here:</b> Anfernee Simons never arrived in your branch, so this act cannot happen.</p><div class="sealed"><b>Sealed.</b> Your branch’s tax after this. You find out by living it — re-declare to change the assumption.</div>'
+      : d === 'follow' ? '<p style="margin:0"><b>Following · Boston Celtics · Reality</b> — this same move touches the tax margin you follow.</p><div class="hole">No new number here: a live Reality feed does not exist yet, so BOW will not invent one. <span class="tiny">[Reality feed]</span></div>'
+        : '<p style="margin:0"><b>Second-apron consequences · BOW model v0.3</b> — an input changed (Boston’s payroll).</p><div class="hole" style="border-style:dashed">MODELED, not run. The rulebook part is complete above. <span class="tiny">' + (S.round.queued ? 'Queued: it runs when capacity returns.' : '') + '</span></div>' + (S.round.queued ? '' : '<div class="row" style="margin-top:6px">' + B('Queue it', 'r-queue', null, 'bb') + '</div>');
+    const branchStamp = '<span class="stamp you">Your branch · diverged late Jun 2025</span>';
+    return '<h3>A branch you kept has broken</h3><div class="two"><div class="rec"><p class="recl">The record · Reality (staged)</p><p class="sm" style="margin:0 0 4px"><b>STAGED:</b> a real move (5 Feb 2026) replayed as if it had just arrived. Live needs a Reality feed; none exists.</p>' + ln(sim.k, esc(sim.v) + '<span class="prov">' + esc(provOf(sim)) + '</span>') + '</div>' +
+      '<div class="forkbox fork"><p class="recl">Holiday kept · yours, kept two weeks ago</p><p style="margin:0 0 4px">' + branchStamp + '</p><p class="tiny" style="margin:0">Assumes: Jrue Holiday stays in Boston · the trade to Portland never happens · so Simons never arrives.</p></div></div>' +
+      '<h4>One cause · three of your things · three doors</h4><div class="row">' + TG('Holiday kept — breaks here', 'r-door', 'branch', d === 'branch') + TG('Your Follow — the margin moved', 'r-door', 'follow', d === 'follow') + TG('Model v0.3 — an input changed', 'r-door', 'model', d === 'model') + '</div><div style="margin-top:8px">' + detail + '</div><div style="margin-top:8px"></div>' +
+      acts(1, 0, '<div class="row">' + B('Keep the branch as it stands', 'r-act', 'hold', 'bb pri') + B('Let the branch go', 'r-act', 'letgo', 'bb') + B('Pass — no act', 'r-pass', 'fracture', 'bb') + B('Leave the Round', 'r-leave', null, 'bb') + '</div>');
+  }
+  if (i === 2) {
+    const o = OFFERS.maya;
+    return '<h3>Addressed to you</h3><p class="sm" style="margin:0 0 6px">Sent, not found: someone wrote to you.</p><div class="fr fr-TEMPORARY" style="--d:' + o.days + ';margin:0 0 8px"><b>Maya’s invitation</b> · Golden State’s seat on the Week 6 trade file · in your own copy · temporary, ' + o.days + ' days left</div>' +
+      '<p class="sm">Sit on the other side of ' + esc(W.tradeFile.send[0].player) + ' for ' + esc(W.tradeFile.get[0].player) + '. Taking it needs the Threshold; passing costs nothing and is recorded as no act. It lapses on ' + esc(o.until) + '.</p>' +
+      acts(2, 0, '<div class="row">' + B('Open the invitation in BOW’s threshold', 'r-invite', null, 'bb pri') + B('Pass — no act', 'r-pass', 'invite', 'bb') + B('Leave the Round', 'r-leave', null, 'bb') + '</div>');
+  }
+  const lv = R.liveEvent;
+  return '<h3>Live · within a day</h3><div class="fr fr-LIVE" style="margin:0 0 8px"><b>Boston Celtics · Reality</b> · keeps changing without you</div>' +
+    '<div class="hole"><b>The next preseason game</b> — ' + esc(lv.note) + '. <span class="tiny">No opponent or date is invented here.</span></div>' +
+    '<p class="sm">You cannot act on the real team. You can watch it, follow it, or let it go.</p>' +
+    acts(3, 0, '<div class="row">' + B('Follow the game', 'r-act', 'game', 'bb pri') + B('Pass — no act', 'r-pass', 'live', 'bb') + B('Leave the Round', 'r-leave', null, 'bb') + '</div>');
+}
+SCENE.round = function () {
+  const R_ = S.round;
+  if (!R_.started) {
+    return '<div class="cols sheet"><div class="stagectl" style="display:block"><p style="max-width:520px">Stage clock (not BOW): you have not opened BOW for 14 days. There is no home page to open. When you do, BOW opens inside the first stop.</p>' + B('Open BOW — 14 days later', 'round-return', null, 'tb') + '</div>' + seam('what a Round is', '<p>Home is a finite walk, not a page: what lapses first, then a kept branch that broke, then what is addressed to you, then what is live. It ends because your holds end.</p><p>One cause that touched three of your things is one stop with three doors.</p>') + '</div>';
+  }
+  if (R_.end) {
+    const res = Object.keys(R_.res).map(k => R_.res[k]);
+    return bow('level with the record',
+      '<h3 style="font-size:28px;margin-bottom:4px">Level with the record.</h3><p class="sm" style="margin:0 0 8px">Nothing else is waiting on you. ' + esc(TIMES[3].world) + ', ' + esc(TIMES[3].real) + '.</p>' +
+      '<svg viewBox="0 0 380 66" width="380" role="img" aria-label="What you have seen and the record, level"><text x="0" y="13" font-size="12.5" fill="#5A5347" font-family="Spectral,serif">the record</text><line x1="0" x2="380" y1="20" y2="20" stroke="#5A5347" stroke-width="3"/><line x1="0" x2="380" y1="44" y2="44" stroke="#5A5347" stroke-width="3"/><text x="0" y="61" font-size="12.5" fill="#5A5347" font-family="Spectral,serif">what you have seen</text></svg>' +
+      '<h4>What this Round left in the record</h4>' + STOPS.map((s, i) => R_.res[i] ? ln(R_.res[i].t === 'act' ? 'RECORDED' : 'UNKNOWN', '<b>' + esc(s.name) + '</b> — ' + esc(R_.res[i].txt)) : '').join('') +
+      '<p class="tiny">A pass is recorded as no act. It is an absence, not a choice.</p><div class="row" style="margin-top:8px">' + B('Standing (an edge, not a place)', 'goto', 'standing', 'bb') + '</div>', { cls: 'quiet', drawn: 'quiet', cap: cap('P', 'NO AI REQUIRED · persistence and lapsed acts are REAL in the classroom product') });
+  }
+  const n = STOPS.length, tonight = STOPS.filter(s => s.tonight).length;
+  return bow('the round · stop ' + (R_.stop + 1) + ' of ' + n, '<div class="edge"><span><b>' + n + ' stops · ' + tonight + ' closes tonight</b></span>' + notches() + TG('Why this order?', 'r-why', null, !!R_.why, 'bb sm" style="max-width:none') + '</div>' + (R_.why ? '<p class="tiny" style="margin:-2px 0 8px">The order is a rule, not a ranking: what lapses first · a kept branch that broke · what is addressed to you · what is live within a day · drift last (nothing to show today). Nothing is sorted by engagement.</p>' : '') + roundStop(), { own: 1, cap: cap('P', 'NO AI REQUIRED · phrasing SMALL / CHEAP MODEL only') });
+};
+ACTS['round-return'] = () => { stockSeat(); ACTS.away(); S.round.started = true; log('you', 'opened BOW after 14 days: it opened inside the first stop, “4 stops · 1 closes tonight”', { hist: 'Your standing (private)', k: 'RECORDED' }); say('BOW opened inside the first stop. 4 stops, 1 closes tonight.'); };
+ACTS['r-whytax'] = () => { S.round.whytax = !S.round.whytax; if (S.round.whytax) log('you', 'asked why the projected tax is ' + M2(projTax(S.w.payroll)) + ' (traced to recorded acts)', { hist: 'Boston · Year Two (your seat)', k: 'COMPUTED' }); };
+ACTS['r-why'] = () => { S.round.why = !S.round.why; };
+ACTS['r-door'] = d => { S.round.door = d; };
+ACTS['r-queue'] = () => { S.round.queued = true; log('you', 'queued the model v0.3 re-run (MODELED, not run yet)', { hist: 'Your standing (private)', k: 'MODELED' }); };
+ACTS['r-act'] = p => {
+  const R_ = S.round, i = R_.stop, hist = 'Boston · Year Two (your seat)';
+  if (p === 'owner') { S.w.owner = 'answered'; R_.res[i] = { t: 'act', txt: 'You answered the owner’s note. Recorded as your act.' }; log('you', 'answered the owner’s note on the tax bill before the owners’ call', { hist: hist, k: 'RECORDED' }); say('Answered. Recorded as your act.'); }
+  if (p === 'hold') { S.kept.branch = 'held'; R_.res[i] = { t: 'act', txt: 'You kept “Holiday kept” as it stands: impossible here, held anyway.' }; log('you', 'kept “Holiday kept” as it stands after the fracture', { hist: 'Your branch · Holiday kept', k: 'RECORDED', fork: true }); say('Kept the branch.'); }
+  if (p === 'letgo') { S.kept.branch = 'gone'; R_.res[i] = { t: 'act', txt: 'You let “Holiday kept” go.' }; log('you', 'let “Holiday kept” go: the relation ended', { hist: 'Your standing (private)', k: 'RECORDED' }); say('Let the branch go.'); }
+  if (p === 'game') { S.round.game = true; R_.res[i] = { t: 'act', txt: 'You followed the next preseason game.' }; log('you', 'followed the next preseason game [verify: from the Reality feed]', { hist: 'Your standing (private)', k: 'RECORDED' }); say('Following the game.'); }
+};
+ACTS['r-pass'] = p => {
+  const R_ = S.round, i = R_.stop;
+  if (p === 'owner') { S.w.owner = 'no-act'; R_.res[i] = { t: 'pass', txt: 'You passed on the owner’s note. Recorded as no act.' }; }
+  else if (p === 'fracture') R_.res[i] = { t: 'pass', txt: 'You passed on the fracture. The branch stays as it is. Recorded as no act.' };
+  else if (p === 'invite') { R_.res[i] = { t: 'pass', txt: 'You passed on Maya’s invitation. Recorded as no act; it lapses on ' + OFFERS.maya.until + '.' }; }
+  else R_.res[i] = { t: 'pass', txt: 'You passed on the game. Recorded as no act.' };
+  log('you', R_.res[i].txt.replace('You ', 'passed: ').replace('passed: passed on', 'passed on'), { hist: p === 'fracture' ? 'Your branch · Holiday kept' : 'Boston · Year Two (your seat)', k: 'UNKNOWN', abs: true }); say('Passed. Recorded as no act.');
+};
+ACTS['r-next'] = () => { const R_ = S.round; if (R_.stop < STOPS.length - 1) { R_.stop++; R_.door = 'branch'; say('Stop ' + (R_.stop + 1) + ' of ' + STOPS.length + ': ' + STOPS[R_.stop].name); } else { R_.end = true; log('BOW', 'the Round ended: level with the record', { hist: 'Your standing (private)', k: 'RECORDED' }); say('Level with the record. The frame goes quiet.'); } };
+ACTS['r-leave'] = () => { S.scene = 'standing'; log('you', 'left the Round at stop ' + (S.round.stop + 1) + ' (it stays open there)', { hist: 'Your standing (private)', k: 'AUTHORED' }); };
+ACTS['r-invite'] = () => { S.offer.id = 'maya'; S.offer.phase = 'threshold'; S.scene = 'offer'; };
+const sign0 = ACTS['offer-sign'];
+ACTS['offer-sign'] = id => { sign0(id); if (id === 'maya' && S.offer.redeemed.maya) { S.round.res[2] = { t: 'act', txt: 'You took Maya’s invitation into the Threshold and signed: Golden State’s seat, in your own copy.' }; } };
+
+/* ================================================================ 9 · STANDING */
+const FRAMES = {
+  OFFICIAL: { name: 'OFFICIAL BOW', said: 'BOW World.', thr: 'One-line ledger. Official means BOW is accountable, not that it is right.', calm: 'calm: house ink, closed double rule, finished edge' },
+  VERIFIED: { name: 'THIRD-PARTY VERIFIED', said: 'Made by [creator], checked by BOW, version 3.', thr: 'Ledger: what was and was not checked. Edited since, those parts drop to unchecked.', calm: 'calm: guest ink inside a rule BOW closes at one corner' },
+  UNVERIFIED: { name: 'THIRD-PARTY UNVERIFIED', said: 'Made by [creator]. Not checked by BOW.', thr: 'One unskippable line before you act; it travels with every share.', calm: 'loud by presence: raw, uncut edge, coarse ground' },
+  LOCAL: { name: 'LOCAL', said: 'On this device.', thr: 'Sharing means publishing a new identity; the ledger says what leaves.', calm: 'your ink on plain ground; no BOW rule' },
+  TEMPORARY: { name: 'TEMPORARY', said: 'Temporary, until Friday.', thr: 'Sharing warns the link dies. Keep copies it into LOCAL. Nothing persistent may depend on it.', calm: 'a thin, see-through frame; the rule thins toward expiry; a number, not a name' },
+  LIVE: { name: 'LIVE REALITY', said: 'Live.', thr: 'No acting on the real team; fork only from recorded moments; the sender’s seen-at travels.', calm: 'observed-solid dominates; the clock keeps running' },
+  MODELED: { name: 'MODELED', said: 'Modeled, by BOW model v0.3.', thr: 'Only after a named model ran; the receipt shows the model and the input digest.', calm: '135° hatch on outputs; the model is named on request' },
+  ARCHIVED: { name: 'ARCHIVED', said: 'Archived. The clock stopped at the end of 1985–86.', thr: 'Readable, citeable, forkable on its pinned rulebook. Never live.', calm: 'glazed, matted frame; the clock stopped at its end' }
+};
+function holdsList() {
+  const kb = S.kept.branch, fr = S.round.res[1];
+  const rows = [];
+  if (S.seat) rows.push({ id: 'seat', rel: 'seat', name: 'Boston · Year Two · General manager', frame: 'OFFICIAL', ends: 'when you hand over, or vacate' });
+  if (S.seat) rows.push({ id: 'orders', rel: 'standing order', name: 'Away orders §1 §2', frame: 'LOCAL', ends: 'when you are back at the seat' });
+  if (S.offer.redeemed.maya) rows.push({ id: 'gs', rel: 'seat', name: 'Golden State · Week 6 trade file · your copy', frame: 'LOCAL', ends: 'when you hand over, or delete the copy' });
+  if (kb !== 'gone') rows.push({ id: 'kept', rel: 'kept branch', name: 'Holiday kept', frame: 'LOCAL', ends: 'when you let it go' + (S.orders.away ? ' · Reality broke it' : '') });
+  rows.push({ id: 'live', rel: 'follow', name: 'Boston Celtics · Reality', frame: 'LIVE', ends: 'when you stop following' + (S.msg.kept ? ' · via Maya’s Follow' : '') });
+  if (S.round.game) rows.push({ id: 'game', rel: 'follow', name: '[next preseason game · Reality feed]', frame: 'LIVE', ends: 'when the game ends' });
+  rows.push({ id: 'model', rel: 'follow', name: 'Second-apron consequences · BOW model v0.3', frame: 'MODELED', ends: 'when this model version is retired' });
+  if (!S.seat) rows.push({ id: 'text', rel: 'follow', name: 'BOW Economics · The Cap', frame: 'OFFICIAL', ends: 'when you stop following' });
+  rows.push({ id: 'ver', rel: 'follow', name: 'Ticket pricing lab · v3 · by [creator]', frame: 'VERIFIED', ends: 'when you stop, or the creator retires it', note: 'illustrative' });
+  rows.push({ id: 'unv', rel: 'want, filled', name: 'Garden nights · arena economics · by [creator]', frame: 'UNVERIFIED', ends: 'when you drop it' });
+  rows.push({ id: 'tmp', rel: 'assumption', name: 'An assistant’s what-if: “Keep Holiday”', frame: 'TEMPORARY', ends: 'Friday, unless you Keep it', days: 3 });
+  rows.push({ id: 'arc', rel: 'follow', name: '1985–86 Celtics', frame: 'ARCHIVED', ends: 'never — it is frozen' });
+  return rows;
+}
+SCENE.standing = function () {
+  const rows = holdsList(), sel = rows.find(r => r.id === S.stand.sel) || rows[0], fd = FRAMES[sel.frame];
+  const row = r => '<div class="hrow"><div class="fr fr-' + r.frame + '"' + (r.days ? ' style="--d:' + r.days + '"' : '') + '><b>' + esc(r.name) + '</b>' + (r.frame === 'ARCHIVED' ? ' <span class="tiny">· 1986</span>' : '') + (r.frame === 'LIVE' ? ' <span class="tiny">· live</span>' : '') + '</div><div class="hmeta"><span class="lbl">' + esc(r.rel) + '</span> · <span class="tiny">ends: ' + esc(r.ends) + '</span>' + (S.know ? '<br><span class="tiny"><b>frame: ' + FRAMES[r.frame].name + '</b></span>' : '') + '</div>' +
+    TG('What stands behind this? <span class="sr">' + esc(r.name) + '</span>', 'stand-sel', r.id, S.stand.sel === r.id && S.stand.sentence, 'bb sm') + '</div>';
+  const det = S.stand.sentence ? bow('at the threshold · ' + fd.name, '<div class="fr fr-' + sel.frame + '" style="margin:0 0 8px' + (sel.days ? ';--d:' + sel.days : '') + '"><b>' + esc(sel.name) + '</b></div><p style="font-size:18px;margin:0 0 6px"><b>' + esc(sel.note ? fd.said.replace('[creator]', '[creator], ' + sel.note) : fd.said) + '</b></p><p class="sm">' + esc(fd.thr) + '</p><p class="tiny">How it looks at the door, no words: ' + esc(fd.calm) + '.</p><p class="tiny">Risk is loud by presence; trusted kinds are calm. No badge is drawn inside the system; the frame is the Browser’s.</p>', { own: 1, cap: cap('P', 'NO AI REQUIRED') })
+    : seam('standing', '<p>Standing is an edge, not a place: the finite ledger of relations you hold, each with an end condition. You follow relations, not things.</p><p>Each system wears a frame, not a badge. Press “What stands behind this?” to hear one plain sentence about its kind.</p><p>No counts, no tiles, no “recommended”.</p>');
+  return '<div class="cols stand"><div class="ledger" role="group" aria-label="Relations you hold">' + rows.map(row).join('') + '</div><div>' + det + '</div></div>';
+};
+ACTS['stand-sel'] = id => { if (S.stand.sel === id && S.stand.sentence) { S.stand.sentence = false; } else { S.stand.sel = id; S.stand.sentence = true; log('you', 'asked what stands behind “' + holdsList().find(r => r.id === id).name + '” (' + FRAMES[holdsList().find(r => r.id === id).frame].name + ')', { hist: 'Your standing (private)', k: 'OBSERVED' }); } };
+
+/* ================================================================ 10 · MODELS UNAVAILABLE */
+const ASKMAP = [[/philadelphia|2017|number one|no\.? ?1/i, 'm2017-06-17'], [/tatum|achilles|game 4/i, 'm2025-05-12'], [/apron|holiday|porzi/i, 'm2025-06'], [/deadline|simons|vu[cč]evi/i, 'm2026-02-05'], [/dallas|return/i, 'm2026-03-06']];
+SCENE.floor = function () {
+  const f = S.floor, fa = S.floorAsk;
+  const RW = [['Reads, marks, claim cards, verify', 'works', 'works'], ['Offers, the Threshold, seats, “Not for you”', 'works', 'works'], ['Rings, holds, standing orders', 'works', 'works'], ['The Round and the Standing', 'works', 'works'], ['Cuts and sealed doors', 'works', 'works'], ['Loose speech and typed asks in words', 'a small model matches it to a card', 'typed choices only'], ['Smoothing the brief and glosses', 'a small model phrases it', 'the fixed template'], ['New modeled forks, actor models', 'metered, receipted', 'MODELED, not run. Queue it']];
+  const tbl = '<table class="mx"><caption class="sr">What still works with models available or unavailable</caption><thead><tr><th scope="col">Function</th><th scope="col">Models available</th><th scope="col">Models unavailable</th></tr></thead><tbody>' + RW.map(r => '<tr><th scope="row">' + esc(r[0]) + '</th><td' + (!f ? ' class="cur"' : '') + '>' + KD(r[1] === 'works' ? 'OBSERVED' : 'GENERATED') + esc(r[1]) + '</td><td' + (f ? ' class="cur"' : '') + '>' + KD(r[2] === 'works' ? 'OBSERVED' : 'UNKNOWN') + esc(r[2]) + '</td></tr>').join('') + '</tbody></table>';
+  const left = bow('the floor · monotone degradation',
+    '<p style="margin:0 0 8px"><b>Nothing spins. There is no error dialog.</b> Every AI feature sits on top of a typed action that already exists.</p><div class="row">' + TG('Models unavailable', 'floor', null, f) + '<span class="sm">' + (f ? 'Models are off. Everything above the line still runs.' : 'Models are on. Turn them off to see the floor.') + '</span></div>' + tbl +
+    '<p class="tiny">REAL as posture: the classroom product runs with no model calls (D166, D179) and no runtime dependencies. In the Browser this is PROPOSED.</p>', { own: 1, cap: cap('R', 'NO AI REQUIRED · posture is REAL in BOW Economics Live; the Browser floor is PROPOSED') });
+  let ask;
+  if (!f) {
+    const res = fa.done ? (fa.done === 'none' ? '<div class="hole">No match. Pick from the typed choices instead (turn models off to see them).</div>' : '<div style="margin-top:8px">' + bow('card · matched by an authored stand-in', '<p class="sm" style="margin:0 0 4px">Language compiles to a visible card before anything runs. <b>No model ran here</b>; a small model would fill this slot in a real product.</p>' + sealedDoor(fa.done)) + '</div>') : '';
+    ask = '<div class="host rel" style="padding:12px"><p style="margin:0 0 6px;font:600 13px var(--sans)">Ask in words <span style="font-weight:400;color:#5B564B">· fictional ask line</span></p><div class="row"><input id="askq" aria-label="Ask BOW in words" value="' + esc(fa.text) + '" style="flex:1;min-width:160px;font:400 14px var(--sans);padding:8px 10px;border:1px solid #B5B8BC;border-radius:8px">' + B('Ask', 'floor-ask', null, 'hb pri') + '</div>' + res + cap('P', 'SMALL / CHEAP MODEL to fill the slots; the engine validates') + '</div>';
+  } else {
+    ask = '<div class="host rel" style="padding:12px"><p style="margin:0 0 6px;font:600 13px var(--sans)">Ask <span style="font-weight:400;color:#5B564B">· typed choices</span></p><p class="sm" style="margin:0 0 6px;font-size:13px">The ask line went typed-only. No error dialog.</p>' + (fa.done && fa.done !== 'none' ? '<p style="margin:0 0 6px;font-size:13px">Chosen: <b>' + esc(momentParts(fa.done).q) + '</b> ' + B('Choose again', 'floor-again', null, 'hb') + '</p><div>' + bow('card · typed choice', sealedDoor(fa.done)) + '</div>' : '<div class="row">' + FX.moments.map(m => B(esc(momentParts(m.id).q), 'floor-pick', m.id, 'hb')).join('') + '</div>') +
+      '<div class="hole" style="margin-top:10px"><b>A modeled what-if</b> — MODELED, not run. The rulebook part is complete above. ' + (fa.queued ? '<b>Queued.</b> It runs when capacity returns.' : B('Queue it', 'floor-queue', null, 'hb')) + '</div>' + cap('P', 'NO AI REQUIRED') + '</div>';
+  }
+  return '<div class="cols sheet"><div>' + left + '</div><div>' + ask + '</div></div>';
+};
+document.addEventListener('input', e => { if (e.target && e.target.id === 'askq') S.floorAsk.text = e.target.value; });
+ACTS['floor-ask'] = () => { const t = S.floorAsk.text; const m = ASKMAP.find(x => x[0].test(t)); S.floorAsk.done = m ? m[1] : 'none'; log('you', 'asked in words: “' + t + '” → ' + (m ? 'matched a card (authored stand-in)' : 'no match'), { hist: 'Ask line (not a record)', k: 'AUTHORED' }); };
+ACTS['floor-again'] = () => { S.floorAsk.done = null; };
+ACTS['floor-pick'] = id => { S.floorAsk.done = id; log('you', 'chose from typed choices: ' + momentParts(id).q, { hist: 'Ask line (not a record)', k: 'AUTHORED' }); };
+ACTS['floor-queue'] = () => { S.floorAsk.queued = true; log('you', 'queued a modeled what-if (MODELED, not run yet)', { hist: 'Your standing (private)', k: 'MODELED' }); say('Queued. It runs when capacity returns. Nothing is waiting on screen.'); };
 
 render();
 </script>

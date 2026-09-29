@@ -1,0 +1,1093 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P3 · The Jurisdiction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<script src="_shared/boston-fixture.js"></script>
+<style>
+:root{
+--ink:#1b2620;--paper:#faf6ea;--paper2:#f0e9d5;--mute:#556058;--hair:#cdc6ae;
+--boston:#1e6a3e;--league:#454c55;--lpaper:#eceeec;--lrule:#b6bbc0;
+--denver:#2a6796;--dgold:#b98a22;--arena:#2b706a;--apaper:#f4f2e9;
+--news:#ece6d2;--nink:#26231b;--branch:#ad3517;--bpaper:#fbede8;
+--tone:rgba(27,38,32,.16);
+--serif:'Source Serif 4',Georgia,'Times New Roman',serif;
+--mono:'Courier Prime','Courier New',Courier,monospace;
+--sidew:208px;--framew:504px;
+--gc:#3a3a2f;--gp:#f5f1e2;--gb:#e2dcc7;--gp2:#efe9d5;
+}
+body[data-g=front]{--gc:#3a3a2f;--gp:#f5f1e2;--gb:#e2dcc7;--gp2:#efe9d5}
+body[data-g=reality]{--gc:var(--boston);--gp:#fbfaf3;--gb:#e3e8e1;--gp2:#f1f4ec}
+body[data-g=desk]{--gc:var(--boston);--gp:#f6eed4;--gb:#d5ccab;--gp2:#eee4c2}
+body[data-g=league]{--gc:var(--league);--gp:var(--lpaper);--gb:#cbcfcf;--gp2:#dfe2e1}
+body[data-g=denver]{--gc:var(--denver);--gp:#f3f8fc;--gb:#c9d8e5;--gp2:#e0ebf5}
+body[data-g=arena]{--gc:var(--arena);--gp:var(--apaper);--gb:#d6d2c1;--gp2:#eae7d8}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{font:15px/1.4 var(--serif);color:var(--ink);background:var(--gb);-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+h1,h2,h3,h4,p,ul,ol{margin:0}
+ul,ol{padding:0;list-style:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--branch);outline-offset:2px;box-shadow:0 0 0 2px #fff}
+#app{display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:100vh;overflow:clip}
+#top{display:flex;align-items:center;gap:12px;padding:4px 12px;background:var(--gp);border-bottom:2px solid var(--gc);min-height:38px}
+#top .ttl{font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+#addr{font:12px var(--mono);color:var(--mute);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tg{display:flex;gap:6px}
+.tb{min-height:34px;padding:3px 10px;border:1.5px solid var(--ink);background:var(--paper);font:700 12px var(--mono);cursor:pointer}
+.tb[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+main{display:grid;grid-template-columns:minmax(0,1fr) var(--sidew);min-height:0;overflow:clip}
+#col{display:flex;flex-direction:column;min-height:0;min-width:0;overflow:clip}
+#work{flex:1;min-height:0;display:flex;gap:10px;padding:8px 12px 8px 12px;align-items:flex-start;overflow:clip}
+#bot{display:flex;gap:14px;align-items:center;padding:3px 12px;background:var(--gp);border-top:1px solid var(--hair);font:11.5px var(--mono);color:var(--mute);min-height:26px}
+#bot .lg{display:none;gap:8px;margin-left:auto}
+body.know #bot .lg{display:flex}
+/* standing line */
+#standing{position:relative;padding:6px 14px 7px;background:var(--gp);border-left:10px solid var(--gc);border-bottom:1px solid var(--hair);display:flex;gap:14px;align-items:flex-start}
+#standing .sb{flex:1;min-width:0}
+#standing .s1{font:700 11px/1.1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gc);margin-bottom:2px}
+#standing .s2{font-size:17px;line-height:1.2;font-weight:600}
+#standing .s3{font:12.5px/1.35 var(--mono);margin-top:1px}
+#standing .s3 b{font-weight:700}
+#standing .gt{position:absolute;right:14px;top:6px;font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--gc);color:var(--gc);padding:3px 8px;white-space:nowrap;background:var(--gp)}
+body.real #standing .gt{position:static;align-self:flex-start}
+.rg{position:relative}
+.cap{display:none;margin:6px 0 0;font:700 10.5px/1.25 var(--mono);letter-spacing:.02em;padding:3px 6px;border:1.5px solid var(--ink);background:var(--paper);text-align:left;text-transform:none}
+#standing .cap{flex:0 0 250px;margin:0;align-self:flex-start}
+.cap small{display:block;font-weight:400;color:var(--mute)}
+body.real .cap{display:block}
+.cap.c-REAL{background:var(--ink);color:var(--paper)}.cap.c-REAL small{color:#d8d3c0}
+.cap.c-PROPOSED{background:var(--paper);border-style:solid}
+.cap.c-SPECULATIVE{background:repeating-linear-gradient(135deg,#f4e5c8 0 3px,#faf3e2 3px 7px);border-style:dashed}
+/* buttons */
+.btn{min-height:44px;padding:6px 14px;border:2px solid var(--ink);background:var(--paper);font:700 12.5px/1.15 var(--mono);letter-spacing:.03em;text-transform:uppercase;cursor:pointer;text-align:center;border-radius:2px}
+.btn:hover:not(:disabled){background:var(--paper2)}
+.btn.pri{background:var(--ink);color:var(--paper)}
+.btn.pri:hover:not(:disabled){background:#2e3d34}
+.btn.gc{background:var(--gc);color:#fff;border-color:var(--gc)}
+.btn:disabled{border-style:dashed;color:var(--mute);cursor:not-allowed;background:transparent}
+.btn[aria-pressed=true],.btn[aria-pressed=true]:hover:not(:disabled){background:var(--ink);color:var(--paper)}
+.btn[aria-pressed=true] .small{color:inherit}
+.btn.sm{min-height:36px;padding:3px 10px;font-size:11.5px}
+.btn.br{border-color:var(--branch);color:var(--branch)}.btn.br.pri{background:var(--branch);color:#fff}
+.lk{background:none;border:0;padding:0;font:inherit;color:var(--gc);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:24px}
+/* truth grammar */
+.vw{display:inline-block;vertical-align:baseline}
+.v{display:inline-block;padding:0 6px;font:700 .92em/1.35 var(--mono);white-space:nowrap;border:1.5px solid var(--ink)}
+.k-OBSERVED{background:var(--ink);color:var(--paper)}
+.k-RECORDED{background:var(--ink);color:var(--paper);box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 3.5px var(--paper)}
+.k-AUTHORED{background:transparent}
+.k-COMPUTED{background:var(--tone);border-color:transparent}
+.k-MODELED{background:repeating-linear-gradient(135deg,rgba(27,38,32,.28) 0 1.5px,transparent 1.5px 5px);border-color:var(--ink)}
+.k-GENERATED{background-color:var(--paper);background-image:radial-gradient(circle,rgba(27,38,32,.75) .8px,transparent 1.1px);background-size:4px 4px;border-color:var(--ink)}
+.k-UNKNOWN{background:transparent;border-style:dashed;color:var(--mute)}
+.kl li{display:grid;grid-template-columns:auto;gap:1px;border-bottom:1px solid var(--hair);padding:3px 0 4px}
+.kl .v{justify-self:start;max-width:100%;white-space:normal;overflow-wrap:anywhere;font-size:11.5px}
+.kl small{font:10.5px/1.25 var(--mono);color:var(--mute)}
+body.know .v{outline:1px dotted var(--branch);outline-offset:1px}
+/* stage / sheets */
+.stage{display:flex;align-items:stretch;min-width:0;flex:1}
+.sheet{background:var(--gp);border:1.5px solid var(--ink);border-left:6px solid var(--gc);display:flex;flex-direction:column;min-width:0;flex:1}
+.sh-h{height:46px;flex:0 0 46px;padding:0 10px;border-bottom:1px solid var(--hair);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sh-h h2{font:700 12.5px/1.15 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.sh-h .rel{font:11.5px var(--mono);color:var(--mute);text-align:right}
+.sh-b{display:flex;min-height:0;flex:none;overflow:hidden}
+.draw{flex:0 0 auto;display:block;border-right:1px solid var(--hair)}
+.read{flex:1;min-width:0;padding:8px 12px;overflow:auto;font-size:14px}
+.read h3{font:700 13px/1.2 var(--mono);letter-spacing:.04em;text-transform:uppercase;margin:0 0 4px}
+.read p{margin:0 0 6px}
+.read .ans{font-size:15px}
+.read .small,.small{font:12px/1.35 var(--mono);color:var(--mute)}
+.edge{flex:0 0 42px;width:42px;position:relative;border:1.5px solid var(--ink);border-left:6px solid var(--gc);border-right-width:0;background:var(--gp2);padding:0;cursor:pointer;overflow:hidden}
+.edge:hover{background:var(--gp)}
+.edge .et,.edge .er{position:absolute;left:4px;right:0;writing-mode:vertical-rl;transform:rotate(180deg);font:700 11.5px/1.15 var(--mono);text-transform:uppercase;letter-spacing:.05em;text-align:left;overflow:hidden}
+.edge .er{font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink)}
+.edge .pt{position:absolute;left:0;right:0;height:3px;background:var(--ink)}
+.hinges{display:flex;flex-direction:column;gap:4px;flex:0 0 118px;padding-top:6px}
+.hg{min-height:52px;text-align:left;border:1.5px solid var(--ink);border-left-width:1.5px;background:var(--gp2);padding:5px 8px;cursor:pointer;font:700 12px/1.15 var(--mono);letter-spacing:.05em;border-radius:0 3px 3px 0}
+.hg small{display:block;font:400 11.5px/1.2 var(--serif);letter-spacing:0;color:var(--mute);margin-top:1px}
+.hg[aria-current=true]{background:var(--gp);border-left:6px solid var(--gc)}
+.hg:hover{background:var(--gp)}
+.hg .ok{float:right;font-size:11px}
+.enterb{margin-top:8px}
+svg.draw text{font-family:var(--mono);fill:var(--ink)}
+.tk{font-size:10.5px;fill:var(--mute)!important}
+.rl{stroke:#8c8670;stroke-width:1;stroke-dasharray:1 3}
+.rn{font-size:11px;font-weight:700}
+.axis{stroke:var(--mute);stroke-width:1}.tkl{stroke:var(--mute)}
+.pinl{stroke:var(--ink);stroke-width:3}.pinl.c{stroke-width:2}
+.pinl.g{stroke:#6d6a5a;stroke-width:2;stroke-dasharray:6 4}
+.pl{font-size:11.5px;font-weight:700}
+table.gaps{border-collapse:collapse;width:100%;font-size:13px;margin:4px 0}
+.lr{display:flex;justify-content:space-between;align-items:center;gap:6px;border-bottom:1px solid var(--hair);padding:3px 0;font-size:13px;min-height:29px}
+.lr .l{font:700 11px var(--mono);letter-spacing:.03em}.lr .r{text-align:right}
+.lr s{color:var(--mute);font:11px var(--mono)}
+table.gaps th{font:700 11px var(--mono);text-align:left;padding:2px 4px;border-bottom:1.5px solid var(--ink);letter-spacing:.03em}
+table.gaps td{padding:3px 4px;border-bottom:1px solid var(--hair);vertical-align:middle}
+.tight{border:2px solid var(--ink);padding:3px 8px;font:700 12.5px var(--mono);margin:4px 0;display:flex;gap:8px;align-items:center;background:var(--tone);flex-wrap:wrap}
+.mkc{display:inline-block;vertical-align:-3px}
+.verb{display:flex;gap:8px;align-items:flex-start;padding:2px 0;font-size:13.5px}
+.verb.st{color:var(--mute)}.verb.st>span:last-child{text-decoration:line-through;text-decoration-thickness:2px}
+.verb .vs{flex:0 0 58px;font:700 10.5px var(--mono);letter-spacing:.04em;padding-top:3px}
+.vgrp{font:700 11.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;border-bottom:1.5px solid var(--ink);margin:7px 0 2px;display:flex;justify-content:space-between}
+input[type=range]{width:100%;height:36px;accent-color:var(--ink)}
+.rowb{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.paper{border:1.5px solid var(--ink);padding:4px 8px;margin:3px 0;display:flex;gap:8px;align-items:center;background:var(--gp2)}
+.paper .pb{flex:1;min-width:0;font-size:13.5px;line-height:1.3}
+.door{border:1.5px solid var(--ink);padding:5px 8px;margin:4px 0;font-size:13.5px}
+.sealed{border:2px dashed var(--mute);padding:6px 8px;color:var(--mute);font-size:13px;margin-top:4px}
+/* trace */
+table.tr{border-collapse:collapse;width:100%;font-size:13px}
+table.tr td,table.tr th{padding:3px 5px;border-bottom:1px solid var(--hair);text-align:left;vertical-align:top}
+table.tr th{font:700 11px var(--mono);border-bottom:1.5px solid var(--ink)}
+table.tr td.n{text-align:right;font-family:var(--mono);white-space:nowrap}
+/* front */
+.front{display:flex;gap:28px;width:100%;padding:12px 8px}
+.front .ask{flex:1.1;min-width:0}
+.front h1{font-size:34px;line-height:1.1;font-weight:700;margin-bottom:8px}
+.front .lead{font-size:16px;margin-bottom:14px;max-width:520px}
+.askl{display:flex;gap:8px;margin-bottom:12px}
+.askl input{flex:1;min-width:0;min-height:48px;padding:6px 10px;border:2px solid var(--ink);background:#fff;font:16px var(--serif)}
+.doors{display:flex;flex-direction:column;gap:6px}
+.doors .btn{text-align:left;text-transform:none;font:600 15px/1.25 var(--serif);letter-spacing:0;padding:8px 12px;min-height:46px}
+.front .reg{flex:.9;min-width:0;border:1.5px solid var(--ink);background:var(--paper);padding:8px 12px}
+.front .reg h2{font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.reg li{display:grid;grid-template-columns:8px 1fr;gap:10px;padding:5px 0;border-bottom:1px solid var(--hair);font-size:13.5px;line-height:1.3}
+.reg li i{display:block;width:8px;background:var(--c,var(--ink))}
+.reg li small{display:block;font:12px var(--mono);color:var(--mute)}
+.refuse{border:2px solid var(--ink);padding:6px 10px;background:var(--paper);font-size:14px;margin-bottom:8px}
+/* desk / center */
+.center{flex:1;min-width:0;min-height:0;max-height:100%;overflow:auto;padding-right:2px}
+.wframe{flex:0 0 var(--framew);display:flex;align-self:flex-start;min-width:0}
+.ledgerbg{background-image:repeating-linear-gradient(to bottom,transparent 0 23px,rgba(30,106,62,.16) 23px 24px)}
+.dh{font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;border-bottom:2px solid var(--ink);padding-bottom:3px;margin-bottom:6px;display:flex;justify-content:space-between;gap:8px}
+.matter{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;border:1.5px solid var(--ink);background:var(--gp);padding:7px 10px;margin-bottom:6px}
+.matter.inert{border-style:dashed;background:transparent;color:var(--mute)}
+.matter b{font-weight:600}
+.matter .due{font:12px var(--mono);color:var(--mute)}
+/* form */
+.form{border:2px solid var(--ink);background:var(--gp);position:relative}
+.form .fh{padding:6px 10px 5px;border-bottom:1.5px solid var(--ink);display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.form .fh h2{font:700 13px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.form .fs{padding:5px 10px;font-size:14px;line-height:1.3;border-bottom:1px solid var(--hair)}
+.stt{font:700 11px var(--mono);letter-spacing:.05em;border:1.5px solid var(--ink);padding:2px 6px;white-space:nowrap;text-transform:uppercase}
+.lns{padding:5px 8px 1px}
+.ln{display:grid;grid-template-columns:8px 80px 1fr auto;gap:0 8px;align-items:center;border:1.5px solid var(--ink);background:var(--gp);margin:0 0 4px;min-height:48px}
+.ln .sl{align-self:stretch;background:var(--lc,var(--ink))}
+.ln.p-denver .sl{background:linear-gradient(to bottom,var(--denver) 78%,var(--dgold) 78%)}
+.ln.p-league .sl{background:var(--league)}
+.ln.p-player .sl,.ln.p-media .sl{background:repeating-linear-gradient(135deg,var(--mute) 0 2px,transparent 2px 5px)}
+.ln.p-arena .sl{background:var(--arena)}
+.ln .who{font:700 12px/1.15 var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:3px 0}
+.ln .who small{display:block;font:400 11px/1.2 var(--serif);text-transform:none;letter-spacing:0;color:var(--mute)}
+.ln .what{font-size:13px;line-height:1.28;padding:2px 0;min-width:0}
+.ln .yk{display:flex;gap:6px;align-items:center;font:700 10.5px var(--mono);letter-spacing:.04em;margin-bottom:1px}
+.ln .yk .cr{font-weight:400;color:var(--mute)}
+.ln .stt2{padding:3px 8px 3px 0;text-align:right;font:700 11px/1.2 var(--mono);min-width:92px}
+.ln.struck{border-color:var(--mute);background:transparent}
+.ln.struck .who,.ln.struck .yk{text-decoration:line-through;text-decoration-thickness:2px}
+.ln.struck .who small{text-decoration:none}
+.ln.struck .mk{opacity:.55}
+.dk{display:inline-block;font:700 10px var(--mono);letter-spacing:.05em;padding:1px 6px;border:1.5px solid var(--ink);text-transform:uppercase;white-space:nowrap;margin-left:6px;vertical-align:1px}
+.dk.d-content{background:var(--ink);color:var(--paper)}
+.dk.d-shape{background:transparent}
+.dk.d-count{background:var(--tone);border-color:transparent}
+.dk.d-none{border-style:dashed;color:var(--mute)}
+.ln.none{border-style:dashed;background:transparent}
+.ln.refused{border-color:var(--branch)}
+.mk{width:25px;height:25px;flex:0 0 25px;--mf:none;--mi:currentColor}
+.mk.on{--mf:currentColor;--mi:var(--paper)}
+.cm{width:34px;height:18px}
+.kstrip{display:flex;gap:10px;align-items:center;padding:5px 10px;border-top:1px solid var(--hair);font:12px var(--mono);flex-wrap:wrap}
+.kstrip .kd{display:inline-flex;gap:4px;align-items:center}
+.kdot{width:13px;height:13px;border-radius:50%;border:2px solid var(--ink);display:inline-block}
+.kdot.on{background:var(--ink)}
+.legend{display:flex;gap:9px 12px;flex-wrap:wrap;align-items:center;padding:4px 10px;border-top:1px solid var(--hair);font:11px var(--mono);color:var(--mute)}
+.legend span{display:inline-flex;gap:3px;align-items:center}.legend .mk{width:19px;height:19px;flex:0 0 19px}.legend .cm{width:30px;height:16px}.legend .sep{width:1px;height:16px;background:var(--hair)}
+.fact{padding:6px 10px;border-top:1.5px solid var(--ink);display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--gp2)}
+.blk{border:2px solid var(--ink);padding:6px 10px;margin:6px 10px 0;font-size:14px;background:var(--paper)}
+.blk b{font-weight:700}
+.verdict{display:inline-block;font:700 12px var(--mono);padding:1px 8px;border:2px solid var(--ink);letter-spacing:.05em}
+.verdict.YES{background:var(--ink);color:var(--paper)}
+.verdict.NO{border-color:var(--branch);color:var(--branch);text-decoration:line-through;text-decoration-thickness:2px}
+.verdict.CT{border-style:dashed}
+.chk{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;margin:3px 0;font-size:13px;align-items:baseline}
+.stip{background-color:var(--paper);background-image:radial-gradient(circle,rgba(27,38,32,.55) .8px,transparent 1.1px);background-size:5px 5px;border:1.5px solid var(--ink);padding:6px 8px;font-size:13.5px;margin:4px 0}
+.stip small{display:block;font:11px var(--mono);background:var(--paper);display:inline-block;padding:0 4px;margin-top:2px}
+.clip{background:var(--news);color:var(--nink);border:1px solid #b3a98c;padding:6px 9px;margin:4px 0;font-size:13.5px;line-height:1.3}
+.clip .ol{font:700 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--nink);margin-bottom:3px;display:flex;justify-content:space-between}
+.clip.if{border-style:dashed;opacity:.9}
+.clip h4{font:700 15px/1.15 var(--serif)}
+/* visits */
+.visit{border:2px solid var(--ink);background:var(--gp);position:relative}
+.visit .vh{padding:6px 12px;border-bottom:2px solid var(--gc);font:700 13px var(--mono);letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between;gap:8px}
+.art{display:grid;grid-template-columns:50px 1fr;gap:0 10px;padding:5px 12px;border-bottom:1px solid var(--lrule);font-size:14px}
+.art .an{font:700 12px var(--mono);color:var(--league)}
+.art .ab{min-width:0}
+body[data-g=league] .visit{background-image:linear-gradient(var(--lrule) 1px,transparent 1px);background-size:100% 26px;background-color:var(--lpaper);font-family:var(--serif)}
+body[data-g=league] .art{background:rgba(236,238,236,.86)}
+.lhead{background:var(--dpaper,#e6eff7);border-top:7px solid var(--denver);border-bottom:2px solid var(--dgold);padding:6px 12px;font:700 15px var(--serif);letter-spacing:.05em;display:flex;justify-content:space-between;align-items:baseline}
+.lhead small{font:11.5px var(--mono);font-weight:400;letter-spacing:0;color:var(--mute)}
+.unk{border:2px dashed var(--mute);color:var(--mute);padding:5px 8px;font-size:13px;margin:4px 0;display:flex;justify-content:space-between;gap:8px}
+.clk{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:4px 0}
+.bar{height:16px;border:2px solid var(--ink);position:relative;min-width:120px;flex:1;max-width:260px}
+.bar.dash{border-style:dashed;border-color:var(--mute);background:transparent}
+.bar i{position:absolute;inset:0 auto 0 0;background:var(--ink)}
+.stamp{display:inline-block;border:3px double var(--league);color:var(--league);padding:5px 12px;transform:rotate(-3deg);font:700 13px/1.25 var(--mono);letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.5)}
+.stamp small{display:block;font:400 11px var(--mono);text-transform:none;letter-spacing:0}
+.stamp.in{animation:thump .55s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes thump{0%{transform:rotate(-3deg) scale(1.7);opacity:0}70%{transform:rotate(-3deg) scale(.96);opacity:1}100%{transform:rotate(-3deg) scale(1)}}
+.env{position:fixed;z-index:50;width:64px;height:42px;border:2px solid var(--ink);background:var(--paper);left:38%;top:52%;pointer-events:none;animation:fly .8s ease-in forwards}
+.env:before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom right,transparent 49%,var(--ink) 49% 51%,transparent 51%),linear-gradient(to bottom left,transparent 49%,var(--ink) 49% 51%,transparent 51%);height:55%}
+@keyframes fly{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(-200px,-260px) scale(.5);opacity:0}}
+/* arena */
+.cal{border-collapse:collapse;width:100%;font:11.5px var(--mono);background:#fff;background-image:linear-gradient(rgba(43,112,106,.12) 1px,transparent 1px);background-size:100% 20px}
+.cal th{font-weight:700;padding:2px;border:1px solid var(--arena);background:var(--apaper);text-align:center}
+.cal td{border:1px solid var(--arena);padding:0;height:30px}
+.cal button{display:block;width:100%;height:100%;min-height:30px;border:0;background:transparent;font:11px/1.1 var(--mono);cursor:pointer;padding:1px}
+.cal button.free:hover{background:rgba(43,112,106,.16)}
+.cal button.busy{background:repeating-linear-gradient(135deg,rgba(27,38,32,.22) 0 2px,transparent 2px 6px);color:var(--ink)}
+.cal button.mine{background:var(--arena);color:#fff;font-weight:700}
+.cal button.sel{outline:3px solid var(--arena);outline-offset:-3px;font-weight:700}
+/* records */
+.recs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.rc{border:1.5px solid var(--ink);background:var(--gp);font-size:14px;line-height:1.32;min-width:0}
+.rc .v{white-space:normal}
+.rc .rh{padding:4px 8px;font:700 11.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;border-bottom:2px solid var(--c);display:flex;justify-content:space-between;gap:4px}
+.rc .rb{padding:5px 8px}
+.rc li{margin:0 0 5px}
+.rc.r-boston{--c:var(--boston)}.rc.r-denver{--c:var(--denver);border-top:6px solid var(--denver)}.rc.r-league{--c:var(--league);background:var(--lpaper)}.rc.r-arena{--c:var(--arena);background:var(--apaper)}
+.rc .cannot{border-top:1px dashed var(--mute);margin-top:4px;padding-top:3px;color:var(--mute);font-size:12px}
+.hide{border:2px dashed var(--mute);color:var(--mute);padding:3px 6px;margin:3px 0;font-size:12.5px}
+.hide.h2{background:repeating-linear-gradient(135deg,rgba(27,38,32,.15) 0 2px,transparent 2px 6px)}
+/* branch + record paper */
+.pp{border:3px double var(--ink);background:var(--gp);padding:8px 10px;position:relative;font-size:13.5px;line-height:1.3}
+.pp.br{border:3px solid var(--branch);background:var(--bpaper)}
+.pp .bs{position:absolute;top:-12px;left:10px;background:var(--branch);color:#fff;font:700 10.5px var(--mono);padding:2px 7px;letter-spacing:0;white-space:nowrap}
+.pp .rs{position:absolute;top:-12px;left:10px;background:var(--ink);color:var(--paper);font:700 11px var(--mono);padding:2px 8px;box-shadow:inset 0 0 0 1px var(--ink),inset 0 0 0 2.5px var(--paper)}
+.pp h4{font:700 12.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;margin:6px 0 3px}
+.diff{color:var(--branch);font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px}
+.ml{display:flex;gap:8px;align-items:center;margin:3px 0}.ml.q{color:var(--ink)}.ml.q .mk{stroke-dasharray:3 2}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+ul.as{list-style:square;padding-left:18px;font-size:13px}
+.seg{display:flex}.seg .btn{border-radius:0;flex:1;text-align:left;text-transform:none;font:600 14px/1.25 var(--serif);letter-spacing:0}
+.seg .btn+.btn{border-left:0}
+/* side */
+#side{background:var(--gp2);border-left:1.5px solid var(--ink);overflow:auto;padding:8px 9px;min-height:0;font-size:12.5px;line-height:1.3}
+#side h2{font:700 11.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;border-bottom:2px solid var(--ink);margin:0 0 5px;padding-bottom:2px;display:flex;justify-content:space-between}
+.fol{margin-bottom:10px}
+.fol li{border:1.5px solid var(--ink);padding:4px 6px;margin-bottom:4px;background:var(--gp)}
+.fol .clock{font:11px var(--mono);color:var(--mute)}
+.ev{border-left:4px solid var(--ink);padding:2px 0 2px 6px;margin-bottom:6px}
+.ev .n{font:700 10.5px var(--mono);color:var(--mute)}
+.ev b{font-weight:700}
+.ev .h{display:block;font:10.5px var(--mono);color:var(--mute)}
+.ev.k-record{border-left:5px double var(--ink)}
+.ev.k-rehearsal{border-left:3px dashed var(--mute)}
+.ev.k-obs{border-left:4px solid var(--ink)}
+.ev.k-branch{border-left:4px solid var(--branch)}
+.ev.k-pencil{border-left:3px dotted var(--mute)}
+.ev.k-result{border-left:5px double var(--league)}
+.ev.k-hold{border-left:4px solid var(--boston)}
+#side .btn{min-height:34px;font-size:11px;padding:2px 8px}
+.wt{font:700 11px var(--mono)}
+@media (max-width:1330px){:root{--framew:470px;--sidew:190px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body data-g="front">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<symbol id="y-rule" viewBox="0 0 24 24"><rect x="2.5" y="2.5" width="19" height="19" style="fill:var(--mf,none)" stroke="currentColor" stroke-width="2"/><rect x="6" y="6" width="12" height="12" fill="none" style="stroke:var(--mi,currentColor)" stroke-width="1"/><path d="M8.5 10h7M8.5 14h7" style="stroke:var(--mi,currentColor)" stroke-width="1.4"/></symbol>
+<symbol id="y-will" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" style="fill:var(--mf,none)" stroke="currentColor" stroke-width="2"/><path d="M6.5 14.5c2-5 3-5 3.5-1s1.5 3 2.5-1.5 2-3.5 3.5.5" fill="none" style="stroke:var(--mi,currentColor)" stroke-width="1.6" stroke-linecap="round"/></symbol>
+<symbol id="y-time" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" style="fill:var(--mf,none)" stroke="currentColor" stroke-width="2"/><rect x="8" y="12" width="8" height="6" style="fill:var(--mi,currentColor)"/><path d="M8 7h8" style="stroke:var(--mi,currentColor)" stroke-width="1.4"/></symbol>
+<symbol id="y-money" viewBox="0 0 24 24"><path d="M12 2.5 21.5 12 12 21.5 2.5 12Z" style="fill:var(--mf,none)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 12h8M12 8v8" style="stroke:var(--mi,currentColor)" stroke-width="1.6"/></symbol>
+<symbol id="y-know" viewBox="0 0 24 24"><path d="M12 3 22 20.5H2Z" style="fill:var(--mf,none)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="15.2" r="2" style="fill:var(--mi,currentColor)"/><path d="M8.6 15a5 4 0 0 1 6.8 0" fill="none" style="stroke:var(--mi,currentColor)" stroke-width="1.2"/></symbol>
+<symbol id="c-copy" viewBox="0 0 34 18"><rect x="2" y="2" width="13" height="14" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="8" y="5" width="13" height="11" fill="var(--paper)" stroke="currentColor" stroke-width="1.6" stroke-dasharray="3 2"/><path d="M24 10h8M29 7l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+<symbol id="c-move" viewBox="0 0 34 18"><rect x="1.5" y="3" width="9" height="12" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 9h4" stroke="currentColor" stroke-width="1.8"/><path d="M12 9h9M18.5 6l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="23.5" y="3" width="9" height="12" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M26 9h4M28 7v4" stroke="currentColor" stroke-width="1.8"/></symbol>
+<symbol id="c-join" viewBox="0 0 34 18"><path d="M2 3h8v12H2M32 3h-8v12h8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M11 9h12" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="6" width="6" height="6" fill="currentColor"/></symbol>
+<pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="none"/><path d="M0 0v6" stroke="#1b2620" stroke-width="1.6"/></pattern>
+<pattern id="stip" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="2.5" cy="2.5" r=".9" fill="#1b2620"/></pattern>
+</defs></svg>
+<div id="app">
+<header id="top">
+<span class="ttl">P3 · The Jurisdiction</span>
+<span id="addr" aria-label="Address"></span>
+<span class="tg"><button type="button" class="tb" id="bKnow" aria-pressed="false">How do we know?</button><button type="button" class="tb" id="bReal" aria-pressed="false">What’s real?</button></span>
+</header>
+<main>
+<section id="col" aria-label="Current jurisdiction">
+<div id="standing" class="rg" aria-label="Standing line"></div>
+<div id="work"></div>
+</section>
+<aside id="side" class="rg" aria-label="Following and the record"></aside>
+</main>
+<footer id="bot"><span>PROTOTYPE · registry office: a system is a jurisdiction with its own ground, seats and clock · data: shared fixture, dated, verify · illustrative values say so</span><span class="lg" aria-hidden="true"><span><span class="v k-OBSERVED">obs</span></span><span><span class="v k-RECORDED">rec</span></span><span><span class="v k-AUTHORED">auth</span></span><span><span class="v k-COMPUTED">comp</span></span><span><span class="v k-MODELED">mod</span></span><span><span class="v k-GENERATED">gen</span></span><span><span class="v k-UNKNOWN">unk</span></span></span></footer>
+</div>
+<div id="live" class="sr" aria-live="polite" role="status"></div>
+<script>
+(function(){
+'use strict';
+var FX=window.BOW_FIXTURE;
+var $=function(s,r){return (r||document).querySelector(s);};
+var esc=function(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
+var m1=function(v){return '$'+(v/1e6).toFixed(1)+'M';},m3=function(v){return '$'+(v/1e6).toFixed(3)+'M';},d0=function(v){return '$'+Math.round(v).toLocaleString('en-US');};
+var fmtP=function(p){return p%100000===0?m1(p):m3(p);};
+var n3=function(v){return (v/1e6).toFixed(3);};
+
+/* ---------------- fixture handles (facts are read, never pasted) ---------------- */
+var L=FX.league.season2627,RE=FX.reality,WD=FX.world;
+var CAP=L.cap.v,TAX=L.tax.v,A1=L.apron1.v,A2=L.apron2.v,MINS=L.exceptions.minimum.v;
+var TS=RE.taxSalary.v,CP=RE.capPayroll.v;
+var WLINE=WD.taxLine.v,WHARD=WD.hardLimit.v,WPAY0=WD.payroll.v;
+var wtax=function(p){return Math.max(0,p-WLINE)*1.5;};
+var FEE=150000,CASH0=4100000;                       /* AUTHORED, illustrative */
+var PEERS=[151.2,154.8,157.9,160.3,162.7,164.1,166.9,169.4,171.8,174.5,176.9,179.6,182.3,185.0,187.9,190.6,193.2,195.8,197.9,199.4,201.3,203.9,206.7,210.2,213.8,216.9,219.4,223.1,226.4]; /* AUTHORED, illustrative: 29 other clubs */
+var CAPN={};Object.keys(FX.meta.capability).forEach(function(k){CAPN[k]=FX.meta.capability[k].split(' — ')[0];});
+var NOAI='NO AI REQUIRED';
+
+/* ---------------- truth-grammar chips ---------------- */
+var PROV=[];
+function chip(t,k,src,asof,ver){var key=k+'|'+t;if(!PROV.some(function(x){return x.key===key;}))PROV.push({key:key,t:t,k:k,src:src||'',asof:asof||'',ver:ver});return '<span class="vw"><span class="v k-'+k+'">'+t+'</span></span>';}
+var cf=function(f,t){return chip(esc(t!=null?t:f.v),f.k,f.src,f.asOf,f.verify);};
+var ca=function(t,n){return chip(esc(t),'AUTHORED',n||'illustrative — chosen for this prototype');};
+var cc=function(t,n){return chip(esc(t),'COMPUTED',n||'computed from the numbers shown');};
+var cr=function(t,n){return chip(esc(t),'RECORDED',n||'BOW World record');};
+var cu=function(t,n){return chip(esc(t),'UNKNOWN',n||'nobody knows yet');};
+var CB=function(c,ai,n){return '<span class="cap c-'+c+'">'+CAPN[c]+' · '+ai+(n?'<small>'+esc(n)+'</small>':'')+'</span>';};
+
+/* the five kinds of yes (silhouette + inner mark) and three carriers */
+var YK={RULE:{id:'y-rule',w:'RULE-yes'},WILL:{id:'y-will',w:'WILL-yes'},TIME:{id:'y-time',w:'TIME-yes'},MONEY:{id:'y-money',w:'MONEY-yes'},KNOWING:{id:'y-know',w:'KNOWING'}};
+var mk=function(k,on){return '<svg class="mk'+(on?' on':'')+'" aria-hidden="true" focusable="false"><use href="#'+YK[k].id+'"/></svg>';};
+var CK={copy:{id:'c-copy',w:'notice copies'},move:{id:'c-move',w:'remittance moves'},join:{id:'c-join',w:'countersignature joins'}};
+var cm=function(k){return '<svg class="cm" aria-hidden="true" focusable="false"><use href="#'+CK[k].id+'"/></svg>';};
+
+/* ---------------- ONE canonical state ---------------- */
+var S={
+  g:'front',sheets:[],active:'',pen:0,know:false,real:false,seat:false,view:'home',why:null,door:{},held:{},
+  w:{payroll:WPAY0,prev:null,roster:15,cash:CASH0,dates:[],picks:0},
+  f:{
+    f1:{st:'draft',sw:false,ln:{boston:0,denver:0,league:0},turn:0,last:null,tell:{boston:1,denver:1,league:0,player:0,media:0},att:0},
+    f2:{st:'draft',cell:null,ln:{boston:0,arena:0,league:0,money:0},turn:0,last:null,tell:{boston:1,arena:0,league:0,ticketing:0,media:0},att:0,refusal:null}
+  },
+  ws:'ledger',dragging:false,flight:null,rec:'f1',recs:{boston:[],denver:[],league:[],arena:[]},red:null,branches:[],log:[],n:0,leak:false,dnote:false,ask:'',refusal:'',stampNew:false,peak:0
+};
+var annT=0;
+function ann(m){var l=$('#live');l.textContent='';clearTimeout(annT);annT=setTimeout(function(){l.textContent=m;},30);}
+function clockNow(){return (S.g==='reality'||S.g==='front')?'Live · '+FX.meta.now:WD.clock.label;}
+function histNow(){return (S.g==='reality'||S.g==='front')?'Reality · observer':'World record';}
+function LOG(who,what,o){o=o||{};S.n++;var e={n:S.n,who:who,what:what,clock:o.clock||clockNow(),hist:o.hist||histNow(),kind:o.kind||'obs',sys:o.sys||''};S.log.push(e);return e;}
+
+/* ---------------- derived numbers ---------------- */
+var RD={min:148,max:230},WDM={min:190,max:256};
+var DH=function(){return Math.max(330,Math.min(650,innerHeight-262));};
+var yy=function(dom,v){return (dom.max-v/1e6)/(dom.max-dom.min)*DH();};
+var ts=function(){return TS+S.pen;},cp=function(){return CP+S.pen;};
+var LINES=[['CAP',CAP],['TAX LINE',TAX],['1ST APRON',A1],['2ND APRON',A2]];
+function gapTxt(line,pin){var d=line-pin;return m3(Math.abs(d))+(d>=0?' under':' over');}
+function tightest(){var t=ts(),best=null;LINES.forEach(function(l){var g=Math.abs(l[1]-t);if(!best||g<best.g)best={n:l[0],v:l[1],g:g};});return best;}
+function nearFlag(v){return LINES.some(function(l){return Math.abs(l[1]-v)<=5e6;});}
+function peerCounts(){var pts=PEERS.map(function(v){return v*1e6;}).concat([ts()]);var per=LINES.map(function(l){return pts.filter(function(v){return Math.abs(v-l[1])<=5e6;}).length;});return{per:per,any:pts.filter(nearFlag).length,tot:pts.length};}
+var VERBS=[
+ {g:'tax',t:'A tax bill starts: charged on tax salary above the line (rising brackets; repeat payers pay more)',bill:1},
+ {g:'a1',t:'use the non-taxpayer MLE ('+m3(L.exceptions.mleNonTaxpayer.v)+')',note:'fixture: crossing the first apron removes it'},
+ {g:'a1',t:'take back more than 100% of outgoing salary in a trade [verify]'},
+ {g:'a2',t:'aggregate salaries in a trade [verify]'},
+ {g:'a2',t:'send cash in a trade [verify]'},
+ {g:'a2',t:'use the taxpayer MLE ('+m3(L.exceptions.mleTaxpayer.v)+') [verify]'},
+ {g:'a2',t:'trade a first-round pick that is frozen at this level [verify]'}
+];
+var THR={tax:TAX,a1:A1,a2:A2};
+var isStruck=function(v,pin){return !v.bill&&pin>THR[v.g];};
+function verbsStruck(pin){return VERBS.filter(function(v){return isStruck(v,pin);});}
+var wpay=function(){return S.w.payroll;};
+
+/* ---------------- svg building blocks ---------------- */
+function base(W,dom,lines,step,left){
+  var D=DH(),s='';
+  for(var t=Math.ceil(dom.min/step)*step;t<=dom.max;t+=step){var y=yy(dom,t*1e6);s+='<line class="tkl" x1="46" x2="52" y1="'+y+'" y2="'+y+'"/><text class="tk" x="43" y="'+(y+4)+'" text-anchor="end">'+t+'</text>';}
+  s+='<line class="axis" x1="52" x2="52" y1="0" y2="'+D+'"/><text class="tk" x="6" y="12">$M</text>';
+  lines.forEach(function(l){var y=yy(dom,l.v);s+='<line class="rl" x1="52" x2="'+W+'" y1="'+y+'" y2="'+y+'"/><text class="rn" x="'+(left?58:W-6)+'" y="'+(l.dy!=null?y+l.dy:(l.pos==='below'?y+13:y-5))+'" text-anchor="'+(left?'start':'end')+'">'+l.n+'</text>';});
+  return s;
+}
+function pinDraw(W,dom,p){
+  var y=yy(dom,p.v),cx=p.right?W-16:(p.cx||68),s='',fill=p.ghost?'#faf6ea':'#1b2620';
+  s+='<line class="pinl '+(p.id==='C'?'c ':'')+(p.ghost?'g':'')+'" x1="52" x2="'+W+'" y1="'+y+'" y2="'+y+'"/>';
+  if(p.id==='C')s+='<path d="M'+cx+' '+(y-9)+' l9 9 -9 9 -9 -9z" fill="'+fill+'" stroke="#1b2620" stroke-width="2"/>';
+  else s+='<circle cx="'+cx+'" cy="'+y+'" r="9" fill="'+fill+'" stroke="#1b2620" stroke-width="2"/>';
+  s+='<text x="'+cx+'" y="'+(y+3.5)+'" text-anchor="middle" style="font-size:10px;font-weight:700;fill:'+(p.ghost?'#1b2620':'#faf6ea')+'">'+p.id+'</text>';
+  if(p.lab)s+='<text class="pl" x="'+(p.right?cx-14:cx+16)+'" y="'+(p.pos==='above'?y-7:y+17)+'"'+(p.right?' text-anchor="end"':'')+'>'+p.lab+'</text>';
+  return s;
+}
+function pinsR(W,dom,labels){
+  var s='';
+  if(S.pen){
+    s+=pinDraw(W,dom,{v:TS,id:'T'})+pinDraw(W,dom,{v:CP,id:'C'});
+    s+=pinDraw(W,dom,{v:ts(),id:'T',ghost:1,cx:112,lab:labels?'pencil +'+(S.pen/1e6).toFixed(1)+'M':'',pos:'below'})+pinDraw(W,dom,{v:cp(),id:'C',ghost:1,cx:112});
+  }else{
+    s+=pinDraw(W,dom,{v:TS,id:'T',lab:labels?'TAX SALARY '+n3(TS):'',pos:'below'})+pinDraw(W,dom,{v:CP,id:'C',lab:labels?'CAP PAYROLL ≈'+(CP/1e6).toFixed(1):'',pos:'above'});
+  }
+  return s;
+}
+function swid(base){var folds=Math.max(0,S.sheets.length-1),avail=innerWidth-208-24-118-42*folds-14;return Math.max(300,Math.min(base,avail-350));}
+function svgOpen(W,label){var D=DH();return '<svg class="draw" width="'+W+'" height="'+D+'" viewBox="0 0 '+W+' '+D+'" role="img" aria-label="'+esc(label)+'">';}
+function rLines(){return LINES.map(function(l){return {v:l[1],n:l[0]+' '+n3(l[1])};});}
+function pinChipT(){return S.pen?cc(d0(ts()),'pencil: your push, not canon'):cf(RE.taxSalary,d0(TS));}
+function pinChipC(){return S.pen?cc('≈ '+m1(cp()),'pencil: your push, not canon'):cf(RE.capPayroll,'≈ '+m1(CP));}
+
+/* ---------------- Reality sheets ---------------- */
+var HING=[{id:'peers',n:'PEERS',s:'30 clubs, same lines'},{id:'runby',n:'RUN BY',s:'which seat moves what'},{id:'paidto',n:'PAID TO',s:'Tatum ≈ $58.5M'},{id:'writtenas',n:'WRITTEN AS',s:'a contract, by season'},{id:'boundby',n:'BOUND BY',s:'the second apron'},{id:'madeby',n:'MADE BY',s:'the CBA, who wrote it'}];
+var SHN={neck:'Payroll',peers:'Peers',runby:'Run by',paidto:'Paid to',writtenas:'Written as',boundby:'Bound by',madeby:'Made by'};
+function edgeRead(id){
+  var t=tightest();
+  switch(id){
+    case 'neck':return m3(t.g)+' from the '+t.n.toLowerCase()+(ts()<t.v?' (under)':' (over)');
+    case 'peers':var pc=peerCounts();return pc.any+' of '+pc.tot+' clubs within $5M of a line';
+    case 'runby':return 'the GM moves it: sign, trade';
+    case 'paidto':return 'Tatum ≈ '+Math.round(RE.contracts[0].salary.v/ts()*100)+'% of it';
+    case 'writtenas':return 'one season known';
+    case 'boundby':var k=verbsStruck(ts()).length;return k?k+' verbs struck (pencil)':'no verb struck';
+    case 'madeby':return 'lines written by League + union';
+  }
+  return '';
+}
+function edgeR(id){
+  var HH=46,yp=HH+yy(RD,ts()),yr=HH+yy(RD,TS);
+  return '<button type="button" class="edge" data-a="open" data-p="'+id+'" data-f="edge:'+id+'" aria-label="Open sheet '+SHN[id]+' (folded). It reads the pin: '+esc(edgeRead(id))+'"><span class="et" style="top:'+(HH+6)+'px;height:'+Math.max(40,yr-HH-18)+'px">'+SHN[id]+'</span><i class="pt" style="top:'+(yp-1)+'px"></i><span class="er" style="top:'+(Math.max(yp,yr)+10)+'px;bottom:6px">'+esc(edgeRead(id))+'</span></button>';
+}
+function sheetHead(id,rel){return '<div class="sh-h"><h2>'+SHN[id]+' · Boston Celtics · 2026–27 lines</h2><span class="rel">'+rel+'</span></div>';}
+
+function neckSvg(){
+  var W=swid(500),dom=RD,t=ts(),yT=yy(dom,t),D=DH(),s=svgOpen(W,'Boston tax salary '+d0(t)+' and cap payroll against the cap, tax line and two aprons; the room left to each line is drawn as a band from the pin');
+  s+=base(W,dom,rLines(),10);
+  var tg=tightest(),ops=[[A2,.10],[A1,.20],[TAX,.42]];
+  var bx=Math.round(W*.5),bw=Math.round(W*.25);
+  ops.forEach(function(o){if(o[0]>t){var y=yy(dom,o[0]);s+='<rect x="'+bx+'" y="'+y+'" width="'+bw+'" height="'+(yT-y)+'" fill="rgba(27,38,32,'+o[1]+')" stroke="#1b2620" stroke-width="1"/>';}});
+  s+=pinsR(W,dom,true);
+  var yl=yy(dom,tg.v),ty=Math.max(yT,yl)+50;
+  s+='<path d="M'+bx+' '+(ty-14)+'v-6h'+bw+'v6" fill="none" stroke="#1b2620" stroke-width="1.6"/><text x="'+bx+'" y="'+(ty+2)+'" style="font-size:12px;font-weight:700">TIGHTEST HERE · '+(tg.g/1e6).toFixed(3)+'M</text>';
+  s+='<text x="58" y="'+(D-8)+'" style="font-size:10.5px;fill:#556058">bands: the room left between the pin and each line above it</text>';
+  return s+'</svg>';
+}
+function heldToggle(id,title,sub){
+  var on=!!S.held[id];
+  return '<div class="paper"><div class="pb"><b>'+title+'</b><br><span class="small">'+sub+'</span></div><button type="button" class="btn sm" data-a="hold" data-p="'+id+'" data-f="hold:'+id+'" aria-pressed="'+on+'">'+(on?'Holding':'Hold this paper')+'</button></div>';
+}
+function neckRead(){
+  var t=ts(),c=cp(),tg=tightest();
+  if(S.why==='neck')return whyNeck();
+  var rows=LINES.map(function(l){return '<tr><td>'+l[0]+' '+cf(L[l[0]==='CAP'?'cap':l[0]==='TAX LINE'?'tax':l[0]==='1ST APRON'?'apron1':'apron2'],m3(l[1]))+'</td><td>'+cc(gapTxt(l[1],t))+'</td><td>'+cc(gapTxt(l[1],c))+'</td></tr>';}).join('');
+  return '<h3>“Why is Boston so close to the tax line?”</h3>'+
+  '<p class="ans">The tax is charged on <b>tax salary</b> '+pinChipT()+': '+cc(gapTxt(TAX,t))+' the '+cf(L.tax,m3(TAX))+' line. <b>Cap payroll</b>, a different number, is '+pinChipC()+': '+cc(gapTxt(TAX,c))+' it. Both stay; nothing is averaged.</p>'+
+  '<table class="gaps"><thead><tr><th>Line</th><th>from tax salary</th><th>from cap payroll</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+  '<div class="tight"><span>TIGHTEST HERE</span>'+cc(tg.n.toLowerCase()+' · '+m3(tg.g),'computed: smallest gap between the pin and any line')+'<button type="button" class="btn sm" style="margin-left:auto" data-a="why" data-p="neck" data-f="why:neck">Why?</button></div>'+
+  '<h3 style="margin-top:6px">Papers you have no side in</h3>'+
+  heldToggle('pick31','2031 second-round pick, owed to Boston','owed by '+cu('[verify: who]')+' · due '+cu('[verify: 2031 draft]'))+
+  heldToggle('queue','The League’s pending queue','count and result only · League hours');
+}
+function whyNeck(){
+  var mm=FX.moments.filter(function(m){return m.id==='m2025-06'||m.id==='m2026-02-05';});
+  var doors=mm.map(function(m){var o=S.door[m.id];return '<div class="door"><b>'+esc(m.question)+'</b><br>'+(o?'<span class="small">asked · </span>'+cf(m.sealed,m.sealed.v):'<button type="button" class="lk" data-a="door" data-p="'+m.id+'" data-f="door:'+m.id+'">Ask what happened (you are an observer)</button>')+'</div>';}).join('');
+  return '<h3>Why: traced to recorded causes</h3><table class="tr"><thead><tr><th>Cause</th><th>Value</th></tr></thead><tbody>'+
+  '<tr><td>The tax line (a League rule, 2026–27)</td><td class="n">'+cf(L.tax,m3(TAX))+'</td></tr>'+
+  '<tr><td>Boston’s tax salary</td><td class="n">'+pinChipT()+'</td></tr>'+
+  '<tr><td>Gap = line − tax salary</td><td class="n">'+cc(gapTxt(TAX,ts()))+'</td></tr></tbody></table>'+
+  '<p class="small" style="margin-top:6px">Recorded moments that bear on it, named by their question:</p>'+doors+
+  '<p class="small" style="margin-top:6px">Which measure each apron uses: [verify]. The pin arrives on every sheet at the same height.</p><div class="rowb"><button type="button" class="btn sm" data-a="why" data-p="" data-f="why:close">Back to the sheet</button></div>';
+}
+function neckSheet(){
+  return '<section class="sheet rg" aria-label="Payroll sheet">'+sheetHead('neck','pin: Boston’s payroll')+'<div class="sh-b" style="height:'+DH()+'px">'+neckSvg()+'<div class="read">'+neckRead()+'</div></div>'+CB('PROPOSED',NOAI,'Sheets, the pin and the neck are not built; the dated fact store behind them is REAL CURRENT PRODUCT CAPABILITY.')+'</section>';
+}
+/* PEERS */
+function peersSvg(){
+  var W=swid(520),dom=RD,t=ts(),s=svgOpen(W,'Thirty clubs as ticks against the same four lines; Boston is the real one, the other twenty-nine are illustrative');
+  s+=base(W,dom,rLines(),10);
+  var px=Math.round(W*.42);
+  PEERS.forEach(function(v){var y=yy(dom,v*1e6),n=nearFlag(v*1e6);
+    s+='<line x1="'+px+'" x2="'+(px+56)+'" y1="'+y+'" y2="'+y+'" stroke="'+(n?'#1b2620':'#8c8670')+'" stroke-width="'+(n?3:2)+'"/>'+(n?'<circle cx="'+(px+62)+'" cy="'+y+'" r="2.6" fill="#1b2620"/>':'');});
+  s+=pinsR(W,dom,false);
+  var yb=yy(dom,t);
+  s+='<line x1="'+(px-14)+'" x2="'+(px+70)+'" y1="'+yb+'" y2="'+yb+'" stroke="#1b2620" stroke-width="5"/><text x="'+(px-92)+'" y="'+(yb+17)+'" style="font-size:11.5px;font-weight:700">BOSTON ▸</text>';
+  s+='<text x="58" y="'+(DH()-8)+'" style="font-size:10.5px;fill:#556058">29 clubs illustrative (AUTHORED) · dot = within $5M of a line</text>';
+  return s+'</svg>';
+}
+function peersRead(){
+  var pc=peerCounts(),rows=LINES.map(function(l,i){return '<tr><td>'+l[0]+'</td><td>'+cc(pc.per[i]+' clubs')+'</td></tr>';}).join('');
+  return '<h3>Peers · thirty payrolls, the same lines</h3><p class="ans">'+cc(pc.any+' of '+pc.tot+' clubs')+' sit within $5M of a line. Boston is real: '+pinChipT()+'. The other twenty-nine are '+ca('illustrative','an authored distribution for this prototype; a live 30-club feed is not built')+'.</p>'+
+  '<table class="gaps"><thead><tr><th>Within $5M of</th><th>clubs (incl. Boston)</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+  '<p class="small">A dot at a tick’s end marks a club within $5M of a line. The pin is the same height as on the Payroll sheet. Push the pin on “Bound by” and Boston’s dot moves here in pencil.</p>';
+}
+/* RUN BY */
+function runbySvg(){
+  var W=swid(440),dom=RD,s=svgOpen(W,'Which seat can move the pin; the lines above it are held elsewhere');
+  s+=base(W,dom,rLines(),10)+pinsR(W,dom,false);
+  var yT=yy(dom,ts());
+  s+='<text x="150" y="'+(yT+30)+'" style="font-size:11.5px;font-weight:700">▼ the GM moves this: sign, trade</text>';
+  s+='<text x="90" y="'+(yy(dom,TAX)-24)+'" style="font-size:11px;fill:#556058">▲ no Boston seat moves these lines</text>';
+  return s+'</svg>';
+}
+function runbyRead(){
+  var owner=cf(RE.owner,'Chisholm group');
+  return '<h3>Run by · who can move what, on whose warrant</h3><table class="tr"><thead><tr><th>Slab</th><th>Seat</th><th>Warrant</th></tr></thead><tbody>'+
+  '<tr><td>Sign or trade players (moves the pin)</td><td>General manager</td><td>the club’s front office · holder '+cu('[verify]')+'</td></tr>'+
+  '<tr><td>Spend on staff and rooms</td><td>Owner · '+owner+'</td><td>the ownership group</td></tr>'+
+  '<tr><td>Approve a trade</td><td>League Office</td><td>the rulebook</td></tr>'+
+  '<tr><td>Tax line, aprons, exceptions</td><td>no Boston seat</td><td>League + players’ union</td></tr></tbody></table>'+
+  '<p class="small" style="margin-top:6px">You are an observer here: your word counts for nothing. Take a seat in Boston · Year Two and the GM row becomes yours.</p>';
+}
+/* PAID TO */
+function paidSvg(){
+  var W=swid(440),dom=RD,t=ts(),s=svgOpen(W,'Tatum’s slab as a share of the pin');
+  s+=base(W,dom,rLines(),10)+pinsR(W,dom,false);
+  var yT=yy(dom,t),sal=RE.contracts[0].salary.v+S.pen*0,share=sal/t,w=300*share;
+  s+='<rect x="120" y="'+(yT+22)+'" width="'+w+'" height="18" fill="#1b2620"/><rect x="'+(120+w)+'" y="'+(yT+22)+'" width="'+(300-w)+'" height="18" fill="rgba(27,38,32,.16)"/>';
+  s+='<text x="124" y="'+(yT+53)+'" style="font-size:11px">Tatum ≈ '+Math.round(share*100)+'%</text><text x="'+(124+w)+'" y="'+(yT+53)+'" style="font-size:11px;fill:#556058">everyone else (not named)</text>';
+  return s+'</svg>';
+}
+function paidRead(){
+  var tat=RE.contracts[0],mm=FX.moments.filter(function(m){return m.id==='m2025-05-12'||m.id==='m2026-03-06';});
+  var doors=mm.map(function(m){var o=S.door[m.id];return '<div class="door"><b>'+esc(m.question)+'</b><br>'+(o?cf(m.sealed,m.sealed.v):'<button type="button" class="lk" data-a="door" data-p="'+m.id+'" data-f="door:'+m.id+'">Ask what happened</button>')+'</div>';}).join('');
+  return '<h3>Paid to · Tatum’s slab, on his own clock</h3><p class="ans">'+esc(tat.player)+' · '+cf(tat.salary,'≈ '+m1(tat.salary.v))+' is '+cc(Math.round(tat.salary.v/ts()*100)+'% of tax salary')+'. '+cu('other contracts: [verify: Reality feed]')+' are not named here: the roster has changed.</p>'+doors+
+  '<div class="rowb"><button type="button" class="btn sm" data-a="pushT" data-f="pushT" aria-pressed="'+(S.pen===5e6)+'">Push Tatum’s number +$5M (pencil)</button></div><p class="small">A push redraws every open sheet in pencil. Nothing is forked or recorded as canon.</p>';
+}
+/* WRITTEN AS */
+function writtenSvg(){
+  var W=swid(440),dom=RD,s=svgOpen(W,'A contract as a staircase of seasons; only 2026–27 is known');
+  s+=base(W,dom,rLines(),10)+pinsR(W,dom,false);
+  var D=DH(),b=D-24,h=96;
+  s+='<rect x="130" y="'+(b-h)+'" width="48" height="'+h+'" fill="#1b2620"/><text x="135" y="'+(b+14)+'" style="font-size:10.5px">26–27</text>';
+  for(var i=1;i<4;i++)s+='<rect x="'+(130+i*56)+'" y="'+(b-h)+'" width="48" height="'+h+'" fill="none" stroke="#556058" stroke-width="1.6" stroke-dasharray="5 4"/><text x="'+(132+i*56)+'" y="'+(b+14)+'" style="font-size:10.5px;fill:#556058">'+(26+i)+'–'+(27+i)+'</text>';
+  s+='<text x="130" y="'+(b-h-8)+'" style="font-size:11px">Tatum ≈ '+(RE.contracts[0].salary.v/1e6).toFixed(1)+'M (own scale)</text>';
+  return s+'</svg>';
+}
+function writtenRead(){
+  return '<h3>Written as · his contract, a staircase of seasons</h3><table class="tr"><thead><tr><th>Season</th><th>Salary</th></tr></thead><tbody><tr><td>2026–27</td><td class="n">'+cf(RE.contracts[0].salary,'≈ '+m1(RE.contracts[0].salary.v))+'</td></tr>'+
+  ['2027–28','2028–29','2029–30'].map(function(s){return '<tr><td>'+s+'</td><td class="n">'+cu('[verify: contract terms]')+'</td></tr>';}).join('')+'</tbody></table><p class="small" style="margin-top:6px">Later seasons are holes, not guesses. The staircase uses its own vertical scale; the pin is drawn at the same height as elsewhere.</p>';
+}
+/* BOUND BY */
+function boundSvg(){
+  var W=swid(440),dom=RD,t=ts(),s=svgOpen(W,'The second apron as a plane across the ledger; the payroll column rises through it and verbs are struck'),D=DH();
+  s+=base(W,dom,rLines(),10);
+  var y2=yy(dom,A2),y1=yy(dom,A1),yT=yy(dom,t);
+  s+='<rect x="52" y="'+(y2-8)+'" width="'+(W-52)+'" height="16" fill="url(#hatch)" opacity=".55"/><rect x="52" y="'+(y1-4)+'" width="'+(W-52)+'" height="8" fill="url(#hatch)" opacity=".35"/>';
+  s+='<rect x="110" y="'+yT+'" width="46" height="'+(D-yT)+'" fill="rgba(27,38,32,.22)" stroke="#1b2620" stroke-width="1.5"/>';
+  s+=pinsR(W,dom,false);
+  var ks=verbsStruck(t).length;
+  s+='<text x="170" y="'+(y2-14)+'" style="font-size:11.5px;font-weight:700">2ND APRON PLANE</text>';
+  s+='<text x="170" y="'+(yT+(t>A2?-20:24))+'" style="font-size:11.5px">'+(ks?ks+' verbs struck at this payroll':'no verb struck at this payroll')+'</text>';
+  return s+'</svg>';
+}
+function verbsList(pin,wl){
+  var out='',groups=[['a2','2ND APRON '+m3(A2)],['a1','1ST APRON '+m3(A1)],['tax',(wl?'WORLD TAX LINE '+m3(WLINE):'TAX LINE '+m3(TAX))]];
+  groups.forEach(function(g){var vs=VERBS.filter(function(v){return v.g===g[0];});if(g[0]==='tax'&&wl)vs=[{g:'tax',bill:1,t:'A tax bill of 1.5× the amount over the World’s line (World rule, authored; the NBA’s real tax is incremental)'}];
+    var n=vs.filter(function(v){return isStruck(v,pin);}).length;
+    out+='<div class="vgrp"><span>'+g[1]+'</span><span>'+(g[0]==='tax'?(pin>WLINE||pin>TAX?'bill on':'no bill'):(n?n+' struck':'open'))+'</span></div>';
+    vs.forEach(function(v){var st=isStruck(v,pin);out+='<div class="verb'+(st?' st':'')+'"><span class="vs">'+(v.bill?'BILL':st?'STRUCK':'OPEN')+'</span><span>'+esc(v.t)+'</span></div>';});});
+  return out;
+}
+function boundRead(){
+  var t=ts();
+  return '<h3>Bound by · the rule as a plane</h3><p class="small">Push Boston’s tax salary. Verbs are struck as it crosses each plane; release and the pencil erases. Nothing forks.</p>'+
+  '<label class="small" for="push">Tax salary (pencil): <b id="pushv">'+d0(t)+'</b></label><span id="pushSlot"></span>'+
+  '<div class="rowb" style="margin-top:0"><button type="button" class="btn sm" data-a="release" data-f="release"'+(S.pen?'':' disabled')+'>Release: erase the pencil</button></div>'+verbsList(t,false)+
+  '<p class="small" style="margin-top:4px">Rules read from the fixture where it has them; the rest are [verify].</p>';
+}
+/* MADE BY */
+function madeSvg(){
+  var W=swid(440),dom=RD,s=svgOpen(W,'The lines are written by the League and the players’ union together');
+  s+=base(W,dom,rLines(),10)+pinsR(W,dom,false);
+  var yc=yy(dom,CAP),y2=yy(dom,A2),ym=(yc+y2)/2;
+  s+='<path d="M112 '+y2+'h-8v'+(yc-y2)+'h8" fill="none" stroke="#1b2620" stroke-width="2"/><path d="M104 '+ym+'h-12" stroke="#1b2620" stroke-width="2"/><rect x="84" y="'+(ym-4)+'" width="8" height="8" fill="#1b2620"/>';
+  s+='<text x="124" y="'+(y2+26)+'" style="font-size:11.5px;font-weight:700">all four lines are written</text><text x="124" y="'+(y2+42)+'" style="font-size:11.5px">together by the League and</text><text x="124" y="'+(y2+58)+'" style="font-size:11.5px">the players’ union: a join</text>';
+  return s+'</svg>';
+}
+function madeRead(){
+  return '<h3>Made by · the rule in its governance reading</h3><table class="tr"><tbody>'+
+  '<tr><td>Written by</td><td>the League (its owners) and the players’ union, in one agreement, the CBA</td></tr>'+
+  '<tr><td>Term</td><td>'+cu('[verify: runs to 2029–30]')+'</td></tr>'+
+  '<tr><td>Can Boston change a line?</td><td>no: a club has one voice among thirty owners, and the union signs too '+cu('[verify]')+'</td></tr>'+
+  '<tr><td>The second apron</td><td>added in the 2023 agreement '+cu('[verify: year and terms]')+'</td></tr></tbody></table>'+
+  '<p class="small" style="margin-top:6px">Up from a rule goes to where it is made. Coming down, the pin arrives intact: Boston’s tax salary is still '+pinChipT()+', at the same height.</p>';
+}
+var SHEETS={
+  peers:{svg:peersSvg,read:peersRead,rel:'30 clubs, one ledger',cap:['PROPOSED',NOAI,'A live 30-club feed would be SPECULATIVE FRONTIER (licences); this distribution is AUTHORED.']},
+  runby:{svg:runbySvg,read:runbyRead,rel:'seats and warrants',cap:['PROPOSED',NOAI,'']},
+  paidto:{svg:paidSvg,read:paidRead,rel:'one person’s slab',cap:['PROPOSED',NOAI,'']},
+  writtenas:{svg:writtenSvg,read:writtenRead,rel:'a staircase of seasons',cap:['PROPOSED',NOAI,'']},
+  boundby:{svg:boundSvg,read:boundRead,rel:'a plane with verbs',cap:['REAL',NOAI,'The CBA rules engine is REAL CURRENT PRODUCT CAPABILITY; the plane and the push are PROPOSED.']},
+  madeby:{svg:madeSvg,read:madeRead,rel:'the rule, where it is made',cap:['PROPOSED',NOAI,'']}
+};
+function sheetR(id){
+  if(id==='neck')return neckSheet();
+  var d=SHEETS[id];
+  return '<section class="sheet rg" aria-label="'+SHN[id]+' sheet">'+sheetHead(id,d.rel)+'<div class="sh-b" style="height:'+DH()+'px">'+d.svg()+'<div class="read">'+d.read()+'</div></div>'+CB(d.cap[0],d.cap[1],d.cap[2])+'</section>';
+}
+function stageR(){
+  var h='<div class="stage" role="region" aria-label="Sheets: the pin at the same height on each">';
+  S.sheets.forEach(function(id){if(id!==S.active)h+=edgeR(id);});
+  h+=sheetR(S.active);
+  h+='<nav class="hinges rg" aria-label="Relations you can follow"><button type="button" class="hg" data-a="open" data-p="neck" data-f="hg:neck" aria-current="'+(S.active==='neck')+'">THE NECK<small>payroll, the pin</small></button>';
+  HING.forEach(function(x){h+='<button type="button" class="hg" data-a="open" data-p="'+x.id+'" data-f="hg:'+x.id+'" aria-current="'+(S.active===x.id)+'">'+x.n+(S.sheets.indexOf(x.id)>=0&&S.active!==x.id?'<span class="ok" aria-hidden="true">▮</span>':'')+'<small>'+x.s+'</small></button>';});
+  h+='<button type="button" class="btn pri enterb" data-a="enter" data-f="enter">Take your seat in Boston · Year Two</button>'+CB('PROPOSED',NOAI,'Hinges are typed relations; none are built.')+'</nav></div>';
+  return h;
+}
+
+/* ---------------- World stage (the pin frame that stays in the margin) ---------------- */
+function ledgerSvg(){
+  var W=200,dom=WDM,p=wpay(),s=svgOpen(W,'Boston World payroll '+fmtP(p)+' against the World tax line, the second apron and the hard limit');
+  var pys=[yy(dom,p)];if(S.w.prev!=null)pys.push(yy(dom,S.w.prev));
+  var ls=[{v:WLINE,n:'TAX LINE'},{v:A2,n:'APRON 2'},{v:WHARD,n:'HARD LIMIT'}].map(function(l){var y=yy(dom,l.v),c=[-5,13,-19,27,-33];for(var i=0;i<c.length;i++){var ly=y+c[i];if(pys.every(function(q){return q<ly-11||q>ly+3;})){l.dy=c[i];break;}}if(l.dy==null)l.dy=-5;return l;});
+  s+=base(W,dom,ls,10,true);
+  if(S.w.prev!=null)s+=pinDraw(W,dom,{v:S.w.prev,id:'P',ghost:1,right:1,lab:'was '+(S.w.prev/1e6).toFixed(1),pos:'above'});
+  s+=pinDraw(W,dom,{v:p,id:'P',right:1,lab:n3(p),pos:S.w.prev!=null?'below':'above'});
+  return s+'</svg>';
+}
+function ledgerRead(){
+  var p=wpay(),chg=S.w.prev!=null,pv=chg?S.w.prev:p;
+  var was=function(a,b){return chg?'<s>'+a+'</s> '+b:b;};
+  var st=verbsStruck(p).filter(function(v){return v.g==='a2';}).length,st0=verbsStruck(pv).filter(function(v){return v.g==='a2';}).length;
+  var row=function(l,r){return '<div class="lr"><span class="l">'+l+'</span><span class="r">'+r+'</span></div>';};
+  return row('PAYROLL',was(fmtP(pv),chg?cr(fmtP(p),'World record: your Week 9 act, League-approved'):cf(WD.payroll,fmtP(p))))+
+  row('ROSTER',ca(String(S.w.roster)))+
+  row('WORLD TAX LINE',cf(WD.taxLine,m1(WLINE)))+
+  row('PROJECTED TAX',was(m3(wtax(pv)),cc(m3(wtax(p)),'computed under the World rule (flat 1.5×, authored), not what the NBA would charge')))+
+  row('2ND APRON LINE',cf(L.apron2,m3(A2)))+
+  row('PAYROLL VS IT',p>A2?cc(m3(p-A2)+' over'):cc(m3(A2-p)+' under'))+
+  row('HARD LIMIT',cf(WD.hardLimit,m1(WHARD)))+
+  row('ROOM TO LIMIT',cc(m1(WHARD-p)))+
+  row('CASH',ca(fmtP(S.w.cash),'illustrative starting cash'))+
+  row('2ND-APRON VERBS',(chg?'<s>'+st0+' struck</s> ':'')+cc(st+' struck'))+
+  '<div class="rowb"><button type="button" class="btn sm" data-a="why" data-p="payroll" data-f="why:payroll">Why '+fmtP(p)+'?</button></div>'+
+  '<p class="small" style="margin-top:4px">Assumption (AUTHORED): the World reads the 2026–27 aprons from the fixture; its tax is its own. Reality’s pin is separate: your World diverged at Year 0.</p>';
+}
+function ruleSvg(){
+  var W=200,dom=WDM,p=wpay(),D=DH(),s=svgOpen(W,'The second-apron plane in the World; the payroll column and the verbs it struck');
+  s+=base(W,dom,[{v:WLINE,n:'TAX LINE'},{v:A2,n:'APRON 2',dy:-14}],10,true);
+  var y2=yy(dom,A2),yP=yy(dom,p);
+  s+='<rect x="52" y="'+(y2-8)+'" width="'+(W-52)+'" height="16" fill="url(#hatch)" opacity=".55"/>';
+  s+='<rect x="100" y="'+yP+'" width="40" height="'+(D-yP)+'" fill="rgba(27,38,32,.22)" stroke="#1b2620" stroke-width="1.5"/>';
+  if(S.w.prev!=null)s+=pinDraw(W,dom,{v:S.w.prev,id:'P',ghost:1,right:1});
+  s+=pinDraw(W,dom,{v:p,id:'P',right:1});
+  return s+'</svg>';
+}
+function ruleRead(){
+  var p=wpay();
+  return '<h3 style="margin-top:2px">Bound by</h3>'+verbsList(p,true)+(S.w.prev!=null?'<p class="small">Before the act the payroll was '+fmtP(S.w.prev)+': '+verbsStruck(S.w.prev).length+' verbs struck. Now '+verbsStruck(p).length+'.</p>':'');
+}
+function edgeW(id){
+  var HH=46,yp=HH+yy(WDM,wpay());
+  var t={wrule:'Bound by',wreal:'Reality'}[id];
+  var rd=id==='wrule'?(S.w.prev!=null?verbsStruck(S.w.prev).length+' struck → '+verbsStruck(wpay()).length:verbsStruck(wpay()).length+' verbs struck'):'unchanged: '+m3(Math.abs(TAX-TS))+' under the tax line';
+  var a=id==='wreal'?'leave':'openW';
+  return '<button type="button" class="edge" data-a="'+a+'" data-p="'+id+'" data-f="edgew:'+id+'" aria-label="'+(id==='wreal'?'Boston Celtics Reality, folded: '+rd+'. Hand the seat back and return to it':'Open the Bound by sheet, folded: '+rd)+'"><span class="et" style="top:'+(HH+6)+'px;height:'+Math.max(40,yp-HH-16)+'px">'+t+'</span>'+(id==='wrule'?'<i class="pt" style="top:'+(yp-1)+'px"></i>':'')+'<span class="er" style="top:'+(yp+9)+'px;bottom:6px">'+esc(rd)+'</span></button>';
+}
+function stageW(){
+  var h='<div class="stage" role="region" aria-label="Boston Year Two ledger; the pin stays in the margin">';
+  h+=edgeW('wreal');
+  if(S.ws!=='rule')h+=edgeW('wrule');
+  var isL=S.ws!=='rule';
+  h+='<section class="sheet rg ledgerbg" aria-label="'+(isL?'Ledger':'Rule')+' sheet"><div class="sh-h"><h2>'+(isL?'Ledger · Year Two · Wk 9':'Bound by · the plane')+'</h2><span class="rel">'+(isL?'pin: payroll':'')+'</span></div><div class="sh-b" style="height:'+DH()+'px">'+(isL?ledgerSvg():ruleSvg())+'<div class="read">'+(isL?ledgerRead():ruleRead())+'</div></div>'+CB('PROPOSED',NOAI,'Ledger sheets over a saved World are PROPOSED; the World record and the payroll rules are REAL seeds in the unmerged NBA-World branch.')+'</section>';
+  if(!isL)h+='<button type="button" class="edge" data-a="openW" data-p="ledger" data-f="edgew:ledger" aria-label="Open the Ledger sheet (folded): payroll '+fmtP(wpay())+'"><span class="et" style="top:52px;height:'+Math.max(40,46+yy(WDM,wpay())-62)+'px">Ledger</span><i class="pt" style="top:'+(46+yy(WDM,wpay())-1)+'px"></i><span class="er" style="top:'+(46+yy(WDM,wpay())+9)+'px;bottom:6px">payroll '+fmtP(wpay())+'</span></button>';
+  return h+'</div>';
+}
+
+/* ---------------- standing line and address ---------------- */
+function standingHTML(){
+  var g=S.g,a='You are in',b,c,tag,extra='';
+  if(g==='front'){b='The registry · front desk · as visitor';c='your word counts for: <b>nothing yet</b>. Ask, and you are placed where the answer is held.';tag='front desk';}
+  else if(g==='reality'){b='Boston Celtics · Reality · as observer';c='your word counts for: <b>nothing here</b> (you can observe, follow, enter a recorded moment)';tag='reading copy · live';}
+  else if(g==='desk'){b='Boston · Year Two (your World) · seat: GM';c='your word counts for: <b>signing, trading, payroll</b> · not for: <b>approving trades, setting the tax line, scheduling the arena</b>';tag='your desk · Wk 9';
+    if(S.view==='redline')extra=' <b>Reading a redline of the Denver paper: nothing is forked until you keep it.</b>';
+    if(S.view==='branch'||S.view==='compare')extra=' <b>Reading your branch of the Denver paper, beside the record.</b>';}
+  else if(g==='league'){a='Visiting';b='League Office';c='you can see: <b>queue count, this file’s status</b> · you cannot: <b>approve</b>. <span class="small">Your seat is still GM, Boston · Year Two.</span>';tag='League ledger';}
+  else if(g==='denver'){a='Visiting';b='Denver’s desk';c='you can see: <b>the paper you sent, nothing else</b> · you cannot: <b>sign for Denver, read their board</b>. <span class="small">Your seat is still GM, Boston · Year Two.</span>';tag='Denver letterhead';}
+  else if(g==='arena'){a='Visiting';b='the arena’s booking calendar';c='you can see: <b>free / busy</b> · you cannot: <b>book a slot, read what fills it</b>. <span class="small">Your seat is still GM, Boston · Year Two.</span>';tag='arena booking grid';}
+  return '<div class="sb"><div class="s1">'+a+'</div><div class="s2">'+b+'</div><div class="s3">'+c+(extra?'<br>'+extra:'')+'</div></div><span class="gt">'+tag+'</span>'+CB('PROPOSED',NOAI,'A standing line that states seat, warrant and disclosure is PROPOSED; the seat and pending-terms scoping it echoes exist in the NBA-World branch (REAL seed).');
+}
+function address(){
+  var g=S.g;
+  if(g==='front')return 'registry · front desk · visitor';
+  if(g==='reality')return 'boston.reality · '+FX.meta.now+' live · observer · '+(S.active||'neck')+(S.pen?' · pencil +'+(S.pen/1e6).toFixed(1)+'M':'');
+  if(g==='desk'){var v=S.view;return 'boston.world.year-two · Year Two · Week 9 · seat GM · '+(v==='redline'?'redline (draft)':v==='branch'||v==='compare'?'branch: denver paper, first-round ask':v);}
+  if(g==='league')return 'league.office · visiting · file '+(S.flight||'f1')+' · Year Two · Week 9';
+  if(g==='denver')return 'denver.desk · visiting · file '+(S.flight||'f1');
+  return 'arena.calendar · visiting · Week 10 · free/busy';
+}
+
+/* ---------------- front desk ---------------- */
+function frontHTML(){
+  var doors=[['neck','Why is Boston so close to the tax line?'],['peers','Who else is this close to a line?'],['boundby','What can’t Boston do above the second apron?']];
+  var reg=[['Boston Celtics · Reality',RE.clock.label,'var(--boston)'],['Boston · Year Two',WD.clock.label+' · a World you run','var(--boston)']];
+  FX.neighbours.forEach(function(n){var c={league:'var(--league)',denver:'var(--denver)',arena:'var(--arena)',media:'#a79d7d','player-rep':'#8a8a80'}[n.id];reg.push([n.name,'holds '+n.holds+' · '+n.crossing,c]);});
+  return '<div class="front rg"><div class="ask"><h1>Ask at the counter.</h1><p class="lead">You are placed where the answer is held, not at the top. A system has borders: some of what you find is decided in other systems.</p>'+
+  (S.refusal?'<div class="refuse" role="alert">'+esc(S.refusal)+'</div>':'')+
+  '<form class="askl" data-form="ask"><label class="sr" for="askq">Ask the registry</label><input id="askq" type="text" value="'+esc(S.ask||'Why is Boston so close to the tax line?')+'" autocomplete="off"><button type="submit" class="btn pri" data-f="askgo">Arrive</button></form>'+
+  '<div class="doors" role="group" aria-label="Doors, named by their question">'+doors.map(function(d){return '<button type="button" class="btn" data-a="ask" data-p="'+d[0]+'" data-f="door:'+d[0]+'">'+d[1]+'</button>';}).join('')+'</div>'+
+  '<p class="small" style="margin-top:10px">A door is named by its question. The question becomes the pin: Boston’s payroll against the lines.</p></div>'+
+  '<div class="reg"><h2>Jurisdictions this counter knows</h2><ul>'+reg.map(function(r){return '<li style="--c:'+r[2]+'"><i></i><span><b>'+esc(r[0])+'</b><small>'+esc(r[1])+'</small></span></li>';}).join('')+'</ul><p class="small" style="margin-top:6px">Boston touches five other systems. A yes may be needed from any of them.</p></div>'+CB('PROPOSED','SMALL / CHEAP MODEL','Free-text questions resolved to a sheet would need a small model; here three authored doors. The registry itself does not exist.')+'</div>';
+}
+
+/* ---------------- desk views ---------------- */
+function deskHome(){
+  var f1=S.f.f1,f2=S.f.f2;
+  var m1s=f1.st==='done'?'<span class="small">done · Week 9</span> <button type="button" class="btn sm" data-a="records" data-p="f1" data-f="rec:f1">Open the three records</button>':'<button type="button" class="btn pri" data-a="draft" data-p="f1" data-f="draft:f1">Draft: send the backup guard to Denver</button>';
+  var m2s=f2.st==='done'?'<span class="small">done · Week 10 Thu eve</span> <button type="button" class="btn sm" data-a="records" data-p="f2" data-f="rec:f2">Open the three records</button>':'<button type="button" class="btn pri" data-a="draft" data-p="f2" data-f="draft:f2">Add a home date for a partner night</button>';
+  var om=WD.openMatters;
+  return '<div class="dh"><span>Your desk · Boston · Year Two · Week 9</span><span>verbs here: DRAFT · SIGN · REHEARSE · SEND</span></div>'+
+  '<h3 class="small" style="margin:2px 0 6px">OPEN MATTERS</h3>'+
+  '<div class="matter inert"><span><b>'+esc(om[0].what)+'</b><br><span class="due">due '+esc(om[0].due)+' · '+ca('authored','illustrative, authored (fixture)')+' · not built in this prototype</span></span><span></span></div>'+
+  '<div class="matter"><span><b>'+esc(om[1].what)+'</b><br><span class="due">due '+esc(om[1].due)+' · '+ca('authored','illustrative, authored (fixture)')+' · a trade needs Denver, the League and you</span></span><span>'+m1s+'</span></div>'+
+  '<div class="matter inert"><span><b>'+esc(om[2].what)+'</b><br><span class="due">due '+esc(om[2].due)+' · '+ca('authored','illustrative, authored (fixture)')+' · not built in this prototype</span></span><span></span></div>'+
+  '<div class="matter"><span><b>A partner wants a night at the arena</b><br><span class="due">due Week 10 · '+ca('authored','illustrative, authored for this prototype')+' · needs the arena’s calendar, the League and you</span></span><span>'+m2s+'</span></div>'+
+  '<div class="rowb"><button type="button" class="lk" data-a="leave" data-f="leave">Leave the seat: hand it back and return to the reading copy of Reality</button></div>'+
+  '<p class="small" style="margin-top:6px">Everything on this desk is your World’s. A signed act changes the ledger at the right of the page only when the last line fills.</p>'+CB('PROPOSED',NOAI,'A desk of open matters derived from the rulebooks; papers offer → signed → delivered exist in the unmerged NBA-World branch (REAL seed).');
+}
+function legendStrip(){
+  return '<div class="legend" aria-label="Legend: five kinds of yes and three carriers">'+['RULE','WILL','TIME','MONEY','KNOWING'].map(function(k){return '<span>'+mk(k,0)+YK[k].w.replace('-yes','').toLowerCase()+'</span>';}).join('')+'<i class="sep"></i>'+['copy','move','join'].map(function(k){return '<span title="'+CK[k].w+'">'+cm(k)+{copy:'copies',move:'moves',join:'joins'}[k]+'</span>';}).join('')+'</div>';
+}
+function lineRow(o){
+  return '<li class="ln p-'+o.p+' '+(o.cls||'')+'"><span class="sl"></span><span class="who">'+o.who+'<small>'+o.sub+'</small></span><span class="what"><span class="yk">'+mk(o.yes,o.on)+YK[o.yes].w+(o.car?' <span class="cr">· '+cm(o.car)+{copy:'copies',move:'moves',join:'joins'}[o.car]+'</span>':'')+'</span><span class="tx">'+o.what+'</span></span><span class="stt2">'+o.st+'</span></li>';
+}
+function kdots(f,names){return '<div class="kstrip" role="group" aria-label="Who knows now"><b>KNOWING NOW</b>'+names.map(function(n){return '<span class="kd"><i class="kdot'+(f.tell[n[0]]?' on':'')+'" aria-hidden="true"></i>'+n[1]+(f.tell[n[0]]?'<span class="sr"> knows</span>':'<span class="sr"> does not know</span>')+'</span>';}).join('')+'</div>';}
+function verdictChip(v){return v==='YES'?'<span class="verdict YES">YES</span>':v==='NO'?'<span class="verdict NO">NO</span>':'<span class="verdict CT">CAN’T TELL</span>';}
+function rulebook(fid,rh){
+  var f=S.f[fid],out={checks:[],v:'YES'};
+  if(fid==='f1'){
+    var over=S.w.payroll>A2;
+    if(f.sw)out.checks.push({side:'Boston',v:over?'NO':'YES',t:over?'Payroll '+fmtP(S.w.payroll)+' is over the second apron '+m3(A2)+': a team over it may not send cash in a trade. Rule: second-apron restrictions [verify: article text]. You can change: take the cash out.':'Cash may travel: payroll is under the second apron.'});
+    else out.checks.push({side:'Boston',v:'YES',t:'Sends one player ('+m3(MINS)+') and takes back only a pick: nothing to aggregate, no cash. Payroll after: '+fmtP(S.w.payroll-MINS)+'.'});
+    out.checks.push({side:'Denver',v:rh?'CT':'YES',t:rh?'Can Denver absorb '+m3(MINS)+'? That reads Denver’s payroll, which sits on Denver’s desk, not yours. [verify: absorption rule]':'Read at the League desk with both sides’ books: Denver absorbs the player (AUTHORED, illustrative).'});
+  }else{
+    out.checks.push({side:'Arena',v:f.cell?'YES':'CT',t:f.cell?'Free on the arena’s calendar: '+cellName(f.cell)+'.':'No slot chosen yet: the calendar cannot answer.'});
+    out.checks.push({side:'League',v:f.cell?'YES':'CT',t:f.cell?'Inside the schedule windows for a home date [verify: rule text].':'A schedule change needs a date.'});
+    out.checks.push({side:'Money',v:S.w.cash>=FEE?'YES':'NO',t:'Event fee '+m3(FEE)+' (illustrative) against cash '+fmtP(S.w.cash)+'.'});
+  }
+  if(out.checks.some(function(c){return c.v==='NO';}))out.v='NO';else if(out.checks.some(function(c){return c.v==='CT';}))out.v='CT';
+  return out;
+}
+function rehearsalBlock(fid){
+  var r=S.f[fid].last;if(!r)return '';
+  return '<div class="blk"><b>Trade call · dry run</b> '+verdictChip(r.v)+' <span class="small">recorded as a rehearsal; crosses nothing</span>'+r.checks.map(function(c){return '<div class="chk"><span>'+verdictChip(c.v)+' '+c.side+'</span><span>'+esc(c.t)+'</span></div>';}).join('')+'</div>';
+}
+var ORDER={f1:['denver','league'],f2:['arena','league']};
+function blockedOn(fid){
+  var f=S.f[fid],k=ORDER[fid].filter(function(x){return !f.ln[x];})[0];if(!k)return null;
+  return {k:k,who:{denver:'Denver',league:'League Office',arena:'the arena business'}[k],yes:{denver:'WILL',league:'RULE',arena:'TIME'}[k],
+    why:{denver:'the seat is held by another owner; you cannot fill it.',league:'it applies the rulebook once every club line is in.',arena:'the slot is on its own calendar; you can see free / busy, not book.'}[k],
+    clock:{denver:'Denver’s clock',league:'League hours',arena:'the arena’s clock'}[k]};
+}
+function movesHTML(fid){
+  var f=S.f[fid];
+  if(f.st==='done')return '<div class="rowb" style="margin:6px 10px 8px"><button type="button" class="btn pri" data-a="back" data-f="back">Return to your desk</button></div>';
+  if(f.st!=='sent')return '';
+  var b=blockedOn(fid),g=goTarget(fid);
+  return '<div class="blk"><b>Blocked on '+b.who+'</b> · '+YK[b.yes].w+' · '+b.why+' What you can change: what you ask (RE-FORM), never their answer.</div>'+
+  '<div class="rowb" style="margin:6px 10px 8px"><button type="button" class="btn pri" data-a="wait" data-f="wait">Wait · '+b.clock+'</button><button type="button" class="btn" data-a="go" data-f="go">Go there · '+g.n+'</button><button type="button" class="btn" data-a="reform" data-f="reform">Re-form</button></div>';
+}
+function goTarget(fid){
+  var f=S.f[fid],un=ORDER[fid].filter(function(x){return !f.ln[x];}),cur=S.g,t=un.filter(function(x){return x!==cur;})[0]||un[0];
+  return {k:t,n:{denver:'Denver’s desk',league:'League Office',arena:'the arena’s calendar'}[t]};
+}
+var CAL={days:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],full:{Mon:'Monday',Tue:'Tuesday',Wed:'Wednesday',Thu:'Thursday',Fri:'Friday',Sat:'Saturday',Sun:'Sunday'},
+  busy:{'Tue-eve':['arena','a touring concert'],'Wed-eve':['league','a Boston home game set by the League schedule'],'Fri-eve':['arena','another tenant’s event'],'Wed-aft':['arena','load-in for the Wednesday game'],'Sat-aft':['arena','a family show'],'Sat-eve':['league','a road game for Boston']}};
+function cellName(c){var p=c.split('-');return 'Week 10 '+CAL.full[p[0]]+(p[1]==='eve'?' evening':' afternoon');}
+function calGrid(interactive){
+  var f=S.f.f2,h='<table class="cal" aria-label="Arena booking grid, Week 10, free or busy"><thead><tr><th></th>'+CAL.days.map(function(d){return '<th scope="col">'+d+'</th>';}).join('')+'</tr></thead><tbody>';
+  ['aft','eve'].forEach(function(sl){h+='<tr><th scope="row">'+(sl==='aft'?'Aft':'Eve')+'</th>';CAL.days.forEach(function(d){
+    var id=d+'-'+sl,b=CAL.busy[id],mine=f.st==='done'&&f.cell===id,sel=f.cell===id&&f.st!=='done',cls=mine?'mine':b?'busy':'free',lab=cellName(id).replace('Week 10 ','')+(mine?': booked, Boston partner night':b?': busy':sel?': free, requested by you':': free');
+    h+='<td><button type="button" class="'+cls+(sel?' sel':'')+'" data-a="cell" data-p="'+id+'" data-f="cell:'+id+'" aria-label="'+lab+'"'+(interactive?'':' disabled')+'>'+(mine?'yours':b?'busy':sel?'asked':'free')+'</button></td>';});h+='</tr>';});
+  return h+'</tbody></table>';
+}
+/* the Instrument: a form whose lines are derived from the rulebooks it touches */
+function form1(){
+  var f=S.f.f1,dr=f.st==='draft';
+  var dn=S.dnote?'<div class="stip">Denver’s side: they asked about a future second-round pick in Week 3 and again now; a minimum-deal guard for a second sits inside what they asked. <small>modeled ABOUT Denver’s position, not by them · AUTHORED stand-in for a SMALL / CHEAP MODEL; nothing ran</small></div>':'';
+  var lk=S.leak?'<div class="clip if"><div class="ol"><span>[outlet: illustrative]</span><span>if it ran now · not printed</span></div><b>Boston shopping a reserve guard to Denver, per a source.</b> <span class="small">A leak is a notice with no warrant: it cannot be recalled, and Denver’s owner may ask for more. AUTHORED.</span></div>':'';
+  var lines=lineRow({p:'boston',who:'Boston',sub:'GM seat · yours',yes:'WILL',on:!!f.ln.boston,car:'join',what:'Boston accepts. Your word, your warrant.',st:f.ln.boston?'signed · Wk 9':(dr?'<button type="button" class="btn sm pri" data-a="sign" data-p="f1" data-f="sign:f1">Sign line 1</button>':'withdrawn')})+
+  lineRow({p:'denver',who:'Denver',sub:'another owner’s seat',yes:'WILL',on:!!f.ln.denver,car:'join',what:'Denver signs. Not yours to fill. <button type="button" class="lk" data-a="dnote" data-f="dnote" aria-pressed="'+S.dnote+'">'+(S.dnote?'Hide Denver’s side':'Ask about Denver’s side')+'</button>'+dn,st:f.ln.denver?'signed · Denver’s clock':'open · theirs'})+
+  lineRow({p:'league',who:'League',sub:'the Office, by rule',yes:'RULE',on:!!f.ln.league,car:'join',what:'Approves by the rulebook; a refusal names its rule.',st:f.ln.league?'approved':'open · by rule'})+
+  lineRow({p:'player',who:'Player',sub:'consent',yes:'WILL',cls:'struck',what:'Struck: no no-trade clause applies '+cu('[verify: 8+ years’ service, 4+ with club]')+'. An absent line is information.',st:'struck'})+
+  lineRow({p:'media',who:'Media',sub:'no line',yes:'KNOWING',car:'copy',cls:'none',what:'Media never says yes; it learns. <button type="button" class="lk" data-a="leak" data-f="leak" aria-pressed="'+S.leak+'">'+(S.leak?'Hide the leak':'What would a leak do?')+'</button>'+lk,st:'no line'});
+  var ret=f.returned?'<div class="blk" role="alert"><b>The League returned the file.</b> '+f.returned.checks.filter(function(c){return c.v==='NO';}).map(function(c){return esc(c.t);}).join(' ')+'</div>':'';
+  return '<div class="form rg"><div class="fh"><h2>Trade paper · Boston ⇄ Denver</h2><span class="stt">'+({draft:'draft · nothing crosses',sent:'sent · in flight',done:'signed three ways'}[f.st])+'</span></div>'+
+  '<div class="fs"><b>Boston sends</b> the backup guard (minimum deal '+cf(L.exceptions.minimum,m3(MINS))+', signed Week 1). <b>Boston gets</b> a future second-round pick from Denver.'+(f.sw?' <b>Plus $0.5M cash.</b>':'')+'</div>'+
+  ret+'<ul class="lns">'+lines+'</ul>'+
+  (dr?'<div class="rowb" style="margin:6px 10px 8px"><button type="button" class="btn" data-a="rehearse" data-p="f1" data-f="rehearse:f1">Trade call (dry run)</button><button type="button" class="btn sm" data-a="sweet" data-p="f1" data-f="sweet" aria-pressed="'+f.sw+'">Add $0.5M cash</button><button type="button" class="btn pri" data-a="send" data-p="f1" data-f="send:f1"'+(f.ln.boston?'':' disabled')+'>Send</button>'+(f.ln.boston?'':'<span class="small" style="align-self:center">Send needs line 1.</span>')+'</div>':'')+
+  movesHTML('f1')+rehearsalBlock('f1')+kdots(f,[['boston','Boston'],['denver','Denver'],['league','League'],['player','Player'],['media','Media']])+legendStrip()+CB('PROPOSED',NOAI,'N-party forms with kinds of yes and dry runs are PROPOSED. RULE-yes uses the CBA rules engine (REAL). A WILL-yes played by a model: SMALL / CHEAP MODEL; an AI holding a seat: FRONTIER MODEL OCCASIONAL.')+'</div>';
+}
+function form2(){
+  var f=S.f.f2,dr=f.st==='draft';
+  var cellTxt=f.cell?cellName(f.cell):null;
+  var lines=lineRow({p:'boston',who:'Boston',sub:'Partnerships room · yours',yes:'WILL',on:!!f.ln.boston,car:'join',what:'Your room says yes to a partner night. Your warrant.',st:f.ln.boston?'signed · Wk 9':(dr?'<button type="button" class="btn sm pri" data-a="sign" data-p="f2" data-f="sign:f2">Sign line 1</button>':'withdrawn')})+
+  lineRow({p:'arena',who:'Arena',sub:'a separate business',yes:'TIME',on:!!f.ln.arena,car:'join',what:'A slot on <b>its</b> calendar: you see free / busy, not the bookings. '+(cellTxt?'Asked: <b>'+cellTxt+'</b>.':'Pick a slot on the grid below.'),st:f.ln.arena?'held for you':(cellTxt?'asked':'no slot yet')})+
+  lineRow({p:'league',who:'League',sub:'schedule, by rule',yes:'RULE',on:!!f.ln.league,car:'join',what:'Approves a schedule change by rule.',st:f.ln.league?'approved':'open · by rule'})+
+  lineRow({p:'boston',who:'Money',sub:'computed',yes:'MONEY',on:!!f.ln.money,car:'move',what:'Event fee '+ca(m3(FEE),'illustrative')+' moves from Boston’s cash '+ca(fmtP(S.w.cash),'illustrative')+' to the arena. Funds exist: '+cc('yes')+'.',st:'computed · yes'})+
+  lineRow({p:'media',who:'Tell',sub:'ticketing · media',yes:'KNOWING',car:'copy',cls:'none',what:'Your ticketing room and the media are told after approval. A copy cannot be recalled.',st:f.tell.ticketing?'told':'after approval'});
+  var ref=f.refusal?'<div class="blk" role="alert"><b>Refused:</b> '+esc(cellName(f.refusal.cell))+' is held on '+({arena:'the arena’s own calendar',league:'the League’s schedule'}[f.refusal.holder])+' ('+esc(f.refusal.why)+', illustrative). Whose word counts: <b>'+({arena:'the arena business',league:'the League'}[f.refusal.holder])+'</b>, not Boston’s. Rule: a TIME-yes belongs to whoever holds the calendar. You can change: the slot.</div>':'';
+  return '<div class="form rg"><div class="fh"><h2>Home date · partner night · Week 10</h2><span class="stt">'+({draft:'draft · nothing crosses',sent:'sent · in flight',done:'booked three ways'}[f.st])+'</span></div>'+
+  '<ul class="lns">'+lines+'</ul>'+
+  '<div style="padding:0 10px 4px"><div class="small" style="margin-bottom:2px"><b>ARENA BOOKING GRID</b> · the arena’s own register · '+ca('authored calendar','illustrative: not a real arena calendar')+' <span class="dk d-shape">shape only: free / busy</span></div>'+calGrid(dr)+'</div>'+ref+
+  (dr?'<div class="rowb" style="margin:6px 10px 8px"><button type="button" class="btn" data-a="rehearse" data-p="f2" data-f="rehearse:f2">Trade call (dry run)</button><button type="button" class="btn pri" data-a="send" data-p="f2" data-f="send:f2"'+(f.ln.boston&&f.cell?'':' disabled')+'>Send</button>'+(f.ln.boston&&f.cell?'':'<span class="small" style="align-self:center">Send needs a slot and line 1.</span>')+'</div>':'')+
+  movesHTML('f2')+rehearsalBlock('f2')+kdots(f,[['boston','Boston'],['arena','Arena'],['league','League'],['ticketing','Ticketing'],['media','Media']])+legendStrip()+CB('SPECULATIVE','NO AI REQUIRED','A live arena calendar is a third-party integration: SPECULATIVE FRONTIER. This calendar is AUTHORED. The schedule rule follows the same PROPOSED rulebook path.')+'</div>';
+}
+/* ---------------- visits: another system's ground ---------------- */
+var DISC={content:['d-content','content'],shape:['d-shape','shape only'],count:['d-count','count and result'],none:['d-none','nothing']};
+var dk=function(k){return '<span class="dk '+DISC[k][0]+'">'+DISC[k][1]+'</span>';};
+function leagueVisit(){
+  var fid=S.flight||'f1',f=S.f[fid];
+  var q=3+(S.f.f1.st==='sent'?1:0)+(S.f.f2.st==='sent'?1:0),ap=2+(S.f.f1.st==='done'?1:0)+(S.f.f2.st==='done'?1:0);
+  var status=fid==='f1'?(f.st==='done'?'APPROVED · RULE-yes given':f.ln.denver?'COMPLETE FILE · in review; the RULE-yes is the League’s to give':'RECEIVED · waiting on Denver’s line (WILL-yes)'):(f.st==='done'?'APPROVED · RULE-yes given':f.ln.arena?'COMPLETE FILE · in review':'RECEIVED · waiting on the arena’s TIME-yes');
+  var what=fid==='f1'?'trade · one player for one future pick · Boston ⇄ Denver':'schedule change · one home date · Boston · Week 10 Thu evening';
+  var stamp=f.st==='done'?'<div style="padding:8px 14px"><span class="stamp'+(S.stampNew?' in':'')+'">Approved · RULE-yes<small>Rulebook: NBA 2026–27 rules, BOW fixture read 4 Sep 2026 [verify: version]</small></span></div>':'';
+  var pend=fid==='f1'&&f.st!=='done'?'<div class="art"><span class="an">Art. 6</span><div class="ab"><b>If this file clears</b> · Boston’s payroll '+fmtP(S.w.payroll)+' → '+fmtP(S.w.payroll-MINS)+' '+cc('computed')+'. Nothing has moved yet.</div></div>':'';
+  return '<div class="visit rg"><div class="vh"><span>League Office · ledger of files</span><span>numbered articles · no marks</span></div>'+
+  '<div class="art"><span class="an">Art. 1</span><div class="ab"><b>This file</b> '+dk('content')+' · '+what+' · lines from '+(fid==='f1'?'Boston, Denver':'Boston, the arena')+'</div></div>'+
+  '<div class="art"><span class="an">Art. 2</span><div class="ab"><b>Status</b> '+dk('content')+' · '+status+'</div></div>'+
+  '<div class="art"><span class="an">Art. 3</span><div class="ab"><b>Queue</b> '+dk('count')+' · '+cc(q+' files in review','count only')+' · today: '+cc(ap+' approved, 1 returned','count and result only')+'<br><b>Other files</b> '+dk('shape')+' · kinds only: 2 trades, 1 waiver '+ca('illustrative')+'</div></div>'+
+  '<div class="art"><span class="an">Art. 4</span><div class="ab"><b>Clock</b> · League hours, not yours.<div class="clk"><span class="small">review time</span><span class="bar dash" role="img" aria-label="League review time: unknown"></span>'+cu('UNKNOWN','the League does not publish review time')+'</div><div class="clk"><span class="small">Boston’s due</span><span class="bar"><i style="width:'+(fid==='f1'?'70%':'40%')+'"></i></span><span class="small">Week 10 ('+(fid==='f1'?'Denver’s open matter':'the partner’s date')+')</span></div></div></div>'+
+  '<div class="art"><span class="an">Art. 5</span><div class="ab"><b>Not shown</b> '+dk('none')+' · other files’ parties and terms; Denver’s desk; Boston’s desk.</div></div>'+pend+stamp+
+  '<div style="padding:4px 12px 4px">'+heldToggle('queue','The League’s pending queue','count and result only · you have no side in it')+'</div>'+
+  movesHTML(fid)+CB('PROPOSED',NOAI,'The League Office public vote record (count and result only) is a REAL seed in the unmerged NBA-World branch; a register that changes ground is PROPOSED.')+'</div>';
+}
+function denverVisit(){
+  var fid=S.flight||'f1',f=S.f[fid];
+  return '<div class="visit rg"><div class="lhead"><span>DENVER · FRONT OFFICE</span><small>illustrative letterhead · not a mark</small></div>'+
+  '<div style="padding:8px 12px"><h3 class="small" style="margin-bottom:4px">WHAT DENVER’S DESK SHOWS YOU</h3>'+
+  '<div class="matter"><span><b>The paper from Boston</b> '+dk('content')+'<br><span class="small">Both desks hold the same paper: Boston sends the guard ('+m3(MINS)+'); Boston gets a future second-round pick from Denver.</span></span><span></span></div>'+
+  '<div class="matter"><span><b>Line 2 · WILL-yes</b> '+dk('count')+' · '+(f.ln.denver?'signed by Denver’s owner':'open: Denver’s owner has not answered')+'<br><span class="small">Another owner’s seat. In this prototype an AUTHORED stand-in signs when Denver’s clock moves.</span></span><span class="small">'+(f.ln.denver?'signed':'open')+'</span></div>'+
+  '<div class="unk"><span>Denver’s payroll, board, other open matters '+dk('none')+'</span><span>nothing</span></div>'+
+  '<div class="stip">Denver’s side: a future second for a minimum-deal guard sits inside what they asked. <small>modeled ABOUT Denver, not by them · AUTHORED stand-in; nothing ran</small></div>'+
+  '<div class="clk"><span class="small">Denver’s clock</span><span class="bar dash" role="img" aria-label="Denver clock: unknown"></span>'+cu('UNKNOWN','Denver’s calendar is theirs')+'</div></div>'+
+  movesHTML(fid)+CB('PROPOSED',NOAI,'Disclosure that hides an opposing club’s desk: papers with pending terms owner-scoped are a REAL seed. A stand-in played by a model: SMALL / CHEAP MODEL.')+'</div>';
+}
+function arenaVisit(){
+  var fid='f2',f=S.f.f2;
+  return '<div class="visit rg" style="background:var(--apaper)"><div class="vh" style="border-bottom-color:var(--arena)"><span>Arena · booking calendar</span><span>a separate business</span></div>'+
+  '<div style="padding:8px 12px"><p class="small" style="margin-bottom:4px">Your request: <b>'+(f.cell?cellName(f.cell):'none')+'</b> · '+(f.ln.arena?'held for you (TIME-yes given)':'asked, not yet answered')+'. '+dk('shape')+' free / busy only · '+dk('none')+' what fills the busy blocks</p>'+calGrid(false)+
+  '<div class="clk" style="margin-top:6px"><span class="small">arena’s answer time</span><span class="bar dash" role="img" aria-label="Arena answer time: unknown"></span>'+cu('UNKNOWN','the arena keeps its own clock')+'</div></div>'+
+  movesHTML(fid)+CB('SPECULATIVE',NOAI,'Reading a real arena’s free/busy needs a partner integration: SPECULATIVE FRONTIER. This grid is AUTHORED.')+'</div>';
+}
+/* ---------------- three records, no god view ---------------- */
+function recordsView(fid){
+  var f=S.f[fid];
+  if(f.st!=='done')return deskHome();
+  var cols;
+  var sees=function(a,b){return '<div class="cannot"><b>sees:</b> '+a+'<br><b>cannot see:</b> '+b+'</div>';};
+  if(fid==='f1'){
+    cols='<div class="rc r-boston"><div class="rh"><span>Boston’s record</span><span>yours</span></div><div class="rb"><ul><li>Line 1 signed by you (GM warrant), Wk 9.</li><li>Sent the guard ('+m3(MINS)+'); got a future 2nd from Denver.</li><li><b>Payroll '+fmtP(S.w.prev)+' → '+fmtP(S.w.payroll)+'</b> · roster 15 → 14 · projected tax '+m3(wtax(S.w.prev))+' → '+m3(wtax(S.w.payroll))+' (World rule).</li></ul>'+sees('your books, the paper','Denver’s payroll and board')+'</div></div>'+
+    '<div class="rc r-denver"><div class="rh"><span>Denver’s record</span><span>theirs</span></div><div class="rb"><ul><li>Got the guard on a minimum deal ('+m3(MINS)+'); sent a future 2nd.</li><li>Line 2 signed by Denver’s owner ('+ca('stand-in','AUTHORED stand-in for another seat')+').</li></ul><div class="hide h2">Denver’s payroll after: nothing shown to you</div>'+sees('the paper, their own books','Boston’s cash, roster, open matters')+'</div></div>'+
+    '<div class="rc r-league"><div class="rh"><span>League’s record</span><span>register</span></div><div class="rb"><ul><li>File approved · RULE-yes.</li><li><span class="stamp'+(S.stampNew?' in':'')+'" style="font-size:11px;padding:3px 6px">Rulebook<small>2026–27, BOW fixture 4 Sep 2026 [verify]</small></span></li><li>Count and result: '+cc((3)+' in review, '+(2+1+(S.f.f2.st==='done'?1:0))+' approved today','count and result only')+'.</li></ul>'+sees('the file’s shape, its result','Denver’s desk and Boston’s desk, even here')+'</div></div>';
+  }else{
+    cols='<div class="rc r-boston"><div class="rh"><span>Boston’s record</span><span>yours</span></div><div class="rb"><ul><li>Line 1 signed by Partnerships, Wk 9.</li><li>Partner night added: <b>'+cellName(f.cell)+'</b>.</li><li><b>Cash '+fmtP(S.w.cash+FEE)+' → '+fmtP(S.w.cash)+'</b> · home dates +1.</li></ul>'+sees('your books, the slot','the arena’s other bookings')+'</div></div>'+
+    '<div class="rc r-arena"><div class="rh"><span>Arena’s record</span><span>theirs</span></div><div class="rb"><ul><li>Slot held: '+cellName(f.cell)+' · Boston partner night.</li><li>Event fee '+m3(FEE)+' received from Boston ('+ca('illustrative')+').</li></ul><div class="hide">Other bookings: busy blocks only</div>'+sees('their calendar, the fee','Boston’s cash and roster')+'</div></div>'+
+    '<div class="rc r-league"><div class="rh"><span>League’s record</span><span>register</span></div><div class="rb"><ul><li>Schedule change approved · RULE-yes.</li><li><span class="stamp" style="font-size:11px;padding:3px 6px">Rulebook<small>2026–27, BOW fixture 4 Sep 2026 [verify]</small></span></li></ul>'+sees('the schedule change','the arena’s books, Boston’s cash')+'</div></div>';
+  }
+  var f1d=S.f.f1.st==='done',f2d=S.f.f2.st==='done';
+  var pick=(f1d&&f2d)?'<div class="seg" style="margin-bottom:6px"><button type="button" class="btn sm" data-a="records" data-p="f1" data-f="rec:f1" aria-pressed="'+(fid==='f1')+'">The Denver trade</button><button type="button" class="btn sm" data-a="records" data-p="f2" data-f="rec:f2" aria-pressed="'+(fid==='f2')+'">The partner night</button></div>':'';
+  var media=fid==='f1'?'<div class="clip"><div class="ol"><span>[outlet: illustrative]</span><span>[verify: date]</span></div><h4>Boston sends reserve guard to Denver for a second-round pick</h4><span class="small">Media never said yes; it learned, after the stamp. In Reality a report may come before a signature. AUTHORED, illustrative.</span></div>':'';
+  var acts='<div class="rowb">'+(fid==='f1'?'<button type="button" class="btn" data-a="redline" data-f="redline">Redline the Denver form</button>':'')+'<button type="button" class="btn" data-a="why" data-p="payroll" data-f="why:payroll2">Why is payroll '+fmtP(S.w.payroll)+'?</button><button type="button" class="btn sm" data-a="home" data-f="home">Back to the desk</button></div>';
+  return '<div class="dh"><span>Three records of one act · no god view</span><span>'+(fid==='f1'?'the Denver trade':'the partner night')+'</span></div>'+pick+'<div class="recs">'+cols+'</div>'+
+  kdots(f,fid==='f1'?[['boston','Boston'],['denver','Denver'],['league','League'],['player','Player'],['media','Media']]:[['boston','Boston'],['arena','Arena'],['league','League'],['ticketing','Ticketing'],['media','Media']])+media+
+  (fid==='f1'?heldToggle('dsecond','Denver’s future second-round pick, owed to Boston','a new paper from this act · clock: Denver’s pick ledger, draft year '+cu('[verify]')):'')+acts+CB('PROPOSED',NOAI,'Each system holds its own record of one act. Two-owner papers with owner-scoped terms are REAL seeds; League record shows count and result.');
+}
+/* ---------------- WHY: traced to recorded causes ---------------- */
+function whyW(){
+  var rec=WD.record,run=WD.payrollStartYearTwo.v,rows='<tr><td>Year Two starts</td><td>'+ca('start','illustrative')+'</td><td class="n">'+m3(run)+'</td><td class="n">'+m3(run)+'</td></tr>';
+  rec.forEach(function(r){if(r.effects&&r.effects.payroll){run+=r.effects.payroll;rows+='<tr><td>'+esc(r.when)+' · '+esc(r.what)+'</td><td>'+(r.k==='RECORDED'?cr('recorded'):ca('authored'))+'</td><td class="n">+'+m3(r.effects.payroll)+'</td><td class="n">'+m3(run)+'</td></tr>';}});
+  var ok=S.f.f1.st==='done';
+  if(ok){run-=MINS;rows+='<tr><td>Year Two · Week 9 · You sent the guard to Denver (the Week 1 signing goes out); League-approved</td><td>'+cr('recorded','your act, RECORDED in the World')+'</td><td class="n">−'+m3(MINS)+'</td><td class="n">'+m3(run)+'</td></tr>';}
+  var p=wpay();
+  return '<div class="dh"><span>Why is payroll '+fmtP(p)+'?</span><span>traced · no AI</span></div><table class="tr"><thead><tr><th>Act</th><th>kind</th><th>moves</th><th>running</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+  '<table class="tr" style="margin-top:8px"><thead><tr><th colspan="2">The rules the number meets</th></tr></thead><tbody>'+
+  '<tr><td>Projected tax = 1.5 × (payroll − '+m1(WLINE)+')</td><td class="n">'+cc(m3(wtax(p)),'World rule, authored; not the NBA’s incremental tax')+'</td></tr>'+
+  '<tr><td>2nd apron '+cf(L.apron2,m3(A2))+' (fixture)</td><td class="n">'+cc(p>A2?m3(p-A2)+' over: verbs struck':m3(A2-p)+' under: verbs restored')+'</td></tr></tbody></table>'+
+  '<div class="rowb"><button type="button" class="btn sm" data-a="home" data-f="whyback">Back to the desk</button></div><p class="small" style="margin-top:4px">Each row is an act in the World record; the rule rows are the World rule and the fixture’s apron line.</p>'+CB('PROPOSED',NOAI,'A causal trace from state to acts and rules: the World record is REAL; the trace view is PROPOSED.');
+}
+/* ---------------- WHAT IF: redline, branch, compare ---------------- */
+function evalPaper(first){
+  return {boston:{recv:first?'a future first-round pick':'a future second-round pick',pay:fmtP(S.w.payroll)},
+   denver:first?{v:'CT',t:'A first for a minimum-deal guard is well above what we asked about. We would counter with a second.'}:{v:'YES',t:'A second for the guard is inside what we asked about.'},
+   league:first?{v:'CT',t:'CAN’T TELL. A first-round pick is bound by a rule that reads the seller’s whole pick ledger [verify: future-firsts rule]. That ledger sits on Denver’s desk.'}:{v:'YES',t:'YES. Nothing in the file crosses a line: a pick carries no salary.'}};
+}
+function redlineView(){
+  var r=S.red,first=r.pick==='1st',e=evalPaper(first),kept=r.kept;
+  return '<div class="dh"><span>Redline · a draft of the Denver paper</span><span>nothing forks until you keep it</span></div>'+
+  '<div class="seg" role="group" aria-label="What Boston asks for"><button type="button" class="btn" data-a="rlpick" data-p="2nd" data-f="rl:2nd" aria-pressed="'+!first+'">Boston gets a future second-round pick <span class="small">(the record)</span></button><button type="button" class="btn" data-a="rlpick" data-p="1st" data-f="rl:1st" aria-pressed="'+first+'">Boston gets a future first-round pick <span class="small">(redline)</span></button></div>'+
+  '<div class="recs" style="margin-top:8px">'+
+  '<div class="rc r-boston"><div class="rh"><span>Boston’s face</span><span>your rules</span></div><div class="rb"><ul><li>Gets: <span class="'+(first?'diff':'')+'">'+e.boston.recv+'</span>.</li><li>Payroll after: <b>'+e.boston.pay+'</b> '+cc('unchanged','a pick carries no salary')+'.</li><li>2nd-apron verbs: restored, as in the record.</li></ul></div></div>'+
+  '<div class="rc r-denver"><div class="rh"><span>Denver’s face</span><span>their voice</span></div><div class="rb"><p>'+verdictChip(e.denver.v==='YES'?'YES':'CT')+'</p><div class="stip '+(first?'':'')+'">'+e.denver.t+' <small>modeled ABOUT Denver, not by them · AUTHORED stand-in; nothing ran</small></div></div></div>'+
+  '<div class="rc r-league"><div class="rh"><span>League’s face</span><span>the rulebook</span></div><div class="rb"><p>'+verdictChip(e.league.v)+'</p><p class="'+(first?'diff':'')+'" style="font-weight:'+(first?600:400)+'">'+e.league.t+'</p></div></div></div>'+
+  '<div class="rowb"><button type="button" class="btn br pri" data-a="keep" data-f="keep"'+(first&&!kept?'':' disabled')+'>Keep this redline as a branch</button><button type="button" class="btn" data-a="fold" data-f="fold">Fold the redline away</button></div>'+
+  '<p class="small" style="margin-top:6px">Both faces re-execute from the terms. The record is untouched. Keeping a redline makes a branch in its own ink.</p>'+CB('PROPOSED','SMALL / CHEAP MODEL','Rule annotations are NO AI REQUIRED; Denver’s voice would be a stippled SMALL / CHEAP MODEL stand-in (here authored).');
+}
+function miniLines(rows){return rows.map(function(r){return '<div class="ml'+(r.q?' q':'')+'">'+mk(r.k,r.on)+'<span><b>'+r.l+'</b> '+r.s+'</span></div>';}).join('');}
+function branchPaper(){
+  return '<div class="pp br"><span class="bs">Your branch · diverged Year Two · Week 9</span><h4>Denver paper · redline</h4><p>Boston sends the guard ('+m3(MINS)+') and gets <span class="diff">a future first-round pick</span>. Payroll after: '+fmtP(wpay())+' (same as the record).</p>'+
+  miniLines([{k:'WILL',on:1,l:'Boston',s:'would sign'},{k:'WILL',on:0,q:1,l:'Denver',s:'<span class="diff">unknown</span> · a counter is likely'},{k:'RULE',on:0,q:1,l:'League',s:'<span class="diff">can’t tell</span> · needs Denver’s pick ledger'}])+
+  '<h4>Assumptions</h4><ul class="as"><li>Denver’s owner may accept a first for a minimum guard (AUTHORED stand-in; nothing ran).</li><li>The League applies the same 2026–27 rulebook (BOW fixture, read 4 Sep 2026 [verify]).</li><li>Nothing after Week 9 is assumed.</li></ul><div class="sealed">Week 10 onward: sealed. You find out by living it.</div></div>';
+}
+function recordPaper(){
+  return '<div class="pp"><span class="rs">RECORDED · Week 9 · signed three ways</span><h4>Denver paper · as signed</h4><p>Boston sent the guard ('+m3(MINS)+') and got a future second-round pick. Payroll after: '+fmtP(wpay())+'.</p>'+
+  miniLines([{k:'WILL',on:1,l:'Boston',s:'signed'},{k:'WILL',on:1,l:'Denver',s:'signed (stand-in)'},{k:'RULE',on:1,l:'League',s:'approved, rulebook stamped'}])+'</div>';
+}
+function branchView(){
+  return '<div class="dh"><span>Your branch, with the record beside it</span><span>the record stays readable</span></div><div class="cmp" style="grid-template-columns:1.5fr 1fr">'+branchPaper()+recordPaper()+'</div>'+
+  '<div class="rowb"><button type="button" class="btn br pri" data-a="compare" data-f="compare">Compare face up</button><button type="button" class="btn" data-a="fold" data-f="fold2">Return to the record</button></div>'+CB('PROPOSED',NOAI,'Branches as frames in their own ink with a divergence stamp are PROPOSED; only the World record is REAL.');
+}
+function compareView(){
+  return '<div class="dh"><span>Compare · recorded paper against your redline</span><span>face up</span></div><div class="cmp">'+recordPaper()+branchPaper()+'</div>'+
+  '<table class="tr" style="margin-top:10px"><thead><tr><th>What differs</th><th>Record</th><th>Your branch</th></tr></thead><tbody>'+
+  '<tr><td>Pick Boston gets</td><td>second-round</td><td><span class="diff">first-round</span></td></tr>'+
+  '<tr><td>Payroll after</td><td>'+fmtP(wpay())+'</td><td>'+fmtP(wpay())+' (same)</td></tr>'+
+  '<tr><td>Denver’s WILL-yes</td><td>signed</td><td><span class="diff">unknown</span></td></tr>'+
+  '<tr><td>League RULE-yes</td><td>approved</td><td><span class="diff">can’t tell</span></td></tr></tbody></table>'+
+  '<div class="rowb"><button type="button" class="btn pri" data-a="fold" data-f="fold3">Return to the record</button></div>';
+}
+function centerHTML(){
+  var g=S.g;
+  if(g==='league')return leagueVisit();
+  if(g==='denver')return denverVisit();
+  if(g==='arena')return arenaVisit();
+  switch(S.view){
+    case 'form1':return form1();
+    case 'form2':return form2();
+    case 'records':return recordsView(S.rec);
+    case 'why':return whyW();
+    case 'redline':return redlineView();
+    case 'branch':return branchView();
+    case 'compare':return compareView();
+  }
+  return deskHome();
+}
+/* ---------------- the side: following, branches, the record ---------------- */
+var HELD={
+  queue:{name:'The League’s pending queue',clock:'League hours · review time unknown'},
+  pick31:{name:'2031 second-round pick, owed to Boston',clock:'the 2031 draft [verify: date]'},
+  dsecond:{name:'Denver’s future second, owed to Boston',clock:'Denver’s pick ledger [verify]'}
+};
+function sideHTML(){
+  var ids=Object.keys(S.held).filter(function(k){return S.held[k];});
+  var h='';
+  if(S.know){h+='<h2>How we know <span class="wt">'+PROV.length+'</span></h2><p class="small" style="margin-bottom:4px">Texture is the kind. Words live here: every value on this page with its kind, source and date.</p><ul class="kl" style="margin-bottom:10px">'+PROV.map(function(x){return '<li><span class="v k-'+x.k+'">'+x.t+'</span><small>'+x.k+(x.src?' · '+esc(x.src):'')+(x.asof?' · as of '+x.asof:'')+(x.ver?' · verify':'')+'</small></li>';}).join('')+'</ul>';}
+  h+='<h2>Following <span class="wt">'+ids.length+'</span></h2>';
+  if(!ids.length)h+='<p class="small" style="margin-bottom:10px">Hold a paper you have no side in. Its clock paces you.</p>';
+  else h+='<ul class="fol">'+ids.map(function(k){var d=HELD[k],at=S.held[k].at,c=S.log.filter(function(e){return e.n>at&&e.kind==='result'&&e.sys==='league';}).length;
+    return '<li><b>'+d.name+'</b><div class="clock">clock: '+d.clock+'</div><div>since you looked: '+(k==='queue'?(c?c+' file'+(c>1?'s':'')+' cleared (count and result only)':'nothing yet'):'nothing has moved')+'</div></li>';}).join('')+'</ul>';
+  if(S.branches.length)h+='<h2>Your branches</h2><ul class="fol">'+S.branches.map(function(b,i){return '<li style="border-color:var(--branch)"><b style="color:var(--branch)">'+b.name+'</b><div class="clock">'+b.stamp+'</div><button type="button" class="btn sm" data-a="openBranch" data-p="'+i+'" data-f="ob:'+i+'">Open</button></li>';}).join('')+'</ul>';
+  h+='<h2>Record <span class="wt">'+S.log.length+'</span></h2>';
+  if(!S.log.length)h+='<p class="small">Every act is written here, with whose clock and which history.</p>';
+  h+='<ol reversed>'+S.log.slice().reverse().slice(0,40).map(function(e){return '<li class="ev k-'+e.kind+'"><span class="n">#'+e.n+'</span> <b>'+esc(e.who)+'</b> '+esc(e.what)+'<span class="h">'+esc(e.clock)+' · '+esc(e.hist)+'</span></li>';}).join('')+'</ol>'+CB('PROPOSED',NOAI,'An in-page event log; the real thing would be signed messages in each system’s own log.');
+  return h;
+}
+
+/* ---------------- acts: the only way state changes ---------------- */
+var Q={neck:'Why is Boston so close to the tax line?',peers:'Who else is this close to a line?',boundby:'What can’t Boston do above the second apron?'};
+function openSheet(id){S.sheets=S.sheets.filter(function(x){return x!==id;}).concat([id]).slice(-4);S.active=id;S.why=null;}
+var sgn=function(v){return (v>=0?'+':'−')+(Math.abs(v)/1e6).toFixed(1)+'M';};
+function flyEnv(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var d=document.createElement('div');d.className='env';document.body.appendChild(d);setTimeout(function(){d.remove();},900);}
+function finish(fid){
+  var f=S.f[fid],prevPay=S.w.payroll,g;
+  f.ln.league=1;f.st='done';S.flight=null;S.stampNew=true;S.rec=fid;
+  if(fid==='f1'){
+    S.w.prev=S.w.payroll;S.w.payroll-=MINS;S.w.roster-=1;f.tell.player=1;f.tell.media=1;f.tell.league=1;
+    LOG('League Office (rulebook)','approved the file: RULE-yes, stamped with the rulebook version. The last line is filled.',{clock:'League desk · turn '+f.turn,hist:'League’s record',kind:'result',sys:'league'});
+    LOG('Boston’s ledger','payroll '+fmtP(prevPay)+' → '+fmtP(S.w.payroll)+'; roster 15 → 14; projected tax '+m3(wtax(prevPay))+' → '+m3(wtax(S.w.payroll))+' under the World rule; 2nd-apron verbs restored.',{hist:'World record · Boston’s record',kind:'record'});
+    LOG('Notice copies','went to the player, his representative and the media. A copy cannot be recalled.',{hist:'World record',kind:'record'});
+  }else{
+    S.w.cash-=FEE;S.w.dates.push(f.cell);f.tell.ticketing=1;f.tell.media=1;f.tell.league=1;
+    LOG('League Office (rulebook)','approved the schedule change: RULE-yes, stamped with the rulebook version. The last line is filled.',{clock:'League desk · turn '+f.turn,hist:'League’s record',kind:'result',sys:'league'});
+    LOG('Boston’s ledger','home date added: '+cellName(f.cell)+'; event fee '+m3(FEE)+' moved from Boston’s cash to the arena (cash '+fmtP(S.w.cash+FEE)+' → '+fmtP(S.w.cash)+'; one ledger fell, the other rose).',{hist:'World record · Boston’s record',kind:'record'});
+  }
+}
+function act(kind,p){
+  var msg='';
+  switch(kind){
+    case 'ask':S.g='reality';S.refusal='';openSheet(p);LOG('you (visitor)','asked “'+Q[p]+'”; placed at the '+SHN[p]+' sheet, where the answer binds. The question is now the pin.');msg='Placed at the '+SHN[p]+' sheet. Boston’s payroll is the pin.';break;
+    case 'open':openSheet(p);var hn=HING.filter(function(x){return x.id===p;})[0];LOG('you (observer)',p==='neck'?'came back to the payroll sheet; the pin is where you left it.':'followed the relation '+hn.n+'; the '+SHN[p]+' sheet opened beside, the last one folded to an edge that still reads the pin.');msg='Opened the '+SHN[p]+' sheet. The pin is at the same height.';break;
+    case 'release':if(S.pen){var k=verbsStruck(TS+S.peak).length;LOG('you (observer)','pushed the pin to '+d0(TS+S.peak)+' in pencil: '+k+' verb'+(k===1?'':'s')+' struck. Released; the pencil erased and nothing forked.',{kind:'pencil',hist:'pencil · nothing forked'});S.pen=0;S.peak=0;msg='Released. The pencil erased; nothing forked.';}break;
+    case 'pushT':if(S.pen===5e6){S.pen=0;S.peak=0;LOG('you (observer)','let go of Tatum’s +$5M push; the pencil erased.',{kind:'pencil',hist:'pencil · nothing forked'});msg='Pencil erased.';}else{S.pen=5e6;S.peak=5e6;LOG('you (observer)','pushed Tatum’s number +$5M in pencil: every open sheet redrew; the tightest line moved to '+tightest().n.toLowerCase()+' '+m3(tightest().g)+'.',{kind:'pencil',hist:'pencil · nothing forked'});msg='Pushed Tatum’s number in pencil. Every open sheet redrew.';}break;
+    case 'door':var mo=FX.moments.filter(function(m){return m.id===p;})[0];S.door[p]=true;LOG('you (observer)','asked what happened at “'+mo.question+'”. Sealed hindsight opened for an observer.');msg='Outcome revealed to you as an observer.';break;
+    case 'why':if(p==='neck'){S.why='neck';msg='Showing the causes behind the gap.';}else if(p===''){S.why=null;msg='Back to the sheet.';}else{S.g='desk';S.view='why';LOG('you (GM seat)','asked why payroll is '+fmtP(wpay())+'; the trace is every act and rule behind it.');msg='Showing why payroll is '+fmtP(wpay())+'.';}break;
+    case 'hold':S.held[p]=S.held[p]?null:{at:S.n};LOG('you',(S.held[p]?'began holding':'stopped holding')+' “'+HELD[p].name+'”, a paper you have no side in; its clock now paces you.',{kind:'hold'});msg=(S.held[p]?'Holding ':'Stopped holding ')+HELD[p].name;break;
+    case 'enter':S.g='desk';S.seat=true;S.view='home';S.why=null;LOG('you','took the GM seat in Boston · Year Two, a World diverged from Reality at Year 0. Your word now counts for signing, trading, payroll.',{kind:'record',hist:'World record',clock:WD.clock.label});msg='You are in Boston, Year Two, as general manager.';break;
+    case 'leave':S.g='reality';S.seat=false;if(!S.sheets.length)openSheet('neck');S.why=null;LOG('you','handed the seat back and returned to the reading copy of Reality. The World keeps its own calendar.');msg='Back in Reality, as an observer.';break;
+    case 'openW':S.ws=p==='ledger'?'ledger':'rule';msg='Opened the '+(S.ws==='rule'?'rule':'ledger')+' sheet.';break;
+    case 'draft':S.g='desk';S.view=p==='f1'?'form1':'form2';LOG('you (GM seat)','opened a draft of the '+(p==='f1'?'Denver trade paper':'partner-night date request')+'. Nothing crosses until you send.',{kind:'rehearsal',hist:'draft · crosses nothing'});msg='Draft opened. Lines are derived from the rulebooks it touches.';break;
+    case 'sweet':var f1=S.f.f1;f1.sw=!f1.sw;f1.last=null;LOG('you (GM seat)',(f1.sw?'added':'removed')+' $0.5M of cash in the Denver draft.',{kind:'rehearsal',hist:'draft · crosses nothing'});msg=f1.sw?'Added cash to the draft.':'Removed the cash.';break;
+    case 'dnote':S.dnote=!S.dnote;msg=S.dnote?'Showing a stand-in for Denver’s side.':'Hidden.';break;
+    case 'leak':S.leak=!S.leak;msg=S.leak?'Showing what a leak would do.':'Hidden.';break;
+    case 'rehearse':var fr=S.f[p];fr.last=rulebook(p,true);LOG('you (GM seat)','ran the trade call (dry run): '+({YES:'YES',NO:'NO',CT:'CAN’T TELL'}[fr.last.v])+'. Recorded as a rehearsal; it crossed nothing.',{kind:'rehearsal',hist:'rehearsal · crosses nothing'});msg='Dry run: '+({YES:'yes',NO:'no',CT:'can’t tell'}[fr.last.v])+'.';break;
+    case 'sign':var fs=S.f[p];fs.ln.boston=1;fs.returned=null;LOG('you (GM seat)','signed line 1 of the '+(p==='f1'?'Denver trade paper':'date request')+' (WILL-yes, your warrant). It is the only line you can fill.',{kind:'record',hist:'World record · paper not yet joined'});msg='Line 1 signed. The other lines are held elsewhere.';break;
+    case 'cell':var f2=S.f.f2,b=CAL.busy[p];if(b){f2.refusal={cell:p,holder:b[0],why:b[1]};LOG('arena calendar','refused '+cellName(p)+': held on '+({arena:'the arena’s own calendar',league:'the League’s schedule'}[b[0]])+'.',{kind:'obs',hist:'refusal · nothing changed',clock:'Arena · its own clock'});msg='Refused: '+cellName(p)+' is held on '+({arena:'the arena’s calendar',league:'the League’s schedule'}[b[0]])+'.';}else{f2.cell=p;f2.refusal=null;f2.last=null;LOG('you (GM seat)','asked for '+cellName(p)+', free on the arena’s calendar.',{kind:'rehearsal',hist:'draft · crosses nothing'});msg='Asked for '+cellName(p)+'.';}break;
+    case 'send':var fd=S.f[p];if(!fd.ln.boston||(p==='f2'&&!fd.cell))return;fd.st='sent';S.flight=p;fd.turn=0;fd.last=null;fd.returned=null;
+      if(p==='f1'){fd.tell.league=1;S.g='league';}else{fd.ln.money=1;fd.tell.arena=1;fd.tell.league=1;S.g='arena';}
+      flyEnv();LOG('you (GM seat)','sent the '+(p==='f1'?'Denver trade paper':'date request')+'. Notice copies went out and cannot be recalled. The page took '+(p==='f1'?'the League’s':'the arena’s')+' register.',{kind:'record',hist:'World record · in flight'});msg='Sent. You are now visiting '+(p==='f1'?'the League Office':'the arena’s calendar')+'; you cannot approve.';break;
+    case 'wait':var fi=S.flight;if(!fi)return;var ff=S.f[fi],bl=blockedOn(fi);if(!bl)return;ff.turn++;
+      if(bl.k==='denver'){ff.ln.denver=1;LOG('Denver’s desk (stand-in)','signed line 2 on Denver’s own clock. The League now holds a complete file.',{clock:'Denver desk · their clock',hist:'Denver’s record',kind:'result',sys:'denver'});msg='Denver’s line arrived, on Denver’s clock.';}
+      else if(bl.k==='arena'){ff.ln.arena=1;LOG('Arena (its calendar)','held '+cellName(ff.cell)+' for Boston, on the arena’s own clock.',{clock:'Arena · its own clock',hist:'Arena’s record',kind:'result',sys:'arena'});msg='The arena held the slot, on its own clock.';}
+      else{var rb=rulebook(fi,false);if(rb.v==='NO'){ff.st='draft';ff.ln={boston:0,denver:0,league:0};ff.returned=rb;S.flight=null;S.g='desk';S.view='form1';LOG('League Office (rulebook)','returned the file, naming the rule. Nothing changed on Boston’s books.',{clock:'League desk · turn '+ff.turn,hist:'League’s record',kind:'result',sys:'league'});msg='The League returned the file, naming the rule.';}
+        else{finish(fi);msg='The League approved. Boston’s ledger moved: payroll '+fmtP(wpay())+'.';}}
+      break;
+    case 'go':var gt=goTarget(S.flight);S.g=gt.k;LOG('you (GM seat)','went to '+gt.n+' to look. It shows you only what it discloses.',{kind:'obs',hist:'visit · read only'});msg='Now visiting '+gt.n+'.';break;
+    case 'reform':var fx=S.flight;if(!fx)return;var fq=S.f[fx];fq.st='draft';fq.ln=fx==='f1'?{boston:0,denver:0,league:0}:{boston:0,arena:0,league:0,money:0};fq.att++;fq.last=null;S.flight=null;S.g='desk';S.view=fx==='f1'?'form1':'form2';LOG('you (GM seat)','withdrew the paper to re-form it. Copies already delivered stay delivered; the join dissolved, so every line must be filled again.',{kind:'record',hist:'World record · withdrawn'});msg='Paper withdrawn. Copies already delivered cannot be recalled.';break;
+    case 'back':S.stampNew=false;S.g='desk';if(S.flight)S.view=S.flight==='f1'?'form1':'form2';else S.view='records';msg='Back at your desk.';break;
+    case 'records':S.g='desk';S.rec=p;S.view='records';S.stampNew=false;msg='Showing the three records.';break;
+    case 'home':S.view='home';S.why=null;S.g='desk';msg='Back at your desk.';break;
+    case 'redline':S.red={pick:'2nd',kept:false};S.view='redline';LOG('you (GM seat)','opened a redline of the signed Denver paper. A redline is a draft: nothing forks until you keep it.',{kind:'rehearsal',hist:'redline · draft'});msg='Redline opened.';break;
+    case 'rlpick':S.red.pick=p;LOG('you (GM seat)','redlined the paper: Boston gets a future '+(p==='1st'?'first':'second')+'-round pick. Both faces re-executed.',{kind:'rehearsal',hist:'redline · draft'});msg='Both faces re-executed with a '+(p==='1st'?'first':'second')+'-round pick.';break;
+    case 'keep':S.branches.push({name:'Denver paper · first-round ask',stamp:'Your branch · diverged Year Two · Week 9'});S.red.kept=true;S.view='branch';LOG('you (GM seat)','kept the redline as a branch: “Your branch · diverged Year Two · Week 9”. The record is untouched.',{kind:'branch',hist:'your branch · diverged Wk 9'});msg='Branch kept, in its own ink, beside the record.';break;
+    case 'compare':S.view='compare';LOG('you (GM seat)','compared the recorded paper and your redline, face up.',{kind:'branch',hist:'your branch · diverged Wk 9'});msg='Comparing the record and your branch.';break;
+    case 'fold':S.red=null;S.view='records';S.rec='f1';S.g='desk';LOG('you (GM seat)','folded the redline away and returned to the record. The branch stays listed.',{kind:'obs',hist:'World record'});msg='Back on the record.';break;
+    case 'openBranch':S.g='desk';S.red={pick:'1st',kept:true};S.view='branch';msg='Opened your branch.';break;
+  }
+  render();if(msg)ann(msg);
+}
+function askText(q){
+  var s=String(q).toLowerCase(),id=/apron|can.?t|cannot/.test(s)?'boundby':/peer|else|other|clubs/.test(s)?'peers':/tax|close|payroll|line/.test(s)?'neck':null;
+  S.ask=q;
+  if(id){act('ask',id);return;}
+  S.refusal='Refused: no sheet here holds that. This counter places a question only at a sheet where its pin exists; the pin here is Boston’s payroll against the lines. Try one of the three doors.';
+  render();ann(S.refusal);
+}
+
+/* ---------------- render: every representation redraws from S ---------------- */
+function workHTML(){
+  if(S.g==='front')return frontHTML();
+  if(S.g==='reality')return stageR();
+  return '<div class="center rg">'+centerHTML()+'</div><div class="wframe rg">'+stageW()+'</div>';
+}
+function makeRange(){var r=document.createElement('input');r.type='range';r.id='push';r.min=String(TS-8e6);r.max='232000000';r.step='100000';r.value=String(ts());r.setAttribute('aria-label','Push Boston’s tax salary');r.setAttribute('aria-valuetext',d0(ts())+' (pencil)');return r;}
+var lastG='';
+function render(){
+  var ae=document.activeElement,fk=ae&&ae.dataset?ae.dataset.f:null,aid=ae&&ae.id,keep=null,pu=$('#push');
+  if(pu&&S.dragging){pu.remove();keep=pu;}
+  document.body.dataset.g=S.g;document.body.classList.toggle('know',S.know);document.body.classList.toggle('real',S.real);
+  $('#bKnow').setAttribute('aria-pressed',S.know);$('#bReal').setAttribute('aria-pressed',S.real);
+  PROV.length=0;$('#addr').textContent=address();$('#standing').innerHTML=standingHTML();$('#work').innerHTML=workHTML();$('#side').innerHTML=sideHTML();
+  var slot=$('#pushSlot');if(slot){var r=keep||makeRange();if(keep){keep.value=String(ts());keep.setAttribute('aria-valuetext',d0(ts())+' (pencil)');}slot.replaceWith(r);}
+  var pv=$('#pushv');if(pv)pv.textContent=d0(ts());
+  var t=null;
+  if(fk)t=document.querySelector('[data-f="'+fk+'"]');
+  if(!t&&aid==='push')t=$('#push');
+  if(!t&&aid==='askq')t=$('#askq');
+  if(!t&&lastG!==S.g&&S.g!=='front'){t=$('#standing');t.setAttribute('tabindex','-1');}
+  if(!t&&ae&&ae!==document.body&&!document.body.contains(ae)){t=$('#work .btn.pri:not(:disabled)')||$('#work .btn:not(:disabled)');}
+  if(t&&t!==ae){try{t.focus({preventScroll:true});}catch(e){}}
+  lastG=S.g;
+}
+document.addEventListener('click',function(e){var b=e.target.closest('[data-a]');if(!b||b.disabled)return;act(b.dataset.a,b.dataset.p);});
+document.addEventListener('submit',function(e){if(e.target.dataset&&e.target.dataset.form==='ask'){e.preventDefault();askText($('#askq').value);}});
+document.addEventListener('input',function(e){if(e.target.id==='push'){S.pen=+e.target.value-TS;S.peak=Math.max(S.peak,S.pen);render();}});
+document.addEventListener('pointerdown',function(e){if(e.target.id==='push')S.dragging=true;});
+document.addEventListener('pointerup',function(){if(S.dragging){S.dragging=false;if(S.pen)setTimeout(function(){act('release');},1100);}});
+$('#bKnow').addEventListener('click',function(){S.know=!S.know;render();ann(S.know?'How do we know: showing kind, source and date on each value.':'Provenance hidden.');});
+$('#bReal').addEventListener('click',function(){S.real=!S.real;render();ann(S.real?'What’s real: labelling each region real, proposed or speculative.':'Capability labels hidden.');});
+var rz=0;window.addEventListener('resize',function(){clearTimeout(rz);rz=setTimeout(render,120);});
+render();
+})();
+</script>
+</body>
+</html>

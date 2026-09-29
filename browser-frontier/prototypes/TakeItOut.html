@@ -1,0 +1,1283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Take It Out</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2EBD8; --paper2:#E8DEC2; --paper3:#D9CBA6; --face:#FBF7EA;
+  --ink:#17120D; --muted:#5A4F41; --warm:#A63A0E; --warm2:#7E2A08; --warmsoft:#EBCDB8;
+  --tone:rgba(23,18,13,.24);
+  --serif:'Old Standard TT','Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+  --mono:'DM Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:14px;line-height:1.35;min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 5px var(--face)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.mono{font-family:var(--mono)}
+.sc{font-variant:small-caps;letter-spacing:.06em}
+i.sw{display:inline-block;width:14px;height:14px;border:1.5px solid var(--ink);vertical-align:-2px;flex:none}
+i.sw.k-OBSERVED{background:var(--ink)}
+i.sw.k-RECORDED{background:var(--ink);box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--ink)}
+i.sw.k-AUTHORED{background:transparent}
+i.sw.k-COMPUTED{background:var(--tone)}
+i.sw.k-MODELED{background:repeating-linear-gradient(135deg,var(--ink) 0 1px,transparent 1px 4px)}
+i.sw.k-GENERATED{background-image:radial-gradient(var(--ink) 1px,transparent 1.3px);background-size:4px 4px}
+i.sw.k-UNKNOWN{border-style:dashed;background:transparent}
+
+/* ---------- masthead */
+header#top{display:flex;align-items:center;gap:18px;padding:0 20px;height:54px;border-bottom:3px double var(--ink);flex:none}
+header h1{margin:0;font-size:22px;letter-spacing:.14em;font-weight:700;white-space:nowrap}
+header .ttl{display:flex;flex-direction:column;justify-content:center;min-width:0;flex:0 1 auto}
+.addr{font-family:var(--mono);font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;max-width:430px}
+header .sub{font-style:italic;color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}
+.sys{display:flex;gap:4px;margin-left:8px}
+.sys button{min-height:44px;padding:0 12px;border-bottom:3px solid transparent;font-size:14px;display:flex;align-items:center;white-space:nowrap}
+.sys button[aria-pressed=true]{border-bottom-color:var(--ink);font-weight:700}
+.sys button[data-sys=reality][aria-pressed=true]{border-bottom-color:var(--ink)}
+.tools{margin-left:auto;display:flex;gap:6px;align-items:center}
+.tog{min-height:44px;padding:0 10px;display:flex;align-items:center;gap:7px;font-size:13px;white-space:nowrap}
+.tog::before{content:"";width:12px;height:12px;border:1.5px solid var(--ink);background:transparent;flex:none}
+.tog[aria-pressed=true]{font-weight:700}
+.tog[aria-pressed=true]::before{background:var(--ink);box-shadow:inset 0 0 0 2px var(--paper)}
+
+/* ---------- layout */
+main{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 340px;grid-template-rows:auto minmax(0,1fr);gap:8px 18px;padding:8px 20px 6px;min-height:0}
+#stick{grid-column:1;grid-row:1;min-width:0;position:relative}
+#bench{grid-column:1;grid-row:2;min-width:0;min-height:0;display:flex;flex-direction:column}
+#present{grid-column:2;grid-row:1/3;min-width:0;border-left:1px solid var(--ink);padding-left:16px;position:relative}
+footer#status{flex:none;border-top:1px solid var(--ink);padding:5px 20px;font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:14px;justify-content:space-between}
+footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---------- the stick */
+.stickHead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:12px;color:var(--muted);min-height:22px}
+.stickHead b{color:var(--ink)}
+.grid{display:grid;column-gap:4px;align-items:stretch}
+.tray{grid-row:1;min-height:64px;display:flex;align-items:center;padding:0 4px 4px}
+.tray .prompt{font-style:italic;font-size:19px;line-height:1.15}
+.tray .prompt small{display:block;font-size:12px;font-style:normal;color:var(--muted);margin-top:2px}
+.wk{grid-row:2;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--muted);padding:2px 2px 3px;border-bottom:1px solid var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wk.now{color:var(--ink);font-weight:500}
+.knee{grid-row:2/5;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;border-radius:0}
+.knee span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;white-space:nowrap}
+.slot{grid-row:3;display:flex;flex-direction:column;gap:4px;padding-top:4px;min-height:150px;min-width:0}
+.slug{position:relative;display:flex;flex-direction:column;flex:1 1 auto;min-width:0;padding:9px 8px 8px;background:var(--face);border:1.5px solid var(--ink);color:var(--ink);font-family:var(--serif);overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.slug::before{content:"";position:absolute;top:0;left:50%;width:14px;height:5px;margin-left:-7px;background:var(--paper);border:1.5px solid var(--ink);border-top:0;border-radius:0 0 6px 6px}
+.slug .when{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.85;margin-top:3px}
+.slug .what{font-size:13px;line-height:1.22;margin-top:4px;font-weight:400;overflow-wrap:anywhere;hyphens:auto}
+.slug .foot{margin-top:auto;padding-top:5px;display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.slug.k-RECORDED,.slug.k-OBSERVED{background:var(--ink);color:var(--paper)}
+.slug.k-RECORDED{box-shadow:inset 0 0 0 3px var(--ink),inset 0 0 0 4px var(--paper),inset 0 0 0 6px var(--ink),inset 0 0 0 7px var(--paper)}
+.slug.k-RECORDED::before,.slug.k-OBSERVED::before{background:var(--paper)}
+.slug.k-RECORDED .what,.slug.k-RECORDED .when,.slug.k-RECORDED .foot{padding-left:4px;padding-right:2px}
+.slug.k-RECORDED .foot i.sw,.slug.k-OBSERVED .foot i.sw{border-color:var(--paper)}
+.slug.k-RECORDED .foot i.sw{background:var(--paper);box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 3px var(--paper)}
+.slug.k-OBSERVED .foot i.sw{background:var(--paper)}
+.slug.k-AUTHORED .foot i.sw{background:transparent}
+.slug.br{background:var(--warm);border-color:var(--warm2);color:var(--paper);box-shadow:inset 0 0 0 3px var(--warm),inset 0 0 0 4px var(--paper),inset 0 0 0 6px var(--warm),inset 0 0 0 7px var(--paper)}
+.slug.br::before{background:var(--paper);border-color:var(--warm2)}
+.slug.br .foot i.sw{border-color:var(--paper);background:var(--paper);box-shadow:inset 0 0 0 2px var(--warm),inset 0 0 0 3px var(--paper)}
+.slug.br .what,.slug.br .when,.slug.br .foot{padding-left:4px}
+.slug.sel{outline:3px solid var(--ink);outline-offset:3px}
+.slug.br.sel{outline-color:var(--warm)}
+.slug.dashed{background:transparent;border:1.5px dashed var(--muted);color:var(--muted);box-shadow:none}
+.slug.dashed::before{background:transparent;border-color:var(--muted)}
+.slug.dashed .what{opacity:.85}
+.slug.dashed .why{font-family:var(--mono);font-size:10px;line-height:1.25;margin-top:5px;color:var(--ink);text-transform:none}
+.slug.lg{flex:none;min-height:44px;padding:4px 6px;background:var(--paper2);border:1.5px solid var(--muted);color:var(--ink)}
+.slug.lg::before{display:none}
+.slug.lg .what{font-size:11.5px;margin-top:0;line-height:1.18}
+.slug.lg .when{margin:0 0 1px;font-size:9.5px}
+.slug.lg .lock{position:absolute;right:4px;top:4px;width:12px;height:13px}
+.slug.lg.dashed{border-style:dashed}
+.slug.lg.k-OBSERVED{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.slug.lg.k-OBSERVED .lock{color:var(--paper)}
+.slug.zero{background:var(--paper2);color:var(--muted);border-color:var(--muted)}
+.slug.zero::before{border-color:var(--muted)}
+.slug.holding::after{content:"";position:absolute;left:0;bottom:0;height:5px;background:var(--warm);animation:fill .65s linear forwards}
+@keyframes fill{from{width:0}to{width:100%}}
+.gap{flex:1 1 auto;border:1.5px dashed var(--ink);background:transparent;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-family:var(--mono);font-size:10.5px;color:var(--muted);min-width:0}
+.gap b{display:block;color:var(--ink);font-weight:500;margin-bottom:2px}
+.gap.br{border-color:var(--warm);color:var(--warm2)}
+.held{align-self:stretch;position:relative;display:flex;flex-direction:column;justify-content:flex-start;min-width:0;padding:7px 8px 6px;border:1.5px solid var(--ink);background:var(--face);box-shadow:0 5px 0 -1px var(--paper3),0 6px 0 -1px var(--ink);transform:rotate(-1.4deg);animation:rise .5s cubic-bezier(.2,.9,.25,1) both;font-size:12px;line-height:1.2;overflow:hidden}
+.held.k-RECORDED,.held.k-OBSERVED{background:var(--ink);color:var(--paper)}
+.held.br{background:var(--warm);color:var(--paper);border-color:var(--warm2)}
+.held .when{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.05em}
+.held .what{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:1px}
+.held.sel{outline:3px solid var(--warm);outline-offset:2px}
+@keyframes rise{from{transform:translateY(64px) rotate(0);opacity:.15}to{transform:translateY(0) rotate(-1.4deg);opacity:1}}
+.gm{grid-row:4;min-width:0}
+.game{grid-row:4;min-width:0;white-space:nowrap;margin-top:5px;padding:5px 5px 4px;border:1.5px solid var(--ink);background:var(--face);font-family:var(--mono);font-size:11.5px;line-height:1.25;display:flex;flex-direction:column;justify-content:center;min-height:50px;overflow:hidden}
+.game .opp{font-size:10px;color:var(--muted);letter-spacing:.05em}
+.game .res{font-weight:500}
+.game .was{font-size:10px;color:var(--muted);text-decoration:none}
+.game.k-RECORDED{background:var(--ink);color:var(--paper);box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 3px var(--paper),inset 0 0 0 4.5px var(--ink),inset 0 0 0 5.5px var(--paper);padding:6px 8px}
+.game.k-RECORDED .opp,.game.k-RECORDED .was,.game.k-RECORDED .kn{color:var(--paper);opacity:.9}
+.game.chg{border-color:var(--warm);border-width:2px;color:var(--warm2)}
+.game.chg .opp,.game.chg .was{color:var(--warm2)}
+.game.k-OBSERVED{background:var(--ink);color:var(--paper)}
+.game.k-OBSERVED .opp{color:var(--paper)}
+.game.k-UNKNOWN{border-style:dashed;background:transparent;color:var(--muted)}
+.game.sel{outline:3px solid var(--ink);outline-offset:2px}
+.game.newg{border-color:var(--warm);background:var(--warmsoft)}
+.gl{grid-row:4;align-self:center;font-family:var(--mono);font-size:10px;color:var(--paper);writing-mode:vertical-rl;transform:rotate(180deg);text-align:center}
+.ghost{grid-row:5;grid-column:2/-1;margin-top:6px;padding:4px 2px 0;border-top:1px dotted var(--muted);font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 14px;align-items:baseline;line-height:1.3}
+.ghost .g{display:inline-flex;align-items:baseline;gap:5px}
+.ghost .gs{display:inline-block;padding:0 6px;border:1px dashed var(--muted);font-size:11.5px}
+.ghost .gs.off{border-style:dotted;text-decoration:line-through}
+.frameBr{border:2px solid var(--warm);outline:1px solid var(--warm);outline-offset:3px;padding:5px 8px 8px;margin:2px 3px 0}
+.stamp{color:var(--warm2);font-weight:700;font-size:14px;display:flex;flex-wrap:wrap;gap:0 10px;align-items:baseline}
+.stamp .as{font-weight:400;font-size:11.5px;color:var(--warm2);font-family:var(--serif)}
+.stampTray{display:block;width:100%}
+.stampTray .assume{font-size:11.5px;color:var(--warm2);margin-top:2px;line-height:1.25}
+.stampTray .assume b{font-weight:700}
+.wt{display:flex;flex-direction:column;gap:3px;margin-top:6px;font-family:var(--mono);font-size:10px;line-height:1.2}
+.wt .pips{display:flex;gap:2px}
+.wt .pips i{display:block;width:9px;height:9px;border:1px solid currentColor}
+.wt .pips i.on{background:currentColor}
+.wt .pips i.foc{outline:2px solid var(--warm);outline-offset:1px}
+.wt .bar{height:9px;background:var(--tone);width:var(--w,0%);min-width:2px;outline:1px solid currentColor}
+.wt .bar.zero{background:none;outline:none;width:0}
+.wt .zeroT{font-style:italic}
+.slug.k-RECORDED .wt .bar,.slug.k-OBSERVED .wt .bar{background:var(--paper);opacity:.55}
+.wt .thn{color:inherit;opacity:.95;white-space:nowrap;font-size:9.5px;letter-spacing:-.01em}
+.slug.k-RECORDED .wt .pips i.on,.slug.k-OBSERVED .wt .pips i.on{background:var(--paper)}
+
+/* ---------- present (dials) */
+#present h2{font-size:15px;margin:0 0 2px;display:flex;justify-content:space-between;align-items:baseline;letter-spacing:.02em}
+#present h2 small{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--muted)}
+.seal{display:flex;align-items:center;gap:8px;padding:5px 0 6px;border-bottom:1px solid var(--ink);font-family:var(--mono);font-size:11px;flex-wrap:wrap;line-height:1.25}
+.seal .hx{font-size:15px;font-weight:500;padding:1px 6px;border:1.5px solid var(--ink);background:var(--face)}
+.seal .hx.br{border-color:var(--warm);color:var(--warm2)}
+.seal .ok{font-weight:500}
+.seal .no{color:var(--warm2)}
+.dials{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}
+.dial{display:block;width:100%;padding:6px 2px 5px;border-bottom:1px solid var(--paper3);min-height:0;position:relative}
+.dial:hover{background:var(--paper2)}
+.dial.foc{background:var(--paper2);box-shadow:inset 3px 0 0 var(--ink)}
+.dial .lab{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;font-variant:small-caps;letter-spacing:.06em;font-weight:700;gap:4px}
+.dial .lab em{font-style:normal;font-family:var(--mono);font-size:10px;font-variant:normal;letter-spacing:0;font-weight:400;color:var(--muted)}
+.dial svg{display:block;width:100%;height:auto;overflow:visible}
+.dial .val,.dial .sub{display:block}
+.dial .val{font-family:var(--mono);font-size:17px;font-weight:500;text-align:center;line-height:1.05;margin-top:-1px}
+.dial .sub{font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center;min-height:13px;line-height:1.25;margin-top:2px}
+.dial .sub.chg{color:var(--warm2)}
+.band-fill{fill:none;stroke-width:8}
+.band-edge{fill:none;stroke:var(--ink);stroke-width:1.2}
+.band-rule{fill:none;stroke:var(--paper);stroke-width:1;display:none}
+.k-RECORDED .band-fill,.k-OBSERVED .band-fill{stroke:var(--ink)}
+.k-RECORDED .band-rule{display:block}
+.k-COMPUTED .band-fill{stroke:var(--tone)}
+.k-AUTHORED .band-fill{stroke:transparent}
+.k-UNKNOWN .band-fill{stroke:transparent}
+.k-UNKNOWN .band-edge{stroke-dasharray:4 3}
+.tick{stroke:var(--ink);stroke-width:1}
+.mark{stroke:var(--ink);stroke-width:3}
+.nd-rec{fill:#fff;stroke:var(--ink);stroke-width:1.3}
+.nd-world{fill:var(--warm);stroke:var(--warm2);stroke-width:1}
+.nd-pred{stroke:var(--warm);stroke-width:1.8;stroke-dasharray:3 2.5;fill:none}
+.hub{fill:var(--ink)}
+.hubIn{fill:var(--paper)}
+.dial.unk .nd,.dial.unk .hub,.dial.unk .hubIn{display:none}
+.dial.unk .val{color:var(--muted);font-size:13px}
+.dial .clampMark{position:absolute;right:2px;top:20px;width:26px;height:26px;display:none}
+.dial.clamped .clampMark{display:block}
+.plate{padding:7px 4px 6px;border-bottom:1px solid var(--paper3);font-size:12px;line-height:1.3}
+.plate.unk{border:1.5px dashed var(--muted);margin:6px 0 2px;color:var(--muted)}
+.plate b{display:block;font-variant:small-caps;letter-spacing:.06em;font-size:12px;color:var(--ink)}
+.plate ul{margin:2px 0 0;padding-left:15px}
+.plate .kk{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.legend{margin-top:8px;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);align-items:center}
+.legend svg{width:16px;height:16px;vertical-align:-4px;overflow:visible}
+.legend .lg{display:inline-flex;gap:4px;align-items:center}
+
+/* ---------- bench */
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--ink);flex:none;flex-wrap:nowrap}
+.tabs button{min-height:38px;padding:0 13px;font-size:14px;display:flex;align-items:center;gap:6px;white-space:nowrap;border:1.5px solid transparent;border-bottom:0;margin-bottom:-2px}
+.tabs button[aria-pressed=true]{background:var(--face);border-color:var(--ink);font-weight:700}
+.tabs .sp{margin-left:auto;display:flex;align-items:center}
+.panel{flex:1;min-height:0;overflow:auto;background:var(--face);border:1.5px solid var(--ink);border-top:0;padding:10px 14px 10px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:4px 22px;align-content:start}
+.panel.one{grid-template-columns:minmax(0,1fr)}
+.panel h3{margin:0 0 3px;font-size:17px;line-height:1.2;font-weight:700}
+.panel h4{margin:8px 0 3px;font-size:12px;font-variant:small-caps;letter-spacing:.07em;color:var(--muted);font-weight:700}
+.panel p{margin:0 0 6px;max-width:62ch}
+.panel .small{font-size:12px;color:var(--muted)}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}
+.btn{min-height:44px;padding:0 14px;border:1.5px solid var(--ink);background:var(--face);display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;letter-spacing:.01em}
+.btn:hover{background:var(--paper2)}
+.btn.pri{background:var(--ink);color:var(--paper)}
+.btn.pri:hover{background:#000}
+.btn.br{border-color:var(--warm);color:var(--warm2)}
+.btn.brf{background:var(--warm);color:var(--paper);border-color:var(--warm2)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin:2px 0 4px}
+.chip{min-height:34px;padding:0 10px;border:1.5px solid var(--ink);font-size:12.5px;display:inline-flex;align-items:center;background:transparent}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.chip.foc{background:var(--ink);color:var(--paper)}
+.rng{display:flex;align-items:center;gap:10px;margin:2px 0 0}
+.rng input{flex:1;min-width:0;accent-color:var(--warm);height:32px}
+.rng output{font-family:var(--mono);font-size:14px;min-width:78px;text-align:right}
+.big{width:100%;max-width:250px;margin:0 auto;display:block}
+.big svg{display:block;width:100%;height:auto;overflow:visible}
+.dialbox{position:relative}
+.dialbox .cap2{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:-2px}
+.said{font-family:var(--mono);font-size:12.5px;line-height:1.4;text-align:center;margin-top:3px}
+.said b{color:var(--warm2);font-weight:500}
+.refuse{border:2px solid var(--ink);padding:8px 12px;margin:2px 0 6px;background:var(--paper2)}
+.refuse .rule{font-family:var(--mono);font-size:11.5px;margin-top:4px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font-variant:small-caps;letter-spacing:.05em;text-align:left;font-weight:700;border-bottom:1.5px solid var(--ink);padding:2px 6px 2px 0;font-size:12px}
+.tbl td{padding:3px 6px 3px 0;border-bottom:1px solid var(--paper3);font-family:var(--mono);font-size:12px;vertical-align:top}
+.tbl td:first-child{font-family:var(--serif);font-size:13px}
+.tbl .r{text-align:right}
+.tbl .chg{color:var(--warm2);font-weight:500}
+.tbl tr.zero td{color:var(--muted)}
+.verdict{border:2px solid var(--ink);padding:6px 10px;margin:4px 0;font-size:15px;font-weight:700}
+.verdict.together{border-color:var(--warm);color:var(--warm2)}
+.verdict small{display:block;font-weight:400;font-size:12.5px;color:var(--ink)}
+.ledger{font-family:var(--mono);font-size:12px;line-height:1.5;margin:0;padding:0;list-style:none}
+.ledger li{display:flex;gap:8px;border-bottom:1px dotted var(--paper3);padding:1px 0}
+.ledger li span:first-child{flex:none;color:var(--muted);min-width:52px}
+.ledger.wide li span:first-child{min-width:120px}
+.log{font-family:var(--mono);font-size:11.5px;line-height:1.35;margin:0;padding:0;list-style:none;columns:2;column-gap:22px}
+.log li{break-inside:avoid;padding:2px 0;border-bottom:1px dotted var(--paper3)}
+.log .who{color:var(--muted)}
+.opt{display:flex;flex-direction:column;gap:2px}
+.kn{display:none;font-family:var(--mono);font-size:10px;line-height:1.25;color:var(--muted);margin-top:3px;text-transform:none;letter-spacing:0;font-weight:400;white-space:normal}
+body.words .kn{display:block}
+body.words .slug .kn{color:inherit;opacity:.9}
+.capline{font-family:var(--mono);font-size:10.5px;line-height:1.3;padding:2px 6px;border:1.5px solid var(--ink);margin:2px 0 4px;background:var(--paper);color:var(--ink);display:none}
+body.real .capline{display:block}
+.capline.PROPOSED{border-style:dashed}
+.capline.SPEC{border:2px dotted var(--ink)}
+.capline.REAL{background:var(--ink);color:var(--paper)}
+.capline b{font-weight:500}
+.capchip{display:none;position:absolute;z-index:5;font-family:var(--mono);font-size:10px;line-height:1.2;padding:2px 6px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);max-width:240px;pointer-events:none;letter-spacing:0;text-transform:none;font-weight:500}
+.capchip b{font-weight:500}
+.capchip.PROPOSED{border-style:dashed}
+.capchip.SPEC{border-style:dotted;border-width:2px}
+.capchip.REAL{background:var(--ink);color:var(--paper)}
+body.real .capline{font-family:var(--mono);font-size:10.5px;line-height:1.3;padding:2px 6px;border:1.5px solid var(--ink);margin:2px 0 4px;background:var(--paper);color:var(--ink);display:none}
+body.real .capline{display:block}
+.capline.PROPOSED{border-style:dashed}
+.capline.SPEC{border:2px dotted var(--ink)}
+.capline.REAL{background:var(--ink);color:var(--paper)}
+.capline b{font-weight:500}
+.capchip{display:block}
+.kindkey{display:none;margin-top:8px;font-size:11.5px}
+body.words .kindkey{display:block}
+.kindkey .row{display:flex;align-items:center;gap:6px;margin:2px 0}
+.hilite{animation:pulse .9s ease-out 1}
+@keyframes pulse{0%{background:var(--warmsoft)}100%{background:transparent}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.held{transform:rotate(-1.4deg)}}
+@media (max-width:1300px){
+  main{grid-template-columns:minmax(0,1fr) 322px;gap:6px 14px;padding:6px 14px 4px}
+  header#top{padding:0 14px;gap:12px}
+  header .ttl{display:flex;flex-direction:column;justify-content:center;min-width:0;flex:0 1 auto}
+.addr{font-family:var(--mono);font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;max-width:430px}
+header .sub{display:none}
+  .slug .what{font-size:12.5px}
+  .tabs button{padding:0 10px;font-size:13.5px}
+  .panel{padding:8px 12px}
+}
+
+</style>
+</head>
+<body>
+<header id="top">
+  <div class="ttl"><h1>TAKE IT OUT</h1><div id="addr" class="addr" aria-label="Address"></div></div>
+  <nav class="sys" aria-label="System">
+    <button type="button" data-do="sys" data-sys="world" data-fk="sys-world" aria-pressed="true">Boston &middot; Year Two &middot; Week 9</button>
+    <button type="button" data-do="sys" data-sys="reality" data-fk="sys-reality" aria-pressed="false">Boston Celtics &middot; Reality</button>
+  </nav>
+  <div class="tools">
+    <button type="button" class="tog" id="howBtn" data-do="words" data-fk="howBtn" aria-pressed="false">How do we know?</button>
+    <button type="button" class="tog" id="realBtn" data-do="real" data-fk="realBtn" aria-pressed="false">What&rsquo;s real?</button>
+  </div>
+</header>
+<main>
+  <section id="stick" aria-label="The record, as acts"></section>
+  <section id="bench" aria-label="Workbench"></section>
+  <aside id="present" aria-label="The present"></aside>
+</main>
+<footer id="status"><span id="statusL"></span><span id="statusR"></span></footer>
+<div id="live" class="sr" aria-live="polite" role="status"></div>
+<script src="_shared/boston-fixture.js"></script>
+<script>
+(function () {
+'use strict';
+/* ================= ENGINE · illustrative engine, authored (toy-0.1) =================
+   One small deterministic reducer. It folds the World's act record into the present.
+   Luck is keyed per game (common random numbers): game g always gets the same two draws,
+   in every world, however many acts are lifted. Nothing here is a model of the NBA. */
+var FX = window.BOW_FIXTURE, WD = FX.world;
+var ENGINE = 'toy-0.1';
+var SEED = 'yr2-32';
+var TAX_LINE = WD.taxLine.v;
+var TAX_RATE = parseFloat(WD.taxRule.v.match(/([\d.]+)\s*×/)[1]);      // "Flat 1.5× over the line"
+var START = WD.payrollStartYearTwo.v;
+var MIN_SIGN = FX.league.season2627.exceptions.minimum.v;
+var ANALYTICS = WD.departments.filter(function (d) { return d.id === 'analytics'; })[0];
+var BASE_SEATS = 1780, CAP_SEATS = 1800, FORM = 0.012, DARK_PENALTY = 1.0;   // authored, illustrative
+var STRENGTH = { 'w1-minimum': 0.8, 'w6-trade': 2.0, 'w7-rotation': 1.2 };  // points of margin, authored
+var SCHED = [null,
+  { o: 'CHA', h: 1 }, { o: 'NYK', h: 0 }, { o: 'ATL', h: 1 }, { o: 'TOR', h: 1 }, { o: 'MIA', h: 0 },
+  { o: 'PHI', h: 1 }, { o: 'CLE', h: 0 }, { o: 'MIL', h: 1 }, { o: 'DEN', h: 1 }, { o: 'PHX', h: 0 }];
+
+function h32(s) {
+  var h = 0x811c9dc5;
+  for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+  h ^= h >>> 16; h = Math.imul(h, 0x85ebca6b); h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35); h ^= h >>> 16;
+  return h >>> 0;
+}
+function hex6(n) { return ('000000' + ((n >>> 8) & 0xffffff).toString(16)).slice(-6); }
+function keyDraw(g, p) { return h32(SEED + '|game' + g + '|' + p) / 4294967296; }   // the same draw for the same purpose, always
+
+function weekOf(a) { return a.when === 'Year One' ? 0 : +a.when.match(/Week (\d+)/)[1]; }
+var LEAGUE_ACT = { id: 'w6-league', when: 'Year Two · Week 6', what: 'Approved the Week 6 trade', who: 'League', seat: 'league', k: 'AUTHORED', effects: {}, week: 6 };
+var ACTS = [];
+WD.record.forEach(function (a) {
+  var c = Object.assign({}, a, { week: weekOf(a), seat: 'gm' });
+  c.needs = a.needs ? [a.needs] : [];
+  if (a.id === 'w6-trade') { ACTS.push(LEAGUE_ACT); c.needs = ['w6-league']; }
+  ACTS.push(c);
+});
+var OPTIONS = [
+  { id: 'reopen-analytics', what: 'Reopened Analytics', price: ANALYTICS.opensFor, effects: { cash: -ANALYTICS.opensFor, analytics: 'lit' }, needsDark: true },
+  { id: 'sign-vet', what: 'Signed a veteran to a minimum deal', price: MIN_SIGN, effects: { payroll: MIN_SIGN }, strength: 0.8 },
+  { id: 'partner-2', what: 'Booked another partner night', price: 0, effects: { cash: 600000 } }
+];
+
+function strengthAt(on, g) {
+  var m = 0, dark = false;
+  on.forEach(function (a) {
+    if (a.week > g) return;
+    var e = a.effects || {};
+    m += (STRENGTH[a.id] || a.strength || 0);
+    if (e.analytics === 'dark') dark = true;
+    if (e.analytics === 'lit') dark = false;
+  });
+  return m - (dark ? DARK_PENALTY : 0);
+}
+var CAL9 = null;   // Week 9 is RECORDED (112–115): its luck is fitted once so the full record reproduces it
+(function () {
+  var st = {}, on = [];
+  ACTS.forEach(function (a) { on.push(a); });
+  var m = strengthAt(on, 9);
+  CAL9 = { b: 112.05 - 108 - m / 2, o: 114.95 - 108 + m / 2 };
+})();
+
+function status(env) {
+  var st = {}, why = {}, acts = ACTS.concat(env.appended || []);
+  acts.forEach(function (a) {
+    if (env.lifted.has(a.id)) { st[a.id] = 'lifted'; return; }
+    if (a.seat === 'league' && env.assume && env.assume.league === 'declined') { st[a.id] = 'declined'; why[a.id] = 'assume'; return; }
+    var bad = (a.needs || []).filter(function (n) { return st[n] !== 'in'; })[0];
+    if (bad) { st[a.id] = 'dashed'; why[a.id] = bad; return; }
+    st[a.id] = 'in';
+  });
+  return { st: st, why: why, acts: acts };
+}
+
+function fold(env) {
+  var S = status(env), on = S.acts.filter(function (a) { return S.st[a.id] === 'in'; });
+  var weeks = env.weeks || 9;
+  var payroll = START, cash = 0, pc = [{ id: 'start', v: START }], cc = [];
+  on.forEach(function (a) {
+    var e = a.effects || {};
+    if (e.payroll) { payroll += e.payroll; pc.push({ id: a.id, v: e.payroll }); }
+    if (e.cash) { cash += e.cash; cc.push({ id: a.id, v: e.cash }); }
+  });
+  var games = [], wins = 0, losses = 0, nights = {};
+  for (var g = 1; g <= weeks; g++) {
+    var m = strengthAt(on, g), dB, dO;
+    if (g === 9) { dB = CAL9.b; dO = CAL9.o; }
+    else { dB = (keyDraw(g, 'bos') - 0.5) * 20; dO = (keyDraw(g, 'opp') - 0.5) * 20; }
+    var b = Math.round(108 + m / 2 + dB), o = Math.round(108 - m / 2 + dO);
+    if (b === o) { if (m >= 0) b++; else o++; }
+    if (SCHED[g].h) {
+      on.forEach(function (a) {
+        var e = a.effects || {};
+        if (e.cashPerNight && a.week <= g) { cash += e.cashPerNight; nights[a.id] = (nights[a.id] || 0) + 1; }
+      });
+    }
+    games.push({ g: g, opp: SCHED[g].o, home: SCHED[g].h, b: b, o: o, win: b > o, m: m, uB: keyDraw(g, 'bos'), uO: keyDraw(g, 'opp') });
+  }
+  Object.keys(nights).forEach(function (id) {
+    var a = S.acts.filter(function (x) { return x.id === id; })[0];
+    cc.push({ id: id, v: a.effects.cashPerNight * nights[id], n: nights[id] });
+  });
+  var before = games.slice(0, 8);
+  before.forEach(function (x) { if (x.win) wins++; else losses++; });
+  games.slice(8).forEach(function (x) { if (x.win) wins++; else losses++; });
+  var w8 = before.filter(function (x) { return x.win; }).length, net = w8 - (before.length - w8);
+  var shift = 0;
+  on.forEach(function (a) { if (a.week <= 9 && a.effects && a.effects.premiumDemand) shift += a.effects.premiumDemand; });
+  var demand = BASE_SEATS * (1 + shift) * (1 + FORM * net);
+  var seats = Math.min(CAP_SEATS, Math.round(demand));
+  var over = Math.max(0, payroll - TAX_LINE), tax = Math.round(TAX_RATE * over);
+  var last = games[games.length - 1];
+  var f = { payroll: payroll, tax: tax, cash: cash, seats: seats, wins: wins, losses: losses, games: games, last: last,
+    status: S.st, why: S.why, acts: S.acts, pc: pc, cc: cc, over: over, net: net, shift: shift, demand: demand, capped: demand > CAP_SEATS, weeks: weeks };
+  f.hash = hex6(h32(ENGINE + '|' + [payroll, tax, Math.round(cash), seats, wins].join(',') + '|' + games.map(function (x) { return x.b + '-' + x.o; }).join(',') +
+    '|' + Object.keys(S.st).map(function (k) { return k + ':' + S.st[k]; }).join(',')));
+  return f;
+}
+function newEnv() { return { lifted: new Set(), assume: {}, appended: [], weeks: 9 }; }
+function withLift(env, ids) { var e = Object.assign({}, env, { lifted: new Set(env.lifted) }); ids.forEach(function (i) { e.lifted.add(i); }); return e; }
+var RECORD_ENV = newEnv(), RECORD = fold(RECORD_ENV);
+
+/* the six present facts, in one place: value, the "changed at shown precision" test, and the size of the change */
+var FACTS = ['payroll', 'tax', 'cash', 'seats', 'wins', 'score'];
+function diff(a, b, k) {   // b relative to a
+  if (k === 'score') { var x = a.last, y = b.last; return { d: (y.b - y.o) - (x.b - x.o), ch: x.b !== y.b || x.o !== y.o || a.weeks !== b.weeks, mag: Math.abs(y.b - x.b) + Math.abs(y.o - x.o) }; }
+  var d = b[k] - a[k], eps = (k === 'seats' || k === 'wins') ? 0.5 : 5000;
+  return { d: d, ch: Math.abs(d) >= eps, mag: Math.abs(d) };
+}
+function gamesChanged(a, b) { var n = 0; for (var i = 0; i < Math.min(a.games.length, b.games.length); i++) if (a.games[i].b !== b.games[i].b || a.games[i].o !== b.games[i].o) n++; return n; }
+/* weigh: lift each live act from the current world, relative to it (luck fixed: same draws) */
+function weigh(env) {
+  var base = fold(env), out = {};
+  base.acts.forEach(function (a) {
+    if (base.status[a.id] !== 'in' || a.seat === 'league') return;
+    var alt = fold(withLift(env, [a.id])), r = { f: {}, reach: 0, games: gamesChanged(base, alt), dashes: [] };
+    FACTS.forEach(function (k) { r.f[k] = diff(base, alt, k); if (r.f[k].ch) r.reach++; });
+    Object.keys(alt.status).forEach(function (id) { if (alt.status[id] === 'dashed' && base.status[id] === 'in') r.dashes.push(id); });
+    out[a.id] = r;
+  });
+  return out;
+}
+
+/* ================= UI ================= */
+const $ = (s, el) => (el || document).querySelector(s);
+const $$ = (s, el) => Array.from((el || document).querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const MINUS = '−', EN = '–', DOT = ' · ';
+const money = (v, d) => { d = d == null ? 1 : d; return (v < -1e-9 && Math.abs(v) >= Math.pow(10, 6 - d) / 2 ? MINUS : '') + '$' + (Math.abs(v) / 1e6).toFixed(d) + 'M'; };
+const smoney = (v, d) => (v > 0 ? '+' : '') + money(v, d);
+const num = v => Math.round(v).toLocaleString('en-US');
+const snum = v => (v > 0 ? '+' : v < 0 ? MINUS : '') + Math.abs(Math.round(v)).toLocaleString('en-US');
+
+/* ---- kinds: what each texture means, in words (shown on request) */
+const KW = { OBSERVED: 'measured or reported from outside BOW', RECORDED: 'written into BOW’s own record', AUTHORED: 'a rule or number someone chose on purpose', COMPUTED: 'follows exactly from rules and state', MODELED: 'a named, versioned model’s range', GENERATED: 'made by AI or a generator', UNKNOWN: 'nobody knows — a marked hole' };
+const OPPN = { CHA: 'Charlotte', NYK: 'New York', ATL: 'Atlanta', TOR: 'Toronto', MIA: 'Miami', PHI: 'Philadelphia', CLE: 'Cleveland', MIL: 'Milwaukee', DEN: 'Denver', PHX: 'Phoenix' };
+const LBL = { 'y1-business': 'Year One funding', 'w1-minimum': 'Week 1 signing', 'w2-partner': 'Week 2 partner night', 'w3-denver': 'Week 3 Denver call', 'w4-prices': 'Week 4 prices', 'w6-league': 'the League’s approval', 'w6-trade': 'Week 6 trade', 'w7-rotation': 'Week 7 rotation', 'w8-extension': 'Week 8 extension meeting',
+  'r-holiday': 'the Jun 2025 Holiday trade', 'r-simons': 'the Feb 2026 Simons trade', 'r-sale': 'the sale approval' };
+const REALITY_NAME = FX.reality.name, WORLD_NAME = WD.name;
+
+/* ---- the six facts (dials) */
+const mkTax = { v: TAX_LINE, t: 'tax line ' + money(TAX_LINE) };
+const FM = {
+  payroll: { name: 'Payroll', lo: 185e6, hi: 235e6, step: 0.1e6, mk: [mkTax], f: v => money(v, 1), ax: v => money(v, 0), phrase: 'the payroll' },
+  tax: { name: 'Projected tax', lo: 0, hi: 45e6, step: 0.5e6, mk: [], f: v => money(v, 1), ax: v => money(v, 0), phrase: 'the projected tax' },
+  cash: { name: 'Cash', lo: 0, hi: 8e6, step: 0.05e6, mk: [], f: v => money(v, 2), ax: v => money(v, 0), phrase: 'the cash' },
+  seats: { name: 'Premium seats', sub: 'the Week 9 night', lo: 1600, hi: 1850, step: 5, mk: [{ v: CAP_SEATS, t: 'sellout ' + num(CAP_SEATS) }], f: v => num(v), ax: v => num(v), phrase: 'the premium seats sold' },
+  wins: { name: 'Record', sub: 'wins', lo: 0, hi: 10, step: 1, mk: [], f: v => Math.round(v) + ' wins', ax: v => String(v), phrase: 'the number of wins' },
+  score: { name: 'Latest score', lo: -20, hi: 20, step: 1, mk: [{ v: 0, t: 'level' }], f: v => (v > 0 ? '+' : v < 0 ? MINUS : '') + Math.abs(Math.round(v)) + ' pts', ax: v => String(v), phrase: 'the latest score' },
+  rtax: { name: 'Tax salary', lo: 190e6, hi: 212e6, step: 0.1e6, mk: [{ v: FX.league.season2627.tax.v, t: 'tax line ' + money(FX.league.season2627.tax.v, 3) }], f: v => money(v, 1), ax: v => money(v, 0), phrase: 'the tax salary' },
+  rcap: { name: 'Cap payroll', lo: 195e6, hi: 230e6, step: 0.1e6, mk: [{ v: FX.league.season2627.apron1.v, t: 'first apron ' + money(FX.league.season2627.apron1.v, 1) }, { v: FX.league.season2627.apron2.v, t: 'second apron ' + money(FX.league.season2627.apron2.v, 1) }], f: v => money(v, 1), ax: v => money(v, 0), phrase: 'the cap payroll' },
+  rrec: { name: 'Record 2025–26', lo: 0, hi: 82, step: 1, mk: [], f: v => Math.round(v) + ' wins', ax: v => String(v), phrase: 'the 2025–26 record' }
+};
+const WORLD_DIALS = ['payroll', 'tax', 'cash', 'seats', 'wins', 'score'];
+const REAL_DIALS = ['rtax', 'rcap', 'rrec'];
+const rawOf = (k, f) => k === 'score' ? f.last.b - f.last.o : k === 'rtax' ? f.ts : k === 'rcap' ? f.cp : k === 'rrec' ? 56 : f[k];
+const toRaw = (k, disp) => (k === 'payroll' || k === 'tax' || k === 'cash' || k === 'rtax' || k === 'rcap') ? disp * 1e6 : disp;
+const toDisp = (k, raw) => (k === 'payroll' || k === 'tax' || k === 'cash' || k === 'rtax' || k === 'rcap') ? raw / 1e6 : raw;
+function valText(k, f) {
+  if (k === 'wins') return f.wins + EN + f.losses;
+  if (k === 'score') return (f.last.win ? 'W ' : 'L ') + f.last.b + EN + f.last.o;
+  if (k === 'rrec') return f.unk ? 'UNKNOWN' : FX.reality.realRecord2526.v;
+  return FM[k].f(rawOf(k, f));
+}
+
+/* ---- state: one object, one act() */
+const S = {
+  sys: 'world', at: 'record', tab: 'act', sel: null, fact: null, pfact: 'tax', weigh: false,
+  rec: newEnv(), branch: null, liftInfo: {}, ledger: {}, clamps: [], log: [], seq: 0, lastRerun: null, pair: null,
+  reality: { lifted: new Set(), standIn: { 'r-holiday': -3.0, 'r-simons': -2.0 }, sel: null, liftInfo: {} },
+  words: false, real: false, notice: null
+};
+const env = () => S.at === 'branch' ? S.branch.env : S.rec;
+const clockNow = () => S.sys === 'reality' ? 'Reality · ' + FX.meta.now : 'Year Two · Week ' + env().weeks;
+const histNow = () => S.sys === 'reality' ? 'Reality (derived view)' : S.at === 'branch' ? 'branch: ' + S.branch.short : 'record';
+const findAct = id => ACTS.concat(env().appended || []).filter(a => a.id === id)[0];
+const labelOf = id => LBL[id] || (findAct(id) ? whenShort(findAct(id)) + ' · ' + findAct(id).what.replace(/^\w/, c => c.toLowerCase()) : id);
+const whenShort = a => a.when === 'Year One' ? 'Year One' : a.when.replace('Year Two · ', '');
+const say = m => { $('#live').textContent = ''; setTimeout(() => { $('#live').textContent = m; }, 30); };
+let CUR = null;
+
+/* ---- reality engine (rules-derived only) */
+const R_FIX = id => FX.moments.filter(m => m.id === id)[0];
+const RACTS = [
+  { id: 'r-injury', when: '12 May 2025', what: 'Tatum ruptures his right Achilles in Game 4 against New York', type: 'outcome', k: 'OBSERVED', fx: 'm2025-05-12' },
+  { id: 'r-holiday', when: 'Late Jun 2025', what: 'Boston trades Jrue Holiday to Portland for Anfernee Simons and two second-round picks', type: 'act', seat: 'boston', k: 'OBSERVED', needs: [], fx: 'm2025-06' },
+  { id: 'r-sale', when: '13 Aug 2025', what: 'The NBA approves the sale to Bill Chisholm’s group', type: 'act', seat: 'league', k: 'OBSERVED', needs: [] },
+  { id: 'r-simons', when: '5 Feb 2026', what: 'Boston trades Anfernee Simons to Chicago for Nikola Vučević', type: 'act', seat: 'boston', k: 'OBSERVED', needs: ['r-holiday'], fx: 'm2026-02-05' },
+  { id: 'r-return', when: '6 Mar 2026', what: 'Tatum returns against Dallas', type: 'outcome', k: 'OBSERVED', fx: 'm2026-03-06' }
+];
+const rAct = id => RACTS.filter(a => a.id === id)[0];
+function foldR(re) {
+  const st = {}, why = {};
+  RACTS.forEach(a => {
+    if (a.type !== 'act') { st[a.id] = 'in'; return; }
+    if (re.lifted.has(a.id)) { st[a.id] = 'lifted'; return; }
+    const bad = (a.needs || []).filter(n => st[n] !== 'in')[0];
+    if (bad) { st[a.id] = 'dashed'; why[a.id] = bad; return; }
+    st[a.id] = 'in';
+  });
+  let ts = FX.reality.taxSalary.v, cp = FX.reality.capPayroll.v, removed = 0;
+  RACTS.forEach(a => { if (a.seat === 'boston' && st[a.id] !== 'in') { ts -= re.standIn[a.id] * 1e6; cp -= re.standIn[a.id] * 1e6; removed++; } });
+  const on = { 'Jrue Holiday': true }, extra = [];
+  if (st['r-holiday'] === 'in') { on['Jrue Holiday'] = false; on['Anfernee Simons'] = true; extra.push('two second-round picks from Portland'); }
+  if (st['r-simons'] === 'in') { on['Anfernee Simons'] = false; on['Nikola Vučević'] = true; }
+  const books = Object.keys(on).filter(n => on[n]).concat(extra);
+  const f = { st, why, ts, cp, removed, unk: removed > 0, books, lifted: removed > 0 };
+  f.hash = hex6(h32('R|' + Math.round(ts) + '|' + Math.round(cp) + '|' + Object.keys(st).map(k => k + st[k]).join(',')));
+  return f;
+}
+const R0 = foldR({ lifted: new Set(), standIn: { 'r-holiday': -3, 'r-simons': -2 } });
+function refold() {
+  if (S.sys === 'reality') CUR = { R: foldR(S.reality) };
+  else { const E = env(); CUR = { E: E, F: fold(E) }; }
+}
+
+/* ---- helpers on the current world */
+function kindOfDial(k) {
+  if (S.sys === 'reality') return k === 'rrec' && CUR.R.unk ? 'UNKNOWN' : CUR.R.lifted ? 'COMPUTED' : 'OBSERVED';
+  const F = CUR.F;
+  if (k === 'payroll') return F.payroll === RECORD.payroll ? 'RECORDED' : 'COMPUTED';
+  if (k === 'tax') return 'COMPUTED';
+  if (k === 'score') return F.weeks === 9 && F.last.b === RECORD.last.b && F.last.o === RECORD.last.o ? 'RECORDED' : 'AUTHORED';
+  return 'AUTHORED';
+}
+const KSRC = {
+  payroll: () => CUR.F.payroll === RECORD.payroll ? 'World record — the sum of the record’s payroll deltas from ' + money(START, 3) + ' (authored start)' : 'sum of the record’s payroll deltas, minus what was lifted',
+  tax: () => 'World rule, authored: ' + WD.taxRule.v.toLowerCase() + ' ' + money(TAX_LINE) + ' (the NBA’s real tax is incremental)',
+  cash: () => 'authored, illustrative: one-off deltas + a per-night delta on home nights',
+  seats: () => 'toy engine (authored): base ' + num(BASE_SEATS) + ' × price shift × form, capped at ' + num(CAP_SEATS) + '; illustrative',
+  wins: () => 'toy engine (authored): strength + a fixed draw per game; Week 9 fitted to the recorded 112–115',
+  score: () => CUR.F.weeks === 9 && CUR.F.last.b === RECORD.last.b ? 'World record (Week 9, lost to Denver 112–115)' : 'toy engine output (authored), not the record',
+  rtax: () => CUR.R.lifted ? 'COMPUTED, simplified: observed tax salary reversed by a stand-in you can set (illustrative, not real contracts)' : FX.reality.taxSalary.src + ', ' + FX.reality.taxSalary.asOf + ' [verify]',
+  rcap: () => CUR.R.lifted ? 'COMPUTED, simplified, from the same stand-in' : FX.reality.capPayroll.src + ', ' + FX.reality.capPayroll.asOf + ' [verify]',
+  rrec: () => CUR.R.unk ? 'UNKNOWN: results are not derived from rules' : FX.reality.realRecord2526.src + ' [verify]'
+};
+
+const KSHORT = {
+  payroll: () => CUR.F.payroll === RECORD.payroll ? 'World record' : 'sum of record deltas',
+  tax: () => 'World rule × payroll',
+  cash: () => 'illustrative deltas',
+  seats: () => 'toy engine',
+  wins: () => 'toy engine',
+  score: () => CUR.F.weeks === 9 && CUR.F.last.b === RECORD.last.b && CUR.F.last.o === RECORD.last.o ? 'World record' : 'toy engine',
+  rtax: () => CUR.R.lifted ? 'reversed by a stand-in' : 'fixture, ' + FX.reality.taxSalary.asOf + ' [verify]',
+  rcap: () => CUR.R.lifted ? 'reversed by a stand-in' : 'fixture, ' + FX.reality.capPayroll.asOf + ' [verify]',
+  rrec: () => CUR.R.unk ? 'not derived from rules' : 'BOW source [verify]'
+};
+/* ---- the act: the only way anything changes */
+function act(kind, p) {
+  p = p || {};
+  const E0 = S.sys === 'world' ? env() : null;
+  const log = (what) => { S.log.push({ n: ++S.seq, who: 'you', what: what, clock: clockNow(), hist: histNow() }); };
+  let msg = '';
+  if (['select', 'tab', 'sys', 'fact', 'factall', 'putback', 'putbackAll', 'keep', 'toRecord', 'toBranch', 'reset', 'playOn', 'pair', 'forkSeat'].indexOf(kind) >= 0) S.notice = null;
+  switch (kind) {
+    case 'sys':
+      S.sys = p.sys; S.tab = 'act'; S.sel = null; S.fact = null; S.weigh = false; S.liftFocus = null; buildPresent();
+      log('moved to ' + (S.sys === 'reality' ? REALITY_NAME : WORLD_NAME)); msg = 'Now in ' + (S.sys === 'reality' ? REALITY_NAME + '. You can observe it and lift moves out of its record; you cannot act on the real team.' : WORLD_NAME + '. Hold an act to lift it out.'); break;
+    case 'tab': S.tab = p.tab; S.weigh = (p.tab === 'weigh'); if (S.weigh && !S.fact) S.fact = null; msg = 'Showing ' + p.tab; break;
+    case 'select':
+      if (S.sys === 'reality') { S.reality.sel = p.id; S.tab = 'act'; S.weigh = false; }
+      else if (S.tab === 'weigh' && String(p.id).indexOf('game:') !== 0) { S.sel = p.id; }
+      else { S.sel = p.id; S.tab = 'act'; S.weigh = false; }
+      msg = 'Selected ' + (S.sys === 'reality' ? '' : (String(p.id).indexOf('game:') === 0 ? 'Week ' + p.id.slice(5) + ' result' : labelOf(p.id))); break;
+    case 'pfact': S.pfact = p.fact; break;
+    case 'fact': if (S.sys === 'reality') { msg = 'In Reality, only lifts recompute rules-derived facts. Lift a move to see them change.'; break; } S.fact = p.fact; S.tab = 'weigh'; S.weigh = true; msg = 'Acts ordered by what they did to ' + FM[p.fact].phrase + '. An act that changed nothing is grey.'; break;
+    case 'factall': S.fact = null; S.tab = 'weigh'; S.weigh = true; msg = 'Acts ordered by how many facts they reached.'; break;
+    case 'lift': msg = doLift(p, log); break;
+    case 'putback': msg = doPutBack(p, log); break;
+    case 'putbackAll': msg = doPutBackAll(log); break;
+    case 'pair': msg = doPair(p, log); break;
+    case 'keep': msg = doKeep(log); break;
+    case 'forkSeat': msg = doForkSeat(log); break;
+    case 'toRecord': S.at = 'record'; S.sel = null; S.liftInfo = {}; S.tab = 'act'; S.weigh = false; log('returned to the record'); msg = 'Back on the record. Hash ' + RECORD.hash + '.'; break;
+    case 'toBranch': S.at = 'branch'; S.sel = null; S.tab = 'act'; log('entered your branch'); msg = 'In your branch: ' + S.branch.stampShort + '.'; break;
+    case 'dropBranch': S.branch = null; S.at = 'record'; S.tab = 'act'; S.sel = null; S.clamps = S.clamps.filter(c => c.at !== 'branch'); log('discarded your branch'); msg = 'Branch discarded.'; break;
+    case 'playOn': msg = doPlayOn(p, log); break;
+    case 'clamp': msg = doClamp(p, log); break;
+    case 'unclamp': S.clamps.splice(+p.i, 1); log('released a clamp'); msg = 'Clamp released.'; break;
+    case 'rerun': msg = doRerun(log); break;
+    case 'words': S.words = !S.words; document.body.classList.toggle('words', S.words); msg = 'How do we know: ' + (S.words ? 'showing kind, source and date' : 'hidden'); break;
+    case 'real': S.real = !S.real; document.body.classList.toggle('real', S.real); msg = 'What’s real: ' + (S.real ? 'showing what exists today and what would need AI' : 'hidden'); break;
+    case 'reset': doReset(); msg = 'Started over. The record is at rest.'; break;
+    case 'standin': S.reality.standIn[p.id] = +p.v; msg = 'Stand-in set'; break;
+  }
+  checkClamps();
+  render();
+  if (msg) say(msg);
+}
+
+function refuse(forId, title, rule) { S.notice = { for: forId, title: title, rule: rule }; }
+
+function doLift(p, log) {
+  if (S.sys === 'reality') {
+    const a = rAct(p.id);
+    if (a.type === 'outcome') { S.reality.sel = p.id; refuse(p.id, 'Refused — outcomes are not acts.', 'Rule: a game, an injury or a return is what happened, not something a seat chose. Lifting one would mean inventing a different game: a speculative frontier, not allowed here.'); log('tried to lift ' + a.when + ' (refused: outcome)'); return 'Refused. Outcomes are not acts.'; }
+    if (a.seat === 'league') { S.reality.sel = p.id; refuse(p.id, 'Refused — not your act. The League’s.', 'Rule: you may lift only acts taken from your own seat. This one belongs to the League.'); log('tried to lift the sale approval (refused: the League’s)'); return 'Refused. Not your act, the League’s.'; }
+    if (S.reality.lifted.has(a.id) || CUR.R.st[a.id] !== 'in') return '';
+    S.reality.lifted.add(a.id); S.reality.sel = a.id; S.notice = null;
+    log('lifted ' + labelOf(a.id) + ' out of Reality’s record');
+    const R = foldR(S.reality);
+    return 'Lifted ' + labelOf(a.id) + '. Tax salary ' + money(R.ts, 1) + ' computed with a stand-in. ' + Object.keys(R.st).filter(k => R.st[k] === 'dashed').map(k => labelOf(k) + ' is now impossible').join('; ') + '. Results and other clubs’ later moves are unknown.';
+  }
+  if (String(p.id).indexOf('game:') === 0) { const g = +p.id.slice(5); S.sel = p.id; refuse(p.id, 'Refused — outcomes are not acts.', 'Rule: only choices can be lifted. A score is what the acts produced' + (g === 9 ? ', and Denver’s half of it is Denver’s.' : '.') + ' There is nothing here to take out.'); log('tried to lift the Week ' + g + ' result (refused: an outcome, not an act)'); return 'Refused. Outcomes are not acts. Ask which acts reached it instead.'; }
+  const E = env(), a = findAct(p.id), st = CUR.F.status[p.id];
+  if (a.seat === 'league') { S.sel = a.id; refuse(a.id, 'Refused — not your act. The League’s.', 'Rule: you may lift only acts taken from your own seat (' + WD.seat.name + '). The League’s approval is the League’s, not yours.'); log('tried to lift the League’s approval (refused)'); return 'Refused. Not your act, the League’s. You can fork with their seat set.'; }
+  if (st !== 'in') return '';
+  const key = p.id + '|' + S.pfact, pred = S.preds && S.preds[key] != null ? S.preds[key] : null;
+  const before = CUR.F;
+  E.lifted.add(p.id); S.sel = p.id; S.notice = null; S.tab = 'act';
+  S.liftInfo[p.id] = { fact: S.pfact, pred: pred };
+  const F = fold(E), lk = lkey(E);
+  const seen = S.ledger[lk];
+  S.ledger[lk] = { n: (seen ? seen.n : 0) + 1, hash: F.hash, ids: Array.from(E.lifted), at: S.at };
+  log('lifted ' + labelOf(p.id) + (pred != null ? ' (guessed ' + FM[S.pfact].f(pred) + ' for ' + FM[S.pfact].phrase + ')' : ' (no guess)') + (p.via === 'hold' ? ' by holding' : ''));
+  const dashed = Object.keys(F.status).filter(k => F.status[k] === 'dashed' && before.status[k] === 'in').map(labelOf);
+  return 'Lifted ' + labelOf(p.id) + '. Payroll ' + money(F.payroll) + ', projected tax ' + money(F.tax) + ', record ' + F.wins + EN + F.losses + '.' + (dashed.length ? ' ' + dashed.join(' and ') + ' can no longer happen; they are dashed.' : ' Nothing after it needed it.') + (seen ? ' Same lift as before: same present, ' + F.hash + '.' : '');
+}
+const lkey = E => (E === S.rec ? 'R' : 'B') + '|' + Array.from(E.lifted).sort().join('+') + '|' + JSON.stringify(E.assume || {}) + '|' + (E.appended || []).map(a => a.id).join(',') + '|' + E.weeks;
+
+function doPutBack(p, log) {
+  if (S.sys === 'reality') { S.reality.lifted.delete(p.id); log('put ' + labelOf(p.id) + ' back'); const R = foldR(S.reality); return 'Put back ' + labelOf(p.id) + '. ' + (R.lifted ? '' : 'Reality is at rest again; hash ' + R.hash + '.'); }
+  const E = env(); E.lifted.delete(p.id); delete S.liftInfo[p.id]; S.notice = null;
+  log('put ' + labelOf(p.id) + ' back');
+  const F = fold(E), same = F.hash === RECORD.hash;
+  return 'Put back ' + labelOf(p.id) + '. ' + (same ? 'The present hash is ' + F.hash + ', the record’s again.' : 'Hash ' + F.hash + '; the record’s is ' + RECORD.hash + '.');
+}
+function doPutBackAll(log) {
+  if (S.sys === 'reality') { S.reality.lifted.clear(); log('put everything back'); return 'Everything is back. Hash ' + foldR(S.reality).hash + '.'; }
+  const E = env(); E.lifted.clear(); S.liftInfo = {}; S.pair = null; S.notice = null; log('put everything back'); return 'Everything is back. Hash ' + fold(E).hash + '.';
+}
+function doPair(p, log) {
+  const E = env(), ids = p.ids.split(',');
+  ids.forEach(i => { if (fold(E).status[i] === 'in') E.lifted.add(i); });
+  S.tab = 'pair'; S.weigh = false; S.sel = null;
+  ids.forEach(i => { const k = lkey(E); S.ledger[k] = { n: (S.ledger[k] ? S.ledger[k].n : 0) + 1, hash: fold(E).hash, ids: Array.from(E.lifted), at: S.at }; });
+  log('lifted ' + ids.map(labelOf).join(' and ') + ' together');
+  return 'Lifted ' + ids.map(labelOf).join(' and ') + ' together.';
+}
+function doKeep(log) {
+  const E = env();
+  if (S.at === 'branch') return 'You are already in a branch.';
+  if (E.lifted.size === 0) { refuse(null, 'Nothing to keep.', 'Keep needs a lift: lift an act first, then keep the world without it.'); return 'Nothing lifted, nothing to keep.'; }
+  const ids = Array.from(E.lifted), names = ids.map(i => LBL[i] ? LBL[i].replace(/^Week (\d+) (\w+)/, 'Week $1 $2') : labelOf(i));
+  const short = names.join(' + ') + ' omitted';
+  const be = { lifted: new Set(ids), assume: Object.assign({}, E.assume), appended: [], weeks: 9 };
+  S.branch = { env: be, short: short, stamp: 'Your branch · ' + short + ' · cut with hindsight · by you', stampShort: short, base: RECORD.hash, kept: fold(be).hash, then: weigh(be), assumptions: ['Luck is held fixed: every game keeps its own draw.', 'Acts that needed a lifted act are dashed, not re-decided.', 'Everyone else’s acts are as recorded.', 'Engine ' + ENGINE + ': illustrative, authored.'] };
+  S.rec = newEnv(); S.at = 'branch'; S.sel = null; S.liftInfo = {}; S.tab = 'act'; S.weigh = false; S.notice = null;
+  log('kept the world without ' + names.join(' and ') + ' as a branch (base ' + RECORD.hash + ')');
+  return 'Kept. ' + S.branch.stamp + '. The record is untouched beside it.';
+}
+function doForkSeat(log) {
+  const be = { lifted: new Set(), assume: { league: 'declined' }, appended: [], weeks: 9 };
+  const short = 'League seat set to “does not approve”';
+  S.branch = { env: be, short: short, stamp: 'Your branch · ' + short + ' · cut with hindsight · by you', stampShort: short, base: RECORD.hash, kept: fold(be).hash, then: weigh(be), assumptions: ['The League’s answer is set by you (authored). It is not the League’s act.', 'Luck is held fixed: every game keeps its own draw.', 'The Week 6 trade needed the approval: it and what needed it are dashed.', 'Engine ' + ENGINE + ': illustrative, authored.'] };
+  S.rec = newEnv(); S.at = 'branch'; S.sel = null; S.tab = 'act'; S.weigh = false; S.notice = null; S.liftInfo = {};
+  log('forked with the League’s seat set to does-not-approve (base ' + RECORD.hash + ')');
+  return 'Forked with the League’s seat set. ' + S.branch.stamp + '.';
+}
+function doPlayOn(p, log) {
+  const E = env();
+  if (E.weeks >= 10) return 'Week 10 is already played.';
+  const g10 = 10;
+  if (p.opt) {
+    const o = OPTIONS.filter(x => x.id === p.opt)[0];
+    E.appended.push({ id: 'b-' + o.id, when: 'Year Two · Week 10', week: 10, what: o.what, k: 'RECORDED', branch: true, seat: 'gm', effects: o.effects, strength: o.strength || 0, needs: [] });
+    log('took a new act in the branch: ' + o.what.toLowerCase());
+  } else log('took no new act in Week 10 (recorded as absence, not as a choice)');
+  E.weeks = 10; S.tab = 'play'; S.sel = null; S.weigh = false;
+  const F = fold(E), g = F.games[9];
+  return 'Week 10 played: ' + (g.win ? 'won' : 'lost') + ' ' + g.b + EN + g.o + ' against ' + OPPN[g.opp] + '. ' + (p.opt ? 'Your new act is in branch ink.' : 'No act taken.');
+}
+function doClamp(p, log) {
+  const c = { id: p.id, fact: p.fact, at: S.at, sys: 'world', tripped: false, label: labelOf(p.id) + ' stops reaching ' + FM[p.fact].phrase };
+  if (S.clamps.some(x => x.id === c.id && x.fact === c.fact && x.at === c.at)) return 'Already clamped.';
+  S.clamps.push(c); log('clamped: tell me when ' + c.label); return 'Clamped. You will be told when ' + c.label + '.';
+}
+function doRerun(log) {
+  const E = env(), a = fold(E), b = fold(withLift(E, [])), lk = lkey(E);
+  S.lastRerun = { a: a.hash, b: b.hash, same: a.hash === b.hash, ids: Array.from(E.lifted) };
+  log('ran the same lift again from scratch: ' + a.hash + ' and ' + b.hash);
+  return 'Ran it again from scratch. ' + (a.hash === b.hash ? 'Same present: ' + a.hash + ' both times.' : 'Different!');
+}
+function doReset() {
+  S.at = 'record'; S.sel = null; S.fact = null; S.weigh = false; S.tab = 'act'; S.rec = newEnv(); S.branch = null; S.liftInfo = {}; S.ledger = {}; S.clamps = []; S.log = []; S.seq = 0; S.lastRerun = null; S.pair = null; S.preds = {}; S.notice = null;
+  S.reality = { lifted: new Set(), standIn: { 'r-holiday': -3.0, 'r-simons': -2.0 }, sel: null, liftInfo: {} }; S.sys = 'world'; buildPresent();
+}
+S.preds = {};
+
+function clampReach(c) {
+  const E = S.branch && c.at === 'branch' ? S.branch.env : c.at === 'record' ? S.rec : null;
+  if (!E) return null;
+  const F = fold(E); if (F.status[c.id] !== 'in') return { off: true };
+  const alt = fold(withLift(E, [c.id])), d = diff(F, alt, c.fact);
+  return { ch: d.ch, d: d.d, mag: d.mag };
+}
+function checkClamps() {
+  S.clamps.forEach(c => {
+    if (S.sys !== 'world' || c.at !== S.at) return;
+    const r = clampReach(c);
+    if (r && !r.off && !r.ch && !c.tripped) { c.tripped = true; c.trippedAt = clockNow(); S.log.push({ n: ++S.seq, who: 'clamp', what: 'tripped: ' + c.label, clock: clockNow(), hist: histNow() }); setTimeout(() => say('Clamp tripped: ' + c.label + '.'), 400); }
+    if (r && r.ch && c.tripped) c.tripped = false;
+  });
+}
+
+/* ================= RENDER ================= */
+function render() {
+  const ae = document.activeElement, fk = ae && ae.dataset ? ae.dataset.fk : null;
+  refold();
+  renderHead(); renderStick(); setAddr(); renderBench(); updatePresent(true); renderStatus();
+  if (fk) { const el = document.querySelector('[data-fk="' + fk + '"]'); if (el) el.focus({ preventScroll: true }); }
+}
+function renderHead() {
+  $$('.sys button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.sys === S.sys)));
+  $('#howBtn').setAttribute('aria-pressed', String(S.words)); $('#realBtn').setAttribute('aria-pressed', String(S.real));
+}
+function renderStatus() {
+  $('#statusL').textContent = 'PROTOTYPE · lifting acts out of a record · data: shared fixture, dated, verify · engine: ' + ENGINE + ' (illustrative, authored)';
+  $('#statusR').textContent = S.sys === 'reality' ? 'seat: observer · present hash ' + CUR.R.hash : 'seat: ' + WD.seat.name + ' · present hash ' + CUR.F.hash;
+}
+const capLine = (cls, txt, st) => '<div class="capline ' + cls + '"' + (st ? ' style="' + st + '"' : '') + '>' + txt + '</div>';
+const cap = (cls, txt) => capLine(cls, txt);
+const P_ = '<b>PROPOSED PLATFORM CAPABILITY</b> · ', NOAI = ' · <b>NO AI REQUIRED</b>';
+const CAPS = {
+  stick: P_ + 'acts as liftable slugs; dashes by dependency; locked by seat' + NOAI,
+  present: P_ + 'the present re-folded from the act log, luck fixed per game' + NOAI,
+  hash: '<b>REAL CURRENT PRODUCT CAPABILITY</b> (prototype-grade) · the Live World page already folds one act log to one SHA-256 state; the hash here is a small stand-in',
+  act: P_ + 'predict, lift, put back, keep-as-fork' + NOAI + ' · a plain-words summary would be <b>SMALL / CHEAP MODEL</b> (not used)',
+  weigh: P_ + 'weights by ablation, clamps' + NOAI,
+  pair: P_ + 'pair against the sum of singles' + NOAI + ' (cost grows with pairs)',
+  compare: P_ + 'two needles, one footprint' + NOAI,
+  play: P_ + 'play on inside a kept fork' + NOAI,
+  log: P_ + 'an act log with clock and history' + NOAI,
+  reality: P_ + 'lifts on a derived view of Reality' + NOAI + ' · lifting an on-court outcome is <b>SPECULATIVE FRONTIER</b> (refused here) · modelling other clubs’ replies would be <b>FRONTIER MODEL OCCASIONAL</b> (not used)'
+};
+/* ---- the stick */
+function timeCols(F, E) {
+  const cols = [{ key: 'y1', label: 'Year One', week: 0, w: 1.2 }, { key: 'w1', label: 'Week 1', week: 1, w: 1 }, { key: 'w2', label: 'Week 2', week: 2, w: 1 }, { key: 'w3', label: 'Week 3', week: 3, w: 1 }, { key: 'w4', label: 'Week 4', week: 4, w: 1 },
+    { key: 'w5', label: 'Wk 5', week: 5, w: 0.9 }, { key: 'w6', label: 'Week 6', week: 6, w: 1.4 }, { key: 'w7', label: 'Week 7', week: 7, w: 1 }, { key: 'w8', label: 'Week 8', week: 8, w: 1 }, { key: 'w9', label: 'Week 9 ◂ now', week: 9, w: 0.9, now: true }];
+  if (E.weeks >= 10) cols.push({ key: 'w10', label: 'Week 10', week: 10, w: 1 });
+  cols.forEach(c => { c.acts = F.acts.filter(a => a.week === c.week); });
+  return cols;
+}
+function weighCols(F, E, W) {
+  const live = F.acts.filter(a => W[a.id]);
+  const fact = S.fact;
+  live.sort((a, b) => {
+    const A = W[a.id], B = W[b.id];
+    if (fact) { const d = B.f[fact].mag / magScale(fact) - A.f[fact].mag / magScale(fact); if (Math.abs(d) > 1e-9) return d; }
+    return (B.reach - A.reach) || (totalMag(B) - totalMag(A)) || (a.week - b.week);
+  });
+  const dashed = F.acts.filter(a => F.status[a.id] === 'dashed'), lifted = F.acts.filter(a => F.status[a.id] === 'lifted' || F.status[a.id] === 'declined'), lg = F.acts.filter(a => a.seat === 'league' && F.status[a.id] === 'in');
+  return live.concat(dashed, lifted, lg).map((a, i) => ({ key: a.id, label: F.status[a.id] === 'in' && W[a.id] ? (W[a.id].reach ? W[a.id].reach + ' of 6 facts' : 'none reached') : (a.seat === 'league' ? 'not yours' : F.status[a.id]), acts: [a], w: 1, wk: whenShort(a) }));
+}
+const magScale = k => { const m = FM[k]; return k === 'score' ? 20 : (m.hi - m.lo); };
+const totalMag = r => FACTS.reduce((s, k) => s + (r.f[k].ch ? r.f[k].mag / magScale(k) : 0), 0);
+
+function slugHTML(a, F, W, E) {
+  const st = F.status[a.id], sel = S.sel === a.id, kind = a.branch ? 'RECORDED' : a.k;
+  const lg = a.seat === 'league', br = !!a.branch;
+  let cls = 'slug k-' + kind + (br ? ' br' : '') + (sel ? ' sel' : '') + (lg ? ' lg' : '');
+  const w = W && W[a.id], zero = S.weigh && w && !w.reach;
+  if (zero) cls += ' zero';
+  let inner = '', why = '';
+  if (st === 'dashed') {
+    cls += ' dashed';
+    const need = F.why[a.id];
+    why = '<span class="why">impossible without ' + esc(labelOf(need).replace(/^the /, '')) + '</span>';
+  } else if (st === 'declined') { cls += ' dashed'; why = '<span class="why">declined — set by you</span>'; }
+  const cnt = '<span class="when">' + esc(a.who ? a.who + DOT + whenShort(a) : whenShort(a)) + '</span><span class="what">' + esc(a.what) + '</span>' + why;
+  let wt = '';
+  if (S.weigh && (st === 'in') && w) {
+    const fk = S.fact, foc = fk ? FACTS.indexOf(fk) : -1;
+    const pips = FACTS.map((k, i) => '<i class="' + (w.f[k].ch ? 'on ' : '') + (i === foc ? 'foc' : '') + '" title="' + FM[k].name + '"></i>').join('');
+    let line = '';
+    if (fk) {
+      const d = w.f[fk];
+      line = d.ch ? '<span class="bar" style="--w:' + Math.max(4, Math.min(100, Math.round(100 * d.mag / magScale(fk) / (maxMag(W, fk) || 1)))) + '%"></span><span>' + deltaText(fk, d.d) + '</span>' : '<span class="zeroT">nothing changed</span>';
+    } else line = w.reach ? '' : '<span class="zeroT">nothing changed</span>';
+    let thn = '';
+    if (S.branch && S.at === 'branch' && S.branch.then && S.branch.then[a.id] && S.branch.then[a.id].reach !== w.reach) thn = '<span class="thn">then ' + S.branch.then[a.id].reach + ' now ' + w.reach + '</span>';
+    else if (S.branch && S.at === 'branch' && S.branch.then && S.branch.then[a.id]) thn = '<span class="thn">then ' + S.branch.then[a.id].reach + ' now ' + w.reach + '</span>';
+    wt = '<span class="wt"><span class="pips">' + pips + '</span>' + line + thn + '</span>';
+  }
+  const foot = '<span class="foot"><i class="sw k-' + kind + '"></i><span class="sr">' + kind + '</span></span>';
+  const kn = '<span class="kn">' + kindNote(a) + '</span>';
+  const label = 'Act: ' + (a.who ? a.who + ', ' : '') + whenShort(a) + '. ' + a.what + '.' + (st === 'dashed' ? ' Dashed: impossible without ' + labelOf(F.why[a.id]) + '.' : '') + (lg ? ' Not your act.' : ' Press to look; hold to lift.') + ' ' + kind + '.';
+  const lock = lg ? '<svg class="lock" viewBox="0 0 12 13" aria-hidden="true"><rect x="1" y="5.5" width="10" height="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3 5.5V3.6a3 3 0 0 1 6 0v1.9" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>' : '';
+  return '<button type="button" class="' + cls + '" data-do="select" data-id="' + a.id + '" data-fk="slug-' + a.id + '" ' + (lg ? '' : 'data-hold="1" ') + 'aria-label="' + esc(label) + '">' + lock + cnt + wt + foot + kn + '</button>';
+}
+const maxMag = (W, k) => { let m = 0; Object.keys(W).forEach(id => { if (W[id].f[k].ch) m = Math.max(m, W[id].f[k].mag / magScale(k)); }); return m; };
+function deltaText(k, d) {
+  if (k === 'payroll' || k === 'tax' || k === 'cash') return smoney(d, k === 'cash' ? 2 : 1);
+  if (k === 'seats') return snum(d) + ' seats';
+  if (k === 'wins') return (d > 0 ? '+' : MINUS) + Math.abs(d) + (Math.abs(d) === 1 ? ' win' : ' wins');
+  return (d > 0 ? '+' : MINUS) + Math.abs(d) + ' pts';
+}
+function kindNote(a) {
+  if (a.branch) return 'RECORDED · your branch';
+  if (a.seat === 'league') return 'AUTHORED · illustrative [verify]';
+  if (a.k === 'RECORDED') return 'RECORDED · World record';
+  return 'AUTHORED · illustrative';
+}
+function gapHTML(a, F, E) {
+  const inBranch = S.at === 'branch', why = F.status[a.id] === 'declined' ? 'declined (set by you)' : inBranch ? 'omitted in your branch' : 'lifted out';
+  return '<button type="button" class="gap' + (inBranch ? ' br' : '') + '" data-do="select" data-id="' + a.id + '" data-fk="gap-' + a.id + '" aria-label="Gap: ' + esc(whenShort(a)) + ' is ' + why + '. Press to select."><span><b>' + esc(whenShort(a)) + '</b>' + why + '</span></button>';
+}
+function setAddr() {
+  if (S.sys === 'reality') { const R = CUR.R; $('#addr').textContent = 'boston.reality \u00b7 live ' + FX.meta.now + ' \u00b7 ' + (R.lifted ? 'derived view \u2212' + Array.from(S.reality.lifted).map(i => i.replace('r-', '')).join(' \u2212') : 'as recorded') + ' \u00b7 seat observer \u00b7 view ' + S.tab; return; }
+  const E = CUR.E, lifted = Array.from(E.lifted);
+  $('#addr').textContent = 'boston.year-two \u00b7 wk ' + E.weeks + ' \u00b7 ' + (S.at === 'branch' ? 'branch' : 'record') + (lifted.length ? ' \u2212' + lifted.map(i => i.split('-')[0]).join(' \u2212') : '') + (E.assume.league ? ' \u00b7 league:declined' : '') + ' \u00b7 seat gm \u00b7 view ' + (S.weigh ? 'what-counted' : S.tab);
+}
+function renderStick() {
+  if (S.sys === 'reality') return renderStickR();
+  const E = CUR.E, F = CUR.F, W = S.weigh ? weigh(E) : null;
+  const cols = S.weigh ? weighCols(F, E, W) : timeCols(F, E);
+  const tpl = '22px ' + cols.map(c => c.w + 'fr').join(' ');
+  const lastRow = 4;
+  let h = (S.real ? capLine('PROPOSED', CAPS.stick) : '');
+  const br = S.at === 'branch';
+  h += (br ? '<div class="frameBr">' : '') + '<div class="grid" style="grid-template-columns:' + tpl + ';grid-template-rows:' + (S.at === 'branch' ? 'auto' : '66px') + ' auto auto auto auto">';
+  // tray
+  const held = cols.map((c, i) => c.acts.filter(a => F.status[a.id] === 'lifted' && !br && a.seat !== 'league').map(a => ({ a: a, i: i }))).reduce((x, y) => x.concat(y), []);
+  if (br) {
+    h += '<div class="tray" style="grid-column:2/-1"><div class="stampTray"><div class="stamp">' + esc(S.branch.stamp) + '</div><div class="assume"><b>Assumptions:</b> ' + S.branch.assumptions.map(esc).join(' ') + '</div>' + '<span class="kn">The fork is a frame in its own ink; the record stays readable beside it (hash ' + RECORD.hash + ').</span></div></div>';
+  } else if (!held.length) {
+    h += '<div class="tray" style="grid-column:2/-1"><div class="prompt">' + (S.weigh ? 'What counted: acts set in the order of what they reached.' : 'Hold an act to lift it out.') + '<small>' + (S.weigh ? 'Tap a dial to order them by what they did to that fact. Grey means nothing changed — a zero is a finding.' : 'You are ' + WD.seat.name + ': you may lift only what this seat did. Tap one first to guess what it did.') + '</small></div></div>';
+  } else {
+    held.forEach(x => {
+      const a = x.a, kind = a.branch ? 'RECORDED' : a.k;
+      h += '<button type="button" class="held k-' + kind + '" style="grid-column:' + (x.i + 2) + ';grid-row:1" data-do="select" data-id="' + a.id + '" data-fk="held-' + a.id + '" aria-label="Held out: ' + esc(whenShort(a)) + '. ' + esc(a.what) + '. Press to select."><span class="when">held out · ' + esc(whenShort(a)) + '</span><span class="what">' + esc(a.what) + '</span></button>';
+    });
+  }
+  h += '<div class="knee" style="grid-column:1;grid-row:2/' + (lastRow + 1) + '"><span>YEAR 0 · LEFT REALITY</span></div>';
+  cols.forEach((c, i) => {
+    const col = i + 2;
+    h += '<div class="wk' + (c.now ? ' now' : '') + '" style="grid-column:' + col + '">' + esc(S.weigh ? c.wk : c.label) + (S.weigh ? '<br>' + esc(c.label) : '') + '</div>';
+  });
+  cols.forEach((c, i) => {
+    const col = i + 2; let inner = '';
+    if (!c.acts.length) inner = '<div class="gap" style="border-style:dotted;border-color:var(--paper3)"><span>' + (c.week === 9 ? 'no act this week' : 'no act') + '</span></div>';
+    else {
+      const main = c.acts.filter(a => a.seat !== 'league'), lgs = c.acts.filter(a => a.seat === 'league');
+      main.forEach(a => { inner += (F.status[a.id] === 'lifted') ? gapHTML(a, F, E) : slugHTML(a, F, W, E); });
+      lgs.forEach(a => { inner += slugHTML(a, F, W, E); });
+    }
+    h += '<div class="slot" style="grid-column:' + col + '">' + inner + '</div>';
+  });
+  if (S.weigh) {
+    cols.forEach((c, i) => {
+      const a = c.acts[0], w = W[a.id];
+      h += '<div class="game info" style="grid-column:' + (i + 2) + ';grid-row:4;margin-top:5px;font-size:10.5px;white-space:normal;justify-content:center;background:transparent;border-style:dotted;border-color:var(--muted);color:var(--muted)">' + (w ? (w.games ? '<b style="color:var(--ink);font-weight:500">' + w.games + ' of ' + F.games.length + '</b> scores changed' : 'no score changed') : '—') + '</div>';
+    });
+  }
+  if (!S.weigh) {
+    cols.forEach((c, i) => {
+      const col = i + 2;
+      if (c.week === 0) { h += '<div class="gm" style="grid-column:' + col + ';grid-row:4;align-self:center;font-family:var(--mono);font-size:10px;color:var(--muted);padding-left:3px">results ▸</div>'; return; }
+      const g = F.games[c.week - 1]; if (!g) { h += '<div class="gm" style="grid-column:' + col + '"></div>'; return; }
+      const rg = RECORD.games[c.week - 1], same = rg && rg.b === g.b && rg.o === g.o;
+      const kind = (c.week === 9 && same) ? 'RECORDED' : 'AUTHORED';
+      const chg = rg && !same, sel = S.sel === 'game:' + g.g;
+      const lab = 'Week ' + g.g + ': ' + (g.win ? 'won ' : 'lost ') + g.b + ' to ' + g.o + (g.home ? ' at home against ' : ' away at ') + OPPN[g.opp] + (chg ? '. Changed; the record says ' + rg.b + ' to ' + rg.o : '') + '. ' + kind + '. An outcome, not an act.';
+      h += '<button type="button" class="game k-' + kind + (chg ? ' chg' : '') + (g.g === 10 ? ' newg' : '') + (sel ? ' sel' : '') + '" style="grid-column:' + col + '" data-do="select" data-id="game:' + g.g + '" data-fk="game-' + g.g + '" aria-label="' + esc(lab) + '"><span class="opp">' + (g.home ? 'vs ' : '@ ') + g.opp + '</span><span class="res">' + (g.win ? 'W ' : 'L ') + g.b + EN + g.o + '</span>' + (chg ? '<span class="was">was ' + rg.b + EN + rg.o + '</span>' : '') + '<span class="kn">' + kind + (kind === 'RECORDED' ? ' · World record' : ' · toy engine') + '</span></button>';
+    });
+  }
+  const recLabels = ACTS.filter(a => a.seat !== 'league').map(a => { const off = E.lifted.has(a.id); return '<span class="gs' + (off ? ' off' : '') + '">' + esc(whenShort(a).replace('Year One', 'Yr 1').replace('Week ', 'W')) + '</span>'; }).join(' ');
+  h += '<div class="ghost" style="grid-row:' + (lastRow + 1) + '"><span class="g">Reality, ghosted — its own calendar:<span class="gs">Late Jun 2025 · Holiday trade</span><span class="gs">5 Feb 2026 · Simons trade</span></span>' + (br ? '<span class="g">The record, untouched:' + recLabels + '</span>' : '') + '</div>';
+  h += '</div>' + (br ? '</div>' : '');
+  $('#stick').innerHTML = h;
+}
+function renderStickR() {
+  const R = CUR.R, tpl = '22px ' + RACTS.map(() => '1fr').join(' ');
+  let h = (S.real ? capLine('SPEC', CAPS.reality) : '');
+  h += '<div class="grid" style="grid-template-columns:' + tpl + ';grid-template-rows:' + (S.at === 'branch' ? 'auto' : '66px') + ' auto auto auto auto">';
+  const held = RACTS.map((a, i) => ({ a: a, i: i })).filter(x => S.reality.lifted.has(x.a.id));
+  if (!held.length) h += '<div class="tray" style="grid-column:2/-1"><div class="prompt">Hold a move to lift it out.<small>You are an observer: you cannot act on the real team, but you can lift its moves out of a derived view. Only what the rules can derive recomputes; the rest goes dashed, never guessed.</small></div></div>';
+  else held.forEach(x => { h += '<button type="button" class="held k-OBSERVED" style="grid-column:' + (x.i + 2) + ';grid-row:1" data-do="select" data-id="' + x.a.id + '" data-fk="held-' + x.a.id + '" aria-label="Held out: ' + esc(x.a.when) + '. ' + esc(x.a.what) + '"><span class="when">held out · ' + esc(x.a.when) + '</span><span class="what">' + esc(x.a.what) + '</span></button>'; });
+  h += '<div class="knee" style="grid-column:1;grid-row:2/4"><span>OBSERVED · KEEPS ITS OWN CLOCK</span></div>';
+  RACTS.forEach((a, i) => { h += '<div class="wk" style="grid-column:' + (i + 2) + '">' + esc(a.when) + '</div>'; });
+  RACTS.forEach((a, i) => {
+    const st = R.st[a.id], sel = S.reality.sel === a.id, isOut = a.type === 'outcome', lg = a.seat === 'league';
+    let inner;
+    if (st === 'lifted') inner = '<button type="button" class="gap" data-do="select" data-id="' + a.id + '" data-fk="gap-' + a.id + '" aria-label="Gap: ' + esc(a.when) + ' is lifted out. Press to select."><span><b>' + esc(a.when) + '</b>lifted out</span></button>';
+    else {
+      const dashed = st === 'dashed';
+      const label = (isOut ? 'Outcome, not an act: ' : lg ? 'The League’s act, not yours: ' : 'Move: ') + a.when + '. ' + a.what + '.' + (dashed ? ' Dashed: impossible without ' + labelOf(R.why[a.id]) + '.' : '') + (isOut || lg ? '' : ' Press to look; hold to lift.');
+      inner = '<button type="button" class="slug k-OBSERVED' + (dashed ? ' dashed' : '') + (sel ? ' sel' : '') + (isOut ? ' out' : '') + (lg ? ' lg' : '') + '" style="' + (lg ? 'flex:1;min-height:0' : '') + '" data-do="select" data-id="' + a.id + '" data-fk="slug-' + a.id + '" ' + (isOut || lg ? '' : 'data-hold="1" ') + 'aria-label="' + esc(label) + '"><span class="when">' + (isOut ? 'outcome · not an act' : lg ? 'the League’s act' : 'Boston’s act') + '</span><span class="what">' + esc(a.what) + '</span>' + (dashed ? '<span class="why">impossible without ' + esc(labelOf(R.why[a.id]).replace(/^the /, '')) + ' — Simons arrived in that trade</span>' : '') + '<span class="foot"><i class="sw k-OBSERVED"></i><span class="sr">OBSERVED</span></span><span class="kn">OBSERVED · ' + esc(a.fx ? R_FIX(a.fx).sealed.src + ' · as of ' + R_FIX(a.fx).sealed.asOf : FX.reality.owner.src + ' · ' + FX.reality.owner.asOf) + ' [verify]</span></button>';
+    }
+    h += '<div class="slot" style="grid-column:' + (i + 2) + '">' + inner + '</div>';
+  });
+  const rc = R.unk;
+  h += '<div class="game k-' + (rc ? 'UNKNOWN' : 'OBSERVED') + '" style="grid-column:2/-1;grid-row:4;margin-top:5px;min-height:46px;flex-direction:row;align-items:center;gap:14px;padding:6px 12px"><span class="res">2025–26 results</span><span>' + (rc ? 'UNKNOWN — results are not derived from rules, so they are not guessed.' : esc(FX.reality.realRecord2526.v) + ' regular season (per BOW’s source) [verify]') + '</span><span class="kn">' + (rc ? 'UNKNOWN · dashed-empty' : 'OBSERVED · ' + esc(FX.reality.realRecord2526.src) + ' · ' + FX.reality.realRecord2526.asOf) + '</span></div>';
+  h += '<div class="ghost" style="grid-row:5"><span class="g">Your world, ghosted — a different calendar:<span class="gs">Boston · Year Two · Week 9</span></span></div>';
+  h += '</div>';
+  $('#stick').innerHTML = h;
+}
+
+/* ---- the present: dials built once per system, updated in place */
+const DIAL = {}; let SHOWN = {}; let tweenId = 0;
+function pt(t, r) { const a = Math.PI * (1 - t); return [100 + r * Math.cos(a), 100 - r * Math.sin(a)]; }
+const tOf = (k, v) => Math.max(0, Math.min(1, (v - FM[k].lo) / (FM[k].hi - FM[k].lo)));
+function gaugeSVG(k) {
+  const m = FM[k]; let s = '<svg viewBox="0 0 200 112" aria-hidden="true" focusable="false">';
+  s += '<path class="band-edge" d="M 16 100 A 84 84 0 0 1 184 100"/><path class="band-fill" d="M 20 100 A 80 80 0 0 1 180 100"/><path class="band-rule" d="M 20 100 A 80 80 0 0 1 180 100"/><path class="band-edge" d="M 24 100 A 76 76 0 0 1 176 100"/>';
+  for (let i = 0; i <= 10; i++) { const a = pt(i / 10, 88), b = pt(i / 10, i % 5 === 0 ? 97 : 93); s += '<line class="tick" x1="' + a[0].toFixed(1) + '" y1="' + a[1].toFixed(1) + '" x2="' + b[0].toFixed(1) + '" y2="' + b[1].toFixed(1) + '"/>'; }
+  m.mk.forEach(mk => { const t = tOf(k, mk.v), a = pt(t, 71), b = pt(t, 99); s += '<line class="mark" x1="' + a[0].toFixed(1) + '" y1="' + a[1].toFixed(1) + '" x2="' + b[0].toFixed(1) + '" y2="' + b[1].toFixed(1) + '"><title>' + esc(mk.t) + '</title></line>'; });
+  s += '<g class="nd ng-pred"><line class="nd-pred" x1="100" y1="100" x2="100" y2="27"/><circle cx="100" cy="27" r="3.4" fill="var(--paper)" stroke="var(--warm)" stroke-width="1.6"/></g>';
+  s += '<g class="nd ng-rec"><path class="nd-rec" d="M 96.4 100 L 100 24 L 103.6 100 Z"/></g>';
+  s += '<g class="nd ng-world"><path class="nd-world" d="M 97.2 100 L 100 31 L 102.8 100 Z"/></g>';
+  s += '<circle class="hub" cx="100" cy="100" r="6.5"/><circle class="hubIn" cx="100" cy="100" r="2.4"/></svg>';
+  return s;
+}
+function setNeedle(g, t) { if (g) g.setAttribute('transform', 'rotate(' + ((t - 0.5) * 180).toFixed(2) + ' 100 100)'); }
+function applyNeedles(root, k, v) {
+  setNeedle($('.ng-rec', root), tOf(k, v.rec));
+  const w = $('.ng-world', root); if (w) { if (v.world == null) w.setAttribute('visibility', 'hidden'); else { w.removeAttribute('visibility'); setNeedle(w, tOf(k, v.world)); } }
+  const p = $('.ng-pred', root); if (p) { if (v.pred == null) p.setAttribute('visibility', 'hidden'); else { p.removeAttribute('visibility'); setNeedle(p, tOf(k, v.pred)); } }
+}
+const CLAMP_SVG = '<svg class="clampMark" viewBox="0 0 26 26" aria-hidden="true"><path d="M6 4H18V8H10V18H18V22H6Z" fill="var(--warm)" stroke="var(--warm2)" stroke-width="1"/><rect x="18" y="10" width="6" height="6" fill="var(--warm2)"/></svg>';
+function buildPresent() {
+  const world = S.sys === 'world';
+  let h = '<h2>The present <small id="clockTxt"></small></h2><div class="seal" id="seal"></div><div id="capP"></div><div class="dials" id="dials">';
+  (world ? WORLD_DIALS : REAL_DIALS).forEach(k => {
+    const m = FM[k];
+    h += '<button type="button" class="dial" data-do="fact" data-fact="' + k + '" data-fk="dial-' + k + '" ' + (world ? '' : 'data-realdial="1" ') + 'id="dial-' + k + '"><span class="lab">' + esc(m.name) + '<em>' + esc(m.sub || '') + '</em></span>' + gaugeSVG(k) + CLAMP_SVG + '<span class="val"></span><span class="sub"></span><span class="kn"></span></button>';
+  });
+  if (!world) {
+    h += '<div class="plate unk" id="plateUnk"></div><div class="plate" id="plateBooks"></div>';
+  }
+  h += '</div>';
+  h += '<div class="legend"><span class="lg"><svg viewBox="0 0 16 16"><path d="M6.5 15 L8 1 L9.5 15 Z" fill="#fff" stroke="var(--ink)" stroke-width="1.2"/></svg> the record</span><span class="lg"><svg viewBox="0 0 16 16"><path d="M6.8 15 L8 2 L9.2 15 Z" fill="var(--warm)" stroke="var(--warm2)"/></svg> ' + (world ? 'this world' : 'derived view') + '</span><span class="lg"><svg viewBox="0 0 16 16"><line x1="8" y1="15" x2="8" y2="2" stroke="var(--warm)" stroke-width="1.8" stroke-dasharray="3 2.5"/></svg> your guess</span></div>';
+  h += '<div class="kindkey">' + ['OBSERVED', 'RECORDED', 'AUTHORED', 'COMPUTED', 'MODELED', 'GENERATED', 'UNKNOWN'].map(k => '<div class="row"><i class="sw k-' + k + '"></i><span><b>' + k + '</b> — ' + KW[k] + (k === 'MODELED' || k === 'GENERATED' ? ' (not used on this page)' : '') + '</span></div>').join('') + '</div>';
+  
+  $('#present').innerHTML = h;
+  Object.keys(DIAL).forEach(k => delete DIAL[k]);
+  (world ? WORLD_DIALS : REAL_DIALS).forEach(k => { DIAL[k] = $('#dial-' + k); });
+  SHOWN = {};
+}
+function updatePresent(animate) {
+  const world = S.sys === 'world', kinds = {};
+  const F = world ? CUR.F : CUR.R;
+  const ks = world ? WORLD_DIALS : REAL_DIALS, targets = {};
+  ks.forEach(k => {
+    const rec = world ? rawOf(k, RECORD) : rawOf(k, R0), now = rawOf(k, F);
+    let pred = null;
+    if (world) Object.keys(S.liftInfo).forEach(id => { const li = S.liftInfo[id]; if (li.fact === k && li.pred != null && CUR.E.lifted.has(id)) pred = li.pred; });
+    targets[k] = { rec: rec, world: (S.sys === 'reality' && k === 'rrec' && F.unk) ? null : now, pred: pred };
+  });
+  // static parts
+  $('#clockTxt').textContent = world ? (S.at === 'branch' ? 'your branch · ' : '') + 'Year Two · Week ' + F.weeks : 'Reality · as of ' + FX.meta.now;
+  const rh = world ? RECORD.hash : R0.hash, same = F.hash === rh;
+  $('#seal').innerHTML = '<span>present hash</span><span class="hx' + (world && S.at === 'branch' ? ' br' : '') + '">' + F.hash + '</span><span class="' + (same ? 'ok' : 'no') + '">' + (same ? 'matches ' + (world ? 'the record' : 'Reality as recorded') + ' (' + rh + ')' : (world ? 'the record is ' : 'as recorded: ') + rh + ' — differs') + '</span><span class="kn">COMPUTED · small hash of the folded state</span>';
+  ks.forEach(k => {
+    const el = DIAL[k], kd = kindOfDial(k);
+    el.className = 'dial k-' + kd + (S.fact === k && S.weigh ? ' foc' : '') + (S.clamps.some(c => c.fact === k && c.at === S.at && world) ? ' clamped' : '') + (S.sys === 'reality' && k === 'rrec' && F.unk ? ' unk' : '');
+    const val = $('.val', el), sub = $('.sub', el);
+    const recTxt = world ? valText(k, RECORD) : valText(k, R0), nowTxt = valText(k, F);
+    const differs = world ? (k === 'score' ? (F.last.b !== RECORD.last.b || F.last.o !== RECORD.last.o || F.weeks !== 9) : Math.abs(rawOf(k, F) - rawOf(k, RECORD)) > (k === 'wins' || k === 'seats' ? 0.4 : 5000)) : (F.unk && k === 'rrec') || (k !== 'rrec' && Math.abs(rawOf(k, F) - rawOf(k, R0)) > 5000);
+    sub.className = 'sub' + (differs ? ' chg' : '');
+    let subTxt = '';
+    if (differs) { subTxt = 'record ' + recTxt; if (!(k === 'wins' || k === 'score' || k === 'rrec')) subTxt += ' \u00b7 ' + deltaTxtRaw(k, rawOf(k, F) - rawOf(k, world ? RECORD : R0)); }
+    else if (k === 'seats' && F.capped) subTxt = 'sold out: capped at ' + num(CAP_SEATS);
+    else if (k === 'tax' && world && F.over === 0) subTxt = 'under the line: no tax';
+    sub.textContent = subTxt;
+    if (k === 'rtax') { const d = FX.league.season2627.tax.v - F.ts; sub.textContent = (differs ? 'record ' + recTxt + ' · ' : '') + (d >= 0 ? money(d, 1) + ' under the line' : money(-d, 1) + ' over the line'); sub.className = 'sub' + (differs ? ' chg' : ''); }
+    if (k === 'rcap') { const d = FX.league.season2627.apron1.v - F.cp; sub.textContent = (differs ? 'record ' + recTxt + ' · ' : '') + (d >= 0 ? money(d, 1) + ' under 1st apron' : money(-d, 1) + ' over 1st apron'); sub.className = 'sub' + (differs ? ' chg' : ''); }
+    $('.kn', el).textContent = kd + ' · ' + KSHORT[k]();
+    el.title = kd + ' · ' + KSRC[k]();
+    el.setAttribute('aria-label', FM[k].name + ': ' + nowTxt + (differs ? ' (the record says ' + recTxt + ')' : '') + '. Press to order the acts by what they did to it.');
+    kinds[k] = kd;
+  });
+  if (!world) {
+    $('#plateUnk').innerHTML = '<b>Unknown, not guessed</b>' + (F.unk ? 'What Chicago, Portland and Atlanta did next · every game result · the 2026 playoffs.<br><span class="kk">UNKNOWN · a different Boston would have changed what they did; nobody can derive it.</span>' : 'What other clubs did after each move: read from the Reality feed [verify]. Nothing in this store models it.<br><span class="kk">UNKNOWN in this store</span>');
+    $('#plateBooks').innerHTML = '<b>On Boston’s books, of the players in these moves</b><ul>' + F.books.map(n => '<li>' + esc(n) + '</li>').join('') + '</ul><span class="kk">' + (F.lifted ? 'COMPUTED from who was traded to whom (no salaries needed)' : 'OBSERVED · as recorded') + '</span>' + '';
+  }
+  $('#capP').innerHTML = S.real ? capLine('REAL', CAPS.hash) + capLine('PROPOSED', CAPS.present) : '';
+  // tween needles + text
+  const from = SHOWN, id = ++tweenId, t0 = performance.now(), dur = (animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) ? 520 : 0;
+  const lerp = (a, b, u) => (a == null || b == null) ? b : a + (b - a) * u;
+  const ease = u => 1 - Math.pow(1 - u, 3);
+  function frame(now) {
+    if (id !== tweenId) return;
+    const u = dur ? Math.min(1, (now - t0) / dur) : 1, e = ease(u);
+    ks.forEach(k => {
+      const f0 = from[k] || targets[k], tg = targets[k];
+      const cur = { rec: lerp(f0.rec, tg.rec, e), world: tg.world == null ? null : lerp(f0.world == null ? tg.world : f0.world, tg.world, e), pred: tg.pred };
+      applyNeedles(DIAL[k], k, cur);
+      const v = $('.val', DIAL[k]);
+      if (u >= 1) v.textContent = valText(k, F);
+      else if (k === 'wins') v.textContent = Math.round(cur.world) + EN + (F.weeks - Math.round(cur.world));
+      else if (k === 'score') v.textContent = snum(cur.world) + ' pts';
+      else if (k === 'rrec') v.textContent = valText(k, F);
+      else v.textContent = FM[k].f(cur.world);
+    });
+    if (u < 1) requestAnimationFrame(frame); else SHOWN = targets;
+  }
+  requestAnimationFrame(frame);
+}
+const deltaTxtRaw = (k, d) => (k === 'seats') ? snum(d) + ' seats' : smoney(d, k === 'cash' ? 2 : 1);
+
+/* ---- the bench */
+function tabsFor() {
+  if (S.sys === 'reality') return [['act', 'Act'], ['compare', 'Compare'], ['log', 'Log']];
+  const t = [['act', 'Act'], ['weigh', 'What counted'], ['pair', 'Two at once'], ['compare', 'Compare']];
+  if (S.at === 'branch') t.push(['play', 'Play on']);
+  t.push(['log', 'Log (' + S.log.length + ')']);
+  return t;
+}
+function renderBench() {
+  if (S.tab === 'play' && !(S.at === 'branch' && S.sys === 'world')) S.tab = 'act';
+  const tabs = tabsFor();
+  if (!tabs.some(t => t[0] === S.tab)) S.tab = 'act';
+  let h = '<div class="tabs" role="group" aria-label="Workbench">' + tabs.map(t => '<button type="button" data-do="tab" data-tab="' + t[0] + '" data-fk="tab-' + t[0] + '" aria-pressed="' + (S.tab === t[0]) + '">' + esc(t[1]) + '</button>').join('');
+  h += '<span class="sp">';
+  if (S.sys === 'world') {
+    if (S.at === 'branch') h += '<button type="button" class="btn br" data-do="toRecord" data-fk="toRecord" style="min-height:38px">Return to the record</button>';
+    else if (S.branch) h += '<button type="button" class="btn br" data-do="toBranch" data-fk="toBranch" style="min-height:38px">Enter your branch</button>';
+  }
+  h += '<button type="button" class="btn" data-do="reset" data-fk="reset" style="min-height:38px;margin-left:6px;font-weight:400">Start over</button></span></div>';
+  let body = '', one = false;
+  switch (S.tab) {
+    case 'act': body = S.sys === 'reality' ? panelActR() : panelAct(); break;
+    case 'weigh': body = panelWeigh(); break;
+    case 'pair': body = panelPair(); one = false; break;
+    case 'compare': body = S.sys === 'reality' ? panelCompareR() : panelCompare(); break;
+    case 'play': body = panelPlay(); break;
+    case 'log': body = panelLog(); one = true; break;
+  }
+  const capk = S.sys === 'reality' ? (S.tab === 'act' ? 'reality' : S.tab === 'compare' ? 'reality' : 'log') : S.tab;
+  const capx = S.real ? capLine(capk === 'reality' ? 'SPEC' : 'PROPOSED', CAPS[capk] || CAPS.act, 'grid-column:1/-1') : '';
+  $('#bench').innerHTML = h + '<div class="panel' + (one ? ' one' : '') + '" id="panel" role="region" aria-label="' + esc(S.tab) + '">' + capx + body + '</div>';
+  wireBig();
+}
+function kindSwatch(k) { return '<i class="sw k-' + k + '"></i>'; }
+function chipRow(sel, kindDo, includeAll) {
+  return '<div class="chips" role="group" aria-label="Fact">' + (includeAll ? '<button type="button" class="chip" data-do="factall" data-fk="chip-all" aria-pressed="' + (!S.fact) + '">All facts</button>' : '') + WORLD_DIALS.map(k => '<button type="button" class="chip" data-do="' + kindDo + '" data-fact="' + k + '" data-fk="chip-' + kindDo + '-' + k + '" aria-pressed="' + (sel === k) + '">' + esc(FM[k].name === 'Projected tax' ? 'Tax' : FM[k].name === 'Latest score' ? 'Score' : FM[k].name === 'Premium seats' ? 'Seats' : FM[k].name) + '</button>').join('') + '</div>';
+}
+function noticeHTML(id) { if (!S.notice || (S.notice.for || null) !== (id || null)) return ''; const n = S.notice; return '<div class="refuse" role="alert"><b>' + esc(n.title) + '</b><div class="rule">' + esc(n.rule) + '</div></div>'; }
+
+function panelAct() {
+  const F = CUR.F, E = CUR.E, sel = S.sel;
+  if (!sel) {
+    const n = noticeHTML(null);
+    return '<div><h3>Hold an act to lift it out.</h3><p>Each slug is something you did. The dials are what those acts add up to. Lift one and the present re-forms without it, with luck held fixed, so the only thing that changed is that act.</p><p class="small">Tap an act to look first and guess what it did. “What counted” shows which acts reached which dial. A lift removes an act; it does not choose the other side.</p><div class="btns"><button type="button" class="btn" data-do="tab" data-tab="weigh" data-fk="w-first">What counted</button><button type="button" class="btn" data-do="select" data-id="w6-trade" data-fk="w6-first">Look at the Week 6 trade</button></div>' + n + '</div><div><h4>What the textures say</h4><p class="small">' + kindSwatch('RECORDED') + ' RECORDED: written into BOW’s record. ' + kindSwatch('AUTHORED') + ' AUTHORED: written for this prototype, illustrative.</p><p class="small">' + kindSwatch('COMPUTED') + ' COMPUTED: follows from rules and state. The toy engine’s scores are AUTHORED, never hatched: no model ran.</p><p class="small">Nothing here is a basketball test: it is sentences, dates, money and a score.</p></div>';
+  }
+  if (sel.indexOf('game:') === 0) return panelGame(+sel.slice(5));
+  const a = findAct(sel), st = F.status[sel], kind = a.branch ? 'RECORDED' : a.k;
+  const head = '<h3>' + kindSwatch(kind) + ' ' + esc(a.who ? a.who + DOT : '') + esc(whenShort(a)) + '</h3><p style="font-size:17px;margin:2px 0 6px"><i>' + esc(a.what) + '</i></p>';
+  if (a.seat === 'league') {
+    const declined = st === 'declined', nt = noticeHTML(a.id);
+    let left;
+    if (declined) left = '<div class="refuse"><b>Set by you, not the League’s.</b><div class="rule">This branch sets the League’s answer by hand. That is an assumption, stamped as yours, not the League’s act.</div></div>';
+    else if (nt) left = nt + '<p>What you can do instead is set their seat and see what follows.</p><div class="btns"><button type="button" class="btn brf" data-do="forkSeat" data-fk="forkSeat">Fork with their seat set</button></div><p class="small">This cuts a branch where the League does not approve. The answer is your assumption, not the League’s act.</p>';
+    else left = '<p>This is the League’s act, set in the record next to yours. Your seat is ' + esc(WD.seat.name) + '.</p><div class="btns"><button type="button" class="btn" data-do="lift" data-id="' + a.id + '" data-fk="try-lift">Try to lift it</button></div>';
+    return '<div>' + head + left + '</div><div><h4>Why this is locked</h4><p class="small">Authority is what you can lift. The League’s approval is authored here [verify against the save]. Whether the League would have approved is not something you can take out, only something you can set.</p></div>';
+  }
+  if (st === 'dashed') {
+    const need = F.why[sel], na = findAct(need);
+    return '<div>' + head + '<div class="refuse"><b>Impossible without ' + esc(labelOf(need).replace(/^the /, '')) + '.</b><div class="rule">This act needed ' + esc(labelOf(need)) + ', which is ' + (F.status[need] === 'lifted' ? 'lifted out' : F.status[need] === 'declined' ? 'declined in this branch' : 'dashed too') + '. It is dashed, not deleted: put that act back and this one returns.</div></div><p>' + esc(whenShort(a)) + ' needed <i>' + esc(na ? na.what : need) + '</i></p><div class="btns"><button type="button" class="btn" data-do="select" data-id="' + need + '" data-fk="show-need">Show the act it needed</button>' + (F.status[need] === 'lifted' ? '<button type="button" class="btn pri" data-do="putback" data-id="' + need + '" data-fk="pb-need">Put ' + esc(labelOf(need)) + ' back</button>' : '') + '</div></div><div><h4>Path dependence</h4><p class="small">What turned to dashes is what could only happen because the lifted act did. It reached no number by itself: it had no way to exist.</p></div>';
+  }
+  if (st === 'lifted') return panelLifted(a, head);
+  // in: predict then lift
+  const fk = S.pfact, m = FM[fk], key = a.id + '|' + fk, rec = rawOf(fk, F), pv = S.preds[key] != null ? S.preds[key] : null;
+  const pd = toDisp(fk, pv != null ? pv : rec);
+  const notice = noticeHTML(a.id);
+  return '<div>' + head + '<p class="small">Your act · ' + esc(WD.seat.name) + '. ' + (a.branch ? 'RECORDED in your branch.' : kind === 'RECORDED' ? 'RECORDED in the World.' : 'AUTHORED: illustrative, written for this prototype.') + '</p><p>Guess first. Then lift it out and watch what the present does without it.</p>' + notice + '<div class="btns"><button type="button" class="btn pri" data-do="lift" data-id="' + a.id + '" data-fk="lift">Lift it out</button></div><p class="small">You can also hold the act in the strip. <span class="kn">' + esc(kindNote(a)) + '</span></p></div>' +
+    '<div class="dialbox"><h4 style="margin-top:0">What will ' + esc(m.phrase) + ' be without it?</h4>' + chipRow(fk, 'pfact', false) + '<div class="big" id="big" data-k="' + fk + '">' + gaugeSVG(fk) + '</div><div class="rng"><input type="range" id="predRange" aria-label="Your guess for ' + esc(m.phrase) + '" min="' + toDisp(fk, m.lo) + '" max="' + toDisp(fk, m.hi) + '" step="' + toDisp(fk, m.step) + '" value="' + pd + '"><output id="predOut">' + m.f(pv != null ? pv : rec) + '</output></div><div class="cap2"><span>' + m.ax(m.lo) + '</span><span>the record: ' + valText(fk, F) + '</span><span>' + m.ax(m.hi) + '</span></div></div>';
+}
+function panelLifted(a, head) {
+  const F = CUR.F, E = CUR.E;
+  const li = S.liftInfo[a.id] || { fact: S.pfact, pred: null }, fk = li.fact, m = FM[fk];
+  // footprint of this one lift relative to the world without it
+  const Eb = Object.assign({}, E, { lifted: new Set(Array.from(E.lifted).filter(i => i !== a.id)) }), Fb = fold(Eb);
+  const rows = FACTS.map(k => ({ k: k, d: diff(Fb, F, k), a: valText(k, Fb), b: valText(k, F) })).filter(r => r.d.ch);
+  const gch = gamesChanged(Fb, F);
+  const dashed = Object.keys(F.status).filter(id => F.status[id] === 'dashed' && Fb.status[id] === 'in');
+  let foot;
+  if (!rows.length && !gch && !dashed.length) foot = '<p class="verdict">Nothing changed.<small>The present is the same without this act. It is still in your record; it reached no fact.</small></p>';
+  else foot = '<h4>What it reached</h4><table class="tbl"><tr><th>Fact</th><th class="r">Before</th><th class="r">Now</th></tr>' + rows.map(r => '<tr><td>' + esc(FM[r.k].name) + '</td><td class="r">' + esc(r.a) + '</td><td class="r chg">' + esc(r.b) + '</td></tr>').join('') + '</table>' + (gch ? '<p class="small" style="margin-top:3px">' + gch + ' of ' + F.games.length + ' game scores are different. The others kept their draws and their results.</p>' : '') + (dashed.length ? '<p class="small">Dashed now: ' + dashed.map(id => esc(labelOf(id))).join(', ') + '.</p>' : '');
+  const said = li.pred != null ? 'You said <b>' + m.f(li.pred) + '</b>. Without it: <b>' + valText(fk, F) + '</b>.<br>The record says ' + valText(fk, Fb) + '.' : 'You did not guess. Without it: <b>' + valText(fk, F) + '</b>. The record says ' + valText(fk, Fb) + '.';
+  const twice = S.ledger[lkey(E)];
+  return '<div><h3>' + kindSwatch(a.branch ? 'RECORDED' : a.k) + ' Lifted out</h3><p style="font-size:16px;margin:0 0 4px"><i>' + esc(whenShort(a)) + ' · ' + esc(a.what) + '</i></p><div class="btns"><button type="button" class="btn pri" data-do="putback" data-id="' + a.id + '" data-fk="putback">Put it back</button>' + (S.at === 'record' ? '<button type="button" class="btn brf" data-do="keep" data-fk="keep">Keep this world</button>' : '') + '</div>' + foot + '<p class="small">A lift removes an act. It does not choose the other side.' + (twice && twice.n > 1 ? ' You have lifted this exact set ' + twice.n + ' times: same present ' + twice.hash + ' each time.' : '') + '</p></div>' +
+    '<div class="dialbox"><h4 style="margin-top:0">' + esc(m.name) + ': your guess and the result</h4><div class="big" id="big" data-k="' + fk + '" data-lifted="1">' + gaugeSVG(fk) + '</div><p class="said">' + said + '</p><p class="small" style="text-align:center;margin:0">Luck held fixed: every game kept its own draw.</p>' + '' + '</div>';
+}
+function panelGame(g) {
+  const F = CUR.F, E = CUR.E, gm = F.games[g - 1], rg = RECORD.games[g - 1], same = rg && rg.b === gm.b && rg.o === gm.o;
+  const kind = (g === 9 && same) ? 'RECORDED' : 'AUTHORED';
+  const rows = [];
+  F.acts.forEach(a => { if (F.status[a.id] !== 'in' || a.seat === 'league') return; const alt = fold(withLift(E, [a.id])), x = alt.games[g - 1]; if (x && (x.b !== gm.b || x.o !== gm.o)) rows.push({ a: a, x: x }); });
+  const nt = noticeHTML('game:' + g);
+  return '<div><h3>' + kindSwatch(kind) + ' Week ' + g + ' · ' + (gm.win ? 'won' : 'lost') + ' ' + gm.b + EN + gm.o + (gm.home ? ' at home against ' : ' away at ') + esc(OPPN[gm.opp]) + '</h3>' + (nt || '<p>This is a result, not something a seat did.</p><div class="btns"><button type="button" class="btn" data-do="lift" data-id="game:' + g + '" data-fk="try-lift">Try to lift it</button></div>') + '<p class="small">' + (kind === 'RECORDED' ? 'RECORDED in the World: the one result that is not the toy engine’s.' : 'AUTHORED: the toy engine’s output for this game. Its draw is fixed: ' + gm.uB.toFixed(2) + ' and ' + gm.uO.toFixed(2) + '.') + '</p></div><div><h4>Which acts reached this score</h4>' + (rows.length ? '<table class="tbl"><tr><th>Lift only…</th><th class="r">Score becomes</th></tr>' + rows.map(r => '<tr><td>' + esc(whenShort(r.a)) + '</td><td class="r chg">' + r.x.b + EN + r.x.o + '</td></tr>').join('') + '</table><p class="small" style="margin-top:4px">Each row lifts one act alone and replays with the same draws.</p>' : '<p>No single act moves this score.</p>') + '</div>';
+}
+function traceHTML(k) {
+  const F = CUR.F, lab = id => id === 'start' ? 'Year Two starts at' : whenShort(findAct(id) || { when: id });
+  if (k === 'payroll') return '<ul class="ledger">' + F.pc.map(x => '<li><span>' + (x.id === 'start' ? 'start' : esc(lab(x.id))) + '</span><span>' + (x.id === 'start' ? money(x.v, 3) + ' (authored)' : smoney(x.v, 3)) + '</span></li>').join('') + '<li><span>= payroll</span><span>' + money(F.payroll, 3) + '</span></li></ul>';
+  if (k === 'tax') return '<ul class="ledger"><li><span>rule</span><span>1.5 × (payroll − ' + money(TAX_LINE) + ') · World rule, authored</span></li><li><span>so</span><span>1.5 × ' + money(F.over, 2) + ' = ' + money(F.tax, 2) + '</span></li></ul><p class="small">The NBA’s real tax is incremental; this World’s is flat.</p><h4>Where the payroll came from</h4>' + traceHTML('payroll');
+  if (k === 'cash') return '<ul class="ledger">' + (F.cc.length ? F.cc.map(x => '<li><span>' + esc(lab(x.id)) + '</span><span>' + smoney(x.v, 2) + (x.n ? ' (' + x.n + ' home nights)' : '') + '</span></li>').join('') : '<li><span>—</span><span>no acts in reach</span></li>') + '<li><span>= cash</span><span>' + money(F.cash, 2) + '</span></li></ul>';
+  if (k === 'seats') return '<ul class="ledger wide"><li><span>base</span><span>' + num(BASE_SEATS) + ' (authored)</span></li><li><span>price shift</span><span>' + (F.shift ? (F.shift * 100).toFixed(0) + '%' : 'none') + '</span></li><li><span>form</span><span>' + (FORM * 100).toFixed(1) + '% per net win in Weeks 1–8; net ' + snum(F.net) + '</span></li><li><span>demand</span><span>' + num(F.demand) + '</span></li><li><span>= sold</span><span>' + num(F.seats) + (F.capped ? ' (sellout limit ' + num(CAP_SEATS) + ')' : '') + '</span></li></ul>';
+  if (k === 'wins') return '<ul class="ledger wide">' + F.games.map(g => '<li><span>Week ' + g.g + '</span><span>' + (g.win ? 'W ' : 'L ') + g.b + EN + g.o + ' ' + (g.home ? 'vs ' : '@ ') + g.opp + '</span></li>').join('') + '</ul>';
+  const g = F.last;
+  return '<ul class="ledger wide"><li><span>Week ' + g.g + '</span><span>' + (g.win ? 'W ' : 'L ') + g.b + EN + g.o + '</span></li><li><span>acts’ margin</span><span>' + snum(g.m * 10) / 10 + ' pts expected from the acts in</span></li><li><span>luck</span><span>draws ' + g.uB.toFixed(2) + ' / ' + g.uO.toFixed(2) + (g.g === 9 ? ' (fitted to the record)' : '') + ' — same in every world</span></li></ul>';
+}
+function panelWeigh() {
+  const F = CUR.F, E = CUR.E, W = weigh(E), fk = S.fact;
+  const sel = S.sel && !String(S.sel).startsWith('game:') && W[S.sel] ? S.sel : null;
+  const cl = S.clamps.map((c, i) => { const r = clampReach(c) || { off: true }, on = c.at === S.at; const st = c.tripped ? 'tripped' : r.off ? 'off' : r.ch ? 'reaching' : 'watching'; const det = c.tripped ? 'at ' + esc(c.trippedAt || '') : r.off ? 'that act is out of this world' : 'lifting it now changes it by ' + deltaText(c.fact, r.d); return '<li><span>' + st + '</span><span>' + esc(c.label) + ' \u2014 ' + det + (on ? '' : ' (in ' + c.at + ')') + ' <button type="button" class="chip" style="min-height:28px" data-do="unclamp" data-i="' + i + '" data-fk="unclamp-' + i + '">Release</button></span></li>'; }).join('');
+  const clampBtn = sel && fk ? '<button type="button" class="btn br" data-do="clamp" data-id="' + sel + '" data-fact="' + fk + '" data-fk="clamp">Clamp: tell me when ' + esc(labelOf(sel)) + ' stops reaching ' + esc(FM[fk].phrase) + '</button>' : '<button type="button" class="btn" disabled>Tap an act and a fact, then clamp</button>';
+  const thenNow = S.branch && S.at === 'branch' ? '<p class="small">Marks on the slugs: <b>then</b> is what each act reached when you kept this world; <b>now</b> is what it reaches after your new acts.</p>' : '';
+  return '<div><h3>What counted</h3><p>Acts are set in the order of how many facts each one reached. Tap a fact to order them by how much they did to it. An act that changed nothing stays, grey: a zero is a finding.</p>' + chipRow(fk, 'fact', true) + '<h4>' + (fk ? 'Why the ' + esc(FM[fk].phrase.replace(/^the /, '')) + ' is what it is' : 'How to read the bars') + '</h4>' + (fk ? traceHTML(fk) : '<p class="small">Six squares under each act, one per fact: payroll, tax, cash, seats, record, latest score. Filled means the act reached it. Bars are COMPUTED by lifting each act in turn and replaying with the same draws. Never good or bad: counted.</p>') + thenNow + '</div>' +
+    '<div><h4>Follow</h4><p class="small">A clamp watches a weight. It tells you when an act stops reaching a fact.</p><div class="btns">' + clampBtn + '</div>' + (cl ? '<ul class="ledger wide">' + cl + '</ul>' : '<p class="small">No clamps yet. Tap Year One on the strip, tap Score above, then clamp.</p>') + '' + '</div>';
+}
+function pairAnalysis() {
+  const E = CUR.E, ids = Array.from(E.lifted).filter(i => findAct(i).seat !== 'league');
+  if (ids.length < 2) return null;
+  const P = ids.slice(-2), Eb = Object.assign({}, E, { lifted: new Set(Array.from(E.lifted).filter(i => P.indexOf(i) < 0)) });
+  const base = fold(Eb), a = fold(withLift(Eb, [P[0]])), b = fold(withLift(Eb, [P[1]])), both = fold(withLift(Eb, P));
+  const rows = [];
+  ['payroll', 'tax', 'cash', 'seats', 'wins'].forEach(k => {
+    const da = both[k] - base[k], sa = a[k] - base[k], sb = b[k] - base[k];
+    if (Math.abs(sa) < 1e-6 && Math.abs(sb) < 1e-6 && Math.abs(da) < 1e-6) return;
+    const eps = (k === 'seats' || k === 'wins') ? 0.5 : 5000, sum = sa + sb;
+    rows.push({ k: k, sa: sa, sb: sb, sum: sum, pair: da, inter: Math.abs(da - sum) >= eps });
+  });
+  const inter = rows.filter(r => r.inter);
+  let why = [];
+  inter.forEach(r => {
+    if (r.k === 'tax') why.push('the tax cannot fall below $0: once one lift takes payroll under ' + money(TAX_LINE) + ', the other has nothing left to remove');
+    if (r.k === 'seats') why.push('premium seats cannot outrun the ' + num(CAP_SEATS) + ' sellout: one lift alone is cut off by it, the pair is not');
+  });
+  return { P: P, base: base, rows: rows, inter: inter, together: inter.length > 0, why: why, both: both, a: a, b: b };
+}
+function panelPair() {
+  const A = pairAnalysis();
+  const btns = '<div class="btns"><button type="button" class="btn pri" data-do="pair" data-ids="w1-minimum,w4-prices" data-fk="pair14">Try Week 1 + Week 4</button><button type="button" class="btn" data-do="pair" data-ids="w1-minimum,w6-trade" data-fk="pair16">Try Week 1 + Week 6</button><button type="button" class="btn" data-do="putbackAll" data-fk="pb-all">Put both back</button></div>';
+  if (!A) return '<div><h3>Two at once</h3><p>Lift two acts together and compare the pair with the two singles added up. If they differ, the acts matter only together.</p>' + btns + '<p class="small">Or lift two acts yourself on the strip.</p></div><div><h4>Why it can differ</h4><p class="small">A limit can cut off one lift but not two (a sellout, a tax that cannot go below zero). Each act alone looks small; together they are not the sum.</p></div>';
+  const P = A.P, nm = P.map(i => whenShort(findAct(i)));
+  const fmt = (k, v) => k === 'seats' ? snum(v) : k === 'wins' ? snum(v) : smoney(v, k === 'cash' ? 2 : 1);
+  const tbl = '<table class="tbl"><tr><th>Fact</th><th class="r">' + esc(nm[0]) + ' alone</th><th class="r">' + esc(nm[1]) + ' alone</th><th class="r">Sum</th><th class="r">Both lifted</th></tr>' + A.rows.map(r => '<tr class="' + (r.inter ? '' : '') + '"><td>' + esc(FM[r.k].name) + '</td><td class="r">' + fmt(r.k, r.sa) + '</td><td class="r">' + fmt(r.k, r.sb) + '</td><td class="r">' + fmt(r.k, r.sum) + '</td><td class="r ' + (r.inter ? 'chg' : '') + '">' + fmt(r.k, r.pair) + '</td></tr>').join('') + '</table>';
+  const verdict = A.together ? '<div class="verdict together">These matter only together.<small>The pair is not the sum of the singles on ' + A.inter.map(r => esc(FM[r.k].phrase.replace(/^the /, ''))).join(' and ') + (A.why.length ? ': ' + esc(A.why.join('; ')) + '.' : '.') + '</small></div>' : '<div class="verdict">No interaction — the pair equals the sum.<small>Lifting ' + esc(nm[0]) + ' and ' + esc(nm[1]) + ' together does what the two singles do added up.</small></div>';
+  return '<div><h3>Two at once: ' + esc(nm[0]) + ' + ' + esc(nm[1]) + '</h3>' + verdict + '<div class="btns"><button type="button" class="btn pri" data-do="putbackAll" data-fk="pb-all">Put both back</button><button type="button" class="btn" data-do="pair" data-ids="w1-minimum,w6-trade" data-fk="pair16">Try Week 1 + Week 6</button></div></div><div><h4>Singles, sum, and the pair</h4>' + tbl + '<p class="small" style="margin-top:4px">All four runs use the same draws. Computed, not narrated.</p></div>';
+}
+function panelCompare() {
+  const F = CUR.F, E = CUR.E, same = F.hash === RECORD.hash;
+  const rows = FACTS.map(k => { const d = diff(RECORD, F, k); return '<tr class="' + (d.ch ? '' : 'zero') + '"><td>' + esc(FM[k].name) + '</td><td class="r">' + esc(valText(k, RECORD)) + '</td><td class="r ' + (d.ch ? 'chg' : '') + '">' + esc(valText(k, F)) + '</td></tr>'; }).join('');
+  const chg = [], keep = [];
+  for (let i = 0; i < Math.min(F.games.length, RECORD.games.length); i++) { const a = F.games[i], b = RECORD.games[i]; ((a.b !== b.b || a.o !== b.o) ? chg : keep).push(i + 1); }
+  const range = arr => arr.length ? (arr.length === 1 ? 'Week ' + arr[0] : 'Weeks ' + arr.join(', ')) : 'none';
+  const gone = Object.keys(F.status).filter(id => F.status[id] === 'lifted' || F.status[id] === 'dashed' || F.status[id] === 'declined').map(labelOf);
+  const li = Object.keys(S.ledger).map(k => S.ledger[k]).filter(x => x.at === S.at);
+  const rr = S.lastRerun && S.lastRerun.ids.join() === Array.from(E.lifted).join() ? '<p class="said">From scratch, twice: <b>' + S.lastRerun.a + '</b> and <b>' + S.lastRerun.b + '</b>' + (S.lastRerun.same ? ' — the same present.' : ' — different!') + '</p>' : '';
+  return '<div><h3>Compare: the record and this world</h3>' + (same ? '<p>This world is the record: the hashes match (' + F.hash + '). Lift an act to see two needles part.</p>' : '<p>Two needles per dial: the record’s (white) and this world’s (your ink). Only what the lifted act reached differs.</p>') + '<table class="tbl"><tr><th>Fact</th><th class="r">Record</th><th class="r">This world</th></tr>' + rows + '</table></div>' +
+    '<div><h4>Only the footprint differs</h4><p class="small" style="margin-bottom:3px">Game scores changed: <b>' + range(chg) + '</b>. Same draws, same results: <b>' + range(keep) + '</b>.' + (gone.length ? ' Not in this world: ' + esc(gone.join(', ')) + '.' : '') + '</p><h4>Luck is fixed</h4><p class="small" style="margin-bottom:4px">Every game has its own draw, the same in every world. Lift the same act again and the present is the same.</p><div class="btns" style="margin-top:0"><button type="button" class="btn" data-do="rerun" data-fk="rerun">Run it again</button></div>' + rr + (li.length ? '<ul class="ledger wide">' + li.map(x => '<li><span>' + x.hash + '</span><span>' + esc(x.ids.map(i => whenShort(findAct(i) || { when: i })).join(' + ')) + ' × ' + x.n + '</span></li>').join('') + '</ul>' : '') + '' + '</div>';
+}
+function panelPlay() {
+  const E = CUR.E, F = CUR.F, played = E.weeks >= 10, dark = false;
+  const analyticsDark = (() => { let d = false; F.acts.forEach(a => { if (F.status[a.id] === 'in' && a.effects) { if (a.effects.analytics === 'dark') d = true; if (a.effects.analytics === 'lit') d = false; } }); return d; })();
+  const g10 = SCHED[10];
+  if (played) {
+    const g = F.games[9];
+    return '<div><h3>Week 10 played</h3><p>' + (g.win ? 'Won ' : 'Lost ') + g.b + EN + g.o + ' at ' + esc(OPPN[g.opp]) + '. <span class="small">AUTHORED: the toy engine’s output, its draw fixed.</span></p><p>' + (E.appended.length ? 'Your new act is in branch ink on the strip.' : 'You took no act. That is recorded as an absence, not as a choice.') + '</p><p class="small">Open “What counted”: each act now shows what it reached then, when you kept the world, and what it reaches now.</p><div class="btns"><button type="button" class="btn pri" data-do="tab" data-tab="weigh" data-fk="to-weigh">What counted</button><button type="button" class="btn br" data-do="toRecord" data-fk="toRecord2">Return to the record</button></div></div><div><h4>Where you are</h4><p class="small">' + esc(S.branch.stamp) + '. Base ' + S.branch.base + '. This branch: ' + F.hash + '.</p></div>';
+  }
+  const ob = OPTIONS.map(o => { const dis = o.needsDark && !analyticsDark; return '<button type="button" class="btn" ' + (dis ? 'disabled' : '') + ' data-do="playOn" data-opt="' + o.id + '" data-fk="opt-' + o.id + '">' + esc(o.what) + (o.price ? ' · ' + money(o.price, o.price < 1e6 ? 2 : 1) : ' · ' + smoney(o.effects.cash || 0, 2)) + '</button>'; }).join('');
+  return '<div><h3>Play on: Week 10, away at ' + esc(OPPN[g10.o]) + '</h3><p>Your branch is kept. Take one act, or none, and the week is played. New acts are set in branch ink.</p><div class="btns">' + ob + '<button type="button" class="btn" data-do="playOn" data-fk="opt-none">Play Week 10 with no new act</button></div><p class="small">' + (analyticsDark ? '' : 'Analytics is already open in this branch, so there is nothing to reopen. ') + 'Reopening Analytics costs ' + money(ANALYTICS.opensFor, 1) + ' (' + esc(ANALYTICS.why) + ').</p></div><div><h4>What playing on does</h4><p class="small">The next game gets its own fixed draw. Acts you take now reach forward, not back: Weeks 1–9 keep their results. The weights will change, and the strip will say so.</p></div>';
+}
+function panelLog() {
+  return '<div><h3>Every act, in order</h3><p class="small">Who, what, when in which clock, in which history. Toggles and tabs are not acts.</p>' + (S.log.length ? '<ul class="log">' + S.log.slice().reverse().map(l => '<li><b>#' + l.n + '</b> <span class="who">' + esc(l.who) + '</span> · ' + esc(l.what) + '<br><span class="who">' + esc(l.clock) + ' · ' + esc(l.hist) + '</span></li>').join('') + '</ul>' : '<p>Nothing yet. The record is at rest.</p>') + '</div>';
+}
+
+/* ---- reality panels */
+function panelActR() {
+  const R = CUR.R, sel = S.reality.sel, a = sel ? rAct(sel) : null, notice = noticeHTML(sel);
+  if (!a) return '<div><h3>Hold a move to lift it out.</h3><p>This is ' + esc(REALITY_NAME) + ': you can watch it, and lift its recorded moves out of a <b>derived view</b>. Only what the rules can work out will recompute. Everything else goes dashed.</p><p class="small">You cannot act on the real team. Outcomes are not acts, and other seats’ acts are not yours.</p>' + notice + '<div class="btns"><button type="button" class="btn" data-do="select" data-id="r-holiday" data-fk="r-first">Look at the Holiday trade</button></div></div><div><h4>What is on the strip</h4><p class="small">Facts from the shared fixture, dated, each marked [verify]. Boston’s tax salary is <b>' + money(FX.reality.taxSalary.v, 3) + '</b> against a tax line of <b>' + money(FX.league.season2627.tax.v, 3) + '</b>: about ' + money(FX.league.season2627.tax.v - FX.reality.taxSalary.v, 1) + ' under. The cap payroll of ' + money(FX.reality.capPayroll.v, 1) + ' is a different number.</p></div>';
+  const st = R.st[sel], fixt = a.fx ? R_FIX(a.fx) : null;
+  const head = '<h3><i class="sw k-OBSERVED"></i> ' + esc(a.when) + '</h3><p style="font-size:17px;margin:2px 0 6px"><i>' + esc(a.what) + '</i></p>';
+  if (a.type === 'outcome') return '<div>' + head + (notice || '<p>This is what happened, not something a seat chose.</p><div class="btns"><button type="button" class="btn" data-do="lift" data-id="' + a.id + '" data-fk="try-lift">Try to lift it</button></div>') + (fixt ? '<p class="small">As recorded: ' + esc(fixt.sealed.v) + ' <span class="kn">OBSERVED · ' + esc(fixt.sealed.src) + '</span></p>' : '') + '</div><div><h4>What you can lift instead</h4><p class="small">The moves that came before it. Try a trade.</p><div class="btns"><button type="button" class="btn" data-do="select" data-id="r-holiday" data-fk="r-h2">Look at the Holiday trade</button></div></div>';
+  if (a.seat === 'league') return '<div>' + head + (notice || '<p>The NBA’s seat, not yours. You are only an observer of the real team.</p><div class="btns"><button type="button" class="btn" data-do="lift" data-id="' + a.id + '" data-fk="try-lift">Try to lift it</button></div>') + '<p class="small">As recorded: ' + esc(FX.reality.owner.v) + ' <span class="kn">OBSERVED · ' + esc(FX.reality.owner.src) + '</span></p></div><div><h4>Authority is what you can lift</h4><p class="small">Nothing in this view lets you take out another seat’s act.</p></div>';
+  if (st === 'dashed') { const need = R.why[sel]; return '<div>' + head + '<div class="refuse"><b>Impossible without ' + esc(labelOf(need).replace(/^the /, '')) + ' — Simons arrived in that trade.</b><div class="rule">You lifted the act this one needed. It is dashed, not deleted.</div></div><div class="btns"><button type="button" class="btn pri" data-do="putback" data-id="' + need + '" data-fk="pb-need">Put ' + esc(labelOf(need)) + ' back</button><button type="button" class="btn" data-do="select" data-id="' + need + '" data-fk="show-need">Show the act it needed</button></div></div><div><h4>Dependency, not opinion</h4><p class="small">A player cannot be traded away by a club that never received him. That is a rule about who holds what, so it is COMPUTED.</p></div>'; }
+  const stand = S.reality.standIn[a.id];
+  const src = '<p class="small">As recorded: ' + (fixt ? esc(fixt.sealed.v) : '') + ' <span class="kn">OBSERVED · ' + (fixt ? esc(fixt.sealed.src) : '') + '</span></p>';
+  const slider = '<h4>One number we do not have</h4><p class="small" style="margin-bottom:2px">How much this move changed Boston’s tax salary. It is not in the fixture: <b>[verify: from the Reality feed]</b>. This slider is an <b>illustrative stand-in</b>, not a real contract.</p><div class="rng"><input type="range" id="standRange" data-id="' + a.id + '" aria-label="Stand-in for how much ' + esc(labelOf(a.id)) + ' changed the tax salary" min="-10" max="10" step="0.5" value="' + stand + '"><output>' + smoney(stand * 1e6, 1) + '</output></div>';
+  if (st === 'lifted') {
+    const d = FX.league.season2627.tax.v - R.ts, c = FX.league.season2627.apron1.v - R.cp;
+    return '<div>' + head + '<h4>Recomputed by the rules (COMPUTED, simplified)</h4><ul class="ledger wide"><li><span>tax line</span><span>tax salary ' + money(R.ts, 1) + ' vs ' + money(FX.league.season2627.tax.v, 3) + ': ' + (d >= 0 ? money(d, 1) + ' under' : money(-d, 1) + ' over') + '</span></li><li><span>first apron</span><span>cap payroll ' + money(R.cp, 1) + ' vs ' + money(FX.league.season2627.apron1.v, 1) + ': ' + (c >= 0 ? money(c, 1) + ' under; the big MLE (' + money(FX.league.season2627.exceptions.mleNonTaxpayer.v, 3) + ') stays open' : money(-c, 1) + ' over; the big MLE is gone') + '</span></li><li><span>over the cap</span><span>' + (R.cp > FX.league.season2627.cap.v ? 'yes: ' + money(R.cp - FX.league.season2627.cap.v, 1) + ' over ' + money(FX.league.season2627.cap.v, 3) + '; a free agent signs only through an exception' : 'no') + '</span></li></ul><div class="btns"><button type="button" class="btn pri" data-do="putback" data-id="' + a.id + '" data-fk="putback">Put it back</button></div>' + '<p class="small">A lift here is a derived view, not a fork of the real team. The dashed move and every unknown are on the strip and the plates.</p></div><div>' + slider + '<h4>Unknown, not guessed</h4><p class="small">Other clubs’ later moves and all game results. Rules cannot derive them; nobody can.</p></div>';
+  }
+  return '<div>' + head + '<p>Guess first, or lift it now. Only what the rules can derive will recompute.</p>' + notice + '<div class="btns"><button type="button" class="btn pri" data-do="lift" data-id="' + a.id + '" data-fk="lift">Lift it out</button></div>' + src + '</div><div>' + slider + '<p class="small">Whether this trade would still have been legal under the salary-matching rules also needs the salaries: UNKNOWN until they are read from the feed.</p></div>';
+}
+function panelCompareR() {
+  const R = CUR.R, tl = FX.league.season2627;
+  const row = (n, a, b, ch) => '<tr class="' + (ch ? '' : 'zero') + '"><td>' + n + '</td><td class="r">' + a + '</td><td class="r ' + (ch ? 'chg' : '') + '">' + b + '</td></tr>';
+  return '<div><h3>Compare: as recorded and with the lift</h3><table class="tbl"><tr><th>Fact</th><th class="r">As recorded</th><th class="r">With the lift</th></tr>' + row('Tax salary', money(R0.ts, 1), money(R.ts, 1) + (R.lifted ? ' (stand-in)' : ''), R.lifted) + row('Cap payroll', money(R0.cp, 1), money(R.cp, 1) + (R.lifted ? ' (stand-in)' : ''), R.lifted) + row('2025–26 record', FX.reality.realRecord2526.v, R.unk ? 'UNKNOWN' : FX.reality.realRecord2526.v, R.unk) + row('Other clubs’ later moves', 'not in this store', R.unk ? 'UNKNOWN' : 'not in this store', false) + '</table><p class="small" style="margin-top:4px">Lines: cap ' + money(tl.cap.v, 3) + ' · tax ' + money(tl.tax.v, 3) + ' · first apron ' + money(tl.apron1.v, 3) + ' · second apron ' + money(tl.apron2.v, 3) + ' (2026–27, [verify]).</p></div><div><h4>Why only these</h4><p class="small">Payroll against lines follows from rules and a few numbers, so it can be COMPUTED, simplified. A game result or another club’s choice does not, so it stays UNKNOWN: dashed-empty, never hatched, never guessed. Tax salary and cap payroll are different numbers; both are shown.</p>' + '' + '</div>';
+}
+
+/* ---- inline dial in the panel: needles set after the panel is in the DOM */
+function wireBig() {
+  const big = $('#big'); if (!big) return;
+  const k = big.dataset.k, F = CUR.F, E = CUR.E;
+  const rec = rawOf(k, RECORD), sel = S.sel, li = S.liftInfo[sel];
+  if (big.dataset.lifted) {
+    const Eb = Object.assign({}, E, { lifted: new Set(Array.from(E.lifted).filter(i => i !== sel)) }), Fb = fold(Eb);
+    applyNeedles(big, k, { rec: rawOf(k, Fb), world: rawOf(k, F), pred: li && li.pred != null ? li.pred : null });
+  } else {
+    const key = sel + '|' + k, pv = S.preds[key];
+    applyNeedles(big, k, { rec: rawOf(k, F), world: null, pred: pv != null ? pv : null });
+  }
+}
+document.addEventListener('input', e => {
+  if (e.target.id === 'predRange') {
+    const big = $('#big'), k = big.dataset.k, raw = toRaw(k, +e.target.value), key = S.sel + '|' + k;
+    S.preds[key] = raw;
+    $('#predOut').textContent = FM[k].f(raw);
+    applyNeedles(big, k, { rec: rawOf(k, CUR.F), world: null, pred: raw });
+  }
+  if (e.target.id === 'standRange') { act('standin', { id: e.target.dataset.id, v: e.target.value }); }
+});
+
+/* ---- events */
+let holdTimer = null, holdFired = false, holdEl = null;
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-do]'); if (!b || b.disabled) return;
+  if (holdFired) { holdFired = false; e.preventDefault(); return; }
+  const d = b.dataset;
+  if (d.do === 'sys') return act('sys', { sys: d.sys });
+  act(d.do, Object.assign({}, d));
+});
+document.addEventListener('pointerdown', e => {
+  const s = e.target.closest('.slug[data-hold]'); if (!s || e.button > 0) return;
+  holdEl = s; s.classList.add('holding'); holdFired = false;
+  holdTimer = setTimeout(() => { holdFired = true; s.classList.remove('holding'); act('lift', { id: s.dataset.id, via: 'hold' }); }, 650);
+});
+['pointerup', 'pointercancel', 'dragstart'].forEach(ev => window.addEventListener(ev, () => { clearTimeout(holdTimer); if (holdEl) holdEl.classList.remove('holding'); holdEl = null; }));
+document.addEventListener('contextmenu', e => { if (e.target.closest('.slug')) e.preventDefault(); });
+document.addEventListener('DOMContentLoaded', () => { });
+
+/* ---- boot */
+function boot() {
+  const ok = RECORD.payroll === WD.payroll.v && RECORD.tax === WD.projectedTax.v && RECORD.last.b === 112 && RECORD.last.o === 115;
+  S.selfcheck = ok;
+  buildPresent(); render();
+  if (!ok) say('Engine does not reproduce the record: ' + RECORD.payroll + ' ' + RECORD.tax);
+}
+window.__TIO = { S: S, act: act, fold: fold, RECORD: RECORD, ok: () => S.selfcheck };
+boot();
+
+})();
+</script>
+</body>
+</html>

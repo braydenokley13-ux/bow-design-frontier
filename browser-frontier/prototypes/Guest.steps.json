@@ -1,0 +1,393 @@
+[
+{
+"wait": 600
+},
+{
+"shot": "00-start-assistant"
+},
+{
+"click": "Send"
+},
+{
+"shot": "01-assistant-claim-card-verify"
+},
+{
+"click": "Open the cut"
+},
+{
+"shot": "01b-assistant-open-the-cut"
+},
+{
+"click": "Trade deadline"
+},
+{
+"click": "Ask as an observer"
+},
+{
+"shot": "01c-cut-at-deadline-observer"
+},
+{
+"click": "Enter as owner"
+},
+{
+"shot": "01d-assistant-cannot-sign"
+},
+{
+"click": "Show a forged card"
+},
+{
+"shot": "01e-assistant-forged-card-has-no-frame"
+},
+{
+"click": "2 Article"
+},
+{
+"shot": "02-article-true-marks"
+},
+{
+"click": "≈ $39.5M"
+},
+{
+"shot": "02b-mark-provenance-doors-with-counts"
+},
+{
+"click": "Because 3"
+},
+{
+"click": "Open the door · Late Jun 2025"
+},
+{
+"click": "Ask as an observer"
+},
+{
+"shot": "02c-because-traced-sealed-door"
+},
+{
+"click": "Back to Because"
+},
+{
+"click": "What’s different 1"
+},
+{
+"shot": "02d-whats-different-world-rule"
+},
+{
+"click": "$12M"
+},
+{
+"shot": "02e-mark-no-record-dashed"
+},
+{
+"click": "How do we know?"
+},
+{
+"click": "≈ $39.5M"
+},
+{
+"shot": "02f-how-do-we-know-layer-on"
+},
+{
+"click": "How do we know?"
+},
+{
+"click": "3 Text"
+},
+{
+"shot": "03-text-from-maya"
+},
+{
+"click": "Open the Follow"
+},
+{
+"shot": "03b-arrival-same-day-no-drift"
+},
+{
+"click": "Three weeks later"
+},
+{
+"click": "Open the Follow"
+},
+{
+"click": "See the 3"
+},
+{
+"shot": "03c-arrival-note-drift-stripe-three-weeks"
+},
+{
+"click": "Keep following"
+},
+{
+"click": "Open the Snapshot"
+},
+{
+"shot": "03d-snapshot-exactly-as-it-stood"
+},
+{
+"click": "4 Voice"
+},
+{
+"shot": "04-voice-start"
+},
+{
+"click": "Say: “Boston, the Philadelphia call"
+},
+{
+"shot": "04b-voice-read-back-fixed-order"
+},
+{
+"click": "Say: “Open it”"
+},
+{
+"click": "Say: “Exact”"
+},
+{
+"click": "Say: “Harbor, lemon”"
+},
+{
+"shot": "04c-voice-did-you-mean-never-wrong-landing"
+},
+{
+"click": "Say: “Harbor, linen”"
+},
+{
+"shot": "04d-voice-opens-sealed-door"
+},
+{
+"click": "5 Offer"
+},
+{
+"shot": "05-offer-arrives"
+},
+{
+"click": "Redeem it in BOW"
+},
+{
+"shot": "05b-threshold-the-only-full-browser-moment"
+},
+{
+"click": "Take on: Convert"
+},
+{
+"click": "Take on: Denver is asking"
+},
+{
+"click": "Take on: The owner"
+},
+{
+"shot": "05c-threshold-signing-line-by-line"
+},
+{
+"click": "Sign · bind this seat"
+},
+{
+"shot": "05d-seat-bound-to-device"
+},
+{
+"click": "Open the phrase on a second device"
+},
+{
+"click": "Try a seat that doesn’t exist"
+},
+{
+"shot": "05e-not-for-you-identical"
+},
+{
+"click": "6 Ring"
+},
+{
+"shot": "06-ring-rings-from-the-seat"
+},
+{
+"click": "Pick up"
+},
+{
+"shot": "06b-ring-20-second-brief"
+},
+{
+"click": "Hold: try accepting"
+},
+{
+"shot": "06c-ring-hold-dry-run-receipt-private-fork"
+},
+{
+"click": "Decline instead"
+},
+{
+"shot": "06d-ring-answered-differs-from-order"
+},
+{
+"click": "Hang up"
+},
+{
+"shot": "06e-ring-receipt-public-facts-only"
+},
+{
+"click": "7 Orders"
+},
+{
+"shot": "07-orders-before-away"
+},
+{
+"click": "Be away for 14 days"
+},
+{
+"shot": "07b-orders-answered-one-ring-stamped"
+},
+{
+"click": "Take it out"
+},
+{
+"shot": "07c-orders-take-it-out-branch-beside-record"
+},
+{
+"click": "8 Round"
+},
+{
+"shot": "08-round-stop-1-seat-diff-4-stops-1-closes-tonight"
+},
+{
+"click": "Why this order?"
+},
+{
+"shot": "08a-round-why-this-order"
+},
+{
+"click": "Why is the tax"
+},
+{
+"shot": "08a2-round-why-the-tax-traced-to-acts"
+},
+{
+"click": "Act: answer the owner"
+},
+{
+"shot": "08b-round-stop-1-acted"
+},
+{
+"click": "Next stop"
+},
+{
+"shot": "08c-round-stop-2-fracture-one-cause-three-doors"
+},
+{
+"click": "Your Follow — the margin moved"
+},
+{
+"click": "Model v0.3 — an input changed"
+},
+{
+"shot": "08d-round-stop-2-door-model"
+},
+{
+"click": "Keep the branch as it stands"
+},
+{
+"click": "Next stop"
+},
+{
+"shot": "08e-round-stop-3-maya-invitation"
+},
+{
+"click": "Pass — no act"
+},
+{
+"shot": "08f-round-stop-3-pass-no-act"
+},
+{
+"click": "Next stop"
+},
+{
+"shot": "08g-round-stop-4-live"
+},
+{
+"click": "Follow the game"
+},
+{
+"click": "Finish the Round"
+},
+{
+"shot": "08h-round-level-with-the-record-quiet"
+},
+{
+"click": "9 Standing"
+},
+{
+"shot": "09-standing-eight-frames"
+},
+{
+"click": "What stands behind this? Holiday kept"
+},
+{
+"shot": "09b-standing-local-sentence"
+},
+{
+"click": "What stands behind this? Garden nights"
+},
+{
+"shot": "09c-standing-unverified-sentence"
+},
+{
+"click": "What stands behind this? An assistant"
+},
+{
+"shot": "09d-standing-temporary-sentence"
+},
+{
+"click": "10 Floor"
+},
+{
+"shot": "10-floor-models-available"
+},
+{
+"fill": [
+"#askq",
+"the Philadelphia call in June 2017"
+]
+},
+{
+"click": "Ask"
+},
+{
+"shot": "10b-floor-language-ask-card"
+},
+{
+"click": "Models unavailable",
+"nth": 1
+},
+{
+"shot": "10c-floor-models-unavailable-typed-choices"
+},
+{
+"click": "Queue it"
+},
+{
+"shot": "10d-floor-queued-nothing-spins"
+},
+{
+"click": "4 Voice"
+},
+{
+"shot": "10e-voice-with-models-off"
+},
+{
+"click": "Host or BOW?"
+},
+{
+"shot": "11-host-or-bow-panel"
+},
+{
+"click": "Close"
+},
+{
+"click": "What’s real?"
+},
+{
+"click": "6 Ring"
+},
+{
+"shot": "12-whats-real-overlay"
+},
+{
+"click": "What’s real?"
+}
+]

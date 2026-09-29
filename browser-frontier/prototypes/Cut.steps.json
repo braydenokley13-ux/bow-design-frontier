@@ -1,80 +1,273 @@
 [
-  {"wait": 900},
-  {"shot": "01-now-horizon-rail"},
-  {"click": "Door ahead: the 2026", "after": 500},
-  {"expectText": "You cannot enter a scheduled day"},
-  {"shot": "02-scheduled-door-refused"},
-  {"click": "Arrive at last year"},
-  {"shot": "03-arrive-last-years-door"},
-  {"click": "5 Feb · deadline day"},
-  {"expectText": "Why this cut already knows"},
-  {"shot": "03b-arrive-cut-0205-already-knows"},
-  {"click": "2 Feb · before the first report"},
-  {"click": "Stand at this cut"},
-  {"expectText": "Not yet"},
-  {"shot": "04-the-cut-four-planes"},
-  {"click": "Later ▸"},
-  {"expectText": "Nobody at this desk could know what comes next"},
-  {"shot": "05-seal-test-refused"},
-  {"click": "Take the seat at this cut"},
-  {"click": "Shed a bench salary"},
-  {"click": "Keep the branch"},
-  {"expectText": "Keep is blocked while a seat the act touches is unset"},
-  {"shot": "06-what-if-council-keep-blocked"},
-  {"click": "Another club · Recorded"},
-  {"expectText": "Recorded needs a source dated on or before the cut"},
-  {"click": "Another club · Declare"},
-  {"click": "Another club declared: Accepts"},
-  {"click": "Tatum and his medical timeline · Model"},
-  {"expectText": "MODELED needs a named, versioned model"},
-  {"click": "Tatum and his medical timeline · Declare"},
-  {"click": "Tatum and his medical timeline declared: Back before"},
-  {"shot": "06b-council-seats-set"},
-  {"click": "Keep the branch"},
-  {"expectText": "diverged 2 Feb 2026"},
-  {"shot": "07-branch-born-two-frames"},
-  {"click": "Advance one day"},
-  {"click": "Advance one day"},
-  {"shot": "08-branch-advanced-numbers-recompute"},
-  {"click": "Why is the tax that?"},
-  {"expectText": "traced to causes"},
-  {"shot": "08b-why-traced"},
-  {"click": "Close"},
-  {"click": "Advance to Reality"},
-  {"expectText": "PULLED"},
-  {"shot": "09-reality-arrives-simons-pulled"},
-  {"click": "Advance to Reality"},
-  {"expectText": "STITCHED"},
-  {"shot": "09b-reality-arrives-tatum-stitched"},
-  {"click": "Ask as an observer"},
-  {"expectText": "Written to YOUR ledger"},
-  {"shot": "10-hindsight-since-opened"},
-  {"click": "Close"},
-  {"click": "Reality window"},
-  {"expectText": "Since you left"},
-  {"shot": "11-return-to-now-branch-on-wall"},
-  {"click": "Backs"},
-  {"shot": "12-three-backs"},
-  {"click": "Amend: also shed"},
-  {"expectText": "Trades close at the deadline"},
-  {"shot": "12b-backs-amend-refused"},
-  {"click": "Re-take: fork from before branch b1"},
-  {"expectText": "Not yet"},
-  {"click": "Take the seat at this cut"},
-  {"click": "Keep the roster"},
-  {"click": "Tatum and his medical timeline · Declare"},
-  {"click": "Tatum and his medical timeline declared: Out for the season"},
-  {"click": "Keep the branch"},
-  {"expectText": "through 29 Sep 2026"},
-  {"shot": "13-second-fork-hindsight-stamp"},
-  {"click": "Reality window"},
-  {"click": "Same trip with a scrubber", "nth": 0},
-  {"expectText": "Leak counter"},
-  {"shot": "14-baseline-scrubber-leak-counter"},
-  {"range": ["#scr", 63]},
-  {"shot": "14b-baseline-scrubber-dragged"},
-  {"click": "Back to standing at a cut"},
-  {"click": "Open 1985"},
-  {"expectText": "No now"},
-  {"shot": "15-no-now-1985-86"}
+ {
+  "wait": 900
+ },
+ {
+  "shot": "s01-now-horizon-rail"
+ },
+ {
+  "click": "Door ahead: the 2026",
+  "after": 500
+ },
+ {
+  "expectText": "You cannot enter a scheduled day"
+ },
+ {
+  "shot": "s01b-scheduled-door-refused"
+ },
+ {
+  "click": "Door 12 May 2025",
+  "after": 500
+ },
+ {
+  "expectText": "A door opens only onto a cut"
+ },
+ {
+  "shot": "s01c-recorded-door-without-a-cut-refused"
+ },
+ {
+  "click": "Arrive at last year"
+ },
+ {
+  "expectText": "This door offers cuts"
+ },
+ {
+  "shot": "s02-arrive-last-years-door"
+ },
+ {
+  "click": "5 Feb · deadline day"
+ },
+ {
+  "expectText": "Why this cut already knows"
+ },
+ {
+  "shot": "s02b-cut-0205-already-knows"
+ },
+ {
+  "click": "2 Feb · before the first report"
+ },
+ {
+  "click": "Stand at this cut"
+ },
+ {
+  "expectText": "Not yet"
+ },
+ {
+  "shot": "s03-the-cut-four-planes"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "shot": "s03b-how-do-we-know-layer"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "click": "What’s real?"
+ },
+ {
+  "shot": "s03c-whats-real-overlay"
+ },
+ {
+  "click": "What’s real?"
+ },
+ {
+  "click": "Later ▸"
+ },
+ {
+  "expectText": "Nobody at this desk could know what comes next"
+ },
+ {
+  "shot": "s04-seal-test-refused"
+ },
+ {
+  "click": "Take the seat at this cut"
+ },
+ {
+  "click": "Shed a bench salary"
+ },
+ {
+  "click": "Keep the branch",
+  "force": true
+ },
+ {
+  "expectText": "Keep is blocked while a seat the act touches is unset"
+ },
+ {
+  "shot": "s05a-what-if-council-keep-blocked"
+ },
+ {
+  "click": "Another club · Recorded"
+ },
+ {
+  "expectText": "Recorded needs a source dated on or before the cut"
+ },
+ {
+  "click": "Another club · Declare"
+ },
+ {
+  "click": "Another club declared: Accepts"
+ },
+ {
+  "click": "Tatum and his medical timeline · Model"
+ },
+ {
+  "expectText": "MODELED needs a named, versioned model"
+ },
+ {
+  "click": "Tatum and his medical timeline · Declare"
+ },
+ {
+  "click": "Tatum and his medical timeline declared: Back before"
+ },
+ {
+  "shot": "s05b-council-seats-set"
+ },
+ {
+  "click": "Keep the branch"
+ },
+ {
+  "expectText": "diverged 2 Feb 2026"
+ },
+ {
+  "shot": "s05c-branch-born-two-frames"
+ },
+ {
+  "click": "Advance one day"
+ },
+ {
+  "click": "Advance one day"
+ },
+ {
+  "shot": "s06-branch-advanced-numbers-recompute"
+ },
+ {
+  "click": "Why is the tax that?"
+ },
+ {
+  "expectText": "traced to causes"
+ },
+ {
+  "shot": "s06b-why-traced-to-recorded-acts"
+ },
+ {
+  "click": "Close"
+ },
+ {
+  "click": "Advance to Reality"
+ },
+ {
+  "expectText": "PULLED"
+ },
+ {
+  "shot": "s07a-reality-arrives-simons-pulled"
+ },
+ {
+  "click": "Advance to Reality"
+ },
+ {
+  "expectText": "STITCHED"
+ },
+ {
+  "shot": "s07b-reality-arrives-tatum-stitched"
+ },
+ {
+  "click": "Ask as an observer"
+ },
+ {
+  "expectText": "Written to YOUR ledger"
+ },
+ {
+  "shot": "s08-hindsight-since-opened-ledger-mark"
+ },
+ {
+  "click": "Close"
+ },
+ {
+  "click": "Reality window"
+ },
+ {
+  "expectText": "Since you left"
+ },
+ {
+  "shot": "s09-return-to-now-branch-on-wall"
+ },
+ {
+  "click": "Backs"
+ },
+ {
+  "shot": "s10a-three-backs"
+ },
+ {
+  "click": "Amend: also shed"
+ },
+ {
+  "expectText": "Trades close at the deadline"
+ },
+ {
+  "shot": "s10b-backs-amend-refused"
+ },
+ {
+  "click": "Re-take: fork from before branch b1"
+ },
+ {
+  "expectText": "Not yet"
+ },
+ {
+  "click": "Take the seat at this cut"
+ },
+ {
+  "click": "Keep the roster"
+ },
+ {
+  "click": "Tatum and his medical timeline · Declare"
+ },
+ {
+  "click": "Tatum and his medical timeline declared: Out for the season"
+ },
+ {
+  "click": "Keep the branch"
+ },
+ {
+  "expectText": "through 29 Sep 2026"
+ },
+ {
+  "shot": "s10c-second-fork-stamped-hindsight"
+ },
+ {
+  "click": "Reality window"
+ },
+ {
+  "click": "Same trip with a scrubber",
+  "nth": 0
+ },
+ {
+  "expectText": "Leak counter"
+ },
+ {
+  "shot": "s11a-baseline-scrubber-leak-counter"
+ },
+ {
+  "range": [
+   "#scr",
+   63
+  ]
+ },
+ {
+  "shot": "s11b-baseline-scrubber-dragged"
+ },
+ {
+  "click": "Back to standing at a cut"
+ },
+ {
+  "click": "Open 1985"
+ },
+ {
+  "expectText": "No now"
+ },
+ {
+  "shot": "s12-no-now-1985-86"
+ }
 ]

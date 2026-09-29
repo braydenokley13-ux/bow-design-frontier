@@ -1,0 +1,1197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concordance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./_shared/vendor/three/three.module.min.js", "three/addons/": "./_shared/vendor/three/addons/" } }</script>
+<style>
+:root{--paper:#ECE8DC;--paper2:#DFD9C7;--card:#F7F4EB;--ink:#15140F;--ink2:#48453B;--red:#B31E14;--brass:#C7A248;--brassink:#6B5214;--green:#1D6A44;--greenbg:#D3E3D7;--tone:#D9D3BF;--sans:'IBM Plex Sans Condensed','Liberation Sans Narrow','DejaVu Sans Condensed',sans-serif;--mono:'IBM Plex Mono','DejaVu Sans Mono',ui-monospace,monospace}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--paper);color:var(--ink);font:14px/1.35 var(--sans);display:flex;flex-direction:column;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0;text-align:left}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 6px var(--brass)}
+.mono{font-family:var(--mono)}
+/* truth grammar: seven textures; words on request */
+.mk[data-t=OBSERVED]{background:var(--ink);color:var(--paper)}
+.mk[data-t=RECORDED]{background:var(--card);box-shadow:inset 0 0 0 1px var(--ink),inset 0 0 0 3px var(--card),inset 0 0 0 4px var(--ink)}
+.mk[data-t=AUTHORED]{background:transparent;outline:1.5px solid var(--ink);outline-offset:-1.5px}
+.mk[data-t=COMPUTED]{background:var(--tone)}
+.mk[data-t=MODELED]{background:repeating-linear-gradient(135deg,transparent 0 4px,rgba(21,20,15,.4) 4px 5px)}
+.mk[data-t=GENERATED]{background-image:radial-gradient(rgba(21,20,15,.5) 1px,transparent 1.4px);background-size:5px 5px}
+.mk[data-t=UNKNOWN]{background:transparent;border:1.5px dashed var(--ink2)}
+.mk[data-t=SEALED]{background:transparent;border:1.5px dashed var(--ink);color:var(--ink2)}
+.mk{padding:1px 6px;display:inline-block;border-radius:0}
+.sw{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:4px;border:1px solid var(--ink)}
+.sw[data-t=OBSERVED]{background:var(--ink)}.sw[data-t=RECORDED]{background:var(--card);box-shadow:inset 0 0 0 2px var(--card),inset 0 0 0 3px var(--ink)}.sw[data-t=AUTHORED]{background:transparent}.sw[data-t=COMPUTED]{background:var(--tone)}.sw[data-t=MODELED]{background:repeating-linear-gradient(135deg,transparent 0 3px,var(--ink) 3px 4px)}.sw[data-t=GENERATED]{background-image:radial-gradient(var(--ink) 1px,transparent 1.4px);background-size:4px 4px}.sw[data-t=UNKNOWN]{border-style:dashed;background:transparent}.sw[data-t=SEALED]{border-style:dashed;background:transparent}
+/* chrome */
+#topstrip{display:flex;justify-content:space-between;align-items:center;padding:0 14px;height:28px;background:var(--ink);color:var(--paper);font:500 12px var(--mono);flex:none}
+#topstrip button{color:var(--paper);text-decoration:underline;text-underline-offset:3px;min-height:26px;padding:0 2px}
+#topstrip button[aria-pressed=true]{background:var(--brass);color:var(--ink);text-decoration:none;padding:0 8px;font-weight:600}
+#topstrip button:focus-visible{outline-color:var(--paper)}
+#hdr{display:flex;align-items:center;gap:14px;padding:6px 14px;border-bottom:2px solid var(--ink);flex:none;min-height:54px}
+.brand{display:flex;flex-direction:column;line-height:1.05}
+.wm{font:700 15px var(--mono);letter-spacing:.14em}
+.brand .sub{font:500 10.5px var(--mono);color:var(--ink2);margin-top:2px}
+.addr{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:0 2px;font:500 12.5px var(--mono);background:var(--card);border:2px solid var(--ink);padding:3px 8px;min-height:36px}
+.addr .seg{padding:2px 3px}.addr .dot{color:var(--ink2)}
+.addr button.seg{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;font-weight:600;min-height:28px}
+.addr .fork{color:var(--green);font-weight:700}
+.levers{display:flex;align-items:center;gap:8px}
+.lever{background:var(--brass);border:2px solid var(--ink);padding:2px 10px;text-align:center;line-height:1.05;box-shadow:3px 3px 0 var(--ink)}
+.lever b{display:block;font:700 22px var(--mono)}.lever i{font:500 11px var(--mono);font-style:normal}
+.btn{border:2px solid var(--ink);background:var(--card);padding:6px 12px;min-height:38px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:var(--paper2)}
+.btn.sign{background:var(--red);color:#fff;border-color:var(--ink)}
+.btn.sign:hover{background:#94180F}
+.btn.sm{min-height:30px;padding:3px 9px;font-size:13px}
+.btn[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.btn.brass{background:var(--brass)}
+.btn:disabled{opacity:.5;cursor:default}
+.plan{display:flex;align-items:center;gap:12px;padding:6px 14px;border-bottom:2px solid var(--ink);flex:none;min-height:50px;background:var(--paper2)}
+.plan .tag{font:700 11px var(--mono);letter-spacing:.12em;background:var(--ink);color:var(--paper);padding:3px 7px}
+.plan .chips{display:flex;gap:6px;flex:none;font:600 12px var(--mono)}
+.plan .chips span{border:1.5px solid var(--ink);background:var(--card);padding:2px 7px}
+.plan .why{flex:1;min-width:0;font-size:14px}
+.plan .acts{display:flex;gap:6px;flex:none}
+.reasons{padding:6px 14px 8px;background:var(--card);border-bottom:2px solid var(--ink);flex:none}
+.reasons h3{margin:0 0 4px;font:700 13px var(--mono)}
+.reasons .row{display:grid;grid-template-columns:130px 1fr 1fr auto;gap:8px;align-items:center;padding:2px 0;border-top:1px dashed var(--ink2);font-size:13px}
+.reasons .row b{font-family:var(--mono);white-space:nowrap}
+.notice{display:flex;align-items:center;gap:10px;padding:4px 14px;border-bottom:1.5px solid var(--ink);font-size:13.5px;flex:none;background:var(--card);min-height:34px}
+.notice.tkt{background:var(--brass)}
+.notice.dn{background:var(--paper2)}
+.notice .grow{flex:1;min-width:0}
+.notice b{font-family:var(--mono);font-size:12px}
+.notice .no{color:var(--red);font-weight:700}
+#board{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px;padding:8px 14px;position:relative}
+#board.lead{flex-direction:row}
+#board.fork{box-shadow:inset 0 0 0 3px var(--green)}
+#panes{flex:1;min-height:0;display:grid;gap:8px;grid-auto-flow:column;min-width:0}
+
+
+
+.lead #panes{flex:0 0 38%}
+.pane{border:2px solid var(--ink);background:var(--card);display:flex;flex-direction:column;min-width:0;min-height:0;position:relative}
+.fork .pane{border-color:var(--green)}
+.ph{display:flex;align-items:center;gap:8px;padding:2px 6px 2px 8px;border-bottom:2px solid var(--ink);background:var(--paper2);font:600 11.5px var(--mono);min-height:28px;flex:none}
+.fork .ph{background:var(--greenbg);border-bottom-color:var(--green)}
+.ph .nm{letter-spacing:.1em;font-weight:700}
+.ph .org{color:var(--ink2);font-weight:500}
+.ph .fr{margin-left:auto;background:var(--card);border:1.5px solid var(--ink);padding:0 6px;white-space:nowrap}
+.ph .x{font-size:15px;line-height:1;padding:0 6px;min-height:24px;font-weight:700}
+.pb{flex:1;min-height:0;position:relative;overflow:hidden}
+.pcov{flex:none;display:flex;flex-wrap:wrap;gap:4px 8px;padding:3px 8px;border-top:1.5px dashed var(--ink);background:repeating-linear-gradient(135deg,transparent 0 6px,rgba(21,20,15,.06) 6px 7px);font-size:12.5px;align-items:center}
+.pcov button{text-decoration:underline;text-underline-offset:3px;min-height:26px;padding:0 2px;font-weight:500;text-align:left}
+.pcov .lb{font:700 10.5px var(--mono);letter-spacing:.08em;color:var(--ink2)}
+.failcover{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:18px;border:2px dashed var(--red);margin:8px;background:repeating-linear-gradient(135deg,transparent 0 8px,rgba(179,30,20,.07) 8px 9px)}
+.failcover h4{margin:0;font:700 17px var(--sans);color:var(--red)}
+.failcover p{margin:0;font-size:14px}
+/* table */
+.tbl{padding:8px 10px;height:100%;overflow:auto}
+.tbl h4{margin:0 0 4px;font:600 12.5px var(--mono);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{font:600 11px var(--mono);text-align:left;letter-spacing:.06em;color:var(--ink2);border-bottom:2px solid var(--ink);padding:2px 4px}
+td{border-bottom:1px solid var(--ink2);padding:2px 4px;vertical-align:middle}
+td.nw,.actc{white-space:nowrap}
+td.n,th.n{text-align:right}
+tr.chg td{background:rgba(199,162,72,.28)}
+tr.sec th{padding-top:5px;font-size:10.5px}
+tr.file td{background:var(--paper2);border-bottom:2px solid var(--ink)}
+.tbl .cellbtn{min-height:24px;padding:1px 6px;display:inline-block;font-family:var(--mono);font-size:12.5px;font-weight:500;line-height:1.3}
+.tbl .cellbtn.f,.followed{box-shadow:0 0 0 3px var(--brass) !important;outline:2px solid var(--ink) !important}
+.actno{font:700 11.5px var(--mono);background:var(--brass);border:1.5px solid var(--ink);padding:0 5px;display:inline-block}
+.money{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;margin-top:8px}
+.money div{display:flex;justify-content:space-between;align-items:center;gap:6px;border-bottom:1px solid var(--ink2);padding:2px 0}
+/* timeline */
+.tlwrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:13px}
+.tlsvg{position:absolute;inset:0;width:100%;height:100%}
+.tlm{position:absolute;font:500 1em/1.25 var(--mono);white-space:nowrap;min-height:1.8em;padding:.1em .5em;background:var(--card);transform:translate(0,-50%);text-align:left}
+.tlm.ac{transform:translate(-50%,-50%)}.tlm.ar{transform:translate(-100%,-50%)}
+.tlm.wrap{white-space:normal;width:13em}
+.tlm.tick{font:700 1.2em var(--mono);background:var(--brass);border:2px solid var(--ink);min-height:1.7em;padding:0 .5em;box-shadow:2px 2px 0 var(--ink)}
+.tlm.tick.ghost{background:var(--card);border-style:dashed;color:var(--ink2);box-shadow:none}
+.tlm.tick.ghost:hover{background:var(--brass);color:var(--ink)}
+.tlgroup{position:absolute;display:flex;flex-direction:column;gap:3px;align-items:flex-start}
+.tlgroup .tlm{position:static;transform:none}
+.tlm.refuse{border:2px solid var(--red);color:var(--red);font-weight:600}
+/* direct */
+#direct{flex:none;border:2px solid var(--ink);background:var(--card);display:flex;flex-direction:column;min-height:0;min-width:0}
+.fork #direct{border-color:var(--green)}
+#dhead{display:flex;align-items:center;gap:10px;padding:2px 6px 2px 8px;min-height:34px;background:var(--paper2);border-bottom:2px solid var(--ink);flex:none}
+.fork #dhead{background:var(--greenbg);border-bottom-color:var(--green)}
+#dhead .nm{font:700 11.5px var(--mono);letter-spacing:.1em}
+#dhead #mcount{font-weight:700}
+#receipt{flex:1;min-width:0;margin:0;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#direct.open #receipt,#direct.lead #receipt,#direct.collapsed #receipt{white-space:normal}
+#direct.collapsed #dbody{display:none}
+#direct.collapsed #dhead{border-bottom:0}
+#dbody{overflow:auto;padding:6px 10px;min-height:0;flex:1;font-size:13.5px}
+#direct.open{height:184px}
+#direct.lead,#direct.open.lead{flex:1;min-width:0;height:auto}
+.dcols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 16px}
+.lead .dcols{grid-template-columns:repeat(2,minmax(0,1fr))}
+.dtabs{display:flex;gap:4px;margin:0 0 4px}
+.dtabs button{border:1.5px solid var(--ink);padding:1px 10px;min-height:28px;font:600 12px var(--mono)}
+.dtabs button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+#dbody h4{margin:6px 0 2px;font:700 11px var(--mono);letter-spacing:.08em;color:var(--ink2);text-transform:uppercase}
+#dbody h4:first-child{margin-top:0}
+#dbody ul,#dbody ol{margin:0;padding:0;list-style:none}
+#dbody li{padding:2px 0;border-bottom:1px dotted var(--ink2);position:relative}
+#dbody ol li{padding:3px 0}
+#dbody li.fact{padding-right:0}
+.lead-w{font:700 11.5px var(--mono);margin-right:4px}
+#dbody .v{font-weight:700}
+.fbtn{font:600 11px var(--mono);border:1.5px solid var(--ink);padding:0 5px;margin-left:6px;min-height:22px;background:var(--card)}
+.tkt-l{font:500 12px var(--mono)}
+li.followed{background:rgba(199,162,72,.4);box-shadow:none !important;outline:2px solid var(--ink) !important}
+.dc{display:flex;gap:6px;flex-wrap:wrap;margin-top:3px}
+.dnote{color:var(--ink2);font-size:12.5px}
+/* rig */
+#rig{display:flex;flex-wrap:wrap;gap:4px 14px;padding:4px 14px;border-top:2px solid var(--ink);background:var(--paper2);flex:none;align-items:center}
+#rig .g{display:flex;gap:4px;align-items:center}
+#rig .gl{font:700 10.5px var(--mono);letter-spacing:.08em;color:var(--ink2);margin-right:2px}
+#rig .btn{min-height:32px;padding:2px 9px;font-size:13px;font-weight:600}
+#status{flex:none;font:500 11px var(--mono);padding:2px 14px;background:var(--ink);color:var(--paper);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* layers */
+[data-cap]{position:relative}
+body.real [data-cap]::before{content:attr(data-cap) " · " attr(data-ai);position:absolute;right:4px;top:-1px;z-index:30;background:var(--brass);border:1.5px solid var(--ink);font:700 9.5px var(--mono);padding:0 5px;letter-spacing:.04em;pointer-events:none;max-width:96%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.howsheet{position:absolute;left:0;right:0;bottom:0;max-height:64%;overflow:auto;background:var(--paper);border-top:2px solid var(--ink);padding:6px 10px;z-index:20;font-size:12.5px}
+.howsheet h5{margin:0 0 3px;font:700 11px var(--mono);letter-spacing:.06em}
+.howsheet div{display:flex;gap:6px;align-items:baseline;padding:1px 0;border-bottom:1px dotted var(--ink2)}
+.howsheet .k{font:700 10.5px var(--mono);min-width:76px}
+@media (prefers-reduced-motion:no-preference){.pane{transition:box-shadow .15s}}
+.in{padding:0 2px}
+.in[data-t=OBSERVED]{background:var(--ink);color:var(--paper);padding:0 4px}
+.in[data-t=RECORDED]{border-bottom:3px double var(--ink)}
+.in[data-t=AUTHORED]{outline:1.5px solid var(--ink);outline-offset:0;padding:0 4px}
+.in[data-t=COMPUTED]{background:var(--tone);padding:0 4px}
+.in[data-t=MODELED]{background:repeating-linear-gradient(135deg,transparent 0 4px,rgba(21,20,15,.4) 4px 5px)}
+.in[data-t=UNKNOWN]{border-bottom:2px dashed var(--ink)}
+.in[data-t=SEALED]{border:1.5px dashed var(--ink);padding:0 4px}
+.dcols2{display:grid;grid-template-columns:1.1fr 1fr;gap:6px 18px}
+.voice{padding:10px 14px;height:100%;overflow:auto}
+.vl{margin:0 0 6px;font-size:15px}
+.vl.past{color:var(--ink2);font-size:13px}
+.vnow{border-left:5px solid var(--brass);padding-left:10px;margin:8px 0}
+.vpast{border-left:2px dashed var(--ink2);padding-left:10px;margin:0 0 6px}
+#board.phone{max-width:440px;width:100%;margin:6px auto;border:6px solid var(--ink);border-radius:24px;padding:8px;background:var(--card)}
+#board.phone #direct{order:-1;height:auto;max-height:52%}
+#board.phone #panes{overflow:auto}
+#board.voicedev #direct.collapsed{order:2}
+.dc{align-items:center}
+.pane .pb .tbl{position:absolute;inset:0}
+
+
+.roomwrap{position:absolute;inset:0;display:flex;flex-direction:column}
+.roomslot{flex:1;min-height:0;position:relative}
+.roombar{flex:none;padding:3px 6px;border-top:2px solid var(--ink);background:var(--paper2)}
+.rb1{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.rb2{display:flex;gap:3px;flex-wrap:wrap;align-items:center;margin-top:3px}
+.rb2 .lb,.dc .lb{font:700 10.5px var(--mono);letter-spacing:.08em;color:var(--ink2)}
+.pill{border:1.5px solid var(--ink);padding:0 7px;min-height:24px;font:600 11.5px var(--mono);background:var(--card)}
+.pill:hover{background:var(--brass)}
+.stip{position:absolute;z-index:5;pointer-events:none;background-image:radial-gradient(var(--ink) 1px,transparent 1.5px);background-size:5px 5px}
+.stip.t{left:0;right:0;top:0;height:8px}.stip.b{left:0;right:0;bottom:0;height:8px}.stip.l{top:0;bottom:0;left:0;width:8px}.stip.r{top:0;bottom:0;right:0;width:8px}
+.compiler{flex:none;padding:4px 10px;border-top:2px solid var(--ink);background:var(--card);font-size:12.5px;position:relative}
+.compiler ul{margin:2px 0 3px;padding-left:16px}
+.ledger{position:absolute;inset:0;display:flex;flex-direction:column}
+.mbox{flex:1;min-height:0;position:relative}
+.ctable{flex:none;padding:2px 8px 4px;border-top:2px solid var(--ink)}
+.ctable table{font-size:12.5px}
+#board.phone #dhead{flex-wrap:wrap;row-gap:2px;padding-bottom:3px}
+#board.phone #receipt{flex:1 1 100%;order:5;white-space:normal}
+#board.phone #dctl{margin-left:auto}
+#board.phone .dcols2,#board.phone .dcols{grid-template-columns:1fr}
+#board.phone #direct{max-height:56%}
+tr.ref td{background:rgba(179,30,20,.08);border-bottom:2px solid var(--red);font-size:13px}
+.refb{white-space:normal;text-align:left}
+.fcols{column-count:3;column-gap:18px}
+.fcols .grp{break-inside:avoid;margin-bottom:4px}
+.tlm.wrap{white-space:normal;width:13em}
+.tlm.refuse.wrap{width:23em}
+.tlgroup .tlm.wrap{width:23em}
+.ledger.wide{flex-direction:row}
+.ledger.wide .mbox{flex:1.5 1 0}
+.ledger.wide .ctable{flex:1 1 0;border-top:0;border-left:2px solid var(--ink);overflow:auto}
+</style>
+</head>
+<body>
+<div id="topstrip"><button type="button" id="declare" data-act="declare" aria-pressed="false">Use Direct for screen readers and keyboard — remember it</button><span>PROTOTYPE · design evidence, not product</span></div>
+<header id="hdr">
+  <div class="brand"><span class="wm">CONCORDANCE</span><span class="sub">one ledger · every view</span></div>
+  <div id="addr" class="addr" role="group" aria-label="Address"></div>
+  <div class="levers"><div id="lever" class="lever" role="group" aria-label="Ledger position"></div><button type="button" class="btn brass" id="agreeBtn" data-act="agree" data-cap="PROPOSED" data-ai="NO AI REQUIRED">Do these agree?</button><button type="button" class="btn" id="forkBtn" data-act="fork">What if…</button></div>
+</header>
+<section id="plan" class="plan" aria-label="Plan" data-cap="PROPOSED" data-ai="NO AI REQUIRED (rule table)"></section>
+<section id="reasons" class="reasons" hidden aria-label="The Plan's reasons"></section>
+<div id="notices"></div>
+<main id="board"><div id="panes"></div><aside id="direct" aria-label="Direct"><div id="dhead"><span class="nm">DIRECT</span><span id="mcount"></span><p id="receipt" role="status" aria-live="polite"></p><span id="dctl"></span></div><div id="dbody"></div></aside></main>
+<footer id="rig" aria-label="Prototype rig"></footer>
+<div id="live" class="sr" role="status" aria-live="polite"></div>
+<div id="status">PROTOTYPE · signal box · one ledger, every view · data: shared fixture, dated, verify · illustrative values are marked</div>
+<script src="_shared/boston-fixture.js"></script>
+<script>
+(function(){
+'use strict';
+const FX=window.BOW_FIXTURE, W=FX.world;
+const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>Array.from((r||document).querySelectorAll(s));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const M=v=>'$'+(Math.abs(v)/1e6).toFixed(1)+'M';
+const DAYS=d=>d<0?'day −'+(-d):'day '+d;
+function sha256(s){
+  const b=new TextEncoder().encode(s),l=b.length,n=((l+9+63)>>6)<<6,m=new Uint8Array(n);m.set(b);m[l]=0x80;
+  const dv=new DataView(m.buffer);dv.setUint32(n-8,Math.floor(l*8/4294967296));dv.setUint32(n-4,(l*8)>>>0);
+  const K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  const H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19],w=new Uint32Array(64);
+  for(let i=0;i<n;i+=64){
+    for(let t=0;t<16;t++)w[t]=dv.getUint32(i+t*4);
+    for(let t=16;t<64;t++){const a=w[t-15],c=w[t-2];const s0=((a>>>7)|(a<<25))^((a>>>18)|(a<<14))^(a>>>3);const s1=((c>>>17)|(c<<15))^((c>>>19)|(c<<13))^(c>>>10);w[t]=(w[t-16]+s0+w[t-7]+s1)>>>0}
+    let a=H[0],b2=H[1],c=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7];
+    for(let t=0;t<64;t++){const S1=((e>>>6)|(e<<26))^((e>>>11)|(e<<21))^((e>>>25)|(e<<7));const ch=(e&f)^(~e&g);const t1=(h+S1+ch+K[t]+w[t])>>>0;const S0=((a>>>2)|(a<<30))^((a>>>13)|(a<<19))^((a>>>22)|(a<<10));const mj=(a&b2)^(a&c)^(b2&c);const t2=(S0+mj)>>>0;h=g;g=f;f=e;e=(d+t1)>>>0;d=c;c=b2;b2=a;a=(t1+t2)>>>0}
+    H[0]=(H[0]+a)>>>0;H[1]=(H[1]+b2)>>>0;H[2]=(H[2]+c)>>>0;H[3]=(H[3]+d)>>>0;H[4]=(H[4]+e)>>>0;H[5]=(H[5]+f)>>>0;H[6]=(H[6]+g)>>>0;H[7]=(H[7]+h)>>>0;
+  }
+  return H.map(x=>x.toString(16).padStart(8,'0')).join('');
+}
+/* ---------------------------------------------------------------- truth tokens */
+const TK={OBSERVED:{lead:'Observed',how:'reported from outside BOW'},RECORDED:{lead:'Recorded',how:'written into BOW’s own record'},AUTHORED:{lead:'Authored',how:'a rule or number someone chose on purpose'},COMPUTED:{lead:'Computed',how:'follows exactly from rules and state'},MODELED:{lead:'Modeled',how:'a named, versioned model ran'},GENERATED:{lead:'Generated',how:'made by a generator'},UNKNOWN:{lead:'Unknown',how:'nobody knows yet: a marked hole'},SEALED:{lead:'Sealed',how:'the future: you find out by living it'}};
+/* ---------------------------------------------------------------- system 1: Boston · Year Two (facts from the shared fixture) */
+const LINE=W.taxLine.v,HARD=W.hardLimit.v,TF=W.tradeFile,TAT=FX.reality.contracts[0].salary.v;
+const DEN_SALARY=28000000; /* AUTHORED, illustrative: a second file for the refusal, not a real contract */
+const FILES={
+  gsw:{id:'gsw',name:'Golden State file',short:'Golden State',send:[{p:'Derrick White',s:TF.send[0].salary.v}],get:[{p:'Jimmy Butler',s:TF.get[0].salary.v}]},
+  den:{id:'den',name:'Denver file',short:'Denver',send:[],get:[{p:'a veteran contract',s:DEN_SALARY}]}
+};
+const delta=f=>f.get.reduce((a,x)=>a+x.s,0)-f.send.reduce((a,x)=>a+x.s,0);
+function base(){
+  const w1=W.record.find(r=>r.id==='w1-minimum').effects.payroll;
+  return {sys:'boston',n:41,week:6,payroll:TF.payrollBefore.v,hist:[{w:0,p:W.payrollStartYearTwo.v,k:'AUTHORED'},{w:1,p:W.payrollStartYearTwo.v+w1,k:'COMPUTED'}],files:{gsw:{status:'unsigned',act:null,via:null},den:{status:'unsigned',act:null,via:null}},ticks:[],refusal:null,last:null};
+}
+function stamp(S){
+  const core={n:S.n,payroll:S.payroll,files:{gsw:S.files.gsw.status,den:S.files.den.status},ticks:S.ticks.map(t=>[t.n,t.file,t.kind])};
+  S.hash=sha256(JSON.stringify(core));S.h4=S.hash.slice(0,4);return S;
+}
+function applyE(S,e){
+  const T=JSON.parse(JSON.stringify(S));
+  if(e.kind==='sign'){const f=FILES[e.file];T.payroll+=delta(f);T.files[e.file]={status:'signed',act:e.n,via:e.via};T.ticks.push({n:e.n,w:6,p:T.payroll,file:e.file,kind:'sign'});T.n=e.n;T.refusal=null;T.last={n:e.n,kind:'sign',file:e.file}}
+  else if(e.kind==='decline'){T.files[e.file]={status:'declined',act:e.n,via:e.via};T.ticks.push({n:e.n,w:6,p:T.payroll,file:e.file,kind:'decline'});T.n=e.n;T.refusal=null;T.last={n:e.n,kind:'decline',file:e.file}}
+  else if(e.kind==='refused'){T.refusal={file:e.file,at:e.at,rule:e.rule,text:e.text,allow:e.allow,after:e.after}}
+  return T;
+}
+function foldLog(log){let S=base();for(const e of log)S=applyE(S,e);return stamp(S)}
+function checkRule(S,file){
+  const f=FILES[file],after=S.payroll+delta(f);
+  if(after>HARD){const over=after-HARD;return {rule:'World hard limit',text:'Payroll may not go above '+M(HARD)+'; this file makes it '+M(after)+'.',allow:'send out '+M(over)+' more, or take back '+M(over)+' less',after}}
+  return null;
+}
+function mattersOf(S){
+  const m=[];
+  if(S.files.gsw.status==='unsigned')m.push({id:'gsw',text:'Golden State: send Derrick White, get Jimmy Butler. The file is unsigned.',file:'gsw'});
+  if(S.files.den.status==='unsigned')m.push({id:'den',text:'Denver is asking: take a '+M(DEN_SALARY)+' contract for a future second-round pick (illustrative).',file:'den'});
+  m.push({id:'owner',text:'The owner’s note on the tax bill is unanswered (read-only here).',file:null});
+  return m;
+}
+const STATUS={unsigned:'unsigned',signed:'signed by both owners',declined:'declined by you'};
+function surfBoston(S){
+  const F=[];
+  const add=(path,cat,token,text,say,o)=>{o=o||{};F.push({path,cat,token,text,say,lead:o.lead||TK[token].lead,src:o.src||'',asOf:o.asOf||'',facet:o.facet||'',note:o.note||''})};
+  const over=S.payroll-LINE,tax=Math.max(0,over)*1.5;
+  add('clock.week','Now','AUTHORED','Year Two · Week 6','{t}',{lead:'Authored World calendar',src:'World calendar (authored)',note:'World time, not a date'});
+  add('matters.open','Now','COMPUTED',mattersOf(S).length+' matters open','{t}',{src:'open matters in the seat'});
+  const g=S.files.gsw;
+  add('file.gsw.status','Golden State file','RECORDED',STATUS[g.status],'Golden State file, {t}',{src:'World trade file'});
+  add('file.gsw.send','Golden State file','RECORDED','Derrick White, '+M(FILES.gsw.send[0].s),'we send {t}',{src:'World trade file'});
+  add('file.gsw.get','Golden State file','RECORDED','Jimmy Butler, '+M(FILES.gsw.get[0].s),'we get {t}',{src:'World trade file'});
+  if(g.act)add('file.gsw.act','Golden State file','RECORDED','act '+g.act,'entered in the ledger as {t}',{src:'World act log'});
+  const d=S.files.den;
+  add('file.den.status','Denver file','AUTHORED',STATUS[d.status].replace('signed by both owners','signed'),'Denver file (illustrative), {t}',{src:'illustrative file, authored for this prototype'});
+  add('file.den.get','Denver file','AUTHORED','a veteran contract, '+M(DEN_SALARY),'Denver would send us {t}, unnamed',{src:'illustrative, authored'});
+  if(d.act)add('file.den.act','Denver file','AUTHORED','act '+d.act,'entered in the ledger as {t}',{src:'World act log'});
+  ['gsw','den'].forEach(id=>{if(S.files[id].status!=='unsigned')return;const af=S.payroll+delta(FILES[id]);add('file.'+id+'.after',id==='gsw'?'Golden State file':'Denver file','COMPUTED','payroll becomes '+M(af)+', '+M(af-LINE)+(af>LINE?' over':' under')+' the World’s line','if signed, {t}',{src:'the file’s salaries against the World record'})});
+  add('payroll.total','Payroll','COMPUTED',M(S.payroll),'payroll {t}',{src:'World record, folded from the act log'});
+  add('payroll.vsLine','Payroll','COMPUTED',M(over)+(over>0?' over':' under'),'{t} the World’s tax line',{src:'payroll less the World line'});
+  add('payroll.toHard','Payroll','COMPUTED',M(HARD-S.payroll)+' under','{t} the World’s hard limit',{src:'hard limit less payroll'});
+  add('payroll.tax','Payroll','COMPUTED',M(tax),'projected tax {t} under the World rule',{lead:'Authored World rule',src:'World rule × payroll; not what the NBA would charge',note:'computed under an authored rule'});
+  add('rule.taxLine','World rules','AUTHORED',M(LINE),'tax line {t}',{lead:'Authored World rule',src:'World rule'});
+  add('rule.hardLimit','World rules','AUTHORED',M(HARD),'hard limit {t}',{lead:'Authored World rule',src:'World rule'});
+  add('rule.taxRule','World rules','AUTHORED','flat 1.5× over the line','the tax is charged {t} (the NBA’s real tax is incremental)',{lead:'Authored World rule',src:'World rule',facet:'rule-text'});
+  const white=S.files.gsw.status!=='signed',butler=S.files.gsw.status==='signed',denSigned=S.files.den.status==='signed';
+  const others=S.payroll-TAT-(white?FILES.gsw.send[0].s:0)-(butler?FILES.gsw.get[0].s:0)-(denSigned?DEN_SALARY:0);
+  add('roster.tatum','Roster','OBSERVED','≈ '+M(TAT),'Jayson Tatum {t} (approximate; verify against the World save)',{src:'public reporting via fixture',asOf:'2026-09-29'});
+  add('roster.white','Roster','RECORDED',white?M(FILES.gsw.send[0].s)+', on the roster':'traded to Golden State','Derrick White, {t}',{src:'World trade file'});
+  add('roster.butler','Roster','RECORDED',butler?M(FILES.gsw.get[0].s)+', arrived by trade':'not on the roster','Jimmy Butler, {t}',{src:'World trade file'});
+  if(denSigned)add('roster.den','Roster','AUTHORED','a veteran contract, '+M(DEN_SALARY),'Denver’s contract, {t}',{src:'illustrative'});
+  add('roster.others','Roster','COMPUTED',M(others),'all other contracts together, {t} (payroll less the rows above)',{src:'payroll less the named rows'});
+  add('roster.names','Roster','UNKNOWN','[verify: World save]','the other contracts by name: {t}',{src:'not in the shared fixture'});
+  W.departments.forEach(dp=>{
+    const id='dept.'+dp.id;
+    add(id+'.funded','The doors',dp.funded?'RECORDED':'RECORDED',dp.funded?'funded':'not funded',dp.name+' is {t}',{src:'World record: '+dp.why});
+    if(!dp.funded)add(id+'.opens','The doors','RECORDED',M(dp.opensFor)+' would open it',dp.name+': {t}',{src:'price read from the spatial evidence; verify against the save'});
+  });
+  add('people.funded','Who','UNKNOWN','not recorded','who works in the funded rooms: {t}',{facet:'people',src:'no presence truth exists'});
+  add('payroll.week.0','Payroll by week','AUTHORED',M(S.hist[0].p),'payroll at the start of Year Two, {t} (illustrative start)',{src:'illustrative: chosen so the record sums to the World’s payroll',facet:'series'});
+  add('payroll.week.1','Payroll by week','COMPUTED',M(S.hist[1].p),'payroll after Week 1, {t}',{src:'start plus the Week 1 minimum signing',facet:'series'});
+  add('payroll.week.6','Payroll by week','COMPUTED',M(S.payroll),'payroll at Week 6, {t}',{src:'World record, folded from the act log',facet:'series'});
+  add('future.sealed','Payroll by week','SEALED','you find out by living it','Weeks 7 to 9: {t}',{src:'the unmodeled future'});
+  if(S.refusal){add('refusal.last','Refused','AUTHORED',S.refusal.rule+': '+S.refusal.text,'refused. {t}',{lead:'Authored World rule',src:'World rule'});add('refusal.allow','Refused','COMPUTED',S.refusal.allow,'what would allow it: {t}',{src:'the rule'})}
+  return F;
+}
+/* ---------------------------------------------------------------- system 2: Harrow Medical (fictional; a Surface nobody drew a view for) */
+const HX=FX.domains.supply;
+const HARROW={
+  lead:9,shipments:[{id:1,out:-14,portIn:-11,portOut:-9,in:-5,past:true},{id:2,out:0,portIn:3,portOut:5,in:9,past:false},{id:3,out:14,portIn:17,portOut:19,in:23,past:false}],
+  promises:[{id:1,due:6},{id:2,due:12},{id:3,due:21},{id:4,due:35},{id:5,due:49}] /* AUTHORED, illustrative: the fixture only says five promises over eight weeks */
+};
+function harrowBase(){return {sys:'harrow',n:1,map:{shelf:250},hash:''}}
+function foldH(log){let S=harrowBase();for(const e of log){if(e.kind==='remap')S.map.shelf=e.v}S.n=1+log.length;const core={n:S.n,map:S.map};S.hash=sha256(JSON.stringify(core));S.h4=S.hash.slice(0,4);return S}
+function surfHarrow(S){
+  const F=[],add=(path,cat,token,text,say,o)=>{o=o||{};F.push({path,cat,token,text,say,lead:o.lead||TK[token].lead,src:o.src||'',asOf:'',facet:o.facet||'',note:o.note||''})};
+  const onHand=HX.onHand.v,burn=HX.burn.v,run=onHand/burn;
+  add('event.fire','What happened','AUTHORED','fab fire at 06:10, day 0','{t} at Kaito Semiconductor (fictional)',{src:'fictional fixture'});
+  add('source.single','How it is wired','AUTHORED','the only source of these MCUs','Kaito Semiconductor is {t}',{src:'fictional fixture: single-source'});
+  add('stock.mcu','Stock and flow','AUTHORED',onHand.toLocaleString('en-US')+' MCUs on hand','{t}',{src:'fictional fixture'});
+  add('flow.burn','Stock and flow','AUTHORED',burn+' MCUs a day','the line uses {t}',{src:'fictional fixture'});
+  add('runway','Stock and flow','COMPUTED','about '+Math.round(run)+' days',onHand.toLocaleString('en-US')+' ÷ '+burn+' is {t} of runway before any resupply',{src:'stock ÷ burn'});
+  add('clock.lead','How it is wired','AUTHORED',HARROW.lead+' days from fab to plant','a shipment takes {t} (illustrative)',{src:'illustrative: not in the fixture'});
+  HARROW.shipments.forEach(s=>add('ship.'+s.id,'Shipments',s.past?'AUTHORED':'AUTHORED',s.past?'out '+DAYS(s.out)+', in '+DAYS(s.in):'out '+DAYS(s.out)+', cut','shipment '+s.id+': {t}',{src:'illustrative, authored',facet:'series'}));
+  HARROW.promises.forEach(p=>{
+    add('promise.'+p.id,'Customer promises','AUTHORED','due '+DAYS(p.due),'customer promise '+p.id+' is {t} (illustrative date)',{src:'the fixture says five promises over eight weeks; dates are illustrative'});
+    add('cover.'+p.id,'Customer promises','COMPUTED',p.due<=Math.floor(run)?'covered by stock on hand':'depends on a resupply','promise '+p.id+': {t}',{src:'due day against runway'});
+  });
+  add('restart','Unknown','UNKNOWN','when Kaito ships again','{t}',{src:'nobody has said',note:'the fab’s restart date is not known'});
+  add('fab.inside','Unknown','UNKNOWN','no view inside Kaito’s fab','the supplier’s fab: {t}',{facet:'inside',src:'another system’s interior'});
+  return F;
+}
+const SYS={
+  boston:{name:'Boston · Year Two',short:'Boston',surface:surfBoston},
+  harrow:{name:'Harrow Medical',short:'Harrow',surface:surfHarrow}
+};
+/* ---------------------------------------------------------------- the one state, the one act() */
+const ST={
+  sys:'boston',hist:{record:[],branch:null},active:'record',harrow:[],record:[],
+  ui:{who:'newcomer',sr:false,device:'desktop',open:[],direct:'collapsed',pin:null,override:false,quiet:false,reasons:null,follow:null,agree:null,how:false,real:false,inject:null,compare:false,tab:'matters',pending:null,offer:null,compiled:false,tier:'3d',room:{station:'overview'}}
+};
+let FRAME=0,regs={},failed={},_c={key:null,S:null},_stale=null;
+ST._sz={};ST._szKey={};
+const logOf=()=>ST.sys==='harrow'?ST.harrow:(ST.active==='branch'?ST.hist.branch:ST.hist.record);
+function cur(){
+  const key=ST.sys+'|'+ST.active+'|'+logOf().length;
+  if(_c.key!==key){_c={key,S:ST.sys==='harrow'?foldH(ST.harrow):foldLog(logOf())}}
+  return _c.S;
+}
+const surf=S=>S._sf||(S._sf=SYS[S.sys].surface(S));
+const smap=S=>{if(!S._sm){S._sm={};surf(S).forEach(f=>{S._sm[f.path]=f})}return S._sm};
+const plain=f=>f.lead+': '+f.say.replace('{t}',f.text)+'.';
+const refusalLine=S=>{const sm=smap(S);return 'Refused. '+sm['refusal.last'].text+' What would allow it: '+sm['refusal.allow'].text+'.'};
+function receiptText(S){
+  if(S.sys==='harrow')return 'Harrow Medical. Act '+S.n+'. Recorded: fab fire at 06:10, day 0. Computed: runway about 11 days, no resupply. Unknown: when Kaito ships again.';
+  const sm=smap(S);
+  if(S.refusal)return refusalLine(S)+' No act spent: the ledger stays at act '+S.n+' · '+S.h4+'.';
+  const pay='Computed: payroll '+sm['payroll.total'].text+', '+sm['payroll.vsLine'].text+'.';
+  if(S.last){
+    const w=(S.last.kind==='sign'?(S.last.file==='gsw'?'trade signed':'Denver file signed'):(S.last.file==='gsw'?'trade declined':'Denver file declined'));
+    return 'Act '+S.n+'. Recorded: '+w+'. '+pay+' Authored World rule: projected tax '+sm['payroll.tax'].text+'.';
+  }
+  return 'Act '+S.n+'. Nothing signed yet: '+sm['matters.open'].text+'. '+pay;
+}
+const staleOf=S=>{if(S.sys!=='boston')return S;if(!_stale)_stale=foldLog([]);return _stale};
+const VN={room:'Room',timeline:'Timeline',table:'Table',voice:'Voice',ledger:'Ledger',direct:'Direct'};
+const ORIGIN={room:'hand-built',timeline:'kit',table:'kit',voice:'compiled',ledger:'compiled',direct:'compiled'};
+/* ---------------------------------------------------------------- the router: a pure function of profile, system, device */
+function planFor(pr,sys){
+  if(sys==='harrow')return {views:['ledger'],direct:'open',lead:'ledger',comp:'direct',ask:'room',why:'Nobody drew a view for this system. Direct and the Ledger arrive at once; a Room compiles only if you ask for one.'};
+  if(pr.sr)return {views:['table'],direct:'lead',lead:'direct',comp:'table',ask:'room',why:'You declared Direct for screen readers and keyboard. It leads: every act and fact in order, with the Room’s relations in words. The Table is the companion for exact amounts.'};
+  if(pr.device==='voice')return {views:['voice'],direct:'collapsed',lead:'voice',comp:'direct',ask:'timeline',why:'Voice reads Direct aloud and asks for a read-back before it signs. Nothing is shown that is not said.'};
+  if(pr.device==='phone')return {views:['table'],direct:'open',lead:'table',comp:'direct',ask:'timeline',why:'A phone has no room for a Room or a chart. The Table gives exact amounts; Direct holds the acts. You can sign in one gesture.'};
+  if(pr.who==='operator')return {views:['timeline','table'],direct:'open',lead:'timeline',comp:'table',ask:'room',why:'Timeline first: you are comparing payroll to a line. It can’t show who is in the room; the Room can’t show exact amounts. The Room is one key away: R.'};
+  return {views:['room','table'],direct:'collapsed',lead:'room',comp:'table',ask:'timeline',why:'The desk shows what kind of thing this is; it can’t show exact amounts — the Table can.'};
+}
+const KIND={
+  room:{shows:'adjacency, what is lit or dark, felt scale',cant:'exact text, exact amounts, people'},
+  timeline:{shows:'order and amounts over time',cant:'who, where'},
+  table:{shows:'exact amounts, side by side',cant:'order, causes'},
+  voice:{shows:'everything, read aloud in order',cant:'proportion at a glance'},
+  direct:{shows:'exact wording, every act, relations in words',cant:'proportion, motion'}
+};
+function applyPlan(){
+  const A=ST.ui,P=planFor(A,ST.sys);
+  A.open=P.views.slice();A.direct=P.direct;A.tab='matters';A.pin=null;A.override=false;A.quiet=false;A.reasons=null;A.offer=null;
+  A.tier=A.device==='desktop'?'3d':'2.5d';
+  if(ST.sys==='harrow'){A.compiled=false}
+}
+function stationFor(path,cur){if(/^(payroll\.|roster\.|rule\.(taxLine|hardLimit)|clock\.)/.test(path)&&!/^payroll\.week/.test(path))return 'board';if(/^file\./.test(path))return 'desk';if(/^dept\./.test(path))return 'doors';return cur}
+function swapTo(id){const A=ST.ui;const rest=A.open.filter(v=>v!==id);A.open=[id].concat(rest.slice(0,1))}
+function pairWith(id){const A=ST.ui;if(A.open.includes(id))return;A.open.push(id);if(A.open.length>3)A.open.splice(1,1)}
+/* the in-page record: every act, world or session, lands here first */
+function act(kind,p){
+  p=p||{};const A=ST.ui,S0=cur();
+  const e={seq:ST.record.length+1,kind:kind,who:'you (GM, Boston)',clock:ST.sys==='boston'?'Year Two · Week 6':'Harrow · day 0',history:ST.sys==='boston'?ST.active:'harrow',view:p.via||p.view||null,file:p.file||null,path:p.path||null,v:p.v||null,at:S0.n};
+  ST.record.push(e);let say=null;
+  switch(kind){
+    case 'sign':case 'decline':{
+      const log=logOf();if(ST.sys!=='boston')break;
+      if(S0.files[p.file].status!=='unsigned'){say='That file is already '+S0.files[p.file].status+'.';e.result='ignored';break}
+      A.pending=null;A.follow=null;
+      if(kind==='sign'){const r=checkRule(S0,p.file);
+        if(r){log.push({kind:'refused',file:p.file,at:S0.n+1,via:p.via,rule:r.rule,text:r.text,allow:r.allow,after:r.after});e.result='refused';A.room.station='desk';break}}
+      e.n=S0.n+1;e.result='accepted';log.push({kind:kind,n:e.n,file:p.file,via:p.via});
+      if(!A.pin&&!A.override&&ST.sys==='boston'&&!A.open.includes('timeline')&&A.who==='newcomer'&&A.device==='desktop'){A.offer={text:'Act '+e.n+' moved payroll past a line. The Timeline shows the step over it.',view:'timeline',kind:'pair'}}
+      else if(A.pin||A.override)A.offer=null;
+      break}
+    case 'arrive':A.who=p.v;A.sr=A.sr;applyPlan();say='Plan for a '+p.v+'.';break;
+    case 'declare':A.sr=!A.sr;try{localStorage.setItem('conc.sr',A.sr?'1':'')}catch(_){}applyPlan();say=A.sr?'Remembered on this device: Direct leads.':'Declaration cleared.';break;
+    case 'device':A.device=p.v;applyPlan();break;
+    case 'why':A.reasons=(A.reasons&&A.reasons.about===p.v)?null:{about:p.v};break;
+    case 'swap':swapTo(p.v);A.override=true;A.quiet=true;A.reasons=null;say='Swapped: '+VN[p.v]+' leads. The router is quiet until the next moment.';break;
+    case 'pair':A.reasons=null;if(p.v==='direct'){if(A.direct==='collapsed')A.direct='open'}else pairWith(p.v);A.override=true;A.quiet=true;A.offer=null;say=VN[p.v]+' paired.';break;
+    case 'close':A.open=A.open.filter(v=>v!==p.v);if(!A.open.length)A.open=[ST.sys==='harrow'?'ledger':'table'];A.override=true;break;
+    case 'pin':A.reasons=null;A.pin=A.pin?null:A.open.slice();say=A.pin?'Pinned on this device: '+A.open.map(v=>VN[v]).join(' and ')+'.':'Unpinned.';break;
+    case 'reset':A.pin=null;applyPlan();say='Back to the router’s Plan.';break;
+    case 'dmode':A.direct=p.v;break;
+    case 'tab':A.tab=p.v;break;
+    case 'follow':{if(A.follow&&A.follow.path===p.path){A.follow=null}else{A.follow={path:p.path,from:p.view};A.whyOpen=false;A.room.station=stationFor(p.path,A.room.station);if(A.direct==='collapsed')A.direct='open';if(A.direct==='open')A.tab='facts'}break}
+    case 'unfollow':A.follow=null;A.whyOpen=false;break;
+    case 'whyfact':A.whyOpen=!A.whyOpen;break;
+    case 'agree':A.agree={at:S0.n,sys:ST.sys,hist:ST.active};break;
+    case 'closeagree':A.agree=null;break;
+    case 'inject':A.inject=A.inject?null:'timeline';if(A.inject&&!A.open.includes('timeline'))pairWith('timeline');say=A.inject?'A stale binding is now injected into the Timeline.':'Binding restored.';break;
+    case 'rebind':A.inject=null;say='Timeline rebound to the record.';break;
+    case 'how':A.how=!A.how;break;
+    case 'real':A.real=!A.real;break;
+    case 'fork':if(ST.sys==='boston'){ST.hist.branch=[];ST.active='branch';A.follow=null;A.compare=false;A.agree=null;say='Branch cut at act 41. The record is untouched.'}break;
+    case 'return':ST.active='record';A.compare=false;A.follow=null;A.agree=null;say='Back on the record.';break;
+    case 'compare':A.compare=!A.compare;break;
+    case 'cover':{const cv=COVERS[p.view]&&COVERS[p.view].find(c=>c.id===p.id);if(cv)A.offer={text:cv.words+' '+cv.hand,view:cv.to,kind:'pair'};break}
+    case 'takeoffer':if(A.offer){if(A.offer.view==='direct'){if(A.direct==='collapsed')A.direct='open'}else{pairWith(A.offer.view);if(ST.sys==='harrow'&&A.offer.view==='room')A.compiled=true}A.offer=null;A.override=true}break;
+    case 'dismiss':A.offer=null;break;
+    case 'sys':{if(ST.sys!==p.v){ST.sys=p.v;A.follow=null;A.agree=null;A.offer=null;A.compare=false;A.inject=null;applyPlan()}break}
+    case 'compile':A.compiled=true;if(!A.open.includes('room'))pairWith('room');break;
+    case 'remap':ST.harrow.push({kind:'remap',v:Number(p.v)});break;
+    case 'voice':if(p.v==='ask'){A.pending=p.file}else if(p.v==='cancel'){A.pending=null}break;
+    case 'room':A.room.station=p.v;break;
+    case 'restart':{ST.hist={record:[],branch:null};ST.active='record';ST.record=[];ST.harrow=[];ST.sys='boston';A.follow=null;A.agree=null;A.inject=null;A.compare=false;A.pending=null;A.offer=null;A.whyOpen=false;A.room.station='overview';applyPlan();say='Started over at act 41.';break}
+    default:break;
+  }
+  render();
+  if(say)$('#live').textContent=say;
+}
+function noteSize(id,w,h){const k=Math.round(w/30)+'x'+Math.round(h/30);if(ST._szKey[id]!==k){ST._szKey[id]=k;ST._sz[id]={w:w,h:h};ST._again=true}}
+/* ---------------------------------------------------------------- covers: what each view declares it cannot show */
+const has=(reg,p)=>reg.some(b=>b.path===p);
+const COVERS={
+  room:[
+    {id:'rule',words:'Exact rule text isn’t shown here.',hand:'Direct has it.',to:'direct',needs:(sm,reg)=>sm['rule.taxRule']&&!has(reg,'rule.taxRule')},
+    {id:'people',words:'People: not recorded.',hand:'Direct says so in words.',to:'direct',needs:(sm,reg)=>sm['people.funded']&&!has(reg,'people.funded')},
+    {id:'series',words:'Payroll by week isn’t drawn here.',hand:'The Timeline draws it.',to:'timeline',needs:(sm,reg)=>sm['payroll.week.0']&&!has(reg,'payroll.week.0')}
+  ],
+  timeline:[{id:'who',words:'Not on this axis: who, where.',hand:'The Room shows where.',to:'room',needs:(sm,reg)=>sm['people.funded']&&!has(reg,'people.funded')}],
+  table:[{id:'order',words:'Order and causes aren’t shown here.',hand:'The Timeline shows order.',to:'timeline',needs:(sm,reg)=>sm['payroll.week.0']&&!has(reg,'payroll.week.0')}],
+  voice:[{id:'prop',words:'Proportion isn’t said here.',hand:'The Timeline draws it.',to:'timeline',needs:()=>true}],
+  direct:[{id:'prop',words:'Proportion isn’t drawn here.',hand:'The Timeline draws it.',to:'timeline',needs:()=>true}],
+  ledger:[{id:'who',words:'Not on this axis: who, where.',hand:'A compiled Room shows where.',to:'room',needs:()=>true}]
+};
+const coversFor=(id,S,reg)=>(COVERS[id]||[]).filter(c=>{try{return c.needs(smap(S),reg)}catch(_){return false}});
+const FROM={table:'the Table',direct:'Direct',room:'the Room',timeline:'the Timeline',voice:'Voice'};
+const actBtns=(file,via,sm)=>{
+  const S=cur();const st=S.files[file].status;if(st!=='unsigned')return '<span class="dnote">'+STATUS[st]+'</span>';
+  const n=S.n+1,nm=FILES[file].name;return '<button type="button" class="btn sign sm" data-act="sign" data-file="'+file+'" data-via="'+via+'" aria-label="Sign the '+nm+' as act '+n+', from '+FROM[via]+'">Sign · act '+n+'</button><button type="button" class="btn sm" data-act="decline" data-file="'+file+'" data-via="'+via+'" aria-label="Decline the '+nm+', from '+FROM[via]+'">Decline</button>';
+};
+const fol=p=>ST.ui.follow&&ST.ui.follow.path===p;
+const mkBtn=(reg,sm,where,view,path,cls,inner,style)=>{
+  const f=sm[path];if(!f)return '';reg.push({path:path,token:f.token,text:f.text,where:where});
+  return '<button type="button" class="mk '+(cls||'')+(fol(path)?' followed':'')+'" style="'+(style||'')+'" data-t="'+f.token+'" data-p="'+path+'" data-act="follow" data-path="'+path+'" data-view="'+view+'" aria-label="Follow '+esc(f.text)+' ('+path+') across views, from '+FROM[view]+'">'+(inner==null?esc(f.text):inner)+'</button>';
+};
+/* ---------------------------------------------------------------- DIRECT (compiled from the Surface; the oracle every view is checked against) */
+function relBoston(S,sm,sp){
+  return [
+    'On the owner’s desk: the Golden State file, '+sp('file.gsw.status')+'; the Denver file, '+sp('file.den.status')+'.',
+    'On the wall beside the desk, the board reads payroll '+sp('payroll.total')+', '+sp('payroll.vsLine')+' the World’s tax line.',
+    'Beyond the glass, Analytics is '+sp('dept.analytics.funded')+' and Scouting is '+sp('dept.scouting.funded')+': both rooms are dark. Analytics: '+sp('dept.analytics.opens')+'.',
+    'Also beyond the glass, Ticketing is '+sp('dept.ticketing.funded')+' and Partnerships is '+sp('dept.partnerships.funded')+': both rooms are lit. Who works in them: '+sp('people.funded')+'.'
+  ];
+}
+function relHarrow(S,sm,sp){
+  return ['In the plant: '+sp('stock.mcu')+' on the shelves; the line uses '+sp('flow.burn')+'.','Far outside: Kaito’s fab, '+sp('fab.inside')+'. One thread runs from it to the plant: Kaito is '+sp('source.single')+'.'];
+}
+function ledgerTickets(S){
+  const log=logOf(),out=[];
+  if(ST.sys==='boston'){
+    out.push({n:41,html:'Checkpoint: the World record up to act 41 is folded here. <span class="mono">'+foldLog([]).h4+'</span>',cls:''});
+    let k=0;log.forEach((e,i)=>{
+      if(e.kind==='refused'){out.push({n:'·',html:'Refused at the '+e.rule+': no act spent (it would have been act '+e.at+'). In '+(e.via||'?')+'.',cls:'no'});return}
+      const h=foldLog(log.slice(0,i+1)).h4;const s2=foldLog(log.slice(0,i+1));
+      out.push({n:e.n,html:'Recorded: '+FILES[e.file].name+' '+(e.kind==='sign'?'signed':'declined')+'. In '+(VN[e.via]||e.via)+'. <span class="mono">'+h+'</span>',cls:''});
+    });
+  }else{
+    out.push({n:1,html:'Recorded: fab fire at 06:10, day 0 (fictional). <span class="mono">'+foldH([]).h4+'</span>',cls:''});
+    log.forEach((e,i)=>out.push({n:i+2,html:'Mapping edited: one shelf per '+e.v+' MCUs. <span class="mono">'+foldH(log.slice(0,i+1)).h4+'</span>',cls:''}));
+  }
+  return out;
+}
+function vDirect(S){
+  const sm=smap(S),F=surf(S),reg=[],A=ST.ui;
+  const R=f=>reg.push({path:f.path,token:f.token,text:f.text,where:'Direct'});
+  const sp=p=>{const f=sm[p];if(!f)return '';R(f);return '<span class="in'+(fol(p)?' followed':'')+'" data-p="'+p+'" data-t="'+f.token+'">'+esc(f.text)+'</span>'};
+  const fact=f=>{R(f);return '<li class="fact'+(fol(f.path)?' followed':'')+'" tabindex="-1" data-p="'+f.path+'" data-t="'+f.token+'"><span class="sw" data-t="'+f.token+'"></span><span class="lead-w">'+esc(f.lead)+':</span> '+esc(f.say).replace('{t}','<span class="v">'+esc(f.text)+'</span>')+'. <button type="button" class="fbtn" data-act="follow" data-path="'+f.path+'" data-view="direct" aria-label="Follow '+esc(f.text)+' ('+f.path+') across views, from Direct">follow</button></li>'};
+  const cats=[];F.forEach(f=>{let c=cats.find(x=>x.name===f.cat);if(!c){c={name:f.cat,fs:[]};cats.push(c)}c.fs.push(f)});
+  const facts=cats.map(c=>'<div class="grp"><h4>'+esc(c.name)+'</h4><ul>'+c.fs.map(fact).join('')+'</ul></div>').join('');
+  const rel=(S.sys==='boston'?relBoston:relHarrow)(S,sm,sp);
+  const where='<h4>Where things are</h4><ul>'+rel.map(r=>'<li>'+r+'</li>').join('')+'</ul>';
+  let matters;
+  if(S.sys==='boston'){
+    matters='<h4>Open matters, as acts</h4><ol>'+mattersOf(S).map((m,i)=>'<li><b>'+(i+1)+'.</b> '+esc(m.text)+(m.file?'<div class="dc">'+actBtns(m.file,'direct',sm)+'</div>':'')+'</li>').join('')+'</ol>';
+  }else{
+    const open=HARROW.promises.filter(p=>sm['cover.'+p.id].text!=='covered by stock on hand');
+    matters='<h4>Open matters</h4><ol>'+open.map((p,i)=>'<li><b>'+(i+1)+'.</b> '+esc(plain(sm['promise.'+p.id]))+' '+esc(plain(sm['cover.'+p.id]))+'</li>').join('')+'</ol><p class="dnote">This system has no seat acts in the prototype. The row order above is the order a compiler reads the Surface.</p>';
+  }
+  const tick=ledgerTickets(S).slice().reverse();
+  const ledger='<h4>Ledger · act numbers</h4><ol reversed>'+tick.map(t=>'<li class="tkt-l '+t.cls+'"><span class="actno">'+t.n+'</span> '+t.html+'</li>').join('')+'</ol><h4>In-page record (session)</h4><ul>'+ST.record.slice(-6).reverse().map(e=>'<li class="tkt-l">#'+e.seq+' '+esc(e.kind)+(e.file?' · '+e.file:'')+(e.path?' · '+esc(e.path):'')+(e.v?' · '+esc(e.v):'')+(e.view?' · in '+esc(e.view):'')+'</li>').join('')+'</ul>';
+  const cover='<p class="dnote"><span class="lead-w">NOT DRAWN HERE</span> '+esc(COVERS.direct[0].words)+' <button type="button" class="fbtn" data-act="cover" data-view="direct" data-id="prop">'+VN[COVERS.direct[0].to]+'</button></p>';
+  let body;
+  if(A.direct==='lead')body='<div class="dcols"><div>'+where+matters+ledger+cover+'</div><div>'+facts+'</div></div>';
+  else{
+    const tabs='<div class="dtabs" role="group" aria-label="Direct sections">'+['matters','facts','ledger'].map(t=>'<button type="button" data-act="tab" data-v="'+t+'" aria-pressed="'+(A.tab===t)+'">'+t[0].toUpperCase()+t.slice(1)+'</button>').join('')+'</div>';
+    let c;
+    if(A.tab==='facts')c='<div class="fcols">'+facts+'</div>';
+    else if(A.tab==='ledger')c=ledger;
+    else c='<div class="dcols2">'+'<div>'+matters+'</div><div>'+where+cover+'</div></div>';
+    body=tabs+c;
+  }
+  return {html:body,reg:reg};
+}
+/* ---------------------------------------------------------------- TABLE */
+function vTable(SRC,S){
+  if(SRC.sys==='harrow')return vTableHarrow(SRC);
+  const sm=smap(SRC),reg=[];
+  const b=(p,cls,inner)=>mkBtn(reg,sm,'Table','table',p,'cellbtn '+(cls||''),inner);
+  const chg=x=>x&&x===SRC.n?'chg':'';
+  const g=SRC.files.gsw,d=SRC.files.den;
+  const doit=(id,st,p)=>st==='unsigned'?'<div class="dc">'+actBtns(id,'table',sm)+'</div>':(sm[p]?b(p,'actc'):'');
+  const html='<div class="tbl"><h4><span>WHO WE PAY</span>'+b('clock.week')+'</h4><table><caption class="sr">Files, roster and money, from one ledger</caption>'+
+  '<thead><tr><th>File</th><th>Status</th><th>Do it · or the act it became</th></tr></thead><tbody>'+
+  '<tr class="file '+chg(g.act)+'"><td>Golden State</td><td>'+b('file.gsw.status')+'</td><td>'+doit('gsw',g.status,'file.gsw.act')+'</td></tr>'+
+  '<tr class="file '+chg(d.act)+'"><td>Denver <span class="dnote">(illustr.)</span></td><td>'+b('file.den.status')+'</td><td>'+doit('den',d.status,'file.den.act')+'</td></tr>'+(sm['refusal.last']?'<tr class="ref"><td colspan="3"><span class="actno" style="background:var(--red);color:#fff">REFUSED</span> '+b('refusal.last','refb')+'<br>To allow it: '+b('refusal.allow')+'</td></tr>':'')+'</tbody>'+
+  '<tr class="sec"><th>Roster</th><th>Salary</th><th>Act</th></tr>'+
+  '<tr><td>Jayson Tatum</td><td>'+b('roster.tatum')+'</td><td></td></tr>'+
+  '<tr class="'+chg(g.act)+'"><td>Derrick White</td><td>'+b('roster.white')+'</td><td>'+(g.status==='signed'?b('file.gsw.act','actc'):'')+'</td></tr>'+
+  '<tr class="'+chg(g.act)+'"><td>Jimmy Butler</td><td>'+b('roster.butler')+'</td><td>'+(g.status==='signed'?b('file.gsw.act','actc'):'')+'</td></tr>'+
+  (sm['roster.den']?'<tr class="chg"><td>Denver’s contract</td><td>'+b('roster.den')+'</td><td>'+b('file.den.act','actc')+'</td></tr>':'')+
+  '<tr><td>All others</td><td>'+b('roster.others')+' '+b('roster.names')+'</td><td></td></tr></tbody></table>'+
+  '<div class="money"><div><span>Payroll</span>'+b('payroll.total')+'</div><div><span>Tax line</span>'+b('rule.taxLine')+'</div><div><span>Against the line</span>'+b('payroll.vsLine')+'</div><div><span>Hard limit</span>'+b('rule.hardLimit')+'</div><div><span>Projected tax</span>'+b('payroll.tax')+'</div><div><span>To the hard limit</span>'+b('payroll.toHard')+'</div><div style="grid-column:1/3"><span>Tax rule</span>'+b('rule.taxRule')+'</div></div></div>';
+  return {html:html,reg:reg};
+}
+function vTableHarrow(SRC){return {html:'',reg:[]}}
+/* ---------------------------------------------------------------- TIMELINE */
+function vTimeline(SRC,S){
+  const sm=smap(SRC),reg=[],H=SRC.hist;
+  const X=w=>70+w*60,Y=v=>320-(v/1e6-180)*(290/75);
+  const pos=(x,y)=>'left:'+(x/6.4).toFixed(2)+'%;top:'+(y/4.2).toFixed(2)+'%';
+  const B=(p,x,y,cls,inner)=>mkBtn(reg,sm,'payroll line','timeline',p,'tlm '+cls,inner,pos(x,y));
+  const yNow=Y(SRC.payroll),yTax=Y(LINE),yHard=Y(HARD),over=SRC.payroll>LINE;
+  let d='M'+X(0)+' '+Y(H[0].p)+' H'+X(1)+' V'+Y(H[1].p)+' H'+X(6);SRC.ticks.forEach(t=>{d+=' V'+Y(t.p)});
+  let svg='<svg class="tlsvg" viewBox="0 0 640 420" role="img" aria-label="Payroll by week against the World tax line and hard limit. The same facts are in the marks and in Direct.">'+
+   '<defs><clipPath id="above"><rect x="0" y="0" width="640" height="'+yTax.toFixed(1)+'"/></clipPath></defs>'+
+   '<rect x="'+(X(6)+3)+'" y="30" width="'+(X(9)-X(6)-3)+'" height="290" fill="none" stroke="#15140F" stroke-width="1.5" stroke-dasharray="6 4"/>'+
+   '<path d="'+d+' V320 H'+X(0)+' Z" fill="#D9D3BF"/>'+
+   '<line x1="70" x2="610" y1="'+yTax.toFixed(1)+'" y2="'+yTax.toFixed(1)+'" stroke="#C7A248" stroke-width="4"/>'+
+   '<line x1="70" x2="610" y1="'+yHard.toFixed(1)+'" y2="'+yHard.toFixed(1)+'" stroke="#B31E14" stroke-width="2"/>'+
+   '<path d="'+d+'" fill="none" stroke="#15140F" stroke-width="2.6"/>'+
+   '<path d="'+d+'" fill="none" stroke="#B31E14" stroke-width="4.2" clip-path="url(#above)"/>'+
+   '<line x1="70" x2="610" y1="320" y2="320" stroke="#15140F" stroke-width="2"/>';
+  for(let w=0;w<=9;w++)svg+='<line x1="'+X(w)+'" x2="'+X(w)+'" y1="320" y2="325" stroke="#15140F" stroke-width="1.5"/><text x="'+X(w)+'" y="338" font-family="IBM Plex Mono,DejaVu Sans Mono,monospace" font-size="11" text-anchor="middle" fill="#48453B">'+w+'</text>';
+  svg+='<line x1="'+(X(6)+10)+'" x2="'+(X(6)+10)+'" y1="'+yTax.toFixed(1)+'" y2="'+yNow.toFixed(1)+'" stroke="'+(over?'#B31E14':'#15140F')+'" stroke-width="3" '+(over?'':'stroke-dasharray="4 3"')+'/>';
+  [[0,Y(H[0].p)],[1,Y(H[1].p)],[6,yNow]].forEach(pt=>{svg+='<rect x="'+(X(pt[0])-4)+'" y="'+(pt[1]-4)+'" width="8" height="8" fill="#15140F"/><line x1="'+X(pt[0])+'" x2="'+X(pt[0])+'" y1="'+(pt[1]+4)+'" y2="'+(pt[0]===1?372:346)+'" stroke="#15140F" stroke-width="1" stroke-dasharray="1 3"/>'});
+  if(SRC.refusal){const ya=Y(SRC.refusal.after);svg+='<line x1="'+(X(6)+26)+'" x2="'+(X(6)+26)+'" y1="'+yNow.toFixed(1)+'" y2="'+ya.toFixed(1)+'" stroke="#B31E14" stroke-width="3" stroke-dasharray="5 4"/><path d="M'+(X(6)+19)+' '+(ya-4)+' l14 0 M'+(X(6)+19)+' '+(ya-9)+' l14 10" stroke="#B31E14" stroke-width="2.5"/>'}
+  svg+='</svg>';
+  let m='';
+  m+=B('clock.week',X(6),13,'ac','now · '+esc(sm['clock.week'].text));
+  m+=B('rule.hardLimit',76,yHard-14,'','Hard limit '+esc(sm['rule.hardLimit'].text));
+  const sz=ST._sz.timeline,ww0=sz?Math.min(sz.w,sz.h*640/420):700,dense=ww0<540||!!SRC.refusal;
+  if(!dense)m+=B('payroll.toHard',236,yHard-14,'','to the limit · '+esc(sm['payroll.toHard'].text));
+  m+=B('rule.taxLine',76,yTax-14,'','Tax line '+esc(sm['rule.taxLine'].text));
+  let gy=62;
+  if(SRC.refusal){m+='<div class="tlgroup" style="'+pos(96,gy)+'">'+B('refusal.last',0,0,'refuse wrap','REFUSED · '+esc(sm['refusal.last'].text)).replace(/style="[^"]*"/,'')+B('refusal.allow',0,0,'wrap','To allow it: '+esc(sm['refusal.allow'].text)).replace(/style="[^"]*"/,'')+'</div>';gy=172}
+  m+='<div class="tlgroup" style="'+pos(96,gy)+'">'+
+     B('file.gsw.status',0,0,'','Golden State · '+esc(sm['file.gsw.status'].text)).replace(/style="[^"]*"/,'')+
+     (SRC.refusal?'':B('file.gsw.send',0,0,'','send '+esc(sm['file.gsw.send'].text)).replace(/style="[^"]*"/,'')+
+     B('file.gsw.get',0,0,'','get '+esc(sm['file.gsw.get'].text)).replace(/style="[^"]*"/,''))+
+     (dense?'':B('file.den.status',0,0,'','Denver (illustrative) · '+esc(sm['file.den.status'].text)).replace(/style="[^"]*"/,'')+
+     B('rule.taxRule',0,0,'','World rule: '+esc(sm['rule.taxRule'].text)).replace(/style="[^"]*"/,''))+'</div>';
+  m+=B('future.sealed',(X(6)+X(9))/2+2,80,'ac wrap','Weeks 7 to 9 · '+esc(sm['future.sealed'].text));
+  m+=B('payroll.tax',X(6)+16,116,'','Projected tax '+esc(sm['payroll.tax'].text));
+  m+=B('payroll.total',X(6)+16,over?yNow-16:yNow+24,'','Payroll '+esc(sm['payroll.total'].text));
+  m+=B('payroll.vsLine',X(6)+34,(yTax+yNow)/2,'',esc(sm['payroll.vsLine'].text)+' the line');
+  m+=B('payroll.week.0',X(0),360,'ac','wk 0 · '+esc(sm['payroll.week.0'].text));
+  m+=B('payroll.week.1',X(1),386,'ac','wk 1 · '+esc(sm['payroll.week.1'].text));
+  m+=B('payroll.week.6',X(6)-26,360,'ac','wk 6 · '+esc(sm['payroll.week.6'].text));
+  /* the lever ticks: the act number is the lever number */
+  const t0=SRC.ticks;
+  if(!t0.length){const gs=SRC.files.gsw.status==='unsigned';if(gs)m+='<button type="button" class="tlm tick ghost ac" style="'+pos(X(6),yNow+(over?0:-26))+'" data-act="sign" data-file="gsw" data-via="timeline" aria-label="Sign the Golden State file as act '+(SRC.n+1)+', from the Timeline">'+(SRC.n+1)+'?</button>'}
+  let prev=Y(H[1].p);
+  t0.forEach(t=>{const yy=Y(t.p);m+='<span class="tlm tick ac" style="'+pos(X(6),(yy+prev)/2===yy?yy-14:(yy+prev)/2)+';pointer-events:none" title="act '+t.n+'">'+t.n+'</span>';prev=yy});
+  /* the second file gets its own ghost lever when still open */
+  return {html:'<div class="tlwrap" id="tlwrap">'+svg+m+'</div>',reg:reg,mount:function(el){const w=$('#tlwrap',el);if(!w)return;const pb=w.parentElement,bw=pb.clientWidth,bh=pb.clientHeight,r=640/420;let ww=Math.min(bw,bh*r),hh=ww/r;w.style.width=ww+'px';w.style.height=hh+'px';w.style.fontSize=Math.max(11.5,ww/640*13)+'px';noteSize('timeline',bw,bh)}};
+}
+/* ---------------------------------------------------------------- VOICE (a transcript of what would be spoken) */
+function vVoice(SRC,S){
+  const sm=smap(SRC),reg=[],A=ST.ui;
+  const B=p=>{const f=sm[p];if(!f)return '';reg.push({path:p,token:f.token,text:f.text,where:'Voice'});return '<span class="in" data-p="'+p+'" data-t="'+f.token+'">'+esc(f.text)+'</span>'};
+  if(SRC.sys==='harrow')return {html:'',reg:reg};
+  const log=logOf(),past=[];
+  log.forEach((e,i)=>{const Sk=foldLog(log.slice(0,i+1));past.push(e.kind==='refused'?refusalLine(Sk):receiptText(Sk))});
+  let cur1=[];
+  cur1.push('Boston, Year Two. '+B('clock.week')+'. '+B('matters.open')+'.');
+  if(SRC.files.gsw.status==='unsigned')cur1.push('One: the Golden State file is '+B('file.gsw.status')+'. We send '+B('file.gsw.send')+'; we get '+B('file.gsw.get')+'.');
+  else cur1.push('The Golden State file is '+B('file.gsw.status')+', '+B('file.gsw.act')+'.');
+  cur1.push('Payroll is '+B('payroll.total')+', '+B('payroll.vsLine')+' the World’s tax line. Projected tax '+B('payroll.tax')+', under an authored World rule.');
+  if(SRC.files.den.status==='unsigned')cur1.push('Two: Denver’s file is '+B('file.den.status')+'. Say “open Direct” to handle it; the Denver file is not spoken here.');
+  if(SRC.refusal)cur1.push(B('refusal.last')+' What would allow it: '+B('refusal.allow')+'.');
+  let pend='';
+  if(A.pending&&SRC.files[A.pending]&&SRC.files[A.pending].status==='unsigned'){
+    pend='<p class="vl now">Read-back. Send Derrick White, get Jimmy Butler. '+B('file.'+A.pending+'.after')+' Say “confirm”.</p>';
+  }
+  const btns=[];
+  if(SRC.files.gsw.status==='unsigned'){
+    if(A.pending)btns.push('<button type="button" class="btn sign" data-act="sign" data-file="gsw" data-via="voice">Say “confirm”</button><button type="button" class="btn" data-act="voice" data-v="cancel">Say “cancel”</button>');
+    else btns.push('<button type="button" class="btn sign" data-act="voice" data-v="ask" data-file="gsw">Say “sign the Golden State file”</button><button type="button" class="btn" data-act="decline" data-file="gsw" data-via="voice">Say “decline it”</button>');
+  }
+  btns.push('<button type="button" class="btn" data-act="pair" data-v="direct">Say “open Direct”</button>');
+  const html='<div class="voice"><p class="dnote">Simulated speech: buttons stand in for a voice, and this transcript stands in for the speaker. On a device, speech recognition would run on-device.</p>'+
+    (past.length?'<div class="vpast"><span class="lead-w">SPOKEN EARLIER</span>'+past.map(t=>'<p class="vl past">'+esc(t)+'</p>').join('')+'</div>':'')+
+    '<div class="vnow"><span class="lead-w">SPEAKING NOW</span>'+cur1.map(t=>'<p class="vl now">'+t+'</p>').join('')+pend+'</div><div class="dc">'+btns.join('')+'</div></div>';
+  return {html:html,reg:reg};
+}
+/* ---------------------------------------------------------------- ROOM: one model, two renderers (3D and 2.5D), the same painted surfaces */
+const INK='#15140F',PAPER='#F7F4EB',TONE='#D9D3BF',RED='#B31E14',BRASS='#C7A248',INK2='#48453B';
+const MONO="'IBM Plex Mono','DejaVu Sans Mono',monospace",SANS="'IBM Plex Sans Condensed','DejaVu Sans Condensed',sans-serif";
+function roomModel(SRC){
+  const sm=smap(SRC),reg=[];
+  const mk=(p,where)=>{const f=sm[p];if(!f)return null;reg.push({path:p,token:f.token,text:f.text,where:where});return f};
+  const M={};
+  const g=SRC.files.gsw,d=SRC.files.den,signedG=g.status==='signed',denSigned=d.status==='signed';
+  const others=SRC.payroll-TAT-(signedG?0:FILES.gsw.send[0].s)-(signedG?FILES.gsw.get[0].s:0)-(denSigned?DEN_SALARY:0);
+  M.board={clock:mk('clock.week','board'),total:mk('payroll.total','board'),vs:mk('payroll.vsLine','board'),tax:mk('payroll.tax','board'),taxLine:mk('rule.taxLine','board'),hard:mk('rule.hardLimit','board'),payroll:SRC.payroll,over:SRC.payroll>LINE,segs:[]};
+  M.board.segs.push({name:'Tatum',f:mk('roster.tatum','board'),amt:TAT});
+  M.board.segs.push({name:'All others',f:mk('roster.others','board'),amt:others});
+  if(!signedG)M.board.segs.push({name:'White',f:mk('roster.white','board'),amt:FILES.gsw.send[0].s});
+  else M.board.segs.push({name:'Butler',f:mk('roster.butler','board'),amt:FILES.gsw.get[0].s,isNew:true});
+  if(denSigned)M.board.segs.push({name:'Denver',f:mk('roster.den','board'),amt:DEN_SALARY,isNew:true});
+  M.gsw={status:mk('file.gsw.status','trade file'),send:mk('file.gsw.send','trade file'),get:mk('file.gsw.get','trade file'),act:mk('file.gsw.act','trade file'),st:g.status};
+  M.den={status:mk('file.den.status','Denver file'),get:mk('file.den.get','Denver file'),act:mk('file.den.act','Denver file'),st:d.status};
+  M.slip=SRC.refusal?{last:mk('refusal.last','refusal slip'),allow:mk('refusal.allow','refusal slip')}:null;
+  M.doors=W.departments.map(dp=>({id:dp.id,name:dp.name.toUpperCase(),funded:dp.funded,fd:mk('dept.'+dp.id+'.funded',dp.name+' door'),op:dp.funded?null:mk('dept.'+dp.id+'.opens',dp.name+' door')}));
+  M.reg=reg;
+  return M;
+}
+function roomMarks(SRC){return roomModel(SRC).reg}
+/* painters: draw the bound marks onto canvases. The follow highlight is drawn around the mark that was followed. */
+const _pat={};
+function cv(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c}
+function patOf(g,t){if(_pat[t])return _pat[t];const c=cv(10,10),q=c.getContext('2d');q.strokeStyle=INK;q.fillStyle=INK;q.lineWidth=1.4;if(t==='MODELED'){q.beginPath();q.moveTo(0,10);q.lineTo(10,0);q.moveTo(-2,2);q.lineTo(2,-2);q.moveTo(8,12);q.lineTo(12,8);q.stroke()}else{q.beginPath();q.arc(3,3,1.1,0,7);q.arc(8,7,1.1,0,7);q.fill()}return _pat[t]=g.createPattern(c,'repeat')}
+function tokPaint(g,t,x,y,w,h){
+  g.save();let col=INK;
+  if(t==='OBSERVED'){g.fillStyle=INK;g.fillRect(x,y,w,h);col=PAPER}
+  else if(t==='RECORDED'){g.fillStyle=PAPER;g.fillRect(x,y,w,h);g.strokeStyle=INK;g.lineWidth=3;g.strokeRect(x+1.5,y+1.5,w-3,h-3);g.strokeRect(x+7.5,y+7.5,w-15,h-15)}
+  else if(t==='AUTHORED'){g.fillStyle=PAPER;g.fillRect(x,y,w,h);g.strokeStyle=INK;g.lineWidth=3;g.strokeRect(x+1.5,y+1.5,w-3,h-3)}
+  else if(t==='COMPUTED'){g.fillStyle=TONE;g.fillRect(x,y,w,h)}
+  else if(t==='MODELED'||t==='GENERATED'){g.fillStyle=PAPER;g.fillRect(x,y,w,h);g.fillStyle=patOf(g,t);g.fillRect(x,y,w,h)}
+  else{g.fillStyle=PAPER;g.fillRect(x,y,w,h);g.setLineDash([10,7]);g.strokeStyle=INK;g.lineWidth=3;g.strokeRect(x+1.5,y+1.5,w-3,h-3)}
+  g.restore();return col;
+}
+function tx(g,s,x,y,size,weight,color,align,font){g.font=weight+' '+size+'px '+(font||SANS);g.fillStyle=color||INK;g.textAlign=align||'left';g.textBaseline='alphabetic';g.fillText(s,x,y);return g.measureText(s).width}
+function fitTx(g,s,x,y,size,weight,color,align,font,maxW){let sz=size;g.font=weight+' '+sz+'px '+(font||SANS);while(g.measureText(s).width>maxW&&sz>10){sz-=2;g.font=weight+' '+sz+'px '+(font||SANS)}return tx(g,s,x,y,sz,weight,color,align,font)}
+function hlRing(g,x,y,w,h){g.save();g.strokeStyle=BRASS;g.lineWidth=12;g.strokeRect(x-8,y-8,w+16,h+16);g.strokeStyle=INK;g.lineWidth=3;g.strokeRect(x-14,y-14,w+28,h+28);g.restore()}
+function wrapTx(g,s,x,y,maxW,lh,size,weight,color,font){g.font=weight+' '+size+'px '+(font||SANS);g.fillStyle=color;g.textAlign='left';const ws=s.split(' ');let line='',yy=y;ws.forEach(w=>{const t=line?line+' '+w:w;if(g.measureText(t).width>maxW&&line){g.fillText(line,x,yy);yy+=lh;line=w}else line=t});g.fillText(line,x,yy);return yy}
+function boardX(m){return 40+m/1e6*(944/260)}
+function paintBoard(M,hl,c){
+  c=c||cv(1024,576);const g=c.getContext('2d'),B=M.board;g.clearRect(0,0,1024,576);
+  g.fillStyle=PAPER;g.fillRect(0,0,1024,576);g.fillStyle=INK;g.fillRect(0,0,1024,64);
+  tx(g,'BOSTON · WHO WE PAY',26,44,34,700,PAPER,'left',MONO);
+  if(B.clock){const w=tx(g,B.clock.text,1000,44,28,600,PAPER,'right',MONO);if(hl(B.clock.path))hlRing(g,1000-w-6,14,w+12,40)}
+  tx(g,'PAYROLL',30,112,28,600,INK2,'left',MONO);
+  if(B.total){const w=tx(g,B.total.text,30,196,104,700,INK,'left',MONO);if(hl(B.total.path))hlRing(g,30,110,w,100)}
+  if(B.vs){const w=tx(g,B.vs.text,560,150,58,700,B.over?RED:INK,'left',MONO);tx(g,'the World’s tax line',560+w+14,150,28,500,INK2,'left',SANS);if(hl(B.vs.path))hlRing(g,560,98,w,64)}
+  if(B.tax){tx(g,'Projected tax',560,204,30,500,INK2,'left',SANS);const w=tx(g,B.tax.text,800,204,44,700,INK,'left',MONO);if(hl(B.tax.path))hlRing(g,796,164,w+8,50)}
+  /* the stacked bar: who we pay, against the two lines */
+  let x=40;const y0=272,bh=110;
+  B.segs.forEach(s=>{const w=s.amt/1e6*(944/260);if(s.f){const col=tokPaint(g,s.f.token,x,y0,w,bh);
+      if(s.isNew&&B.over){/* the part of this bar past the tax line */const lx=boardX(LINE);if(x+w>lx){g.save();g.fillStyle=RED;g.globalAlpha=.9;g.fillRect(lx,y0,x+w-lx,10);g.fillRect(lx,y0+bh-10,x+w-lx,10);g.restore()}}
+      fitTx(g,s.name,x+w/2,y0+44,30,700,col,'center',SANS,w-14);fitTx(g,s.f.text.split(',')[0],x+w/2,y0+84,28,600,col,'center',MONO,w-14);
+      if(hl(s.f.path))hlRing(g,x,y0,w,bh)}
+    x+=w});
+  const lx=boardX(LINE),hx=boardX(HARD);
+  g.fillStyle=BRASS;g.fillRect(lx-5,y0-24,10,bh+48);g.fillStyle=RED;g.fillRect(hx-3,y0-24,6,bh+48);
+  if(B.taxLine){const w=tx(g,'TAX LINE '+B.taxLine.text,lx+4,y0+bh+82,30,700,INK,'right',MONO);if(hl(B.taxLine.path))hlRing(g,lx+4-w,y0+bh+56,w,34)}
+  if(B.hard){const w=tx(g,'HARD LIMIT '+B.hard.text,1010,y0+bh+128,30,700,RED,'right',MONO);if(hl(B.hard.path))hlRing(g,1010-w,y0+bh+102,w,34)}
+  g.strokeStyle=INK;g.lineWidth=6;g.strokeRect(3,3,1018,570);
+  return c;
+}
+function paintPaper(P,title,hl,tokenBox,c){
+  c=c||cv(512,384);const g=c.getContext('2d');g.fillStyle='#FBF9F2';g.fillRect(0,0,512,384);g.strokeStyle=INK2;g.lineWidth=2;g.strokeRect(6,6,500,372);
+  tx(g,title,26,50,30,700,INK,'left',MONO);
+  if(P.send){tx(g,'WE SEND',26,100,20,600,INK2,'left',MONO);fitTx(g,P.send.text,26,138,32,600,INK,'left',SANS,460);if(hl(P.send.path))hlRing(g,20,112,470,34)}
+  if(P.get){tx(g,'WE GET',26,186,20,600,INK2,'left',MONO);fitTx(g,P.get.text,26,224,32,600,INK,'left',SANS,460);if(hl(P.get.path))hlRing(g,20,198,470,34)}
+  if(P.status){const st=P.st;const bx=26,by=262,bw=300,bh=92;const col=tokPaint(g,P.status.token,bx,by,bw,bh);g.save();g.translate(bx+bw/2,by+bh/2+2);if(st==='signed')g.rotate(-.06);
+    fitTx(g,P.status.text.toUpperCase(),0,st==='signed'?12:10,32,700,st==='signed'?RED:col,'center',MONO,bw-30);g.restore();if(hl(P.status.path))hlRing(g,bx,by,bw,bh)}
+  if(P.act){g.fillStyle=BRASS;g.fillRect(346,282,140,52);g.strokeStyle=INK;g.lineWidth=4;g.strokeRect(346,282,140,52);tx(g,P.act.text.toUpperCase(),416,320,34,700,INK,'center',MONO);if(hl(P.act.path))hlRing(g,346,282,140,52)}
+  return c;
+}
+function paintSlip(S2,hl,c){
+  c=c||cv(512,288);const g=c.getContext('2d');g.fillStyle='#FFFFFF';g.fillRect(0,0,512,288);g.strokeStyle=RED;g.lineWidth=8;g.strokeRect(4,4,504,280);
+  tx(g,'REFUSED',26,58,44,700,RED,'left',MONO);
+  wrapTx(g,S2.last.text,26,102,460,28,23,600,INK,SANS);
+  wrapTx(g,'To allow it: '+S2.allow.text,26,214,460,26,21,500,INK2,SANS);
+  if(hl(S2.last.path)||hl(S2.allow.path))hlRing(g,4,4,504,280);
+  return c;
+}
+function paintSign(D,hl,c){
+  c=c||cv(512,224);const g=c.getContext('2d');g.fillStyle=D.funded?'#F7F4EB':'#B9B2A0';g.fillRect(0,0,512,224);g.strokeStyle=INK;g.lineWidth=8;g.strokeRect(4,4,504,216);
+  tx(g,D.name,256,74,58,700,INK,'center',MONO);
+  if(D.fd){const col=tokPaint(g,D.fd.token,120,92,272,54);fitTx(g,D.fd.text.toUpperCase(),256,130,34,700,col,'center',MONO,250);if(hl(D.fd.path))hlRing(g,120,92,272,54)}
+  if(D.op){fitTx(g,D.op.text,256,190,32,600,INK,'center',SANS,470);if(hl(D.op.path))hlRing(g,20,160,472,40)}
+  return c;
+}
+function paintRulePlate(c){c=c||cv(512,256);const g=c.getContext('2d');g.fillStyle='rgba(245,243,236,1)';g.fillRect(0,0,512,256);g.strokeStyle='rgba(21,20,15,.10)';g.lineWidth=2;for(let i=-256;i<512;i+=16){g.beginPath();g.moveTo(i,256);g.lineTo(i+256,0);g.stroke()}g.setLineDash([12,8]);g.strokeStyle=INK;g.lineWidth=5;g.strokeRect(6,6,500,244);g.setLineDash([]);tx(g,'WORLD TAX RULE',256,64,34,700,INK2,'center',MONO);tx(g,'Exact rule text',256,132,42,600,INK,'center',SANS);tx(g,'isn’t shown here.',256,180,42,600,INK,'center',SANS);tx(g,'Open Direct.',256,230,30,700,INK,'center',MONO);return c}
+function paintPeople(c){c=c||cv(384,100);const g=c.getContext('2d');g.fillStyle=PAPER;g.fillRect(0,0,384,100);g.setLineDash([10,7]);g.strokeStyle=INK;g.lineWidth=5;g.strokeRect(4,4,376,92);g.setLineDash([]);tx(g,'PEOPLE:',192,42,30,700,INK,'center',MONO);tx(g,'NOT RECORDED',192,80,34,700,INK,'center',MONO);return c}
+/* ---------------------------------------------------------------- 3D (three.js r160, lazy, procedural, nothing external) */
+let R3=null,R3loading=false,R3fail=false;
+const STATIONS={overview:{p:[0.1,2.3,6.4],t:[0.1,1.85,-1.0]},board:{p:[0.1,2.7,1.2],t:[0.1,3.45,-3.5]},desk:{p:[0.1,1.9,3.5],t:[0.05,0.85,0.95]},doors:{p:[0,1.5,0.2],t:[0,1.1,-2.6]}};
+function overviewFor(asp){const th=Math.tan(17*Math.PI/180),dist=Math.max(8.4,4.6/(th*asp));return {p:[0.1,2.3,-3.5+dist],t:[0.1,1.85,-1.0]}}
+const ROOMOBJ=[['board','Board','payroll.total'],['gsw','Trade file','file.gsw.status'],['den','Denver file','file.den.status'],['analytics','Analytics','dept.analytics.funded'],['scouting','Scouting','dept.scouting.funded'],['ticketing','Ticketing','dept.ticketing.funded'],['partnerships','Partners','dept.partnerships.funded']];
+function ensure3D(){
+  if(R3||R3loading||R3fail)return;R3loading=true;
+  Promise.all([import('three'),import('three/addons/OrbitControls.js')]).then(m=>{try{build3D(m[0],m[1].OrbitControls)}catch(e){R3fail=true;ST.ui.tierNote='The 3D Room could not start on this device ('+String(e.message||e).slice(0,60)+'). Showing the 2.5D Room: same acts, same record, no camera.'}R3loading=false;render()}).catch(e=>{R3fail=true;R3loading=false;ST.ui.tierNote='The 3D Room could not load here. Showing the 2.5D Room: same acts, same record, no camera.';render()});
+}
+function mergeBoxes(T,parts){
+  const pos=[],nor=[],col=[];
+  parts.forEach(p=>{const g=new T.BoxGeometry(p.w,p.h,p.d).toNonIndexed();g.applyMatrix4(new T.Matrix4().compose(new T.Vector3(p.x,p.y,p.z),new T.Quaternion().setFromEuler(new T.Euler(p.rx||0,p.ry||0,p.rz||0)),new T.Vector3(1,1,1)));const c=new T.Color(p.c),a=g.attributes.position.array,n=g.attributes.normal.array;for(let i=0;i<a.length;i+=3){pos.push(a[i],a[i+1],a[i+2]);nor.push(n[i],n[i+1],n[i+2]);col.push(c.r,c.g,c.b)}});
+  const G=new T.BufferGeometry();G.setAttribute('position',new T.Float32BufferAttribute(pos,3));G.setAttribute('normal',new T.Float32BufferAttribute(nor,3));G.setAttribute('color',new T.Float32BufferAttribute(col,3));return G;
+}
+function build3D(T,OC){
+  const host=document.createElement('div');host.style.cssText='position:absolute;inset:0';
+  const renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(1);renderer.setClearColor(0xD8CFBA);
+  host.appendChild(renderer.domElement);renderer.domElement.style.cssText='width:100%;height:100%;display:block;touch-action:none';
+  renderer.domElement.setAttribute('tabindex','0');renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','The owner’s Room: a desk with the trade file, the payroll board, four glass rooms. Direct has the same facts and acts in words.');
+  const scene=new T.Scene(),cam=new T.PerspectiveCamera(40,1.4,.1,60);
+  cam.fov=34;cam.position.set(0.1,2.3,6.4);
+  const ctl=new OC(cam,renderer.domElement);ctl.target.set(0.1,1.85,-1.0);ctl.enablePan=false;ctl.enableDamping=false;ctl.minAzimuthAngle=-.6;ctl.maxAzimuthAngle=.6;ctl.minPolarAngle=0.9;ctl.maxPolarAngle=1.9;ctl.minDistance=1.2;ctl.maxDistance=14;ctl.update();
+  scene.add(new T.AmbientLight(0xffffff,1.25));const dl=new T.DirectionalLight(0xfff1d6,1.5);dl.position.set(-3,5,4);scene.add(dl);
+  const L=(c)=>new T.MeshLambertMaterial({color:c}),Bas=(c)=>new T.MeshBasicMaterial({color:c});
+  const add=(geo,mat,x,y,z,ry)=>{const m=new T.Mesh(geo,mat);m.position.set(x,y,z);if(ry)m.rotation.y=ry;scene.add(m);return m};
+  const plane=(w,h,mat,x,y,z,ry,rx)=>{const m=add(new T.PlaneGeometry(w,h),mat,x,y,z,ry);if(rx)m.rotation.x=rx;return m};
+  const tex={},mats={};
+  const mkTex=(c)=>{const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.anisotropy=4;return t};
+  const canv={board:cv(1024,576),gsw:cv(512,384),den:cv(512,384),slip:cv(512,288),rule:paintRulePlate(),ppl:paintPeople()};
+  W.departments.forEach(dp=>canv['s_'+dp.id]=cv(512,224));
+  Object.keys(canv).forEach(k=>{tex[k]=mkTex(canv[k]);mats[k]=new T.MeshBasicMaterial({map:tex[k]})});
+  const hit=[];const reg=(m,id)=>{m.userData.rid=id;hit.push(m)};
+  /* shell */
+  add(new T.PlaneGeometry(40,20),L(0xB79F7B),0,0,0,0).rotation.x=-Math.PI/2;
+  plane(40,12,L(0xD8CFBA),0,6,-3.6,0);
+  scene.add(new T.Mesh(mergeBoxes(T,[{w:40,h:.18,d:.06,x:0,y:.09,z:-3.57,c:0x15140F}]),new T.MeshLambertMaterial({vertexColors:true})));
+  /* desk */
+  scene.add(new T.Mesh(mergeBoxes(T,[{w:3.4,h:.09,d:1.3,x:.2,y:.8,z:1.0,c:0xA9814F},{w:3.2,h:.75,d:1.1,x:.2,y:.38,z:1.0,c:0x4A3520}]),new T.MeshLambertMaterial({vertexColors:true})));
+  const folder=add(new T.BoxGeometry(.74,.05,.56),L(0x22201A),-1.3,.872,1.0,.18);
+  const flab=cv(256,190),fg=flab.getContext('2d');fg.fillStyle='#22201A';fg.fillRect(0,0,256,190);fg.strokeStyle=BRASS;fg.lineWidth=6;fg.strokeRect(12,12,232,166);tx(fg,'TRADE',128,88,54,700,BRASS,'center',MONO);tx(fg,'FILE',128,144,54,700,BRASS,'center',MONO);
+  const flt=mkTex(flab);const fl=plane(.56,.41,new T.MeshBasicMaterial({map:flt}),-1.3,.9,1.0);fl.rotation.x=-Math.PI/2;fl.rotation.z=-.18;
+  /* papers lean toward the viewer (34 degrees) so they can be read from the rail */
+  const lean=(w,h,mat,x,zBottom)=>{const m=plane(w,h,mat,x,.845+h/2*.565,zBottom-h/2*.825,0);m.rotation.order='XYZ';m.rotation.x=-(Math.PI/2-.6);return m};
+  const p1=lean(.92,.69,mats.gsw,-.35,1.4);p1.rotation.z=.03;reg(p1,'gsw');
+  const p2=lean(.7,.525,mats.den,1.35,1.5);p2.rotation.z=-.05;reg(p2,'den');
+  const sl=lean(.86,.48,mats.slip,.75,1.58);sl.visible=false;reg(sl,'gsw');
+  /* the payroll board: large, on the back wall above the rooms */
+  const bd=plane(4.0,2.25,mats.board,0,3.55,-3.53,0);reg(bd,'board');
+  scene.add(new T.Mesh(mergeBoxes(T,[{w:4.16,h:2.41,d:.05,x:0,y:3.55,z:-3.56,c:0x15140F}]),new T.MeshLambertMaterial({vertexColors:true})));
+  /* the rule plate (a cover): frosted, on the wall beside the board */
+  const rp=plane(1.7,.85,mats.rule,3.55,3.55,-3.53,0);
+  /* four glass rooms: lit when funded in the save, dark with chairs stacked when not */
+  const rooms=[];
+  W.departments.forEach((dp,i)=>{
+    const cx=-2.25+i*1.5,cz=-2.85,w=1.4,h=1.55,d=1.3;
+    const lit=dp.funded;
+    const fr=[{w:w,h:.07,d:.07,x:cx,y:h,z:cz+d/2,c:0x15140F},{w:w,h:.07,d:.07,x:cx,y:.02,z:cz+d/2,c:0x15140F},{w:.07,h:h,d:.07,x:cx-w/2,y:h/2,z:cz+d/2,c:0x15140F},{w:.07,h:h,d:.07,x:cx+w/2,y:h/2,z:cz+d/2,c:0x15140F},{w:.05,h:h,d:.05,x:cx,y:h/2,z:cz+d/2,c:0x15140F}];
+    scene.add(new T.Mesh(mergeBoxes(T,fr),new T.MeshLambertMaterial({vertexColors:true})));
+    add(new T.PlaneGeometry(w,d),Bas(lit?0xEBD9A6:0x6F6A5C),cx,.02,cz,0).rotation.x=-Math.PI/2;
+    plane(w,h,Bas(lit?0xF3E7C2:0x8A8474),cx,h/2,cz-d/2,0);
+    plane(d,h,Bas(lit?0xE4D3A0:0x77725F),cx-w/2,h/2,cz,Math.PI/2);plane(d,h,Bas(lit?0xE4D3A0:0x77725F),cx+w/2,h/2,cz,-Math.PI/2);
+    plane(w,d,Bas(lit?0xFFF4CE:0x55513F),cx,h,cz,0).rotation.x=Math.PI/2;
+    const ps=[];
+    for(let k=0;k<2;k++){ps.push({w:.5,h:.05,d:.5,x:cx-.3+k*.6,y:.6,z:cz-.2,c:lit?0xA9814F:0x6C5A44});ps.push({w:.05,h:.6,d:.4,x:cx-.3+k*.6,y:.3,z:cz-.2,c:0x3A2E20});
+      if(lit)ps.push({w:.34,h:.22,d:.03,x:cx-.3+k*.6,y:.8,z:cz-.35,c:0xFFF6D0});
+      else{ps.push({w:.34,h:.22,d:.03,x:cx-.3+k*.6,y:.8,z:cz-.35,c:0x2A2822});ps.push({w:.36,h:.05,d:.36,x:cx-.55+k*.18,y:.28+k*.1,z:cz+.32,rz:.3+k*.1,c:0x23211B});ps.push({w:.05,h:.4,d:.36,x:cx-.55+k*.18,y:.5+k*.1,z:cz+.32,rz:.3+k*.1,c:0x23211B})}}
+    scene.add(new T.Mesh(mergeBoxes(T,ps),new T.MeshBasicMaterial({vertexColors:true})));
+    plane(w,h,new T.MeshLambertMaterial({color:lit?0xDCE9EA:0xB7C4C7,transparent:true,opacity:lit?.10:.22,depthWrite:false}),cx,h/2,cz+d/2+.01,0);
+    const sg=plane(1.36,.594,mats['s_'+dp.id],cx,h+.34,cz+d/2+.02,0);reg(sg,dp.id);
+    if(lit)plane(.9,.234,mats.ppl,cx,.55,cz+d/2+.03,0);
+    rooms.push(sg);
+  });
+  const objs={board:bd,gsw:p1,den:p2,analytics:rooms[0],scouting:rooms[1],ticketing:rooms[2],partnerships:rooms[3]};
+  R3={T,host,renderer,scene,cam,ctl,canv,tex,objs,slip:sl,rp,lastW:0,lastH:0,ok:true,station:'overview',lastAsp:-1};
+  /* click on an object follows its fact */
+  const rc=new T.Raycaster(),v2=new T.Vector2();let down=null;
+  const el=renderer.domElement;
+  el.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY]});
+  el.addEventListener('pointerup',e=>{if(!down)return;const dx=Math.abs(e.clientX-down[0]),dy=Math.abs(e.clientY-down[1]);down=null;if(dx+dy>5)return;
+    const r=el.getBoundingClientRect();v2.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);rc.setFromCamera(v2,cam);const h=rc.intersectObjects(hit,false)[0];
+    if(h){const o=ROOMOBJ.find(x=>x[0]===h.object.userData.rid);if(o){act('follow',{path:o[2],view:'room'});ST._focusFollow=true;render()}}});
+  ctl.addEventListener('change',()=>{if(R3&&R3.M)renderer.render(scene,cam)});
+}
+function paint3D(M){
+  const A=ST.ui,hl=p=>A.follow&&A.follow.path===p;const R=R3;
+  paintBoard(M,hl,R.canv.board);R.tex.board.needsUpdate=true;
+  paintPaper(M.gsw,'GOLDEN STATE',hl,null,R.canv.gsw);R.tex.gsw.needsUpdate=true;
+  paintPaper(M.den,'DENVER · ILLUSTRATIVE',hl,null,R.canv.den);R.tex.den.needsUpdate=true;
+  if(M.slip){paintSlip(M.slip,hl,R.canv.slip);R.tex.slip.needsUpdate=true}R.slip.visible=!!M.slip;
+  M.doors.forEach(D=>{paintSign(D,hl,R.canv['s_'+D.id]);R.tex['s_'+D.id].needsUpdate=true});
+  R.M=M;
+}
+/* ---------------------------------------------------------------- 2.5D (the Chromebook rung): same painted surfaces on one flat canvas */
+function draw25(c,M,A){
+  const g=c.getContext('2d'),W2=c.width,H2=c.height,hl=p=>A.follow&&A.follow.path===p;
+  g.fillStyle='#D8CFBA';g.fillRect(0,0,W2,H2*.66);g.fillStyle='#B79F7B';g.fillRect(0,H2*.66,W2,H2*.34);g.strokeStyle='rgba(21,20,15,.18)';g.lineWidth=1;for(let i=1;i<9;i++){g.beginPath();g.moveTo(0,H2*.66+i*H2*.04);g.lineTo(W2,H2*.66+i*H2*.04);g.stroke()}
+  const bw=W2*.42,bh=bw*576/1024,bx=W2*.03,by=H2*.06;const bc=paintBoard(M,hl);g.fillStyle=INK;g.fillRect(bx-4,by-4,bw+8,bh+8);g.drawImage(bc,bx,by,bw,bh);g.fillRect(bx+bw*.1,by+bh+4,6,H2*.66-by-bh);g.fillRect(bx+bw*.9,by+bh+4,6,H2*.66-by-bh);
+  /* rule plate */
+  const rc=paintRulePlate();g.drawImage(rc,bx+bw+W2*.03,by,W2*.2,W2*.2*256/512);
+  /* rooms */
+  const rw=W2*.115,rh=H2*.26,rx0=bx+bw+W2*.035,ry=H2*.36;
+  M.doors.forEach((D,i)=>{const x=rx0+i*(rw+W2*.012);g.fillStyle=D.funded?'#F3E7C2':'#6F6A5C';g.fillRect(x,ry,rw,rh);g.fillStyle=D.funded?'#FFF6D0':'#2A2822';g.fillRect(x+rw*.18,ry+rh*.5,rw*.28,rh*.2);g.fillRect(x+rw*.58,ry+rh*.5,rw*.28,rh*.2);if(!D.funded){g.fillStyle='#23211B';g.save();g.translate(x+rw*.3,ry+rh*.88);g.rotate(-.35);g.fillRect(-8,-6,18,12);g.restore()}
+    g.strokeStyle=INK;g.lineWidth=4;g.strokeRect(x,ry,rw,rh);g.fillStyle='rgba(220,233,234,.16)';g.fillRect(x,ry,rw,rh);
+    const sc=paintSign(D,hl);g.drawImage(sc,x-rw*.06,ry-rw*.5*224/512-4,rw*1.12,rw*1.12*224/512);
+    if(D.funded){const pc=paintPeople();g.drawImage(pc,x+rw*.1,ry+rh*.72,rw*.8,rw*.8*100/384)}});
+  /* desk: an oblique top with papers lying on it */
+  const dx=W2*.14,dy=H2*.72,dw=W2*.72,dd=H2*.22;g.fillStyle='#A9814F';g.beginPath();g.moveTo(dx+dd*.4,dy);g.lineTo(dx+dw+dd*.4,dy);g.lineTo(dx+dw,dy+dd);g.lineTo(dx,dy+dd);g.closePath();g.fill();g.fillStyle='#4A3520';g.fillRect(dx,dy+dd,dw,H2*.06);g.strokeStyle=INK;g.lineWidth=2;g.stroke();
+  const flat=(cnv,x,y,w,h,sk)=>{g.save();g.transform(1,0,sk,.5,x,y);g.drawImage(cnv,0,0,w,h);g.restore()};
+  flat(paintPaper(M.gsw,'GOLDEN STATE',hl),dx+dw*.16,dy+dd*.08,dw*.24,dw*.24*.75,.7);
+  flat(paintPaper(M.den,'DENVER · ILLUSTRATIVE',hl),dx+dw*.5,dy+dd*.1,dw*.2,dw*.2*.75,.7);
+  if(M.slip)flat(paintSlip(M.slip,hl),dx+dw*.34,dy+dd*.4,dw*.24,dw*.24*288/512,.7);
+}
+/* ---------------------------------------------------------------- the Room pane */
+function roomBar(SRC){
+  const sm=smap(SRC),A=ST.ui;
+  const acts=SRC.files.gsw.status==='unsigned'?'<button type="button" class="btn sign sm" data-act="sign" data-file="gsw" data-via="room" aria-label="Sign the Golden State file as act '+(SRC.n+1)+', from the Room">Sign the Golden State file · act '+(SRC.n+1)+'</button><button type="button" class="btn sm" data-act="decline" data-file="gsw" data-via="room" aria-label="Decline the Golden State file, from the Room">Decline it</button>':'<span class="dnote">Golden State file: '+STATUS[SRC.files.gsw.status]+'.</span>';
+  const den=SRC.files.den.status==='unsigned'?'<button type="button" class="btn sm" data-act="sign" data-file="den" data-via="room" aria-label="Try the Denver file as act '+(SRC.n+1)+', from the Room">Try the Denver file · act '+(SRC.n+1)+'</button>':'<span class="dnote">Denver file: '+STATUS[SRC.files.den.status]+'.</span>';
+  const objs='<button type="button" class="pill" data-act="room" data-v="overview" aria-pressed="'+((ST.ui.room.station||'overview')==='overview')+'">Overview</button>'+ROOMOBJ.map(o=>'<button type="button" class="pill'+(fol(o[2])?' followed':'')+'" data-act="follow" data-path="'+o[2]+'" data-view="room" aria-label="Follow the '+o[1]+(o[0]==='analytics'||o[0]==='scouting'||o[0]==='ticketing'||o[0]==='partnerships'?' door':'')+' fact across views">'+o[1]+'</button>').join('');
+  return '<div class="roombar"><div class="rb1">'+acts+den+'</div><div class="rb2"><span class="lb">OBJECTS</span>'+objs+'</div></div>';
+}
+function vRoom(SRC,S){
+  const A=ST.ui,M=roomModel(SRC);
+  const want3d=A.tier==='3d'&&!R3fail;
+  if(want3d)ensure3D();
+  const use3d=want3d&&R3&&R3.ok;
+  const html='<div class="roomwrap"><div class="roomslot" id="roomslot">'+(want3d&&!use3d?'<p class="dnote" style="padding:12px">Building the Room…</p>':'')+'</div>'+roomBar(SRC)+'</div>';
+  return {html:html,reg:M.reg,tier:use3d?'3D':'2.5D',mount:function(el){
+    const slot=$('#roomslot',el);if(!slot)return;const w=slot.clientWidth,h=slot.clientHeight;if(w<10||h<10)return;
+    if(use3d){slot.appendChild(R3.host);R3.host.style.position='absolute';const asp=w/h,stn=(A.room.station||'overview')==='overview'?overviewFor(asp):(STATIONS[A.room.station]||STATIONS.overview);if(R3.station!==A.room.station||(A.room.station==='overview'&&Math.abs(R3.lastAsp-asp)>.02)){R3.lastAsp=asp;R3.cam.position.set(stn.p[0],stn.p[1],stn.p[2]);R3.ctl.target.set(stn.t[0],stn.t[1],stn.t[2]);R3.ctl.update();R3.station=A.room.station}if(R3.lastW!==w||R3.lastH!==h){R3.renderer.setSize(w,h,false);R3.cam.aspect=w/h;R3.cam.updateProjectionMatrix();R3.lastW=w;R3.lastH=h}paint3D(M);R3.renderer.render(R3.scene,R3.cam)}
+    else{const c=cv(w,h);c.style.cssText='width:100%;height:100%;display:block';c.setAttribute('role','img');c.setAttribute('aria-label','The owner’s Room in 2.5D: a desk with the trade file, the payroll board, four glass rooms. Direct has the same facts and acts in words.');slot.appendChild(c);draw25(c,M,A)}
+  }};
+}
+
+/* ---------------------------------------------------------------- LEDGER (compiled for any Surface with shipments and commitments): a Marey chart and a commitments table */
+function vLedger(SRC,S){
+  const sm=smap(SRC),reg=[],szl=ST._sz.ledger,wide=!!(szl&&szl.w>900);
+  const X=d=>70+(d+16)*13.4,LY={fab:52,port:126,plant:200};
+  const pos=(x,y)=>'left:'+(x/6.4).toFixed(2)+'%;top:'+(y/2.9).toFixed(2)+'%';
+  const B=(p,x,y,cls,inner)=>mkBtn(reg,sm,'Ledger','ledger',p,'tlm '+cls,inner,pos(x,y));
+  let svg='<svg class="tlsvg" viewBox="0 0 640 290" role="img" aria-label="Shipments from the fab to the plant by day. The fire is a vertical cut at day 0. The same facts are in the marks and in Direct.">';
+  [['Kaito fab',LY.fab],['Port',LY.port],['Harrow plant',LY.plant]].forEach(l=>{svg+='<line x1="70" x2="612" y1="'+l[1]+'" y2="'+l[1]+'" stroke="#15140F" stroke-width="1" stroke-dasharray="2 4"/><text x="4" y="'+(l[1]+4)+'" font-family="IBM Plex Mono,DejaVu Sans Mono,monospace" font-size="10.5" fill="#48453B">'+l[0].toUpperCase().slice(0,8)+'</text>'});
+  for(let d=-16;d<=24;d+=8)svg+='<line x1="'+X(d)+'" x2="'+X(d)+'" y1="236" y2="241" stroke="#15140F" stroke-width="1.5"/><text x="'+X(d)+'" y="254" font-family="IBM Plex Mono,DejaVu Sans Mono,monospace" font-size="11" text-anchor="middle" fill="#48453B">'+(d<0?'−'+(-d):d)+'</text>';
+  svg+='<line x1="70" x2="612" y1="236" y2="236" stroke="#15140F" stroke-width="2"/>';
+  HARROW.shipments.forEach(s=>{
+    const pts=[[s.out,LY.fab],[s.portIn,LY.port],[s.portOut,LY.port],[s.in,LY.plant]].map(p=>X(p[0]).toFixed(1)+','+p[1]).join(' ');
+    svg+='<polyline points="'+pts+'" fill="none" stroke="'+(s.past?'#15140F':'#B31E14')+'" stroke-width="'+(s.past?3:2.5)+'" '+(s.past?'':'stroke-dasharray="7 5"')+'/>';
+  });
+  svg+='<rect x="'+X(0)+'" y="30" width="'+(612-X(0))+'" height="206" fill="none" stroke="#15140F" stroke-width="1.2" stroke-dasharray="6 4"/>';
+  svg+='<line x1="'+X(0)+'" x2="'+X(0)+'" y1="24" y2="236" stroke="#B31E14" stroke-width="4"/>';
+  const rw=Math.round(HX.onHand.v/HX.burn.v);
+  svg+='<path d="M'+X(rw)+' '+(LY.plant-9)+' l8 9 l-8 9 l-8 -9 z" fill="#F7F4EB" stroke="#15140F" stroke-width="2.5"/>';
+  svg+='</svg>';
+  let m='';
+  m+=B('event.fire',X(0)-4,12,'ar','Fab fire · '+esc(sm['event.fire'].text));
+  m+=B('ship.1',X(-15.5),34,'','ship 1 · '+esc(sm['ship.1'].text));
+  m+=B('ship.2',X(1),34,'','ship 2 · '+esc(sm['ship.2'].text));
+  m+=B('ship.3',X(8),82,'','ship 3 · '+esc(sm['ship.3'].text));
+  m+=B('clock.lead',X(-14),(LY.fab+LY.port)/2+22,'wrap','lead time · '+esc(sm['clock.lead'].text));
+  m+=B('runway',X(rw)+12,LY.plant+22,'','stock runs out in '+esc(sm['runway'].text));
+  m+=B('restart',X(9),LY.plant-30,'','Kaito restart · '+esc(sm['restart'].text));
+  const rows=HARROW.promises.map(p=>'<tr><td class="nw">Promise '+p.id+'</td><td>'+mkBtn(reg,sm,'Ledger','ledger','promise.'+p.id,'cellbtn',null)+'</td><td>'+mkBtn(reg,sm,'Ledger','ledger','cover.'+p.id,'cellbtn',null)+'</td></tr>').join('');
+  const html='<div class="ledger'+(wide?' wide':'')+'"><div class="mbox" id="mbox"><div class="tlwrap" id="mwrap">'+svg+m+'</div></div><div class="ctable">'+(ST.ui.open.includes('room')?'':'<button type="button" class="btn sm brass" data-act="compile" style="margin:3px 0">Step onto the floor: compile a Room</button>')+'<table><caption class="sr">Customer promises against the runway</caption><thead><tr><th>Commitment</th><th>Due</th><th>Against the runway</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+  return {html:html,reg:reg,mount:function(el){const w=$('#mwrap',el),pb=$('#mbox',el);if(!w||!pb)return;const bw=pb.clientWidth,bh=pb.clientHeight,r=640/290;let ww=Math.min(bw,bh*r),hh=ww/r;w.style.width=ww+'px';w.style.height=hh+'px';w.style.fontSize=Math.max(11.5,ww/640*13)+'px';noteSize('ledger',el.clientWidth,el.clientHeight)}};
+}
+/* ---------------------------------------------------------------- a Room compiled from a schema nobody drew a view for */
+function compileHarrow(SRC){
+  const sm=smap(SRC),reg=[],mk=(p,where)=>{const f=sm[p];if(!f)return null;reg.push({path:p,token:f.token,text:f.text,where:where});return f};
+  const unit=SRC.map.shelf,onHand=HX.onHand.v;
+  const C={unit:unit,n:Math.ceil(onHand/unit),full:Math.floor(onHand/unit),stock:mk('stock.mcu','shelves'),burn:mk('flow.burn','the line'),lead:mk('clock.lead','thread'),src:mk('source.single','thread'),fire:mk('event.fire','fab'),inside:mk('fab.inside','fab'),clock:mk('runway','wall clock'),restart:mk('restart','fab'),papers:HARROW.promises.map(p=>({id:p.id,due:mk('promise.'+p.id,'paper '+p.id),cov:mk('cover.'+p.id,'paper '+p.id)}))};
+  C.reg=reg;C.schema=sha256(JSON.stringify({s:['stock','flow','commitment','clock','place','seat'],lead:HARROW.lead,n:HARROW.promises.length})).slice(0,6);
+  return C;
+}
+function drawHarrowRoom(c,C,A){
+  const g=c.getContext('2d'),W2=c.width,H2=c.height,hl=p=>A.follow&&A.follow.path===p;
+  g.fillStyle='#DCD5C2';g.fillRect(0,0,W2,H2*.62);g.fillStyle='#BFB59B';g.fillRect(0,H2*.62,W2,H2*.38);
+  const plantW=W2*.5;g.strokeStyle=INK;g.lineWidth=4;g.strokeRect(6,H2*.1,plantW,H2*.8);
+  /* stock -> shelves */
+  const perRow=5,rows=Math.ceil(C.n/perRow),sw=(plantW-30)/perRow,sh=Math.min(58,(H2*.34)/rows);
+  for(let i=0;i<C.n;i++){const r=Math.floor(i/perRow),k=i%perRow,x=18+k*sw,y=H2*.2+r*(sh+10);const isFull=i<C.full;
+    tokPaint(g,'AUTHORED',x,y,sw-6,sh);g.fillStyle=INK;for(let l=1;l<3;l++)g.fillRect(x+3,y+l*sh/3,sw-12,2);
+    if(isFull){g.fillStyle=TONE;for(let l=0;l<3;l++)g.fillRect(x+8,y+l*sh/3+4,sw-22,sh/3-9)}else{g.fillStyle=TONE;g.fillRect(x+8,y+4,(sw-22)*.5,sh/3-9)}
+    if(C.stock&&hl(C.stock.path)&&i===0){}}
+  if(C.stock){const w=fitTx(g,C.stock.text,20,H2*.16,16,700,INK,'left',MONO,plantW-30);if(hl(C.stock.path)){g.strokeStyle=BRASS;g.lineWidth=5;g.strokeRect(14,H2*.1,plantW-14,H2*.4)}}
+  tx(g,'shelves drawn from a count, not observed',20,H2*.2+rows*(sh+10)+14,12,500,INK2,'left',MONO);
+  if(C.burn){fitTx(g,'the line uses '+C.burn.text,20,H2*.6,14,600,INK,'left',MONO,plantW-30)}
+  /* wall clock -> runway */
+  if(C.clock){g.beginPath();g.arc(plantW-38,H2*.2,30,0,7);g.fillStyle=TONE;g.fill();g.strokeStyle=INK;g.lineWidth=3;g.stroke();fitTx(g,C.clock.text.replace('about ',''),plantW-38,H2*.2+5,14,700,INK,'center',MONO,52);if(hl(C.clock.path)){g.strokeStyle=BRASS;g.lineWidth=5;g.beginPath();g.arc(plantW-38,H2*.2,36,0,7);g.stroke()}}
+  /* commitments -> papers on a desk */
+  g.fillStyle='#A9814F';g.fillRect(14,H2*.7,plantW-16,H2*.16);
+  C.papers.forEach((p,i)=>{const w=(plantW-40)/5,x=22+i*w,y=H2*.72;tokPaint(g,p.cov&&p.cov.text==='covered by stock on hand'?'COMPUTED':'UNKNOWN',x,y,w-8,H2*.11);fitTx(g,'P'+p.id,x+(w-8)/2,y+16,13,700,INK,'center',MONO,w-12);if(p.due)fitTx(g,p.due.text.replace('due ',''),x+(w-8)/2,y+H2*.11-8,11,600,INK,'center',MONO,w-12)});
+  /* lead time -> distance; single source -> one thread; the supplier's fab -> a covered building */
+  const px=6+plantW,fabX=W2-W2*.2,fy=H2*.5;
+  g.strokeStyle=INK;g.lineWidth=3;g.setLineDash([]);g.beginPath();g.moveTo(px,fy);g.lineTo(fabX,fy);g.stroke();
+  g.fillStyle=INK;g.fillRect(px-3,fy-8,6,16);
+  if(C.lead)fitTx(g,C.lead.text,(px+fabX)/2,fy-12,13,600,INK,'center',MONO,fabX-px-6);
+  if(C.src)fitTx(g,'Kaito is '+C.src.text,(px+fabX)/2,fy+24,12,500,INK2,'center',MONO,fabX-px);
+  g.fillStyle='#6F6A5C';g.fillRect(fabX,H2*.22,W2*.18,H2*.56);g.strokeStyle=INK;g.lineWidth=4;g.setLineDash([9,6]);g.strokeRect(fabX,H2*.22,W2*.18,H2*.56);g.setLineDash([]);
+  g.strokeStyle='rgba(247,244,235,.35)';g.lineWidth=2;for(let i=-H2;i<W2*.18;i+=14){g.beginPath();g.moveTo(fabX+i,H2*.78);g.lineTo(fabX+i+H2*.56,H2*.22);g.stroke()}
+  if(C.inside){const w=W2*.18;g.fillStyle=PAPER;g.fillRect(fabX+6,H2*.44,w-12,44);g.setLineDash([6,4]);g.strokeStyle=INK;g.lineWidth=2;g.strokeRect(fabX+6,H2*.44,w-12,44);g.setLineDash([]);fitTx(g,C.inside.text,fabX+w/2,H2*.44+27,12,700,INK,'center',MONO,w-20)}
+  if(C.fire){g.fillStyle=RED;g.fillRect(fabX+W2*.09-4,H2*.22-26,8,26);fitTx(g,C.fire.text,fabX+W2*.09,H2*.22-32,12,700,RED,'center',MONO,W2*.2)}
+  tx(g,'no people drawn: nothing here records who is where',10,H2-10,11,500,INK2,'left',MONO);
+}
+function vRoomHarrow(SRC,S){
+  const A=ST.ui,C=compileHarrow(SRC);
+  const dec=['stock → shelves: one shelf per '+C.unit+' MCUs (drawn from a count, not observed)','lead time → distance: '+HARROW.lead+' days of thread','single source → one thread','the supplier’s fab → a covered building: no view inside','commitments → papers on a desk','people → none: no presence truth exists'];
+  const html='<div class="roomwrap"><div class="stip t"></div><div class="stip b"></div><div class="stip l"></div><div class="stip r"></div><div class="roomslot" id="roomslot"></div><div class="compiler" data-cap="PROPOSED (deterministic) · arbitrary untyped systems: SPECULATIVE" data-ai="NO AI REQUIRED · a small model may propose types"><b>WHAT THE COMPILER DECIDED</b> <span class="dnote" style="color:var(--ink)">COMPILED from schema '+C.schema+', no kit, nobody drew this.</span><ul>'+dec.map(d=>'<li>'+esc(d)+'</li>').join('')+'</ul><div class="dc"><span class="lb">EDIT THE SHELF MAPPING</span><button type="button" class="btn sm" data-act="remap" data-v="250" aria-pressed="'+(C.unit===250)+'">1 shelf = 250</button><button type="button" class="btn sm" data-act="remap" data-v="500" aria-pressed="'+(C.unit===500)+'">1 shelf = 500</button></div></div></div>';
+  return {html:html,reg:C.reg,tier:'2.5D',mount:function(el){const slot=$('#roomslot',el);if(!slot)return;const w=slot.clientWidth,h=slot.clientHeight;if(w<10||h<10)return;const c=cv(w,h);c.style.cssText='width:100%;height:100%;display:block';c.setAttribute('role','img');c.setAttribute('aria-label','A facility Room compiled from the Harrow Medical schema: shelves from the stock count, one thread to a covered building. Direct has the same facts in words.');slot.appendChild(c);drawHarrowRoom(c,C,A)}};
+}
+
+const VD={
+  room:{name:'Room',render:(SRC,S)=>SRC.sys==='harrow'?vRoomHarrow(SRC,S):vRoom(SRC,S)},
+  timeline:{name:'Timeline',render:vTimeline},
+  table:{name:'Table',render:vTable},
+  voice:{name:'Voice',render:vVoice},
+  ledger:{name:'Ledger',render:(SRC,S)=>vLedger(SRC,S)}
+};
+/* ---------------------------------------------------------------- verification: what each view was told vs the record (fails closed) */
+function mismatches(reg,src,S,sm){
+  const out=[];
+  if(src.n!==S.n||src.h4!==S.h4)out.push({path:'frame',shown:'act '+src.n+' · '+src.h4,record:'act '+S.n+' · '+S.h4});
+  const seen={};
+  reg.forEach(b=>{const f=sm[b.path];const k=b.path+'|'+b.text+'|'+b.token;if(seen[k])return;seen[k]=1;
+    if(!f)out.push({path:b.path,shown:b.text,record:null});
+    else if(f.token!==b.token||f.text!==b.text)out.push({path:b.path,shown:b.text,shownToken:b.token,record:f.text,recordToken:f.token})});
+  return out;
+}
+function failCover(id,src,S,mism){
+  const m=mism.find(x=>x.path!=='frame')||mism[0];
+  const say=m.path==='frame'?VN[id]+' is showing '+m.shown+'; the record is at '+m.record+'.':VN[id]+' was told '+(m.path)+' is '+m.shown+(m.shownToken?' ('+TK[m.shownToken].lead+')':'')+'. The record says '+m.record+(m.recordToken?' ('+TK[m.recordToken].lead+')':'')+'.';
+  return '<div class="failcover" role="group" aria-label="'+VN[id]+' failed closed"><h4>This view stopped matching the record at act '+S.n+'.</h4><p>'+esc(say)+'</p><p>It is not drawing numbers it cannot check. <b>Direct has the record.</b></p><div class="dc"><button type="button" class="btn" data-act="rebind" data-view="'+id+'">Rebind '+VN[id]+' to the record</button><button type="button" class="btn brass" data-act="agree">Do these agree?</button></div></div>';
+}
+/* ---------------------------------------------------------------- the Concordance check, computed from every open view's ShownSet */
+function whereOf(id,path){const r=(regs[id]||[]).find(b=>b.path===path);return r?r.where:null}
+function joinNames(a){return a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1]}
+function agreeCheck(S){
+  const sm=smap(S),A=ST.ui;
+  const ids=A.open.filter(id=>regs[id]);
+  const live=ids.filter(id=>!failed[id]);
+  const byPath={};
+  live.forEach(id=>regs[id].forEach(b=>{(byPath[b.path]=byPath[b.path]||{})[id]=b}));
+  let agree=0;const only={};live.forEach(id=>only[id]=[]);const contra=[];
+  Object.keys(byPath).forEach(p=>{
+    const vs=Object.keys(byPath[p]),f=sm[p];
+    vs.forEach(id=>{const b=byPath[p][id];if(!f||f.token!==b.token||f.text!==b.text)contra.push({id:id,path:p,shown:b.text,record:f?f.text:null})});
+    if(vs.length>=2)agree++;else only[vs[0]].push(p);
+  });
+  ids.filter(id=>failed[id]).forEach(id=>failed[id].mism.forEach(m=>contra.push({id:id,path:m.path,shown:m.shown,record:m.record,failed:true})));
+  const nm=live.map(id=>VN[id]);
+  let head;
+  if(live.length>=2)head=joinNames(nm)+' agree on '+agree+' facts.';
+  else if(live.length===1){const n=new Set(regs[live[0]].map(b=>b.path)).size;head=nm[0]+' agrees with Direct on '+n+' facts.'}
+  else head='No open view is live to check.';
+  const onlys=[];
+  if(live.length>=2)live.forEach(id=>{if(!only[id].length)return;const g={};only[id].forEach(p=>{const c=sm[p].cat.toLowerCase();g[c]=(g[c]||0)+1});onlys.push('Only '+VN[id]+': '+Object.keys(g).map(c=>c+' ('+g[c]+')').join(', ')+'.')});
+  let cx;
+  if(!contra.length)cx='Contradictions: none.';
+  else{const seen={};const items=contra.filter(c=>{const k=c.id+c.path;if(seen[k])return false;seen[k]=1;return true}).map(c=>c.path==='frame'?VN[c.id]+' shows '+c.shown+', the record is at '+c.record:VN[c.id]+' says '+c.path+' is '+c.shown+'; Direct says '+c.record);
+    cx='Contradictions: '+items.length+'. '+items.join('. ')+'.'+ids.filter(id=>failed[id]).map(id=>' '+VN[id]+' stopped matching the record at act '+S.n+' and is covered.').join('')}
+  return {head:head,onlys:onlys,cx:cx,bad:contra.length>0,text:[head].concat(onlys,[cx]).join(' ')};
+}
+/* ---------------------------------------------------------------- downshift parity (a dry run of every view in the rung) */
+const VIEW_ACTS={room:['sign:gsw','decline:gsw','sign:den'],timeline:['sign:gsw'],table:['sign:gsw','decline:gsw','sign:den','decline:den'],voice:['sign:gsw','decline:gsw'],direct:['sign:gsw','decline:gsw','sign:den','decline:den']};
+const ALL_ACTS=['sign:gsw','decline:gsw','sign:den','decline:den'];
+const RUNG={desktop:{name:'Desktop · Room 3D',shed:'nothing yet'},chromebook:{name:'Chromebook · Room 2.5D',shed:'the camera and depth'},phone:{name:'Phone · Table + Direct',shed:'the Room, the chart, spatial gestalt'},voice:{name:'Voice · Direct spoken',shed:'everything drawn; order and words carry it'}};
+function rungParity(S){
+  const A=ST.ui;const ids=A.open.filter(id=>VD[id]&&id!=='ledger').concat(['direct']);
+  const reach=new Set(),hand=new Set();
+  ids.forEach(id=>{(VIEW_ACTS[id]||[]).forEach(a=>reach.add(a));ALL_ACTS.filter(a=>!(VIEW_ACTS[id]||[]).includes(a)).forEach(a=>hand.add(a))});
+  const inPlace=ALL_ACTS.filter(a=>ids.some(id=>id!=='direct'&&(VIEW_ACTS[id]||[]).includes(a)));
+  /* dry run: hypothetical refusal folded on top of the current state, rendered by every view of the rung */
+  const hyp=applyE(S,{kind:'refused',file:'den',at:S.n+1,rule:'World hard limit',text:'Payroll may not go above '+M(HARD)+'; this file makes it '+M(S.payroll+DEN_SALARY)+'.',allow:'x',after:S.payroll+DEN_SALARY});stamp(hyp);hyp.refusal.allow=checkRule({payroll:HARD-1},'den')?checkRule({payroll:HARD-1},'den').allow:'x';
+  const want=smap(hyp)['refusal.last'];let okN=0,tot=0;
+  ids.filter(id=>id!=='direct').forEach(id=>{tot++;try{const o=id==='room'?{reg:roomMarks(hyp)}:VD[id].render(hyp,hyp);if(o.reg.some(b=>b.path==='refusal.last'&&b.text===want.text&&b.token===want.token))okN++}catch(_){}});
+  tot++;try{const dd=vDirect(hyp);if(dd.reg.some(b=>b.path==='refusal.last'&&b.text===want.text&&b.token===want.token))okN++}catch(_){}
+  const toks=new Set();ids.forEach(id=>(regs[id]||[]).forEach(b=>toks.add(b.token)));
+  return {ids:ids,acts:ALL_ACTS.length,reach:reach.size,inPlace:inPlace.length,ref:okN,refOf:tot,tokens:toks.size,matters:mattersOf(S).length};
+}
+/* ---------------------------------------------------------------- chrome */
+function addrHTML(S){
+  const A=ST.ui,vs=A.open.map(v=>VN[v]).join(' + ')+(A.direct==='collapsed'?'':' · Direct '+(A.direct==='lead'?'leads':'open'));
+  const d='<span class="dot">·</span>';
+  if(S.sys==='harrow')return '<span class="seg">Harrow Medical</span>'+d+'<span class="seg">day 0 · fire at 06:10</span>'+d+'<span class="seg">record</span>'+d+'<span class="seg">procurement seat</span>'+d+'<button type="button" class="seg" data-act="why" data-v="'+planFor(A,ST.sys).ask+'" aria-label="View: '+vs+'. Open the Plan">view: '+vs+'</button>';
+  return '<span class="seg">Boston · Year Two</span>'+d+'<span class="seg">Week 6</span>'+d+(ST.active==='branch'?'<span class="seg fork">Your branch</span>':'<span class="seg">record</span>')+d+'<span class="seg">GM seat</span>'+d+'<button type="button" class="seg" data-act="why" data-v="'+planFor(A,ST.sys).ask+'" aria-label="View: '+vs+'. Open the Plan">view: '+vs+'</button>';
+}
+function planHTML(S){
+  const A=ST.ui,P=planFor(A,ST.sys);
+  const ch=A.open.map((v,i)=>(i?'':'lead: ')+VN[v]).join(' · ');
+  const chips='<span>'+(P.lead==='direct'?'lead: Direct':ch)+'</span><span>Direct: '+(A.direct==='collapsed'?'collapsed':A.direct==='lead'?'leads':'open')+'</span>';
+  let why=P.why;
+  if(A.pin)why='Pinned on this device: '+A.pin.map(v=>VN[v]).join(' and ')+'. The router does not change views under your hands.';
+  else if(A.quiet)why='You chose this. The router is quiet until the next moment.';
+  const askName=VN[P.ask];
+  return '<span class="tag">PLAN</span><span class="chips">'+chips+'</span><span class="why">'+esc(why)+'</span><span class="acts"><button type="button" class="btn sm" data-act="why" data-v="'+P.ask+'" aria-expanded="'+(!!(A.reasons))+'">Why not the '+askName+'?</button><button type="button" class="btn sm" data-act="pin" aria-pressed="'+(!!A.pin)+'">Pin on this device</button><button type="button" class="btn sm" data-act="reset">Reset</button></span>';
+}
+function reasonsHTML(S){
+  const A=ST.ui;if(!A.reasons)return '';
+  const P=planFor(A,ST.sys),id=A.reasons.about,K=KIND[id];
+  const ids=(ST.sys==='harrow'?['ledger','room','direct']:['room','timeline','table','voice','direct']);
+  const why=(v)=>{
+    if(v===id)return 'You asked. ';return '';
+  };
+  const rows=ids.map(v=>{const k=KIND[v]||(v==='ledger'?{shows:'shipments over time, a fire as a cut',cant:'who, where'}:null);const open=A.open.includes(v);
+    return '<div class="row"><b>'+VN[v]+(open?' (open)':'')+'</b><span>shows: '+esc(k.shows)+'</span><span>can’t show: '+esc(k.cant)+'</span><span>'+(v==='direct'?'<button type="button" class="btn sm" data-act="dmode" data-v="open">Open</button>':'<button type="button" class="btn sm" data-act="swap" data-v="'+v+'" aria-label="Swap in the '+VN[v]+'">Swap in</button> <button type="button" class="btn sm" data-act="pair" data-v="'+v+'" aria-label="Pair the '+VN[v]+'">Pair</button>')+'</span></div>'}).join('');
+  const lead=A.who==='operator'?'you are comparing payroll with a line':A.who==='newcomer'?'you arrived with one file and no history here':'';
+  return '<h3>WHY NOT THE '+VN[id].toUpperCase()+'? · '+esc(P.lead==='direct'?'Direct leads because you declared it':'the router chose '+VN[P.lead]+' because '+lead)+'</h3>'+rows+'<div class="dc"><button type="button" class="btn sm" data-act="why" data-v="'+id+'">Close</button></div>';
+}
+function whyChain(S,path){
+  const sm=smap(S),L=[];
+  if(S.sys==='harrow'){
+    if(/^(runway|stock|flow)/.test(path))L.push({n:'ev',t:'Stock '+sm['stock.mcu'].text+' ÷ '+sm['flow.burn'].text+' = '+sm['runway'].text+' of runway (Computed from two Authored numbers)'});
+    if(/^(ship|clock\.lead|event)/.test(path))L.push({n:'ev',t:sm['event.fire'].text+' cut every shipment planned after day 0; the fab’s restart date is Unknown'});
+    if(/^(promise|cover)/.test(path))L.push({n:'ev',t:'A promise is covered only if it falls due inside the runway of '+sm['runway'].text});
+    if(!L.length)L.push({n:'ev',t:'An Authored fact in the fictional fixture; nothing upstream of it in this record'});
+    return L;
+  }
+  if(/^(payroll\.|roster\.)/.test(path)&&!/^payroll\.week\.(0|1)$/.test(path)){
+    const b0=base();let p=b0.payroll;
+    L.push({n:'41',t:'Checkpoint: payroll '+M(b0.payroll)+' = start of Year Two '+M(S.hist[0].p)+' (Authored, illustrative) + the Week 1 minimum signing $'+((S.hist[1].p-S.hist[0].p)/1e6).toFixed(3)+'M (Recorded in the fixture)'});
+    S.ticks.forEach(t=>{const d=t.kind==='sign'?delta(FILES[t.file]):0;L.push({n:String(t.n),t:FILES[t.file].name+' '+(t.kind==='sign'?'signed':'declined')+' in '+(VN[S.files[t.file].via]||S.files[t.file].via)+': payroll '+M(p)+(t.kind==='sign'?' → '+M(p+d):' unchanged')});p+=d});
+    if(!S.ticks.length)L.push({n:'—',t:'No act since the checkpoint: nothing has moved this number yet'});
+    L.push({n:'rule',t:'World rule (Authored): tax line '+M(LINE)+', '+sm['rule.taxRule'].text+'. Payroll '+M(S.payroll)+' is '+sm['payroll.vsLine'].text+' the line.'});
+  }else if(/^file\./.test(path)){const id=path.split('.')[1],f=S.files[id];L.push({n:f.act?String(f.act):'—',t:f.act?FILES[id].name+' '+f.status+' in '+(VN[f.via]||f.via)+'; the record shows it at act '+f.act:FILES[id].name+' is still open: no act has touched it'})}
+  else if(/^dept\./.test(path)){L.push({n:'Y1',t:'Year One: Business funded over Basketball Ops (Recorded); Analytics and Scouting have been dark since'})}
+  else L.push({n:'rule',t:'An Authored World rule or calendar; no act in the record made it'});
+  return L;
+}
+function noticesHTML(S){
+  const A=ST.ui,o=[];
+  if(S.sys==='boston'&&ST.active==='branch')o.push('<div class="notice fork" style="background:var(--greenbg);border-bottom-color:var(--green)"><b style="color:var(--green)">YOUR BRANCH</b><span class="grow">diverged Week 6 · act 41 · '+foldLog([]).h4+'. Assumptions: World rules unchanged (authored); nothing after act 41 carries over from the record; Weeks 7 to 9 stay sealed.</span><button type="button" class="btn sm" data-act="compare" aria-pressed="'+A.compare+'">Compare with the record</button><button type="button" class="btn sm" data-act="return">Return to the record</button></div>');
+  if(A.follow){
+    const f=smap(S)[A.follow.path];
+    if(f){const ws=[];[A.open.concat('direct')].forEach(a=>a.forEach(id=>{if(id===A.follow.from)return;const w=id==='direct'?'Direct':whereOf(id,A.follow.path);if(w&&!ws.includes(w))ws.push(w)}));
+      const closed=A.open.length&&['room','timeline','table'].filter(v=>!A.open.includes(v)&&ST.sys==='boston');
+      o.push('<div class="notice"><b>FOLLOWING</b><span class="grow"><span class="in" data-t="'+f.token+'">'+esc(f.text)+'</span> ('+esc(f.path)+') · <b>also in:</b> '+(ws.length?esc(ws.join(' · ')):'nowhere else that is open')+'</span><button type="button" class="btn sm" data-act="whyfact" aria-pressed="'+!!A.whyOpen+'">Why?</button><button type="button" class="btn sm" data-act="unfollow">Stop following</button></div>');if(A.whyOpen)o.push('<div class="notice" style="align-items:flex-start;flex-direction:column;gap:1px"><b>WHY · traced to the record, not prose</b>'+whyChain(S,A.follow.path).map(l=>'<span><span class="actno">'+l.n+'</span> '+esc(l.t)+'</span>').join('')+'</div>')}
+  }
+  if(A.agree){const r=agreeCheck(S);o.push('<div class="notice tkt" role="group" aria-label="Agreement check"><b>CHECKED · act '+S.n+' · '+S.h4+'</b><span class="grow"><span class="'+(r.bad?'no':'')+'">'+esc(r.text)+'</span> <span class="dnote" style="color:var(--ink)">Each mark was compared with the record, path by path and token by token. This shows each view was told the same thing; it can’t show the pixels are right.</span></span><button type="button" class="btn sm" data-act="closeagree">Close</button></div>')}
+  if(A.offer)o.push('<div class="notice"><b>OFFER</b><span class="grow">'+esc(A.offer.text)+'</span><button type="button" class="btn sm" data-act="takeoffer">Pair '+VN[A.offer.view]+'</button><button type="button" class="btn sm" data-act="dismiss">Not now</button></div>');
+  if(S.sys==='boston'&&A.device!=='desktop'){
+    const q=rungParity(S),R=RUNG[A.device];
+    o.push('<div class="notice dn" data-cap="PROPOSED" data-ai="NO AI REQUIRED"><b>'+esc(R.name.toUpperCase())+'</b><span class="grow"><b>CARRIED</b> '+q.matters+' open matters · '+q.reach+' of '+q.acts+' acts ('+(q.acts-q.inPlace)+' by hand-off to Direct) · refusals with rule names, same words, '+q.ref+' of '+q.refOf+' views (dry run) · '+q.tokens+' truth kinds · act '+S.n+' · '+S.h4+'. <b>SHED</b> '+esc(R.shed)+'. Authority and truth never shed.</span></div>');
+  }
+  if(A.tierNote)o.push('<div class="notice dn"><b>STEPPED DOWN</b><span class="grow">'+esc(A.tierNote)+'</span></div>');
+  return o.join('');
+}
+function rigHTML(){
+  const A=ST.ui,pb=(act,v,label,on)=>'<button type="button" class="btn" data-act="'+act+'"'+(v?' data-v="'+v+'"':'')+' aria-pressed="'+(!!on)+'">'+label+'</button>';
+  return '<div class="g"><span class="gl">ARRIVE AS</span>'+pb('arrive','newcomer','Newcomer',A.who==='newcomer')+pb('arrive','operator','Operator',A.who==='operator')+'</div>'+
+   '<div class="g"><span class="gl">DEVICE</span>'+pb('device','desktop','Desktop 3D',A.device==='desktop')+pb('device','chromebook','Chromebook',A.device==='chromebook')+pb('device','phone','Phone',A.device==='phone')+pb('device','voice','Voice',A.device==='voice')+'</div>'+
+   '<div class="g"><span class="gl">SYSTEM</span>'+pb('sys','boston','Boston · Year Two',ST.sys==='boston')+pb('sys','harrow','Harrow Medical',ST.sys==='harrow')+'</div>'+
+   '<div class="g" data-cap="PROPOSED" data-ai="NO AI REQUIRED"><span class="gl">LAYERS</span>'+pb('how','','How do we know?',A.how)+pb('real','','What’s real?',A.real)+'</div>'+
+   (ST.sys==='boston'?'<div class="g"><span class="gl">BUILDER</span>'+pb('inject','','Inject a stale binding',!!A.inject)+pb('restart','','Start over at act 41',false)+'</div>':'');
+}
+function cmpLabel(s){let x=s.split('{t}');let l=(x[0]||'').trim()||(x[1]||'').trim();l=l.replace(/[,:]$/,'').trim();return l?l[0].toUpperCase()+l.slice(1):s}
+function compareHTML(){
+  const Sr=foldLog(ST.hist.record),Sb=foldLog(ST.hist.branch||[]);
+  const mr=smap(Sr),mb=smap(Sb);
+  const paths=[];surf(Sr).concat(surf(Sb)).forEach(f=>{if(!paths.includes(f.path))paths.push(f.path)});
+  const diff=paths.filter(p=>!(mr[p]&&mb[p]&&mr[p].text===mb[p].text&&mr[p].token===mb[p].token));
+  const keys=['payroll.total','payroll.vsLine','payroll.tax','file.gsw.status'];
+  const rows=(diff.length?diff:keys).map(p=>{const a=mr[p],b=mb[p];return '<tr><td>'+esc(cmpLabel((a||b).say||p))+'</td><td>'+(a?'<span class="mk" data-t="'+a.token+'">'+esc(a.text)+'</span>':'<span class="mk" data-t="UNKNOWN">not in the record</span>')+'</td><td>'+(b?'<span class="mk" data-t="'+b.token+'">'+esc(b.text)+'</span>':'<span class="mk" data-t="UNKNOWN">not in the branch</span>')+'</td></tr>'}).join('');
+  return '<section class="pane" style="grid-column:1/-1"><div class="ph"><span class="nm">COMPARE</span><span class="org">branch beside the record</span><span class="fr">record act '+Sr.n+' · '+Sr.h4+'  |  branch act '+Sb.n+' · '+Sb.h4+'</span></div><div class="pb"><div class="tbl"><table><caption class="sr">What differs between the record and your branch</caption><thead><tr><th>What differs</th><th style="border-bottom-color:var(--ink)">The record · act '+Sr.n+'</th><th style="border-bottom-color:var(--green);color:var(--green)">Your branch · act '+Sb.n+'</th></tr></thead><tbody>'+rows+'</tbody></table><p class="dnote">'+(diff.length?diff.length+' facts differ. The record was not changed by anything you did in the branch.':'Nothing differs yet: the branch is still identical to the record at act 41. Act in the branch, then compare.')+' Weeks 7 to 9 are sealed in both.</p><div class="dc"><button type="button" class="btn" data-act="return">Return to the record</button><button type="button" class="btn" data-act="compare">Back to the branch</button></div></div></div></section>';
+}
+function fkOf(el){const d=el.dataset;return el.id?'#'+el.id:['b',d.act,d.file,d.view,d.path,d.id,d.v].join('|')}
+function howSheet(reg,sm){
+  const seen={},rows=reg.filter(b=>!seen[b.path]&&(seen[b.path]=1)).map(b=>{const f=sm[b.path]||{};return '<div><span class="k"><span class="sw" data-t="'+b.token+'"></span>'+b.token+'</span><span>'+esc(b.text)+'</span><span class="dnote">'+esc(f.src||'')+(f.asOf?' · as of '+f.asOf:'')+(f.note?' · '+esc(f.note):'')+'</span></div>'}).join('');
+  return '<div class="howsheet"><h5>HOW DO WE KNOW · '+Object.keys(seen).length+' marks in this view</h5>'+rows+'</div>';
+}
+const CAPS={room:['PROPOSED · seed REAL (unmerged Room)','NO AI REQUIRED'],timeline:['PROPOSED','NO AI REQUIRED'],table:['PROPOSED','NO AI REQUIRED'],voice:['PROPOSED','SMALL / CHEAP MODEL (on-device speech)'],ledger:['PROPOSED','NO AI REQUIRED']};
+/* ---------------------------------------------------------------- the one render: every open view redraws from state in the same frame */
+function render(){
+  const S=cur(),A=ST.ui,sm=smap(S);FRAME++;
+  const active=document.activeElement,fk=active&&active.closest&&active.closest('button[data-act]')?fkOf(active.closest('button[data-act]')):null;
+  document.body.classList.toggle('real',A.real);
+  const B=$('#board');
+  B.className=(A.direct==='lead'?'lead ':'')+(S.sys==='boston'&&ST.active==='branch'?'fork ':'')+(A.device==='phone'?'phone ':'')+(A.device==='voice'?'voicedev ':'');
+  $('#addr').innerHTML=addrHTML(S);
+  const lv=$('#lever');lv.innerHTML='<b>ACT '+S.n+'</b><i>'+S.h4+' · '+(S.sys==='boston'?(ST.active==='branch'?'branch':'record'):'record')+'</i>';lv.setAttribute('data-cap','REAL CURRENT (lockstep fold, prototype-grade)');lv.setAttribute('data-ai','NO AI REQUIRED');
+  $('#forkBtn').textContent=ST.active==='branch'?'Return to the record':'What if…';$('#forkBtn').dataset.act=ST.active==='branch'?'return':'fork';$('#forkBtn').hidden=S.sys!=='boston';
+  $('#declare').setAttribute('aria-pressed',A.sr);
+  $('#plan').innerHTML=planHTML(S);
+  const rs=$('#reasons');rs.innerHTML=reasonsHTML(S);rs.hidden=!A.reasons;
+  regs={};const panes=$('#panes');panes.innerHTML='';panes.className='n'+(A.compare?1:A.open.length);const PW={room:1.05,table:.95,timeline:1.35,voice:.9,ledger:1.3};panes.style.gridTemplateColumns=(A.compare?'minmax(0,1fr)':A.open.map(id=>'minmax(0,'+(A.open.length===1?1:PW[id]||1)+'fr)').join(' '));
+  const mounts=[];
+  if(A.compare&&ST.active==='branch'){panes.innerHTML=compareHTML()}
+  else A.open.forEach(id=>{
+    const src=(A.inject===id)?staleOf(S):S;
+    const out=VD[id].render(src,S);regs[id]=out.reg;
+    const mism=mismatches(out.reg,src,S,sm);
+    if(mism.length)failed[id]={at:S.n,mism:mism,reg:out.reg};else delete failed[id];
+    const cv=coversFor(id,src,out.reg),cp=CAPS[id]||CAPS.timeline;
+    const html='<section class="pane" data-view="'+id+'" data-cap="'+cp[0]+'" data-ai="'+cp[1]+'" aria-label="'+VN[id]+'"><div class="ph"><span class="nm">'+VN[id].toUpperCase()+'</span><span class="org">'+ORIGIN[id]+(id==='room'&&out.tier?' · '+out.tier:'')+(id==='ledger'?'':'')+'</span><span class="fr" title="'+esc(SYS[S.sys].name+' · '+(S.sys==='boston'?'Week 6':'day 0')+' · act '+src.n+' · '+src.h4)+'">'+(S.sys==='boston'?'Week 6':'day 0')+' · act '+src.n+' · '+src.h4+'</span><button type="button" class="x" data-act="close" data-v="'+id+'" aria-label="Close '+VN[id]+'">×</button></div><div class="pb" id="pb-'+id+'">'+(mism.length?failCover(id,src,S,mism):out.html)+(A.how&&!mism.length?howSheet(out.reg,sm):'')+'</div>'+(cv.length?'<div class="pcov" data-cap="PROPOSED (arena cover: REAL, unmerged)" data-ai="NO AI REQUIRED"><span class="lb">CANNOT SHOW</span>'+cv.map(c=>'<span>'+esc(c.words)+' <button type="button" data-act="cover" data-view="'+id+'" data-id="'+c.id+'">'+esc(c.hand)+'</button></span>').join('')+'</div>':'')+'</section>';
+    panes.insertAdjacentHTML('beforeend',html);
+    if(!mism.length&&out.mount)mounts.push([id,out.mount]);
+  });
+  /* Direct: the oracle. Always compiled, even when collapsed. */
+  const dd=vDirect(S);regs.direct=dd.reg;
+  const D=$('#direct');D.className=A.direct==='collapsed'?'collapsed':A.direct==='lead'?'open lead':'open';
+  D.setAttribute('data-cap','PROPOSED (compiled from the Surface)');D.setAttribute('data-ai','NO AI REQUIRED');
+  $('#mcount').textContent=sm['matters.open']?sm['matters.open'].text:'';
+  const rc=receiptText(S);if($('#receipt').textContent!==rc)$('#receipt').textContent=rc;
+  $('#dctl').innerHTML='<span class="fr" style="border:1.5px solid var(--ink);padding:0 6px;font:600 11.5px var(--mono);margin-right:6px;background:var(--card)">'+(S.sys==='boston'?'Week 6':'day 0')+' · act '+S.n+' · '+S.h4+' · compiled</span>'+(A.direct==='collapsed'?'<button type="button" class="btn sm" data-act="dmode" data-v="open">Open Direct</button>':(A.direct==='lead'?'<button type="button" class="btn sm" data-act="dmode" data-v="open">Dock</button>':'<button type="button" class="btn sm" data-act="dmode" data-v="collapsed">Collapse</button><button type="button" class="btn sm" data-act="dmode" data-v="lead">Lead</button>'));
+  $('#dbody').innerHTML=A.direct==='collapsed'?'':dd.html;
+  /* DOM order: Direct first when it leads (screen-reader order), else after the panes */
+  if(A.direct==='lead')B.insertBefore(D,panes);else if(D.previousElementSibling!==panes)B.appendChild(D);
+  $('#notices').innerHTML=noticesHTML(S);$('#notices').setAttribute('aria-live','polite');
+  $('#rig').innerHTML=rigHTML();
+  mounts.forEach(m=>{const el=$('#pb-'+m[0]);if(el)m[1](el)});
+  /* focus: keep the user's place; a followed fact takes Direct's focus */
+  if(ST._focusFollow){ST._focusFollow=false;const li=$('#dbody li[data-p="'+(A.follow&&A.follow.path)+'"]');if(li){li.focus();try{li.scrollIntoView({block:'nearest'})}catch(_){}}}
+  else if(fk){const el=$$('button[data-act]').concat($$('#declare')).find(e=>fkOf(e)===fk);if(el)el.focus()}
+  document.body.setAttribute('data-frame',FRAME);
+  if(ST._again&&!ST._re){ST._again=false;ST._re=true;try{render()}finally{ST._re=false}}
+}
+/* ---------------------------------------------------------------- events */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button[data-act]');if(!b||b.disabled)return;
+  const d=b.dataset;
+  if(d.act==='follow'){const was=ST.ui.follow&&ST.ui.follow.path===d.path;act('follow',{path:d.path,view:d.view});if(!was){ST._focusFollow=true;render()}return}
+  act(d.act,{file:d.file,view:d.view,path:d.path,id:d.id,v:d.v,via:d.via});
+});
+document.addEventListener('keydown',e=>{
+  if(e.altKey||e.ctrlKey||e.metaKey)return;const t=e.target;if(t&&/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))return;
+  if((e.key==='r'||e.key==='R')&&ST.sys==='boston'){act('pair',{v:'room'})}
+  else if(e.key==='Escape'&&ST.ui.reasons){act('why',{v:ST.ui.reasons.about})}
+});
+let _rt;window.addEventListener('resize',()=>{clearTimeout(_rt);_rt=setTimeout(render,120)});
+try{if(localStorage.getItem('conc.sr')==='1')ST.ui.sr=true}catch(_){}
+applyPlan();
+window.CONCORDANCE={ST:ST,act:act,cur:cur,agreeCheck:agreeCheck};
+render();
+})();
+</script>
+</body>
+</html>
+
+
+

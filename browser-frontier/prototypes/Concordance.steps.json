@@ -1,0 +1,223 @@
+[
+ {
+  "wait": 2200
+ },
+ {
+  "shot": "01-newcomer-plan-room-plus-table-direct-one-line"
+ },
+ {
+  "click": "Operator",
+  "exact": true
+ },
+ {
+  "shot": "02a-operator-plan-timeline-table-direct-open"
+ },
+ {
+  "press": "r"
+ },
+ {
+  "shot": "02b-operator-room-one-key-away"
+ },
+ {
+  "click": "Use Direct for screen readers and keyboard"
+ },
+ {
+  "shot": "02c-screen-reader-declared-direct-leads"
+ },
+ {
+  "click": "Use Direct for screen readers and keyboard"
+ },
+ {
+  "click": "Newcomer",
+  "exact": true
+ },
+ {
+  "click": "Why not the Timeline?"
+ },
+ {
+  "shot": "03a-override-why-not-the-timeline"
+ },
+ {
+  "click": "Pair the Timeline"
+ },
+ {
+  "click": "Pin on this device"
+ },
+ {
+  "click": "Open Direct"
+ },
+ {
+  "shot": "03b-override-paired-pinned-address-rewritten"
+ },
+ {
+  "click": "Sign the Golden State file as act 42, from the Room",
+  "after": 1300
+ },
+ {
+  "shot": "04-act-42-lands-in-every-open-view-same-frame"
+ },
+ {
+  "click": "Follow $22.8M over (payroll.vsLine) across views, from the Timeline",
+  "after": 1000
+ },
+ {
+  "shot": "05-follow-a-fact-across-views"
+ },
+ {
+  "click": "Why?"
+ },
+ {
+  "shot": "05b-why-traced-to-recorded-causes"
+ },
+ {
+  "click": "Stop following"
+ },
+ {
+  "click": "Do these agree?",
+  "nth": 0
+ },
+ {
+  "shot": "06-do-these-agree-computed"
+ },
+ {
+  "click": "Close",
+  "nth": 0
+ },
+ {
+  "click": "Direct has it."
+ },
+ {
+  "shot": "07-covers-and-the-offer-to-pair"
+ },
+ {
+  "click": "Not now"
+ },
+ {
+  "click": "Why not the Timeline?"
+ },
+ {
+  "click": "Pair the Voice"
+ },
+ {
+  "click": "Try the Denver file",
+  "after": 1300
+ },
+ {
+  "shot": "08-refusal-parity-room-timeline-voice-direct"
+ },
+ {
+  "click": "Inject a stale binding"
+ },
+ {
+  "shot": "09a-fail-closed-stale-timeline-becomes-a-cover"
+ },
+ {
+  "click": "Do these agree?",
+  "nth": 0
+ },
+ {
+  "shot": "09b-fail-closed-agreement-check-names-the-mismatch"
+ },
+ {
+  "click": "Rebind Timeline",
+  "nth": 0
+ },
+ {
+  "click": "Close",
+  "nth": 0
+ },
+ {
+  "click": "What if…"
+ },
+ {
+  "click": "Decline the Golden State file, from the Room",
+  "after": 1000
+ },
+ {
+  "click": "Compare with the record"
+ },
+ {
+  "shot": "10-what-if-fork-compare-beside-the-record"
+ },
+ {
+  "click": "Return to the record",
+  "nth": 0
+ },
+ {
+  "shot": "10b-return-to-the-record"
+ },
+ {
+  "click": "Start over at act 41"
+ },
+ {
+  "click": "Chromebook"
+ },
+ {
+  "shot": "11a-downshift-chromebook-room-2-5d"
+ },
+ {
+  "click": "Phone"
+ },
+ {
+  "shot": "11b-downshift-phone-table-plus-direct"
+ },
+ {
+  "click": "Voice",
+  "exact": true
+ },
+ {
+  "shot": "11c-downshift-voice-spoken-direct"
+ },
+ {
+  "click": "Say “sign the Golden State file”"
+ },
+ {
+  "shot": "11d-voice-read-back-before-signing"
+ },
+ {
+  "click": "Say “confirm”",
+  "after": 1000
+ },
+ {
+  "shot": "11e-voice-act-42-recorded-same-words"
+ },
+ {
+  "click": "Desktop 3D"
+ },
+ {
+  "shot": "11f-back-on-desktop-same-address-act-42"
+ },
+ {
+  "click": "Harrow Medical"
+ },
+ {
+  "shot": "12a-compile-arrives-direct-and-ledger-at-once"
+ },
+ {
+  "click": "Step onto the floor"
+ },
+ {
+  "shot": "12b-compiled-room-what-the-compiler-decided"
+ },
+ {
+  "click": "1 shelf = 500"
+ },
+ {
+  "shot": "12c-one-mapping-edited"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "shot": "13a-words-on-request-how-do-we-know"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "click": "real?"
+ },
+ {
+  "shot": "13b-whats-real-layer"
+ }
+]

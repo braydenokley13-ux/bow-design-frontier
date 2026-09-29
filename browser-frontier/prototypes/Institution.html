@@ -560,6 +560,7 @@ function renderPanel(FXS) {
   }
   h += '<p class="kick sect">The record · ' + (br() ? 'your branch' : 'your ink is blue') + '</p><ul class="rec" tabindex="0" aria-label="The record">' + recordRows(S.history).slice(-6).map(r => '<li><span class="no ' + (r.br ? 'bch' : r.mine ? 'mine' : '') + '">' + r.no + '</span><span class="' + (r.br ? 'bch' : r.mine ? 'mine' : '') + '">' + esc(r.what) + '</span></li>').join('') + '</ul>';
   const sc = $('#pscroll'); sc.innerHTML = h;
+  const rl = sc.querySelector('.rec'); if (rl) rl.scrollTop = rl.scrollHeight;
   $('#addr').innerHTML = addressLine();
   $('#tgReal').setAttribute('aria-pressed', S.layers.real); $('#tgKnow').setAttribute('aria-pressed', S.layers.know); $('#tgSched').setAttribute('aria-pressed', S.mode === 'schedule');
   if (focusK) { const el = sc.querySelector('[data-k="' + CSS.escape(focusK) + '"]'); if (el) el.focus(); }
@@ -633,8 +634,9 @@ document.addEventListener('keydown', e => {
   else if (k === 'Escape') { if (S.why) act('whyEnd'); else if (S.paper) act('put'); else if (S.mode === 'schedule') act('mode', { m: 'room' }); }
 });
 /*__ROOM__*/
+
+/*__ROOM_END__*/
 paint();
-$('#loading').textContent = 'The Room needs WebGL. The Schedule (key S) is the same building as text.';
 </script>
 </body>
 </html>
