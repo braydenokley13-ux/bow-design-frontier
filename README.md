@@ -51,6 +51,30 @@ These are prototypes and design evidence, not product code. None of it has been 
 - `econ/bow-economic-architecture.html` is the standalone "BOW Economic Architecture: Design Implications" page.
 - `tools/render/render.mjs` is the render harness used to play each board in headless Chromium and screenshot every state for critique.
 
+## Medium & Protocol Frontier (`medium/`), 29 Sep 2026
+
+This is a research program on BOW as a medium of executable systems. It inspected all three repositories at exact SHAs (`medium/SOURCE_STATE.md`) and ran:
+- eight wave-1 research reports and five targeted wave-2 reports;
+- a blind open/closed/hybrid platform tournament;
+- two independent adversarial critics.
+
+Everything is labelled EARNED / RECURRING / HYPOTHESIS / SPECULATIVE FRONTIER / REJECTED. **Nothing in it is canon.** After the critics, the contract is framed as a convergence hygiene standard for the two products plus a test plan, **not** a spec to publish.
+
+**Start with `medium/BOW_MEDIUM_CONTRACT_V0_PROPOSAL.md`.** Its §12 is the founder packet.
+
+The companion documents:
+- `BOW_SYSTEM_VOCABULARY_V0.md`
+- `BOW_PROTOCOL_HYPOTHESES_V0.md`
+- `BOW_REPRESENTATION_CONTRACT_V0_PROPOSAL.md`
+- `BOW_PORTABILITY_AND_COMPOSITION_V0.md`
+- `BOW_TIME_AND_FORKS_V0.md`
+- `BOW_OPEN_PLATFORM_TOURNAMENT.md`
+- `BOW_MEDIUM_EVIDENCE_LEDGER.md`
+- `BOW_MEDIUM_KILL_LIST.md`
+- `BOW_OPEN_QUESTIONS_V0.md`
+
+Raw worker reports, tournament papers and critiques are in `medium/research/`.
+
 ## Truth grammar (summary)
 
 Each value's epistemic status is drawn as a texture, and words appear on request:

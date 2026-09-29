@@ -73,7 +73,7 @@ OPEN( system@digest,
 
 **Is OPEN-AT-T as fundamental as opening a page?**
 
-Parent answer: *yes for BOW, in a precise sense*. Opening a web page is opening `now` of a mutable document. Opening a BOW instance at `(p, audience, as-known-at)` is the basic read, and "now" is the special case. That is the native operation no page, spreadsheet or game offers together:
+Parent answer: *yes for BOW, in a precise sense*. Opening a web page is opening `now` of a mutable document. Opening a BOW instance at `(p, audience, as-known-at)` is the basic read, and "now" is the special case. ~~That is the native operation no page, spreadsheet or game offers together~~ (withdrawn; see the correction below). The combination is:
 - a pinned past cut;
 - that past as a specific audience knew it then;
 - under the rules in force then.
