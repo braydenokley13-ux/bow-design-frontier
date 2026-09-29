@@ -1,62 +1,237 @@
 [
-  {"wait": 500, "shot": "front-desk-discover"},
-  {"click": "Why is Boston so close to the tax line?", "shot": "arrive-at-the-neck"},
-  {"click": "How do we know?", "shot": "how-do-we-know-layer"},
-  {"click": "How do we know?"},
-  {"click": "What’s real?", "shot": "whats-real-overlay"},
-  {"click": "What’s real?"},
-  {"click": "Why?", "exact": true, "shot": "why-the-gap-traced"},
-  {"click": "Back to the sheet"},
-  {"click": "PEERS", "shot": "hinge-peers-neck-folds-to-an-edge"},
-  {"click": "RUN BY", "shot": "hinge-run-by"},
-  {"click": "PAID TO", "shot": "hinge-paid-to"},
-  {"click": "Push Tatum", "shot": "push-tatum-pencil-on-every-sheet"},
-  {"click": "Push Tatum"},
-  {"click": "WRITTEN AS", "shot": "hinge-written-as"},
-  {"click": "BOUND BY", "shot": "hinge-bound-by-the-plane"},
-  {"range": ["#push", 225000000], "shot": "push-across-the-second-apron-verbs-struck"},
-  {"click": "Release", "shot": "released-pencil-erased-nothing-forked"},
-  {"click": "MADE BY", "shot": "hinge-made-by"},
-  {"click": "THE NECK", "shot": "pin-intact-on-return"},
-  {"click": "Take your seat in Boston", "shot": "cross-into-your-world"},
-  {"click": "Draft: send the backup guard", "shot": "the-instrument-form"},
-  {"click": "Ask about Denver", "shot": "denver-stand-in-stippled"},
-  {"click": "Hide Denver"},
-  {"click": "What would a leak do?", "shot": "knowing-strip-leak"},
-  {"click": "Hide the leak"},
-  {"click": "Add $0.5M cash"},
-  {"click": "Trade call (dry run)", "shot": "rehearse-no-names-the-rule"},
-  {"click": "Add $0.5M cash"},
-  {"click": "Trade call (dry run)", "shot": "rehearse-cant-tell"},
-  {"click": "Sign line 1", "shot": "line-1-signed-only-line-you-can-fill"},
-  {"click": "Send", "exact": true, "shot": "sent-ground-changes-to-the-league"},
-  {"click": "Hold this paper"},
-  {"click": "Go there", "shot": "go-there-denvers-desk-disclosure"},
-  {"click": "Re-form", "shot": "re-form-withdrawn-copies-stay"},
-  {"click": "Sign line 1"},
-  {"click": "Send", "exact": true},
-  {"click": "Wait", "shot": "wait-denver-signs-on-its-clock"},
-  {"click": "Wait", "shot": "league-approves-stamp-ledger-moves"},
-  {"click": "Return to your desk", "shot": "three-records-no-god-view"},
-  {"click": "Why is payroll", "shot": "why-payroll-traced-to-acts-and-rule"},
-  {"click": "Back to the desk"},
-  {"click": "Open the three records"},
-  {"click": "Redline the Denver form", "shot": "redline-second-round-the-record"},
-  {"click": "Boston gets a future first-round pick", "shot": "redline-first-round-faces-re-execute"},
-  {"click": "Keep this redline as a branch", "shot": "branch-in-its-own-ink-record-beside"},
-  {"click": "Compare face up", "shot": "compare-face-up"},
-  {"click": "Return to the record", "shot": "return-to-the-record"},
-  {"click": "Back to the desk"},
-  {"click": "Add a home date for a partner night", "shot": "second-composition-five-kinds-of-yes"},
-  {"click": "Tuesday evening", "shot": "date-refused-names-whose-calendar"},
-  {"click": "Thursday evening"},
-  {"click": "Sign line 1"},
-  {"click": "Trade call (dry run)", "shot": "second-form-rehearsed"},
-  {"click": "Send", "exact": true, "shot": "sent-arena-register"},
-  {"click": "Wait"},
-  {"click": "Wait", "shot": "schedule-approved-remittance-moved"},
-  {"click": "Return to your desk", "shot": "second-records"},
-  {"css": ".edge[aria-label*='Reality']", "shot": "back-to-reality"},
-  {"click": "Hold this paper", "nth": 0, "shot": "follow-holding-papers"},
-  {"expectText": "Following"}
+ {
+  "wait": 500,
+  "shot": "front-desk-discover"
+ },
+ {
+  "click": "Why is Boston so close to the tax line?",
+  "shot": "arrive-at-the-neck"
+ },
+ {
+  "click": "How do we know?",
+  "shot": "how-do-we-know-layer"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "click": "What’s real?",
+  "shot": "whats-real-overlay"
+ },
+ {
+  "click": "What’s real?"
+ },
+ {
+  "click": "Why?",
+  "exact": true,
+  "shot": "why-the-gap-traced"
+ },
+ {
+  "click": "Ask what happened",
+  "nth": 0,
+  "shot": "sealed-outcome-opens-for-an-observer"
+ },
+ {
+  "click": "Back to the sheet"
+ },
+ {
+  "click": "PEERS",
+  "shot": "hinge-peers-neck-folds-to-an-edge"
+ },
+ {
+  "click": "RUN BY",
+  "shot": "hinge-run-by"
+ },
+ {
+  "click": "PAID TO",
+  "shot": "hinge-paid-to"
+ },
+ {
+  "click": "Push Tatum",
+  "shot": "push-tatum-pencil-on-every-sheet"
+ },
+ {
+  "click": "Push Tatum"
+ },
+ {
+  "click": "WRITTEN AS",
+  "shot": "hinge-written-as"
+ },
+ {
+  "click": "BOUND BY",
+  "shot": "hinge-bound-by-the-plane"
+ },
+ {
+  "range": [
+   "#push",
+   225000000
+  ],
+  "shot": "push-across-the-second-apron-verbs-struck"
+ },
+ {
+  "click": "Release",
+  "shot": "released-pencil-erased-nothing-forked"
+ },
+ {
+  "click": "MADE BY",
+  "shot": "hinge-made-by"
+ },
+ {
+  "click": "THE NECK",
+  "shot": "pin-intact-on-return"
+ },
+ {
+  "click": "Take your seat in Boston",
+  "shot": "cross-into-your-world"
+ },
+ {
+  "click": "Draft: send the backup guard",
+  "shot": "the-instrument-form"
+ },
+ {
+  "click": "Ask about Denver",
+  "shot": "denver-stand-in-stippled"
+ },
+ {
+  "click": "Hide Denver"
+ },
+ {
+  "click": "What would a leak do?",
+  "shot": "knowing-strip-leak"
+ },
+ {
+  "click": "Hide the leak"
+ },
+ {
+  "click": "Add $0.5M cash"
+ },
+ {
+  "click": "Trade call (dry run)",
+  "shot": "rehearse-no-names-the-rule"
+ },
+ {
+  "click": "Add $0.5M cash"
+ },
+ {
+  "click": "Trade call (dry run)",
+  "shot": "rehearse-cant-tell"
+ },
+ {
+  "click": "Sign line 1",
+  "shot": "line-1-signed-only-line-you-can-fill"
+ },
+ {
+  "click": "Send",
+  "exact": true,
+  "shot": "sent-ground-changes-to-the-league"
+ },
+ {
+  "click": "Hold this paper"
+ },
+ {
+  "click": "Go there",
+  "shot": "go-there-denvers-desk-disclosure"
+ },
+ {
+  "click": "Re-form",
+  "shot": "re-form-withdrawn-copies-stay"
+ },
+ {
+  "click": "Sign line 1"
+ },
+ {
+  "click": "Send",
+  "exact": true
+ },
+ {
+  "click": "Wait",
+  "shot": "wait-denver-signs-on-its-clock"
+ },
+ {
+  "click": "Wait",
+  "shot": "league-approves-stamp-ledger-moves"
+ },
+ {
+  "click": "Return to your desk",
+  "shot": "three-records-no-god-view"
+ },
+ {
+  "click": "Why is payroll",
+  "shot": "why-payroll-traced-to-acts-and-rule"
+ },
+ {
+  "click": "Back to the desk"
+ },
+ {
+  "click": "Open the three records"
+ },
+ {
+  "click": "Redline the Denver form",
+  "shot": "redline-second-round-the-record"
+ },
+ {
+  "click": "Boston gets a future first-round pick",
+  "shot": "redline-first-round-faces-re-execute"
+ },
+ {
+  "click": "Keep this redline as a branch",
+  "shot": "branch-in-its-own-ink-record-beside"
+ },
+ {
+  "click": "Compare face up",
+  "shot": "compare-face-up"
+ },
+ {
+  "click": "Return to the record",
+  "shot": "return-to-the-record"
+ },
+ {
+  "click": "Back to the desk"
+ },
+ {
+  "click": "Add a home date for a partner night",
+  "shot": "second-composition-five-kinds-of-yes"
+ },
+ {
+  "click": "Tuesday evening",
+  "shot": "date-refused-names-whose-calendar"
+ },
+ {
+  "click": "Thursday evening"
+ },
+ {
+  "click": "Sign line 1"
+ },
+ {
+  "click": "Trade call (dry run)",
+  "shot": "second-form-rehearsed"
+ },
+ {
+  "click": "Send",
+  "exact": true,
+  "shot": "sent-arena-register"
+ },
+ {
+  "click": "Wait"
+ },
+ {
+  "click": "Wait",
+  "shot": "schedule-approved-remittance-moved"
+ },
+ {
+  "click": "Return to your desk",
+  "shot": "second-records"
+ },
+ {
+  "css": ".edge[aria-label*='Reality']",
+  "shot": "back-to-reality"
+ },
+ {
+  "click": "Hold this paper",
+  "nth": 0,
+  "shot": "follow-holding-papers"
+ },
+ {
+  "expectText": "Following"
+ }
 ]
