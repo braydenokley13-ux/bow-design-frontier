@@ -904,7 +904,7 @@ function vLedger(SRC,S){
   const pos=(x,y)=>'left:'+(x/6.4).toFixed(2)+'%;top:'+(y/2.9).toFixed(2)+'%';
   const B=(p,x,y,cls,inner)=>mkBtn(reg,sm,'Ledger','ledger',p,'tlm '+cls,inner,pos(x,y));
   let svg='<svg class="tlsvg" viewBox="0 0 640 290" role="img" aria-label="Shipments from the fab to the plant by day. The fire is a vertical cut at day 0. The same facts are in the marks and in Direct.">';
-  [['Kaito fab',LY.fab],['Port',LY.port],['Harrow plant',LY.plant]].forEach(l=>{svg+='<line x1="70" x2="612" y1="'+l[1]+'" y2="'+l[1]+'" stroke="#15140F" stroke-width="1" stroke-dasharray="2 4"/><text x="4" y="'+(l[1]+4)+'" font-family="IBM Plex Mono,DejaVu Sans Mono,monospace" font-size="10.5" fill="#48453B">'+l[0].toUpperCase().slice(0,8)+'</text>'});
+  [['FAB',LY.fab],['PORT',LY.port],['PLANT',LY.plant]].forEach(l=>{svg+='<line x1="70" x2="612" y1="'+l[1]+'" y2="'+l[1]+'" stroke="#15140F" stroke-width="1" stroke-dasharray="2 4"/><text x="4" y="'+(l[1]+4)+'" font-family="IBM Plex Mono,DejaVu Sans Mono,monospace" font-size="10.5" fill="#48453B">'+l[0]+'</text>'});
   for(let d=-16;d<=24;d+=8)svg+='<line x1="'+X(d)+'" x2="'+X(d)+'" y1="236" y2="241" stroke="#15140F" stroke-width="1.5"/><text x="'+X(d)+'" y="254" font-family="IBM Plex Mono,DejaVu Sans Mono,monospace" font-size="11" text-anchor="middle" fill="#48453B">'+(d<0?'−'+(-d):d)+'</text>';
   svg+='<line x1="70" x2="612" y1="236" y2="236" stroke="#15140F" stroke-width="2"/>';
   HARROW.shipments.forEach(s=>{
@@ -918,7 +918,7 @@ function vLedger(SRC,S){
   svg+='</svg>';
   let m='';
   m+=B('event.fire',X(0)-4,12,'ar',esc(sm['event.fire'].text));
-  m+=B('ship.1',X(-15.5),34,'','ship 1 · '+esc(sm['ship.1'].text));
+  m+=B('ship.1',8,34,'','ship 1 · '+esc(sm['ship.1'].text));
   m+=B('ship.2',X(1),34,'','ship 2 · '+esc(sm['ship.2'].text));
   m+=B('ship.3',X(8),82,'','ship 3 · '+esc(sm['ship.3'].text));
   m+=B('clock.lead',X(-14),(LY.fab+LY.port)/2+22,'wrap','lead time · '+esc(sm['clock.lead'].text));

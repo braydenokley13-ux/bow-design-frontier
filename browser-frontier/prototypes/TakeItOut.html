@@ -106,7 +106,7 @@ footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .gap{flex:1 1 auto;border:1.5px dashed var(--ink);background:transparent;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-family:var(--mono);font-size:10.5px;color:var(--muted);min-width:0}
 .gap b{display:block;color:var(--ink);font-weight:500;margin-bottom:2px}
 .gap.br{border-color:var(--warm);color:var(--warm2)}
-.held{align-self:stretch;position:relative;display:flex;flex-direction:column;justify-content:flex-start;min-width:0;padding:7px 8px 6px;border:1.5px solid var(--ink);background:var(--face);box-shadow:0 5px 0 -1px var(--paper3),0 6px 0 -1px var(--ink);transform:rotate(-1.4deg);animation:rise .5s cubic-bezier(.2,.9,.25,1) both;font-size:12px;line-height:1.2;overflow:hidden}
+.held{align-self:stretch;margin-bottom:8px;position:relative;display:flex;flex-direction:column;justify-content:flex-start;min-width:0;padding:7px 8px 6px;border:1.5px solid var(--ink);background:var(--face);box-shadow:0 5px 0 -1px var(--paper3),0 6px 0 -1px var(--ink);transform:rotate(-1.4deg);animation:rise .5s cubic-bezier(.2,.9,.25,1) both;font-size:12px;line-height:1.2;overflow:hidden}
 .held.k-RECORDED,.held.k-OBSERVED{background:var(--ink);color:var(--paper)}
 .held.br{background:var(--warm);color:var(--paper);border-color:var(--warm2)}
 .held .when{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.05em}
@@ -676,6 +676,7 @@ function doPutBackAll(log) {
 }
 function doPair(p, log) {
   const E = env(), ids = p.ids.split(',');
+  E.lifted.clear(); S.liftInfo = {};
   ids.forEach(i => { if (fold(E).status[i] === 'in') E.lifted.add(i); });
   S.tab = 'pair'; S.weigh = false; S.sel = null;
   ids.forEach(i => { const k = lkey(E); S.ledger[k] = { n: (S.ledger[k] ? S.ledger[k].n : 0) + 1, hash: fold(E).hash, ids: Array.from(E.lifted), at: S.at }; });

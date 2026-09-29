@@ -639,7 +639,10 @@ document.addEventListener('keydown', e => {
   const fail = m => { const l = $('#loading'); if (l) l.textContent = m; };
   let THREE, renderer;
   try { THREE = await import('three'); } catch (e) { console.info('three unavailable', e); fail('The Room needs three.js. The Schedule (key S) is the same building as text.'); return; }
-  try { renderer = new THREE.WebGLRenderer({ canvas: $('#gl'), antialias: true, powerPreference: 'high-performance' }); } catch (e) { console.info('no WebGL', e); fail('The Room needs WebGL. The Schedule (key S) is the same building as text.'); return; }
+  /* software GL (headless, remote desktops) gets a cheaper renderer: no MSAA, a small shadow map, and cuts instead of tweens */
+  let SOFT = false; try { const pc = document.createElement('canvas'), pg = pc.getContext('webgl'); if (pg) { const ex = pg.getExtension('WEBGL_debug_renderer_info'); SOFT = /swiftshader|llvmpipe|software|mesa offscreen/i.test(ex ? String(pg.getParameter(ex.UNMASKED_RENDERER_WEBGL)) : ''); const lc = pg.getExtension('WEBGL_lose_context'); if (lc) lc.loseContext(); } } catch (e) { /* probe optional */ }
+  const CUT = REDUCED || SOFT;
+  try { renderer = new THREE.WebGLRenderer({ canvas: $('#gl'), antialias: !SOFT, powerPreference: 'high-performance' }); } catch (e) { console.info('no WebGL', e); fail('The Room needs WebGL. The Schedule (key S) is the same building as text.'); return; }
   try {
     await Promise.race([Promise.all([document.fonts.load('600 32px Archivo'), document.fonts.load('700 32px Archivo'), document.fonts.load('400 32px Newsreader'), document.fonts.load('italic 400 32px Newsreader')]), new Promise(r => setTimeout(r, 2500))]);
   } catch (e) { /* fonts optional */ }
@@ -648,7 +651,7 @@ document.addEventListener('keydown', e => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.02;
-    renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
+    renderer.shadowMap.enabled = true; renderer.shadowMap.type = SOFT ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, 1.2, 0.1, 600);
     const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -1048,15 +1051,15 @@ document.addEventListener('keydown', e => {
     /* League office: one lit counter window (a neighbouring system: observed, never actionable here) */
     box('brickOut', -25, -.02, -31, -14, 7.2, -22.6, { tile: .9, skip: '-y' }); box('conc', -25.3, 7.1, -31.3, -13.7, 7.5, -22.3, { tile: 2 });
     for (const x of [-22.1, -19.5, -16.9]) box('steel', x - .05, 1.3, -22.66, x + .05, 3.8, -22.56); for (const y of [1.3, 3.75]) box('steel', -22.1, y - .05, -22.66, -16.9, y + .05, -22.56); box('conc', -22.3, 1.2, -22.75, -16.7, 1.3, -22.4, { tile: 1 });
-    BRD.league = panelMesh(1024, 450, 5.0, 2.2, [-19.5, 2.55, -22.585], FZP, { basic: true, id: 'win.league' });
-    pl('league.sign', 3.4, .5, 240, [-19.5, 4.8, -22.57], FZP); hit('win.league', -22.3, 1.2, -22.9, -16.7, 5.1, -22.3);
+    BRD.league = panelMesh(1024, 450, 5.0, 2.2, [-19.5, 2.55, -22.585], FZP, { basic: true, id: 'win.league', parent: GRP.roomOnly });
+    pl('league.sign', 3.4, .5, 240, [-19.5, 4.8, -22.57], FZP, 'atlasS'); hit('win.league', -22.3, 1.2, -22.9, -16.7, 5.1, -22.3);
     /* the record building (or your branch), across the slip */
     const NB = { x0: -8.5, x1: 4.5, z0: -31, z1: -24, zm: -27.5 }; mkGrp('nbr'); mkGrp('bridge');
     box('nbrBrick', NB.x0, -.02, NB.z0, NB.x1, 5.6, NB.z1, { tile: .9, skip: '-y' });
     for (const s of [-1, 1]) { const g = new THREE.BoxGeometry(14.2, .14, 4.3); g.rotateX(s * Math.atan2(2.2, 3.6)); g.translate((NB.x0 + NB.x1) / 2, 6.75, NB.zm + s * 1.85); addGeo('nbrRoof', g, { col: [.52, .5, .48] }); }
     for (const sx of [NB.x0 - .3, NB.x1]) { const tri = new THREE.Shape(); tri.moveTo(-3.6, 5.6); tri.lineTo(3.6, 5.6); tri.lineTo(0, 7.85); tri.lineTo(-3.6, 5.6); const eg = new THREE.ExtrudeGeometry(tri, { depth: .3, bevelEnabled: false }); eg.rotateY(Math.PI / 2); eg.translate(sx, 0, NB.zm); addGeo('nbrBrick', eg, { tile: .9 }); }
     BRD.nbr = panelMesh(1024, 260, 12.6, 3.2, [-2, 3.3, NB.z1 + .015], FZP, { basic: true, id: 'win.record', parent: GRP.nbr });
-    pl('nbr.plaque', 3.0, .95, 260, [-2, 1.1, NB.z1 + .02], FZP); hit('win.record', NB.x0, 0, NB.z0, NB.x1, 6, NB.z1 + .5);
+    pl('nbr.plaque', 3.0, .95, 260, [-2, 1.1, NB.z1 + .02], FZP, 'atlasS'); hit('win.record', NB.x0, 0, NB.z0, NB.x1, 6, NB.z1 + .5);
     for (let x = NB.x0; x <= NB.x1 + .01; x += 2.6) box('nbrScaf', x - .03, 0, NB.z1 + .25, x + .03, 6.5, NB.z1 + .31); for (const y of [2.1, 4.2, 6.3]) { box('nbrScaf', NB.x0, y - .03, NB.z1 + .25, NB.x1, y + .03, NB.z1 + .31); box('nbrScaf', NB.x0, y - .03, NB.z1 + .9, NB.x1, y + .03, NB.z1 + .96); box('nbrScafPl', NB.x0, y, NB.z1 + .2, NB.x1, y + .05, NB.z1 + .95, { tile: 1 }); }
     for (let x = NB.x0; x <= NB.x1 + .01; x += 2.6) box('nbrScaf', x - .03, 0, NB.z1 + .9, x + .03, 6.5, NB.z1 + .96);
     /* footbridge across the slip (exists once a branch does) */
@@ -1090,14 +1093,14 @@ document.addEventListener('keydown', e => {
     const BOWL = { c: cv(1024, 1024) }; BOWL.g = BOWL.c.getContext('2d'); T.bowl = mkTex(BOWL.c); T.atlas = mkTex(AT.c);
     Object.assign(MAT, {
       atlas: L({ map: T.atlas, alphaTest: .03 }), roofM: S_({ map: T.timber, color: 0xd6b88c, roughness: .8, metalness: 0 }), scaf: S_({ color: 0xa8a8a0, roughness: .45, metalness: .7 }),
-      slat: L({ map: T.slat }), paper: L({ color: 0xf7f4ea }), maqWater: L({ color: 0xc7d4d4 }), brassD: S_({ color: 0x8d6d22, roughness: .4, metalness: .8 }), bowl: L({ map: T.bowl })
+      slat: L({ map: T.slat }), paper: L({ color: 0xffffff }), maqWater: L({ color: 0xc7d4d4 }), brassD: S_({ color: 0x8d6d22, roughness: .4, metalness: .8 }), bowl: L({ map: T.bowl })
     });
     const M = {}; const bk = (name, mat, o = {}) => { const m = bake(name, mat, o); if (m) M[name] = m; return m; };
     const mergeAcc = (into, names) => { const t = acc(into); for (const n of names) { const a = ACC[n]; if (!a) continue; const off = t.p.length / 3; for (const v of a.p) t.p.push(v); for (const v of a.n) t.n.push(v); for (const v of a.u) t.u.push(v); for (const v of a.c) t.c.push(v); for (const v of a.i) t.i.push(v + off); delete ACC[n]; } };
     mergeAcc('props', ['furn:film', 'furn:desk', 'furn:df', 'furn:pen', 'hall', 'furn:mini']);
     bk('oak', MAT.oak, { cast: true, recv: true }); bk('deck', MAT.deck, { cast: true, recv: true }); bk('brick', MAT.brick, { cast: true, recv: true }); bk('plaster', MAT.plaster, { cast: true, recv: true }); bk('timber', MAT.timber, { cast: true, recv: true });
     bk('steel', MAT.steel, { cast: true }); bk('brass', MAT.brass); bk('conc', MAT.conc, { recv: true, parent: GRP.roomOnly }); bk('water', MAT.water, { parent: GRP.roomOnly }); bk('sky', MAT.vc, { parent: GRP.roomOnly });
-    bk('shell', MAT.vc); bk('emis', MAT.emis); bk('atlas', MAT.atlas); bk('props', MAT.vc, { cast: true }); bk('brickOut', MAT.brick, { recv: true }); bk('vcOut', MAT.vc, { recv: true });
+    bk('shell', MAT.vc); bk('emis', MAT.emis); bk('atlas', MAT.atlas); bk('props', MAT.vc, { cast: true }); bk('brickOut', MAT.brick, { recv: true, parent: GRP.roomOnly }); bk('vcOut', MAT.vc, { recv: true, parent: GRP.roomOnly });
     bk('brickCut', MAT.brick, { parent: GRP.cut, cast: true, recv: true }); bk('plasterCut', MAT.plaster, { parent: GRP.cut, recv: true }); bk('truss', MAT.timber, { parent: GRP.cut }); bk('roof', MAT.roofM, { parent: GRP.cut }); bk('roomRoof', MAT.plaster, { parent: GRP.cut }); bk('oakCut', MAT.oak, { parent: GRP.cut }); bk('atlasS', MAT.atlas, { parent: GRP.cut });
     bk('paper', MAT.paper, { parent: GRP.maqOnly, recv: true }); bk('maqWater', MAT.maqWater, { parent: GRP.maqOnly });
     const glassMesh = bk('glass', MAT.glass); glassMesh.renderOrder = 6;
@@ -1108,13 +1111,13 @@ document.addEventListener('keydown', e => {
     for (const id of ROOMKEYS) box('sheetRooms', X0 + .12, 0, RZ[id] - RW + .12, RXF - .1, RH - .25, RZ[id] + RW - .12, { tile: .8 });
     PARTS.sheetRooms = bk('sheetRooms', MAT.sheet); PARTS.sheetRooms.visible = false;
     PARTS.scaf = bk('scaf', MAT.scaf, { parent: GRP.cut }); PARTS.scafPl = bk('scafPl', MAT.timber, { parent: GRP.cut }); PARTS.nbrScaf = bk('nbrScaf', MAT.scaf, { parent: GRP.nbr }); PARTS.nbrScafPl = bk('nbrScafPl', MAT.timber, { parent: GRP.nbr }); PARTS.bridgeDeck = bk('bridgeDeck', MAT.deck, { parent: GRP.bridge }); PARTS.bridgeRail = bk('bridgeRail', MAT.steel, { parent: GRP.bridge });
-    PARTS.bowl = new THREE.Mesh(bowlGeo, MAT.bowl); PARTS.bowl.receiveShadow = false; scene.add(PARTS.bowl);
+    PARTS.bowl = new THREE.Mesh(bowlGeo, MAT.bowl); PARTS.bowl.receiveShadow = false; GRP.roomOnly.add(PARTS.bowl);
     AM.w10.shutMat = MAT.slat; for (const id of ARK) AM[id].mesh.material = MAT.infill;
     /* the sheet cloths never cast; the roof never casts (the sun comes through the window wall) */
     /* ---------- light: low warm sun through the window wall, cool sky fill, one warm interior fill. No bloom, no vignette. ---------- */
     const hemi = new THREE.HemisphereLight(0xdde8f0, 0xb99a68, .95); scene.add(hemi);
     const sun = new THREE.DirectionalLight(0xffe0b2, 2.7); sun.position.set(15, 15, -44); sun.target.position.set(0, 0, 0); scene.add(sun, sun.target);
-    sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); { const c = sun.shadow.camera; c.left = -26; c.right = 26; c.top = 15; c.bottom = -15; c.near = 10; c.far = 120; } sun.shadow.bias = -.0005; sun.shadow.normalBias = .04;
+    sun.castShadow = true; sun.shadow.mapSize.set(SOFT ? 1024 : 2048, SOFT ? 1024 : 2048); { const c = sun.shadow.camera; c.left = -26; c.right = 26; c.top = 15; c.bottom = -15; c.near = 10; c.far = 120; } sun.shadow.bias = -.0005; sun.shadow.normalBias = .04;
     const fill = new THREE.PointLight(0xffe4c0, .55, 46, 1.2); fill.position.set(-1, 6.6, 0); scene.add(fill);
     const door = new THREE.PointLight(0xffe0b8, .7, 9, 1.6); door.position.set(10, 2.6, 1.2); scene.add(door);
     const pm = new THREE.PMREMGenerator(renderer); const ENV = pm.fromEquirectangular(T.sky).texture;
@@ -1457,7 +1460,7 @@ document.addEventListener('keydown', e => {
     }
     function setPose(name, instant) {
       const to = poseOf(name); const first = CAM.name === null; CAM.name = name; LOOK.yaw = LOOK.pitch = 0;
-      if (instant || REDUCED || first) { CAM.cur.eye.copy(to.eye); CAM.cur.at.copy(to.at); CAM.cur.fov = to.fov; CAM.dur = 0; }
+      if (instant || CUT || first) { CAM.cur.eye.copy(to.eye); CAM.cur.at.copy(to.at); CAM.cur.fov = to.fov; CAM.dur = 0; }
       else { CAM.from = { eye: CAM.cur.eye.clone(), at: CAM.cur.at.clone(), fov: CAM.cur.fov }; CAM.to = to; CAM.t0 = performance.now(); CAM.dur = 430; }
       invalidate();
     }
@@ -1468,7 +1471,7 @@ document.addEventListener('keydown', e => {
     }
     /* ---------- animation, render on demand ---------- */
     const ANIMS = []; const ease = k => k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
-    function tween(dur, delay, fn, done) { if (REDUCED) { fn(1); if (done) done(); invalidate(); return; } ANIMS.push({ t0: performance.now() + (delay || 0), dur, fn, done }); invalidate(); }
+    function tween(dur, delay, fn, done) { if (CUT) { fn(1); if (done) done(); invalidate(); return; } ANIMS.push({ t0: performance.now() + (delay || 0), dur, fn, done }); invalidate(); }
     function stepAnims(now) { let busy = false; for (let i = ANIMS.length - 1; i >= 0; i--) { const a = ANIMS[i]; if (now < a.t0) { busy = true; continue; } const k = Math.min(1, (now - a.t0) / a.dur); a.fn(ease(k)); if (k >= 1) { ANIMS.splice(i, 1); if (a.done) a.done(); } else busy = true; } return busy; }
     let dirty = true, raf = 0, lastFXS = [];
     function invalidate() { dirty = true; if (!raf) raf = requestAnimationFrame(frame); }
@@ -1487,9 +1490,9 @@ document.addEventListener('keydown', e => {
     }
     function showPaper(fx) {
       camera.updateMatrixWorld(); const inv = camera.matrixWorld.clone().invert(); const a = (ANCH[fx.id] || V3(0, 0, 0)).clone().applyMatrix4(inv); PP.from.copy(a.z < -.4 ? a : V3(.3, -.5, -.8));
-      paintPaper(fx, S, S.layers.know); paperGrp.visible = true; PP.id = fx.id; PP.out = false; PP.t0 = performance.now(); if (REDUCED) PP.dur = 1; else PP.dur = 300; invalidate();
+      paintPaper(fx, S, S.layers.know); paperGrp.visible = true; PP.id = fx.id; PP.out = false; PP.t0 = performance.now(); PP.dur = CUT ? 1 : 300; invalidate();
     }
-    function hidePaper() { if (!paperGrp.visible) return; PP.id = null; if (REDUCED) { paperGrp.visible = false; invalidate(); return; } PP.out = true; PP.t0 = performance.now(); PP.dur = 180; PP.from.set(.2, -.55, -.9); invalidate(); }
+    function hidePaper() { if (!paperGrp.visible) return; PP.id = null; if (CUT) { paperGrp.visible = false; invalidate(); return; } PP.out = true; PP.t0 = performance.now(); PP.dur = 180; PP.from.set(.2, -.55, -.9); invalidate(); }
     /* ---------- update: S -> scene ---------- */
     const SIGS = {}; const once = (k, sig, fn) => { const s = JSON.stringify(sig); if (SIGS[k] !== s) { SIGS[k] = s; fn(); } };
     const ROOMK = {}; let prev = { branch: false, po: null, maq: null, paper: null, funded: {} }, closingT = 0;
@@ -1505,7 +1508,9 @@ document.addEventListener('keydown', e => {
     let maqMode = true;
     function setMaqMode(m) {
       maqMode = m; GRP.maqOnly.visible = m; GRP.roomOnly.visible = !m; GRP.cut.visible = !m; scene.background = m ? PAPERBG : T.sky; scene.fog.near = m ? 9000 : 110; scene.fog.far = m ? 9500 : 470;
-      hemi.intensity = m ? 1.05 : .95; renderer.toneMappingExposure = m ? .98 : 1.02; door.visible = !m; fill.visible = !m;
+      hemi.intensity = m ? 1.1 : .95; renderer.toneMappingExposure = m ? 1.3 : 1.02; door.visible = !m; fill.visible = !m;
+      if (m) { sun.position.set(26, 46, -22); sun.intensity = 2.2; const c = sun.shadow.camera; c.left = -34; c.right = 34; c.top = 34; c.bottom = -34; c.far = 160; } else { sun.position.set(15, 15, -44); sun.intensity = 2.7; const c = sun.shadow.camera; c.left = -26; c.right = 26; c.top = 15; c.bottom = -15; c.far = 120; }
+      sun.shadow.camera.updateProjectionMatrix(); renderer.shadowMap.needsUpdate = true;
     }
     setMaqMode(true);
     function poseFor(Sx) { return Sx.posture === 'maquette' ? 'maquette' : Sx.pose; }
@@ -1521,7 +1526,7 @@ document.addEventListener('keydown', e => {
       /* branch: the Week 6 arch is open with scaffold; otherwise bricked */
       for (const a of ARCHES()) { const A = AM[a.id], st = a.state; A.mesh.geometry = st === 'bricked' ? A.fill : st === 'shutter' ? A.shut : A.pass; A.mesh.material = st === 'bricked' ? MAT.infill : st === 'shutter' ? MAT.slat : MAT.vc2; if (!A.animating) A.cover.rotation.x = Sx.arch[a.id].cover ? 1.9 : 0;
         A.tape.visible = st === 'bricked' || st === 'passage'; const ink = st === 'passage' ? [.78, .44, .11] : [.11, .3, .6], col = A.tape.geometry.attributes.color; for (let v = 0; v < col.count; v++) col.setXYZ(v, ink[0], ink[1], ink[2]); col.needsUpdate = true; }
-      const scafOn = br_ && !!Sx.branch; if (!AM.w6.scafAnim) { PARTS.scaf.visible = PARTS.scafPl.visible = scafOn; PARTS.scaf.scale.y = PARTS.scafPl.scale.y = 1; } BRICKM.visible = br_ && !AM.w6.scafAnim;
+      const scafOn = br_ && !!Sx.branch; if (!AM.w6.scafAnim) { PARTS.scaf.visible = PARTS.scafPl.visible = scafOn; PARTS.scaf.scale.y = PARTS.scafPl.scale.y = 1; } BRICKM.visible = br_ && !AM.w6.scafAnim && !inMaq;
       if (br_) BRICKM.position.set(AM.w6.cx + .5, .04, Z1 - 1.5);
       /* paint every dynamic surface (each only when its inputs changed) */
       once('door', [Sx.signed, Sx.left, Sx.lapsedExtra, Sx.seatStart], paintDoor); once('rail', Sx.history, paintRailPlates); once('clocks', [Sx.clock, Sx.signed, Sx.seatStart], paintClocks);
@@ -1541,7 +1546,7 @@ document.addEventListener('keydown', e => {
       const want = poseFor(Sx);
       if (want !== CAM.name) {
         clearTimeout(closingT);
-        if (maqMode && !inMaq) { if (!REDUCED) { GRP.cut.visible = true; closingT = setTimeout(() => { setMaqMode(false); setPose(want, true); renderer.shadowMap.needsUpdate = true; invalidate(); }, 260); } else { setMaqMode(false); setPose(want, true); } }
+        if (maqMode && !inMaq) { if (!CUT) { GRP.cut.visible = true; closingT = setTimeout(() => { setMaqMode(false); setPose(want, true); renderer.shadowMap.needsUpdate = true; invalidate(); }, 260); } else { setMaqMode(false); setPose(want, true); } }
         else if (!maqMode && inMaq) { setMaqMode(true); setPose('maquette', true); }
         else setPose(want, false);
       }
@@ -1549,11 +1554,11 @@ document.addEventListener('keydown', e => {
       if (Sx.paper) { const fx = fxs.find(f => f.id === Sx.paper); if (fx) { if (prev.paper !== Sx.paper || prev.know !== Sx.layers.know || prev.sig !== fx.line) showPaper(fx); prev.sig = fx.line; } } else if (prev.paper) hidePaper();
       prev.paper = Sx.paper; prev.know = Sx.layers.know;
       /* consequences that happen once: the order slides off the blotter; the cut is made */
-      if (Sx.po && (!prev.po || prev.po !== Sx.po.no)) { prev.po = Sx.po.no; BRD.po.visible = true; const x0 = 10.4, x1 = 10.98; if (!REDUCED) tween(700, 0, k => { BRD.po.position.set(x0 + (x1 - x0) * k, DY + .02, -2.55 + .25 * k); BRD.po.rotation.z = -.18 * k; }); else BRD.po.position.set(x1, DY + .02, -2.3); }
+      if (Sx.po && (!prev.po || prev.po !== Sx.po.no)) { prev.po = Sx.po.no; BRD.po.visible = true; const x0 = 10.4, x1 = 10.98; if (!CUT) tween(700, 0, k => { BRD.po.position.set(x0 + (x1 - x0) * k, DY + .02, -2.55 + .25 * k); BRD.po.rotation.z = -.18 * k; }); else BRD.po.position.set(x1, DY + .02, -2.3); }
       if (!Sx.po) { BRD.po.visible = false; prev.po = null; }
       if (Sx.branch && !prev.branch) { runFork(); } if (!Sx.branch) prev.branch = false; else prev.branch = true;
       BRD.po.visible = !!Sx.po && !br_;
-      renderer.shadowMap.needsUpdate = true; invalidate(); updateChips();
+      once('shadow', [GRP.cut.visible, PARTS.sheetMaq.visible, maqMode], () => { renderer.shadowMap.needsUpdate = true; }); invalidate(); updateChips();
     }
     function runFork() {
       const A = AM.w6; A.animating = true; A.scafAnim = true; A.cover.rotation.x = 0; tween(520, 0, k => { A.cover.rotation.x = 1.9 * k; }, () => { A.animating = false; });

@@ -1117,7 +1117,7 @@ function marginFork(){
   return t;
 }
 function marginLineage(){
-  var L=S.lin, body = L.mode==='reality' ? marginReality() : L.mode==='league' ? marginLeague() : L.mode==='fork' ? marginFork() : L.mode==='year' ? marginYear() : marginInhab();
+  var L=S.lin, body = L.mode==='reality' ? marginReality() : L.mode==='league' ? marginLeague() : L.mode==='fork' ? marginFork() : (L.mode==='year' && L.sel!=null) ? marginYear() : marginInhab();
   return ltabs()+body;
 }
 function ACT2(kind, p, set){
