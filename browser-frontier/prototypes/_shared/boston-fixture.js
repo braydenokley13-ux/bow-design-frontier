@@ -269,6 +269,24 @@
         dH: F(57.2, 'OBSERVED', 'standard textbook value, kJ/mol, forward reaction endothermic (verify)', null, true),
         note: 'NO₂ is brown, N₂O₄ colourless: heating the flask darkens it.'
       },
+      chemistryDetail: {
+        reaction: 'N₂O₄(g) ⇌ 2 NO₂(g)',
+        Q: 'Q = [NO₂]² / [N₂O₄]',
+        leChatelier: [
+          'Heat the flask: the forward reaction is endothermic, K rises, more NO₂ — darker brown.',
+          'Halve the volume: every concentration doubles, so Q = 2K > K — the mixture shifts toward N₂O₄ (fewer gas molecules) — lighter, then partly back.',
+          'Add N₂O₄: Q < K — shifts toward NO₂.'
+        ],
+        note: 'COMPUTE these from the formula; never paste a result. K is temperature-dependent; only the 25 °C value is given (verify).'
+      },
+      ecology: {
+        name: 'Yellowstone’s northern range after wolves returned',
+        why: 'chosen as the awkward domain: nobody holds this system, there is essentially one act, causality is contested science, and the state is continuous and sparsely observed',
+        act: F('Gray wolves reintroduced to Yellowstone from Canada in 1995 and 1996 (31 wolves in total)', 'OBSERVED', 'National Park Service public history (verify counts)', '1996', true),
+        seats: ['National Park Service (the park)', 'U.S. Fish and Wildlife Service (the Endangered Species Act listing and the reintroduction rule)', 'the surrounding states (hunting outside the park)', 'ranchers (losses and compensation)', 'tribes [verify roles]'],
+        contested: F('How much of the northern elk decline and of any willow / aspen recovery wolves caused, versus hunting, drought, bears and cougars, is disputed among researchers', 'OBSERVED', 'published ecology literature (verify sources before naming any)', null, true, 'show the disagreement; never pick a winner'),
+        counts: F(null, 'UNKNOWN', null, null, true, '[verify: elk and wolf counts by year — do not invent]')
+      },
       history1787: {
         name: 'Philadelphia, 16 Jul 1787 — equal votes in the Senate',
         tally: F('5 ayes (CT, NJ, DE, MD, NC) · 4 noes (PA, VA, SC, GA) · Massachusetts divided · New York absent · carried', 'OBSERVED', 'W2 fixture', null, true)
