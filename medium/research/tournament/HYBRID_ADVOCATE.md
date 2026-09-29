@@ -1,6 +1,6 @@
 # Verification open, authority operated
 
-*Hybrid Advocate. Facts dated 2026-09-29. I mark speculation as speculation. Thresholds below are my proposals, not findings.*
+*Hybrid Advocate, facts dated 2026-09-29. Speculation is marked; thresholds are my proposals, not findings.*
 
 ## Thesis
 
@@ -18,14 +18,14 @@ Two guardrails. Open is not inspectable: "How do we know?" is free inside every 
 
 | Layer | Call | Reason and exact line |
 |---|---|---|
-| L0 Record | **Open spec + open source** (Apache-2.0, patent grant) | Decision Receipt v1 already verifies in a second browser. A district cannot trust a receipt only the vendor can verify. Includes one canonicalisation and hash (the repo has three non-identical canonical-JSON functions), typed unknowns, statuses emitted from provenance. |
-| L1 Address | **Open spec** | Minted without permission, names its frame (semantics version), derived from content so it survives our registry. The name-to-head *registry* is operated. |
+| L0 Record | **Open spec + open source** (Apache-2.0, patent grant) | Decision Receipt v1 already verifies in a second browser, and a district cannot trust a receipt only the vendor can verify. Includes one canonicalisation and hash (the repo has three non-identical canonical-JSON functions), typed unknowns, provenance-emitted statuses. |
+| L1 Address | **Open spec** | Minted without permission, names its frame (semantics version), content-derived so it survives our registry. The name-to-head *registry* is operated. |
 | L2 Contract | **Open spec + reference fold/verifier + conformance vectors.** Rulebook *language*: **not yet.** Rulebooks: closed content, inspectable | A determinism contract is checkable. A language before three independent rulebooks exist is VRML97. |
-| L3 Host | **Closed, operated.** Reference host: not yet | Seats, time authority, identity and leases carry child-data safety and revenue. Closing buys little against copying; the reasons are test (2), safety and option value: closed-to-open is possible later, open-to-closed is not. |
+| L3 Host | **Closed, operated.** Reference host: not yet | Seats, time authority, identity and leases carry child-data safety and revenue. Closing buys little against copying; the reasons are test (2), safety, and option value (closed-to-open is possible later, the reverse is not). |
 | L4 Representation | First-party Browser and packs closed. Record viewer open (inside the verifier). **Projection contract: not yet** | The seat auditor guards displayed facts, not derived secrets. A confidentiality promise we cannot keep is worse than none. |
 | L5 Network | **Not yet.** Publish `bow-bridge-1` as an informational draft | Standardise after two independent hosts have transacted. |
-| L6 Connectors | **Closed, licensed.** Only the licence-in-provenance field is in L0 | Licences and rights are the asset. Writeback: not yet. |
-| L7 Intelligence | **No new spec.** An agent is a seat: it gets a seat's projection and emits acts. Thin provider adapters open; orchestration closed | Interchangeability comes from L0/L3 semantics, not another standard. |
+| L6 Connectors | **Closed, licensed.** Only the licence-in-provenance field is in L0 | Licences and rights are the asset; open layers carry no league data or likeness. Writeback: not yet. |
+| L7 Intelligence | **No new spec.** An agent is a seat: it receives a seat's projection and emits acts. Thin adapters open; orchestration closed | Interchangeability comes from seat semantics, not another standard. |
 | L8 Creators | Authoring kit open when stable; **marketplace not yet** | Supply first, commerce after external authors exist. |
 | L9 Verticals | Education closed; others **not yet** | Scope discipline in both repos. |
 
@@ -35,7 +35,7 @@ Two guardrails. Open is not inspectable: "How do we know?" is free inside every 
 |---|---|
 | **T1** Draft to Stable v1 (compatibility promise) | One real class on each product; a spec-only clone passes (below); one non-BOW author shipped against it. |
 | **T2** Neutral governance for L0–L2 | Two conformant implementations with no BOW funding; or two prospective implementers name BOW's sole-editor role as the blocker; or a buyer conditions purchase on it. Target a Joint Development Foundation-style home (OpenUSD's route). BOW keeps an editor seat and a "BOW Verified" mark. |
-| **T3** Open a reference host | Procurement demands self-hosting or data residency, or three external Worlds need shared authority we will not host free. License **AGPL-3.0 from day one**, single tenant. Multi-tenant control plane, registry and identity stay closed. Never Apache-then-restrict. |
+| **T3** Open a reference host | Procurement demands self-hosting or data residency, or three external Worlds need shared authority we will not host free. License **AGPL-3.0 from day one** (accepting enterprise AGPL friction), single tenant; control plane, registry and identity stay closed. Never open-then-restrict. |
 | **T4** Rulebook language | Three independently authored rulebooks in two domains share constructs and an outsider asks. Derive it; do not design it. |
 | **T5** L5 spec | Two independent hosts complete a cross-World transaction. |
 | **T6** Marketplace | About ten external Worlds published unaided, one creator paying for hosting (speculative number). |
@@ -44,29 +44,28 @@ Two guardrails. Open is not inspectable: "How do we know?" is free inside every 
 
 ## What compounds, and how the boundary holds
 
-*Open side compounds:* records strangers can verify, implementers, agent-legible tooling, the exit rights procurement demands. *Closed side compounds:* World One's unbroken record, signed heads and a public transparency log, dated rulebooks right on both sides of every trade, child-safety operations, licences, later counterparties.
+*Open side compounds:* records strangers can verify, implementers, agent-legible tooling, the exit rights buyers demand. *Closed side compounds:* World One's unbroken record, signed heads in a public log, dated rulebooks right on both sides of every trade, child-safety operations, licences, later counterparties.
 
-**Against commoditization:** a rival with the whole open stack has a viewer and a toy World. It lacks the history everyone cites, the keys, the rulebooks, the licences. Honest caveat: today all of that is near zero (history starts at first start; authority is borrowed from a host ACL). The hybrid's real risk is delay in operating the canonical instance.
+**Against commoditization:** a rival with the whole open stack has a viewer and a toy World, not the history everyone cites, the keys, the rulebooks or the licences. Honest caveat: today all of that is near zero (history starts at first start; authority is borrowed from a host ACL). The hybrid's real risk is delay in operating the canonical instance.
 
-**Against starvation:** a *sufficiency test*: a stranger can do one useful thing without asking us. Verify a receipt; embed a Moment (the lockstep fold runs in any browser, so single-player Moments need no host, like a Google Maps embed); author and export records. Plus three rules: no paid fields inside the spec; every hosted record exports for offline verification (Git's clone rule); the free door stays free.
+**Against starvation:** a *sufficiency test*: a stranger can do one useful thing without asking us. Verify a receipt; embed a Moment (the lockstep fold runs in any browser, so single-player Moments need no host, like a Google Maps embed); author and export records. Plus: no paid fields inside the spec; every hosted record exports for offline verification (Git's clone rule); the free door stays free.
 
 ## The required topics
 
-- **Adoption:** the product carries adoption; the spec is an option, not the thesis. Spec pull, if it comes, arrives through verification links and embeds. Speculation: coding agents that read a spec cut the cost of third-party tooling.
+- **Adoption:** the product carries adoption; the spec is an option. Spec pull, if it comes, arrives through verification links and embeds. Speculation: coding agents that read a spec cut the cost of third-party tooling.
 - **Monetization** (no price list): persistence, licensed data, district and enterprise licences with receipts, hosting, later marketplace take.
-- **Developer ecosystem:** spec, verifier, fold library, vectors, later an authoring kit. No outside developer exists, so the first implementers are our own two products.
-- **Moat:** instance, history, rulebook data, keys, trust operations, licences. Not code.
-- **Security:** publishing formats and hashing is safe (Kerckhoffs). The attack surface is the host and the projections, both closed. Today head authority is a platform ACL and comparison is 32-bit; a full 64-hex signed head must precede any "verifiable" claim.
+- **Developer ecosystem and moat:** spec, verifier, fold library, vectors, later an authoring kit; no outside developer exists, so the first implementers are our own two products. The moat is instance, history, rulebook data, keys, trust operations, licences, not code.
+- **Security:** publishing formats and hashing is safe (Kerckhoffs). The attack surface is the host and projections, both closed. Head authority today is a platform ACL and comparison is 32-bit; a full 64-hex signed head must precede any "verifiable" claim.
 - **Trust:** an operator cannot silently rewrite World One if signed heads also go to a third-party log. That matters when students ask "our decision caused that?"
 - **Network effects:** zero today. Plausible: verification (the more places can check a record, the more it is worth as evidence, as with PDF readers) and, much later, cross-World contracts. A classroom is not a network.
 
 ## Analogies, and what each teaches
 
-- **Android/AOSP vs GMS:** Apache code; the moat was Google's services plus a compatibility definition and test suite. That is L0–L2 plus "BOW Verified". Cautions: preinstall and tying deals drew the EU's 2018 fine, and in March 2025 Google moved AOSP development private.
+- **Android/AOSP vs GMS:** Apache code; the moat was Google's services plus a compatibility definition and test suite (our L0–L2 plus "BOW Verified"). Cautions: tying and preinstall deals drew the EU's 2018 fine, and in March 2025 Google moved AOSP development private.
 - **Git vs GitHub:** open protocol, clone-to-leave; hosting and the social layer captured the value. That is L0/L1 vs L3.
-- **PDF:** published 1993, ISO 32000-1 in 2008; free reader, paid authoring, governance after adoption. BOW has no adoption yet.
+- **PDF:** published 1993, ISO 32000-1 in 2008; free reader, paid authoring, governance after adoption. We have no adoption yet.
 - **OpenUSD vs Omniverse:** Pixar opened code in 2016, the Alliance formed August 2023, Core Specification 1.0 landed December 2025. Code first, governance late, proprietary platform on top.
-- **Chromium vs Chrome; VS Code vs Marketplace:** open engine, closed distribution and services. The warning: one vendor steers the "open" thing, and Microsoft's April 2025 enforcement cut its C/C++ extension off from forks like Cursor. LSP shows a one-vendor spec can still win.
+- **Chromium vs Chrome; VS Code vs Marketplace:** open engine, closed distribution and services. The warning: one vendor steers the "open" thing (Microsoft's April 2025 enforcement cut its C/C++ extension off from forks like Cursor). LSP shows a one-vendor spec can still win.
 - **Unity, Stripe, Figma:** Unity's Runtime Fee (2023, cancelled 12 Sep 2024) shows retroactive terms burn trust. Stripe documents its API and keeps the network and risk data (my reading). Figma won with a closed multiplayer runtime plus documented APIs, so an open format is not what won there.
 
 ## Failure modes of my own strategy
