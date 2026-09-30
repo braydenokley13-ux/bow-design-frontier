@@ -146,7 +146,8 @@ are what the builders and the parent could still see):
 | `BROWSER_KILL_LIST.md` | everything killed, parked, demoted or turned into law, with who and why |
 
 Working papers: `briefs/` (contract, specs, critic brief, canon, the founder update), `research/`
-(thirteen reports), `critique/` (two critics and the browser-truth run), `evidence/boston-spatial/`
+(thirteen reports), `critique/` (three independent critics, the browser-truth run, and the builders'
+self-reports, added after the critics had judged), `evidence/boston-spatial/`
 (screenshots of the real Boston 3D work).
 
 ## 5. What is honest to claim
