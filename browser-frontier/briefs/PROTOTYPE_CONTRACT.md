@@ -95,3 +95,24 @@ Your spec gives you a NAMED ART DIRECTION. Commit to it; do not drift toward a h
 5. Reply (≤ 250 words): the concept in one line; the steps implemented; what is REAL / PROPOSED /
    SPECULATIVE; the weakest part; every fact you were unsure of; the harness result line for both
    viewports.
+
+## 9. Amendments after the critique wave (binding for every build from 30 Sep 2026)
+Read `briefs/CANON_AFTER_CRITIQUE.md`. In short:
+- **Two logs.** The canonical RECORD (acts that change state; numbered with the World's canonical
+  numbers from the fixture — `world.record[].n`, next act `world.nextActNumber`) and the person's TRAIL
+  (navigation, toggles, reveals). Only the RECORD is hashed, with **SHA-256** (Web Crypto
+  `crypto.subtle.digest`); never a toy hash; never over navigation.
+- **Address in the URL.** Write the current address to `location.hash`; reading the hash on load must
+  restore the state it names (reload test in your steps: `{"reload": true}`). A `seat` segment is a
+  viewpoint: opening it yields only what an observer may see, and the page says so.
+- **Kind propagation.** A value wears the kind of its weakest input. MODELED only where a named,
+  versioned model ran here; otherwise say where it ran and mark verify.
+- **Seam verdicts:** exactly HELD · DIVERGED · IMPOSSIBLE · RE-DECLARE.
+- **Textures are not checkboxes.** No hollow squares beside text.
+- **Never silently replace user input.**
+- **Viewports:** also run `--w 1024 --h 600` and `--w 390 --h 844`; a phone gets a phone layout.
+- Two clients: the harness can open a second client in the same browser context (`{"open2": ...}`,
+  `{"use": 0|1}`); a stand-in shared store may use `BroadcastChannel` + `localStorage`, labelled as a
+  stand-in for the real shared store.
+- Keep build scripts private: name any helper in the scratchpad with your board's prefix
+  (e.g. `onerecord_build.sh`); never run another builder's script.

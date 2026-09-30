@@ -21,6 +21,10 @@
 //   {"expectText": "text"}                          record whether the page shows this text
 //   {"shot": "name"}                                screenshot (jpeg q82 by default)
 //   {"shot": "name", "full": true}                  full-page screenshot
+//   {"open2": "Other.html#addr"}                    open a SECOND client (same browser context: shares
+//                                                  BroadcastChannel / localStorage) and make it current
+//   {"use": 0} / {"use": 1}                         switch which client the next steps act on
+//   {"reload": true}                                reload the current client (tests address-in-URL)
 // Every click-like step waits `after` ms (default 700) for transitions.
 //
 // Output: <out>/NN-name.jpg and <out>/report.json (console errors, page errors, failed requests,
@@ -58,11 +62,16 @@ const port = server.address().port;
 
 const exe = fs.existsSync('/opt/pw-browsers/chromium-1194/chrome-linux/chrome') ? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' : undefined;
 const browser = await chromium.launch({ executablePath: exe, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
-const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
+const ctx = await browser.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
+const pages = [await ctx.newPage()];
+let page = pages[0];
 const report = { file, viewport: [W, H], console: [], pageErrors: [], failedRequests: [], failedSteps: [], expectations: [], shots: [] };
-page.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') report.console.push(m.type() + ': ' + m.text().slice(0, 300)); });
-page.on('pageerror', e => report.pageErrors.push(e.message.slice(0, 400)));
-page.on('requestfailed', r => report.failedRequests.push(r.url().slice(0, 200) + ' ' + (r.failure() || {}).errorText));
+const watch = (pg, tag) => {
+pg.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') report.console.push(m.type() + ': ' + m.text().slice(0, 300)); });
+pg.on('pageerror', e => report.pageErrors.push(e.message.slice(0, 400)));
+pg.on('requestfailed', r => report.failedRequests.push(r.url().slice(0, 200) + ' ' + (r.failure() || {}).errorText));
+};
+watch(page);
 
 const t0 = Date.now();
 await page.goto(`http://127.0.0.1:${port}/prototypes/${file}`, { waitUntil: 'networkidle', timeout: 45000 }).catch(e => report.failedSteps.push('goto: ' + e.message.split('\n')[0]));
@@ -72,6 +81,9 @@ for (const s of steps) {
   const after = s.after ?? 700;
   try {
     if (s.wait) await page.waitForTimeout(s.wait);
+    if (s.open2) { const p2 = await ctx.newPage(); watch(p2); await p2.goto(`http://127.0.0.1:${port}/prototypes/${s.open2}`, { waitUntil: 'networkidle', timeout: 45000 }); pages.push(p2); page = p2; await page.waitForTimeout(s.after ?? 700); }
+    if (s.use !== undefined) { page = pages[s.use]; await page.bringToFront(); await page.waitForTimeout(300); }
+    if (s.reload) { await page.reload({ waitUntil: 'networkidle' }); await page.waitForTimeout(s.after ?? 900); }
     if (s.viewport) { await page.setViewportSize({ width: s.viewport[0], height: s.viewport[1] }); await page.waitForTimeout(400); }
     if (s.click) { await page.getByRole(s.role || 'button', { name: s.click, exact: !!s.exact }).nth(s.nth || 0).click({ timeout: 4000, force: !!s.force }); await page.waitForTimeout(after); }
     if (s.clickText) { await page.getByText(s.clickText, { exact: !!s.exact }).nth(s.nth || 0).click({ timeout: 4000, force: !!s.force }); await page.waitForTimeout(after); }

@@ -201,19 +201,22 @@
          AUTHORED are illustrative, written for the prototypes — not in any save. Money deltas are
          authored too, except the Week 6 trade (the World record). */
       record: [
-        { id: 'y1-business', when: 'Year One', what: 'Funded Business over Basketball Ops', k: 'RECORDED', effects: { analytics: 'dark', scouting: 'dark', cash: 3000000 }, cashNote: 'authored' },
-        { id: 'w1-minimum', when: 'Year Two · Week 1', what: 'Signed a guard to a minimum deal', k: 'AUTHORED', effects: { payroll: 2449000 } },
-        { id: 'w2-partner', when: 'Year Two · Week 2', what: 'Booked a partner night at the arena', k: 'AUTHORED', effects: { cash: 600000 } },
-        { id: 'w3-denver', when: 'Year Two · Week 3', what: 'Declined Denver’s call about a future second-round pick', k: 'AUTHORED', effects: {} },
-        { id: 'w4-prices', when: 'Year Two · Week 4', what: 'Raised premium seat prices by 5%', k: 'AUTHORED', effects: { cashPerNight: 120000, premiumDemand: -0.04 } },
-        { id: 'w6-trade', when: 'Year Two · Week 6', what: 'Traded Derrick White to Golden State for Jimmy Butler', k: 'RECORDED', effects: { payroll: 26500000 } },
-        { id: 'w7-rotation', when: 'Year Two · Week 7', what: 'Moved Butler into the starting five', k: 'AUTHORED', needs: 'w6-trade', effects: {} },
-        { id: 'w8-extension', when: 'Year Two · Week 8', what: 'Offered Butler’s camp an extension meeting', k: 'AUTHORED', needs: 'w6-trade', effects: {} }
+        { id: 'y1-business', n: 35, when: 'Year One', what: 'Funded Business over Basketball Ops', k: 'RECORDED', effects: { analytics: 'dark', scouting: 'dark', cash: 3000000 }, cashNote: 'authored' },
+        { id: 'w1-minimum', n: 36, when: 'Year Two · Week 1', what: 'Signed a guard to a minimum deal', k: 'AUTHORED', effects: { payroll: 2449000 } },
+        { id: 'w2-partner', n: 37, when: 'Year Two · Week 2', what: 'Booked a partner night at the arena', k: 'AUTHORED', effects: { cash: 600000 } },
+        { id: 'w3-denver', n: 38, when: 'Year Two · Week 3', what: 'Declined Denver’s call about a future second-round pick', k: 'AUTHORED', effects: {} },
+        { id: 'w4-prices', n: 39, when: 'Year Two · Week 4', what: 'Raised premium seat prices by 5%', k: 'AUTHORED', effects: { cashPerNight: 120000, premiumDemand: -0.04 } },
+        { id: 'w6-trade', n: 40, when: 'Year Two · Week 6', what: 'Traded Derrick White to Golden State for Jimmy Butler', k: 'RECORDED', effects: { payroll: 26500000 } },
+        { id: 'w7-rotation', n: 41, when: 'Year Two · Week 7', what: 'Moved Butler into the starting five', k: 'AUTHORED', needs: 'w6-trade', effects: {} },
+        { id: 'w8-extension', n: 42, when: 'Year Two · Week 8', what: 'Offered Butler’s camp an extension meeting', k: 'AUTHORED', needs: 'w6-trade', effects: {} }
       ],
+      nextActNumber: 43,
+      numberingNote: 'Canonical act numbers for this World (n). Every prototype uses these; the next act is 43. Numbers are AUTHORED for the prototypes.',
+      cash: F(20000000, 'AUTHORED', 'illustrative World cash at Year Two · Week 9, before any Week 9 act', null, false, 'one cash for every board — read it, never restate it'),
       payrollStartYearTwo: F(193851000, 'AUTHORED', 'illustrative: 196.3 − 2.449', null, false, 'chosen so the record sums to the World’s $222.8M'),
       arena: {
         lastNight: F('Won 135–115 · 16,440 in the seats of 18,624', 'RECORDED', 'World record (spatial evidence)', null, false),
-        nextNight: F('About 18,454 expected, of 18,624', 'MODELED', 'Ticketing room forecast (World model)', null, false, 'an estimate, not a played night'),
+        nextNight: F('About 18,454 expected, of 18,624', 'MODELED', 'the ticketing-room forecast of the BOW NBA World (unmerged branch) — the value is read from its screenshot, no model runs in these prototypes', null, true, 'an estimate, not a played night; say where the model ran'),
         ifTicketingDark: F(null, 'UNKNOWN', null, null, false, 'no seat forecast without a funded ticketing room')
       },
       openMatters: [
