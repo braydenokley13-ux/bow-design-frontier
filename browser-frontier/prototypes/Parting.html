@@ -1054,7 +1054,7 @@ function verdictHTML(r, full){
 }
 function marginReality(){
   var L=S.lin, W=lineageWorlds(), sw=lworld(L.seamWorld), verd=seamFor(sw,L.arrived), next=EVENTS[L.arrived];
-  var sel = W.map(function(w){ return '<button type="button" class="btn" data-a="seamworld" data-v="'+w.id+'" aria-pressed="'+(L.seamWorld===w.id)+'">'+esc(w.id==='main'?'Author’s fork':w.id==='s1'?'Fultz traded ’19':'Your fork')+'</button>'; }).join('');
+  var sel = W.map(function(w){ return '<button type="button" class="btn" data-a="seamworld" data-v="'+w.id+'" aria-pressed="'+(L.seamWorld===w.id)+'" aria-label="Read the seam for '+esc(w.name)+'">'+esc(w.id==='main'?'Author’s fork':w.id==='s1'?'Fultz traded ’19':'Your fork')+'</button>'; }).join('');
   var fe = L.focusEv || L.arrived;
   var byEv = {}; verd.forEach(function(r){ (byEv[r.ev.id]=byEv[r.ev.id]||[]).push(r); });
   var strip = '', detail = '', i;

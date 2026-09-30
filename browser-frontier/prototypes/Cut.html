@@ -979,8 +979,8 @@ function vSeat(){
   var slip = (S.refusal && S.refusal.keep) ? '<div class="refuse"><span class="stamp">Refused</span> <b>Rule:</b> ' + esc(S.refusal.rule) + ' ' + esc(S.refusal.text) + '</div>' : '';
   var fold = '<div class="folded" data-cap="PROPOSED" data-capc="the cut stays on the left in record ink while you decide" data-cost="NO AI REQUIRED"><span class="lbl">The cut · ' + fd(c.date) + ' · record ink · stays put</span>' +
     '<span class="fi"><span class="sw k-' + taxFactAt(c).k + '" aria-hidden="true"></span> Projected tax <b>≈ ' + M(TAX0) + '</b></span>' +
-    '<span class="fi"><span class="sw k-' + findState(/Tatum/).value.k + '" aria-hidden="true"></span> Tatum: ' + esc(findState(/Tatum/).value.v) + '</span>' +
-    '<span class="fi"><span class="sw k-' + findState(/Simons/).value.k + '" aria-hidden="true"></span> Simons: ' + esc(findState(/Simons/).value.v) + '</span>' +
+    '<span class="fi"><span class="sw k-' + findState(/Tatum/).value.k + '" aria-hidden="true"></span> Tatum: ' + esc(findState(/Tatum/).value.v.split(' (')[0]) + ' · no return yet</span>' +
+    '<span class="fi"><span class="sw k-' + findState(/Simons/).value.k + '" aria-hidden="true"></span> Simons: ' + esc(findState(/Simons/).value.v.split(' (')[0]) + '</span>' +
     '<span class="fi"><span class="sw k-UNKNOWN" aria-hidden="true"></span> Not yet: sealed</span></div>';
   return '<div class="seat"><div class="lbl">Seat · Boston’s decision-maker · at ' + fd(c.date) + ' · hindsight: ' + esc(hindStamp()) + '</div><h1>Choose from what the rules allow, not from what happened.</h1>' + fold +
     '<div class="cols2"><section data-cap="PROPOSED" data-capc="the legal action space, cut-versioned; the CBA engine that would compute it is REAL in BOW Economics Live" data-cost="NO AI REQUIRED"><h2 class="h2">The legal action space</h2>' + acts +

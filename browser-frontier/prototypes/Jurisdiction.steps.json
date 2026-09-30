@@ -126,7 +126,8 @@
   "shot": "sent-ground-changes-to-the-league"
  },
  {
-  "click": "Hold this paper"
+  "click": "Hold this paper",
+  "shot": "follow-hold-the-league-queue"
  },
  {
   "click": "Go there",

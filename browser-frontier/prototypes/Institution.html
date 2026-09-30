@@ -405,16 +405,16 @@ function FIXTURES() {
     else { lead = 'Recorded.'; text = d.name + ' is lit: ' + d.why.replace('Business funded', 'Business was funded') + '.'; }
     add('dept.' + id, mark, room, d.name, k, lead, text, {
       way: on ? undefined : 'Unbought', cause: on ? undefined : 'Nobody paid for this.',
-      addr: 'boston/ops/v4.departments[' + WD.departments.indexOf(d) + ']', cap: 'REAL', src: SRC.world + ' · ' + SRC.evid, asof: AUTH.week, pose: 'analytics|analytics',
+      addr: 'boston/ops/v4.departments[' + WD.departments.indexOf(d) + ']', cap: 'REAL', src: SRC.world + ' · ' + SRC.evid, asof: AUTH.week, pose: 'desk-analytics|analytics',
       body: on ? [d.side === 'business' ? 'Business side. A funded ticketing room is what makes the next home night’s forecast exist.' : 'Basketball side.'] : ['Price on the door: ' + mm(d.opensFor) + '. [verify: price read from the spatial evidence, not from the save]', 'Dark is chairs stacked and sheets on the desks; the light is only a second cue.'],
       acts: (!on && id !== 'partnerships' && id !== 'ticketing') ? [{ act: 'fund', arg: { dept: id }, label: 'Fund ' + d.name + ' · ' + mm(d.opensFor) }] : []
     });
   };
   dept('analytics', 'H-05', 'H'); dept('scouting', 'H-06', 'H'); dept('ticketing', 'H-07', 'H'); dept('partnerships', 'H-08', 'H');
-  out.find(f => f.id === 'dept.ticketing').pose = 'ticketing|ticketing'; out.find(f => f.id === 'dept.partnerships').pose = 'ticketing|ticketing';
+  out.find(f => f.id === 'dept.ticketing').pose = 'desk-analytics|ticketing'; out.find(f => f.id === 'dept.partnerships').pose = 'desk-analytics|ticketing';
   add('board.draft', 'H-09', 'H', 'Draft board', fund.scouting ? 'AUTHORED' : 'UNKNOWN', fund.scouting ? 'Pending.' : 'Unbought.',
     fund.scouting ? 'The draft board keeps its outlines. First report due ' + AUTH.reportWeek + ': pending, not magic. Nothing is on it yet.' : 'The draft board is under a sheet. No reports feed it while Scouting is dark.',
-    { addr: 'boston/ops/scouting/draftBoard', src: SRC.auth, asof: AUTH.week, pose: 'analytics|analytics', body: fund.scouting ? ['A dated tag, not a result: what Scouting finds is not known until it reports.'] : [] });
+    { addr: 'boston/ops/scouting/draftBoard', src: SRC.auth, asof: AUTH.week, pose: 'desk-analytics|analytics', body: fund.scouting ? ['A dated tag, not a result: what Scouting finds is not known until it reports.'] : [] });
   add('film.room', 'H-10', 'H', 'Film room', br ? 'UNKNOWN' : 'RECORDED', br ? 'Sealed.' : 'Recorded.', br ? 'The Week 9 game with a different roster has not been played in this branch. You find out by living it.' : 'Last game, at home: ' + LOSS_DETAIL + '.',
     { addr: 'boston/ops/v4.court.last', cap: 'REAL', src: br ? SRC.auth : SRC.world, asof: AUTH.week, pose: 'film|film', body: br ? ['The screen is a dashed empty frame. The record’s tape is across the slip.'] : ['Whether ' + P_IN + ' changed the result is not determined by anything in the record.'] });
   add('court', 'H-11', 'H', 'Practice court', 'AUTHORED', 'Authored.', 'Practice court. Nothing is recorded here; it stands for the work between games.', { addr: 'boston/ops/court', pose: 'court|court' });

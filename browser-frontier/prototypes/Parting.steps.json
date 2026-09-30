@@ -173,6 +173,18 @@
   "shot": "lineage-opens"
  },
  {
+  "click": "The door:"
+ },
+ {
+  "shot": "door-sealed-for-observer"
+ },
+ {
+  "click": "Ask what Reality did"
+ },
+ {
+  "shot": "door-asked"
+ },
+ {
   "click": "Year 3 ·"
  },
  {
@@ -207,8 +219,7 @@
   "shot": "seam-impossible-no-world"
  },
  {
-  "click": "Fultz traded in 2019",
-  "exact": true
+  "click": "Read the seam for Fultz traded in 2019"
  },
  {
   "shot": "seam-other-world"
@@ -274,6 +285,12 @@
  },
  {
   "shot": "seam-for-my-fork"
+ },
+ {
+  "click": "Return to Reality, now"
+ },
+ {
+  "shot": "return-to-reality"
  },
  {
   "click": "How do we know?"
