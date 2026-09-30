@@ -31,7 +31,7 @@ h1,h2,h3,p{margin:0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* ---------- shell ---------- */
-#app{display:grid;grid-template-rows:auto 1fr auto auto;height:100vh;min-height:0}
+#app{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr auto auto auto;height:100vh;min-height:0}
 .mast{border-bottom:3px double var(--ink);padding:5px 20px 4px;background:var(--paper) var(--grain)}
 .r1{display:flex;align-items:center;gap:12px;min-height:42px}
 .brand{font:700 25px/1 var(--serif);letter-spacing:.01em;white-space:nowrap}
@@ -57,17 +57,19 @@ body.showhow .legend{display:flex}
 .status b{color:var(--ink);font-weight:600}
 
 /* ---------- truth grammar ---------- */
-.sw{display:inline-block;width:14px;height:14px;flex:none;border:1.5px solid var(--kc);box-sizing:border-box;vertical-align:-2px}
+.sw{display:inline-block;width:24px;height:10px;flex:none;border:1.5px solid var(--kc);box-sizing:border-box;vertical-align:1px}
+.sw.unv{outline:1.5px dashed var(--kc);outline-offset:2px;margin-left:2px;margin-right:2px}
+.unvchip{display:inline-block;margin-left:8px;border:1.5px dashed var(--ink);padding:0 5px;font:500 10px/1.5 var(--mono);text-transform:uppercase;letter-spacing:.05em;vertical-align:1px;background:var(--paper);white-space:nowrap}
 .k-OBSERVED{background:var(--kc)}
-.k-RECORDED{background:var(--kc);box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--kc)}
+.k-RECORDED{background:var(--kc);box-shadow:inset 0 0 0 1.5px var(--paper),inset 0 0 0 2.5px var(--kc)}
 .k-AUTHORED{background:transparent}
 .k-COMPUTED{background:var(--tone)}
 .branch .k-COMPUTED{background:var(--brtone)}
 .k-MODELED{background:repeating-linear-gradient(135deg,var(--kc) 0 1.3px,transparent 1.3px 4px)}
 .k-GENERATED{background:radial-gradient(circle,var(--kc) 0.9px,transparent 1.2px) 0 0/4px 4px}
 .k-UNKNOWN{border-style:dashed;background:transparent}
-.fact{display:grid;grid-template-columns:20px 1fr;gap:6px;padding:4px 0;border-bottom:1px solid rgba(22,22,21,.18);align-items:start}
-.fact .sw{margin-top:3px}
+.fact{display:grid;grid-template-columns:28px 1fr;gap:6px;padding:4px 0;border-bottom:1px solid rgba(22,22,21,.18);align-items:start}
+.fact .sw{margin-top:6px}
 .fl{font:500 10.5px/1.3 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin-right:6px}
 .fv{font-size:14px}
 .fv.tone{background:var(--tone);padding:0 4px}
@@ -100,11 +102,15 @@ body.showhow .how{display:block}
 
 /* ---------- capability overlay ---------- */
 [data-cap]{position:relative}
-.captag{position:absolute;top:2px;right:2px;z-index:30;max-width:min(300px,94%);background:var(--paper);color:var(--ink);border:1.5px solid var(--ink);padding:2px 6px;font:500 9.5px/1.3 var(--mono);letter-spacing:.03em;text-transform:uppercase;pointer-events:none;box-shadow:2px 2px 0 var(--ink);text-align:left}
-.captag.prop{border-style:dotted;border-width:2px}
-.captag.spec{border-style:dashed}
-.captag.real{border-width:2.5px}
-.captag em{font-style:normal;display:block;color:var(--ink2)}
+.capn{position:absolute;top:-9px;left:-7px;z-index:30;min-width:18px;height:18px;padding:0 3px;background:var(--paper);color:var(--ink);border:1.5px solid var(--ink);font:600 10.5px/15px var(--mono);text-align:center;pointer-events:none;box-shadow:1.5px 1.5px 0 var(--ink)}
+.capn.in,.sheet .capn{top:2px;left:2px}
+.zA .capn{left:auto;right:8px}
+.capn.st{position:static;display:inline-block;flex:none;box-shadow:none}
+#realsheet{border-top:2px solid var(--ink);background:var(--paper2);padding:5px 16px 6px;max-height:27vh;overflow:auto}
+#realsheet h3{margin:0 0 3px;font:600 10.5px/1.3 var(--mono);letter-spacing:.09em;text-transform:uppercase}
+#realsheet ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:1px 18px}
+#realsheet li{display:flex;gap:7px;align-items:baseline;border-bottom:1px dotted var(--ink3);padding:1px 0;font:400 11.5px/1.3 var(--mono)}
+#realsheet .capw{font-weight:600}
 
 /* ---------- rail ---------- */
 .rail{display:grid;grid-template-columns:288px 1fr 322px;height:132px;background:var(--paper2) var(--grain);border-top:3px double var(--ink);position:relative}
@@ -137,7 +143,7 @@ body.showhow .how{display:block}
 .door small{display:block;font-weight:400;color:var(--ink2)}
 .doorstatic{position:absolute;top:0;border:1.5px solid var(--ink);background:var(--paper);padding:3px 7px;font:500 10.5px/1.3 var(--mono)}
 .doorstatic small{display:block;font-weight:400;color:var(--ink2)}
-.outc{position:absolute;top:47px;height:14px;border:1.5px dashed var(--ink);font:400 9.5px/11px var(--mono);color:var(--ink2);padding:0 4px;white-space:nowrap;overflow:hidden}
+.outc{position:absolute;top:45px;height:13px;border:1.5px dashed var(--ink);font:400 9.5px/10px var(--mono);color:var(--ink2);padding:0 4px;white-space:nowrap;overflow:hidden}
 .win{display:block;width:100%;height:100%;border:2px solid var(--ink);background:var(--paper);position:relative;overflow:hidden;padding:0}
 .win .top{display:flex;justify-content:space-between;align-items:center;height:28px;padding:0 8px;font:500 10.5px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase}
 .win .top b{background:var(--ink);color:var(--paper);font:600 15px/1 var(--mono);padding:4px 7px;letter-spacing:.03em;text-transform:none}
@@ -165,6 +171,11 @@ body.showhow .how{display:block}
 .rivertiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .mtile{display:block;border:1.5px dashed var(--ink);padding:6px 10px;min-height:64px}
 .mtile:hover{background:var(--tone);border-style:solid}
+.mtile.unlit{background:var(--paper2);border-color:var(--ink3);color:var(--ink2)}
+.mtile.unlit:hover{background:var(--paper2);border-style:dashed}
+.mtile .ul{display:block;margin-top:4px;font:500 10px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink3)}
+.mtile .un{display:block;margin-top:4px;font:400 12px/1.35 var(--mono);color:var(--ink);border-top:1px dashed var(--ink3);padding-top:3px}
+.vpnote{border:2px dashed var(--ink);background:var(--paper);padding:5px 12px;margin:0 0 8px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:13.5px}
 .mtile .dt{display:block;font-size:11px;font-weight:600;color:var(--ink2)}
 .mtile .qq{display:block;font:italic 400 14px/1.3 var(--serif)}
 .doorbox{border:1.5px solid var(--ink);padding:8px 12px;margin-bottom:8px;background:var(--paper)}
@@ -288,10 +299,10 @@ ul.plain{margin:0;padding-left:18px}
 .mark .mid{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:4px;text-align:center;background:var(--paper2)}
 .verd{font:600 11px/1.15 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 4px;border:2px solid var(--ink);background:var(--paper);width:100%;text-align:center}
 .verd small{display:block;font-weight:400;letter-spacing:0;text-transform:none;font-size:10.5px}
-.verd.stitched{background:repeating-linear-gradient(90deg,var(--paper) 0 5px,var(--tone) 5px 8px)}
-.verd.pulled{background:repeating-linear-gradient(135deg,var(--paper) 0 4px,var(--tone) 4px 6px)}
-.verd.torn{border-style:dashed;clip-path:polygon(0 8%,8% 0,16% 10%,26% 0,36% 8%,46% 0,58% 10%,70% 0,82% 8%,92% 0,100% 10%,100% 100%,92% 92%,82% 100%,70% 90%,58% 100%,46% 92%,36% 100%,26% 90%,16% 100%,8% 92%,0 100%);padding-top:7px;padding-bottom:7px}
-.verd.open{border-style:dashed;background:transparent}
+.verd.held{background:repeating-linear-gradient(90deg,var(--paper) 0 5px,var(--tone) 5px 8px)}
+.verd.diverged{background:repeating-linear-gradient(135deg,var(--paper) 0 4px,var(--tone) 4px 6px)}
+.verd.impossible{border-style:dashed;clip-path:polygon(0 8%,8% 0,16% 10%,26% 0,36% 8%,46% 0,58% 10%,70% 0,82% 8%,92% 0,100% 10%,100% 100%,92% 92%,82% 100%,70% 90%,58% 100%,46% 92%,36% 100%,26% 90%,16% 100%,8% 92%,0 100%);padding-top:7px;padding-bottom:7px}
+.verd.re-declare{border-style:dashed;background:transparent}
 .mid .mn{font:400 9.5px/1.2 var(--mono);color:var(--ink2)}
 .marks.empty{display:block;font:italic 400 14px/1.35 var(--serif);color:var(--ink2);border:1.5px dashed var(--ink);padding:10px 14px}
 
@@ -358,7 +369,50 @@ ul.plain{margin:0;padding-left:18px}
   .mark.new{animation:stampin .55s cubic-bezier(.2,.9,.3,1.2) 1}
   @keyframes stampin{0%{transform:translateY(-10px) scale(1.04);opacity:0}100%{transform:none;opacity:1}}
 }
-@media (max-width:1300px){
+@media (max-width:700px){
+  html,body{height:auto}
+  body{overflow:auto}
+  #app{display:block;height:auto}
+  .mast{padding:6px 12px 5px}
+  .r1{flex-wrap:wrap;gap:6px 10px;min-height:0}
+  .tools{margin-left:0;flex-wrap:wrap;width:100%}
+  .tb{min-height:40px}
+  .brand{font-size:22px}
+  .addr{white-space:normal;flex-wrap:wrap;font-size:11.5px;gap:0 6px}
+  .addr .seg{overflow:visible;text-overflow:clip;white-space:normal}
+  #stage{overflow:visible;padding:10px 12px}
+  .now,.arrive,.hist,.scrub,.cols2,.frames,.planes,.marks,.backs,.walltiles{grid-template-columns:minmax(0,1fr)}
+  .now h1,.arrive h1,.hist h1{font-size:26px}
+  .rivertiles{grid-template-columns:1fr 1fr}
+  .mark{grid-template-columns:minmax(0,1fr)}
+  .mark .side.r{border-right:0;border-bottom:1.5px solid var(--ink)}
+  .cuthead{flex-direction:column;align-items:flex-start;gap:4px}
+  .floor{text-align:left;max-width:none}
+  .assump ul{columns:1}
+  .taxrow>div{min-width:0}
+  .fact.hero .fv{font-size:24px}
+  .dock{position:static;flex-wrap:wrap}
+  .dock .btn{flex:1 1 auto;justify-content:center}
+  .sheet,.sheet.wide{position:fixed;width:100%;border-left:0;padding:8px 12px 10px}
+  .since{flex-direction:column;align-items:flex-start;gap:4px}
+  .slip{position:static;width:auto;margin-top:10px;box-shadow:3px 3px 0 var(--red)}
+  .edge{right:-6px}
+  .rail{grid-template-columns:minmax(0,1fr);height:auto}
+  .rail>div{padding:6px 12px}
+  .zA{border-right:0;border-bottom:1.5px solid var(--ink)}
+  .zB{height:140px;overflow-x:auto;overflow-y:hidden}
+  .zB .ruler{width:640px;right:auto;left:12px}
+  .zC{border-left:0;border-top:1.5px solid var(--ink);height:132px}
+  .zA .who,.zA .lbl,.zA .rt{white-space:normal}
+  .status{flex-wrap:wrap;gap:2px 12px;white-space:normal}
+  .legend{padding:4px 12px}
+  #realsheet{max-height:none}
+  #realsheet ul{grid-template-columns:1fr}
+  .strack .n{width:130px}
+}
+@media (min-width:701px) and (max-width:1300px){
+  .r1{flex-wrap:wrap;row-gap:4px}
+  .tools{flex-wrap:wrap;justify-content:flex-end}
   .rail{grid-template-columns:270px 1fr 300px}
   .now h1{font-size:28px}
   #stage{padding:8px 16px}
@@ -374,6 +428,7 @@ ul.plain{margin:0;padding-left:18px}
 <div id="app">
   <header class="mast" id="mast"></header>
   <main id="stage" tabindex="-1" aria-label="Stage"></main>
+  <div id="realsheet" hidden></div>
   <div class="legend" id="legend" aria-label="Texture legend"></div>
   <footer>
     <div class="rail" id="rail" aria-label="Horizon rail"></div>
@@ -405,11 +460,15 @@ function AF(v, k, src, note){ return { v: v, k: k || 'AUTHORED', src: src || 'th
 var CUTCTX = null;
 function howOf(f){ return f.k + ' · ' + (f.src || 'no source') + (f.asOf ? ' · as of ' + fd(f.asOf) : ' · undated') + (f.verify ? ' · verify' : '') + (f.note ? ' — ' + f.note : '') + ((CUTCTX && f.k === 'OBSERVED' && f.asOf && f.asOf > CUTCTX) ? ' · the fixture’s date is after this cut; the fact held before it [verify: a source dated on or before ' + fs(CUTCTX) + ']' : ''); }
 function shortSrc(f){ return f.k + ' · ' + String(f.src || 'no source').split(' — ')[0].replace(/ \(search snippets; verify\)/, '').replace(/^web search by research agent D, 29 Sep 2026$/, 'web search, 29 Sep 2026 [verify]') + (f.verify ? ' · verify' : ''); }
+/* a row whose own source says [verify] must not wear a bare solid texture: it carries a visible unverified mark */
+function unv(f){ return !!(f && f.v != null && (f.k === 'OBSERVED' || f.k === 'RECORDED') && f.verify && (/verify|web search|search snippets/i.test((f.src || '') + ' ' + (f.note || '')) || !f.asOf)); }
+function sw(f){ return '<span class="sw k-' + f.k + (unv(f) ? ' unv' : '') + '" aria-hidden="true"></span>'; }
+function unvChip(f){ return unv(f) ? '<span class="unvchip">unverified</span>' : ''; }
 function fact(f, label, val, cls, note, after){
   var hole = (f.v == null && val == null);
   var v = hole ? '<span class="hole">' + esc(f.note || '[verify]') + '</span>' : (val != null ? val : esc(f.v));
   var fl = /flash/.test(cls || ''), fc = (cls || '').replace('flash', '').trim();
-  return '<div class="fact ' + fc + '"><span class="sw k-' + f.k + '" aria-hidden="true"></span><div class="fb"><span class="fl">' + label + '</span><span class="fv ' + (f.k === 'COMPUTED' ? 'tone' : '') + (fl ? ' flash' : '') + '">' + v + '</span>' + (after || '') + (note ? '<span class="rt" style="display:block">' + note + '</span>' : '') + '<span class="how">' + esc(howOf(f)) + '</span></div></div>';
+  return '<div class="fact ' + fc + '">' + sw(f) + '<div class="fb"><span class="fl">' + label + '</span><span class="fv ' + (f.k === 'COMPUTED' ? 'tone' : '') + (fl ? ' flash' : '') + '">' + v + '</span>' + unvChip(f) + (after || '') + (note ? '<span class="rt" style="display:block">' + note + '</span>' : '') + '<span class="how">' + esc(howOf(f)) + '</span></div></div>';
 }
 function findState(rx){ for (var i = 0; i < DL.state.length; i++) if (rx.test(DL.state[i].what)) return DL.state[i]; return null; }
 function findKnown(rx){ for (var i = 0; i < DL.known.length; i++) if (rx.test(DL.known[i].what)) return DL.known[i]; return null; }
@@ -472,7 +531,7 @@ var S = {
   observer: { asked: false, through: null },
   hindsight: { declared: false },
   seat: { act: null, council: { club: null, tatum: null } },
-  branches: [], activeId: null, nextN: 1,
+  branches: [], activeId: null, nextN: 1, vp: false, seatAddr: false, unlit: null,
   overlay: null, whyOf: 'cut',
   tog: { how: false, real: false, scrub: false },
   scrub: { pos: CUTS['0202'].date },
@@ -511,7 +570,7 @@ function trailPush(label){
 }
 function go(view, label){
   if (S.view === 'now' && view !== 'now') S.leftAt = S.tick;
-  S.view = view; S.overlay = null;
+  S.view = view; S.overlay = null; S.seatAddr = false;
   if (view !== 'now') S.doorOpen = null;
   trailPush(label);
 }
@@ -562,16 +621,16 @@ function grade(ev, b){
   var m = { ev: ev, real: ev.text, rf: ev.fact, rlabel: 'Reality · ' + fs(ev.date) };
   if (ev.grade === 'simons') {
     var ss = simonsStatus(b);
-    if (ss === 'kept') { m.v = 'PULLED'; m.sub = 'diverged'; m.bt = 'Assumed: Boston keeps Simons (your act: ' + ACTS[b.act].short + ').'; m.plain = 'Reality did something your branch held fixed. You did not cause it.'; m.bk = 'AUTHORED'; }
-    else if (ss === 'gone') { m.v = 'TORN'; m.sub = 'impossible'; m.bt = 'Simons had already left in your branch, at the cut. That trade has nobody to trade.'; m.plain = 'Reality did something your branch has no room for. You did not cause it.'; m.bk = 'AUTHORED'; }
-    else { m.v = 'OPEN'; m.sub = 're-declare'; m.bt = 'Your branch never said where Simons was. Reality did.'; m.plain = 'Your branch left this unknown, so nothing here is held or broken.'; m.bk = 'UNKNOWN'; }
+    if (ss === 'kept') { m.v = 'DIVERGED'; m.sub = 'Reality moved off it'; m.bt = 'Assumed: Boston keeps Simons (your act: ' + ACTS[b.act].short + ').'; m.plain = 'Reality did something your branch held fixed. You did not cause it.'; m.bk = 'AUTHORED'; }
+    else if (ss === 'gone') { m.v = 'IMPOSSIBLE'; m.sub = 'no room in your branch'; m.bt = 'Simons had already left in your branch, at the cut. That trade has nobody to trade.'; m.plain = 'Reality did something your branch has no room for. You did not cause it.'; m.bk = 'AUTHORED'; }
+    else { m.v = 'RE-DECLARE'; m.sub = 'say it now'; m.bt = 'Your branch never said where Simons was. Reality did.'; m.plain = 'Your branch left this unknown, so nothing here is held or broken.'; m.bk = 'UNKNOWN'; }
   } else {
     var t = b.council.tatum;
-    if (t && t.mode === 'declare' && t.v === 'back') { m.v = 'STITCHED'; m.sub = 'held'; m.bt = 'Assumed: Tatum back before the regular season ends.'; m.plain = 'Reality did what your branch assumed.'; m.bk = 'AUTHORED'; }
-    else if (t && t.mode === 'declare') { m.v = 'PULLED'; m.sub = 'diverged'; m.bt = 'Assumed: Tatum out for the season.'; m.plain = 'Reality moved off your assumption. You did not cause it.'; m.bk = 'AUTHORED'; }
-    else if (t && t.mode === 'recorded') { m.v = 'OPEN'; m.sub = 're-declare'; m.bt = 'Assumed: what the record said at the cut, “no return yet”.'; m.plain = 'The record now has a date your branch never had.'; m.bk = 'RECORDED'; }
-    else { m.v = 'OPEN'; m.sub = 're-declare'; m.bt = 'Your branch left Tatum’s timeline unknown.'; m.plain = 'Nothing held, nothing broken. Reality now has an answer.'; m.bk = 'UNKNOWN'; }
-    if (m.v === 'OPEN' && b.redecl) { m.sub = 're-declared'; m.plain += ' You re-declared it after Reality arrived (Acts).'; }
+    if (t && t.mode === 'declare' && t.v === 'back') { m.v = 'HELD'; m.sub = 'Reality agreed'; m.bt = 'Assumed: Tatum back before the regular season ends.'; m.plain = 'Reality did what your branch assumed.'; m.bk = 'AUTHORED'; }
+    else if (t && t.mode === 'declare') { m.v = 'DIVERGED'; m.sub = 'Reality moved off it'; m.bt = 'Assumed: Tatum out for the season.'; m.plain = 'Reality moved off your assumption. You did not cause it.'; m.bk = 'AUTHORED'; }
+    else if (t && t.mode === 'recorded') { m.v = 'RE-DECLARE'; m.sub = 'say it now'; m.bt = 'Assumed: what the record said at the cut, “no return yet”.'; m.plain = 'The record now has a date your branch never had.'; m.bk = 'RECORDED'; }
+    else { m.v = 'RE-DECLARE'; m.sub = 'say it now'; m.bt = 'Your branch left Tatum’s timeline unknown.'; m.plain = 'Nothing held, nothing broken. Reality now has an answer.'; m.bk = 'UNKNOWN'; }
+    if (m.v === 'RE-DECLARE' && b.redecl) { m.sub = 're-declared'; m.plain += ' You re-declared it after Reality arrived (Acts).'; }
   }
   return m;
 }
@@ -599,6 +658,7 @@ function recordRows(D, c){
 function act(kind, p){
   p = p || {};
   S.refusal = null;
+  if (S.vp && /^(advance|keep|retake|amend|pick-act|seat-set|take-seat)$/.test(kind)) { announce('You opened an address: you are reading as an observer. Take the seat to act.'); return; }
   var b = actBranch();
   switch (kind) {
   case 'toggle':
@@ -614,8 +674,10 @@ function act(kind, p){
     refuse('You cannot enter a scheduled day.', 'Acts close here. Nothing has happened at this door yet, and no model ran, so its outcome stays empty.');
     break;
   case 'close-door': S.doorOpen = null; break;
+  case 'unvp':
+    S.vp = false; L('enter', 'Took the Boston seat from a viewpoint (stands in for redeeming an Offer)'); announce('You hold the Boston seat.'); break;
   case 'moment-door':
-    L('observe', 'Tried a recorded door with no authored cut'); refuse('A door opens only onto a cut with dated, reviewed sources.', 'No cut is authored for this door in this prototype. Only the deadline door has one. (Authoring is PROPOSED; drafting is a small model’s job, review is a person’s.)'); S.refusal.moment = true; break;
+    S.unlit = p.id; L('observe', 'Touched an unlit door: no cut is authored for it yet'); announce('This door is unlit. No dated, reviewed cut is authored for it in this prototype. Nothing was refused.'); break;
   case 'follow':
     S.following = true; L('follow', 'Followed Boston Celtics · Reality: keep an arrival for ' + (p.door === 'dl27' ? 'the 2026–27 deadline' : 'the next preseason game'), true);
     announce('Following. You will be told when Reality arrives at this door.'); break;
@@ -730,7 +792,7 @@ function addressHTML(){
   else if (S.view === 'arrive') s = ['Boston Celtics', DOORT, 'at the door · no moment yet', 'no branch', 'observer', 'door'];
   else if (S.view === 'cut') s = ['Boston Celtics', DOORT, '<b>cut ' + fd(cut().date) + '</b>' + (cut().knows ? ', after the first report' : ', before the first report'), 'public record then', 'no branch', 'observer', 'cut'];
   else if (S.view === 'seat') s = ['Boston Celtics', DOORT, 'cut ' + fd(cut().date), 'no branch yet', '<b>seat Boston</b> (taking)', 'cut'];
-  else if (S.view === 'branch' && b) s = ['Boston Celtics', DOORT, 'cut ' + fd(CUTS[b.cutId].date), '<b class="br">branch ' + b.n + ' · ' + fd(b.date) + '</b>', 'seat Boston (you)', 'pinned', 'branch'];
+  else if (S.view === 'branch' && b) s = ['Boston Celtics', DOORT, 'cut ' + fd(CUTS[b.cutId].date), '<b class="br">branch ' + b.n + ' · ' + fd(b.date) + '</b>', S.vp ? 'seat Boston (viewpoint, read only)' : 'seat Boston (you)', 'pinned', 'branch'];
   else if (S.view === 'hist') s = [histName(), '<b>frozen</b> · no NOW', 'no branch', 'observer', 'record'];
   return '<span class="lbl">Address</span><span class="seg">' + s.join('<i>·</i>') + '</span>';
 }
@@ -739,7 +801,7 @@ function mastHTML(){
   var hind = (!S.observer.asked && S.hindsight.declared) ? '<span class="chip led">Hindsight · self-declared</span>' : '';
   return '<div class="r1"><div class="brand">The Cut<small>stand at a moment · do not travel</small></div>' +
     '<div class="tools">' + led + hind +
-    '<button type="button" class="tb" data-act="open-backs" data-fk="backs">Backs <span class="mono">· ' + S.log.length + ' acts</span></button>' +
+    '<button type="button" class="tb" data-act="open-backs" data-fk="backs" aria-label="Backs: ' + S.sig + ' signed act' + (S.sig === 1 ? '' : 's') + '">Backs <span class="mono">· ' + S.sig + ' signed</span></button>' +
     '<button type="button" class="tb" data-act="toggle" data-t="how" aria-pressed="' + S.tog.how + '" data-fk="how">How do we know?</button>' +
     '<button type="button" class="tb" data-act="toggle" data-t="real" aria-pressed="' + S.tog.real + '" data-fk="real">What’s real?</button>' +
     '<button type="button" class="tb" data-act="toggle" data-t="scrub" aria-pressed="' + S.tog.scrub + '" data-fk="scrub">Same trip with a scrubber</button>' +
@@ -818,7 +880,7 @@ function railHTML(){
 
 function slipHTML(){
   var r = S.refusal; if (!r || r.view !== S.view) return '';
-  if ((S.view === 'now' && !r.moment) || r.keep || r.seat || r.backs) return '';
+  if (S.view === 'now' || r.keep || r.seat || r.backs) return '';
   return '<div class="slip" data-fk="slip"><div><span class="stamp">Refused</span> <b>Rule:</b> ' + esc(r.rule) + '</div><p>' + esc(r.text) + '</p>' +
     (r.observerOffer ? '<div class="row"><button type="button" class="btn sm pri" data-act="ask-observer" data-fk="slip-ask">Ask as an observer</button><span class="lbl">one way · written to YOUR ledger, not the system’s</span></div>' : '') + '</div>';
 }
@@ -861,9 +923,9 @@ function vNow(){
     { id: 'c', d: mq(2).d, q: mq(2).q },
     { id: 'd', d: mq(4).d, q: mq(4).q }
   ];
-  var rh = (S.refusal && S.refusal.moment) ? '<div class="refuse" style="margin:0 0 6px;padding:4px 10px"><span class="stamp">Refused</span> <b>Rule:</b> ' + esc(S.refusal.rule) + ' No cut is authored for this door in this prototype; only the deadline door has one.</div>' : '<h2 class="h2" style="margin-top:0">Other doors behind you · named by their question <span class="rt" style="text-transform:none;letter-spacing:0;font-weight:400">· no cut is authored for these in this prototype</span></h2>';
+  var rh = '<h2 class="h2" style="margin-top:0">Other doors behind you · named by their question <span class="rt" style="text-transform:none;letter-spacing:0;font-weight:400">· unlit: no cut is authored for these in this prototype</span></h2>';
   var river = hasB ? '' : '<div class="river" data-cap="PROPOSED" data-capc="a river of doors: every recorded moment a question; only one has an authored cut here" data-cost="NO AI REQUIRED · authoring: SMALL / CHEAP MODEL drafts, human reviews">' + rh + '<div class="rivertiles">' +
-    others.map(function (o) { return '<button type="button" class="mtile" data-act="moment-door" data-id="' + o.id + '" data-fk="mt-' + o.id + '" aria-label="Door ' + esc(o.d) + ': ' + esc(o.q) + '"><span class="mono dt">' + esc(o.d) + '</span><span class="qq">' + esc(o.q) + '</span></button>'; }).join('') + '</div></div>';
+    others.map(function (o) { return '<button type="button" class="mtile unlit" data-act="moment-door" data-id="' + o.id + '" data-fk="mt-' + o.id + '" aria-label="Door ' + esc(o.d) + ': ' + esc(o.q) + ' (unlit: no cut authored)"><span class="mono dt">' + esc(o.d) + '</span><span class="qq">' + esc(o.q) + '</span><span class="ul">unlit · no cut yet</span>' + (S.unlit === o.id ? '<span class="un">This door is unlit. A cut needs dated, reviewed sources and none is authored here. Nothing was refused. (Authoring is PROPOSED: a small model drafts, a person reviews.)</span>' : '') + '</button>'; }).join('') + '</div></div>';
   var right = hasB ? (sinceLeft + doorPanel + behind + elsewhere) : ((doorPanel || '<h2 class="h2" style="margin-top:0">Ahead · scheduled doors</h2><p class="rt" style="margin-bottom:8px">Two doors sit ahead on the rail below: an outline, a closing edge, an empty outcome. Open one.</p>') + behind + elsewhere);
   return '<div class="now"><section>' +
     '<div class="dateline"><span>' + dowf(NOW) + ' ' + fd(NOW) + '</span><span>·</span><span>Reality · live</span></div>' +
@@ -924,7 +986,7 @@ function vCut2(c){
     fact(rec.value, 'Boston’s record that morning', null) + fact(pay.value, 'Payroll vs the 2025–26 lines', null) + '</section>';
   var deskSrc = c.knows ? fact(DL.firstReport, 'Dated source · ' + fs(DL.firstReport.v), 'Report: ' + TRADE_TXT + '. <span class="rt">(reported, not yet signed)</span>') : '';
   var desk = '<section class="plane desk" data-cap="PROPOSED" data-capc="the desk: what this seat could know" data-cost="NO AI REQUIRED"><h2>On the desk<small>what this seat could know</small></h2>' +
-    '<div class="fact"><span class="sw k-OBSERVED" aria-hidden="true"></span><div class="fb"><span class="fl">Rulebook in force</span><span class="fv">The 2025–26 lines: tax ≈ ' + M(L2526.tax.v) + ', first apron ≈ ' + M(L2526.apron1.v) + ', second ≈ ' + M(L2526.apron2.v) + '. Over the tax line, a rising rate on every dollar above it.</span><span class="how">' + esc(howOf(L2526.tax)) + '</span></div></div>' +
+    '<div class="fact">' + sw(L2526.tax) + '<div class="fb"><span class="fl">Rulebook in force</span><span class="fv">The 2025–26 lines: tax ≈ ' + M(L2526.tax.v) + ', first apron ≈ ' + M(L2526.apron1.v) + ', second ≈ ' + M(L2526.apron2.v) + '. Over the tax line, a rising rate on every dollar above it.</span>' + unvChip(L2526.tax) + '<span class="how">' + esc(howOf(L2526.tax)) + '</span></div></div>' +
     '<div class="fact"><span class="sw k-AUTHORED" aria-hidden="true"></span><div class="fb"><span class="fl">What Boston may do</span><span class="fv">Three moves the rules allow. Take the seat to see them.</span><span class="how">AUTHORED · this prototype · illustrative · the CBA engine that would compute this exists in BOW Economics Live</span></div></div>' +
     deskSrc +
     '<div class="fact"><span class="sw k-UNKNOWN" aria-hidden="true"></span><div class="fb"><span class="fl">Dated sources ≤ ' + fs(c.date) + '</span><span class="hole">[verify: two press sources on Boston’s tax bill]</span></div></div>' +
@@ -940,7 +1002,7 @@ function vCut2(c){
   var since = '<div class="since" data-cap="PROPOSED" data-capc="Since is closed; it opens only when an observer asks" data-cost="NO AI REQUIRED"><h2>Since <span class="stamp" style="margin-left:6px;font-size:10px">' + (S.observer.asked ? 'opened by you' : 'closed') + '</span></h2>' +
     '<p>' + (S.observer.asked ? 'You asked as an observer. It is written to your ledger, not to the system’s record.' : 'Later facts, later corrections, later arguments. It opens only if an observer asks, one way, into your own ledger. In a class, the teacher holds the key.') + '</p>' +
     (S.observer.asked ? '<button type="button" class="btn sm" data-act="ask-observer" data-fk="readsince">Read Since</button>' : '') + '</div>';
-  return '<div class="cutview">' +
+  return '<div class="cutview">' + vpBanner() +
     '<div class="cuthead"><div><div class="lbl">Cut · Boston Celtics · stopped · lights on, clocks stopped <span class="knower">knower: Boston’s decision-maker, at their desk</span></div><h1>Deadline week · ' + fd(c.date) + '<small>' + mkH + '</small></h1></div>' +
     '<div class="floor">Floor rule: the latest state not after ' + fd(c.date) + ', every plane at one instant. A room, not a list of what follows.</div></div>' +
     '<div class="planes">' + books + desk + notyet + '</div>' + since +
@@ -1005,12 +1067,14 @@ function vBranch(){
     deskLine + nyLine + sinceLine + '<div class="shut"><span>shuttered beyond ' + fs(b.date) + '</span></div>' +
     '<div class="paceb"><button type="button" class="btn sm" data-act="ask-observer" data-fk="ask">Ask as an observer</button><span class="rt">one way · your ledger</span></div></section>';
   var tatRow = t.v ? fact({ k: t.k, src: t.k === 'RECORDED' ? 'the record at the cut' : 'declared in the Council', asOf: null, verify: false }, 'Tatum', esc(t.v)) : fact({ v: null, k: 'UNKNOWN', note: 'unknown — the Council left it open' }, 'Tatum', null);
-  var simRow = simTxt ? fact(AF(simTxt, 'COMPUTED', 'your act, run through the rules'), 'Simons', esc(simTxt)) : fact({ v: null, k: 'UNKNOWN', note: 'unknown — waiting on an answer nobody has' }, 'Simons', null);
-  var clubRow = (N.club === 'accepts') ? fact(AF('', 'COMPUTED', 'your act, run through the rules'), 'Payroll change', esc(M(N.delta) + ' (illustrative)')) : (N.club === 'declines' ? fact(AF('', 'COMPUTED', 'the club declined (declared)'), 'Payroll change', 'none · the club declined') : (N.club === 'unknown' ? fact({ v: null, k: 'UNKNOWN', note: 'unknown — the club’s answer is left open' }, 'Payroll change', null) : ''));
+  var simRow = simTxt ? fact(AF(simTxt, 'AUTHORED', 'your act with the answer you declared for the other club'), 'Simons', esc(simTxt)) : fact({ v: null, k: 'UNKNOWN', note: 'unknown — waiting on an answer nobody has' }, 'Simons', null);
+  var clubRow = (N.club === 'accepts') ? fact(AF('', 'AUTHORED', 'the act’s authored salary change, if the club you declared says yes'), 'Payroll change', esc(M(N.delta) + ' (illustrative)')) : (N.club === 'declines' ? fact(AF('', 'AUTHORED', 'the club declined (declared by you)'), 'Payroll change', 'none · the club declined') : (N.club === 'unknown' ? fact({ v: null, k: 'UNKNOWN', note: 'unknown — the club’s answer is left open' }, 'Payroll change', null) : ''));
   var taxRow;
   var whyBtn = '<button type="button" class="btn sm" data-act="why" data-of="branch" data-fk="why-br" aria-label="Why is the tax that?">Why?</button>';
-  if (N.known) taxRow = fact(AF(N.tax, 'COMPUTED', 'simplified ' + TAXNOTE), 'Projected tax' + (N.locked ? ' · locked' : ''), '≈ ' + M(N.tax), 'hero' + (FL ? ' flash' : ''), 'over the line by ≈ ' + M(N.over) + ' (implied)' + (N.locked ? ' · trades closed; this is the bill it stays at' : ''), whyBtn);
+  /* kind propagation: authored rates applied to an overage back-solved from a reported bill give an AUTHORED illustration, never COMPUTED; Boston's real payroll at the deadline is UNKNOWN */
+  if (N.known) taxRow = fact(AF(N.tax, 'AUTHORED', 'authored first-time-payer rates applied to an assumed overage: an illustration, not Boston’s books'), 'Projected tax' + (N.locked ? ' · locked' : ''), '≈ ' + M(N.tax), 'hero' + (FL ? ' flash' : ''), 'AUTHORED illustration: authored first-time-payer rates applied to this act’s change, starting from the reported ≈ ' + M(TAX0) + '. Not Boston’s books; Why? shows the assumption.' + (N.locked ? ' · trades closed; this is the bill it stays at' : ''), whyBtn);
   else taxRow = fact({ v: null, k: 'UNKNOWN', note: 'unknown — cannot be computed until the club answers' }, 'Projected tax', null, 'hero', null, whyBtn);
+  var payRow = fact({ v: null, k: 'UNKNOWN', note: 'unknown — Boston’s payroll at the deadline is [verify]; the shared fixture does not hold it' }, 'Payroll at the deadline', null);
   var dl = N.locked ? 'closed on ' + fs(DL.date) : (N.daysLeft === 0 ? 'close today, ' + esc(DEADLINE_TIME) : 'close in ' + N.daysLeft + ' day' + (N.daysLeft === 1 ? '' : 's') + ' (' + fs(DL.date) + ')');
   var dlRow = fact(AF(dl, 'COMPUTED', 'branch date against the scheduled deadline'), 'Trades', dl, FL ? 'flash' : '');
   var ended = b.status !== 'walking';
@@ -1023,7 +1087,7 @@ function vBranch(){
   var br = '<section class="frame branch' + brBorn + '" data-cap="PROPOSED" data-capc="a branch runs on its own clock, in its own ink, beside Reality" data-cost="NO AI REQUIRED"><h2>Your branch ' + b.n + ' · runs beside Reality</h2>' +
     '<div class="bstamp"><b>Your branch · diverged ' + fd(c.date) + ', ' + (c.knows ? 'after' : 'before') + ' the first report</b><br>by you · seat Boston · hindsight: <b>' + esc(b.hind) + '</b> · coupling: <span class="pin" title="Pinned: your dates are Reality’s dates, so Reality’s recorded events arrive at them. You set the pace.">PINNED</span></div>' +
     '<div class="clk"><span class="d">' + fd(b.date) + '</span><span class="rt">its own clock · ' + Math.abs(N.daysLeft) + (N.daysLeft >= 0 ? ' days to the deadline' : ' days after the deadline') + '</span></div>' +
-    taxRow + simRow + clubRow + tatRow + extra + dlRow + pace + ((S.refusal && S.refusal.view === 'branch') ? '<div class="refuse" style="margin-top:8px"><span class="stamp">Refused</span> <b>Rule:</b> ' + esc(S.refusal.rule) + ' ' + esc(S.refusal.text) + '</div>' : '') + '</section>';
+    taxRow + payRow + simRow + clubRow + tatRow + extra + dlRow + pace + ((S.refusal && S.refusal.view === 'branch') ? '<div class="refuse" style="margin-top:8px"><span class="stamp">Refused</span> <b>Rule:</b> ' + esc(S.refusal.rule) + ' ' + esc(S.refusal.text) + '</div>' : '') + '</section>';
   var marks;
   if (!sm) marks = '<div class="marks empty">Nothing has arrived. Reality has not spoken to anything your branch assumed. It will, at its own dates. Your assumptions: ' + assumptions(b).map(function (x) { return esc(x.t.replace(/\.$/, '')); }).join('; ') + '.</div>';
   else marks = '<div class="marks">' + ms.map(function (m) {
@@ -1033,7 +1097,7 @@ function vBranch(){
       '<div class="side b"><span class="lbl">Your branch assumed</span>' + esc(m.bt) + ' <i>' + esc(m.plain) + '</i><span class="how">' + esc(m.bk + ' · declared in the Council · your act') + '</span></div></div>';
   }).join('') + '</div>';
   var seamH = '<section class="seambar" data-cap="PROPOSED" data-capc="Reality arrives one way; the mark grades your assumption, never you" data-cost="NO AI REQUIRED (Council ‘Model’ seats: FRONTIER MODEL OCCASIONAL)"><div class="stitch"></div><h2>The seam <small>Reality arrives one way. It grades what your branch assumed. No score, no total.</small></h2>' + marks + '</section>';
-  return '<div class="bview"><div class="frames">' + rec + br + '</div>' + seamH + '</div>';
+  return '<div class="bview">' + vpBanner() + '<div class="frames">' + rec + br + '</div>' + seamH + '</div>';
 }
 
 /* ----- HIST ----- */
@@ -1084,15 +1148,16 @@ function ovSince(){
   var hl = { fact: 'Fact', corr: 'Correction', arg: 'Argument' };
   return '<div class="scrim" data-act="close-overlay"></div><section class="sheet" role="dialog" aria-modal="true" aria-label="Since, opened as an observer" data-cap="PROPOSED" data-capc="Since: later facts, corrections, arguments; each dated, ruled in a different hand" data-cost="NO AI REQUIRED"><div class="top"><div><div class="lbl">Since · opened by you as an observer</div><h1>What came after ' + fd(cut().date) + '</h1></div><button type="button" class="btn sm" data-act="close-overlay" data-fk="close">Close</button></div>' +
     '<p class="rt" style="margin-bottom:4px"><b>Written to YOUR ledger, not the system’s.</b> Seen through ' + fd(S.observer.through) + '. One way: nothing un-reads. Forks you make now carry “hindsight: through ' + fd(S.observer.through) + '”.</p>' +
-    items.map(function (it) { return '<div class="since-i ' + it.h + '"><div class="dt">' + (it.d ? fd(it.d) : '[verify: date]') + '<span class="hand"><span class="sw k-' + it.f.k + '" aria-hidden="true"></span> ' + hl[it.h] + '</span></div><div><div class="tx">' + esc(it.t) + '</div>' + (it.n ? '<div class="src">' + esc(it.n) + '</div>' : '') + '<div class="src">' + esc(shortSrc(it.f)) + '</div><div class="how">' + esc(howOf(it.f)) + '</div></div></div>'; }).join('') + '</section>';
+    items.map(function (it) { return '<div class="since-i ' + it.h + '"><div class="dt">' + (it.d ? fd(it.d) : '[verify: date]') + '<span class="hand">' + sw(it.f) + ' ' + hl[it.h] + '</span></div><div><div class="tx">' + esc(it.t) + unvChip(it.f) + '</div>' + (it.n ? '<div class="src">' + esc(it.n) + '</div>' : '') + '<div class="src">' + esc(shortSrc(it.f)) + '</div><div class="how">' + esc(howOf(it.f)) + '</div></div></div>'; }).join('') + '</section>';
 }
 function whyChain(of){
   var links = [], b = actBranch();
   if (of === 'branch' && b) {
     var N = bnums(b), a = ACTS[b.act], actLog = null, cl = null;
     S.log.forEach(function (e) { if (e.kind === 'keep' && e.text.indexOf('branch ' + b.n + ' ') >= 0) actLog = e; if (e.kind === 'council' && e.text.indexOf('Another club') >= 0) cl = e; });
-    links.push({ id: 'now', k: 'COMPUTED', t: N.known ? 'Branch projected tax ≈ ' + M(N.tax) : 'Branch projected tax: cannot be computed', m: 'tax at the ' + TAXNOTE + ' · your branch’s books' });
-    links.push({ id: 'over', k: N.known ? 'COMPUTED' : 'UNKNOWN', t: N.known ? 'Over the 2025–26 line by ≈ ' + M(N.over) : 'Payroll change unknown', m: 'the cut’s implied overage ≈ ' + M(OVER0) + ' plus the acts’ salary change ' + (N.known ? M(N.delta) : '(unknown)') });
+    links.push({ id: 'now', k: N.known ? 'AUTHORED' : 'UNKNOWN', t: N.known ? 'Branch projected tax ≈ ' + M(N.tax) + ' (an authored illustration)' : 'Branch projected tax: cannot be computed', m: 'authored ' + TAXNOTE + ' · not Boston’s books' });
+    links.push({ id: 'over', k: N.known ? 'AUTHORED' : 'UNKNOWN', t: N.known ? 'An assumed overage of ≈ ' + M(N.over) : 'Payroll change unknown', m: 'back-solved from the reported ≈ ' + M(TAX0) + ' under the authored rates (≈ ' + M(OVER0) + ') plus the act’s salary change ' + (N.known ? M(N.delta) : '(unknown)') });
+    links.push({ id: 'pay', k: 'UNKNOWN', t: 'Boston’s payroll at the deadline', m: '[verify: payroll at the deadline against the 2025–26 lines] — not in the shared fixture, so the overage is assumed here, not known' });
     links.push({ id: actLog ? '#' + actLog.n : '#—', k: 'AUTHORED', t: 'Signed act: ' + a.label, m: 'salary change ' + M(a.dSal) + ' if it goes through (illustrative) · ' + (actLog ? actLog.clock : '') });
     if (a.touches.indexOf('club') >= 0) links.push({ id: cl ? '#' + cl.n : '#—', k: b.council.club && b.council.club.mode === 'declare' ? 'AUTHORED' : 'UNKNOWN', t: 'Council: another club — ' + (b.council.club ? (b.council.club.mode === 'declare' ? 'declared: ' + b.council.club.v : b.council.club.mode) : 'unset'), m: 'the act only changes the books if this seat says yes' });
     links.push({ id: 'cut', k: taxFactAt(CUTS[b.cutId]).k, t: 'At the cut: projected tax ≈ ' + M(TAX0) + ' before any move', m: shortSrc(taxFactAt(CUTS[b.cutId])) + ' · as of ' + fd(CUTS[b.cutId].date) });
@@ -1133,7 +1198,59 @@ function ovBacks(){
     '<div class="backcol bc-rec"><h2>Record · print</h2><p class="k">The system’s. Public. Never changed.</p>' + rec +
     '<div class="acts"><button type="button" class="btn sm" data-act="rec-earlier" data-fk="rec-e">Earlier</button><button type="button" class="btn sm" data-act="rec-later" data-fk="rec-l">Later</button></div><p class="rt" style="margin-top:6px">Later stops at the horizon.</p></div>' +
     '<div class="backcol bc-acts"><h2 style="color:var(--br)">Acts · signature</h2><p class="k">Mine. Attributable. Append-only. No Back, only acting.</p>' + acts +
-    '<div class="acts">' + retake + amend + '</div><p class="rt" style="margin-top:8px"><b>Reality has no Undo.</b> It accepts nothing; it arrives.</p><p class="rt" style="margin-top:6px">Act-log fold · SHA-256 <span class="mono" id="loghash">…</span><br>Same clicks, same hash. REAL on the Live World page; prototype-grade here.</p></div></div></section>';
+    '<div class="acts">' + retake + amend + '</div><p class="rt" style="margin-top:8px"><b>Reality has no Undo.</b> It accepts nothing; it arrives.</p><p class="rt" style="margin-top:6px">Signed-act fold · SHA-256 <span class="mono" id="loghash">…</span><br>Over the signed acts only, never the trail. Same acts, same hash. REAL on the Live World page; prototype-grade here.</p></div></div></section>';
+}
+
+/* ================= the address lives in the URL; it names STATE, never authority ================= */
+function cEnc(c){ return !c ? '-' : c.mode === 'declare' ? 'd:' + (c.v || '') : c.mode === 'recorded' ? 'r' : 'u'; }
+function cDec(s){ if (!s || s === '-') return null; if (s === 'r') return { mode: 'recorded' }; if (s === 'u') return { mode: 'unknown' }; if (s.indexOf('d:') === 0) return { mode: 'declare', v: s.slice(2) || null }; return null; }
+function bEnc(b){ return [b.id, b.cutId, b.act, cEnc(b.council.club), cEnc(b.council.tatum), b.date, b.status, b.extra || '-', b.redecl ? '1' : '0', encodeURIComponent(b.hind || 'none')].join('.'); }
+function hashOf(){
+  var v = S.view, q = [];
+  if (v === 'cut' || v === 'seat' || v === 'arrive') q.push('cut=' + S.cutId);
+  if (v === 'hist' && S.histId) q.push('hist=' + S.histId);
+  if (S.branches.length) q.push('b=' + S.branches.map(bEnc).join(';'));
+  if (v === 'branch' && S.activeId) q.push('at=' + S.activeId);
+  if (S.following) q.push('follow=1');
+  if (S.observer.asked) q.push('obs=1');
+  if (S.hindsight.declared) q.push('hind=1');
+  return '#/boston.celtics/' + v + (q.length ? '?' + q.join('&') : '');
+}
+function syncHash(){ try { var h = hashOf(); if (location.hash !== h) history.replaceState(null, '', h); } catch (e) {} }
+function restoreHash(){
+  var raw = (location.hash || '').replace(/^#\/?/, ''); if (!raw) return;
+  var pq = raw.split('?'), path = pq[0].split('/'), q = {};
+  (pq[1] || '').split('&').forEach(function (kv) { var i = kv.indexOf('='); if (i > 0) { try { q[kv.slice(0, i)] = decodeURIComponent(kv.slice(i + 1)); } catch (e) { q[kv.slice(0, i)] = kv.slice(i + 1); } } });
+  if (path[0] !== 'boston.celtics') return;
+  var v = path[1] || 'now';
+  if (q.cut && CUTS[q.cut]) S.cutId = q.cut;
+  if (q.obs) S.observer = { asked: true, through: NOW };
+  if (q.hind) S.hindsight.declared = true;
+  if (q.follow) { S.following = true; L('follow', 'Restored from the address: following Boston Celtics · Reality', true); }
+  if (q.b) q.b.split(';').forEach(function (s) {
+    var f = s.split('.'); if (f.length < 10 || !ACTS[f[2]] || !CUTS[f[1]]) return;
+    var nb = { id: f[0], n: f[0], cutId: f[1], date: f[5], act: f[2], council: { club: cDec(f[3]), tatum: cDec(f[4]) }, hind: decodeURIComponent(f[9]), status: f[6] };
+    if (f[7] !== '-') nb.extra = f[7]; if (f[8] === '1') nb.redecl = true;
+    S.branches.push(nb);
+    L('keep', 'Restored from the address: your branch ' + nb.n + ' — “' + ACTS[nb.act].label + '” · diverged ' + fd(CUTS[nb.cutId].date) + ' · hindsight: ' + nb.hind, true, ACTS[nb.act].label);
+    if (nb.status === 'retired') L('retake', 'Restored from the address: branch ' + nb.n + ' retired (kept, not deleted)', true, ACTS[nb.act].label);
+    if (nb.extra) L('amend', 'Restored from the address: amended on ' + nb.n + ' (also shed a bench salary)', true);
+    if (nb.redecl) L('amend', 'Restored from the address: re-declared on ' + nb.n, true);
+  });
+  S.nextN = S.branches.length + 1;
+  if (v === 'branch' && S.branches.length) { S.activeId = (q.at && S.branches.some(function (x) { return x.id === q.at; })) ? q.at : S.branches[S.branches.length - 1].id; S.view = 'branch'; S.vp = true; }
+  else if (v === 'cut' || v === 'seat') { S.view = 'cut'; S.seatAddr = (v === 'seat'); }
+  else if (v === 'arrive') S.view = 'arrive';
+  else if (v === 'hist' && q.hist) { S.histId = q.hist; S.view = 'hist'; }
+  else S.view = 'now';
+  if (S.view !== 'now') S.leftAt = S.tick;
+  trailPush('Opened from an address');
+}
+function vpBanner(){
+  var b = actBranch();
+  if (S.vp && b) return '<div class="vpnote" role="note"><span><b>Viewpoint: seat Boston, read only.</b> You opened an address, and an address names state, never authority. You see branch ' + esc(b.n) + ' as an observer may see it; nothing can be advanced or amended from here.</span><button type="button" class="btn sm" data-act="unvp" data-fk="unvp">Take the Boston seat</button><span class="rt">(stands in for redeeming an Offer)</span></div>';
+  if (S.seatAddr) return '<div class="vpnote" role="note"><span><b>The address you opened names the seat at this cut.</b> An address names state, never authority: you stand here as an observer. The seat is yours only by taking it.</span></div>';
+  return '';
 }
 
 /* ================= render ================= */
@@ -1156,7 +1273,8 @@ function render(){
   document.getElementById('rail').innerHTML = railHTML();
   document.getElementById('legend').innerHTML = legendHTML();
   document.getElementById('status').innerHTML = statusHTML();
-  if (S.tog.real) tagCaps();
+  syncHash();
+  if (S.tog.real) tagCaps(); else { var rsh = document.getElementById('realsheet'); rsh.hidden = true; rsh.innerHTML = ''; }
   if (S.overlay === 'backs') logHash();
   var target = null;
   if (S.overlay) target = st.querySelector('.sheet [data-fk="close"]');
@@ -1165,7 +1283,8 @@ function render(){
 }
 function logHash(){
   try {
-    var data = new TextEncoder().encode(JSON.stringify(S.log.map(function (e) { return [e.kind, e.text, e.clock, e.hist, e.who, e.signed]; })));
+    /* SHA-256 over the signed acts only: the canonical record. Navigation, toggles and reveals are the trail and are never hashed. */
+    var data = new TextEncoder().encode(JSON.stringify(S.log.filter(function (e) { return e.signed; }).map(function (e) { return [e.kind, e.text, e.clock, e.hist, e.who]; })));
     crypto.subtle.digest('SHA-256', data).then(function (buf) {
       var h = Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
       var el = document.getElementById('loghash'); if (el) el.textContent = h.slice(0, 24) + '…';
@@ -1173,13 +1292,14 @@ function logHash(){
   } catch (e) { var el = document.getElementById('loghash'); if (el) el.textContent = 'not available here'; }
 }
 function tagCaps(){
-  var els = document.querySelectorAll('[data-cap]');
+  var els = document.querySelectorAll('[data-cap]'), rows = [], sh = document.getElementById('realsheet');
   for (var i = 0; i < els.length; i++) {
-    var el = els[i], k = el.getAttribute('data-cap'), full = FX.meta.capability[k] || k, cls = k === 'REAL' ? 'real' : k === 'SPECULATIVE' ? 'spec' : 'prop';
-    var t = document.createElement('span'); t.className = 'captag ' + cls;
-    t.innerHTML = esc(full.split(' — ')[0]) + '<em>' + esc(el.getAttribute('data-cost') || '') + '</em>' + (el.getAttribute('data-capc') ? '<em style="text-transform:none;letter-spacing:0">' + esc(el.getAttribute('data-capc')) + '</em>' : '');
-    el.appendChild(t);
+    var el = els[i], k = el.getAttribute('data-cap'), full = FX.meta.capability[k] || k;
+    var n = document.createElement('span'); n.className = 'capn' + (/(^|\s)(ruler|zA|zC|open-win)(\s|$)/.test(el.className) ? ' in' : ''); n.textContent = String(i + 1); n.setAttribute('aria-hidden', 'true');
+    el.appendChild(n);
+    rows.push('<li><span class="capn st" aria-hidden="true">' + (i + 1) + '</span><span>' + esc(el.getAttribute('data-capc') || '') + ' <span class="capw">' + esc(full.split(' — ')[0]) + '</span> · ' + esc(el.getAttribute('data-cost') || '') + '</span></li>');
   }
+  sh.hidden = false; sh.innerHTML = '<h3>What’s real? · each numbered region: its capability status, then what a real product would need</h3><ul>' + rows.join('') + '</ul>';
 }
 
 /* ================= events ================= */
@@ -1218,6 +1338,7 @@ setInterval(function () {
 
 trailPush('NOW · Reality');
 L('open', 'Opened Boston · NOW as an observer');
+restoreHash();
 render();
 window.__CUT = { S: S, act: act };
 })();

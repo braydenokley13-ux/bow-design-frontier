@@ -169,6 +169,15 @@
   "shot": "10b-return-to-the-record"
  },
  {
+  "reload": true
+ },
+ {
+  "expectText": "Opened from an address"
+ },
+ {
+  "shot": "10c-reload-restores-act-43-and-its-hash-from-the-address"
+ },
+ {
   "click": "Proof controls"
  },
  {

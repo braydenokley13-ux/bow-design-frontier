@@ -264,6 +264,7 @@ body.cap-on .cap{display:block}
 .railbox[open]>summary::after{content:"  \2212"}
 .rail code{font:11px ui-monospace,'DejaVu Sans Mono',monospace;word-break:break-all}
 .clause{margin:0 0 2px}
+body.cap-on .bowbd{padding-bottom:44px}
 .kv.wrap{white-space:normal;display:inline;padding:.05em .3em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .panelfix{position:fixed;z-index:30;top:118px;right:22px;width:min(600px,calc(100vw - 44px));max-height:calc(100vh - 140px);overflow:auto}
 /* ---------- a real phone layout (not a picture of a phone) ---------- */
@@ -764,7 +765,7 @@ ACTS['msg-keep'] = () => { S.msg.kept = !S.msg.kept; log('you', S.msg.kept ? 'ke
 /* ================================================================ 4 · SPOKEN */
 const CWS = { 'm2017-06-17': 'harbor, linen', 'm2025-05-12': 'birch, ember', 'm2025-06': 'reed, copper', 'm2026-02-05': 'lantern, moss', 'm2026-03-06': 'tide, cinder' };
 const DANA = 'm2017-06-17';
-const FORKAUTH = { 'fork.keep-no1': 'Sol & Bea', 'fork.holiday-kept': 'Rosa & Theo' };  /* the fixture leaves [author]; a screen shows fictional names */
+const FORKAUTH = { 'fork.keep-no1': 'Marisol Vega', 'fork.holiday-kept': 'Tomas Reyes' };  /* the fixture leaves [author]; a screen shows fictional names */
 function momentParts(id) { const m = FX.moments.find(x => x.id === id), p = m.question.split(' · '); return { m: m, date: p[0], q: p.slice(1).join(' · ') }; }
 function readBack(id) {
   const mp = momentParts(id), nb = FX.forks.filter(f => f.diverged === mp.date).length;
@@ -800,7 +801,7 @@ SCENE.voice = function () {
     const nb = FX.forks.filter(f => f.diverged === momentParts(pick).date);
     door = '<div style="margin-top:10px">' + bow('opened on your screen · a door',
       '<p class="sm" style="margin:0 0 6px">The hand-off carries the reading, not a seat. Opening never acts.</p>' + sealedDoor(pick) +
-      (nb.length ? '<h4>Branches that start here</h4>' + nb.map(f => ln('AUTHORED', '<b>' + esc(f.name) + '</b> · by ' + esc(FORKAUTH[f.id] || f.author) + ' (a fictional pair) · ' + esc(f.clock.label))).join('') : '') +
+      (nb.length ? '<h4>Branches that start here</h4>' + nb.map(f => ln('AUTHORED', '<b>' + esc(f.name) + '</b> · by ' + esc(FORKAUTH[f.id] || f.author) + ' (fictional) · ' + esc(f.clock.label))).join('') : '') +
       '<p class="tiny">Taking the seat, holding a branch and comparing: only in BOW.</p>', { own: 1, cap: cap('P', 'NO AI REQUIRED') }) + '</div>';
   }
   const spk = '<div class="speaker"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="3" y="3" width="28" height="28" rx="14" fill="none" stroke="#3A362D" stroke-width="2"/><rect x="11" y="9" width="12" height="16" rx="6" fill="#3A362D"/></svg><b style="font:600 13px var(--sans)">Voice · a fictional speaker</b><span style="margin-left:auto;font-size:11px;color:#4B4739">only a transcript is shown</span></div>';

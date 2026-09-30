@@ -23,9 +23,18 @@ button{font:inherit;color:inherit}
 #gl{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none}
 #gl:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
 #chips{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.chip{position:absolute;transform:translate(-50%,-50%);background:var(--paper);border:1px solid var(--ink);padding:2px 6px;font:600 11px/1.25 var(--sans);letter-spacing:.02em;max-width:190px;text-align:left;white-space:normal}
-.chip b{display:block;font-weight:700;letter-spacing:.06em;font-size:10px}
-.chip.REAL{border-width:2px}.chip.PROPOSED{border-style:dashed;border-width:2px}.chip.SPECULATIVE{border-style:dotted;border-width:2px}
+#hots{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+.hot{position:absolute;transform:translate(-50%,-50%);width:46px;height:46px;padding:0;border:0;border-radius:50%;background:transparent;pointer-events:auto;cursor:pointer}
+.hot:hover{outline:2px dashed var(--ink);outline-offset:-3px}
+.hot:focus-visible{outline:3px solid var(--focus);outline-offset:0;background:rgba(11,87,208,.14)}
+.chip{position:absolute;transform:translate(-50%,-50%);background:var(--paper);border:2px solid var(--ink);min-width:24px;height:24px;padding:0 6px;font:700 12px/20px var(--sans);text-align:center;white-space:nowrap}
+.chip.PROPOSED{border-style:dashed}.chip.SPECULATIVE{border-style:dotted}
+#chiplegend{border-top:1px solid var(--ink);background:var(--paper2);max-height:34%;overflow:auto;padding:6px 16px 8px}
+#chiplegend h3{margin:0 0 4px;font:700 10.5px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
+#chiplegend ul{list-style:none;margin:0;padding:0}
+#chiplegend li{display:flex;gap:8px;align-items:baseline;padding:2px 0;border-bottom:1px solid var(--rule);font:500 12px/1.35 var(--sans)}
+#chiplegend .chn{flex:none;min-width:22px;text-align:center;border:2px solid var(--ink);font:700 11px/16px var(--sans);background:var(--paper)}
+.hintv{border-left:3px solid var(--ink);padding-left:8px}
 #frame{position:absolute;inset:0;pointer-events:none;border:0 solid var(--branchFill);z-index:3}
 body.in-branch #frame{border-width:7px;border-style:solid}
 #stamp{display:none;position:absolute;left:0;top:0;z-index:4;background:var(--branchFill);color:#1c1200;font:700 12px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;padding:8px 12px 7px;max-width:100%}
@@ -49,7 +58,7 @@ body.in-branch #stamp{display:block}
 #sched .kw{font-weight:700;font-family:var(--sans);font-size:12.5px;letter-spacing:.03em}
 #sched table.diff td.a{width:34%}#sched table.diff td.b{width:34%}
 #sched .ledger{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;max-width:760px}
-.sw{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px;border:1.5px solid var(--ink);background:transparent}
+.sw{display:inline-block;width:24px;height:9px;vertical-align:1px;margin-right:6px;border:1.5px solid var(--ink);background:transparent}
 .sw.k-OBSERVED{background:var(--ink)}
 .sw.k-RECORDED{background:var(--ink);box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--ink)}
 .sw.k-AUTHORED{background:transparent}
@@ -97,7 +106,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid
 .refuse{border:2px dashed var(--ink);padding:8px 10px;margin:0 0 10px;font:400 14.5px/1.4 var(--serif);background:var(--paper)}
 .refuse.sticky{position:sticky;top:-20px;z-index:3;margin:-20px -28px 14px;padding:12px 28px;border-width:0 0 3px;border-style:dashed;background:#fffdf5}
 .refuse b{font:700 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:2px}
-.rec{margin:0;padding:0;list-style:none;font:500 12.5px/1.35 var(--sans);max-height:112px;overflow:auto}
+.rec{margin:0;padding:0;list-style:none;font:500 12.5px/1.35 var(--sans)}
 .rec li{padding:3px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px}
 .rec .no{font-weight:700;min-width:30px}
 .rec .mine{color:var(--you);font-weight:600}.rec .bch{color:var(--branch);font-weight:600}
@@ -116,7 +125,24 @@ details.leave summary{cursor:pointer;font:600 13px var(--sans);padding:6px 0}
 details.leave input{width:100%;font:400 14px var(--serif);padding:6px 8px;border:1.5px solid var(--ink);background:#fffdf5;margin:4px 0 6px}
 .sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .sect{margin:12px 0 4px}
-@media (max-width:1300px){#app{grid-template-columns:minmax(0,1fr) 352px}}
+@media (min-width:701px) and (max-width:1300px){#app{grid-template-columns:minmax(0,1fr) 352px}}
+/* a real phone: the building on top, the panel under it, the page itself never scrolls sideways */
+@media (max-width:700px){
+  #app{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(190px,38vh) minmax(0,1fr);height:100vh;min-height:0}
+  #panel{border-left:0;border-top:1px solid var(--ink)}
+  body.sched-open #app{grid-template-rows:minmax(0,1fr) auto}
+  body.sched-open #panel{max-height:36vh}
+  #ptop{padding:8px 12px 6px}#pscroll{padding:10px 12px 8px}#pfoot{padding:6px 12px 6px}
+  #pfoot .tg .btn.sm{flex:1 1 28%;padding:5px 6px}
+  #status{font-size:10px}
+  h2.pt{font-size:19px}.pl{font-size:15.5px}
+  #sched{padding:12px 12px 40px}#sched h1{font-size:21px}
+  #sched table{display:block;overflow-x:auto}
+  #sched .ledger{grid-template-columns:1fr}
+  #sched td.ad{display:none}#sched th:nth-child(4){display:none}
+  #chiplegend{max-height:30%;padding:5px 12px}
+  .grid4 .btn{font-size:11.5px}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -125,6 +151,7 @@ details.leave input{width:100%;font:400 14px var(--serif);padding:6px 8px;border
   <main id="stage" aria-label="The building">
     <canvas id="gl" tabindex="0" aria-label="The building, in 3D. The Schedule (key S) is the same building as text."></canvas>
     <div id="chips" aria-hidden="true"></div>
+    <div id="hots" role="group" aria-label="Objects in the room, as buttons"></div>
     <div id="frame" aria-hidden="true"></div>
     <div id="stamp" aria-hidden="true"></div>
     <div id="loading">Opening the building…</div>
@@ -133,6 +160,7 @@ details.leave input{width:100%;font:400 14px var(--serif);padding:6px 8px;border
   <aside id="panel" aria-label="Plate, acts and record">
     <div id="ptop"><div class="who">BOW Browser · the Institution</div><p id="addr"></p></div>
     <div id="pscroll"></div>
+    <div id="chiplegend" hidden></div>
     <div id="pfoot">
       <div class="tg">
         <button type="button" class="btn sm" id="tgReal" aria-pressed="false">What’s real?</button>
@@ -172,11 +200,11 @@ const LOSS_DETAIL = WD.acts[2].what;
 const REALTAX = val(LG.tax), REAL_TAXSAL = val(RL.taxSalary), REAL_CAPPAY = val(RL.capPayroll);
 /* AUTHORED for this prototype (illustrative) — the fixture holds none of these */
 const AUTH = {
-  actsBefore: 42, cash0: 20000000, clock0: 9 * 60 + 13, week: 'Year Two · Week 9', reportWeek: 'Week 11',
+  actsBefore: WD.nextActNumber - 1, cash0: val(WD.cash), clock0: 9 * 60 + 13, week: WD.clock.label, reportWeek: 'Week 11',
   lapsed: 'Week 8 · Review premium seat prices again?',
   q: { callup: 'Convert the two-way call-up?', denver: 'Answer Denver about a second-round pick?', owner: 'Answer the owner’s note on the tax bill?' }
 };
-const REC = WD.record.map((r, i) => ({ ...r, no: AUTH.actsBefore - WD.record.length + 1 + i }));
+const REC = WD.record.map(r => ({ ...r, no: r.n }));
 const W6 = REC.find(r => r.id === 'w6-trade');
 const LEDGER = {
   gave: [{ id: 'maquette', text: 'the outside view (the maquette)' }, { id: 'later', text: 'everything after Week 9 (sealed)' }],
@@ -226,7 +254,7 @@ const ACTS = {
   sign() {
     if (S.posture !== 'desk') return REF('R-SEAT-2', 'A seat is signed at the desk, with the pen. Sit first; sitting is free.');
     if (S.signed) return REF('R-SEAT-3', 'You already hold the seat.');
-    S.signed = true; S.left = null; S.seatStart = S.clock;
+    S.signed = true; S.left = null; S.seatStart = S.clock; S.paper = null; S.held = false; S.why = 0; S.fromAddress = false;
     log('seat', 'Signed for 3 open matters', { by: 'you' });
     return { say: 'Signed. You hold the seat. The maquette is covered, later plates are shuttered, three folders are in your tray, other seats show doors, and your clock started at ' + hm(S.clock) + '.' };
   },
@@ -245,6 +273,7 @@ const ACTS = {
   },
   pick({ id }) {
     const fx = FIXTURES().find(f => f.id === id); if (!fx) return REF('R-0', 'No such fixture.');
+    if (inReality()) return REF('R-REAL-1', 'You cannot act on the real team. Boston · Reality is observed from outside; its rooms are sheeted and nothing in it is touchable.');
     if (S.posture === 'maquette') return REF('R-POSTURE-1', 'From outside, nothing is touchable. The maquette is an object you observe. Arrive at the door.');
     if (!touchable(fx)) return REF('R-POSTURE-2', 'From the door you can read the plate and the folder. Look around to read the floor.');
     S.paper = id; S.held = id === 'desk.tradefile'; S.reads[id] = true; S.why = 0;
@@ -314,6 +343,19 @@ function act(kind, p = {}) {
   if (r.ok === false) { S.refusal = { rule: r.rule, why: r.why }; say('Refused by rule ' + r.rule + '. ' + r.why); }
   else { S.refusal = null; if (r.say) say(r.say); }
   paint();
+}
+/* click an object once to read it; click the same object again to do its act. The sidebar and the Schedule keep the same verbs. */
+function verbOn(id, FXS) {
+  if (S.posture === 'maquette') return null;
+  const fx = FXS.find(f => f.id === id); if (!fx) return null;
+  if (id === 'desk.tradefile') return (S.held && S.history !== 'branch') ? { act: 'why', arg: { step: 1 }, label: 'trace what this trade touched' } : null;
+  if (id.startsWith('arch.') && S.arch[id.slice(5)] && S.arch[id.slice(5)].cover) return null;
+  return fx.acts.find(a => a.act !== 'pick' && a.act !== 'whatif') || null;
+}
+function clickObject(id) {
+  if (S.posture === 'maquette') { if (inReality()) { act('pick', { id }); return; } act('arrive'); return; }
+  const v = S.paper === id ? verbOn(id, FIXTURES()) : null;
+  if (v) act(v.act, v.arg || {}); else act('pick', { id });
 }
 function say(t) { const l = $('#live'); l.textContent = ''; setTimeout(() => { l.textContent = t; }, 30); }
 
@@ -396,7 +438,7 @@ function FIXTURES() {
     { addr: 'boston/ops/money.payroll · taxLine · payrollLimit', cap: 'REAL', src: br ? SRC.calc : SRC.world, asof: AUTH.week, pose: 'money|money', body: ['The line and the limit are World rules, chosen on purpose. The NBA’s own numbers for 2026–27 are the tax line ' + mm(REALTAX) + ' (observed, verify).'] });
   add('board.tax', 'H-03', 'H', 'Tax ledger', 'COMPUTED', 'Computed.', br ? 'Tax ledger: under the line, so nothing is charged. ' + mm(b.tax) + ' under the World rule (flat ' + MULT + '×, authored).' : 'Tax ledger: ' + M1(b.over) + ' × ' + MULT + ' = ' + M1(b.tax) + '. World rule, authored — the NBA’s real tax is incremental.',
     { addr: 'boston/ops/money.projectedTax', cap: 'REAL', src: SRC.calc, asof: AUTH.week, pose: 'money|money', body: ['A projected bill, not a paid one.'] });
-  add('plate.cash', 'H-04', 'H', 'Cash plate', 'AUTHORED', 'Authored.', 'Cash ' + mm(S.cash) + ' (illustrative: the fixture holds no cash figure).' + (S.po ? ' Scouting’s ' + mm(S.po.price) + ' has come out.' : '') + ' The projected tax is a bill that has not come due; it is not in this number yet.',
+  add('plate.cash', 'H-04', 'H', 'Cash plate', 'AUTHORED', 'Authored.', 'Cash ' + mm(S.cash) + ' (the World’s one cash, read from the fixture: authored, illustrative).' + (S.po ? ' Scouting’s ' + mm(S.po.price) + ' has come out.' : '') + ' The projected tax is a bill that has not come due; it is not in this number yet.',
     { addr: 'boston/ops/money.cash', src: SRC.auth, pose: 'money|money' });
   const dept = (id, mark, room) => {
     const d = DEPT[id], on = fund[id], act = S.fundedBy[id];
@@ -423,9 +465,9 @@ function FIXTURES() {
   add('win.league', 'W-01', 'W', 'League counter', 'UNKNOWN', 'Withheld.', 'Another seat holds this. Terms between other clubs sit in sleeves at the League counter; only signed facts reach the League’s public board.',
     { addr: 'league/counter/slots[]', cap: 'PROPOSED', src: 'League office as a neighbouring system: observed from outside · seed: League tables, vote record (REAL, DOM, unmerged)', asof: 'illustrative', cause: 'Another seat holds this.', way: 'Withheld', pose: 'desk-league|window', body: ['Sleeved envelopes: “terms between other clubs — not shown.” Nothing here is actionable from Boston.', 'A pane admits that something exists; the sleeve shows its shape, not its terms.'] });
   const tk = fund.ticketing;
-  add('win.arena', 'W-02', 'W', 'Next home night', tk ? 'MODELED' : 'UNKNOWN', tk ? 'Estimate by the ticketing forecast, ran Week 9.' : 'Unknown.',
-    tk ? NIGHT[0] && ('About ' + NIGHT[1] + ' of ' + NIGHT[2] + ' seats expected. Not a played night. Band: [verify: the forecast’s range is not in the fixture].') : 'No seat forecast without a funded ticketing room.',
-    { addr: 'boston/arena/v4.arena.nights[0].forecast', cap: 'REAL', src: val(WD.arena.nextNight) ? 'Ticketing room forecast (World model) · version [verify: not in the fixture]' : '', asof: 'ran Week 9', cause: 'It has not happened yet.', way: 'Unlived', pose: 'desk-bowl|window', body: tk ? ['Ticketing is funded, so a forecast exists. Pencil hatch on pale linen: expected to sell. The linen stays on until the night is played.'] : ['The bowl is bare grey seats.'] });
+  add('win.arena', 'W-02', 'W', 'Next home night', tk ? 'MODELED' : 'UNKNOWN', tk ? 'Estimate, copied here.' : 'Unknown.',
+    tk ? NIGHT[0] && ('About ' + NIGHT[1] + ' of ' + NIGHT[2] + ' seats expected. Not a played night. The forecast ran in the BOW NBA World’s ticketing room (unmerged branch), not in this prototype: this value is copied from its screenshot, no model ran here. Model version and range: [verify: not in the fixture].') : 'No seat forecast without a funded ticketing room.',
+    { addr: 'boston/arena/v4.arena.nights[0].forecast', cap: 'REAL', src: val(WD.arena.nextNight) ? 'Ticketing-room forecast of the BOW NBA World (unmerged branch) · value copied from its screenshot; nothing ran in these prototypes · model version [verify]' : '', asof: 'copied from a screenshot; no model ran here', cause: 'It has not happened yet.', way: 'Unlived', pose: 'desk-bowl|window', body: tk ? ['Ticketing is funded, so a forecast exists in the World it came from. Pencil hatch on pale linen: expected to sell, an estimate and not a played night. The linen stays on until the night is played.'] : ['The bowl is bare grey seats.'] });
   if (S.branch) add('win.record', 'W-03', 'W', br ? 'The record building' : 'Your branch, across the slip', br ? 'RECORDED' : 'AUTHORED', br ? 'Recorded.' : 'Authored.',
     br ? 'The record building, lit across the slip. Your branch diverged from it at Week 6 and never overwrites it.' : 'Your branch stands across the slip under scaffold: ' + S.branch.stamp.replace('Your branch · ', '') + '. A paper plaque names the cut.',
     { addr: br ? 'boston/record' : 'boston/branch/fork.w6', src: SRC.world, asof: AUTH.week, pose: 'window|window', acts: [{ act: 'cross', arg: { to: br ? 'record' : 'branch' }, label: br ? 'Back to the record · cross the footbridge' : 'Cross the footbridge to your branch' }] });
@@ -480,7 +522,9 @@ function coveredNow() { return S.signed ? { maquette: 1, later: 1 } : {}; }
 /* ---------- 4. the drawings: panel + Schedule (the Room is in section 5) ---------- */
 const kindSw = k => '<span class="sw k-' + k + '" aria-hidden="true"></span>';
 const btn = (a, cls = '', extra = '') => '<button type="button" class="btn ' + cls + '" data-act="' + a.act + '" data-arg="' + esc(JSON.stringify(a.arg || {})) + '" data-k="' + a.act + (a.arg && (a.arg.id || a.arg.dept || a.arg.to || a.arg.v || a.arg.m) ? ':' + (a.arg.id || a.arg.dept || a.arg.to || a.arg.v || a.arg.m) : '') + '">' + a.label + (a.kbd ? '<kbd>' + a.kbd + '</kbd>' : '') + (a.sub ? '<small>' + a.sub + '</small>' : '') + '</button>';
+const inReality = () => S.posture === 'maquette' && S.maq === 'reality';
 function addressLine() {
+  if (inReality()) return '<b>boston.reality</b> · live ' + FX.meta.now + ' · observer · maquette · you cannot act on the real team';
   const seat = S.signed ? 'gm (you)' : '—', h = S.history === 'branch' ? 'branch fork.w6' : 'record';
   return '<b>boston · year-two</b> · wk9 ' + hm(S.clock) + ' · ' + h + ' · seat: ' + seat + ' · ' + (S.mode === 'schedule' ? 'schedule' : S.posture);
 }
@@ -490,8 +534,10 @@ function plateBlock(FXS) {
     const fx = FXS.find(f => f.id === S.paper) || (S.paper.startsWith('arch.') && FXS.find(f => f.id === S.paper));
     if (fx) {
       const why = S.layers.know ? '<dl class="know"><div><dt>Kind: </dt><dd>' + fx.k + ' — ' + KW_SRC(fx.k) + '</dd></div><div><dt>Source: </dt><dd>' + esc(fx.src) + '</dd></div><div><dt>As of: </dt><dd>' + esc(fx.asof) + '</dd></div></dl>' : '';
+      const vb = verbOn(fx.id, FXS);
       return '<div class="sheet k-' + fx.k + '"><p class="kick">' + kindSw(fx.k) + fx.k + (fx.way ? ' · ' + fx.way.toUpperCase() : '') + '</p><h2 class="pt">' + esc(fx.name) + '</h2>' +
         (fx.cause ? '<p class="pl"><b>' + esc(fx.cause) + '</b> ' + esc(fx.text.replace(fx.cause, '').trim()) + '</p>' : '<p class="pl">' + esc(fx.line) + '</p>') + fx.body.map(t => '<p class="pl sm">' + esc(t) + '</p>').join('') + why + '</div>' +
+        (vb ? '<p class="pl sm hintv">In the Room: click the object again to ' + esc(vb.label.charAt(0).toLowerCase() + vb.label.slice(1)) + '.</p>' : '') +
         (S.held && !br ? btn({ act: 'why', arg: { step: 1 }, label: 'What did this trade touch?', kbd: 'G' }, 'pri') : '') +
         fx.acts.filter(a => !(a.act === 'pick')).map(a => btn(a)).join('') + btn({ act: 'put', label: S.held ? 'Put it down' : 'Put it back', kbd: 'Esc' });
     }
@@ -506,10 +552,10 @@ function plateBlock(FXS) {
   switch (S.posture) {
     case 'maquette': {
       const real = S.maq === 'reality';
-      return '<p class="kick">Outside · observing the system as an object</p><h2 class="pt">' + (real ? 'Boston Celtics · Reality' : 'Boston · Year Two') + '</h2>' +
-        (real ? '<p class="pl">Observed from outside. The four department rooms are sheeted: nobody outside knows their funding. The World knows more than Reality because someone wrote it.</p><p class="pl sm">Cap payroll ≈ ' + mm(REAL_CAPPAY) + '; tax salary ' + '$' + REAL_TAXSAL.toLocaleString('en-US') + ', about ' + mm(REALTAX - REAL_TAXSAL) + ' under the ' + mm(REALTAX) + ' line. Two numbers, side by side [verify].</p>'
+      return '<p class="kick">' + (real ? 'Outside · Reality, observed as an object' : 'Outside · observing the system as an object') + '</p><h2 class="pt">' + (real ? 'Boston Celtics · Reality' : 'Boston · Year Two') + '</h2>' +
+        (real ? '<p class="pl">Observed from outside. The four department rooms are sheeted: nobody outside knows their funding. The World knows more than Reality because someone wrote it.</p><p class="pl sm">Cap payroll ≈ ' + mm(REAL_CAPPAY) + '; tax salary ' + '$' + REAL_TAXSAL.toLocaleString('en-US') + ', about ' + mm(REALTAX - REAL_TAXSAL) + ' under the ' + mm(REALTAX) + ' line. Two numbers, side by side [verify].</p><p class="pl sm"><b>You can:</b> ' + esc(RL.youCan.join(', ')) + '. <b>You cannot:</b> ' + esc(RL.youCannot.join(', ')) + '. There is no seat to sign on the real team.</p>'
           : '<p class="pl">A BOW World, diverged from Reality at Year 0. Authored building; Boston’s real offices are not shown.</p><p class="pl sm">Nothing here is touchable from outside. The four rooms behind glass are lit when funded in the save and dark when not.</p>') +
-        btn({ act: 'arrive', label: 'Arrive at the door' }, 'pri') + '<button type="button" class="btn" id="tgReality" data-act="maq" data-arg="' + esc(JSON.stringify({ v: real ? 'world' : 'reality' })) + '" data-k="maq" aria-pressed="' + real + '">Show Boston · Reality instead</button>';
+        (real ? '' : btn({ act: 'arrive', label: 'Arrive at the door' }, 'pri')) + '<button type="button" class="btn' + (real ? ' pri' : '') + '" id="tgReality" data-act="maq" data-arg="' + esc(JSON.stringify({ v: real ? 'world' : 'reality' })) + '" data-k="maq" aria-pressed="' + real + '">' + (real ? 'Show Boston · Year Two (the World) instead' : 'Show Boston · Reality instead') + '</button>';
     }
     case 'door': {
       const fx = FXS.find(f => f.id === 'door.plate');
@@ -528,7 +574,7 @@ function plateBlock(FXS) {
         (br ? btn({ act: 'compare', label: 'Compare with the record' }, 'pri') + btn({ act: 'cross', arg: { to: 'record' }, label: 'Back to the record', sub: 'Cross the footbridge.' })
           : (S.funded.scouting ? '<div class="sheet k-RECORDED"><p class="pl" style="margin:0"><b>Act ' + S.fundedBy.scouting + '</b> · Funded Scouting · ' + mm(DEPT.scouting.opensFor) + '. First report due ' + AUTH.reportWeek + ', pending.</p></div>' : btn({ act: 'fund', arg: { dept: 'scouting' }, label: 'Fund Scouting · ' + mm(DEPT.scouting.opensFor), sub: 'Cash ' + mm(S.cash) + ' → ' + mm(S.cash - DEPT.scouting.opensFor) + ' (illustrative)' }, 'pri'))) +
         btn({ act: 'stand', label: 'Stand up', sub: 'Restores nothing.' }) +
-        '<details class="leave"><summary>Leave the seat</summary><label class="pl sm" for="hnote">Hand over in your own words</label><input id="hnote" type="text" value="' + esc(S.handNote) + '"><button type="button" class="btn" data-act="handover" data-k="handover">Hand over</button><button type="button" class="btn" data-act="vacate" data-k="vacate">Vacate<small>Matters lapse as NO ACT.</small></button></details>';
+        '<details class="leave"><summary>Leave the seat</summary><label class="pl sm" for="hnote">Hand over in your own words</label><input id="hnote" type="text" value="' + esc(S.handNote) + '"><button type="button" class="btn" data-act="handover" data-k="handover" aria-label="Hand over the seat, with the note above">Hand over</button><button type="button" class="btn" data-act="vacate" data-k="vacate" aria-label="Vacate the seat: the three matters lapse as NO ACT">Vacate<small>Matters lapse as NO ACT.</small></button></details>';
     }
   }
   return '';
@@ -546,6 +592,7 @@ function fourWays(FXS) { return ['win.league', 'dept.' + (S.funded.analytics ? '
 function renderPanel(FXS) {
   const focusK = document.activeElement && document.activeElement.dataset && document.activeElement.dataset.k;
   let h = '';
+  if (S.fromAddress && !S.signed) h += '<div class="sheet k-AUTHORED"><p class="kick">Opened from an address</p><p class="pl sm" style="margin:0">An address names state (the record, the branch, where you stand) and never the seat. You are reading as an observer; holding the seat is a fresh act at the desk.</p></div>';
   if (S.refusal) h += '<div class="refuse" role="note"><b>Refused by rule ' + esc(S.refusal.rule) + '</b>' + esc(S.refusal.why) + '</div>';
   h += plateBlock(FXS);
   if (S.layers.real) h += '<div class="cap ' + (S.posture === 'maquette' ? 'PROPOSED' : 'REAL') + '">' + (S.posture === 'maquette' ? CAPTXT.PROPOSED : CAPTXT.REAL + ' · unmerged branch, no human verdict') + ' · NO AI REQUIRED</div>';
@@ -559,9 +606,9 @@ function renderPanel(FXS) {
     h += '<p class="kick sect">Stations</p><div class="grid4">' + STN.map((s, i) => '<button type="button" class="btn sm" data-act="go" data-arg="' + esc(JSON.stringify({ id: s.id })) + '" data-k="go:' + s.id + '" aria-label="Station ' + (i + 1) + ' · ' + esc(s.name) + '" title="' + esc(s.name) + '"><i>' + (i + 1) + '</i>' + s.short + '</button>').join('') + '</div>';
     h += '<div class="grid2">' + btn({ act: 'view', arg: { pose: 'window' }, label: 'Look out of the window' }, 'sm') + btn({ act: 'view', arg: { pose: 'history' }, label: 'Look at the history wall' }, 'sm') + '</div>';
   }
-  h += '<p class="kick sect">The record · ' + (br() ? 'your branch' : 'your ink is blue') + '</p><ul class="rec" tabindex="0" aria-label="The record">' + recordRows(S.history).slice(-6).map(r => '<li><span class="no ' + (r.br ? 'bch' : r.mine ? 'mine' : '') + '">' + r.no + '</span><span class="' + (r.br ? 'bch' : r.mine ? 'mine' : '') + '">' + esc(r.what) + '</span></li>').join('') + '</ul>';
+  if (inReality()) h += '<p class="kick sect">The record · Reality, as an observer</p><div class="sheet k-AUTHORED"><p class="pl sm" style="margin:0"><b>No acts of yours here.</b> You cannot act on the real team, so there is no ink of yours in this record. Boston’s own record is read from the Reality feed [verify]. The World’s acts ' + REC[0].no + ' to ' + AUTH.actsBefore + ' belong to Boston · Year Two, not to this view.</p></div>';
+  else h += '<p class="kick sect">The record · ' + (br() ? 'your branch' : 'your ink is blue') + '</p><ul class="rec" tabindex="0" aria-label="The record">' + recordRows(S.history).slice(-6).map(r => '<li><span class="no ' + (r.br ? 'bch' : r.mine ? 'mine' : '') + '">' + r.no + '</span><span class="' + (r.br ? 'bch' : r.mine ? 'mine' : '') + '">' + esc(r.what) + '</span></li>').join('') + '</ul>';
   const sc = $('#pscroll'), prevTop = sc.scrollTop, sig = [S.posture, S.paper, S.why, S.history, S.mode, S.signed, S.refusal && S.refusal.rule].join('|'), keepTop = renderPanel.sig === sig; renderPanel.sig = sig; sc.innerHTML = h; sc.scrollTop = keepTop ? prevTop : 0;
-  const rl = sc.querySelector('.rec'); if (rl) rl.scrollTop = rl.scrollHeight;
   $('#addr').innerHTML = addressLine();
   $('#tgReal').setAttribute('aria-pressed', S.layers.real); $('#tgKnow').setAttribute('aria-pressed', S.layers.know); $('#tgSched').setAttribute('aria-pressed', S.mode === 'schedule');
   if (focusK) { const el = sc.querySelector('[data-k="' + CSS.escape(focusK) + '"]'); if (el) el.focus(); }
@@ -569,6 +616,10 @@ function renderPanel(FXS) {
 function br() { return S.history === 'branch'; }
 function renderSchedule(FXS) {
   const el = $('#sched');
+  if (inReality()) {
+    el.innerHTML = (S.refusal ? '<div class="refuse sticky" role="note"><b>Refused by rule ' + esc(S.refusal.rule) + '</b>' + esc(S.refusal.why) + '</div>' : '') + '<h1>Room schedule · Boston Celtics · Reality</h1><p class="addr" style="font:500 12px var(--sans);margin:0">' + addressLine() + '</p><p class="lede">Reality is observed from outside. You cannot act on the real team, so there are no acts here, no record of yours and no rooms to sit in. The four department rooms are sheeted: nobody outside knows their funding.</p><table><thead><tr><th>Fixture</th><th>Line</th></tr></thead><tbody><tr><td class="nm">Cap payroll</td><td class="ln"><span class="kw">' + kindSw('OBSERVED') + 'Observed.</span> ≈ ' + mm(REAL_CAPPAY) + ' [verify]</td></tr><tr><td class="nm">Tax salary</td><td class="ln"><span class="kw">' + kindSw('OBSERVED') + 'Observed.</span> $' + REAL_TAXSAL.toLocaleString('en-US') + ', about ' + mm(REALTAX - REAL_TAXSAL) + ' under the ' + mm(REALTAX) + ' line [verify]</td></tr></tbody></table><p class="lede">To read the World’s schedule, show Boston · Year Two.</p>';
+    return;
+  }
   const kn = S.layers.know, rl = S.layers.real;
   let h = (S.refusal ? '<div class="refuse sticky" role="note"><b>Refused by rule ' + esc(S.refusal.rule) + '</b>' + esc(S.refusal.why) + '</div>' : '') + '<h1>Room schedule</h1><p class="addr" style="font:500 12px var(--sans);margin:0">' + addressLine() + '</p><p class="lede">The same building as the Room, written down. Every line starts with what kind of knowing it is. Every act is a button, and acting here changes the Room: act numbers match.</p>';
   h += '<div class="ledger"><div class="clk"><b>World</b>' + AUTH.week + ' · ' + fmtClock(S.clock) + '</div><div class="clk you"><b>Your clock</b>' + (S.signed ? 'started ' + hm(S.seatStart) : S.left ? 'stopped' : 'not started') + '</div></div>';
@@ -600,7 +651,7 @@ function paint() {
   const FXS = FIXTURES();
   document.body.classList.toggle('in-branch', S.history === 'branch');
   $('#stamp').textContent = S.branch && S.history === 'branch' ? S.branch.stamp + ' · cut with hindsight' : '';
-  $('#sched').hidden = S.mode !== 'schedule';
+  $('#sched').hidden = S.mode !== 'schedule'; document.body.classList.toggle('sched-open', S.mode === 'schedule');
   if (ROOM) ROOM.update(S, FXS);
   /* the ledger's "gave up" list must equal what actually got covered (asserted, in code) */
   const want = S.signed ? LEDGER.gave.map(g => g.id).sort().join() : '';
@@ -608,7 +659,7 @@ function paint() {
   const ok = want === have; S.ledgerCheck = S.signed ? (ok ? 'ok' : 'bad') : null;
   if (!ok) console.error('ledger mismatch: ledger says [' + want + '] but the Room covers [' + have + ']');
   if (S.mode === 'schedule') renderSchedule(FXS);
-  renderPanel(FXS);
+  renderPanel(FXS); syncHash();
 }
 window.__bow = { get S() { return S; }, act, paint, FIXTURES, get room() { return ROOM; }, reset() { S = fresh(); paint(); } };
 
@@ -1102,7 +1153,7 @@ document.addEventListener('keydown', e => {
     bk('oak', MAT.oak, { cast: true, recv: true }); bk('deck', MAT.deck, { cast: true, recv: true }); bk('brick', MAT.brick, { cast: true, recv: true }); bk('plaster', MAT.plaster, { cast: true, recv: true }); bk('timber', MAT.timber, { cast: true, recv: true });
     bk('steel', MAT.steel, { cast: true }); bk('steelOut', MAT.steel, { parent: GRP.roomOnly }); bk('brass', MAT.brass); bk('conc', MAT.conc, { recv: true, parent: GRP.roomOnly }); bk('water', MAT.water, { parent: GRP.roomOnly }); bk('sky', MAT.vc, { parent: GRP.roomOnly });
     bk('shell', MAT.vc); bk('emis', MAT.emis); bk('atlas', MAT.atlas); bk('props', MAT.vc, { cast: true }); bk('brickOut', MAT.brick, { recv: true, parent: GRP.roomOnly }); bk('vcOut', MAT.vc, { recv: true, parent: GRP.roomOnly });
-    bk('brickCut', MAT.brick, { parent: GRP.cut, cast: true, recv: true }); bk('plasterCut', MAT.plaster, { parent: GRP.cut, recv: true }); bk('truss', MAT.timber, { parent: GRP.cut }); bk('roof', MAT.roofM, { parent: GRP.cut }); bk('roomRoof', MAT.plaster, { parent: GRP.cut }); bk('oakCut', MAT.oak, { parent: GRP.cut }); bk('atlasS', MAT.atlas, { parent: GRP.cut });
+    bk('brickCut', MAT.brick, { parent: GRP.cut, cast: true, recv: true }); bk('plasterCut', MAT.plaster, { parent: GRP.cut, recv: false }); bk('truss', MAT.timber, { parent: GRP.cut }); bk('roof', MAT.roofM, { parent: GRP.cut }); bk('roomRoof', MAT.plaster, { parent: GRP.cut }); bk('oakCut', MAT.oak, { parent: GRP.cut }); bk('atlasS', MAT.atlas, { parent: GRP.cut });
     bk('paper', MAT.paper, { parent: GRP.maqOnly, recv: true }); bk('maqWater', MAT.maqWater, { parent: GRP.maqOnly });
     const glassMesh = bk('glass', MAT.glass); glassMesh.renderOrder = 6;
     PARTS.furn = {}; for (const id of ROOMKEYS) PARTS.furn[id] = { lit: bk('furn:' + id + ':lit', MAT.vc), dark: bk('furn:' + id + ':dark', MAT.vc) };
@@ -1571,8 +1622,31 @@ document.addEventListener('keydown', e => {
 
     /* ---------- chips (What's real? / How do we know?), picking, resize ---------- */
     const canvas = renderer.domElement, stage = $('#stage'), chipsEl = $('#chips');
+    /* the objects that carry a verb are also real buttons laid over the room, so the pointer, the keyboard and a screen reader reach the same acts */
+    const hotsEl = $('#hots'); let HOT_SIG = '';
+    const HOTLABEL = { 'desk.pen': 'the pen', 'desk.tradefile': 'the Golden State folder', 'dept.analytics': 'the Analytics door', 'dept.scouting': 'the Scouting door', 'dept.ticketing': 'the Ticketing door', 'dept.partnerships': 'the Partnerships door', 'win.record': 'the record building across the slip', 'arch.w6': 'the Week 6 arch' };
+    function updateHotspots() {
+      const r = canvas.getBoundingClientRect(), items = [];
+      if (S.mode === 'schedule') { if (hotsEl.firstChild) hotsEl.textContent = ''; HOT_SIG = ''; return; }
+      if (S.posture === 'maquette') {
+        if (!inReality()) { const v = V3(MQ.tgt.x, MQ.tgt.y, MQ.tgt.z).project(camera); items.push({ id: '__building', label: 'the building, from outside (arrives at the door)', x: (v.x * .5 + .5) * r.width, y: (-v.y * .5 + .5) * r.height }); }
+      } else {
+        for (const id of Object.keys(HOTLABEL)) {
+          if (!lastFXS.some(f => f.id === id)) continue; const a = ANCH[id]; if (!a) continue; const v = a.clone().project(camera);
+          if (v.z > 1 || Math.abs(v.x) > .9 || Math.abs(v.y) > .88) continue;
+          items.push({ id, label: HOTLABEL[id], x: (v.x * .5 + .5) * r.width, y: (-v.y * .5 + .5) * r.height });
+        }
+      }
+      const ids = items.map(i => i.id).join('|');
+      if (ids === HOT_SIG) { /* same objects: move the buttons, never replace them */ items.forEach((i, k) => { const b = hotsEl.children[k]; if (b) { b.style.left = Math.round(i.x) + 'px'; b.style.top = Math.round(i.y) + 'px'; } }); return; }
+      HOT_SIG = ids;
+      hotsEl.innerHTML = items.map(i => '<button type="button" class="hot" data-id="' + i.id + '" aria-label="Object in the room: ' + esc(i.label) + '" style="left:' + Math.round(i.x) + 'px;top:' + Math.round(i.y) + 'px"></button>').join('');
+    }
+    hotsEl.addEventListener('click', e => { const b = e.target.closest('.hot'); if (!b) return; if (b.dataset.id === '__building') act('arrive'); else clickObject(b.dataset.id); });
+    const legendEl = $('#chiplegend'); let LEG_SIG = '';
     function updateChips() {
-      if (!S.layers.real && !S.layers.know) { if (chipsEl.firstChild) chipsEl.textContent = ''; return; }
+      updateHotspots();
+      if (!S.layers.real && !S.layers.know) { if (chipsEl.firstChild) chipsEl.textContent = ''; if (!legendEl.hidden) { legendEl.hidden = true; legendEl.innerHTML = ''; LEG_SIG = ''; } return; }
       const r = canvas.getBoundingClientRect(), items = [], maq = S.posture === 'maquette';
       for (const f of lastFXS) {
         if (maq && !/^(dept\.|board\.roster|board\.cap|win\.league|win\.arena|hall\.maquette)/.test(f.id)) continue;
@@ -1580,13 +1654,17 @@ document.addEventListener('keydown', e => {
         if (v.z > 1 || Math.abs(v.x) > .93 || Math.abs(v.y) > .9) continue;
         items.push({ f, x: (v.x * .5 + .5) * r.width, y: (-v.y * .5 + .5) * r.height, d: a.distanceTo(camera.position) });
       }
-      items.sort((p, q) => p.d - q.d); const placed = [], out = [];
-      for (const it of items) {
-        if (placed.length >= 15) break; if (placed.some(p => Math.abs(p.x - it.x) < 178 && Math.abs(p.y - it.y) < 46)) continue; placed.push(it);
-        const cap = maq && !/^dept\.|board\./.test(it.f.id) ? 'PROPOSED' : it.f.cap;
-        out.push('<div class="chip ' + (S.layers.real ? cap : '') + '" style="left:' + Math.round(it.x) + 'px;top:' + Math.round(it.y - 46) + 'px">' + (S.layers.real ? '<b>' + CAPTXT[cap] + ' · NO AI REQUIRED</b>' : '') + esc(it.f.name) + (S.layers.know ? '<br><span class="sw k-' + it.f.k + '"></span>' + it.f.k + ' · ' + esc(String(it.f.src).split(' · ')[0].slice(0, 46)) : '') + '</div>');
+      items.sort((p, q) => p.d - q.d); const placed = [], out = [], rows = [];
+      for (const it of items) { if (placed.length >= 15) break; if (placed.some(p => Math.abs(p.x - it.x) < 34 && Math.abs(p.y - it.y) < 30)) continue; placed.push(it); }
+      placed.sort((a, b) => (Math.round(a.y / 60) - Math.round(b.y / 60)) || (a.x - b.x));
+      for (const it of placed) {
+        const n = placed.indexOf(it) + 1, cap = maq && !/^dept\.|board\./.test(it.f.id) ? 'PROPOSED' : it.f.cap;
+        out.push('<div class="chip ' + (S.layers.real ? cap : '') + '" style="left:' + Math.round(it.x) + 'px;top:' + Math.round(it.y) + 'px">' + n + '</div>');
+        rows.push('<li><span class="chn">' + n + '</span><span><b>' + esc(it.f.name) + '</b>' + (S.layers.real ? ' · ' + CAPTXT[cap] + ' · NO AI REQUIRED' : '') + (S.layers.know ? '<br><span class="sw k-' + it.f.k + '"></span>' + it.f.k + ' · ' + esc(String(it.f.src).split(' · ')[0].slice(0, 64)) : '') + '</span></li>');
       }
       chipsEl.innerHTML = out.join('');
+      const sig = rows.join('');
+      if (sig !== LEG_SIG) { LEG_SIG = sig; legendEl.hidden = false; legendEl.innerHTML = '<h3>' + (S.layers.real ? 'What’s real? · numbered in the room' : 'How do we know? · numbered in the room') + '</h3><ul>' + sig + '</ul>'; }
     }
     const ray = new THREE.Raycaster(), ptr = new THREE.Vector2(); let down = null;
     function pickAt(cx, cy) { const r = canvas.getBoundingClientRect(); ptr.set(((cx - r.left) / r.width) * 2 - 1, -((cy - r.top) / r.height) * 2 + 1); ray.setFromCamera(ptr, camera); for (const h of ray.intersectObjects(HITS, false)) { const id = h.object.userData.fixtureId; if (lastFXS.some(f => f.id === id)) return id; } return null; }
@@ -1596,7 +1674,7 @@ document.addEventListener('keydown', e => {
         if (down.moved && CAM.dur === 0) { if (CAM.name === 'maquette') { MQ.az = down.az - dx * .006; MQ.el = Math.max(.2, Math.min(1.1, down.el + dy * .004)); } else { LOOK.yaw = Math.max(-.5, Math.min(.5, down.yaw + dx * .0025)); LOOK.pitch = Math.max(-.25, Math.min(.25, down.pitch + dy * .0018)); } invalidate(); } }
       else { const id = pickAt(e.clientX, e.clientY); canvas.style.cursor = id ? 'pointer' : 'grab'; const f = id && lastFXS.find(x => x.id === id); canvas.title = f ? f.name : ''; }
     });
-    canvas.addEventListener('pointerup', e => { if (down && !down.moved) { const id = pickAt(e.clientX, e.clientY); if (id) act('pick', { id }); } down = null; });
+    canvas.addEventListener('pointerup', e => { if (down && !down.moved) { const id = pickAt(e.clientX, e.clientY); if (id) clickObject(id); } down = null; });
     function resize() { const r = stage.getBoundingClientRect(), w = Math.max(240, Math.floor(r.width)), h = Math.max(240, Math.floor(r.height)); renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); invalidate(); }
     new ResizeObserver(resize).observe(stage); resize();
     ROOM = { BRD, PARTS, update, coveredIds, stats: () => ({ ...STATS }), pose: n => setPose(n, true), poses: POSES, MQ, camera, renderer, scene, invalidate, project: id => { const v = (ANCH[id] || V3()).clone().project(camera), r = canvas.getBoundingClientRect(); return [r.left + (v.x * .5 + .5) * r.width, r.top + (-v.y * .5 + .5) * r.height]; } };
@@ -1605,6 +1683,40 @@ document.addEventListener('keydown', e => {
 })();
 
 /*__ROOM_END__*/
+/* ---------- the address lives in the URL; it names STATE (the record, the branch, where you stand), never the seat ---------- */
+function hashOf() {
+  const q = [], acts = S.log.filter(e => e.kind === 'act' && e.hist === 'record');
+  if (acts.length) q.push('f=' + acts.map(e => e.dept + ':' + e.actNo).join(','));
+  if (S.branch) q.push('br=1');
+  if (S.history === 'branch') q.push('at=branch');
+  if (S.maq === 'reality') q.push('maq=reality');
+  if (S.mode === 'schedule') q.push('view=schedule');
+  return '#/boston.world.year-two/' + S.posture + (q.length ? '?' + q.join('&') : '');
+}
+function syncHash() { try { const h = hashOf(); if (location.hash !== h) history.replaceState(null, '', h); } catch (e) { /* optional */ } }
+function restoreHash() {
+  const raw = (location.hash || '').replace(/^#\/?/, ''); if (!raw) return;
+  const pq = raw.split('?'), path = pq[0].split('/'), q = {};
+  (pq[1] || '').split('&').forEach(kv => { const i = kv.indexOf('='); if (i > 0) q[kv.slice(0, i)] = decodeURIComponent(kv.slice(i + 1)); });
+  if (path[0] !== 'boston.world.year-two') return;
+  S.fromAddress = true;
+  if (q.maq === 'reality') S.maq = 'reality';
+  (q.f || '').split(',').filter(Boolean).forEach(s => {
+    const [dept, no] = s.split(':'), d = DEPT[dept]; if (!d || S.funded[dept] || d.funded) return;
+    S.funded[dept] = true; S.fundedWeek = true; S.cash -= d.opensFor; S.actNo = Math.max(S.actNo, +no || S.actNo); S.fundedBy[dept] = +no; S.po = { no: +no, dept, price: d.opensFor, clock: S.clock };
+    log('act', 'Fund ' + d.name + ' · ' + mm(d.opensFor), { actNo: +no, dept });
+  });
+  if (q.br === '1') {
+    S.arch.w6.cover = true; S.arch.w6.out = true;
+    S.branch = { id: 'fork.w6', at: W6.no, stamp: 'Your branch · Week 6 trade not made · diverged Week 6', hindsight: true, funded: { ...S.funded }, cash: S.cash, kept: S.log.filter(e => e.kind === 'act' && e.hist === 'record').map(e => ({ ...e })), at_clock: fmtClock(S.clock) };
+    if (q.at === 'branch') { S.history = 'branch'; S.pose = 'arches'; }
+    log('fork', 'Restored from the address: Week 6 trade not made · cut with hindsight', { hist: 'branch', actNo: null, no: '40′' });
+  }
+  const pos = path[1];
+  if (pos === 'door' || pos === 'rail' || pos === 'desk') { S.posture = pos; S.pose = pos; }
+  if (q.view === 'schedule') S.mode = 'schedule';
+}
+restoreHash();
 paint();
 </script>
 </body>

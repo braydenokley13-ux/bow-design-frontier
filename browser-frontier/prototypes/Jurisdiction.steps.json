@@ -4,6 +4,21 @@
   "shot": "front-desk-discover"
  },
  {
+  "fill": [
+   "#askq",
+   "Will Boston trade Jaylen Brown?"
+  ]
+ },
+ {
+  "press": "Enter"
+ },
+ {
+  "expectText": "No system here for that"
+ },
+ {
+  "shot": "free-question-no-system-a-want-filed"
+ },
+ {
   "click": "Why is Boston so close to the tax line?",
   "shot": "arrive-at-the-neck"
  },
@@ -224,6 +239,15 @@
   "shot": "second-records"
  },
  {
+  "reload": true
+ },
+ {
+  "expectText": "observer may see"
+ },
+ {
+  "shot": "reload-restores-the-world-as-a-read-only-viewpoint"
+ },
+ {
   "css": ".edge[aria-label*='Reality']",
   "shot": "back-to-reality"
  },
@@ -234,5 +258,14 @@
  },
  {
   "expectText": "Following"
+ },
+ {
+  "reload": true
+ },
+ {
+  "expectText": "Payroll"
+ },
+ {
+  "shot": "reload-restores-the-reality-sheet-from-the-address"
  }
 ]

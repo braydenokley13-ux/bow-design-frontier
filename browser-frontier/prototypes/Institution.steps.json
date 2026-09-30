@@ -1,98 +1,357 @@
 [
-  {"wait": 14000},
-  {"expectText": "A BOW World, diverged from Reality at Year 0"},
-  {"shot": "maquette-world"},
-  {"click": "Show Boston · Reality instead", "after": 4000},
-  {"expectText": "sheeted"},
-  {"shot": "maquette-reality-rooms-sheeted"},
-  {"click": "Show Boston · Reality instead", "after": 3500},
-  {"click": "Arrive at the door", "after": 4500},
-  {"expectText": "Owed: 3"},
-  {"shot": "door"},
-  {"click": "Look around", "after": 4000},
-  {"expectText": "Reading the record. Nothing here is yours."},
-  {"shot": "rail"},
-  {"click": "Take the seat", "after": 4000},
-  {"expectText": "You give up:"},
-  {"shot": "desk-unsigned-ledger"},
-  {"click": "Sign with the pen", "after": 4500},
-  {"expectText": "Ledger check"},
-  {"shot": "signed-five-changes"},
-  {"click": "Fund Scouting", "after": 4500},
-  {"expectText": "Act 43"},
-  {"shot": "funded-desk-order"},
-  {"click": "Station 5", "after": 4000},
-  {"shot": "scouting-lit-sign-brass"},
-  {"click": "Station 2", "after": 4000},
-  {"click": "Withheld", "after": 4000},
-  {"expectText": "Another seat holds this"},
-  {"shot": "withheld-league-counter"},
-  {"press": "Escape", "after": 1500},
-  {"click": "Unbought", "after": 4000},
-  {"expectText": "Nobody paid for this"},
-  {"shot": "unbought-analytics-dark"},
-  {"press": "Escape", "after": 1500},
-  {"click": "Unlived", "after": 4000},
-  {"expectText": "It has not happened yet"},
-  {"shot": "unlived-next-night-linen"},
-  {"press": "Escape", "after": 1500},
-  {"click": "Untraced", "after": 4000},
-  {"expectText": "Nobody wrote it down"},
-  {"shot": "untraced-empty-frame"},
-  {"press": "Escape", "after": 1500},
-  {"click": "What’s real?", "after": 3500},
-  {"shot": "whats-real-layer"},
-  {"click": "How do we know?", "after": 3500},
-  {"shot": "how-do-we-know-layer"},
-  {"click": "What’s real?", "after": 1500},
-  {"click": "How do we know?", "after": 1500},
-  {"click": "Station 2", "after": 4000},
-  {"click": "Trade file", "after": 4000},
-  {"expectText": "Signed by both owners"},
-  {"shot": "trade-file-in-hand"},
-  {"click": "What did this trade touch?", "after": 4500},
-  {"expectText": "Roster board"},
-  {"shot": "why-1-roster"},
-  {"click": "Next tag", "after": 4000},
-  {"shot": "why-2-cap-wall"},
-  {"click": "Next tag", "after": 4000},
-  {"shot": "why-3-tax-ledger"},
-  {"click": "Next tag", "after": 4000},
-  {"shot": "why-4-cash"},
-  {"click": "Next tag", "after": 4000},
-  {"shot": "why-5-film-room"},
-  {"click": "Page two", "after": 3000},
-  {"expectText": "Not reached:"},
-  {"shot": "why-page-two"},
-  {"click": "Return to the desk", "after": 4000},
-  {"click": "Week 6", "after": 4500},
-  {"expectText": "Golden State calls about"},
-  {"shot": "arch-week6-question"},
-  {"click": "Lift the cover", "after": 3500},
-  {"shot": "cover-lifted"},
-  {"click": "What if?", "after": 5500},
-  {"expectText": "Your branch"},
-  {"shot": "branch-cut-tape-scaffold"},
-  {"click": "Look out of the window", "after": 4500},
-  {"shot": "branch-record-lit-across-slip"},
-  {"click": "Compare with the record", "after": 3500},
-  {"expectText": "Impossible here"},
-  {"shot": "compare-record-vs-branch"},
-  {"click": "Back to the record", "after": 3500},
-  {"press": "s", "after": 4500},
-  {"shot": "back-in-record-branch-scaffolded"},
-  {"press": "s", "after": 2500},
-  {"click": "Fund Analytics", "after": 2500},
-  {"expectText": "One funding decision per week"},
-  {"shot": "schedule-twin-refusal-names-rule"},
-  {"click": "Cross the footbridge to your branch", "after": 2500},
-  {"shot": "schedule-acted-branch"},
-  {"press": "s", "after": 4500},
-  {"expectText": "Your branch"},
-  {"shot": "room-shows-what-schedule-did"},
-  {"click": "Back to the record", "after": 3500},
-  {"clickText": "Leave the seat", "after": 1500},
-  {"click": "Hand over", "after": 4500},
-  {"expectText": "Handed over"},
-  {"shot": "handed-over-door"}
+ {
+  "wait": 14000
+ },
+ {
+  "expectText": "A BOW World, diverged from Reality at Year 0"
+ },
+ {
+  "shot": "maquette-world"
+ },
+ {
+  "click": "Show Boston · Reality instead",
+  "after": 4000
+ },
+ {
+  "expectText": "sheeted"
+ },
+ {
+  "expectText": "you cannot act on the real team"
+ },
+ {
+  "shot": "maquette-reality-rooms-sheeted"
+ },
+ {
+  "click": "Show Boston · Year Two",
+  "after": 3500
+ },
+ {
+  "click": "Object in the room: the building",
+  "after": 4500,
+  "force": true
+ },
+ {
+  "expectText": "Owed: 3"
+ },
+ {
+  "shot": "door"
+ },
+ {
+  "click": "Look around",
+  "after": 4000
+ },
+ {
+  "expectText": "Reading the record. Nothing here is yours."
+ },
+ {
+  "shot": "rail"
+ },
+ {
+  "click": "Take the seat",
+  "after": 4000
+ },
+ {
+  "expectText": "You give up:"
+ },
+ {
+  "shot": "desk-unsigned-ledger"
+ },
+ {
+  "click": "Object in the room: the pen",
+  "after": 2500,
+  "force": true
+ },
+ {
+  "click": "Object in the room: the pen",
+  "after": 4500,
+  "force": true
+ },
+ {
+  "expectText": "Ledger check"
+ },
+ {
+  "shot": "signed-five-changes"
+ },
+ {
+  "click": "Fund Scouting",
+  "after": 4500
+ },
+ {
+  "expectText": "Act 43"
+ },
+ {
+  "shot": "funded-desk-order"
+ },
+ {
+  "click": "Station 5",
+  "after": 4000
+ },
+ {
+  "shot": "scouting-lit-sign-brass"
+ },
+ {
+  "click": "Station 2",
+  "after": 4000
+ },
+ {
+  "click": "Withheld",
+  "after": 4000
+ },
+ {
+  "expectText": "Another seat holds this"
+ },
+ {
+  "shot": "withheld-league-counter"
+ },
+ {
+  "press": "Escape",
+  "after": 1500
+ },
+ {
+  "click": "Unbought",
+  "after": 4000
+ },
+ {
+  "expectText": "Nobody paid for this"
+ },
+ {
+  "shot": "unbought-analytics-dark"
+ },
+ {
+  "press": "Escape",
+  "after": 1500
+ },
+ {
+  "click": "Unlived",
+  "after": 4000
+ },
+ {
+  "expectText": "It has not happened yet"
+ },
+ {
+  "shot": "unlived-next-night-linen"
+ },
+ {
+  "press": "Escape",
+  "after": 1500
+ },
+ {
+  "click": "Untraced",
+  "after": 4000
+ },
+ {
+  "expectText": "Nobody wrote it down"
+ },
+ {
+  "shot": "untraced-empty-frame"
+ },
+ {
+  "press": "Escape",
+  "after": 1500
+ },
+ {
+  "click": "What’s real?",
+  "after": 3500
+ },
+ {
+  "shot": "whats-real-layer"
+ },
+ {
+  "click": "How do we know?",
+  "after": 3500
+ },
+ {
+  "shot": "how-do-we-know-layer"
+ },
+ {
+  "click": "What’s real?",
+  "after": 1500
+ },
+ {
+  "click": "How do we know?",
+  "after": 1500
+ },
+ {
+  "click": "Station 2",
+  "after": 4000
+ },
+ {
+  "click": "Object in the room: the Golden State folder",
+  "after": 4000,
+  "force": true
+ },
+ {
+  "expectText": "Signed by both owners"
+ },
+ {
+  "shot": "trade-file-in-hand"
+ },
+ {
+  "click": "What did this trade touch?",
+  "after": 4500
+ },
+ {
+  "expectText": "Roster board"
+ },
+ {
+  "shot": "why-1-roster"
+ },
+ {
+  "click": "Next tag",
+  "after": 4000
+ },
+ {
+  "shot": "why-2-cap-wall"
+ },
+ {
+  "click": "Next tag",
+  "after": 4000
+ },
+ {
+  "shot": "why-3-tax-ledger"
+ },
+ {
+  "click": "Next tag",
+  "after": 4000
+ },
+ {
+  "shot": "why-4-cash"
+ },
+ {
+  "click": "Next tag",
+  "after": 4000
+ },
+ {
+  "shot": "why-5-film-room"
+ },
+ {
+  "click": "Page two",
+  "after": 3000
+ },
+ {
+  "expectText": "Not reached:"
+ },
+ {
+  "shot": "why-page-two"
+ },
+ {
+  "click": "Return to the desk",
+  "after": 4000
+ },
+ {
+  "click": "Week 6",
+  "after": 4500
+ },
+ {
+  "expectText": "Golden State calls about"
+ },
+ {
+  "shot": "arch-week6-question"
+ },
+ {
+  "click": "Lift the cover",
+  "after": 3500
+ },
+ {
+  "shot": "cover-lifted"
+ },
+ {
+  "click": "What if?",
+  "after": 5500
+ },
+ {
+  "expectText": "Your branch"
+ },
+ {
+  "shot": "branch-cut-tape-scaffold"
+ },
+ {
+  "click": "Look out of the window",
+  "after": 4500
+ },
+ {
+  "shot": "branch-record-lit-across-slip"
+ },
+ {
+  "click": "Compare with the record",
+  "after": 3500
+ },
+ {
+  "expectText": "Impossible here"
+ },
+ {
+  "shot": "compare-record-vs-branch"
+ },
+ {
+  "click": "Back to the record",
+  "after": 3500
+ },
+ {
+  "press": "s",
+  "after": 4500
+ },
+ {
+  "shot": "back-in-record-branch-scaffolded"
+ },
+ {
+  "press": "s",
+  "after": 2500
+ },
+ {
+  "click": "Fund Analytics",
+  "after": 2500
+ },
+ {
+  "expectText": "One funding decision per week"
+ },
+ {
+  "shot": "schedule-twin-refusal-names-rule"
+ },
+ {
+  "click": "Cross the footbridge to your branch",
+  "after": 2500
+ },
+ {
+  "shot": "schedule-acted-branch"
+ },
+ {
+  "press": "s",
+  "after": 4500
+ },
+ {
+  "expectText": "Your branch"
+ },
+ {
+  "shot": "room-shows-what-schedule-did"
+ },
+ {
+  "click": "Back to the record",
+  "after": 3500
+ },
+ {
+  "clickText": "Leave the seat",
+  "after": 1500,
+  "force": true
+ },
+ {
+  "click": "Hand over",
+  "after": 4500,
+  "force": true
+ },
+ {
+  "expectText": "Handed over"
+ },
+ {
+  "shot": "handed-over-door"
+ },
+ {
+  "reload": true,
+  "after": 9000
+ },
+ {
+  "expectText": "Opened from an address"
+ },
+ {
+  "shot": "reload-restores-the-building-from-the-address"
+ }
 ]

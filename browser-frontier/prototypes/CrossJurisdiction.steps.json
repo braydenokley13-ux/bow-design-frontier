@@ -1,0 +1,456 @@
+[
+ {
+  "wait": 600,
+  "shot": "discover-the-counter"
+ },
+ {
+  "fill": [
+   "#askq",
+   "Will Boston trade Jaylen Brown?"
+  ]
+ },
+ {
+  "click": "Arrive",
+  "shot": "typed-ask-refused-not-replaced"
+ },
+ {
+  "click": "Why did the flask go dark when I heated it?",
+  "shot": "chem-arrive-observer-reading"
+ },
+ {
+  "click": "How do we know?",
+  "shot": "chem-how-do-we-know-layer"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "click": "What’s real?",
+  "shot": "chem-whats-real-overlay"
+ },
+ {
+  "click": "What’s real?"
+ },
+ {
+  "click": "Take the bench lead’s seat",
+  "shot": "chem-the-offer-five-parts"
+ },
+ {
+  "click": "Redeem",
+  "shot": "chem-seat-taken-standing-line-rewrites"
+ },
+ {
+  "click": "Draft: heat the flask",
+  "shot": "chem-paper-five-kinds-and-nature-row"
+ },
+ {
+  "click": "14:15",
+  "shot": "chem-busy-slot-refused-names-whose-calendar"
+ },
+ {
+  "click": "14:30"
+ },
+ {
+  "click": "Sign line 1"
+ },
+ {
+  "click": "Dry run",
+  "shot": "chem-dry-run-seats-cant-tell-nature-exact"
+ },
+ {
+  "click": "Send",
+  "exact": true,
+  "shot": "chem-sent-visiting-the-booking-desk"
+ },
+ {
+  "click": "Go there",
+  "shot": "chem-go-there-safety-officer-register"
+ },
+ {
+  "click": "Wait",
+  "shot": "chem-booking-answers-on-its-clock"
+ },
+ {
+  "click": "Wait",
+  "shot": "chem-safety-approves-flask-changes-in-four-places"
+ },
+ {
+  "click": "Watch 20 s",
+  "shot": "chem-nature-answers-on-the-flasks-clock"
+ },
+ {
+  "click": "Open the three records",
+  "shot": "chem-three-records-no-god-view"
+ },
+ {
+  "click": "Why is [NO",
+  "shot": "chem-why-traced-to-acts-and-constants"
+ },
+ {
+  "click": "Back",
+  "exact": true
+ },
+ {
+  "click": "Draft: halve the volume",
+  "shot": "chem-halve-paper-booking-line-struck"
+ },
+ {
+  "click": "Sign line 1"
+ },
+ {
+  "click": "Send",
+  "exact": true
+ },
+ {
+  "click": "Wait",
+  "shot": "chem-halve-landed-darker-then-settling"
+ },
+ {
+  "click": "Watch 20 s",
+  "shot": "chem-halve-settled-lighter"
+ },
+ {
+  "click": "Open the three records"
+ },
+ {
+  "click": "Back to the desk"
+ },
+ {
+  "click": "Draft: add n₂o₄",
+  "shot": "chem-add-paper-stockroom-and-money-lines"
+ },
+ {
+  "click": "Sign line 1"
+ },
+ {
+  "click": "Send",
+  "exact": true
+ },
+ {
+  "click": "Wait"
+ },
+ {
+  "click": "Wait",
+  "shot": "chem-add-landed-four-drawings-again"
+ },
+ {
+  "click": "Open the three records"
+ },
+ {
+  "click": "Back to the desk"
+ },
+ {
+  "click": "Draft: add n₂o₄"
+ },
+ {
+  "click": "Sign line 1"
+ },
+ {
+  "click": "Send",
+  "exact": true
+ },
+ {
+  "click": "Wait"
+ },
+ {
+  "click": "Wait"
+ },
+ {
+  "click": "Open the three records"
+ },
+ {
+  "click": "Back to the desk"
+ },
+ {
+  "click": "Draft: add n₂o₄"
+ },
+ {
+  "click": "Sign line 1"
+ },
+ {
+  "click": "Send",
+  "exact": true
+ },
+ {
+  "click": "Wait",
+  "shot": "chem-keeper-declines-naming-no-rule-a-will"
+ },
+ {
+  "click": "Back to the desk"
+ },
+ {
+  "click": "Draft: halve the volume"
+ },
+ {
+  "click": "Sign line 1"
+ },
+ {
+  "click": "Dry run",
+  "shot": "chem-dry-run-safety-line-exact-says-no"
+ },
+ {
+  "click": "Send",
+  "exact": true
+ },
+ {
+  "click": "Wait",
+  "shot": "chem-officer-returns-the-file-naming-rule-5"
+ },
+ {
+  "click": "Back to the desk"
+ },
+ {
+  "click": "Open the three records"
+ },
+ {
+  "click": "Redline this paper",
+  "shot": "chem-redline-faces-re-execute"
+ },
+ {
+  "click": "Keep this redline as a branch",
+  "shot": "chem-branch-in-its-own-ink-record-beside"
+ },
+ {
+  "click": "Compare face up",
+  "shot": "chem-compare-face-up"
+ },
+ {
+  "click": "Return to the record",
+  "shot": "chem-return-to-the-record"
+ },
+ {
+  "reload": true,
+  "shot": "chem-reload-restores-the-address"
+ },
+ {
+  "click": "The counter",
+  "shot": "the-counter-again-three-jurisdictions"
+ },
+ {
+  "click": "Can Harrow still keep its promises after the Kaito fire?",
+  "shot": "sup-arrive-observer-reading"
+ },
+ {
+  "click": "How do we know?",
+  "shot": "sup-how-do-we-know-layer"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "click": "Take the procurement lead’s seat",
+  "shot": "sup-the-offer-five-parts"
+ },
+ {
+  "click": "Redeem",
+  "shot": "sup-seat-taken-standing-line-rewrites"
+ },
+ {
+  "click": "Draft: a second-source order",
+  "shot": "sup-paper-kaito-row-has-no-line"
+ },
+ {
+  "click": "Skip qualification (rush"
+ },
+ {
+  "click": "Sign line 1"
+ },
+ {
+  "click": "Dry run",
+  "shot": "sup-dry-run-change-control-exact-says-no"
+ },
+ {
+  "click": "Send",
+  "exact": true,
+  "shot": "sup-sent-visiting-osei"
+ },
+ {
+  "click": "Wait",
+  "shot": "sup-osei-answers-two-days-gone"
+ },
+ {
+  "click": "Wait",
+  "shot": "sup-carrier-holds-a-departure"
+ },
+ {
+  "click": "Wait",
+  "shot": "sup-change-control-returns-the-file-five-days-spent"
+ },
+ {
+  "click": "Skip qualification (rush"
+ },
+ {
+  "click": "Sign line 1"
+ },
+ {
+  "click": "4,200"
+ },
+ {
+  "click": "Sea",
+  "shot": "sup-money-line-says-no-send-blocked"
+ },
+ {
+  "click": "Part B"
+ },
+ {
+  "click": "Sea",
+  "shot": "sup-4200-b-sea-affordable"
+ },
+ {
+  "click": "Send",
+  "exact": true
+ },
+ {
+  "click": "Wait",
+  "shot": "sup-osei-declines-naming-no-rule-its-capacity"
+ },
+ {
+  "click": "Part A"
+ },
+ {
+  "click": "Sign line 1"
+ },
+ {
+  "click": "2,100"
+ },
+ {
+  "click": "Air"
+ },
+ {
+  "click": "Dry run",
+  "shot": "sup-dry-run-second-attempt"
+ },
+ {
+  "click": "Send",
+  "exact": true
+ },
+ {
+  "click": "Wait"
+ },
+ {
+  "click": "Wait"
+ },
+ {
+  "click": "Wait",
+  "shot": "sup-landed-board-stock-promises-move-together"
+ },
+ {
+  "click": "Open the three records",
+  "shot": "sup-three-records-no-god-view"
+ },
+ {
+  "click": "Why ",
+  "shot": "sup-why-traced-days-lots-promises"
+ },
+ {
+  "click": "Back",
+  "exact": true
+ },
+ {
+  "click": "Open the three records"
+ },
+ {
+  "click": "Redline this order",
+  "shot": "sup-redline-part-b-faces-re-execute"
+ },
+ {
+  "click": "Keep this redline as a branch",
+  "shot": "sup-branch-in-its-own-ink-record-beside"
+ },
+ {
+  "click": "Compare face up",
+  "shot": "sup-compare-face-up"
+ },
+ {
+  "click": "Return to the record",
+  "shot": "sup-return-to-the-record"
+ },
+ {
+  "click": "The counter"
+ },
+ {
+  "click": "What did the wolves do to the northern range?",
+  "shot": "eco-arrive-observer-reading-and-the-dispute"
+ },
+ {
+  "click": "Ask for a seat",
+  "shot": "eco-no-seat-refused-naming-the-rule"
+ },
+ {
+  "click": "Stand at the 1995–96 paper as a fork author",
+  "shot": "eco-fork-chair-standing-line"
+ },
+ {
+  "click": "Redline this paper",
+  "shot": "eco-redline-faces-cant-tell"
+ },
+ {
+  "click": "Keep this redline as a branch",
+  "shot": "eco-branch-in-its-own-ink"
+ },
+ {
+  "click": "Compare face up",
+  "shot": "eco-compare-and-the-seam-with-no-control"
+ },
+ {
+  "click": "Return to the record",
+  "shot": "eco-return-to-the-record"
+ },
+ {
+  "click": "Open the records",
+  "shot": "eco-three-records-holes-and-natures-missing-book"
+ },
+ {
+  "click": "Back",
+  "exact": true
+ },
+ {
+  "click": "Leave the chair",
+  "shot": "eco-back-to-observer"
+ },
+ {
+  "click": "Collapse report",
+  "shot": "collapse-report-all-three"
+ },
+ {
+  "click": "Report for Chemistry",
+  "shot": "collapse-report-chemistry"
+ },
+ {
+  "click": "Report for Harrow",
+  "shot": "collapse-report-harrow"
+ },
+ {
+  "click": "Report for Yellowstone",
+  "shot": "collapse-report-yellowstone"
+ },
+ {
+  "click": "Close the report",
+  "shot": "collapse-closed-back-to-the-record"
+ },
+ {
+  "click": "The counter"
+ },
+ {
+  "click": "Why did the flask go dark when I heated it?"
+ },
+ {
+  "click": "Go to your desk"
+ },
+ {
+  "click": "Open the three records",
+  "shot": "chem-records-the-address-names-this-state"
+ },
+ {
+  "open2": "CrossJurisdiction.html#s=lab.bench4&n=25&seat=bench-lead&v=records&a=ask:chem~offer~enter~draft:heat~slot:1415~slot:1430~sign~send~wait~wait~cur:30~draft:halve~sign~send~wait~cur:50~draft:add~sign~send~wait~wait~draft:add~sign~send~wait~wait~draft:add~sign~send~wait~draft:halve~sign~send~wait~redline~keep~compare~fold~ask:sup~offer~enter~draft:po~set:rush.1~sign~send~wait~wait~wait~set:rush.0~sign~set:qty.4200~set:ship.sea~set:part.B~set:ship.sea~send~wait~set:part.A~sign~set:qty.2100~set:ship.air~send~wait~wait~wait~redline~keep~compare~fold~ask:eco~offer~fork~redline~keep~compare~fold~leave~ask:chem",
+  "shot": "second-client-opens-the-address-as-observer"
+ },
+ {
+  "click": "Why is [NO",
+  "shot": "second-client-can-ask-why-as-observer"
+ },
+ {
+  "use": 0,
+  "shot": "first-client-same-record-same-head"
+ }
+]

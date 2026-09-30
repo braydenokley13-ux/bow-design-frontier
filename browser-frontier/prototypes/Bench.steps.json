@@ -346,5 +346,80 @@
 },
 {
 "shot": "11b-want-filed-empty-room"
+},
+{
+"click": "Sheet A: Ask"
+},
+{
+"click": "Why is Boston close to the tax line?"
+},
+{
+"expectText": "A reviewed system exists."
+},
+{
+"shot": "12-boston-question-resolves-to-a-reviewed-system"
+},
+{
+"type": [
+"#q",
+" and what about the Celtics"
+]
+},
+{
+"shot": "12b-typed-words-kept-in-the-box"
+},
+{
+"fill": [
+"#q",
+"Why is my package late?"
+]
+},
+{
+"press": "Enter"
+},
+{
+"expectText": "Which do you mean?"
+},
+{
+"shot": "13-weak-reading-bow-asks-back"
+},
+{
+"click": "Neither: leave a want"
+},
+{
+"expectText": "No system for this."
+},
+{
+"shot": "13b-neither-leads-to-want-no-place-named"
+},
+{
+"click": "Leave a want"
+},
+{
+"expectText": "no place named"
+},
+{
+"shot": "13c-want-filed-no-place-named"
+},
+{
+"click": "Sheet A: Ask"
+},
+{
+"fill": [
+"#q",
+"Why did the Celtics trade for Jimmy Butler?"
+]
+},
+{
+"press": "Enter"
+},
+{
+"shot": "14-typed-celtics-question-want-under-boston"
+},
+{
+"click": "Leave a want"
+},
+{
+"shot": "14b-want-filed-under-boston-celtics"
 }
 ]

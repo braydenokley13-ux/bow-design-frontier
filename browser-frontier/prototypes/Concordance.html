@@ -237,6 +237,21 @@ tr.ref td{background:rgba(179,30,20,.08);border-bottom:2px solid var(--red);font
 .objs summary{cursor:pointer;font:600 11.5px var(--mono);padding:2px 0;min-height:24px}
 .pane .ph .act{border:1.5px solid var(--ink);background:var(--brass);padding:0 8px;min-height:22px;font:700 11px var(--mono)}
 .ctable td{padding:1px 4px}
+/* a short window (1024x600): tighter chrome so the panes keep their height */
+@media (max-height:680px) and (min-width:601px){
+  #topstrip{height:26px}
+  #hdr{min-height:44px;padding:3px 14px}
+  .addr{min-height:30px;padding:1px 8px;font-size:11.5px}
+  .lever b{font-size:17px}.lever{padding:1px 8px}
+  .btn{min-height:32px;padding:3px 10px}
+  .plan{min-height:36px;padding:3px 14px}.plan .why{font-size:12.5px;line-height:1.25}
+  #board{padding:6px 14px;gap:6px}
+  #direct.open{height:128px}
+  #dhead{min-height:30px}
+  #rig{padding:2px 14px}#rig .btn{min-height:26px}
+  .notice{min-height:28px;padding:2px 14px;font-size:12.5px}
+  .roombar{padding:2px 6px}.pill{min-height:22px}
+}
 /* a real phone: what a 390-wide viewport receives (Table + Direct by detection, one column, the page scrolls) */
 @media (max-width:600px){
   html,body{height:auto;min-height:100%}
@@ -262,7 +277,7 @@ tr.ref td{background:rgba(179,30,20,.08);border-bottom:2px solid var(--red);font
   #panes,#board.phone #panes,.lead #panes{display:block;flex:none;overflow:visible}
   .pane{margin-bottom:8px;height:auto}
   .ph{flex-wrap:wrap;row-gap:2px}
-  .pb{overflow:visible;height:auto}
+  .pb{overflow:visible;height:auto;flex:none}
   .pane .pb .tbl{position:static;height:auto;overflow:visible}
   .pane[data-view=room] .pb{height:400px;overflow:hidden}
   .pane[data-view=timeline] .pb{height:290px;overflow:hidden}
@@ -507,7 +522,7 @@ function applyPlan(){
 }
 function stationFor(path,cur){if(/^(payroll\.|roster\.|rule\.(taxLine|hardLimit)|clock\.)/.test(path)&&!/^payroll\.week/.test(path))return 'board';if(/^file\./.test(path))return 'desk';if(/^dept\./.test(path))return 'doors';return cur}
 function swapTo(id){const A=ST.ui;const rest=A.open.filter(v=>v!==id);A.open=[id].concat(rest.slice(0,1))}
-function pairWith(id){const A=ST.ui;if(A.open.includes(id))return;A.open.push(id);if(A.open.length>3)A.open.splice(1,1)}
+function pairWith(id){const A=ST.ui;if(A.open.includes(id))return;A.open.push(id);/* a narrow window holds two views side by side, not three */if(A.open.length>(window.innerWidth<1100?2:3))A.open.splice(1,1)}
 /* the in-page record: every act, world or session, lands here first */
 function act(kind,p){
   p=p||{};const A=ST.ui,S0=cur();
@@ -544,7 +559,7 @@ function act(kind,p){
     case 'rebind':A.inject=null;say='Timeline rebound to the record.';break;
     case 'how':A.how=!A.how;break;
     case 'real':A.real=!A.real;break;
-    case 'fork':if(ST.sys==='boston'){/* a fork starts from the CURRENT act, not from a fixed one */ST.hist.branch=ST.hist.record.slice();ST.hist.forkAt={n:S0.n,h4:S0.h4};ST.active='branch';A.follow=null;A.compare=false;A.agree=null;say='Branch cut at act '+S0.n+'. The record is untouched.'}break;
+    case 'fork':if(ST.sys==='boston'){/* a fork starts from the CURRENT act, not from a fixed one */ST.hist.branch=ST.hist.record.slice();ST.hist.forkAt={n:S0.n,h4:S0.h4,len:ST.hist.record.length};ST.active='branch';A.follow=null;A.compare=false;A.agree=null;say='Branch cut at act '+S0.n+'. The record is untouched.'}break;
     case 'return':ST.active='record';A.compare=false;A.follow=null;A.agree=null;say='Back on the record.';break;
     case 'compare':A.compare=!A.compare;break;
     case 'cover':{const cv=COVERS[p.view]&&COVERS[p.view].find(c=>c.id===p.id);if(cv)A.offer={text:cv.words+' '+cv.hand,view:cv.to,kind:'pair'};break}
@@ -556,6 +571,7 @@ function act(kind,p){
     case 'voice':if(p.v==='ask'){A.pending=p.file}else if(p.v==='cancel'){A.pending=null}break;
     case 'room':A.room.station=p.v;break;
     case 'proof':A.proofOpen=!A.proofOpen;break;
+    case 'dismissaddr':A.fromAddress=false;break;
     case 'restart':{ST.hist={record:[],branch:null,forkAt:null};ST.active='record';ST.record=[];ST.harrow=[];ST.sys='boston';A.follow=null;A.agree=null;A.inject=null;A.compare=false;A.pending=null;A.offer=null;A.whyOpen=false;A.room.station='overview';applyPlan();say='Started over at act '+HEAD+'.';break}
     default:break;
   }
@@ -695,25 +711,25 @@ function vTimeline(SRC,S){
   if(SRC.refusal){const ya=Y(SRC.refusal.after);svg+='<line x1="'+(xN+26)+'" x2="'+(xN+26)+'" y1="'+yNow.toFixed(1)+'" y2="'+ya.toFixed(1)+'" stroke="#B31E14" stroke-width="3" stroke-dasharray="5 4"/><path d="M'+(xN+19)+' '+(ya-4)+' l14 0 M'+(xN+19)+' '+(ya-9)+' l14 10" stroke="#B31E14" stroke-width="2.5"/>'}
   svg+='</svg>';
   let m='';
-  m+=B('clock.week',xN,13,'ac','now · '+esc(sm['clock.week'].text));
+  const sz=ST._sz.timeline,ww0=sz?Math.min(sz.w,sz.h*640/420):700,dense=ww0<540||!!SRC.refusal,tiny=ww0<430;
+  m+=B('clock.week',xN,13,'ac','now · '+(tiny?'Week '+WEEK:esc(sm['clock.week'].text)));
   m+=B('rule.hardLimit',76,yHard-14,'','Hard limit '+esc(sm['rule.hardLimit'].text));
-  const sz=ST._sz.timeline,ww0=sz?Math.min(sz.w,sz.h*640/420):700,dense=ww0<540||!!SRC.refusal;
   if(!dense)m+=B('payroll.toHard',236,yHard-14,'','to the limit · '+esc(sm['payroll.toHard'].text));
   m+=B('rule.taxLine',76,yTax-14,'','Tax line '+esc(sm['rule.taxLine'].text));
-  m+=B('trade.act',X(6)+8,200,'',esc(sm['trade.act'].text)+' · trade');
+  if(!tiny)m+=B('trade.act',X(6)+8,200,'',esc(sm['trade.act'].text)+' · trade');
   let gy=62;
   if(SRC.refusal){m+='<div class="tlgroup" style="'+pos(96,gy)+'">'+B('refusal.last',0,0,'refuse wrap','REFUSED · '+esc(sm['refusal.last'].text)).replace(/style="[^"]*"/,'')+B('refusal.allow',0,0,'wrap','To allow it: '+esc(sm['refusal.allow'].text)).replace(/style="[^"]*"/,'')+'</div>';gy=172}
   m+='<div class="tlgroup" style="'+pos(96,gy)+'">'+
      B('file.cup.status',0,0,'','Call-up · '+esc(sm['file.cup.status'].text)).replace(/style="[^"]*"/,'')+
-     (SRC.refusal?'':B('file.cup.get',0,0,'','get '+esc(sm['file.cup.get'].text)).replace(/style="[^"]*"/,''))+
+     (SRC.refusal||tiny?'':B('file.cup.get',0,0,'','get '+esc(sm['file.cup.get'].text)).replace(/style="[^"]*"/,''))+
      (dense?'':B('file.den.status',0,0,'','Denver (illustrative) · '+esc(sm['file.den.status'].text)).replace(/style="[^"]*"/,'')+
      B('rule.taxRule',0,0,'',esc(sm['rule.taxRule'].text)).replace(/style="[^"]*"/,''))+'</div>';
-  m+=B('future.sealed',(xN+610)/2+2,262,'ac wrap sealed','Week 10 on · '+esc(sm['future.sealed'].text));
-  m+=B('payroll.tax',xN+16,106,'','Projected tax '+esc(sm['payroll.tax'].text));
+  m+=B('future.sealed',(xN+610)/2+2,283,'ac wrap sealed','Week 10 on · '+esc(sm['future.sealed'].text));
+  if(!tiny)m+=B('payroll.tax',xN+16,106,'','Projected tax '+esc(sm['payroll.tax'].text));
   m+=B('payroll.total',xN+34,over?yNow-16:yNow+24,'','Payroll '+esc(sm['payroll.total'].text));
   m+=B('payroll.vsLine',xN+34,(yTax+yNow)/2,'',esc(sm['payroll.vsLine'].text)+(dense?'':' the line'));
-  m+=B('payroll.week.0',X(0),360,'ac','wk 0 · '+esc(sm['payroll.week.0'].text));
-  m+=B('payroll.week.1',X(1),386,'ac','wk 1 · '+esc(sm['payroll.week.1'].text));
+  if(!tiny){m+=B('payroll.week.0',X(0),360,'ac','wk 0 · '+esc(sm['payroll.week.0'].text));
+  m+=B('payroll.week.1',X(1),386,'ac','wk 1 · '+esc(sm['payroll.week.1'].text))}
   m+=B('payroll.week.6',X(6),360,'ac','wk 6 · '+esc(sm['payroll.week.6'].text));
   /* the lever ticks: the act number is the lever number */
   const t0=SRC.ticks;
@@ -1197,6 +1213,7 @@ function noticesHTML(S){
     const q=rungParity(S),R=RUNG[A.device];
     o.push('<div class="notice dn" data-cap="PROPOSED PLATFORM · 2.5D rooms: REAL CURRENT (unmerged)" data-ai="NO AI REQUIRED"><b>'+esc(R.name.toUpperCase())+'</b><span class="grow"><b>CARRIED</b> '+q.matters+' open matters · '+q.reach+' of '+q.acts+' acts ('+(q.acts-q.inPlace)+' by hand-off to Direct) · refusals with rule names, same words, '+q.ref+' of '+q.refOf+' views (dry run) · '+q.tokens+' truth kinds · act '+S.n+' · '+S.h4+'. <b>SHED</b> '+esc(R.shed)+'. Authority and truth never shed.</span></div>');
   }
+  if(A.fromAddress)o.push('<div class="notice dn"><b>OPENED FROM AN ADDRESS</b><span class="grow">The address names state, never authority: the ledger, its act numbers and hash, and the views are restored from it. The GM controls on this page stand in for a seat you would redeem with an Offer.</span><button type="button" class="btn sm" data-act="dismissaddr">Got it</button></div>');
   if(A.tierNote)o.push('<div class="notice dn"><b>STEPPED DOWN</b><span class="grow">'+esc(A.tierNote)+'</span></div>');
   return o.join('');
 }
@@ -1289,12 +1306,45 @@ function render(){
   $('#rig').innerHTML=rigHTML();$('#tools').innerHTML=toolsHTML();
   decorateReal();
   mounts.forEach(m=>{const el=$('#pb-'+m[0]);if(el)m[1](el)});
+  syncHash();
   /* focus: keep the user's place; a followed fact takes Direct's focus */
   if(ST._focusFollow){ST._focusFollow=false;const li=$('#dbody li[data-p="'+(A.follow&&A.follow.path)+'"]');if(li){li.focus();try{li.scrollIntoView({block:'nearest'})}catch(_){}}}
   else if(fk){const el=$$('button[data-act]').concat($$('#declare')).find(e=>fkOf(e)===fk);if(el)el.focus()}
   document.body.setAttribute('data-frame',FRAME);
   {const now={};A.open.forEach(id=>{if(failed[id])now[id]=1});const nf=Object.keys(now).filter(id=>!ST._wasFailed[id]);ST._wasFailed=now;if(nf.length){$('#live').textContent=nf.map(id=>VN[id]).join(' and ')+' stopped matching the record at act '+S.n+'. Direct has the record.';if(A.direct==='collapsed'){A.direct='open';ST._again=true}}}
   if(ST._again&&!ST._re){ST._again=false;ST._re=true;try{render()}finally{ST._re=false}}
+}
+/* ---------------------------------------------------------------- the address lives in the URL; it names STATE, never authority */
+function hashOf(){
+  const A=ST.ui;
+  if(ST.sys==='harrow')return '#/harrow/act-'+cur().n+(ST.harrow.length?'?remap='+ST.harrow.map(e=>e.v).join(','):'');
+  const acts=l=>l.filter(e=>e.kind==='sign'||e.kind==='decline').map(e=>e.kind+'.'+e.file+'.'+(e.via||'x')).join(',');
+  const q=[];
+  if(ST.hist.record.length)q.push('log='+acts(ST.hist.record));
+  if(ST.active==='branch'&&ST.hist.forkAt&&ST.hist.branch)q.push('at=branch','fork='+ST.hist.forkAt.len,'blog='+acts(ST.hist.branch.slice(ST.hist.forkAt.len)));
+  q.push('v='+A.open.join('+'),'d='+A.direct,'dev='+A.device,'who='+A.who);
+  return '#/boston.year-two/act-'+cur().n+'?'+q.join('&');
+}
+function syncHash(){try{const h=hashOf();if(location.hash!==h)history.replaceState(null,'',h)}catch(_){}}
+function restoreHash(){
+  const raw=(location.hash||'').replace(/^#\/?/,'');if(!raw)return;
+  const pq=raw.split('?'),path=pq[0].split('/'),q={};
+  (pq[1]||'').split('&').forEach(kv=>{const i=kv.indexOf('=');if(i>0){try{q[kv.slice(0,i)]=decodeURIComponent(kv.slice(i+1))}catch(_){q[kv.slice(0,i)]=kv.slice(i+1)}}});
+  const A=ST.ui;
+  if(path[0]==='harrow'){ST.sys='harrow';(q.remap||'').split(',').filter(Boolean).forEach(v=>{if(v==='250'||v==='500')ST.harrow.push({kind:'remap',v:Number(v)})});applyPlan();A.fromAddress=true;return}
+  if(path[0]!=='boston.year-two')return;
+  const mk=(txt,start)=>{let n=start;return String(txt||'').split(',').filter(Boolean).map(s=>{const f=s.split('.');return (f[0]==='sign'||f[0]==='decline')&&FILES[f[1]]?{kind:f[0],n:++n,file:f[1],via:f[2]==='x'?undefined:f[2]}:null}).filter(Boolean)};
+  const rec=mk(q.log,HEAD);ST.hist.record=rec;
+  if(q.at==='branch'){
+    const fl=Math.max(0,Math.min(rec.length,+q.fork||0)),base=rec.slice(0,fl),head=HEAD+base.length;
+    ST.hist.branch=base.concat(mk(q.blog,head));ST.hist.forkAt={n:head,h4:foldLog(base).h4,len:fl};ST.active='branch';
+  }
+  if(q.who==='operator'||q.who==='newcomer')A.who=q.who;
+  if(['desktop','chromebook','phone','voice'].includes(q.dev))A.device=q.dev;
+  applyPlan();
+  const vs=(q.v||'').split('+').filter(v=>VD[v]&&v!=='ledger');if(vs.length){A.open=vs;A.override=true}
+  if(['collapsed','open','lead'].includes(q.d))A.direct=q.d;
+  A.fromAddress=true;
 }
 /* ---------------------------------------------------------------- events */
 document.addEventListener('click',e=>{
@@ -1311,6 +1361,7 @@ document.addEventListener('keydown',e=>{
 let _rt;window.addEventListener('resize',()=>{clearTimeout(_rt);_rt=setTimeout(render,120)});
 try{if(localStorage.getItem('conc.sr')==='1')ST.ui.sr=true}catch(_){}
 applyPlan();
+restoreHash();
 window.CONCORDANCE={ST:ST,act:act,cur:cur,agreeCheck:agreeCheck};
 render();
 })();

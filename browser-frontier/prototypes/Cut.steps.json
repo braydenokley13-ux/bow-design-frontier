@@ -20,10 +20,10 @@
   "after": 500
  },
  {
-  "expectText": "A door opens only onto a cut"
+  "expectText": "This door is unlit"
  },
  {
-  "shot": "s01c-recorded-door-without-a-cut-refused"
+  "shot": "s01c-recorded-door-without-a-cut-is-unlit"
  },
  {
   "click": "Arrive at last year"
@@ -156,22 +156,34 @@
   "click": "Close"
  },
  {
+  "reload": true
+ },
+ {
+  "expectText": "Viewpoint: seat Boston, read only"
+ },
+ {
+  "shot": "s06c-reload-restores-the-branch-as-a-read-only-viewpoint"
+ },
+ {
+  "click": "Take the Boston seat"
+ },
+ {
   "click": "Advance to Reality"
  },
  {
-  "expectText": "PULLED"
+  "expectText": "DIVERGED"
  },
  {
-  "shot": "s07a-reality-arrives-simons-pulled"
+  "shot": "s07a-reality-arrives-simons-diverged"
  },
  {
   "click": "Advance to Reality"
  },
  {
-  "expectText": "STITCHED"
+  "expectText": "HELD"
  },
  {
-  "shot": "s07b-reality-arrives-tatum-stitched"
+  "shot": "s07b-reality-arrives-tatum-held"
  },
  {
   "click": "Advance one week"
