@@ -264,14 +264,14 @@ svg.chart{display:block;width:100%;height:100%}
 .shrow b{font-weight:600;font-size:19px}
 .shrow.off{border-bottom-style:dashed;color:var(--pencil)}
 .shn{font:700 12px var(--mono);border:1.5px solid currentColor;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex:none;margin-top:2px}
-.openb{display:grid;grid-template-columns:minmax(300px,370px) 1fr;gap:14px;margin-top:6px;align-items:start}
+.openb{display:grid;grid-template-columns:minmax(300px,370px) 1fr;gap:14px;margin-top:5px;align-items:start}
 .fam{width:100%;border-collapse:collapse;font:400 11px/1.25 var(--mono)}
 .fam td,.fam th{border-bottom:1px solid var(--rule);padding:1px 6px 1px 0;text-align:left;font-weight:400}
 .fam th{font:700 10px var(--mono);letter-spacing:.06em;color:var(--graphite)}
 .pip{display:inline-block;width:11px;height:9px;background:var(--ink);margin-right:2px;vertical-align:-1px}
 .pip.u{background:transparent;border:1.3px dashed var(--ink)}
 .gnd2{background:#fdfbf6;border:1.5px solid var(--ink);aspect-ratio:520/250}
-.slips{display:grid;grid-template-columns:repeat(6,1fr);gap:10px 9px;padding:6px 2px 2px;margin-top:4px}
+.slips{display:grid;grid-template-columns:repeat(6,1fr);gap:8px 8px;padding:6px 2px 0;margin-top:0}
 .slip{position:relative;display:flex;flex-direction:column;gap:2px;background:#fdfaf1;border:1px solid var(--rule);padding:10px 7px 5px;transform:rotate(var(--r));font:400 11px/1.25 var(--mono);min-height:0;box-shadow:1px 2px 0 rgba(35,33,29,.18)}
 .slip::before{content:"";position:absolute;top:-4px;left:10px;width:22px;height:8px;background:var(--ink)}
 .slip .sc{font:700 9.5px var(--mono);letter-spacing:.04em;border:1.3px solid var(--ink);padding:0 4px;align-self:flex-start}
@@ -391,7 +391,7 @@ svg .tabtxt{font:600 11.5px var(--mono)}
     <pattern id="stip" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".95" fill="#23211d"/><circle cx="3.7" cy="3.7" r=".95" fill="#23211d"/></pattern>
     <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(135)"><line x1="0" y1="0" x2="0" y2="6" stroke="#23211d" stroke-width="1.3"/></pattern>
     <pattern id="hatchP" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(135)"><line x1="0" y1="0" x2="0" y2="6" stroke="#5e584e" stroke-width="1.2"/></pattern>
-    <symbol id="hand" viewBox="0 0 34 20"><path d="M1 4h5v12H1zM8 6.5l9-1.2 6.5-.6c1.6-.1 2 1.7.8 2.3l-3.2 1.7h9.2c2 0 2.8 2.7.9 3.6 1.4.9 1 3-.7 3.3.8 1.2-.1 2.9-1.7 2.9H15.5L8 16.5z"/></symbol>
+    <symbol id="hand" viewBox="0 0 34 20"><rect x="0.5" y="5" width="5" height="11"/><path d="M8 7H13L14.8 4H17.6L16.6 7H30.6C32.6 7 32.6 10.4 30.6 10.4H24.4C26.6 10.4 26.6 13.2 24.4 13.2H25.2C27.2 13.2 27.2 16 25.2 16H24C25.8 16 25.8 18.6 23.8 18.6H14L8 16.6Z"/></symbol>
   </defs>
 </svg>
 <div id="app">
@@ -1321,15 +1321,15 @@ function modelSVG(a, ans) {
 /* ---------------------------------------------------------------- the plural question, then the open bench */
 VIEWS.plural = () => {
   const bench = S.semi.stage === 'bench';
-  let h = '<section class="sheet" data-cap="SPEC" data-cost="FRONTIER MODEL CONTINUOUS while compiling"><header class="sh"><span class="no">SHEET E</span><h1 tabindex="-1">' + (bench ? 'The 2021 shortage' : 'This is several questions') + '</h1><span class="sub">' + (bench ? 'an open bench: source slips on observed ground' : '“' + esc(S.q || 'Why are semiconductor shortages happening?') + '”') + '</span>' + (bench ? '<span class="grow"></span><button type="button" class="btn sm pri" data-a="compile" aria-label="Compile a working model from these slips">Compile a working model</button>' : '') + '</header>' +
+  let h = '<section class="sheet" data-cap="SPEC" data-cost="FRONTIER MODEL CONTINUOUS while compiling"><header class="sh"><span class="no">SHEET E</span><h1 tabindex="-1">' + (bench ? 'The 2021 shortage' : 'This is several questions') + '</h1><span class="sub">' + (bench ? 'open bench' : '“' + esc(S.q || 'Why are semiconductor shortages happening?') + '”') + '</span>' + (bench ? '<span class="grow"></span><button type="button" class="btn sm pri" data-a="compile" aria-label="Compile a working model from these slips">Compile a working model</button>' : '') + '</header>' +
     '<div class="standin" role="note"><b>SPECULATIVE FRONTIER · STAND-IN.</b> BOW cannot compile open-world systems today. Every slip here is an authored stand-in for a compile that did not run. The only real figure is the Commerce RFI one [verify].</div>';
   if (!bench) {
     h += '<p class="note wide" style="margin:8px 0">At least three shortages are in the news, and they are different systems. Pick one. The others stay beside it as sibling questions.</p><div class="shlist" data-cap="SPEC" data-cost="SMALL / CHEAP MODEL">' +
       SHORTAGES.map((s, i) => s.on ? '<button type="button" class="shrow" data-a="pickShortage" ' + dp({ id: s.id }) + '><span class="shn">' + (i + 1) + '</span><span><b>' + esc(s.name) + '</b><br><i>' + esc(s.src) + '</i></span></button>' : '<div class="shrow off" role="group" aria-label="' + esc(s.name) + ', a sibling question, not compiled in this prototype"><span class="shn">' + (i + 1) + '</span><span><b>' + esc(s.name) + '</b><br><i>' + esc(s.src) + '</i><br><em>sibling question · kept beside, not compiled in this prototype</em></span></div>').join('') + '</div>';
   } else {
     const fams = SLIPS.map(s => s.fam).filter((f, i, a) => a.indexOf(f) === i);
-    h += '<div class="openb"><div class="og" data-cap="SPEC" data-cost="NO AI REQUIRED"><div class="gnd2">' + groundSVG() + '</div><p class="note" style="margin-top:3px;font-size:10.5px">' + kc('OBSERVED') + ' the ground: two points, Commerce RFI, Jan 2022 <b>[verify]</b>. A real compile is a frontier model working for minutes; here it is one press.</p></div>' +
-      '<div data-cap="SPEC" data-cost="FRONTIER MODEL CONTINUOUS (the compile, minutes)"><h2>Claims cluster under mechanism families <small>' + SLIPS.length + ' sources · ' + SLIPS.filter(s => s.read).length + ' read · filled: read, dashed: unread</small></h2><table class="fam"><tr><th>FAMILY</th><th>SLIPS</th></tr>' + fams.map(f => '<tr><td>' + f + '</td><td>' + SLIPS.filter(s => s.fam === f).map(s => '<i class="pip' + (s.read ? '' : ' u') + '"></i>').join('') + '</td></tr>').join('') + '</table></div></div>' +
+    h += '<div class="openb"><div class="og" data-cap="SPEC" data-cost="NO AI REQUIRED"><div class="gnd2">' + groundSVG() + '</div><p class="note" style="margin-top:3px;font-size:10.5px">' + kc('OBSERVED') + ' the ground: two points, Commerce RFI, Jan 2022 <b>[verify]</b>. Nothing else is real here.</p></div>' +
+      '<div data-cap="SPEC" data-cost="FRONTIER MODEL CONTINUOUS (the compile, minutes)"><h2>Claims cluster under mechanism families</h2><table class="fam"><tr><th>FAMILY</th><th>' + SLIPS.filter(s => s.read).length + ' OF ' + SLIPS.length + ' SLIPS READ</th></tr>' + fams.map(f => '<tr><td>' + f + '</td><td>' + SLIPS.filter(s => s.fam === f).map(s => '<i class="pip' + (s.read ? '' : ' u') + '"></i>').join('') + '</td></tr>').join('') + '</table></div></div>' +
       '<div class="slips">' + SLIPS.map((s, i) => s.read ?
         '<div class="slip" style="--r:' + ((i % 5) - 2) * .4 + 'deg"><span class="sc">' + s.c + '</span><span class="sd">' + (i === 0 ? esc(s.src) + ' · ' : '') + esc(s.date) + '</span><span class="scl">' + esc(s.claim) + '</span><span class="sf">supports: ' + s.fam + (s.v ? ' · <em>' + esc(s.v) + ' [verify]</em>' : '') + '</span></div>' :
         '<div class="slip blank" style="--r:' + ((i % 5) - 2) * .4 + 'deg"><span class="sc">' + s.c + '</span><span class="sd">' + esc(s.date) + '</span><span class="scl">UNREAD · ' + s.why + '. Blank: never paraphrased from memory.</span><span class="sf">would support: ' + s.fam + '</span></div>').join('') + '</div>' +
@@ -1348,7 +1348,7 @@ function modelShell() {
     '<div class="tpwrap" id="tpwrap"><div class="paper"></div><span class="tape t1"></span><span class="tape t2"></span>' +
     '<div class="trrow1"><span class="stampbig" id="stampT">WORKING MODEL · NOT REVIEWED</span><span class="life" id="life" role="timer" aria-label="Life left of this working model"><span id="lifeK" class="lifek"></span><span>life left <b id="lifeT"></b></span><span class="ruler" aria-hidden="true">' + '<i></i>'.repeat(72) + '</span></span></div>' +
     '<div class="trmain"><div class="lcol"><div class="gcell" data-cap="SPEC" data-cost="NO AI REQUIRED (after the compile)"><div class="gnd" data-k="OBSERVED">' + groundSVG() + '</div><div class="mk" id="mkHost"></div></div><div class="permrow" id="perm"></div></div><div class="rcol"><div id="readout"></div><div id="tblock"></div><div id="mRefuse" role="alert"></div></div></div>' +
-    '<div class="ledgerH">THE WHAT IF IS THE LEDGER OF WHAT THIS MODEL GUESSED <small>seven assumptions · toned strip and numbers: the range the slips support</small></div><div class="ledger7">' + socks + '</div><div class="unkrow">' + unk + '</div></div></section>';
+    '<div class="ledgerH">THE WHAT IF IS THE LEDGER OF WHAT THIS MODEL GUESSED <small>the strip on each track is the range the slips support</small></div><div class="ledger7">' + socks + '</div><div class="unkrow">' + unk + '</div></div></section>';
 }
 function paintModel() {
   const M = S.model, a = M.lev, ans = answer(a);

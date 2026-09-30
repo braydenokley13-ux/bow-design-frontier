@@ -885,7 +885,7 @@ document.addEventListener('keydown', e => {
     /* the mezzanine rail and the stair */
     { const yb = DECK, zt = 6.1; box('steel', RX - .04, yb + 1.0, Z0 + .1, RX + .04, yb + 1.05, zt, { tile: 1 }); box('steel', RX - .04, yb, Z0 + .1, RX + .04, yb + .07, zt);
       quadTo(acc('glass'), [[RX, yb + .07, zt], [RX, yb + .07, Z0 + .1], [RX, yb + 1.0, Z0 + .1], [RX, yb + 1.0, zt]], [1, 0, 0], [[0, 0], [1, 0], [1, 1], [0, 1]], [1, 1, 1]);
-      for (let z = Z0 + .1; z <= zt + .01; z += 2.0) box('steel', RX - .03, yb, z - .03, RX + .03, yb + 1.05, z + .03);
+      for (const z of [Z0 + .1, zt]) box('steel', RX - .03, yb, z - .03, RX + .03, yb + 1.05, z + .03);
       const n = 18, run = (RX - .4) / n, rise = DECK / n;
       for (let i = 0; i < n; i++) { const xa = .4 + i * run; box('oak', xa, 0, 6.5, xa + run, rise * (i + 1), 7.9, { tile: 1, skip: '-y' }); }
       box('steel', .4, 0, 6.42, RX, .1, 6.5); beam('steel', [.4, 1.02, 6.46], [RX, DECK + 1.02, 6.46], .05, .05);
@@ -1044,38 +1044,39 @@ document.addEventListener('keydown', e => {
       pl('hist.' + ['y1', 'w6', 'w9', 'mine', 'untraced'][i], 1.0, 1.28, 260, [x, y, Z1 - .075], FZM, 'atlasS'); hit('hist.' + ['y1', 'w6', 'w9', 'mine', 'untraced'][i], x - .56, y - .7, Z1 - .6, x + .56, y + .7, Z1); });
     /*__END_C1__*/
 
+    const FQ = -17.5; /* the far quay: the slip is a narrow harbour cut */
     /* ---------- outside: the slip, the far quay, the League counter, the arena, the record building ---------- */
     box('conc', -220, -1.7, Z1 + .5, 220, -.02, 140, { tile: 6, skip: '-y' }); box('conc', X1 + .5, -1.7, Z0 - 2.9, 220, -.02, Z1 + .5, { tile: 6, skip: '-y-z' }); box('conc', -220, -1.7, Z0 - 2.9, X0 - .5, -.02, Z1 + .5, { tile: 6, skip: '-y-z' });
-    box('conc', -220, -1.7, Z0 - 3.2, 220, -.02, Z0 - 2.9, { tile: 6 }); box('conc', -220, -1.7, -260, 220, -.02, -22.6, { tile: 6, skip: '-y' });
-    face('water', '+y', -220, -1.0, -22.6, 220, -1.0, Z0 - 3.2, { tile: 24 });
+    box('conc', -220, -1.7, Z0 - 3.2, 220, -.02, Z0 - 2.9, { tile: 6 }); box('conc', -220, -1.7, -260, 220, -.02, FQ, { tile: 6, skip: '-y' });
+    face('water', '+y', -220, -1.0, FQ, 220, -1.0, Z0 - 3.2, { tile: 24 });
     /* League office: one lit counter window (a neighbouring system: observed, never actionable here) */
-    box('brickOut', -25, -.02, -31, -14, 7.2, -22.6, { tile: .9, skip: '-y' }); box('steelOut', -25.3, 7.1, -31.3, -13.7, 7.5, -22.3);
-    for (const x of [-22.1, -19.5, -16.9]) box('steelOut', x - .05, 1.3, -22.66, x + .05, 3.8, -22.56); for (const y of [1.3, 3.75]) box('steelOut', -22.1, y - .05, -22.66, -16.9, y + .05, -22.56); box('steelOut', -22.3, 1.2, -22.75, -16.7, 1.3, -22.4);
-    BRD.league = panelMesh(1024, 450, 5.0, 2.2, [-19.5, 2.55, -22.585], FZP, { basic: true, id: 'win.league', parent: GRP.roomOnly });
-    pl('league.sign', 3.4, .5, 240, [-19.5, 4.8, -22.57], FZP, 'atlasS'); hit('win.league', -22.3, 1.2, -22.9, -16.7, 5.1, -22.3);
+    box('brickOut', -14, -.02, FQ - 8.4, -2, 7.2, FQ, { tile: .9, skip: '-y' }); box('steelOut', -14.3, 7.1, FQ - 8.7, -1.7, 7.5, FQ + .3);
+    for (const x of [-10.6, -8, -5.4]) box('steelOut', x - .05, 1.3, FQ - .06, x + .05, 3.8, FQ + .04); for (const y of [1.3, 3.75]) box('steelOut', -10.6, y - .05, FQ - .06, -5.4, y + .05, FQ + .04); box('steelOut', -10.8, 1.2, FQ - .15, -5.2, 1.3, FQ + .2);
+    BRD.league = panelMesh(1024, 450, 5.0, 2.2, [-8, 2.55, FQ + .015], FZP, { basic: true, id: 'win.league', parent: GRP.roomOnly });
+    pl('league.sign', 3.4, .5, 240, [-8, 4.8, FQ + .03], FZP, 'atlasS'); hit('win.league', -10.8, 1.2, FQ - .3, -5.2, 5.1, FQ + .3);
     /* the record building (or your branch), across the slip */
-    const NB = { x0: -8.5, x1: 4.5, z0: -31, z1: -24, zm: -27.5 }; mkGrp('nbr'); mkGrp('bridge');
+    const NB = { x0: 0.5, x1: 13.5, z0: FQ - 8.4, z1: FQ - 1.4, zm: FQ - 4.9 }; mkGrp('nbr'); mkGrp('bridge');
     box('nbrBrick', NB.x0, -.02, NB.z0, NB.x1, 5.6, NB.z1, { tile: .9, skip: '-y' });
-    for (const s of [-1, 1]) { const g = new THREE.BoxGeometry(14.2, .14, 4.3); g.rotateX(s * Math.atan2(2.2, 3.6)); g.translate((NB.x0 + NB.x1) / 2, 6.75, NB.zm + s * 1.85); addGeo('nbrRoof', g, { col: [.52, .5, .48] }); }
+    for (const s of [-1, 1]) { const g = new THREE.BoxGeometry(14.4, .14, 4.3); g.rotateX(s * Math.atan2(2.2, 3.6)); g.translate((NB.x0 + NB.x1) / 2, 6.75, NB.zm + s * 1.85); addGeo('nbrRoof', g, { col: [.52, .5, .48] }); }
     for (const sx of [NB.x0 - .3, NB.x1]) { const tri = new THREE.Shape(); tri.moveTo(-3.6, 5.6); tri.lineTo(3.6, 5.6); tri.lineTo(0, 7.85); tri.lineTo(-3.6, 5.6); const eg = new THREE.ExtrudeGeometry(tri, { depth: .3, bevelEnabled: false }); eg.rotateY(Math.PI / 2); eg.translate(sx, 0, NB.zm); addGeo('nbrBrick', eg, { tile: .9 }); }
-    BRD.nbr = panelMesh(1024, 260, 12.6, 3.2, [-2, 3.3, NB.z1 + .015], FZP, { basic: true, id: 'win.record', parent: GRP.nbr });
-    pl('nbr.plaque', 3.0, .95, 260, [-2, 1.1, NB.z1 + .02], FZP, 'atlasS'); hit('win.record', NB.x0, 0, NB.z0, NB.x1, 6, NB.z1 + .5);
+    BRD.nbr = panelMesh(1024, 260, 12.6, 3.2, [7, 3.3, NB.z1 + .015], FZP, { basic: true, id: 'win.record', parent: GRP.nbr });
+    pl('nbr.plaque', 3.0, .95, 260, [7, 1.1, NB.z1 + .02], FZP, 'atlasS'); hit('win.record', NB.x0, 0, NB.z0, NB.x1, 6, NB.z1 + .5);
     for (let x = NB.x0; x <= NB.x1 + .01; x += 2.6) box('nbrScaf', x - .03, 0, NB.z1 + .25, x + .03, 6.5, NB.z1 + .31); for (const y of [2.1, 4.2, 6.3]) { box('nbrScaf', NB.x0, y - .03, NB.z1 + .25, NB.x1, y + .03, NB.z1 + .31); box('nbrScaf', NB.x0, y - .03, NB.z1 + .9, NB.x1, y + .03, NB.z1 + .96); box('nbrScafPl', NB.x0, y, NB.z1 + .2, NB.x1, y + .05, NB.z1 + .95, { tile: 1 }); }
     for (let x = NB.x0; x <= NB.x1 + .01; x += 2.6) box('nbrScaf', x - .03, 0, NB.z1 + .9, x + .03, 6.5, NB.z1 + .96);
     /* footbridge across the slip (exists once a branch does) */
-    box('bridgeDeck', -2.6, .02, -22.6, -1.4, .2, Z0 - 2.9, { tile: 1 }); for (const x of [-2.62, -1.42]) { box('bridgeRail', x, 1.02, -22.6, x + .04, 1.08, Z0 - 2.9); for (let z = -22.5; z < Z0 - 2.85; z += 1.6) box('bridgeRail', x - .02, .0, z - .04, x + .06, 1.1, z + .04); }
+    box('bridgeDeck', 6.4, .02, FQ, 7.6, .2, Z0 - 2.9, { tile: 1 }); for (const x of [6.38, 7.58]) { box('bridgeRail', x, 1.02, FQ, x + .04, 1.08, Z0 - 2.9); for (let z = FQ + .1; z < Z0 - 2.85; z += 1.6) box('bridgeRail', x - .02, .0, z - .04, x + .06, 1.1, z + .04); }
     /* the arena: an open bowl model, seat rows on steps; the state of the next home night is painted on the treads */
-    const AC = { x: 18, z: -48 }, R0 = 7.5, TIERS = 6, TW = 1.75, RMAX = R0 + TIERS * TW, HT = t => .5 + t * .55;
+    const AC = { x: 18, z: -46 }, R0 = 7.5, TIERS = 6, TW = 1.75, RMAX = R0 + TIERS * TW, HT = t => 3.75 + t * .55;
     const bowlGeo = (() => {
-      const pos = [], nor = [], uv = [], idx = [], SEG = 72, P = (r, a, y) => [AC.x + r * Math.cos(a), y, AC.z + r * Math.sin(a)], UVp = p => [(p[0] - AC.x) / RMAX * .5 + .5, .5 - (p[2] - AC.z) / RMAX * .5];
-      const quad4 = (A, B, C, D, N, planar) => { const o = pos.length / 3; for (const p of [A, B, C, D]) { pos.push(...p); nor.push(...(typeof N === 'function' ? N(p) : N)); const u = planar ? UVp(p) : [.01, .01]; uv.push(u[0], u[1]); } idx.push(o, o + 1, o + 2, o, o + 2, o + 3); };
+      const pos = [], nor = [], uv = [], idx = [], SEG = 72, AL = 32 * Math.PI / 180, H0 = 3.6, H1 = H0 + (RMAX - R0) * Math.tan(AL), P = (r, a, y) => [AC.x + r * Math.cos(a), y, AC.z + r * Math.sin(a)], UVp = p => [(p[0] - AC.x) / RMAX * .5 + .5, .5 - (p[2] - AC.z) / RMAX * .5];
+      const quad4 = (A, B, C, D, N, planar) => { const o = pos.length / 3; for (const p of [A, B, C, D]) { pos.push(...p); nor.push(...N); const u = planar ? UVp(p) : [.01, .01]; uv.push(u[0], u[1]); } idx.push(o, o + 1, o + 2, o, o + 2, o + 3); };
+      /* a cutaway model of the bowl: only the far half stands, raked so the rows face the window */
       for (let k = 0; k < SEG; k++) {
-        const a0 = k / SEG * Math.PI * 2, a1 = (k + 1) / SEG * Math.PI * 2, am = (a0 + a1) / 2, inw = [-Math.cos(am), 0, -Math.sin(am)];
-        for (let t = 0; t < TIERS; t++) { const r0 = R0 + t * TW, r1 = r0 + TW, h = HT(t), hp = t ? HT(t - 1) : .25;
-          quad4(P(r0, a0, h), P(r0, a1, h), P(r1, a1, h), P(r1, a0, h), [0, 1, 0], true);
-          quad4(P(r0, a0, hp), P(r0, a1, hp), P(r0, a1, h), P(r0, a0, h), inw, false); }
-        const c = [AC.x, .25, AC.z]; { const o = pos.length / 3; for (const p of [c, P(R0, a1, .25), P(R0, a0, .25)]) { pos.push(...p); nor.push(0, 1, 0); const u = UVp(p); uv.push(u[0], u[1]); } idx.push(o, o + 1, o + 2); }
-        const hh = HT(TIERS - 1), rr = RMAX; quad4(P(rr, a1, -.02), P(rr, a0, -.02), P(rr, a0, hh), P(rr, a1, hh), [Math.cos(am), 0, Math.sin(am)], false);
+        const a0 = k / SEG * Math.PI * 2, a1 = (k + 1) / SEG * Math.PI * 2, am = (a0 + a1) / 2; if (Math.sin(am) > .3) continue;
+        quad4(P(R0, a0, H0), P(R0, a1, H0), P(RMAX, a1, H1), P(RMAX, a0, H1), [-Math.cos(am) * Math.sin(AL), Math.cos(AL), -Math.sin(am) * Math.sin(AL)], true);
+        const o = pos.length / 3; for (const p of [[AC.x, H0, AC.z], P(R0, a1, H0), P(R0, a0, H0)]) { pos.push(...p); nor.push(0, 1, 0); const u = UVp(p); uv.push(u[0], u[1]); } idx.push(o, o + 1, o + 2);
+        quad4(P(RMAX, a1, -.02), P(RMAX, a0, -.02), P(RMAX, a0, H1), P(RMAX, a1, H1), [Math.cos(am), 0, Math.sin(am)], false);
+        quad4(P(R0, a0, -.02), P(R0, a1, -.02), P(R0, a1, H0), P(R0, a0, H0), [-Math.cos(am), 0, -Math.sin(am)], false);
       }
       const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(new THREE.BufferAttribute(new Uint32Array(idx), 1)); g.computeBoundingSphere(); return g;
     })();
@@ -1083,8 +1084,8 @@ document.addEventListener('keydown', e => {
     { const r = rng(5); for (let i = 0; i < 36; i++) { const x = -300 + i * 17 + r() * 8, z = -170 - r() * 90, w = 8 + r() * 16, d = 8 + r() * 12, h = 12 + r() * 30 * (r() < .2 ? 1.5 : 1), k = .86 + r() * .1; box('sky', x, -.02, z, x + w, h, z + d, { col: [k, k * .98, k * .93], skip: '-y' }); }
       for (const [x0, x1, z0, h] of [[-90, -50, -80, 7], [-60, -30, -60, 5], [50, 90, -90, 8], [45, 70, -36, 4], [-150, -100, -70, 9]]) box('sky', x0, -.02, z0, x1, h, z0 + 22, { col: [.8, .76, .7], skip: '-y' }); }
     /* the paper-white site the maquette stands on (maquette only) */
-    box('paper', -38, -2.4, Z0 - 3.2, 38, -.03, 22, { tile: 8, skip: '-y' }); box('paper', -38, -2.4, -60, 38, -.03, -22.6, { tile: 8, skip: '-y' }); box('paper', -38, -2.4, -22.6, 38, -1.05, Z0 - 3.2, { tile: 8, skip: '-y' });
-    face('maqWater', '+y', -38, -.9, -22.6, 38, -.9, Z0 - 3.2, { tile: 24 });
+    box('paper', -38, -2.4, Z0 - 3.2, 38, -.03, 22, { tile: 8, skip: '-y' }); box('paper', -38, -2.4, -60, 38, -.03, FQ, { tile: 8, skip: '-y' }); box('paper', -38, -2.4, FQ, 38, -1.05, Z0 - 3.2, { tile: 8, skip: '-y' });
+    face('maqWater', '+y', -38, -.9, FQ, 38, -.9, Z0 - 3.2, { tile: 24 });
     /*__END_D1__*/
 
     /* ---------- bake: one draw call per material, toggled parts kept apart ---------- */
@@ -1093,7 +1094,7 @@ document.addEventListener('keydown', e => {
     const BOWL = { c: cv(1024, 1024) }; BOWL.g = BOWL.c.getContext('2d'); T.bowl = mkTex(BOWL.c); T.atlas = mkTex(AT.c);
     Object.assign(MAT, {
       atlas: L({ map: T.atlas, alphaTest: .03 }), roofM: S_({ map: T.timber, color: 0xd6b88c, roughness: .8, metalness: 0 }), scaf: S_({ color: 0xa8a8a0, roughness: .45, metalness: .7 }),
-      slat: L({ map: T.slat }), paper: L({ color: 0xffffff }), maqWater: L({ color: 0xc7d4d4 }), brassD: new THREE.MeshLambertMaterial({ color: 0xb08a2c, emissive: 0x3a2c08 }), bowl: L({ map: T.bowl })
+      slat: L({ map: T.slat }), paper: L({ color: 0xffffff }), maqWater: L({ color: 0xc7d4d4 }), brassD: new THREE.MeshLambertMaterial({ color: 0xb08a2c, emissive: 0x3a2c08 }), bowl: new THREE.MeshBasicMaterial({ map: T.bowl })
     });
     const M = {}; const bk = (name, mat, o = {}) => { const m = bake(name, mat, o); if (m) M[name] = m; return m; };
     const mergeAcc = (into, names) => { const t = acc(into); for (const n of names) { const a = ACC[n]; if (!a) continue; const off = t.p.length / 3; for (const v of a.p) t.p.push(v); for (const v of a.n) t.n.push(v); for (const v of a.u) t.u.push(v); for (const v of a.c) t.c.push(v); for (const v of a.i) t.i.push(v + off); delete ACC[n]; } };
@@ -1378,10 +1379,10 @@ document.addEventListener('keydown', e => {
       /* court floor in the middle */
       g.fillStyle = '#d9b984'; g.beginPath(); g.arc(cxp, cxp, R0 * ppm, 0, 7); g.fill(); g.strokeStyle = 'rgba(255,255,255,.85)'; g.lineWidth = 3; g.strokeRect(cxp - 5.2 * ppm, cxp - 2.6 * ppm, 10.4 * ppm, 5.2 * ppm); g.beginPath(); g.moveTo(cxp, cxp - 2.6 * ppm); g.lineTo(cxp, cxp + 2.6 * ppm); g.stroke(); g.beginPath(); g.arc(cxp, cxp, 1.2 * ppm, 0, 7); g.stroke();
       /* rows and aisles */
-      g.strokeStyle = known ? 'rgba(90,80,60,.35)' : 'rgba(40,38,34,.5)'; g.lineWidth = 1.2;
+      g.strokeStyle = known ? 'rgba(90,80,60,.16)' : 'rgba(40,38,34,.5)'; g.lineWidth = 1.2;
       for (let r_ = R0 + .45; r_ < RMAX; r_ += .45) { g.beginPath(); g.arc(cxp, cxp, r_ * ppm, 0, 7); g.stroke(); }
       g.lineWidth = 2; for (let a = 0; a < 16; a++) { const an = a / 16 * Math.PI * 2; g.beginPath(); g.moveTo(cxp + Math.cos(an) * R0 * ppm, cxp + Math.sin(an) * R0 * ppm); g.lineTo(cxp + Math.cos(an) * RMAX * ppm, cxp + Math.sin(an) * RMAX * ppm); g.stroke(); }
-      if (known) { g.save(); g.beginPath(); g.arc(cxp, cxp, RMAX * ppm, 0, 7); g.arc(cxp, cxp, R0 * ppm, 0, 7, true); g.clip(); g.fillStyle = 'rgba(240,235,220,.5)'; g.fillRect(0, 0, W, W); g.strokeStyle = 'rgba(48,44,38,.72)'; g.lineWidth = 2.4; for (let i = -W; i < W * 2; i += 15) { g.beginPath(); g.moveTo(i, W); g.lineTo(i + W, 0); g.stroke(); } g.restore(); }
+      if (known) { g.save(); g.beginPath(); g.arc(cxp, cxp, RMAX * ppm, 0, 7); g.arc(cxp, cxp, R0 * ppm, 0, 7, true); g.clip(); g.fillStyle = 'rgba(240,235,220,.5)'; g.fillRect(0, 0, W, W); g.strokeStyle = 'rgba(40,36,30,.85)'; g.lineWidth = 3.4; for (let i = -W; i < W * 2; i += 20) { g.beginPath(); g.moveTo(i, W); g.lineTo(i + W, 0); g.stroke(); } g.restore(); }
       else { g.fillStyle = 'rgba(30,30,28,.28)'; for (let i = 0; i < 1600; i++) { const an = Math.random() * 0, x = Math.floor(i * 37 % W), y = Math.floor(i * 91 % W); g.fillRect(x, y, 3, 2); } }
       T.bowl.needsUpdate = true;
     }
@@ -1404,8 +1405,8 @@ document.addEventListener('keydown', e => {
       m.userData.tex.needsUpdate = true;
       drawPlate('nbr.plaque', (g2, w2, h2) => {
         if (!has) return;
-        if (br_) { enamel(g2, w2, h2, '#f4efdf'); kindFrame(g2, 'RECORDED', w2, h2, P.ink, 7); g2.fillStyle = P.ink; g2.font = fnt(700, 34); g2.fillText('THE RECORD', 26, 62); g2.font = fnt(500, 25); g2.fillText('Boston · Year Two · Week 9', 26, 102); g2.fillStyle = P.soft; g2.font = fnt(400, 23, F_SERIF); g2.fillText('Never overwritten by a branch.', 26, 142); }
-        else { enamel(g2, w2, h2, '#f6e6c6'); tapeBand(g2, 0, 0, w2, 22, P.br); tapeBand(g2, 0, h2 - 22, w2, 22, P.br); g2.fillStyle = P.brD; g2.font = fnt(700, 30); g2.fillText('YOUR BRANCH', 26, 76); g2.fillStyle = P.ink; g2.font = fnt(500, 23); g2.fillText('Week 6 trade not made · diverged Week 6', 26, 112); g2.fillText('cut with hindsight · scaffolded, still yours', 26, 142); g2.fillText('Footbridge to the record: yes', 26, 172); }
+        if (br_) { enamel(g2, w2, h2, '#f4efdf'); kindFrame(g2, 'RECORDED', w2, h2, P.ink, 7); g2.fillStyle = P.ink; g2.font = fnt(700, 96); g2.fillText('THE RECORD', 30, 110); g2.font = fnt(500, 46); g2.fillText('Boston · Year Two · Week 9', 30, 168); g2.fillStyle = P.soft; g2.font = fnt(400, 38, F_SERIF); g2.fillText('Never overwritten by a branch.', 30, 218); }
+        else { enamel(g2, w2, h2, '#f6e6c6'); tapeBand(g2, 0, 0, w2, 22, P.br); tapeBand(g2, 0, h2 - 22, w2, 22, P.br); g2.fillStyle = P.brD; g2.font = fnt(700, 80); g2.fillText('YOUR BRANCH', 30, 106); g2.fillStyle = P.ink; g2.font = fnt(500, 38); g2.fillText('Week 6 trade not made · diverged Week 6', 30, 156); g2.fillText('cut with hindsight · under scaffold', 30, 204); }
       });
     }
     /* the paper brought to the camera */
@@ -1439,13 +1440,13 @@ document.addEventListener('keydown', e => {
     paperGrp.add(paperShadow, paperMesh);
     const POSES = {
       door: { eye: [11.7, 1.62, 1.45], at: [8.5, 1.02, 1.05] }, rail: { eye: [8.3, 5.0, 1.4], at: [-6.5, 2.0, -1.8] },
-      desk: { eye: [10.4, 4.5, -1.5], at: [9.35, 3.85, -6.6] }, 'desk-file': { eye: [10.4, 4.5, -1.5], at: [9.72, 3.95, -2.6] },
-      'desk-league': { eye: [10.4, 4.5, -1.5], at: [-17, 2.8, -22.6] }, 'desk-bowl': { eye: [10.4, 4.5, -1.5], at: [18, 1.2, -46] },
-      'desk-analytics': { eye: [10.4, 4.5, -1.5], at: [-10.7, 1.7, 4.4] }, 'desk-history': { eye: [10.4, 4.5, -1.5], at: [9.8, 5.0, 8] },
+      desk: { eye: [10.4, 4.65, -.55], at: [9.95, 3.8, -6.6] }, 'desk-file': { eye: [10.4, 4.65, -.55], at: [9.72, 3.95, -2.6] },
+      'desk-league': { eye: [10.4, 4.65, -.55], at: [-8, 2.6, -17.5] }, 'desk-bowl': { eye: [10.4, 4.65, -.55], at: [18, 1.4, -46] },
+      'desk-analytics': { eye: [10.4, 4.65, -.55], at: [-10.7, 1.7, 4.4] }, 'desk-history': { eye: [10.4, 4.65, -.55], at: [9.8, 5.0, 8] },
       money: { eye: [.8, 1.65, .4], at: [-12.9, 5.3, -.3] }, court: { eye: [4.5, 1.65, -.6], at: [-3.2, .4, 4.4] },
       analytics: { eye: [-1.5, 1.65, 1.0], at: [-10.8, 2.4, 3.2] }, ticketing: { eye: [-1.5, 1.65, -1.0], at: [-10.8, 2.4, -3.2] },
       film: { eye: [-2.6, 1.65, -.8], at: [-5.2, 1.5, -5.9] }, arches: { eye: [-3.2, 1.65, -2.8], at: [-5.4, 2.7, 8] },
-      history: { eye: [9.6, 4.95, .6], at: [9.6, 5.2, 8] }, window: { eye: [6.6, 4.95, -7.0], at: [-3.5, 0.6, -34] },
+      history: { eye: [9.6, 4.95, .6], at: [9.6, 5.2, 8] }, window: { eye: [6.5, 4.95, -4.6], at: [7.5, 0.4, -24] },
       why1: { eye: [-3.0, 1.65, 3.2], at: [-12.9, 5.5, 3.6] }, why2: { eye: [-3.0, 1.65, -1.2], at: [-12.9, 5.4, -1.4] }, why3: { eye: [-4.6, 1.65, -3.0], at: [-12.9, 5.4, -4.2] },
       why4: { eye: [-5.0, 1.65, -3.6], at: [-12.9, 5.2, -5.9] }, why5: { eye: [.8, 1.65, -3.0], at: [-5.6, 1.6, -5.9] }
     };
@@ -1554,7 +1555,7 @@ document.addEventListener('keydown', e => {
       if (Sx.paper) { const fx = fxs.find(f => f.id === Sx.paper); if (fx) { if (prev.paper !== Sx.paper || prev.know !== Sx.layers.know || prev.sig !== fx.line) showPaper(fx); prev.sig = fx.line; } } else if (prev.paper) hidePaper();
       prev.paper = Sx.paper; prev.know = Sx.layers.know;
       /* consequences that happen once: the order slides off the blotter; the cut is made */
-      if (Sx.po && (!prev.po || prev.po !== Sx.po.no)) { prev.po = Sx.po.no; BRD.po.visible = true; const x0 = 10.4, x1 = 10.98; if (!CUT) tween(700, 0, k => { BRD.po.position.set(x0 + (x1 - x0) * k, DY + .02, -2.55 + .25 * k); BRD.po.rotation.z = -.18 * k; }); else BRD.po.position.set(x1, DY + .02, -2.3); }
+      if (Sx.po && (!prev.po || prev.po !== Sx.po.no)) { prev.po = Sx.po.no; BRD.po.visible = true; const x0 = 10.4, x1 = 10.86; if (!CUT) tween(700, 0, k => { BRD.po.position.set(x0 + (x1 - x0) * k, DY + .02, -2.55 + .13 * k); BRD.po.rotation.z = -.18 * k; }); else { BRD.po.position.set(x1, DY + .02, -2.42); BRD.po.rotation.z = -.18; } }
       if (!Sx.po) { BRD.po.visible = false; prev.po = null; }
       if (Sx.branch && !prev.branch) { runFork(); } if (!Sx.branch) prev.branch = false; else prev.branch = true;
       BRD.po.visible = !!Sx.po && !br_;

@@ -1,106 +1,350 @@
 [
- {"shot":"00-ask-empty"},
- {"type":["#q","Why are airline delays spreading?"]},
- {"press":"Enter"},
- {"expectText":"PROPAGATION THROUGH SHARED RESOURCES"},
- {"shot":"01-ask-restated-dynamic-neighbours"},
- {"click":"AIR-TRAFFIC PROGRAMS"},
- {"shot":"01b-ask-neighbour-opened"},
- {"click":"Assemble this system","after":1250},
- {"shot":"02-bench-arriving-run-from-first-second"},
- {"wait":4800},
- {"expectText":"4 reviewed · 3 generated couplings · 2 assumed · 1 gap"},
- {"shot":"02b-bench-complete-provenance-per-part"},
- {"click":"Run what you have"},
- {"expectText":"COMPUTED"},
- {"shot":"03-loom-marey-chart-hold-40"},
- {"click":"How do we know?"},
- {"shot":"03b-loom-how-do-we-know-layer"},
- {"click":"How do we know?"},
- {"click":"What's real?"},
- {"shot":"03c-loom-whats-real-layer"},
- {"click":"What's real?"},
- {"range":["#hold",70]},
- {"shot":"04-push-hold-70-thread-shears-slack-absorbs"},
- {"range":["#hold",100]},
- {"shot":"04b-push-hold-100-leg4-still-runs"},
- {"range":["#hold",101]},
- {"expectText":"At 101 min leg 4 is cut; at 100 min it still runs."},
- {"shot":"04c-edge-found-101-leg4-cut-hand"},
- {"click":"Who holds it?"},
- {"shot":"05-enter-practice-seat-ground-changes"},
- {"click":"Release the ORD hold"},
- {"shot":"05b-seat-refusal-not-this-seat"},
- {"click":"Extend the duty period 30 min"},
- {"expectText":"leg 4 runs"},
- {"shot":"05c-act-extend-30-leg4-runs-rest-shrinks-record-in-your-ink"},
- {"click":"Extend by 2 h 30 min"},
- {"shot":"05d-seat-refusal-names-the-rule"},
- {"click":"Leave the seat"},
- {"click":"Lift ROTATION"},
- {"shot":"06-unbolt-rotation-spread-stops-pencil-frame"},
- {"click":"Lift ROTATION"},
- {"click":"Lift TURN BUFFERS"},
- {"shot":"06b-unbolt-turn-buffers-absorbs"},
- {"click":"Lift TURN BUFFERS"},
- {"click":"Lift ROTATION"},
- {"click":"Keep as a branch"},
- {"shot":"06c-keep-as-branch-stamped-fork-own-ink"},
- {"click":"Compare with the record"},
- {"shot":"06d-compare-branch-vs-record"},
- {"click":"Return to the record","nth":0},
- {"shot":"06e-return-to-the-record"},
- {"click":"Turn it over"},
- {"shot":"07-plate-truth-signatures-couplings-ports"},
- {"click":"Where would I distrust this?"},
- {"shot":"07b-plate-distrust-computed"},
- {"click":"How do we know?"},
- {"shot":"07c-plate-know-layer"},
- {"click":"How do we know?"},
- {"click":"WEATHER"},
- {"click":"RULE: FAA DUTY LIMITS"},
- {"shot":"07d-stub-faa-duty-limits-carrying-the-pin"},
- {"click":"Attach this sheet as the source for the extension"},
- {"click":"Back to the plate"},
- {"shot":"07e-plate-back-with-revision-clouds"},
- {"click":"Sheet A: Ask"},
- {"click":"Why are semiconductor shortages happening?"},
- {"expectText":"This is several questions"},
- {"shot":"08-plural-question-three-shortages"},
- {"click":"The 2021 shortage"},
- {"shot":"08b-open-bench-source-slips-one-unread"},
- {"click":"Compile a working model from these slips"},
- {"expectText":"NOT REVIEWED"},
- {"shot":"09-working-model-tracing-paper-title-block"},
- {"range":["#lev-T",30]},
- {"shot":"09b-ledger-lever-moved-band-moves"},
- {"range":["#lev-d",36]},
- {"shot":"09c-outside-evidence"},
- {"click":"Export controls"},
- {"shot":"09d-refused-no-part-behind-lever"},
- {"click":"Follow it"},
- {"shot":"09e-refused-cannot-be-followed"},
- {"range":["#lev-d",18]},
- {"range":["#lev-T",24]},
- {"click":"Promote or discard"},
- {"shot":"10-review-sketch-ladder"},
- {"click":"Issue for review"},
- {"click":"[reviewer A] signs","nth":0},
- {"shot":"10b-issued-first-knot-signed"},
- {"click":"Sign the rest"},
- {"expectText":"2 assumed · 3 reviewer-authored · 2 sourced"},
- {"shot":"10c-ledger-shrinks-dissent-stays-on-knot"},
- {"click":"Approve as REVIEWED v1"},
- {"shot":"10d-reviewed-v1-lineage"},
- {"click":"Follow REVIEWED v1"},
- {"click":"Discard the sketch"},
- {"shot":"10e-discard-tombstone"},
- {"click":"Open the shared link"},
- {"shot":"10f-shared-link-discarded-by-its-author"},
- {"click":"Sheet A: Ask"},
- {"click":"Will the Green Line run after the game?"},
- {"expectText":"No system for this."},
- {"shot":"11-want-no-system-shape-of-missing-thing"},
- {"click":"Leave a want"},
- {"shot":"11b-want-filed-empty-room"}
+{
+"shot": "00-ask-empty"
+},
+{
+"type": [
+"#q",
+"Why are airline delays spreading?"
+]
+},
+{
+"press": "Enter"
+},
+{
+"expectText": "PROPAGATION THROUGH SHARED RESOURCES"
+},
+{
+"shot": "01-ask-restated-dynamic-neighbours"
+},
+{
+"click": "AIR-TRAFFIC PROGRAMS"
+},
+{
+"shot": "01b-ask-neighbour-opened"
+},
+{
+"click": "Assemble this system",
+"after": 1250
+},
+{
+"shot": "02-bench-arriving-run-from-first-second"
+},
+{
+"click": "Run what you have"
+},
+{
+"shot": "02a-run-what-you-have-from-the-first-second-partial-parts"
+},
+{
+"click": "Sheet B: Bench"
+},
+{
+"wait": 4800
+},
+{
+"expectText": "4 reviewed · 3 generated couplings · 2 assumed · 1 gap"
+},
+{
+"shot": "02b-bench-complete-provenance-per-part"
+},
+{
+"click": "Run what you have"
+},
+{
+"expectText": "COMPUTED"
+},
+{
+"shot": "03-loom-marey-chart-hold-40"
+},
+{
+"click": "How do we know?"
+},
+{
+"shot": "03b-loom-how-do-we-know-layer"
+},
+{
+"click": "How do we know?"
+},
+{
+"click": "What's real?"
+},
+{
+"shot": "03c-loom-whats-real-layer"
+},
+{
+"click": "What's real?"
+},
+{
+"range": [
+"#hold",
+70
+]
+},
+{
+"shot": "04-push-hold-70-thread-shears-slack-absorbs"
+},
+{
+"range": [
+"#hold",
+100
+]
+},
+{
+"shot": "04b-push-hold-100-leg4-still-runs"
+},
+{
+"range": [
+"#hold",
+101
+]
+},
+{
+"expectText": "At 101 min leg 4 is cut; at 100 min it still runs."
+},
+{
+"shot": "04c-edge-found-101-leg4-cut-hand"
+},
+{
+"click": "Who holds it?"
+},
+{
+"shot": "05-enter-practice-seat-ground-changes"
+},
+{
+"click": "Release the ORD hold"
+},
+{
+"shot": "05b-seat-refusal-not-this-seat"
+},
+{
+"click": "Extend the duty period 30 min"
+},
+{
+"expectText": "leg 4 runs"
+},
+{
+"shot": "05c-act-extend-30-leg4-runs-rest-shrinks-record-in-your-ink"
+},
+{
+"click": "Extend by 2 h 30 min"
+},
+{
+"shot": "05d-seat-refusal-names-the-rule"
+},
+{
+"click": "Leave the seat"
+},
+{
+"click": "Lift ROTATION"
+},
+{
+"shot": "06-unbolt-rotation-spread-stops-pencil-frame"
+},
+{
+"click": "Lift ROTATION"
+},
+{
+"click": "Lift TURN BUFFERS"
+},
+{
+"shot": "06b-unbolt-turn-buffers-absorbs"
+},
+{
+"click": "Lift TURN BUFFERS"
+},
+{
+"click": "Lift ROTATION"
+},
+{
+"click": "Keep as a branch"
+},
+{
+"shot": "06c-keep-as-branch-stamped-fork-own-ink"
+},
+{
+"click": "Compare with the record"
+},
+{
+"shot": "06d-compare-branch-vs-record"
+},
+{
+"click": "Return to the record",
+"nth": 0
+},
+{
+"shot": "06e-return-to-the-record"
+},
+{
+"click": "Turn it over"
+},
+{
+"shot": "07-plate-truth-signatures-couplings-ports"
+},
+{
+"click": "Where would I distrust this?"
+},
+{
+"shot": "07b-plate-distrust-computed"
+},
+{
+"click": "How do we know?"
+},
+{
+"shot": "07c-plate-know-layer"
+},
+{
+"click": "How do we know?"
+},
+{
+"click": "WEATHER"
+},
+{
+"click": "RULE: FAA DUTY LIMITS"
+},
+{
+"shot": "07d-stub-faa-duty-limits-carrying-the-pin"
+},
+{
+"click": "Attach this sheet as the source for the extension"
+},
+{
+"click": "Back to the plate"
+},
+{
+"shot": "07e-plate-back-with-revision-clouds"
+},
+{
+"click": "Sheet A: Ask"
+},
+{
+"click": "Why are semiconductor shortages happening?"
+},
+{
+"expectText": "This is several questions"
+},
+{
+"shot": "08-plural-question-three-shortages"
+},
+{
+"click": "The 2021 shortage"
+},
+{
+"shot": "08b-open-bench-source-slips-one-unread"
+},
+{
+"click": "Compile a working model from these slips"
+},
+{
+"expectText": "NOT REVIEWED"
+},
+{
+"shot": "09-working-model-tracing-paper-title-block"
+},
+{
+"range": [
+"#lev-T",
+30
+]
+},
+{
+"shot": "09b-ledger-lever-moved-band-moves"
+},
+{
+"range": [
+"#lev-d",
+36
+]
+},
+{
+"shot": "09c-outside-evidence"
+},
+{
+"click": "Export controls"
+},
+{
+"shot": "09d-refused-no-part-behind-lever"
+},
+{
+"click": "Follow it"
+},
+{
+"shot": "09e-refused-cannot-be-followed"
+},
+{
+"range": [
+"#lev-d",
+18
+]
+},
+{
+"range": [
+"#lev-T",
+24
+]
+},
+{
+"click": "Promote or discard"
+},
+{
+"shot": "10-review-sketch-ladder"
+},
+{
+"click": "Issue for review"
+},
+{
+"click": "[reviewer A] signs",
+"nth": 0
+},
+{
+"shot": "10b-issued-first-knot-signed"
+},
+{
+"click": "Sign the rest"
+},
+{
+"expectText": "2 assumed · 3 reviewer-authored · 2 sourced"
+},
+{
+"shot": "10c-ledger-shrinks-dissent-stays-on-knot"
+},
+{
+"click": "Approve as REVIEWED v1"
+},
+{
+"shot": "10d-reviewed-v1-lineage"
+},
+{
+"click": "Follow REVIEWED v1"
+},
+{
+"click": "Discard the sketch"
+},
+{
+"shot": "10e-discard-tombstone"
+},
+{
+"click": "Open the shared link"
+},
+{
+"shot": "10f-shared-link-discarded-by-its-author"
+},
+{
+"click": "Sheet A: Ask"
+},
+{
+"click": "Will the Green Line run after the game?"
+},
+{
+"expectText": "No system for this."
+},
+{
+"shot": "11-want-no-system-shape-of-missing-thing"
+},
+{
+"click": "Leave a want"
+},
+{
+"shot": "11b-want-filed-empty-room"
+}
 ]
