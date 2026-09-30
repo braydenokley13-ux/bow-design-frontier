@@ -981,7 +981,7 @@ document.addEventListener('keydown', e => {
     /* desk lamp */
     box('brass', 9.45, DY, -3.02, 9.6, DY + .02, -2.9); beam('brass', [9.52, DY + .02, -2.96], [9.62, DY + .38, -2.86], .012, .012); beam('brass', [9.62, DY + .38, -2.86], [9.78, DY + .4, -2.76], .012, .012); box('emis', 9.74, DY + .33, -2.79, 9.86, DY + .41, -2.66, { col: [1, .9, .66] });
     /* purchase order animates off the blotter (only exists after act 43) */
-    BRD.po = panelMesh(300, 420, .21, .3, [10.4, DY + .02, -2.55], FLAT, { id: 'desk.po', glow: .1 }); BRD.po.visible = false; hit('desk.po', 10.75, DY, -2.7, 11.15, DY + .08, -2.3);
+    BRD.po = panelMesh(300, 420, .21, .3, [0, 0, 0], FLAT, { id: 'desk.po', glow: .1 }); BRD.po.position.set(10.4, DY + .02, -2.55); BRD.po.visible = false; ANCH['desk.po'] = V3(10.86, DY + .02, -2.42); hit('desk.po', 10.75, DY, -2.7, 11.15, DY + .08, -2.3);
     /* the credenza: glass onto other seats' material */
     const CRX0 = 9.0, CRX1 = 12.2, CRZ0 = -7.75, CRZ1 = -7.15;
     box('oak', CRX0, DECK, CRZ0, CRX1, DECK + .12, CRZ1, { tile: 1 }); box('oak', CRX0 - .02, DECK + .95, CRZ0 - .02, CRX1 + .02, DECK + 1.02, CRZ1 + .03, { tile: 1 }); box('oak', CRX0, DECK + .12, CRZ0, CRX0 + .05, DECK + .95, CRZ1, { tile: 1 }); box('oak', CRX1 - .05, DECK + .12, CRZ0, CRX1, DECK + .95, CRZ1, { tile: 1 }); box('oak', CRX0 + .05, DECK + .12, CRZ0, CRX1 - .05, DECK + .95, CRZ0 + .05, { tile: 1 }); box('oak', CRX0 + .05, DECK + .5, CRZ0 + .05, CRX1 - .05, DECK + .53, CRZ1 - .05, { tile: 1 });
@@ -1555,7 +1555,7 @@ document.addEventListener('keydown', e => {
       if (Sx.paper) { const fx = fxs.find(f => f.id === Sx.paper); if (fx) { if (prev.paper !== Sx.paper || prev.know !== Sx.layers.know || prev.sig !== fx.line) showPaper(fx); prev.sig = fx.line; } } else if (prev.paper) hidePaper();
       prev.paper = Sx.paper; prev.know = Sx.layers.know;
       /* consequences that happen once: the order slides off the blotter; the cut is made */
-      if (Sx.po && (!prev.po || prev.po !== Sx.po.no)) { prev.po = Sx.po.no; BRD.po.visible = true; const x0 = 10.4, x1 = 10.86; if (!CUT) tween(700, 0, k => { BRD.po.position.set(x0 + (x1 - x0) * k, DY + .02, -2.55 + .13 * k); BRD.po.rotation.z = -.18 * k; }); else { BRD.po.position.set(x1, DY + .02, -2.42); BRD.po.rotation.z = -.18; } }
+      if (Sx.po && (!prev.po || prev.po !== Sx.po.no)) { prev.po = Sx.po.no; BRD.po.visible = true; const x0 = 10.4, x1 = 10.86; if (!CUT) tween(700, 0, k => { BRD.po.position.set(x0 + (x1 - x0) * k, DY + .02, -2.55 + .13 * k); BRD.po.rotation.y = .2 * k; }); else { BRD.po.position.set(x1, DY + .02, -2.42); BRD.po.rotation.y = .2; } }
       if (!Sx.po) { BRD.po.visible = false; prev.po = null; }
       if (Sx.branch && !prev.branch) { runFork(); } if (!Sx.branch) prev.branch = false; else prev.branch = true;
       BRD.po.visible = !!Sx.po && !br_;
@@ -1599,7 +1599,7 @@ document.addEventListener('keydown', e => {
     canvas.addEventListener('pointerup', e => { if (down && !down.moved) { const id = pickAt(e.clientX, e.clientY); if (id) act('pick', { id }); } down = null; });
     function resize() { const r = stage.getBoundingClientRect(), w = Math.max(240, Math.floor(r.width)), h = Math.max(240, Math.floor(r.height)); renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); invalidate(); }
     new ResizeObserver(resize).observe(stage); resize();
-    ROOM = { update, coveredIds, stats: () => ({ ...STATS }), pose: n => setPose(n, true), poses: POSES, MQ, camera, renderer, scene, invalidate, project: id => { const v = (ANCH[id] || V3()).clone().project(camera), r = canvas.getBoundingClientRect(); return [r.left + (v.x * .5 + .5) * r.width, r.top + (-v.y * .5 + .5) * r.height]; } };
+    ROOM = { BRD, PARTS, update, coveredIds, stats: () => ({ ...STATS }), pose: n => setPose(n, true), poses: POSES, MQ, camera, renderer, scene, invalidate, project: id => { const v = (ANCH[id] || V3()).clone().project(camera), r = canvas.getBoundingClientRect(); return [r.left + (v.x * .5 + .5) * r.width, r.top + (-v.y * .5 + .5) * r.height]; } };
     const ld = $('#loading'); if (ld) ld.remove(); renderer.shadowMap.needsUpdate = true; paint();
   } catch (e) { console.error('the Room failed to build', e); fail('The Room failed to build. The Schedule (key S) is the same building as text.'); }
 })();
