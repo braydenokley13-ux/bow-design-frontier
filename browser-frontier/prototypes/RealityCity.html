@@ -104,6 +104,7 @@ body.branch #sheet{border:2px solid var(--branch);border-left-width:8px}
 .btn{min-height:40px;padding:5px 12px;border:2px solid var(--ink);background:var(--paper);font:600 12px/1.15 var(--mono);letter-spacing:.03em;text-transform:uppercase;cursor:pointer;text-align:center;border-radius:2px}
 .btn:hover:not(:disabled){background:var(--paper2)}
 .btn.pri{background:var(--ink);color:var(--paper)}
+.btn.pri:hover:not(:disabled){background:var(--ink);color:var(--paper);text-decoration:underline}.btn.gc:hover:not(:disabled){background:var(--gc);text-decoration:underline}.btn.br.pri:hover:not(:disabled){background:var(--branch)}
 .btn.gc{background:var(--gc);color:#fff;border-color:var(--gc)}
 .btn:disabled{border-style:dashed;color:var(--mute);cursor:not-allowed;background:transparent}
 .btn[aria-pressed=true],.btn[aria-pressed=true]:hover:not(:disabled){background:var(--ink);color:var(--paper)}.btn[aria-pressed=true] small{color:inherit}

@@ -1,0 +1,748 @@
+[
+{
+"click": "Equilibrium"
+},
+{
+"wait": 500
+},
+{
+"shot": "chem-01-now-four-views-one-state"
+},
+{
+"click": "Door ahead: Bench booked"
+},
+{
+"expectText": "You cannot enter a scheduled moment"
+},
+{
+"shot": "chem-02-scheduled-door-refused"
+},
+{
+"click": "Arrive at this door"
+},
+{
+"expectText": "This door offers cuts"
+},
+{
+"shot": "chem-03-arrive-two-cuts"
+},
+{
+"click": "the instant of the push"
+},
+{
+"expectText": "Why this cut already knows"
+},
+{
+"shot": "chem-04-arrive-cut-with-a-stale-desk"
+},
+{
+"click": "Stand at this cut"
+},
+{
+"expectText": "On the desk"
+},
+{
+"shot": "chem-04b-cut-at-the-push-desk-still-reads-the-old-value"
+},
+{
+"click": "tap the window to return to NOW"
+},
+{
+"click": "Arrive at this door"
+},
+{
+"click": "3 s after the push"
+},
+{
+"click": "Stand at this cut"
+},
+{
+"expectText": "On the desk"
+},
+{
+"shot": "chem-05-the-cut-books-desk-notyet"
+},
+{
+"click": "How do we know?"
+},
+{
+"shot": "chem-06-how-do-we-know-layer"
+},
+{
+"click": "How do we know?"
+},
+{
+"click": "real?"
+},
+{
+"shot": "chem-07-whats-real-layer"
+},
+{
+"click": "real?"
+},
+{
+"click": "Later",
+"nth": 0
+},
+{
+"expectText": "Nobody at this desk could know what comes next"
+},
+{
+"shot": "chem-08-seal-refuses-later"
+},
+{
+"click": "Work out where it settles"
+},
+{
+"expectText": "Worked at the desk"
+},
+{
+"shot": "chem-09-computable-but-withheld-worked-at-desk"
+},
+{
+"click": "Why is it like this?"
+},
+{
+"expectText": "traced to causes"
+},
+{
+"shot": "chem-10-why-traced-to-causes"
+},
+{
+"click": "Close",
+"exact": true
+},
+{
+"click": "Take the seat at this cut"
+},
+{
+"click": "Heat the bath by 20 K"
+},
+{
+"click": "Keep the branch",
+"force": true
+},
+{
+"expectText": "Keep is blocked"
+},
+{
+"shot": "chem-11-keep-blocked-seats-unset"
+},
+{
+"click": "The bath and its owner \u00b7 Declare"
+},
+{
+"click": "Holds the new 45"
+},
+{
+"click": "The reaction (nature) \u00b7 Recorded"
+},
+{
+"expectText": "Recorded needs a source dated on or before the cut"
+},
+{
+"shot": "chem-12-council-refuses-recorded-names-the-rule"
+},
+{
+"click": "The reaction (nature) \u00b7 Model"
+},
+{
+"shot": "chem-13-council-set-assumptions-listed"
+},
+{
+"click": "Keep the branch"
+},
+{
+"expectText": "Your branch \u00b7 diverged"
+},
+{
+"shot": "chem-14-fork-born-record-left-branch-right"
+},
+{
+"click": "next date"
+},
+{
+"click": "next date"
+},
+{
+"expectText": "DIVERGED"
+},
+{
+"shot": "chem-15-reality-arrives-bath-diverged"
+},
+{
+"click": "next date"
+},
+{
+"expectText": "held in the band"
+},
+{
+"shot": "chem-16-measurement-arrives-model-held"
+},
+{
+"click": "Why is the branch like this"
+},
+{
+"expectText": "Signed act"
+},
+{
+"shot": "chem-17-why-branch-traced"
+},
+{
+"click": "Close",
+"exact": true
+},
+{
+"click": "Ask as an observer",
+"nth": 0
+},
+{
+"expectText": "Written to YOUR ledger"
+},
+{
+"shot": "chem-18-since-opened-ledger-mark"
+},
+{
+"click": "Close",
+"exact": true
+},
+{
+"click": "Backs"
+},
+{
+"shot": "chem-19a-three-backs"
+},
+{
+"click": "Back to:",
+"force": true
+},
+{
+"click": "Back to:",
+"force": true
+},
+{
+"click": "Back to:",
+"force": true
+},
+{
+"expectText": "Back never crosses a signature"
+},
+{
+"shot": "chem-19-back-refused-across-a-signature"
+},
+{
+"click": "Amend: also add the last"
+},
+{
+"expectText": "compensating"
+},
+{
+"shot": "chem-20-amend-appended"
+},
+{
+"click": "Re-take: fork from before branch b1"
+},
+{
+"expectText": "Re-take"
+},
+{
+"shot": "chem-21-retake-at-the-cut"
+},
+{
+"click": "Take the seat at this cut"
+},
+{
+"click": "Add 0.020 mol"
+},
+{
+"click": "The bath and its owner \u00b7 Declare"
+},
+{
+"click": "The lab raises it by about"
+},
+{
+"click": "The reaction (nature) \u00b7 Model"
+},
+{
+"click": "Keep the branch"
+},
+{
+"click": "next date"
+},
+{
+"click": "next date"
+},
+{
+"click": "next date"
+},
+{
+"click": "next date"
+},
+{
+"expectText": "Reality did something your branch has no room for"
+},
+{
+"shot": "chem-22-second-fork-impossible-syringe-empty"
+},
+{
+"click": "tap the window to return to NOW"
+},
+{
+"expectText": "Your wall"
+},
+{
+"shot": "chem-23-return-to-now-two-branches-on-the-wall"
+},
+{
+"click": "Your branch b2"
+},
+{
+"expectText": "Your branch b2"
+},
+{
+"shot": "chem-24-back-in-branch-b2"
+},
+{
+"reload": true
+},
+{
+"expectText": "Your branch b2"
+},
+{
+"shot": "chem-25-reload-restores-the-address"
+},
+{
+"open2": "CrossCut.html#s=chem&v=branch&c=c3&b=add%3Bbath%3Adeclare%3Araise10%2Cnature%3Amodel&t=63&h=none",
+"after": 900
+},
+{
+"expectText": "Viewpoint"
+},
+{
+"shot": "chem-26-address-opened-as-observer-viewpoint"
+},
+{
+"click": "+ 1 s",
+"force": true
+},
+{
+"expectText": "An address is a viewpoint, not a seat"
+},
+{
+"shot": "chem-27-observer-cannot-advance-refusal"
+},
+{
+"use": 0
+},
+{
+"click": "Harrow supply"
+},
+{
+"wait": 500
+},
+{
+"shot": "sup-01-now-harrow-fictional"
+},
+{
+"click": "Arrive at this door"
+},
+{
+"click": "11:20 \u00b7 after Kaito"
+},
+{
+"expectText": "Why this cut already knows"
+},
+{
+"shot": "sup-02-arrive-cut-that-already-knows"
+},
+{
+"click": "06:10 \u00b7 the moment of the fire"
+},
+{
+"click": "Stand at this cut"
+},
+{
+"expectText": "Not yet"
+},
+{
+"shot": "sup-03-cut-books-know-the-fire-desk-does-not"
+},
+{
+"click": "How do we know?"
+},
+{
+"shot": "sup-04-how-do-we-know-inputs-shown"
+},
+{
+"click": "How do we know?"
+},
+{
+"click": "Later",
+"nth": 0
+},
+{
+"expectText": "Nobody at this desk could know what comes next"
+},
+{
+"shot": "sup-05-seal-refuses-later"
+},
+{
+"click": "Why is it like this?"
+},
+{
+"expectText": "Runway"
+},
+{
+"shot": "sup-06-why-runway-fixture-computed-wears-authored"
+},
+{
+"click": "Close",
+"exact": true
+},
+{
+"click": "Take the seat at this cut"
+},
+{
+"click": "Buy 1,500 chips"
+},
+{
+"click": "Keep the branch",
+"force": true
+},
+{
+"expectText": "Keep is blocked"
+},
+{
+"shot": "sup-06b-keep-blocked"
+},
+{
+"click": "Kaito Semiconductor (the supplier) \u00b7 Recorded"
+},
+{
+"expectText": "Recorded needs a source dated on or before the cut"
+},
+{
+"shot": "sup-07-council-refuses-recorded"
+},
+{
+"click": "Kaito Semiconductor (the supplier) \u00b7 Model"
+},
+{
+"expectText": "MODELED needs a named, versioned model that actually ran"
+},
+{
+"shot": "sup-08-council-refuses-model"
+},
+{
+"click": "Kaito Semiconductor (the supplier) \u00b7 Declare"
+},
+{
+"click": "Restarts in 3 weeks"
+},
+{
+"click": "The broker market \u00b7 Declare"
+},
+{
+"click": "Parts arrive in 7 days"
+},
+{
+"shot": "sup-09-council-set"
+},
+{
+"click": "Keep the branch"
+},
+{
+"expectText": "Your branch \u00b7 diverged"
+},
+{
+"shot": "sup-10-fork-born-stock-engine"
+},
+{
+"click": "+ 1 day"
+},
+{
+"click": "+ 1 day"
+},
+{
+"shot": "sup-11-branch-two-days-numbers-recompute"
+},
+{
+"click": "next date"
+},
+{
+"click": "next date"
+},
+{
+"expectText": "Kaito: restart estimated"
+},
+{
+"shot": "sup-12-kaito-estimate-diverges"
+},
+{
+"click": "next date"
+},
+{
+"expectText": "nowhere to go"
+},
+{
+"shot": "sup-13-quality-rule-impossible"
+},
+{
+"click": "next date"
+},
+{
+"shot": "sup-14-broker-quote-diverged"
+},
+{
+"click": "Why is the branch like this"
+},
+{
+"expectText": "Signed act"
+},
+{
+"shot": "sup-15-why-branch-traced"
+},
+{
+"click": "Close",
+"exact": true
+},
+{
+"click": "Backs"
+},
+{
+"click": "Re-take: fork from before branch b1"
+},
+{
+"expectText": "Re-take"
+},
+{
+"click": "Take the seat at this cut"
+},
+{
+"click": "Ration the chips"
+},
+{
+"click": "The five customers \u00b7 Recorded"
+},
+{
+"shot": "sup-16-council-recorded-allowed-contracts-on-desk"
+},
+{
+"click": "Kaito Semiconductor (the supplier) \u00b7 Unknown"
+},
+{
+"click": "Keep the branch"
+},
+{
+"click": "next date"
+},
+{
+"click": "next date"
+},
+{
+"expectText": "left Kaito\u2019s restart open"
+},
+{
+"shot": "sup-17-unknown-left-open-re-declare"
+},
+{
+"click": "Backs"
+},
+{
+"click": "Amend: re-declare an open seat"
+},
+{
+"expectText": "re-declared"
+},
+{
+"click": "Close",
+"exact": true
+},
+{
+"shot": "sup-18-amended-re-declared"
+},
+{
+"click": "tap the window to return to NOW"
+},
+{
+"expectText": "Your wall"
+},
+{
+"shot": "sup-19-return-to-now-wall"
+},
+{
+"click": "Yellowstone"
+},
+{
+"wait": 500
+},
+{
+"shot": "eco-01-now-nobody-holds-it"
+},
+{
+"click": "Arrive at this door"
+},
+{
+"click": "Jan 1996 \u00b7 after the first release"
+},
+{
+"expectText": "Why this cut already knows"
+},
+{
+"click": "Jan 1995 \u00b7 before the first release"
+},
+{
+"shot": "eco-02-arrive"
+},
+{
+"click": "Stand at this cut"
+},
+{
+"expectText": "Not yet"
+},
+{
+"shot": "eco-03-cut-books-are-empty-tracks"
+},
+{
+"click": "Ask as an observer",
+"nth": 0
+},
+{
+"expectText": "Reading A"
+},
+{
+"shot": "eco-04-since-is-mostly-argument-no-winner"
+},
+{
+"click": "Close",
+"exact": true
+},
+{
+"click": "Take the seat at this cut"
+},
+{
+"click": "Do not release wolves"
+},
+{
+"click": "The range (elk, willow, aspen) \u00b7 Recorded"
+},
+{
+"expectText": "Recorded needs a source dated on or before the cut"
+},
+{
+"shot": "eco-05-council-recorded-refused"
+},
+{
+"click": "The range (elk, willow, aspen) \u00b7 Model"
+},
+{
+"expectText": "No model of the northern range is registered"
+},
+{
+"shot": "eco-06-council-model-refused"
+},
+{
+"click": "The range (elk, willow, aspen) \u00b7 Declare"
+},
+{
+"click": "No single cause dominates"
+},
+{
+"click": "Would wolves return unaided? \u00b7 Declare"
+},
+{
+"click": "No wolves establish"
+},
+{
+"shot": "eco-07-council-collapses-to-declarations"
+},
+{
+"click": "Keep the branch"
+},
+{
+"expectText": "Your branch \u00b7 diverged"
+},
+{
+"shot": "eco-08-fork-nothing-to-compute"
+},
+{
+"click": "next date"
+},
+{
+"expectText": "DIVERGED"
+},
+{
+"click": "next date"
+},
+{
+"click": "next date"
+},
+{
+"click": "next date"
+},
+{
+"click": "next date"
+},
+{
+"expectText": "no control"
+},
+{
+"shot": "eco-09-seam-most-marks-unknown-no-control"
+},
+{
+"click": "Why is the branch like this"
+},
+{
+"expectText": "Candidate cause"
+},
+{
+"shot": "eco-10-why-candidates-dashed-no-weights"
+},
+{
+"click": "Close",
+"exact": true
+},
+{
+"click": "tap the window to return to NOW"
+},
+{
+"expectText": "Your wall"
+},
+{
+"shot": "eco-11-return-to-now"
+},
+{
+"click": "Collapse report"
+},
+{
+"expectText": "Does the time grammar survive outside sports"
+},
+{
+"shot": "collapse-eco-current-system"
+},
+{
+"click": "Equilibrium",
+"nth": 1
+},
+{
+"shot": "collapse-chem"
+},
+{
+"click": "Harrow supply",
+"nth": 1
+},
+{
+"shot": "collapse-supply"
+},
+{
+"click": "All three",
+"nth": 0
+},
+{
+"shot": "collapse-matrix"
+},
+{
+"click": "Close",
+"exact": true
+}
+]
