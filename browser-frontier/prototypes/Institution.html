@@ -981,7 +981,7 @@ document.addEventListener('keydown', e => {
     /* desk lamp */
     box('brass', 9.45, DY, -3.02, 9.6, DY + .02, -2.9); beam('brass', [9.52, DY + .02, -2.96], [9.62, DY + .38, -2.86], .012, .012); beam('brass', [9.62, DY + .38, -2.86], [9.78, DY + .4, -2.76], .012, .012); box('emis', 9.74, DY + .33, -2.79, 9.86, DY + .41, -2.66, { col: [1, .9, .66] });
     /* purchase order animates off the blotter (only exists after act 43) */
-    BRD.po = panelMesh(300, 420, .21, .3, [0, 0, 0], FLAT, { id: 'desk.po', glow: .1 }); BRD.po.position.set(10.4, DY + .02, -2.55); BRD.po.visible = false; ANCH['desk.po'] = V3(10.86, DY + .02, -2.42); hit('desk.po', 10.75, DY, -2.7, 11.15, DY + .08, -2.3);
+    BRD.po = panelMesh(300, 420, .26, .37, [0, 0, 0], FLAT, { id: 'desk.po', glow: .1 }); BRD.po.position.set(10.4, DY + .02, -2.55); BRD.po.visible = false; ANCH['desk.po'] = V3(10.86, DY + .02, -2.42); hit('desk.po', 10.75, DY, -2.7, 11.15, DY + .08, -2.3);
     /* the credenza: glass onto other seats' material */
     const CRX0 = 9.0, CRX1 = 12.2, CRZ0 = -7.75, CRZ1 = -7.15;
     box('oak', CRX0, DECK, CRZ0, CRX1, DECK + .12, CRZ1, { tile: 1 }); box('oak', CRX0 - .02, DECK + .95, CRZ0 - .02, CRX1 + .02, DECK + 1.02, CRZ1 + .03, { tile: 1 }); box('oak', CRX0, DECK + .12, CRZ0, CRX0 + .05, DECK + .95, CRZ1, { tile: 1 }); box('oak', CRX1 - .05, DECK + .12, CRZ0, CRX1, DECK + .95, CRZ1, { tile: 1 }); box('oak', CRX0 + .05, DECK + .12, CRZ0, CRX1 - .05, DECK + .95, CRZ0 + .05, { tile: 1 }); box('oak', CRX0 + .05, DECK + .5, CRZ0 + .05, CRX1 - .05, DECK + .53, CRZ1 - .05, { tile: 1 });
@@ -1584,7 +1584,7 @@ document.addEventListener('keydown', e => {
       for (const it of items) {
         if (placed.length >= 15) break; if (placed.some(p => Math.abs(p.x - it.x) < 178 && Math.abs(p.y - it.y) < 46)) continue; placed.push(it);
         const cap = maq && !/^dept\.|board\./.test(it.f.id) ? 'PROPOSED' : it.f.cap;
-        out.push('<div class="chip ' + (S.layers.real ? cap : '') + '" style="left:' + Math.round(it.x) + 'px;top:' + Math.round(it.y) + 'px">' + (S.layers.real ? '<b>' + CAPTXT[cap] + ' · NO AI REQUIRED</b>' : '') + esc(it.f.name) + (S.layers.know ? '<br><span class="sw k-' + it.f.k + '"></span>' + it.f.k + ' · ' + esc(String(it.f.src).split(' · ')[0].slice(0, 46)) : '') + '</div>');
+        out.push('<div class="chip ' + (S.layers.real ? cap : '') + '" style="left:' + Math.round(it.x) + 'px;top:' + Math.round(it.y - 46) + 'px">' + (S.layers.real ? '<b>' + CAPTXT[cap] + ' · NO AI REQUIRED</b>' : '') + esc(it.f.name) + (S.layers.know ? '<br><span class="sw k-' + it.f.k + '"></span>' + it.f.k + ' · ' + esc(String(it.f.src).split(' · ')[0].slice(0, 46)) : '') + '</div>');
       }
       chipsEl.innerHTML = out.join('');
     }
