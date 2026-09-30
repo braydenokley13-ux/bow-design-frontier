@@ -26,7 +26,8 @@ screen:
 4. ◆ **Absence has kinds** (C: withheld · unbought · unlived · untraced; B: four kinds of nothing; D:
    sealed / not yet; A: the Want; G: Cover). The truth grammar's single UNKNOWN splits.
 5. ◆ **A branch is a running world that Reality later grades** (A Fracture, D Seam, B Keeping, H1
-   lift, H2 Parting, C unbrick). Never merge; one-way arrival; stitched / pulled / torn / open.
+   lift, H2 Parting, C unbrick). Never merge; one-way arrival; graded (vocabulary fixed after the
+   critique to HELD · DIVERGED · IMPOSSIBLE · RE-DECLARE).
 6. ◆ **Every view is a witness of one canonical state** (G Concordance, C Place Manifest parity, F
    claim sets with no free numerals, B chrome only the Browser may draw). Direct (plain text) is
    the spine and the oracle; the AI agent and the screen reader read the same thing.
