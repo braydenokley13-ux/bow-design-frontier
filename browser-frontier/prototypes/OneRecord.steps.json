@@ -1,0 +1,239 @@
+[
+ {
+  "wait": 900,
+  "shot": "01-offer-threshold-nobody-holds-the-seat"
+ },
+ {
+  "click": "Redeem the Offer",
+  "shot": "02-called-the-phone-rings-from-the-seat"
+ },
+ {
+  "click": "Pick up",
+  "shot": "03-pick-up-is-enter-the-standing-line-rewrites"
+ },
+ {
+  "expectText": "Yours · 0:00 since pick-up"
+ },
+ {
+  "click": "Add $0.5M cash",
+  "shot": "04-the-paper-cash-offered-as-an-option"
+ },
+ {
+  "click": "Sign Boston",
+  "shot": "05-sent-denver-answers-on-denvers-clock"
+ },
+ {
+  "click": "Let Denver",
+  "shot": "06-denver-signed-the-league-has-it"
+ },
+ {
+  "click": "hours run",
+  "shot": "07-the-league-returns-it-naming-the-rule"
+ },
+ {
+  "expectText": "No act number spent"
+ },
+ {
+  "click": "Take the cash out",
+  "shot": "08-cash-out-ready-to-resend"
+ },
+ {
+  "click": "Sign again and resend"
+ },
+ {
+  "click": "Let Denver"
+ },
+ {
+  "click": "hours run",
+  "shot": "09-act-43-lands-three-records-no-god-view"
+ },
+ {
+  "expectText": "Act 43 is in the record"
+ },
+ {
+  "click": "Room",
+  "exact": true,
+  "shot": "10-the-room-hears-act-43"
+ },
+ {
+  "click": "Direct",
+  "exact": true,
+  "shot": "11-direct-says-it-in-words"
+ },
+ {
+  "click": "Table",
+  "exact": true,
+  "shot": "12-the-table-has-act-43-and-its-hash"
+ },
+ {
+  "click": "Do these agree?",
+  "shot": "13-do-these-agree-computed-from-the-pages"
+ },
+ {
+  "click": "Do these agree?"
+ },
+ {
+  "click": "Desk",
+  "exact": true
+ },
+ {
+  "click": "Ask what happened",
+  "shot": "14-a-door-named-by-its-question-asked-as-an-observer"
+ },
+ {
+  "click": "Keep a branch: Holiday stays",
+  "shot": "15-a-branch-kept-hindsight-stated"
+ },
+ {
+  "click": "Why is payroll",
+  "shot": "16-why-traced-to-recorded-acts"
+ },
+ {
+  "open2": "OneRecord.html#s=boston.year-two&at=43&h=a79682bd&b=main&seat=gm&view=table",
+  "shot": "17-second-client-same-hash-a-viewpoint"
+ },
+ {
+  "expectText": "Address checked: act 43"
+ },
+ {
+  "click": "Room",
+  "exact": true,
+  "shot": "18-second-client-the-room-from-outside"
+ },
+ {
+  "use": 0
+ },
+ {
+  "click": "Desk",
+  "exact": true
+ },
+ {
+  "click": "Do these agree?",
+  "shot": "19-agreement-across-two-windows"
+ },
+ {
+  "click": "Do these agree?"
+ },
+ {
+  "click": "Write my standing orders",
+  "shot": "20-standing-orders-you-write"
+ },
+ {
+  "click": "Put the phone down for 14 days",
+  "shot": "21-a-blank-clause-is-refused"
+ },
+ {
+  "click": "Clause 2, if Denver asks for a second"
+ },
+ {
+  "click": "Clause 2, then accept"
+ },
+ {
+  "click": "Put clause 2 in force",
+  "shot": "22-clause-2-written-and-in-force"
+ },
+ {
+  "click": "Put the phone down for 14 days",
+  "shot": "23-away-the-world-runs-orders-answer"
+ },
+ {
+  "expectText": "not by you"
+ },
+ {
+  "click": "Table",
+  "exact": true
+ },
+ {
+  "click": "Record",
+  "exact": true,
+  "shot": "24-the-table-stamps-the-order-not-you"
+ },
+ {
+  "use": 1,
+  "shot": "25-second-client-hears-the-away"
+ },
+ {
+  "use": 0
+ },
+ {
+  "click": "Desk",
+  "exact": true
+ },
+ {
+  "click": "Open BOW, 14 days later",
+  "shot": "26-the-round-stop-1-the-seat-diff"
+ },
+ {
+  "expectText": "2 stops"
+ },
+ {
+  "click": "Pass"
+ },
+ {
+  "click": "Next stop",
+  "shot": "27-the-round-stop-2-the-seam"
+ },
+ {
+  "expectText": "RE-DECLARE"
+ },
+ {
+  "click": "Keep the branch"
+ },
+ {
+  "click": "Finish the Round",
+  "shot": "28-level-with-the-record"
+ },
+ {
+  "expectText": "Level with the record"
+ },
+ {
+  "reload": true,
+  "shot": "29-reload-restores-the-address"
+ },
+ {
+  "click": "Lift an act out"
+ },
+ {
+  "click": "Lift out act 43",
+  "shot": "30-lift-act-43-the-present-re-forms"
+ },
+ {
+  "click": "Put it back",
+  "shot": "31-put-back-the-hash-matches-the-record"
+ },
+ {
+  "expectText": "The World is the record"
+ },
+ {
+  "click": "Lift out act 43"
+ },
+ {
+  "click": "Keep it as a fork",
+  "shot": "32-kept-as-a-fork-own-ink-closed-lockfile"
+ },
+ {
+  "expectText": "cut with hindsight"
+ },
+ {
+  "click": "Return to the record",
+  "shot": "33-return-to-the-record-the-fork-stays"
+ },
+ {
+  "click": "Open the fork by its address",
+  "shot": "34-the-fork-reopened-by-its-address"
+ },
+ {
+  "click": "Return to the record"
+ },
+ {
+  "click": "How do we know?",
+  "shot": "35-how-do-we-know"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "click": "What’s real?",
+  "shot": "36-whats-real"
+ }
+]

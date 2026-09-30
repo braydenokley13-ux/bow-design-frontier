@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reality City · Midtown</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./_shared/vendor/three/three.module.min.js", "three/addons/": "./_shared/vendor/three/addons/" } }</script>
+<style>
+:root{
+--ink:#1c2420;--paper:#f6f1e3;--paper2:#ece5d0;--mute:#4a524b;--hair:#cbc4ac;--tone:rgba(28,36,32,.16);
+--branch:#ad3517;--bpaper:#fbede8;
+--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--mono:'IBM Plex Mono','Courier New',monospace;
+--gc:#3a3a2f;--gp:#f6f1e3;--gb:#e4ddc6;--gp2:#efe8d3;
+--sheetw:minmax(440px,36vw);
+}
+body[data-g=front]{--gc:#3a3a2f;--gp:#f6f1e3;--gb:#e4ddc6;--gp2:#efe8d3}
+body[data-g=club]{--gc:#1e6a3e;--gp:#f7f8ef;--gb:#dde5d4;--gp2:#eaf0df}
+body[data-g=arena]{--gc:#25665f;--gp:#f4f3e8;--gb:#d5dcd0;--gp2:#e6eadc}
+body[data-g=transit]{--gc:#3b4658;--gp:#eef0ef;--gb:#cfd4d6;--gp2:#dfe3e3}
+body[data-g=league]{--gc:#55534f;--gp:#efeeea;--gb:#d3d1ca;--gp2:#e2e0d9}
+body[data-g=hood]{--gc:#7d5f1c;--gp:#f8f1dc;--gb:#e0d5b3;--gp2:#f0e6c7}
+body[data-g=city]{--gc:#6a3b2b;--gp:#f5eee6;--gb:#dccfc3;--gp2:#ebdfd2}
+body[data-g=place]{--gc:#4a4a44;--gp:#faf8f0;--gb:#e0dccf;--gp2:#efece0}
+body.branch{--gc:var(--branch)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{font:15px/1.4 var(--serif);color:var(--ink);background:var(--gb);-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+h1,h2,h3,h4,p,ul,ol{margin:0}ul,ol{padding:0;list-style:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--branch);outline-offset:2px;box-shadow:0 0 0 2px #fff}
+#top{grid-row:1}#clocks{grid-row:2}#standing{grid-row:3}#main{grid-row:4}#tabs{grid-row:5}#foot{grid-row:6}
+#app{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto minmax(0,1fr) auto auto;height:100vh;height:100dvh;overflow:clip}
+#top{display:flex;align-items:center;gap:10px;padding:3px 12px;flex-wrap:wrap;background:var(--gp);border-bottom:2px solid var(--gc);min-height:38px}
+#top .ttl{font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+#addr{font:12px var(--mono);color:var(--mute);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tg{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;min-width:0}
+.tb{min-height:34px;padding:3px 10px;border:1.5px solid var(--ink);background:var(--paper);font:600 12px var(--mono);cursor:pointer}
+.tb[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+#clocks{display:flex;gap:16px;padding:2px 12px;background:var(--paper2);border-bottom:1px solid var(--hair);font:11px/1.3 var(--mono);color:var(--mute);white-space:nowrap;overflow:hidden}
+#clocks b{color:var(--ink);font-weight:600}
+#clocks .cl{overflow:hidden;text-overflow:ellipsis}
+#standing{position:relative;padding:5px 14px 6px;background:var(--gp);border-left:10px solid var(--gc);border-bottom:1px solid var(--hair);display:flex;gap:14px;align-items:flex-start;min-height:58px}
+#standing .sb{flex:1;min-width:0}
+#standing .s1{font:600 11px/1.1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gc);margin-bottom:2px}
+#standing .s2{font-size:17px;line-height:1.2;font-weight:600}
+#standing .s3{font:12.5px/1.35 var(--mono);margin-top:1px}
+#standing .s3 b{font-weight:600}
+.gt{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--gc);color:var(--gc);padding:3px 8px;white-space:nowrap;background:var(--gp);align-self:flex-start}
+#main{display:grid;grid-template-columns:minmax(0,1fr) var(--sheetw);min-height:0;overflow:clip}
+#left{display:flex;flex-direction:column;min-height:0;min-width:0;border-right:1px solid var(--hair)}
+#mapwrap{position:relative;flex:1;min-height:0;background:#f1ecdc;overflow:hidden}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#ov{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#mk{position:absolute;inset:0;pointer-events:none}
+#mk .mk{position:absolute;pointer-events:auto;transform:translate(-50%,-100%);min-height:30px;padding:2px 8px;border:1.5px solid var(--ink);background:var(--paper);font:600 11px/1.15 var(--mono);cursor:pointer;white-space:nowrap;text-align:left}
+#mk .mk small{display:block;font:400 10px var(--mono);color:var(--mute)}
+#mk .mk.au{background:transparent;border-style:dashed;background:rgba(246,241,227,.86)}
+#mk .mk.un{border-style:dashed;color:var(--mute);background:rgba(246,241,227,.86)}
+#mk .mk[aria-current=true]{outline:3px solid var(--gc);outline-offset:1px}
+#views{position:absolute;left:8px;top:8px}
+#views span{font:11px var(--mono);background:rgba(246,241,227,.9);padding:2px 5px}
+#mapnote{position:absolute;left:8px;bottom:6px;right:8px;font:11px/1.3 var(--mono);color:var(--mute);background:rgba(246,241,227,.88);padding:2px 6px;pointer-events:none}
+#legend{display:flex;flex-wrap:wrap;gap:4px 10px;padding:3px 10px;border-top:1px solid var(--hair);background:var(--gp);font:10.5px var(--mono);color:var(--mute);align-items:center}
+#legend .lg{display:inline-flex;align-items:center;gap:4px}
+#legend .sw{display:inline-block;width:26px;height:12px;border:1.5px solid var(--ink)}
+#band{flex:0 0 auto;background:var(--gp);border-top:2px solid var(--ink);display:flex;flex-direction:column;max-height:34%}
+#bandbody{height:150px;overflow:auto;padding:2px 12px 6px;font-size:13px}
+#band.closed #bandbody{display:none}
+#sheetwrap{display:flex;min-width:0;min-height:0;background:var(--gb)}
+#edges{display:flex;flex:0 0 auto}
+#sheet{flex:1;min-width:0;min-height:0;background:var(--gp);border-left:6px solid var(--gc);display:flex;flex-direction:column;margin:8px 8px 8px 0}
+body.branch #sheet{border:2px solid var(--branch);border-left-width:8px}
+.sh-h{flex:0 0 auto;padding:6px 10px 4px;border-bottom:1px solid var(--hair);display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.sh-h h2{font:600 12.5px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.sh-h .rel{font:11px/1.3 var(--mono);color:var(--mute);margin-top:2px}
+#ribbon{flex:0 0 auto;padding:3px 10px 4px;border-bottom:1px solid var(--hair);background:var(--gp2);font:11.5px/1.35 var(--mono)}
+#ribbon .rp{display:flex;flex-wrap:wrap;gap:2px 6px;align-items:baseline}
+#ribbon .rb{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px}#ribbon .rb .btn{min-height:32px;padding:1px 8px;font-size:10.5px}
+#ribbon .rs{white-space:nowrap}
+#ribbon .ra{color:var(--mute);font-weight:600;margin-right:2px}
+.sh-b{flex:1 1 auto;min-height:0;overflow:auto;padding:6px 10px 6px}
+.sh-b h3{font:600 12px/1.2 var(--mono);letter-spacing:.04em;text-transform:uppercase;margin:8px 0 3px;border-bottom:1.5px solid var(--ink);padding-bottom:1px}
+.sh-b h3:first-child{margin-top:0}
+.sh-b p{margin:0 0 5px}
+.small,.sh-b .small{font:11.5px/1.35 var(--mono);color:var(--mute)}
+.lr{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:1px solid var(--hair);padding:2px 0;font-size:13.5px;min-height:26px}
+.lr .l{font:600 11px var(--mono);letter-spacing:.03em;flex:0 0 auto;max-width:44%}
+.lr .r{text-align:right;min-width:0}
+#hinges{flex:0 0 auto;border-top:1.5px solid var(--ink);padding:4px 10px 6px;background:var(--gp2)}
+#hinges .hh{font:600 10.5px var(--mono);letter-spacing:.08em;color:var(--mute);margin-bottom:3px}
+#hinges .hg{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.hg button{min-height:46px;text-align:left;border:1.5px solid var(--ink);background:var(--paper);padding:3px 7px;cursor:pointer;font:600 11.5px/1.15 var(--mono);letter-spacing:.03em;border-radius:0 3px 3px 0;border-left-width:5px}
+.hg button small{display:block;font:400 11px/1.2 var(--serif);letter-spacing:0;color:var(--mute);margin-top:1px}
+.hg button:hover{background:var(--gp)}
+.hg button.no{border-style:dashed;color:var(--mute)}
+.hg button.ref{border-left-style:double;border-left-width:6px}
+.edge{flex:0 0 40px;width:40px;position:relative;border:1.5px solid var(--ink);border-left:6px solid var(--gc);border-right-width:0;background:var(--gp2);padding:0;cursor:pointer;overflow:hidden;margin:8px 0}
+.edge .et,.edge .er{position:absolute;left:4px;right:2px;writing-mode:vertical-rl;transform:rotate(180deg);font:600 10.5px/1.15 var(--mono);text-transform:uppercase;letter-spacing:.04em;text-align:left;overflow:hidden;white-space:nowrap}
+.edge .er{font-weight:400;text-transform:none;letter-spacing:0;bottom:4px;top:auto;max-height:55%}
+.edge .et{top:4px;bottom:auto;height:42%}
+.btn{min-height:40px;padding:5px 12px;border:2px solid var(--ink);background:var(--paper);font:600 12px/1.15 var(--mono);letter-spacing:.03em;text-transform:uppercase;cursor:pointer;text-align:center;border-radius:2px}
+.btn:hover:not(:disabled){background:var(--paper2)}
+.btn.pri{background:var(--ink);color:var(--paper)}
+.btn.gc{background:var(--gc);color:#fff;border-color:var(--gc)}
+.btn:disabled{border-style:dashed;color:var(--mute);cursor:not-allowed;background:transparent}
+.btn[aria-pressed=true],.btn[aria-pressed=true]:hover:not(:disabled){background:var(--ink);color:var(--paper)}.btn[aria-pressed=true] small{color:inherit}
+.btn.sm{min-height:34px;padding:2px 9px;font-size:11px}
+.btn.br{border-color:var(--branch);color:var(--branch)}.btn.br.pri{background:var(--branch);color:#fff}
+.lk{background:none;border:0;padding:0;font:inherit;color:var(--gc);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:24px}
+.row{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0}
+/* truth grammar: texture, not colour alone */
+.vw{display:inline}
+.v{display:inline-block;padding:0 6px;font:600 .9em/1.35 var(--mono);border:1.5px solid var(--ink);white-space:nowrap}
+.v.wrap{white-space:normal}
+.k-OBSERVED{background:var(--ink);color:var(--paper)}
+.k-RECORDED{background:var(--ink);color:var(--paper);box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 3.5px var(--paper)}
+.k-AUTHORED{background:transparent;border-style:dashed}
+.k-COMPUTED{background:var(--tone);border-color:transparent}
+.k-MODELED{background:repeating-linear-gradient(135deg,rgba(28,36,32,.28) 0 1.5px,transparent 1.5px 5px)}
+.k-GENERATED{background-color:var(--paper);background-image:radial-gradient(circle,rgba(28,36,32,.75) .8px,transparent 1.1px);background-size:4px 4px}
+.k-UNKNOWN{background:transparent;border-style:dashed;border-color:var(--mute);color:var(--mute);font-weight:400}
+.k-PENCIL{background:var(--bpaper);border-color:var(--branch);color:var(--branch);border-style:dotted}
+.pv{display:none;font:10.5px/1.25 var(--mono);color:var(--mute);margin:1px 0 2px}
+body.know .pv{display:block}
+body.know .v{outline:1px dotted var(--branch);outline-offset:1px}
+.cap{display:none;margin:3px 0;font:600 10.5px/1.25 var(--mono);padding:2px 6px;border:1.5px solid var(--ink);background:var(--paper);text-align:left}
+.cap small{display:block;font-weight:400;color:var(--mute)}
+body.real .cap{display:block}
+.cap.c-PROPOSED{border-style:solid}
+.cap.c-SPECULATIVE{background:repeating-linear-gradient(135deg,#f4e5c8 0 3px,#faf3e2 3px 7px);border-style:dashed}
+.cap.c-REAL{background:var(--ink);color:var(--paper)}.cap.c-REAL small{color:#d8d3c0}
+.cap.in{position:absolute;left:8px;top:44px;z-index:3;max-width:60%}
+/* pencil / branch */
+.pen{border:1.5px dashed var(--branch);background:var(--bpaper);padding:5px 8px;margin:6px 0}
+.pen label{display:flex;justify-content:space-between;font:12px var(--mono);gap:8px}
+.pen input[type=range]{width:100%}
+.fork{border:2px solid var(--branch);background:var(--bpaper);padding:5px 8px;margin:6px 0}
+.fork b.st{font:600 11px var(--mono);letter-spacing:.06em;color:var(--branch);text-transform:uppercase}
+table.cmp{border-collapse:collapse;width:100%;font-size:13px;margin:4px 0}
+table.cmp th{font:600 11px var(--mono);text-align:left;padding:2px 4px;border-bottom:1.5px solid var(--ink)}
+table.cmp td{padding:2px 4px;border-bottom:1px solid var(--hair)}
+.tight{border:2px solid var(--ink);padding:3px 8px;font:600 12px var(--mono);margin:4px 0;background:var(--tone)}
+.form{border:1.5px solid var(--ink);margin:4px 0}
+.form .fl{display:grid;grid-template-columns:70px 1fr auto;gap:6px;align-items:start;padding:3px 6px;border-bottom:1px solid var(--hair);font-size:13px}
+.form .fl:last-child{border-bottom:0}
+.form .fl .tag{font:600 10.5px var(--mono);letter-spacing:.04em}
+.form .fl.held{background:var(--gp2)}
+.form .fl.struck{color:var(--mute);text-decoration:line-through}
+.kn{display:flex;gap:10px;flex-wrap:wrap;font:11.5px var(--mono);margin:3px 0}
+.kn .on{font-weight:600}.kn .off{color:var(--mute)}
+.ref-box{border:2px solid var(--ink);background:var(--paper);padding:5px 8px;margin:6px 0;font-size:13.5px}
+.ref-box b{font:600 11px var(--mono);letter-spacing:.05em}
+.why{font-size:13px}
+.why li{margin:2px 0;padding-left:8px;border-left:2px solid var(--hair)}
+.why ul{margin-left:12px}
+.rec li{border-bottom:1px solid var(--hair);padding:2px 0;font-size:12.5px}
+.rec li small{display:block;font:10.5px var(--mono);color:var(--mute)}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.cols3 h4{font:600 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;border-bottom:1.5px solid var(--ink)}
+.sitepick{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:4px 0}
+.sitepick .btn{text-align:left;text-transform:none;font-size:11.5px;padding:3px 7px;min-height:44px}
+.sitepick .btn small{display:block;font:400 10.5px var(--mono);color:var(--mute)}.sitepick .btn[aria-pressed=true] small{color:inherit}
+.test{display:grid;grid-template-columns:78px 62px 1fr;gap:6px;align-items:start;padding:3px 0;border-bottom:1px solid var(--hair);font-size:13px}
+.test .tn{font:600 10.5px var(--mono);letter-spacing:.04em}
+.verd{font:600 10.5px var(--mono);border:1.5px solid var(--ink);padding:0 4px;text-align:center}
+.verd.pass{background:var(--ink);color:var(--paper)}.verd.warn{border-style:double;border-width:3px}.verd.fail{border-style:dashed}
+input.ask{width:100%;min-height:40px;padding:4px 8px;border:2px solid var(--ink);background:#fff;font:14px var(--serif)}
+#tabs{display:none}
+/* narrow */
+@media (max-width:1240px){:root{--sheetw:minmax(400px,42vw)}}
+@media (max-height:700px){#bandbody{height:84px}#standing{min-height:0}#standing .s2{font-size:15px}.sh-b{padding:4px 8px}}
+@media (max-width:760px){
+ :root{--sheetw:1fr}
+ body{font-size:14.5px}
+ #top{gap:2px 8px;padding:3px 8px}#top .ttl{font-size:11px}#addr{flex:1 1 100%;order:3;font-size:10.5px}.tg{flex:1 0 100%;order:2;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding-bottom:2px}.tb{flex:0 0 auto;min-height:38px}
+ #clocks{display:none}
+ #standing{padding:3px 8px 4px;min-height:0;border-left-width:6px}#standing .s2{font-size:14px}#standing .s3{font-size:11px}#standing .gt{display:none}
+ #main{display:block;position:relative}
+ #left,#sheetwrap{position:absolute;inset:0;border:0}
+ body[data-tab=map] #sheetwrap{display:none}body[data-tab=sheet] #left{display:none}body[data-tab=rec] #sheetwrap{display:none}
+ body[data-tab=rec] #mapwrap,body[data-tab=rec] #legend{display:none}
+ .sh-h .btn{min-height:36px}
+ body[data-tab=rec] #band{max-height:none;flex:1}body[data-tab=rec] #bandbody{height:auto;flex:1}body[data-tab=rec] #band.closed #bandbody{display:block}
+ body[data-tab=map] #band{display:none}
+ #edges{display:none}#sheet{margin:0;border-left-width:6px}
+ .hg button{min-height:42px;font-size:11px}.hg button small{font-size:10.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+ #tabs{display:flex;gap:0;border-top:2px solid var(--ink);background:var(--paper)}
+ #tabs button{flex:1;min-height:44px;border:0;border-right:1px solid var(--ink);background:var(--paper);font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+ #tabs button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+ #foot{display:none}
+ .cols3{grid-template-columns:1fr}
+ .test{grid-template-columns:70px 56px 1fr}
+ #legend{font-size:9.5px;gap:2px 6px}#legend .sw{width:18px}
+}
+#foot{padding:3px 12px;background:var(--gp);border-top:1px solid var(--hair);font:11.5px var(--mono);color:var(--mute)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body data-g="front" data-tab="sheet">
+<div id="app">
+<header id="top">
+  <span class="ttl">Reality City · Midtown</span>
+  <span id="addr" aria-label="Address"></span>
+  <span class="tg" role="group" aria-label="View, records, layers">
+    <button type="button" class="tb" id="vL1" aria-pressed="true">L1 plan</button>
+    <button type="button" class="tb" id="vL3" aria-pressed="false">L3 massing</button>
+    <button type="button" class="tb" data-band="record" aria-pressed="false">Record</button>
+    <button type="button" class="tb" data-band="three" aria-pressed="false">Three records</button>
+    <button type="button" class="tb" id="bKnow" aria-pressed="false">How do we know?</button>
+    <button type="button" class="tb" id="bReal" aria-pressed="false">What's real?</button>
+  </span>
+</header>
+<div id="clocks"></div>
+<section id="standing" aria-label="Standing line"></section>
+<main id="main">
+  <div id="left">
+    <div id="mapwrap">
+      <canvas id="cv" aria-label="Map of Midtown Manhattan: 4,142 recorded building footprints. Everything on the map is also in the sheet and the Direct list."></canvas>
+      <svg id="ov" aria-hidden="true"></svg>
+      <div id="mk"></div>
+      <div id="views"><span>L1 / L3 change the camera, never the subject</span></div>
+      <div class="cap c-PROPOSED in" id="capMap">PROPOSED PLATFORM CAPABILITY<small>NO AI · footprints to prisms is arithmetic. Nothing here is REAL CURRENT PRODUCT: BOW has no map code today.</small></div>
+      <div id="mapnote"></div>
+    </div>
+    <div id="legend"></div>
+    <div id="band" class="closed">
+      
+      <div id="bandbody"></div>
+    </div>
+  </div>
+  <div id="sheetwrap"><div id="edges"></div><section id="sheet" aria-label="Sheet"></section></div>
+</main>
+<nav id="tabs" aria-label="Panels"><button type="button" data-tab="map" aria-pressed="false">Map</button><button type="button" data-tab="sheet" aria-pressed="true">Sheet</button><button type="button" data-tab="rec" aria-pressed="false">Record</button></nav>
+<footer id="foot">PROTOTYPE · the grammar on a Reality City · data: NYC OTI footprints (RECORDED, fetched from _shared/nyc) + a dated PLUTO/FacDB excerpt · BOW things are AUTHORED and say so</footer>
+</div>
+<div id="live" class="sr" aria-live="polite"></div>
+<script>
+const LOTS=[["1012620009","59 WEST 46 STREET",5,"H3","",1906,100678,11850,40.757338,-73.981129],["1012620017","45 WEST 46 STREET",4,"K4","",1920,7000,2008,40.756979,-73.980689],["1012620018","41 WEST 46 STREET",4,"C7","",1920,7216,2008,40.756926,-73.980566],["1012620019","39 WEST 46 STREET",4,"S9","",1920,6830,1975,40.756902,-73.980501],["1012620020","37 WEST 46 STREET",4,"K4","",1920,10785,2600,40.756869,-73.980433],["1012620021","33 WEST 46 STREET",5,"O6","",1915,34553,4141,40.756825,-73.980324],["1012620022","WEST 46 STREET",11,"V1","",0,0,40,40.756926,-73.980339],["1012620023","31 WEST 46 STREET",4,"K4","",1920,8400,2092,40.756781,-73.98022],["1012620024","21 WEST 46 STREET",5,"O6","",1929,75008,6719,40.756693,-73.980014],["1012620027","15 WEST 46 STREET",11,"V1","",0,0,3406,40.756613,-73.979823],["1012620029","13 WEST 46 STREET",11,"V1","",0,0,2161,40.756575,-73.979736],["1012620030","11 WEST 46 STREET",11,"V1","",0,0,2151,40.756548,-73.979668],["1012620031","7 WEST 46 STREET",11,"V1","",0,0,2152,40.75649,-73.979534],["1012620032","5 WEST 46 STREET",11,"V1","",0,0,2152,40.756462,-73.979466],["1012620033","3 WEST 46 STREET",11,"V1","",0,0,2152,40.756432,-73.979397],["1012620034","562 5 AVENUE",11,"V1","",0,0,3575,40.756292,-73.979278],["1012620035","564 5 AVENUE",11,"V1","",0,0,4882,40.756355,-73.979162],["1012620037","570 5TH AVENUE",11,"V1","",0,0,51459,40.756449,-73.979126],["1012620038","572 5 AVENUE",11,"V1","",0,0,2500,40.756501,-73.97909],["1012620039","574 5 AVENUE",11,"V1","",0,0,2500,40.756564,-73.979043],["1012620041","576 5 AVENUE",11,"V1","",0,0,5041,40.756657,-73.978975],["1012620042","2 WEST 47 STREET",11,"V1","",0,0,8610,40.75672,-73.979321],["1012620045","10 WEST 47 STREET",11,"V1","",0,0,6451,40.756822,-73.979559],["1012620048","16 WEST 47 STREET",5,"O6","",1924,110553,10041,40.756932,-73.979819],["1012620052","26 WEST 47 STREET",5,"O6","",1920,12600,2008,40.757011,-73.980007],["1012620053","28 WEST 47 STREET",4,"S9","",1920,7090,2008,40.757036,-73.980064],["1012620054","30 WEST 47 STREET",5,"O6","",1957,55613,6025,40.757091,-73.980194],["1012620056","36 WEST 47 STREET",5,"O6","",1924,97785,8033,40.757184,-73.980418],["1012620063","54 WEST 47 STREET",5,"O5","",1925,13012,2111,40.757396,-73.980916],["1012620072","74 WEST 47 STREET",5,"K2","",1930,4920,1330,40.757706,-73.981526],["1012620073","76 WEST 47 STREET",5,"K1","",1965,1645,1330,40.757731,-73.981584],["1012620074","78 WEST 47 STREET",4,"K4","",1920,4350,1330,40.757756,-73.981642],["1012620075","1192 AVENUE OF THE AMERICAS",5,"K2","",1930,4620,1540,40.757783,-73.98171],["1012620076","1190 AVENUE OF THE AMERICAS",4,"K4","",1920,5600,1580,40.757638,-73.981703],["1012620077","1188 AVENUE OF THE AMERICAS",5,"K2","",1920,6182,1887,40.757577,-73.981714],["1012620117","43 WEST 46 STREET",5,"O6","",1920,9020,2008,40.756954,-73.980628],["1012620123","29 WEST 46 STREET",4,"S9","",1920,11490,2092,40.756753,-73.980151],["1012620127","19 WEST 46 STREET",4,"S9","",1920,4030,1230,40.756644,-73.979895],["1012620130","9 WEST 46 STREET",11,"V1","",0,0,2151,40.756517,-73.979599],["1007810001","4 PENN PLAZA",7,"U6","X",0,0,237724,40.750494,-73.993395],["1007810002","392 7 AVENUE",7,"U6","X",0,0,113695,40.749981,-73.992132],["1007850001","500 8 AVENUE",5,"O6","P",1922,243350,19027,40.753011,-73.992435],["1009170006","207 EAST 36 STREET",8,"Z3","X",1930,109635,17380,40.747036,-73.976365],["1009170017","225 EAST 36 STREET",3,"D4","",1963,204638,14275,40.746652,-73.975773],["1009170021","237 EAST 36 STREET",10,"G7","",0,0,5925,40.746523,-73.975455],["1009170032","2 AVENUE",11,"V9","",0,0,2247,40.746811,-73.975773],["1009170034","675 2 AVENUE",11,"V7","C",0,0,50075,40.746863,-73.975607],["1009170057","555 3 AVENUE",4,"S3","",1920,7278,2467,40.747335,-73.976545],["1009170058","553 3 AVENUE",4,"C7","",1900,22458,4933,40.747245,-73.97661],["1012690020","21 WEST 53 STREET",8,"P7","X",1963,355600,55350,40.761276,-73.976742]];
+const FAC=[["01821972","GED P2G-ALT ED COMPLEX HUB - AHSEP","GED-ALTERNATIVE HIGH SCHOOL EQUIVALENCY PREP PROGRAMS","GED AND ALTERNATIVE HIGH SCHOOL EQUIVALENCY","NYC Department of Education","Public","1014421","500 8 AVENUE","1007850001",40.753018,-73.992442],["060237a4","NY SCH OF COMPUTER TECHNOLOGY","LICENSED PRIVATE SCHOOLS","PROPRIETARY SCHOOLS","Ny Sch Of Computer Technology","Non-public","1014421","500 EIGHTH AVENUE","1007850001",40.753018,-73.992442],["0c479279","U.S. GENERAL POST OFFICE","STATE HISTORIC PLACE","HISTORICAL SITES","","","1084820","","1007557501",40.751529,-73.995838],["1ca6477b","C YARD","LIRR YARD","RAIL YARDS AND MAINTENANCE","Metropolitan Transportation Authority","Public","1084820","","1007557501",40.751534,-73.99589],["3edeca99","NEW AGE TRAINING","REGISTERED BUSINESS SCHOOLS","PROPRIETARY SCHOOLS","New Age Training","Non-public","1014421","500 8 AVENUE","1007850001",40.753018,-73.992442],["49eb0abf","ARTHUR INSTITUTE","REGISTERED BUSINESS SCHOOLS","PROPRIETARY SCHOOLS","Arthur Institute","Non-public","1014421","500 8 AVENUE","1007850001",40.753018,-73.992442],["59320be6","STAPLES ELECTRONICS DROP-OFF SITE","ELECTRONICS","DSNY DROP-OFF FACILITY","Staples","","1014421","500 8 AVE","1007850001",40.753011,-73.992435],["5e8e22cd","AMLOTUS","LICENSED PRIVATE SCHOOLS","PROPRIETARY SCHOOLS","Amlotus","Non-public","1014421","500 8 AVENUE","1007850001",40.753018,-73.992442],["63009f14","35TH STREET HEALTH CENTER","DIAGNOSTIC AND TREATMENT CENTER EXTENSION CLINIC","HOSPITALS AND CLINICS","Damian Family Care Centers, Inc.","Non-public","1014421","500 EIGHTH AVENUE","1007850001",40.753018,-73.992442],["73bacc0b","NEW YORK MEDICAL CAREER TRAINING CEN","LICENSED PRIVATE SCHOOLS","PROPRIETARY SCHOOLS","New York Medical Career Training Center","Non-public","1014421","500 EIGHTH AVENUE","1007850001",40.753018,-73.992442],["825d6971","D2GB CPAC AT PEARL STUDIOS","SUMMER ONLY FEEDING SITE","CHILD NUTRITION","D2gb Children Performing Aerts Camp At Pearl Studios","Non-public","1014421","500 8 AVENUE","1007850001",40.753018,-73.992442],["85c9326c","42ND STREET WORKSHOP, INC.","THEATER","OTHER CULTURAL INSTITUTIONS","42nd Street Workshop, Inc.","Non-public","1084820","421 EIGHTH AVENUE","1007557501",40.751542,-73.995891],["a4c16f30","NYC DATA SCIENCE ACADEMY","LICENSED PRIVATE SCHOOLS","PROPRIETARY SCHOOLS","Nyc Data Science Academy","Non-public","1014421","500 EIGHTH AVENUE","1007850001",40.753018,-73.992442],["ac887a11","NEW AGE TRAINING","LICENSED PRIVATE SCHOOLS","PROPRIETARY SCHOOLS","New Age Training","Non-public","1014421","500 8 AVENUE","1007850001",40.753018,-73.992442],["b750e243","MEGA SCIENCE OF TECHNOLOGY LEARN ENG","LICENSED PRIVATE SCHOOLS","PROPRIETARY SCHOOLS","Mega Science Of Technology Learn English Language","Non-public","1014421","500 8 AVENUE","1007850001",40.753018,-73.992442],["b7d74842","AMERICAN CAREER CENTER INC","REGISTERED BUSINESS SCHOOLS","PROPRIETARY SCHOOLS","American Career Center Inc","Non-public","1014421","500 8 AVENUE","1007850001",40.753018,-73.992442],["b886ac0b","MUSEUM OF MODERN ART","MUSEUM","MUSEUMS","Museum of Modern Art","Non-public","1081128","11 WEST 53 STREET","1012690020",40.761194,-73.977013],["ba61db7e","GED-P2G-ALTERT ED COMPLEX-AHSEP","GED-ALTERNATIVE HIGH SCHOOL EQUIVALENCY PREP PROGRAMS","GED AND ALTERNATIVE HIGH SCHOOL EQUIVALENCY","NYC Department of Education","Public","1014421","269 WEST 35 STREET","1007850001",40.753018,-73.992442],["be0a24a0","AMERICAN CAREER CENTER, INC.","LICENSED PRIVATE SCHOOLS","PROPRIETARY SCHOOLS","American Career Center, Inc.","Non-public","1014421","500 8 AVENUE","1007850001",40.753018,-73.992442],["ce7cf06c","TCY TECHNOLOGIES, INC.","REGISTERED BUSINESS SCHOOLS","PROPRIETARY SCHOOLS","Tcy Technologies, Inc.","Non-public","1014421","500 8 AVENUE","1007850001",40.753018,-73.992442],["d0d480b7","NE 8 AVE & W 35 ST FOOD DROP-OFF SITE","COMPOST","DSNY DROP-OFF FACILITY","Department of Sanitation","","1014421","","1007850001",40.752898,-73.992624],["d3037100","MUSEUM OF MODERN ART (MOMA)","PUBLIC MUSEUMS AND SITES","MUSEUMS","Museum Of Modern Art (The)","Non-public","1081128","11 WEST 53 STREET","1012690020",40.761194,-73.977013],["fc532cb4","NEW YORK INTERNATIONAL BEAUTY SCHOOL","LICENSED PRIVATE SCHOOLS","PROPRIETARY SCHOOLS","New York International Beauty School, Ltd.","Non-public","1014421","500 8 AVENUE","1007850001",40.753018,-73.992442],["M050068","TWO PENN PLAZA/MADISON SQUARE GARDEN","PRIVATELY OWNED PUBLIC SPACE","PRIVATELY OWNED PUBLIC SPACE","Not Available","Non-public","1083026","2 PENNSYLVANIA PLAZA","1007810002",40.749981,-73.992188],["M050108","MUSEUM OF MODERN ART","PRIVATELY OWNED PUBLIC SPACE","PRIVATELY OWNED PUBLIC SPACE","Not Available","Non-public","1081128","11 WEST 53 STREET","1012690020",40.761194,-73.977013]];
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/OrbitControls.js';
+THREE.ColorManagement.enabled=false;
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=n=>Number(n).toLocaleString('en-US');
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const LAT0=40.752,LON0=-73.985,KX=Math.cos(LAT0*Math.PI/180)*111320,KY=110574,FT=0.3048;
+const proj=(lon,lat)=>[(lon-LON0)*KX,(lat-LAT0)*KY];
+const GRIDANG=29*Math.PI/180,AV=[Math.sin(GRIDANG),Math.cos(GRIDANG)],SV=[Math.cos(GRIDANG),-Math.sin(GRIDANG)];
+/* ================= geometry: RECORDED footprints -> COMPUTED prisms ================= */
+let B=[],BIN={},GRID=new Map(),TRI={roof:[],wall:[]};const CELL=40,TOL=1.6;
+const cellKey=(a,b)=>(a+100)*1000+(b+100);
+function segDist(p,a,b){const dx=b[0]-a[0],dy=b[1]-a[1];const l=dx*dx+dy*dy;if(!l)return Math.hypot(p[0]-a[0],p[1]-a[1]);let t=((p[0]-a[0])*dx+(p[1]-a[1])*dy)/l;t=Math.max(0,Math.min(1,t));return Math.hypot(p[0]-a[0]-t*dx,p[1]-a[1]-t*dy)}
+function dpOpen(P,t){const n=P.length,keep=new Uint8Array(n);keep[0]=keep[n-1]=1;const st=[[0,n-1]];while(st.length){const[a,b]=st.pop();let md=0,mi=-1;for(let i=a+1;i<b;i++){const d=segDist(P[i],P[a],P[b]);if(d>md){md=d;mi=i}}if(md>t&&mi>0){keep[mi]=1;st.push([a,mi],[mi,b])}}return P.filter((_,i)=>keep[i])}
+function ringS(r,t){let o=r.slice(0,-1);if(o.length<=4)return dedupe(o);let k=0,md=0;for(let i=1;i<o.length;i++){const d=(o[i][0]-o[0][0])**2+(o[i][1]-o[0][1])**2;if(d>md){md=d;k=i}}const A=dpOpen(o.slice(0,k+1),t),Bp=dpOpen(o.slice(k).concat([o[0]]),t);const res=dedupe(A.slice(0,-1).concat(Bp.slice(0,-1)));return res.length>=3?res:dedupe(o)}
+function dedupe(o){return o.filter((p,i)=>{const q=o[(i+1)%o.length];return Math.hypot(p[0]-q[0],p[1]-q[1])>0.05})}
+const sarea=r=>{let A=0;for(let i=0;i<r.length;i++){const p=r[i],q=r[(i+1)%r.length];A+=p[0]*q[1]-q[0]*p[1]}return A/2};
+function pip(x,y,r){let c=false;for(let i=0,j=r.length-1;i<r.length;j=i++){const a=r[i],b=r[j];if(((a[1]>y)!==(b[1]>y))&&(x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0]))c=!c}return c}
+function segI(a,b,c,d){const o=(p,q,r)=>(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]);return o(c,d,a)*o(c,d,b)<0&&o(a,b,c)*o(a,b,d)<0}
+function polyHit(A,Bq){for(let i=0;i<A.length;i++)for(let j=0;j<Bq.length;j++)if(segI(A[i],A[(i+1)%A.length],Bq[j],Bq[(j+1)%Bq.length]))return true;return pip(A[0][0],A[0][1],Bq)||pip(Bq[0][0],Bq[0][1],A)}
+const TONE=[0.83,0.79,0.70];
+let roofGeo,wallGeo,roofMesh,wallMesh,lineSeg,roofCol,wallCol;
+function buildCity(gj){
+  const rp=[],rn=[],rc=[],wp=[],wn=[],wc=[],lp=[];
+  for(const f of gj.features){
+    const pr=f.properties,h=parseFloat(pr.height_roof),unk=!(h>0),hM=unk?0:h*FT;
+    const yr=parseInt(pr.construction_year);
+    const b={i:B.length,bin:pr.bin,bbl:pr.base_bbl,hft:unk?null:h,hM,yr:yr>0?yr:null,rings:[],area:0,cx:0,cy:0,x0:1e9,y0:1e9,x1:-1e9,y1:-1e9,rv:[rp.length/3,0],wv:[wp.length/3,0]};
+    let sx=0,sy=0;
+    for(const poly of f.geometry.coordinates){
+      const rings=poly.map(r=>ringS(r.map(c=>proj(c[0],c[1])),TOL)).filter(r=>r.length>=3);
+      if(!rings.length)continue;
+      rings.forEach((r,ri)=>{const a=sarea(r);const want=ri===0?1:-1;if(a*want<0)r.reverse()});
+      const outer=rings[0],holes=rings.slice(1);
+      b.rings.push(rings);
+      const ao=Math.abs(sarea(outer));b.area+=ao;
+      let cx=0,cy=0;for(const p of outer){cx+=p[0];cy+=p[1]}sx+=cx/outer.length*ao;sy+=cy/outer.length*ao;
+      for(const p of outer){b.x0=Math.min(b.x0,p[0]);b.y0=Math.min(b.y0,p[1]);b.x1=Math.max(b.x1,p[0]);b.y1=Math.max(b.y1,p[1])}
+      const all=[outer,...holes].flat();
+      const faces=THREE.ShapeUtils.triangulateShape(outer.map(p=>new THREE.Vector2(p[0],p[1])),holes.map(h=>h.map(p=>new THREE.Vector2(p[0],p[1]))));
+      for(const fc of faces){for(const k of fc){rp.push(all[k][0],all[k][1],hM);rn.push(0,0,1);rc.push(...TONE)}TRI.roof.push(b.i)}
+      for(const r of rings){for(let i=0;i<r.length;i++){const p=r[i],q=r[(i+1)%r.length];lp.push(p[0],p[1],hM,q[0],q[1],hM);
+        if(hM>0){const dx=q[0]-p[0],dy=q[1]-p[1],l=Math.hypot(dx,dy)||1,nx=dy/l,ny=-dx/l;
+          for(const [x,y,z] of [[p[0],p[1],0],[q[0],q[1],0],[q[0],q[1],hM],[p[0],p[1],0],[q[0],q[1],hM],[p[0],p[1],hM]]){wp.push(x,y,z);wn.push(nx,ny,0);wc.push(...TONE)}
+          TRI.wall.push(b.i,b.i)}}}
+    }
+    b.cx=b.area?sx/b.area:0;b.cy=b.area?sy/b.area:0;b.rv[1]=rp.length/3-b.rv[0];b.wv[1]=wp.length/3-b.wv[0];
+    const i0=Math.floor(b.x0/CELL),i1=Math.floor(b.x1/CELL),j0=Math.floor(b.y0/CELL),j1=Math.floor(b.y1/CELL);
+    for(let a=i0;a<=i1;a++)for(let c=j0;c<=j1;c++){const k=cellKey(a,c);if(!GRID.has(k))GRID.set(k,[]);GRID.get(k).push(b.i)}
+    (BIN[b.bin]=BIN[b.bin]||[]).push(b.i);B.push(b);
+  }
+  const mk=(P,N,C)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(P),3));g.setAttribute('normal',new THREE.BufferAttribute(new Float32Array(N),3));const ca=new THREE.BufferAttribute(new Float32Array(C),3);g.setAttribute('color',ca);g.computeBoundingSphere();return [g,ca]};
+  [roofGeo,roofCol]=mk(rp,rn,rc);[wallGeo,wallCol]=mk(wp,wn,wc);
+  return {tris:{roof:TRI.roof.length,wall:TRI.wall.length},lp};
+}
+/* ================= scene ================= */
+const cv=$('#cv');
+const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true});
+renderer.outputColorSpace=THREE.LinearSRGBColorSpace;renderer.setClearColor(0xf1ecdc,1);
+const scene=new THREE.Scene(),cityG=new THREE.Group();scene.add(cityG);
+scene.add(new THREE.HemisphereLight(0xffffff,0xcfc7b0,2.3));const dl=new THREE.DirectionalLight(0xfff6e6,1.5);dl.position.set(-700,-1000,1300);scene.add(dl);
+const H0=1300;
+const camO=new THREE.OrthographicCamera(-H0,H0,H0,-H0,1,9000);camO.up.set(0,1,0);camO.position.set(0,0,3000);
+const camP=new THREE.PerspectiveCamera(32,1,20,12000);camP.up.set(0,0,1);
+const ctlO=new OrbitControls(camO,cv),ctlP=new OrbitControls(camP,cv);
+ctlO.enableRotate=false;ctlO.screenSpacePanning=true;ctlO.minZoom=0.5;ctlO.maxZoom=16;ctlO.zoomSpeed=1.1;
+ctlP.maxPolarAngle=Math.PI*0.47;ctlP.minDistance=80;ctlP.maxDistance=5200;ctlP.enabled=false;ctlP.screenSpacePanning=false;
+let VIEW='L1',EXTR=0.02,EXTR_TO=0.02,FOCUS={x:0,y:0,r:1150},cam=camO,W=800,Hh=600;
+const matB=new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1});
+const matL=new THREE.MeshLambertMaterial({vertexColors:true,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1});
+let lineMat=new THREE.LineBasicMaterial({color:0x1c2420,transparent:true,opacity:0.6});
+let ground;
+function finishScene(lineGeoData){
+  roofMesh=new THREE.Mesh(roofGeo,matB);wallMesh=new THREE.Mesh(wallGeo,matL);wallMesh.visible=false;
+  const lg=new THREE.BufferGeometry();lg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(lineGeoData),3));
+  lineSeg=new THREE.LineSegments(lg,lineMat);
+  cityG.add(roofMesh,wallMesh,lineSeg);
+  const gg=new THREE.Mesh(new THREE.PlaneGeometry(2192,2212),new THREE.MeshBasicMaterial({color:0xe9e2cb}));gg.position.z=-0.6;scene.add(gg);ground=gg;
+  const edge=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(2192,2212)),new THREE.LineBasicMaterial({color:0x4a524b}));edge.position.z=-0.5;scene.add(edge);
+  setView('L1',true);
+}
+function setView(v,instant){
+  VIEW=v;cam=v==='L1'?camO:camP;ctlO.enabled=v==='L1';ctlP.enabled=v==='L3';
+  roofMesh.material=v==='L1'?matB:matL;wallMesh.visible=v==='L3';
+  EXTR=v==='L1'?0.02:(instant?1:0.02);EXTR_TO=v==='L1'?0.02:1;
+  const el=$('#vL1'),e3=$('#vL3');if(el){el.setAttribute('aria-pressed',v==='L1');e3.setAttribute('aria-pressed',v==='L3')}
+  resize();flyTo(FOCUS,true);req();
+}
+function resize(){const r=$('#mapwrap').getBoundingClientRect();W=Math.max(200,Math.floor(r.width));Hh=Math.max(200,Math.floor(r.height));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.setSize(W,Hh,false);cv.style.width=W+'px';cv.style.height=Hh+'px';
+  const a=W/Hh;camO.left=-H0*a;camO.right=H0*a;camO.top=H0;camO.bottom=-H0;camO.updateProjectionMatrix();camP.aspect=a;camP.updateProjectionMatrix();
+  const svg=$('#ov');svg.setAttribute('viewBox',`0 0 ${W} ${Hh}`);}
+function camState(){if(VIEW==='L1')return{tx:ctlO.target.x,ty:ctlO.target.y,zoom:camO.zoom};const t=ctlP.target,d=camP.position.clone().sub(t),dist=d.length();return{tx:t.x,ty:t.y,dist,az:Math.atan2(d.x,-d.y),el:Math.asin(d.z/dist)}}
+function setCam(s){if(VIEW==='L1'){ctlO.target.set(s.tx,s.ty,0);camO.position.set(s.tx,s.ty,3000);camO.zoom=s.zoom;camO.updateProjectionMatrix();ctlO.update()}else{ctlP.target.set(s.tx,s.ty,0);camP.position.set(s.tx+s.dist*Math.cos(s.el)*Math.sin(s.az),s.ty-s.dist*Math.cos(s.el)*Math.cos(s.az),s.dist*Math.sin(s.el));ctlP.update()}}
+function fitState(f){const a=W/Hh;if(VIEW==='L1')return{tx:f.x,ty:f.y,zoom:Math.min(16,Math.max(.5,H0*Math.min(1,a)/(f.r*1.1)))};const fov=camP.fov*Math.PI/180;const near=f.r<700;return{tx:f.x,ty:f.y,dist:Math.min(5000,(f.r*(near?1.7:1.05))/Math.tan(fov/2)/Math.min(1,a)),az:0.42,el:near?1.0:0.66}}
+let tw=null;
+function flyTo(f,instant){FOCUS=f;const to=fitState(f);if(instant||REDUCED){tw=null;setCam(to);req();return}tw={from:camState(),to,t0:performance.now(),dur:600};req()}
+let raf=0;const req=()=>{if(!raf)raf=requestAnimationFrame(frame)};
+ctlO.addEventListener('change',req);ctlP.addEventListener('change',req);
+const V3=new THREE.Vector3();
+function scr(x,y,z){V3.set(x,y,(z||0)*EXTR).project(cam);return[(V3.x*.5+.5)*W,(-V3.y*.5+.5)*Hh]}
+function frame(now){raf=0;let more=false;
+  if(tw){let k=Math.min(1,(now-tw.t0)/tw.dur);k=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;const s={};for(const key in tw.to)s[key]=tw.from[key]+(tw.to[key]-tw.from[key])*k;setCam(s);if(k>=1)tw=null;else more=true}
+  if(Math.abs(EXTR-EXTR_TO)>0.002){EXTR+=(EXTR_TO-EXTR)*(REDUCED?1:0.16);more=true}else EXTR=EXTR_TO;
+  cityG.scale.z=EXTR;if(!roofMesh)return;
+  renderer.render(scene,cam);
+  if(window.__overlay)window.__overlay();
+  if(more)req();
+}
+new ResizeObserver(()=>{resize();req()}).observe($('#mapwrap'));
+/* picking */
+const ray=new THREE.Raycaster(),ptr=new THREE.Vector2();
+function pick(ev){const r=cv.getBoundingClientRect();ptr.set(((ev.clientX-r.left)/r.width)*2-1,-((ev.clientY-r.top)/r.height)*2+1);ray.setFromCamera(ptr,cam);
+  const objs=VIEW==='L3'?[roofMesh,wallMesh]:[roofMesh];const hit=ray.intersectObjects(objs,false)[0];if(!hit)return null;
+  const arr=hit.object===roofMesh?TRI.roof:TRI.wall;return B[arr[hit.faceIndex]]||null}
+let down=null;cv.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY]});
+cv.addEventListener('pointerup',e=>{if(!down)return;const d=Math.hypot(e.clientX-down[0],e.clientY-down[1]);down=null;if(d<5&&window.__pick){const b=pick(e);window.__pick(b)}});
+/* colours */
+function tint(b,rgb){for(const [col,rng] of [[roofCol,b.rv],[wallCol,b.wv]]){if(!col)continue;for(let v=rng[0];v<rng[0]+rng[1];v++){col.setXYZ(v,rgb[0],rgb[1],rgb[2])}col.needsUpdate=true}}
+function retone(map){ // map: index -> rgb
+  for(const b of B)tint(b,TONE);for(const [i,rgb] of Object.entries(map))tint(B[i],rgb);req()}
+/* neighbourhood: computed from RECORDED footprints */
+function inAny(x,y){const k=cellKey(Math.floor(x/CELL),Math.floor(y/CELL)),c=GRID.get(k);if(!c)return false;for(const i of c){const b=B[i];if(x<b.x0||x>b.x1||y<b.y0||y>b.y1)continue;for(const rs of b.rings)if(pip(x,y,rs[0]))return true}return false}
+const HOOD={};
+function hoodStats(c,R){const key=R;if(HOOD[key])return HOOD[key];
+  let n=0,unkH=0,unkY=0,tall=null,foot=0;for(const b of B){if(Math.hypot(b.cx-c[0],b.cy-c[1])<=R){n++;if(b.hft==null)unkH++;if(b.yr==null)unkY++;if(b.hft!=null&&(!tall||b.hft>tall.hft))tall=b;foot+=b.area}}
+  const st=4;let inside=0,cov=0;for(let x=c[0]-R;x<=c[0]+R;x+=st)for(let y=c[1]-R;y<=c[1]+R;y+=st){if(Math.hypot(x-c[0],y-c[1])>R)continue;inside++;if(inAny(x,y))cov++}
+  const circ=Math.PI*R*R,covFrac=cov/inside;return HOOD[key]={n,unkH,unkY,tall,circ,covFrac,open:circ*(1-covFrac),foot}}
+/* ================= data: dated excerpts (RECORDED) ================= */
+const LOT={};for(const r of LOTS)LOT[r[0]]={b:r[0],ad:r[1],lu:r[2],cl:r[3],ot:r[4],yb:r[5],ba:r[6],la:r[7],lat:r[8],lon:r[9]};
+const FACS=FAC.map(r=>({u:r[0],n:r[1],t:r[2],s:r[3],o:r[4],p:r[5],bin:r[6],ad:r[7],bbl:r[8],lat:r[9],lon:r[10]}));
+const LU={1:'1–2 family',2:'walk-up apartments',3:'elevator apartments',4:'mixed residential/commercial',5:'commercial/office',6:'industrial',7:'transportation & utility',8:'public facilities & institutions',9:'open space',10:'parking',11:'vacant land'};
+const OT={C:'City',X:'tax-exempt owner',P:'private',O:'other public',M:'mixed','':'blank'};
+const SRC={fp:'NYC Building Footprints · OTI · rows updated 2026-09-27',pluto:'PLUTO 26v2 · DCP · 2026-08-24',facdb:'FacDB 26v1 · DCP · 2026-07-16',world:'BOW World · Lamplighters Y1 · authored, illustrative',desk:'transit practice desk · authored, illustrative',laneA:'Lane A count, 2026-09-29 [verify]',none:'no source loaded'};
+const SCEN={crowd:18000,railShare:0.55,windowMin:60,baseTrains:8,seats:1000,fee:20000,cash:250000,cityBuildings:1083062};
+const WORLD='Lamplighters · Year One · home night 7';
+const MSG_BIN='1082908',CLINIC_BIN='1014421',MOMA_BIN='1081128';
+/* candidate sites for the authored club HQ */
+const SITES={
+ A:{id:'A',name:'On the Garden',sub:'over BIN 1082908',lat:40.75049,lon:-73.99340,w:44,d:60,anchor:['1007810001']},
+ B:{id:'B',name:'Fifth Avenue block-front',sub:'vacant lots, W 46th–47th',lat:40.75652,lon:-73.97930,w:40,d:30,anchor:['1012620037','1012620035','1012620038','1012620039','1012620041']},
+ C:{id:'C',name:'Second Avenue, E 36th',sub:'City-owned vacant lot',lat:40.74686,lon:-73.97561,w:50,d:36,anchor:['1009170034']},
+ D:{id:'D',name:'Eighth Avenue office block',sub:'over BIN 1014421',lat:40.75301,lon:-73.99244,w:26,d:26,anchor:['1007850001']}};
+/* ================= helpers: kinds, chips ================= */
+const KDEF={OBSERVED:'solid',RECORDED:'double-ruled',AUTHORED:'dashed outline',COMPUTED:'toned',MODELED:'hatched',GENERATED:'stippled',UNKNOWN:'dashed empty'};
+function K(kind,text,src){return `<span class="vw"><span class="v k-${kind}">${text}</span><span class="pv">${kind}${src?' · '+esc(src):''}</span></span>`}
+const kR=(t,s)=>K('RECORDED',t,s||SRC.fp),kA=(t,s)=>K('AUTHORED',t,s||SRC.world),kC=(t,s)=>K('COMPUTED',t,s),kU=(t,why)=>K('UNKNOWN',t,'reason: '+why);
+const rowL=(l,r)=>`<div class="lr"><span class="l">${l}</span><span class="r">${r}</span></div>`;
+const btn=(label,d,a,b,cls,extra)=>`<button type="button" class="btn ${cls||''}" data-do="${d}"${a!=null?` data-a="${esc(a)}"`:''}${b!=null?` data-b="${esc(b)}"`:''}${extra||''}>${label}</button>`;
+const capBox=(lvl,txt,ai)=>`<div class="cap c-${lvl}">${lvl==='REAL'?'REAL CURRENT PRODUCT CAPABILITY':lvl==='PROPOSED'?'PROPOSED PLATFORM CAPABILITY':'SPECULATIVE FRONTIER'}<small>${txt}${ai?' · AI: '+ai:''}</small></div>`;
+/* ================= state = fold(record) ================= */
+let S,ROOT=[],LOGS,U={sys:'front',path:[],relIn:'',view:'L1',pin:null,know:false,real:false,branch:'record',branches:{},pencil:null,showPen:false,why:null,radius:400,siteSel:null,site:null,band:null,tab:'sheet',trail:[],draft:{trains:2,count:null,slots:[]},rehearsal:null,refusal:null,staged:false,verified:null,askText:'',noSys:null,fly:true};
+function S0(){return{n:0,seat:false,hq:null,crowd:SCEN.crowd,railShare:SCEN.railShare,extra:0,cash:{arena:SCEN.cash,transit:0},req:{status:'none',signed:false,sent:null,ref:null,decideN:null},wants:[]}}
+function resetWorld(){S=S0();LOGS={club:[],arena:[],transit:[],city:[]};ROOT=[];entry(['city'],'world_open','the World',`opened ${WORLD}. Scenario: tonight's crowd 18,000 people, rail share 55% (both AUTHORED, illustrative). Reality here is a dated excerpt; nothing in it is live.`)}
+function entry(logs,kind,by,text){S.n++;const e={n:S.n,kind,by,text,logs};for(const l of logs)LOGS[l].push({...e,h:null});return e}
+const SLOTS=[['23:10',1],['23:25',1],['23:40',1],['23:55',0]];
+function derive(A){A=A||{};const crowd=A.crowd??S.crowd,share=A.railShare??S.railShare,extra=S.extra;const riders=Math.round(crowd*share);
+  const seatsWin=SCEN.baseTrains*SCEN.seats*SCEN.windowMin/60+extra*SCEN.seats,waiting=Math.max(0,riders-seatsWin),perMin=SCEN.baseTrains*SCEN.seats/60;
+  const clear=riders<=seatsWin?riders/seatsWin*SCEN.windowMin:SCEN.windowMin+waiting/perMin;return{crowd,share,riders,extra,seatsWin,waiting,clear,ratio:riders/seatsWin}}
+const curA=()=>U.pencil?U.pencil:(U.branch!=='record'&&U.branches[U.branch]?U.branches[U.branch].a:{});
+const D=()=>derive(curA()),DR=()=>derive({});
+/* ---- site tests: the overlap / vacancy / institution / time tests, run on the real data ---- */
+function rectPts(s){const c=proj(s.lon,s.lat);return [[-1,-1],[1,-1],[1,1],[-1,1]].map(([u,v])=>[c[0]+SV[0]*u*s.w/2+AV[0]*v*s.d/2,c[1]+SV[1]*u*s.w/2+AV[1]*v*s.d/2])}
+const SITE_CACHE={};
+function testSite(id){if(SITE_CACHE[id])return SITE_CACHE[id];const s=SITES[id],R=rectPts(s),c=proj(s.lon,s.lat);
+  const hits=B.filter(b=>b.x1>=Math.min(...R.map(p=>p[0]))&&b.x0<=Math.max(...R.map(p=>p[0]))&&b.y1>=Math.min(...R.map(p=>p[1]))&&b.y0<=Math.max(...R.map(p=>p[1]))&&b.rings.some(rs=>polyHit(R,rs[0])));
+  const anchorSet=new Set(s.anchor);
+  const lotsIn=LOTS.filter(l=>{const p=proj(l[9],l[8]);return pip(p[0],p[1],R)||anchorSet.has(l[0])}).map(l=>LOT[l[0]]);
+  const hitOwn=hits.filter(h=>anchorSet.has(h.bbl)),hitOther=hits.filter(h=>!hitOwn.includes(h));
+  const bins=new Set(hits.map(h=>h.bin)),fac=FACS.filter(f=>bins.has(f.bin)||anchorSet.has(f.bbl)&&f.bin==='0');
+  const ops=[...new Set(fac.map(f=>f.o||f.n))];
+  const vac=lotsIn.length&&lotsIn.every(l=>l.lu===11),lotMain=lotsIn.find(l=>anchorSet.has(l.b))||lotsIn[0];
+  const t={id,s,R,hits,hitOwn,hitOther,lotsIn,fac,ops,lotMain,
+   overlap:hitOwn.length?'fail':hitOther.length?'warn':'pass',
+   vacancy:!lotsIn.length?'warn':vac?'pass':'fail',
+   institution:(fac.length||(lotMain&&lotMain.ot==='C')||(lotMain&&lotMain.lu===7))?'warn':'pass',
+   time:'pass'};
+  t.canBuilding=t.overlap==='pass'&&t.vacancy==='pass'&&t.institution==='pass';
+  t.canTenancy=t.overlap==='fail';
+  t.cant=t.overlap==='warn';
+  t.render=t.canBuilding?'AUTHORED outline on vacant ground: a proposal, nothing solid, stamped AUTHORED.':t.canTenancy?'Refused as a building. A tenancy flag on the real structure is allowed; the structure stays RECORDED and solid.':'The checker will not draw it. The lot boundary is not loaded, so any rectangle is a guess.';
+  return SITE_CACHE[id]=t}
+/* ---- acts ---- */
+function validate(k,p){
+  if(k==='take_seat'&&S.seat)return{rule:'SEAT-1',text:'you already hold this seat; one seat per person.'};
+  if(k==='place_hq'){if(!S.seat)return{rule:'SEAT-2',text:'placing the club\'s HQ is a seat\'s act; you are an observer. Take the operations seat first.'};
+    const t=testSite(p.site);if(p.mode==='building'&&!t.canBuilding)return t.cant?{rule:'OVERLAP-2',text:'CAN\'T TELL. This rectangle meets a footprint filed on another lot, and this lot\'s boundary is not loaded. The checker will not place a guess.'}:{rule:'OVERLAP-1',text:'an authored footprint that meets a real BIN cannot render as a building. Place a tenancy on the real structure instead.'};
+    if(p.mode==='tenancy'&&!t.canTenancy)return{rule:'TENANCY-1',text:'a tenancy needs a real structure under it; this site has none, or its boundary is unknown.'};
+    if(S.hq)return{rule:'HQ-1',text:'the club already has an HQ in this World; a move is a new act on the record, not an edit. (Not built in this prototype.)'}}
+  if(k==='sign_line'){if(!S.seat)return{rule:'SEAT-2',text:'line 1 is held by the operations seat; you are an observer.'};if(S.req.signed)return{rule:'WARRANT-1',text:'line 1 is already signed.'};if(S.req.status==='queued'||S.req.status==='granted')return{rule:'FORM-1',text:'a request is already with the transit desk.'}}
+  if(k==='send_request'){if(!S.req.signed)return{rule:'WARRANT-1',text:'nothing crosses until your own line is signed.'}}
+  if(k==='clock'&&S.req.status!=='queued')return{rule:'CLOCK-1',text:'nothing waits on the transit desk\'s clock.'};
+  if(k==='withdraw'&&S.req.status!=='queued')return{rule:'FORM-2',text:'only a request in their queue can be withdrawn.'};
+  return null}
+function intake(){const need=derive({}).riders,q=S.req.sent;
+  if(q.count==null)return{rule:'R-EV-1',text:'an event-service request must carry a rider count. None was attached.'};
+  if(q.count<need)return{rule:'R-EV-1',text:`the rider count filed (${fmt(q.count)}) is below the pinned rail riders (${fmt(need)}).`};
+  if(q.slots.length<q.trains)return{rule:'R-EV-2',text:`each train needs a free slot; ${q.slots.length} chosen for ${q.trains} trains.`};return null}
+function perform(k,p){
+  switch(k){
+  case 'take_seat':S.seat=true;entry(['club','arena'],k,'you','took the Lamplighters operations seat (an Offer redeemed by a present person; lease held on this device). Word counts for: the club\'s site, the arena desk\'s requests.');break;
+  case 'place_hq':{const t=testSite(p.site);S.hq={site:p.site,mode:p.mode};entry(['club'],k,'you (ops seat)',p.mode==='building'?`placed the Lamplighters HQ at site ${p.site}, ${t.s.name}: AUTHORED outline on vacant ground. Overlap: none of ${B.length} footprints. Vacancy: ${t.lotsIn.length} lot points, all land use 11. Institution: no FacDB row. It is a proposal, not a building.`:`placed the Lamplighters HQ as a tenancy on BIN ${t.hitOwn[0]?.bin} (site ${p.site}). The structure stays RECORDED; ${t.fac.length} FacDB rows from ${t.ops.length} operators stay displayed beside it.`);break}
+  case 'sign_line':S.req.signed=true;entry(['arena'],k,'you (ops seat)','signed line 1 of the post-game train request (WILL-yes, your own warrant). Nothing has crossed.');break;
+  case 'send_request':{S.req.sent={trains:p.trains,count:p.count,slots:[...p.slots]};S.req.status='sent';S.req.signed=false;
+    entry(['arena','club'],k,'you (ops seat)',`sent the request: ${p.trains} post-game trains, rider count ${p.count==null?'none':fmt(p.count)}, ${p.slots.length} slots. Notice copies stay with the arena desk and club HQ; they cannot be recalled.`);
+    const bad=intake();if(bad){S.req.status='returned';S.req.ref=bad;entry(['transit','arena'],'transit_return','transit desk',`returned it at intake, naming ${bad.rule}: ${bad.text}`)}
+    else{S.req.status='queued';S.req.ref=null;entry(['transit','arena'],'transit_queue','transit desk','queued it. WILL-yes is theirs, on their clock: next review, duration UNKNOWN.')}break}
+  case 'clock':{entry(['transit'],k,'the World clock','advanced the transit desk\'s clock to its next review (its clock, not yours).');
+    const q=S.req.sent,granted=Math.min(q.trains,2),fee=granted*SCEN.fee,before=S.cash.arena;
+    S.extra=granted;S.cash.arena-=fee;S.cash.transit+=fee;S.req.status='granted';
+    const e=entry(['transit','arena','club'],'transit_decide','transit desk',`said yes to ${granted} of ${q.trains} trains (WILL-yes is discretion; its practice caps special trains at 2, authored). Slots ${q.slots.slice(0,granted).join(', ')} held. Fee ${fmt(fee)} moved: arena desk ${fmt(before)} to ${fmt(S.cash.arena)}, transit desk 0 to ${fmt(S.cash.transit)} (MONEY-yes, conserved).`);S.req.decideN=e.n;break}
+  case 'withdraw':S.req.status='withdrawn';S.req.signed=false;entry(['arena','transit'],k,'you (ops seat)','withdrew the request. The transit desk keeps its copy; a new request is a new form.');break;
+  case 'want':S.wants.push({topic:p.topic,n:S.n+1});entry(['city'],k,'you',`filed a Want: ${p.topic}. The registry has no system for it; the hole is recorded, not filled.`);break}}
+function act(k,p){p=p||{};const bad=validate(k,p);if(bad){U.refusal={kind:k,...bad};trail(`refused ${k}: ${bad.rule}`);render();announce(`Refused. ${bad.rule}: ${bad.text}`);return null}
+  U.refusal=null;ROOT.push({k,p});const n0=S.n;perform(k,p);save();foldQ();trail(`act #${n0+1} ${k}`);const le=LOGS.city.concat(LOGS.club,LOGS.arena,LOGS.transit).filter(e=>e.n===S.n)[0];if(le)setTimeout(()=>{const l=document.getElementById('live');if(l)l.textContent='Act #'+le.n+'. '+le.by+' '+le.text},60);return true}
+const trail=t=>{U.trail.push(t);if(U.trail.length>60)U.trail.shift()};
+/* hashes: SHA-256 folded per log, over the record only, never over navigation */
+async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+let fq=Promise.resolve();
+function foldQ(){fq=fq.then(async()=>{for(const l of Object.keys(LOGS)){let prev='0'.repeat(64);for(const e of LOGS[l]){if(!e.h)e.h=await sha(prev+'|'+JSON.stringify([e.n,e.kind,e.by,e.text]));prev=e.h}}
+  try{const st=JSON.parse(localStorage.getItem(LSK)||'null');if(U.verified==='pending'&&st&&st.heads){const now=heads();U.verified=Object.keys(now).every(k=>st.heads[k]===now[k])?'yes':'MISMATCH'}}catch(e){if(U.verified==='pending')U.verified=null}
+  save();renderBand();renderTop()})}
+const heads=()=>Object.fromEntries(Object.keys(LOGS).map(l=>[l,LOGS[l].length&&LOGS[l][LOGS[l].length-1].h||null]));
+const LSK='bow-nyc-b-reality-city-v1';
+function save(){try{localStorage.setItem(LSK,JSON.stringify({root:ROOT,branches:U.branches,heads:heads()}))}catch(e){}}
+function restore(){try{const st=JSON.parse(localStorage.getItem(LSK)||'null');if(st&&st.root&&st.root.length){resetWorld();for(const a of st.root){ROOT.push(a);perform(a.k,a.p)}U.branches=st.branches||{};U.verified='pending';return true}}catch(e){}return false}
+/* ================= places / geometry anchors ================= */
+const MSGB=()=>B[BIN[MSG_BIN][0]],CLB=()=>B[BIN[CLINIC_BIN][0]],MOB=()=>B[BIN[MOMA_BIN][0]];
+const dist=(a,b)=>Math.hypot(a.cx-b.cx,a.cy-b.cy);
+const NAMES={front:'Reality City',arena:'Arena desk',transit:'Penn Station transit',form:'Request form',club:'Club HQ',league:'League Office',hood:'Neighborhood',city:'City',site:'Site'};
+const GROUND={front:'front',arena:'arena',form:'arena',transit:'transit',club:'club',league:'league',hood:'hood',city:'city',site:'place'};
+const nfmt=n=>fmt(Math.round(n));
+function announce(t){$('#live').textContent='';setTimeout(()=>{$('#live').textContent=t},30)}
+/* ---- the pin: one quantity carried across subjects ---- */
+function reading(sys,plain){const d=D(),pen=U.pencil||U.branch!=='record';const A=(t)=>plain?t:(pen?K('PENCIL',t,'in pencil: not the record'):kA(t));
+  switch(sys){
+   case 'arena':return `${A(nfmt(d.crowd))} people`;
+   case 'transit':case 'form':return `${A(nfmt(d.riders))} rail riders / ${SCEN.windowMin} min`;
+   case 'hood':return d.waiting?`${A(nfmt(d.waiting))} still here at min ${SCEN.windowMin}`:`${A('0')} still here at min ${SCEN.windowMin}`;
+   case 'league':return `reportable attendance ${A(nfmt(d.crowd))}`;
+   case 'city':return `share of the city's evening trips: ${plain?'UNKNOWN':kU('UNKNOWN','no denominator loaded')}`;
+   case 'club':return 'a duty, not a quantity';
+   case 'site':return /NEAR|SITED/.test(U.relIn)?'not carried (SITED-1)':'—';}
+  return '—'}
+function ribbon(){
+  if(!U.pin)return `<div id="ribbon"><div class="rp"><span><b>PIN</b> none. A pin is a quantity that travels with you.</span>${btn("Pin tonight's arena crowd",'pin',null,null,'sm')}</div>${capBox('PROPOSED','a pin is a set of state paths, converted at every hop','NO AI')}</div>`;
+  const nodes=[];U.path.forEach((p,pi)=>{nodes.push(`<button type="button" class="lk rs" data-do="edge" data-a="${pi}" aria-label="Go back to ${nm(p.sys,p.bin)}: ${esc(reading(p.sys,true))}"><b>${nm(p.sys,p.bin)}</b> ${reading(p.sys)}</button><span class="ra">${esc(p.rel)} →</span>`)});
+  nodes.push(`<span class="rs"><b>${nm(U.sys)}</b> ${reading(U.sys)}</span>`);
+  return `<div id="ribbon"><div class="rp"><span><b>PIN</b> tonight's crowd</span>${nodes.join(' ')}</div><div class="rb">${btn(U.showPen?'Close what if':'What if…','pen',null,null,'sm',` aria-pressed="${!!U.showPen}"`)}${['arena','transit','form','hood'].includes(U.sys)?btn('Why this number?','why',U.sys==='hood'?'open':U.sys==='arena'?'riders':'waiting',null,'sm'):''}${btn('Drop the pin','unpin',null,null,'sm')}</div>${capBox('PROPOSED','the pin, its conversions and the receipt','NO AI')}</div>`}
+/* ---- why: a number traced to recorded causes, wearing the kind of its weakest input ---- */
+function whyHtml(key){const d=D(),pen=U.pencil||U.branch!=='record';const nk=(t)=>pen?K('PENCIL',t):kA(t);
+  const li=(l,v,kids)=>`<li>${l} ${v}${kids?`<ul>${kids}</ul>`:''}</li>`;
+  const cr=li('Crowd '+nk(nfmt(d.crowd)),'<span class="small">set by act #1, the World scenario</span>'),sh=li('Rail share '+nk(Math.round(d.share*100)+'%'),'<span class="small">an assumption; nobody measured it</span>');
+  const ext=li('Extra trains '+nk(String(d.extra)),d.extra?`<span class="small">granted by the transit desk, act #${S.req.decideN}</span>`:'<span class="small">none granted</span>');
+  const seats=li('Seats in the window '+kA(nfmt(d.seatsWin)),'',li('Base trains an hour '+kA(String(SCEN.baseTrains),SRC.desk),'')+li('Seats a train '+kA(nfmt(SCEN.seats),SRC.desk),'')+ext);
+  const riders=li('Rail riders '+kA(nfmt(d.riders)),'<span class="small">crowd × rail share</span>',cr+sh);
+  let head,tree,note;
+  if(key==='open'){const h=hoodStats(proj2(MSGB()),U.radius);head='People per hectare of open ground, if all were outdoors at once';
+    tree=li(`Ceiling ${kA(nfmt(d.crowd/(h.open/1e4)))} per ha`,'<span class="small">crowd ÷ open ground</span>',cr+li('Open ground '+kC(nfmt(h.open)+' m²'),'<span class="small">circle of radius '+U.radius+' m (a definition) minus the footprints inside it</span>',li(`${kR(fmt(h.n)+' footprints')} `,'<span class="small">RECORDED, grid-sampled at 4 m; courts count as open</span>')));
+    note='COMPUTED from RECORDED footprints is honest; mix in the crowd and the result wears AUTHORED.'}
+  else if(key==='riders'){head='Rail riders';tree=riders;note='Every leaf is AUTHORED, so the rail riders are AUTHORED.'}
+  else{head=`Still waiting at minute ${SCEN.windowMin}`;tree=li(`Waiting ${kA(nfmt(d.waiting))}`,'<span class="small">rail riders − seats in the window; egress rule v0, authored arithmetic, not a model</span>',riders+seats);
+    note='Kind: AUTHORED. The weakest input is AUTHORED, so nothing above it can be COMPUTED. Bind a feed and base trains would become OBSERVED; the answer would still be AUTHORED, because the crowd and the rail share are.'}
+  return `<h3>Why: ${head}</h3><ul class="why">${tree}</ul><p class="small">${note}</p><div class="row">${btn('Back to the sheet','whyback',null,null,'sm')}</div>${capBox('PROPOSED','a causal trace to acts and sources','NO AI')}`}
+const proj2=b=>[b.cx,b.cy];
+/* ---- sheets ---- */
+function shFront(){return{title:'Reality City',rel:'front desk · ask, or click a building',tag:'READING COPY',h:`
+ <p>Midtown Manhattan as the city's own registries record it: <b>${fmt(B.length)}</b> building footprints, a few lots and facilities. One BOW World, the Lamplighters, stands on it. Nothing dashed here is a building.</p>
+ <div class="row"><input class="ask" id="askIn" aria-label="Ask the city" placeholder="Ask, e.g. what does tonight's crowd do to the city?" value="${esc(U.askText)}"></div>
+ <div class="row">${btn('Ask','askgo',null,null,'pri')}</div>
+ ${U.noSys?`<div class="ref-box"><b>NO SYSTEM FOR THIS</b><br>${esc(U.noSys)} is not answered by any system in this excerpt. Your words were not changed. ${btn('File it as a Want','wantask',null,null,'sm')}</div>`:''}
+ <h3>Or start from a question</h3>
+ <div class="row" style="flex-direction:column;align-items:stretch">${btn("What does tonight's crowd do to the city?",'ask','crowd')}${btn("Where can the Lamplighters' HQ stand?",'ask','hq')}${btn('Who has to say yes to extra post-game trains?','ask','yes')}</div>
+ <h3>Or go straight to · Direct</h3><p class="small">The same places as the map, as plain choices. Clicking a building on the map opens its <em>site</em>: a site is many authorities, not one building.</p>
+ <div class="row">${[['arena','Arena desk'],['transit','Penn Station transit'],['club','Club HQ'],['league','League Office'],['hood','Neighborhood'],['city','City']].map(([s,n])=>btn(n,'go',s,null,'sm')).join('')}</div>
+ <div class="row">${btn('Site · BIN '+MSG_BIN+' (Madison Square Garden)','hop','site:'+MSG_BIN+':',null,'sm')}${btn('Site · BIN '+CLINIC_BIN+' (500 Eighth Avenue)','hop','site:'+CLINIC_BIN+':',null,'sm')}${btn('Site · BIN '+MOMA_BIN+' (Museum of Modern Art)','hop','site:'+MOMA_BIN+':',null,'sm')}</div>
+ <div class="row"><input class="ask" id="binIn" style="max-width:200px" aria-label="Find a building by BIN" placeholder="BIN, e.g. 1015862"><button type="button" class="btn sm" data-do="binfind">Find BIN</button></div>
+${U.know?kindsTable():''}
+ ${capBox('PROPOSED','a typed ask is routed to a system or refused; nothing is invented','SMALL for routing, NO AI for this stand-in')}`,hinges:[]}}
+function kindsTable(){const r=(f,k,t,s)=>`<tr><td>${f}</td><td>${K(k,t,s)}</td></tr>`;
+ const nH=B.filter(b=>b.hft==null).length,nY=B.filter(b=>b.yr==null).length;
+ return `<h3>Kinds by field · words on request</h3><table class="cmp"><tr><th>Field</th><th>Kind</th></tr>
+ ${r('Footprint outline, BIN, BBL','RECORDED','RECORDED',SRC.fp)}${r('Roof height (feet, verify)','RECORDED','RECORDED · '+nH+' blank = UNKNOWN',SRC.fp)}${r('Construction year','RECORDED','RECORDED · '+nY+' blank = UNKNOWN',SRC.fp)}
+ ${r('Extruded prism, flat roof','COMPUTED','COMPUTED','footprint × height; no facades, no roof shapes')}${r('Lot use, class, owner type','RECORDED','RECORDED · 0 area / 0 year = UNKNOWN',SRC.pluto)}${r('Facility rows and operators','RECORDED','RECORDED',SRC.facdb)}
+ ${r('Trains, alerts, lag','UNKNOWN','UNKNOWN','reason: no feed runs; OBSERVED only with a mirror')}${r('Club HQ, arena desk, League rulebook','AUTHORED','AUTHORED',SRC.world)}${r('Crowd, rail share, practice service','AUTHORED','AUTHORED',SRC.world)}
+ ${r('Riders, seats, waiting','AUTHORED','COMPUTED from AUTHORED = AUTHORED','egress rule v0: authored arithmetic, not a model')}${r('Open ground inside a radius','COMPUTED','COMPUTED','circle minus footprints; grid-sampled at 4 m')}${r('MODELED / GENERATED','UNKNOWN','none','no named model ran; nothing generated')}</table>`}
+function pinBlock(){const d=D();return U.pin?'':`<div class="row">${btn("Pin tonight's arena crowd",'pin')}</div>`}
+function shArena(){const d=D(),b=MSGB(),lot=LOT['1007810001'];return{title:'Arena desk · Lamplighters home night',rel:'a tenancy on BIN '+MSG_BIN+' · '+U.relIn,tag:'AUTHORED',h:`
+ <h3>Tonight</h3>
+ ${rowL("Tonight's crowd",`${kA(nfmt(d.crowd)+' people')} ${btn('Why?','why','riders',null,'sm')}`)}
+ ${rowL('Leave by rail',kA(Math.round(d.share*100)+'%'))}${rowL('Egress window',kA(SCEN.windowMin+' min'))}
+ ${rowL('Desk cash',kA('$'+nfmt(S.cash.arena)))}
+ ${pinBlock()}
+ <h3>Real ground under the desk</h3>
+ ${rowL('Building',kR('BIN '+MSG_BIN)+' '+kR(b.hft.toFixed(1)+' ft roof')+' '+kC(nfmt(b.area)+' m² footprint'))}
+ ${rowL('Year built',kU('UNKNOWN','the registry field is blank'))}
+ ${rowL('Lot',kR('BBL 1007810001','PLUTO 26v2')+' '+kR('class U6','PLUTO 26v2'))}
+ ${rowL('Title in PLUTO',kR('National Railroad Passenger Corp','PLUTO 26v2'))}
+ ${rowL('Arena operator',kU('UNKNOWN','no loaded registry names one'))}
+ <p class="small">The desk is BOW's tenancy on that building. It does not say the building is BOW's, or that anyone who runs it agrees.</p>
+ ${S.seat?'':`<div class="row">${btn('Take the Lamplighters operations seat','seat','','','pri')}</div>`}
+ ${capBox('PROPOSED','tenancy on a real structure; identity keys stay in separate namespaces','NO AI')}`,
+ hinges:[{fam:'SERVED BY',to:'transit',label:'Penn Station transit',prev:`× ${Math.round(d.share*100)}% by rail = ${nfmt(d.riders)} riders`},
+  {fam:'SITED AT',to:'hood',label:`Neighborhood (${U.radius} m)`,prev:'the crowd is physically here: a density'},
+  {fam:'RUN BY',to:'club',label:'Club HQ',prev:'a duty, not a quantity'},
+  {fam:'BOUND BY',to:'league',label:'League Office',prev:'reads as reportable attendance; no place'},
+  {fam:'PEERS',to:null,label:'other arenas',prev:'no sheet yet',mode:'no',want:'PEERS of an arena: a distribution of other arenas'}]}}
+function shTransit(){const d=D(),q=S.req,st=q.status;
+ const feed=U.staged?`${rowL('Trains now · lag',K('AUTHORED','3 trains · 12 s','STAGED SAMPLE: authored, not observed'))}<p class="small">STAGED SAMPLE: an authored stand-in shaped like a feed. A mirror would show OBSERVED with a lag stamp.</p>`:`${rowL('Trains now · alerts · lag',kU('UNKNOWN','no feed runs in this prototype'))}`;
+ let req='';
+ if(st==='none'||st==='withdrawn')req=`<p>No request with this desk. ${st==='withdrawn'?'The desk keeps its copy of the withdrawn one.':''}</p><div class="row">${btn('Ask for extra post-game trains','ask','yes',null,'pri')}</div>`;
+ else if(st==='returned')req=`<div class="ref-box"><b>RETURNED AT INTAKE · ${esc(q.ref.rule)}</b><br>${esc(q.ref.text)}<br><span class="small">Their rule, their word. What you can change: the form. Not their answer.</span></div><div class="row">${btn('Re-form the request','ask','yes',null,'pri')}</div>`;
+ else if(st==='queued')req=`<div class="ref-box"><b>IN THEIR QUEUE</b> · sent as act #${LOGS.transit.find(e=>e.kind==='transit_queue').n-1}<br>You see: <b>count and result</b> only. Queue: 3 files, yours is the 2nd. Others' contents: <b>nothing</b>. Their clock: next review, ${kU('UNKNOWN','the desk does not publish it')}.</div><div class="row">${btn("Wait for the transit desk's clock",'wait',null,null,'pri')}${btn('Withdraw and re-form','withdraw')}</div>`;
+ else req=`<div class="ref-box"><b>YES · ${S.extra} TRAINS</b> · act #${q.decideN}<br>WILL-yes was theirs: ${q.sent.trains} asked, ${S.extra} granted${S.extra<q.sent.trains?' (their practice caps special trains at 2, authored)':''}. Fee moved: desk cash $${nfmt(S.cash.arena)}, their income $${nfmt(S.cash.transit)} (conserved).</div>`;
+ return{title:'Penn Station · transit desk',rel:'practice seat, stands in for separate operators · '+U.relIn,tag:'AUTHORED STAND-IN',h:`
+ ${st==='none'||st==='withdrawn'?'':`<h3>Your request</h3>${req}`}
+ <h3>The pin arrives</h3>
+ ${rowL('Rail riders',kA(nfmt(d.riders))+' '+btn('Why?','why','riders',null,'sm'))}
+ ${rowL('Seats in the window',kA(nfmt(d.seatsWin),SRC.desk)+` <span class="small">${SCEN.baseTrains} trains/h × ${nfmt(SCEN.seats)}${d.extra?' + '+d.extra+' special':''}</span>`)}
+ ${rowL('Load ÷ seats',kA(d.ratio.toFixed(2)))}
+ ${rowL('Still waiting at min '+SCEN.windowMin,kA(nfmt(d.waiting))+' '+btn('Why?','why','waiting',null,'sm'))}
+ <div class="tight">TIGHTEST HERE · the only sheet on this pin's path with a limit loaded</div>
+ ${st==='none'||st==='withdrawn'?`<h3>Your request</h3>${req}`:''}
+ <h3>Observed slots</h3>
+ ${feed}<div class="row">${btn(U.staged?'Unstage the sample':'Stage a feed sample','stage',null,null,'sm',` aria-pressed="${!!U.staged}"`)}</div>
+ ${capBox('PROPOSED','GTFS-realtime mirrored by BOW: MTA terms need a non-MTA host, an unmodified feed, a lag statement over 1 min; revocable.','NO AI')}
+ <p class="small">The OBSERVED rows are UNKNOWN by design. Practice values are AUTHORED and say so.</p>`,
+ hinges:[{fam:'SERVES',to:'arena',label:'Arena desk',prev:'back the way the pin came'},
+  {fam:'SITED AT',to:'hood',label:`Neighborhood (${U.radius} m)`,prev:'who is still on the street'},
+  {fam:'PART OF',to:'city',label:'City',prev:"share of the city's evening trips"},
+  {fam:'OPERATED BY',to:null,label:'the real operators',prev:'separate authorities; no sheet',mode:'no',want:'OPERATED BY: the real rail, subway and commuter operators as their own systems'}]}}
+function shForm(){const d=D(),dr=DR(),dd=U.draft,q=S.req,r=U.rehearsal;
+ const sl=SLOTS.map(([t,f])=>`<button type="button" class="btn sm" data-do="slot" data-a="${t}" ${f?'':'disabled'} aria-pressed="${dd.slots.includes(t)}">${t}${f?'':' busy'}</button>`).join('');
+ const need=dr.riders;
+ return{title:'Request · post-game trains',rel:'a form whose lines other systems hold',tag:'AUTHORED',h:`
+ <div class="row"><span class="small">Trains asked</span>${[1,2,3].map(n=>`<button type="button" class="btn sm" data-do="trains" data-a="${n}" aria-pressed="${dd.trains===n}">${n}</button>`).join('')}</div>
+ <div class="form">
+  <div class="fl ${q.signed?'held':''}"><span class="tag">ARENA<br>WILL</span><span>Line 1 · yours. The operations seat can fill it. ${q.signed?'<b>Signed.</b>':''}</span>${btn('Sign line 1','sign',null,null,'sm')}</div>
+  <div class="fl ${dd.count!=null?'held':''}"><span class="tag">TRANSIT<br>RULE</span><span>R-EV-1 (authored): carry a rider count at least the pinned rail riders, ${kA(nfmt(need))}. ${dd.count!=null?'<b>Attached '+nfmt(dd.count)+'.</b>':''}</span>${btn('Attach '+nfmt(need),'count',null,null,'sm')}</div>
+  <div class="fl ${dd.slots.length>=dd.trains?'held':''}"><span class="tag">TRANSIT<br>TIME</span><span>R-EV-2: a free slot per train. Their free/busy, <b>shape only</b>.<div class="row">${sl}</div></span><span></span></div>
+  <div class="fl"><span class="tag">TRANSIT<br>WILL</span><span>Their discretion, on their clock. ${kU('UNKNOWN','review time not published')} A rehearsal can never say this yes.</span><span></span></div>
+  <div class="fl"><span class="tag">MONEY</span><span>Fee $${nfmt(SCEN.fee)} a train ${kA('illustrative')}, for the trains granted; funds on the desk ${kC('$'+nfmt(S.cash.arena))}. Both ledgers move at the last yes, or neither.</span><span></span></div>
+ </div>
+ <div class="kn"><span class="on">knows now: arena desk</span><span class="off">club HQ (copy at send)</span><span class="off">transit desk (at send)</span><span class="off">League: no line, never told</span></div>
+ ${r?`<div class="ref-box"><b>REHEARSAL · ${esc(r.v)}${r.rule?' · '+esc(r.rule):''}</b><br>${esc(r.text)}<br><span class="small">Recorded as a rehearsal in your trail. It crossed nothing.</span></div>`:''}
+ <div class="row">${btn('Rehearse (dry run)','rehearse')}${btn('Send','send',null,null,'pri')}</div>
+ <p class="small">Sending makes notice copies (you keep yours, you cannot recall it) and the page takes the transit desk's register.</p>
+ ${capBox('PROPOSED','RULE-yes and the form are NO AI; WILL-yes is a human seat or a stippled stand-in','NO AI · SMALL if a model plays the desk')}`,
+ hinges:[{fam:'SERVED BY',to:'transit',label:'Penn Station transit',prev:'their side of the paper'},{fam:'RUN BY',to:'arena',label:'Arena desk',prev:'back'}]}}
+function shClub(){const sid=U.siteSel,t=sid?testSite(sid):null;
+ const pick=Object.values(SITES).map(s=>`<button type="button" class="btn" data-do="siteSel" data-a="${s.id}" aria-pressed="${sid===s.id}"><b>Site ${s.id}</b> · ${s.name}<small>${s.sub}</small></button>`).join('');
+ let tests='';
+ if(t){const v=(c,txt)=>`<span class="verd ${c}">${c==='pass'?'PASS':c==='fail'?'FAIL':'WATCH'}</span>`;
+  const own=t.hitOwn.map(h=>`BIN ${h.bin} (${h.hft?Math.round(h.hft)+' ft':'height UNKNOWN'})`).join(', '),oth=t.hitOther.map(h=>`BIN ${h.bin} filed on lot ${h.bbl}`).join(', ');
+  const lm=t.lotMain;
+  const ovT=t.overlap==='pass'?`None of ${fmt(B.length)} RECORDED footprints meets the rectangle.`:t.overlap==='fail'?`Meets ${own}, on the site's own lot.${oth?' Also nearby: '+oth+'.':''}`:`Meets ${oth}, not this site's lot. The lot's boundary is not loaded, so the rectangle is a guess. CAN'T TELL.`;
+  const vaT=!t.lotsIn.length?'No PLUTO lot point inside.':t.vacancy==='pass'?`${t.lotsIn.length} PLUTO lot points, all land use 11 (vacant), building area 0. Two registries agree; neither says what stands there today.`:`${lm.ad}: land use ${lm.lu} (${LU[lm.lu]}), class ${lm.cl}. Building area ${lm.ba?fmt(lm.ba)+' sq ft':'reads 0: UNKNOWN, not zero'}.${t.lotsIn.length>1&&!t.lotsIn.every(l=>l.lu===lm.lu)?' The rectangle also holds lots of other uses: it is misplaced, not the registry.':''}`;
+  const inT=t.id==='A'?`FacDB lists no facility on BIN ${MSG_BIN}. PLUTO titles the lot to ${'"National Railroad Passenger Corp"'} (title, not operator). The arena's operator: UNKNOWN.`:t.id==='B'?`No FacDB row. FacDB holds only government-funded, licensed or certified facilities: absence is not proof.`:t.id==='C'?`Title: ${OT[lm.ot]} (PLUTO owner type ${lm.ot}). A BOW HQ here is a proposal on the City's lot, never an availability.`:`${t.fac.length} FacDB rows from ${t.ops.length} operators share this one structure, incl. a health clinic. Displayed beside the tenancy, never replaced.`;
+  tests=`<h3>Tests on site ${t.id} · ${t.s.name}</h3>
+  <div class="test"><span class="tn">OVERLAP</span>${v(t.overlap)}<span>${ovT}</span></div>
+  <div class="test"><span class="tn">VACANCY</span>${v(t.vacancy)}<span>${vaT}</span></div>
+  <div class="test"><span class="tn">INSTITUTION</span>${v(t.institution)}<span>${inT}</span></div>
+  <div class="test"><span class="tn">TIME</span>${v('pass')}<span>PLUTO 26v2: 24 Aug 2026. Footprints: 27 Sep (34 days on). A demolition between would show there. This World has no calendar date, so an anachronism test is UNKNOWN.</span></div>
+  <p><b>Renders as:</b> ${t.render}</p>`}
+ else tests=`<p class="small">Pick a site. The rectangle (authored, illustrative size) is tested against the RECORDED footprints and the dated lot and facility rows.</p>`;
+ const placed=S.hq?`<div class="ref-box"><b>PLACED</b> · site ${S.hq.site} as a ${S.hq.mode}. AUTHORED. ${S.hq.mode==='building'?'A proposal drawn as a dashed outline.':'A tenancy flag on a real structure.'}</div>`:'';
+ return{title:'Club HQ · the Lamplighters',rel:'an authored club; where can it stand?',tag:'AUTHORED',h:`<div class="sitepick">${pick}</div>${t?`<div class="row">${btn('Place as a building','place',t.id,'building','pri')}${btn('Place as a tenancy','place',t.id,'tenancy')}</div>`:''}${tests}${placed}
+ ${capBox('PROPOSED','overlap, vacancy, institution and time tests are checkable; they run here on real data','NO AI')}`,
+ hinges:[{fam:'RUNS',to:'arena',label:'Arena desk',prev:'the club\'s tenancy'},{fam:'BOUND BY',to:'league',label:'League Office',prev:'no place'}]}}
+function shLeague(){const d=D();return{title:'League Office · rulebook',rel:'no place · '+U.relIn,tag:'AUTHORED',h:`
+ <h3>Off the map by design</h3><p>A League is a rulebook and a set of seats. It has no lot. Its office address is a public fact and changes nothing about who can say yes.</p>
+ ${rowL('Where',kU('NO PLACE','a rulebook is not sited'))}
+ ${rowL('Rule L-ATT-1',kA('reportable attendance = tickets scanned'))}
+ ${rowL("Tonight's reportable attendance",kA(nfmt(d.crowd)))}
+ <p class="small">The rule is authored for this World. It binds the arena desk without being near it.</p>${capBox('PROPOSED','a non-spatial system reachable by a typed relation','NO AI')}`,
+ hinges:[{fam:'BINDS',to:'arena',label:'Arena desk',prev:'back'},{fam:'MADE OF',to:null,label:'clubs, arenas',prev:'no sheet yet',mode:'no',want:'MADE OF: the clubs and arenas a league is made of'}]}}
+function shHood(){const h=hoodStats(proj2(MSGB()),U.radius),d=D(),cl=CLB(),mo=MOB(),dc=dist(MSGB(),cl),dm=dist(MSGB(),mo);
+ const R=[150,400,800].map(r=>`<button type="button" class="btn sm" data-do="radius" data-a="${r}" aria-pressed="${U.radius===r}">${r} m</button>`).join('');
+ const nm=(m)=>m>=1000?(m/1000).toFixed(1)+' km':Math.round(m)+' m';
+ return{title:`Neighborhood · within ${U.radius} m`,rel:'a saved question, not an institution · '+U.relIn,tag:'DEFINED BY BOW',h:`
+ <div class="row" style="margin-top:0"><span class="small">Radius: a definition, not a fact</span>${R}</div>
+ <h3>Computed from what the city recorded</h3>
+ ${rowL('Footprints inside',kC(fmt(h.n)))}${rowL('Tallest',h.tall?kR(Math.round(h.tall.hft)+' ft · BIN '+h.tall.bin):kU('UNKNOWN','none inside'))}
+ ${rowL('Height / year blank',kU(h.unkH+' / '+h.unkY,'blank in the registry: not zero'))}
+ ${rowL('Open ground (streets, plazas, courts)',kC(nfmt(h.open)+' m²'))}
+ <p class="small">Footprints cannot tell a street from a courtyard: this overstates what people can stand on.</p>
+ <h3>The pin lands</h3>
+ ${rowL('Crowd per hectare, ceiling',kA(nfmt(d.crowd/(h.open/1e4)))+' '+btn('Why?','why','open',null,'sm'))}
+ ${rowL('Still here at min '+SCEN.windowMin,kA(nfmt(d.waiting)))}
+ <p class="small">A ceiling, all outdoors at once: not a forecast, not a model. Nobody's word counts on a saved question. Near is not served: try the two NEAR relations below.</p>
+ ${capBox('PROPOSED','a computed catchment over RECORDED footprints; geography does real work here','NO AI')}`,
+ hinges:[{fam:'SITES',to:'arena',label:'Arena desk',prev:'the ring\'s centre'},{fam:'PART OF',to:'city',label:'City',prev:"share of the city's evening trips"},{fam:'SERVED BY',to:'transit',label:'Penn Station transit',prev:'who carries them away'},
+  {fam:'NEAR',to:'site:'+CLINIC_BIN+':NEAR',label:`35th Street Health Center · ${nm(dc)}${dc<=U.radius?' (inside)':' (outside)'}`,prev:'a FacDB clinic row; near carries nothing',mode:'ref'},
+  {fam:'NEAR',to:'site:'+MOMA_BIN+':NEAR',label:`Museum of Modern Art · ${nm(dm)}${dm<=U.radius?' (inside)':' (outside)'}`,prev:'a FacDB museum row; near carries nothing',mode:'ref'}]}}
+function shCity(){return{title:'City · a saved question',rel:'the far end of this pin · '+U.relIn,tag:'DEFINED BY BOW',h:`
+ <h3>What this excerpt can say</h3>
+ ${rowL('Footprints in this box',kR(fmt(B.length)))}${rowL('Footprints in the city',kR(fmt(SCEN.cityBuildings),SRC.laneA))}
+ ${rowL('Coverage',kC((100*B.length/SCEN.cityBuildings).toFixed(2)+'% of the city\'s buildings'))}
+ <h3>What it cannot</h3>
+ ${rowL("Tonight's crowd as a share of the city's evening trips",kU('UNKNOWN','no ridership denominator is loaded'))}
+ ${rowL('Who owns the definition of "the city here"',kU('UNKNOWN','nobody has declared one'))}
+ <p>The pin stops here. Not because the map ran out, but because the next conversion needs a number no source in this page holds. That is an honest end.</p>
+ <div class="row">${btn('File the ridership denominator as a Want','want','ridership denominator for the Penn Station complex on a weekday evening',null,'pri')}</div>
+ ${S.wants.length?`<p class="small">Wants filed: ${S.wants.map(w=>'#'+w.n+' '+esc(w.topic)).join(' · ')}</p>`:''}
+ ${capBox('SPECULATIVE','an aggregate is a claim by its definer; the definer problem is unsolved','none')}`,
+ hinges:[{fam:'MADE OF',to:'hood',label:'Neighborhood',prev:'back'},{fam:'PART OF',to:null,label:'country, world',prev:'no sheet yet',mode:'no',want:'PART OF: the sports economy above the city'}]}}
+function shSite(){const bin=U.site,idx=BIN[bin],b=idx&&B[idx[0]];
+ if(!b)return{title:'Site · BIN '+esc(bin),rel:'not in this excerpt',tag:'UNKNOWN',h:`<p>No footprint with BIN ${esc(bin)} in this box. The box holds ${fmt(B.length)} of about ${fmt(SCEN.cityBuildings)} footprints in the city [verify].</p>`,hinges:[]};
+ const lot=LOT[b.bbl],fac=FACS.filter(f=>f.bin===bin),ops=[...new Set(fac.map(f=>f.o||f.n))];
+ const tenants=[];if(bin===MSG_BIN)tenants.push('Arena desk (Lamplighters)');if(S.hq&&S.hq.mode==='tenancy'&&testSite(S.hq.site).hitOwn.some(h=>h.bin===bin))tenants.push('Club HQ (Lamplighters)');
+ const h=[];if(bin===MSG_BIN){h.push({fam:'HOSTS',to:'arena',label:'Arena desk',prev:'AUTHORED tenancy'},{fam:'HOSTS',to:'transit',label:'Penn Station transit',prev:'below ground; extent UNKNOWN'})}
+ if(tenants.includes('Club HQ (Lamplighters)'))h.push({fam:'HOSTS',to:'club',label:'Club HQ',prev:'AUTHORED tenancy'});
+ const near=U.relIn&&/NEAR/.test(U.relIn);
+ return{title:'Site · BIN '+bin,rel:'many authorities, one place'+(U.relIn?' · arrived by '+U.relIn:''),tag:'RECORDED',h:`
+ ${near?`<div class="ref-box"><b>REFUSED · SITED-1</b><br>The pin did not come with you. Location carries only what is physically there. The crowd is not in this building, and nothing here SERVES the arena. Follow SERVES or PAYS if a relation exists.</div>`:''}
+ <h3>Structure</h3>
+ ${rowL('BIN · roof',kR('BIN '+bin)+' '+(b.hft?kR(b.hft.toFixed(1)+' ft'):kU('UNKNOWN','blank or zero in the registry')))}
+ ${rowL('Built · footprint',(b.yr?kR(String(b.yr)):kU('UNKNOWN','blank in the registry'))+' '+kC(nfmt(b.area)+' m² prism'))}
+ <h3>Lot · BBL ${b.bbl}</h3>
+ ${lot?`${rowL('Address',kR(esc(lot.ad),SRC.pluto))}${rowL('Use, class',kR(`${LU[lot.lu]||lot.lu}, ${lot.cl}`,SRC.pluto))}${rowL('Owner type',kR(OT[lot.ot]||lot.ot,SRC.pluto))}${rowL('Building area',lot.ba?kR(fmt(lot.ba)+' sq ft',SRC.pluto):kU('UNKNOWN','reads 0: not a measurement'))}${bin===MSG_BIN?rowL('Title',kR('National Railroad Passenger Corp',SRC.pluto)):''}`:rowL('PLUTO fields',kU('NOT IN EXCERPT','this page carries lots for its cluster only'))}
+ <h3>Operators · FacDB</h3>
+ ${fac.length?`${rowL('Rows',kR(fac.length+' from '+ops.length+' operators',SRC.facdb))}<p class="small">${fac.slice(0,5).map(f=>esc(f.n)).join(' · ')}${fac.length>5?' · and '+(fac.length-5)+' more':''}</p>`:rowL('Rows',kU('NONE','FacDB lists only government-funded, licensed or certified facilities'))}
+ <h3>BOW tenancies</h3>
+ ${tenants.length?tenants.map(t=>rowL(t,kA('AUTHORED tenancy'))).join(''):rowL('None',kU('NONE','nothing of BOW\'s stands here'))}
+ <p class="small">Keys stay apart: <code>nyc:bin:${bin}</code> · <code>nyc:bbl:${b.bbl}</code>${tenants.length?' · <code>bow:lamplighters/…</code>':''}. A condo lot can carry a billing BBL unlike the footprint's: join FacDB by BIN.</p>
+ ${capBox('PROPOSED','a registry join by BIN/BBL/uid; no invention','NO AI')}`,hinges:h}}
+const SHEETS={front:shFront,arena:shArena,transit:shTransit,form:shForm,club:shClub,league:shLeague,hood:shHood,city:shCity,site:shSite};
+/* ---- standing line: the ground changes with the subject ---- */
+function standing(){const seat=S.seat,y=U.sys;
+ const m={front:['YOU ARE IN · READING COPY','Reality City · Midtown excerpt',seat?"your word counts for: <b>the club's site, the arena desk's requests</b> · not for: <b>anything a city registry says</b>":'your word counts for: <b>nothing yet</b>. You can look, ask, hop, pencil · not for: <b>any system\'s acts</b>'],
+  arena:[seat?'YOU ARE IN · ARENA DESK':'VISITING · ARENA DESK · AUTHORED TENANCY','Lamplighters arena desk',seat?"your word counts for: <b>the club's site, the desk's requests</b> · not for: <b>train service, the lot's title, the League's rules</b>":'you can: <b>look, follow relations, pencil</b> · you cannot: <b>file requests</b> (needs the operations seat)'],
+  form:['YOU ARE IN · ARENA DESK · DRAFTING','Post-game train request',"line 1 is yours · lines 2 to 5 are <b>held elsewhere</b>: rule, time, will (the transit desk), money (both ledgers)"],
+  transit:['VISITING · TRANSIT DESK · PRACTICE SEAT (AUTHORED STAND-IN)','Penn Station transit','you can see: <b>the shape of their timetable, free/busy slots, your request\'s status</b> · you cannot: <b>add a train, read their reviews</b>'],
+  club:[seat?'YOU ARE IN · CLUB HQ':'VISITING · CLUB HQ · AUTHORED','The Lamplighters',seat?'your word counts for: <b>where the club stands</b> · not for: <b>the lot\'s owner, the City, the registries</b>':'you can: <b>test sites</b> · you cannot: <b>place</b> (needs the operations seat)'],
+  league:['VISITING · LEAGUE OFFICE · AUTHORED RULEBOOK, NO PLACE','League Office','you can see: <b>rule text</b> · you cannot: <b>change it</b>; its makers are not on this map'],
+  hood:['LOOKING AT · A SAVED QUESTION · NO SEAT',`Everything within ${U.radius} m of BIN ${MSG_BIN}`,'nobody\'s word counts here · you may change: <b>the radius</b>, which is a definition'],
+  city:['LOOKING AT · A SAVED QUESTION · NO SEAT','The city, as far as this page knows','nobody\'s word counts here · the definition of "the city" has <b>no owner</b> yet'],
+  site:['LOOKING AT · A SITE · MANY AUTHORITIES','Site · BIN '+U.site,'a site is where authorities <b>meet</b>; none of them is the site']}[y];
+ return{s1:m[0],s2:m[1],s3:m[2],gt:U.branch!=='record'?'YOUR BRANCH':y==='transit'?'THEIR REGISTER':'READING COPY'}}
+function renderStanding(){const s=standing();$('#standing').innerHTML=`<div class="sb"><div class="s1">${s.s1}</div><div class="s2">${s.s2}</div><div class="s3">${s.s3}</div></div><span class="gt">${s.gt}</span>`}
+/* ---- render ---- */
+function renderTop(){const h=heads(),lg=U.sys==='transit'?'transit':U.sys==='club'?'club':'arena';
+  $('#addr').textContent=`city.midtown · n${S.n} · ${U.branch} · ${S.seat?'seat:ops':'observer'} · ${VIEW} · ${U.sys}${U.site&&U.sys==='site'?':'+U.site:''}${U.pin?' · pin:crowd':''}`;
+  $('#clocks').innerHTML=`<span class="cl"><b>REALITY</b> footprints 2026-09-27 · PLUTO 26v2 · FacDB 26v1 · no feed runs</span><span class="cl"><b>WORLD</b> ${WORLD} (authored)</span><span class="cl"><b>RECORD</b> act #${S.n} · ${lg} log ${h[lg]?h[lg].slice(0,10)+'…':'folding…'} sha-256</span>`}
+function renderSheet(){const o=(SHEETS[U.sys]||shFront)(),first=U.sys==='front';
+  let body;
+  if(U.why)body=whyHtml(U.why);
+  else{let top='';
+   if(U.refusal)top+=`<div class="ref-box"><b>REFUSED · ${esc(U.refusal.rule)}</b><br>${esc(U.refusal.text)}<br><span class="small">The rule names itself. What you can change is the request, not the rule.</span></div>`;
+   if(U.notice)top+=`<div class="ref-box"><b>${esc(U.notice.head)}</b><br>${esc(U.notice.text)}${U.notice.want?' '+btn('File the Want','want',U.notice.want,null,'sm'):''}</div>`;
+   if(U.showPen)top+=penHtml();
+   if(U.branch!=='record')top+=forkHtml();
+   body=top+o.h}
+  const hg=(o.hinges||[]).map(x=>{const cls=x.mode==='no'?'no':x.mode==='ref'?'ref':'';return `<button type="button" class="${cls}" data-do="hop" data-a="${x.to||''}" data-b="${esc(x.fam)}"${x.want?` data-w="${esc(x.want)}"`:''}>${x.fam} · ${esc(x.label)}<small>${esc(x.prev)}</small></button>`}).join('');
+  $('#sheet').innerHTML=`<div class="sh-h"><div><h2 tabindex="-1" id="shTitle">${esc(o.title)}</h2><div class="rel">${esc(o.rel)}</div></div><span style="display:flex;gap:6px;align-items:flex-start">${btn('Front desk','front',null,null,'sm')}<span class="gt">${o.tag}</span></span></div>${first?'':ribbon()}<div class="sh-b" id="shB">${body}</div>${hg?`<div id="hinges"><div class="hh">FOLLOW A RELATION · the pin comes along, converted</div><div class="hg">${hg}</div></div>`:''}`;
+  const inp=$('#askIn');if(inp)inp.addEventListener('input',e=>{U.askText=e.target.value});
+}
+function renderEdges(){const el=$('#edges');const ps=U.path.slice(-(innerWidth>1350?3:innerWidth>1150?2:0));const off=U.path.length-ps.length;
+  el.innerHTML=ps.map((p,i)=>`<button type="button" class="edge" data-do="edge" data-a="${off+i}" aria-label="Go back to ${nm(p.sys,p.bin)}: ${esc(reading(p.sys,true))}"><span class="et">${nm(p.sys,p.bin)}</span><span class="er">${esc(reading(p.sys,true))}</span></button>`).join('')}
+function penHtml(){const a=U.pencil||{},d=derive(a);const cr=a.crowd??S.crowd,sh=a.railShare??S.railShare;
+  return `<div class="pen"><b class="small">WHAT IF · IN PENCIL · nothing forks, nothing saves</b>
+  <label>Crowd <span data-live="pcrowd">${nfmt(cr)}</span></label><input type="range" id="pCrowd" aria-label="Crowd in pencil" min="12000" max="24000" step="500" value="${cr}">
+  <label>Rail share <span data-live="pshare">${Math.round(sh*100)}%</span></label><input type="range" id="pShare" aria-label="Rail share in pencil" min="30" max="80" step="5" value="${Math.round(sh*100)}">
+  <div class="small">Pencil: <span data-live="ppen">${nfmt(d.riders)} riders · ${nfmt(d.waiting)} waiting at min ${SCEN.windowMin}</span></div>
+  <div class="row">${btn('Release (erase the pencil)','release',null,null,'sm')}${btn('Keep as a branch','keep',null,null,'sm br pri')}</div>${capBox('PROPOSED','a pull across the pin; release erases it','NO AI')}</div>`}
+function forkHtml(){const br=U.branches[U.branch],a=br.a,d=derive(a),r=DR();
+  return `<div class="fork"><b class="st">Your branch · ${U.branch} · diverged at act #${br.at}</b>
+  <div class="small">Assumptions kept: crowd ${nfmt(a.crowd??S.crowd)} · rail share ${Math.round((a.railShare??S.railShare)*100)}%. Both AUTHORED. Nothing on the record changed.</div>
+  <table class="cmp"><tr><th>Compare</th><th>Record</th><th>Branch</th></tr>
+  <tr><td>Rail riders</td><td>${nfmt(r.riders)}</td><td>${nfmt(d.riders)}</td></tr>
+  <tr><td>Seats in the window</td><td>${nfmt(r.seatsWin)}</td><td>${nfmt(d.seatsWin)}</td></tr>
+  <tr><td>Waiting at min ${SCEN.windowMin}</td><td>${nfmt(r.waiting)}</td><td>${nfmt(d.waiting)}</td></tr>
+  <tr><td>Minutes to clear</td><td>${r.clear.toFixed(1)}</td><td>${d.clear.toFixed(1)}</td></tr></table>
+  <div class="row">${btn('Return to the record','return',null,null,'sm')}</div></div>`}
+function updateLive(){const a=U.pencil;if(!a)return;const d=derive(a);const set=(k,t)=>{const e=document.querySelector(`[data-live=${k}]`);if(e)e.textContent=t};set('pcrowd',nfmt(d.crowd));set('pshare',Math.round(d.share*100)+'%');set('ppen',`${nfmt(d.riders)} riders · ${nfmt(d.waiting)} waiting at min ${SCEN.windowMin}`)}
+function renderLegend(){const sw=(k,st,t)=>`<span class="lg"><span class="sw" style="${st}"></span>${k}${t?' <span style="opacity:.75">'+t+'</span>':''}</span>`;
+  $('#legend').innerHTML=sw('RECORDED','background:#1c2420;box-shadow:inset 0 0 0 2px #1c2420,inset 0 0 0 3.5px #f6f1e3','footprint edge')+sw('COMPUTED','background:rgba(28,36,32,.16);border-color:transparent','massing')+sw('AUTHORED','border-style:dashed;background:transparent','BOW\'s')+sw('UNKNOWN','border-style:dashed;border-color:#4a524b;background:transparent','blank, with reason')+sw('MODELED','background:repeating-linear-gradient(135deg,rgba(28,36,32,.28) 0 1.5px,transparent 1.5px 5px)','none ran')+sw('GENERATED','background-image:radial-gradient(circle,rgba(28,36,32,.75) .8px,transparent 1.1px);background-size:4px 4px','none here')+sw('OBSERVED','background:#1c2420','no feed')}
+function renderBand(){const bb=$('#band');bb.classList.toggle('closed',!U.band);$$('[data-band]').forEach(b=>b.setAttribute('aria-pressed',String(U.band===b.dataset.band)));
+  const el=$('#bandbody');if(!U.band){el.innerHTML='';return}
+  if(U.band==='record'){const all=[];for(const l of Object.keys(LOGS))for(const e of LOGS[l])if(!all.find(x=>x.n===e.n))all.push(e);all.sort((a,b)=>b.n-a.n);
+    el.innerHTML=`<div class="small">RECORD · acts that changed state · append-only · each log folded with SHA-256${U.verified?` · verified on load: <b>${U.verified}</b>`:''}</div><ul class="rec">${all.slice(0,14).map(e=>`<li><b>#${e.n}</b> ${esc(e.by)} ${esc(e.text)}<small>${e.logs.join(' + ')} log${e.logs.length>1?'s':''}</small></li>`).join('')}</ul><div class="small">YOUR TRAIL · private, never hashed · ${esc(U.trail.slice(-5).join(' › '))}</div>${capBox('REAL','the SHA-256 fold of an act log exists in the Live World page (built, not yet on a shared store). One log per system across a city is PROPOSED.','NO AI')}`}
+  else if(U.band==='three'){const col=(l,t)=>`<div><h4>${t}</h4><ul class="rec">${LOGS[l].slice(-5).reverse().map(e=>`<li><b>#${e.n}</b> ${esc(e.text.slice(0,120))}${e.text.length>120?'…':''}<small>${e.h?e.h.slice(0,12)+'…':'folding…'}</small></li>`).join('')||'<li class="small">empty</li>'}</ul></div>`;
+    el.innerHTML=`<div class="cols3">${col('arena','Arena desk')}${col('transit','Transit desk')}${col('club','Club HQ')}</div><div class="small">Three records, no god view. The City has no record of its own: it is a saved question. (${LOGS.city.length} entries in the World's log.)</div>`}
+}
+function mapNote(){const st=window.__stats;if(U.know&&st){$('#mapnote').innerHTML=`Footprint edges: RECORDED (${SRC.fp}). Prisms: COMPUTED, footprint × roof height. Dashed: AUTHORED by BOW. Dashed ring: extent UNKNOWN (under the ground). Tinted: a facility row or tenancy is anchored there.`;return}$('#mapnote').innerHTML=st?`REALITY · ${fmt(B.length)} RECORDED footprints (${B.filter(b=>b.hft==null).length} with no height: UNKNOWN, drawn flat) · massing COMPUTED, flat roofs, no facades · ${VIEW==='L1'?'L1: '+fmt(st.roof)+' triangles':'L3: '+fmt(st.roof+st.wall)+' triangles'}${VIEW==='L3'?' · perspective: no scale bar':''}`:'loading footprints…'}
+/* ---- overlay: authored things are outlines; recorded things are never repainted ---- */
+let MKS=[];
+function circle(cx,cy,r,z){const p=[];for(let i=0;i<=72;i++){const a=i/72*Math.PI*2;p.push(scr(cx+Math.cos(a)*r,cy+Math.sin(a)*r,z||0))}return p}
+const pth=(p,close)=>'M'+p.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join('L')+(close?'Z':'');
+function overlay(){if(!B.length)return;const out=[],m=MSGB();
+  const stroke=(p,col,w,dash,close,fill,halo)=>{if(halo)out.push(`<path d="${pth(p,close)}" fill="none" stroke="#f6f1e3" stroke-width="${w+3}" stroke-linejoin="round"/>`);out.push(`<path d="${pth(p,close)}" fill="${fill||'none'}" stroke="${col}" stroke-width="${w}" ${dash?`stroke-dasharray="${dash}"`:''} stroke-linejoin="round"/>`)};
+  /* unknown-height buildings: dashed */
+  for(const b of B)if(b.hft==null&&VIEW==='L1'){const r=b.rings[0][0];if(scr(b.cx,b.cy,0)[0]>-20&&scr(b.cx,b.cy,0)[0]<W+20)stroke(r.map(p=>scr(p[0],p[1],0)),'#4a524b',1.2,'3 3',true)}
+  /* transit: extent under the ground is UNKNOWN */
+  const lot=LOT['1007810001'],lp=proj(lot.lon,lot.lat),rr=Math.sqrt(lot.la*0.0929/Math.PI);
+  stroke(circle(lp[0],lp[1],rr,0),'#3b4658',1.8,'8 5',false,null,true);
+  /* hood ring */
+  if(U.sys==='hood'||U.path.some(p=>p.sys==='hood')){stroke(circle(m.cx,m.cy,U.radius,0),'#7d5f1c',2.2,'12 6');const t=scr(m.cx+U.radius*0.72,m.cy-U.radius*0.72,0);out.push(`<text x="${t[0]}" y="${t[1]}" font-family="IBM Plex Mono,monospace" font-size="11" font-weight="600" fill="#7d5f1c">saved question · ${U.radius} m</text>`)}
+  /* backlog ring */
+  if(U.pin){const d=D();if(d.waiting>0){stroke(circle(lp[0],lp[1],Math.max(14,0.9*Math.sqrt(d.waiting)),0),U.branch!=='record'||U.pencil?'#ad3517':'#1c2420',2.4,'3 3');}}
+  /* candidate sites */
+  if(U.sys==='club'){for(const s of Object.values(SITES)){const R=testSite(s.id).R,sel=U.siteSel===s.id;stroke(R.map(p=>scr(p[0],p[1],0)),'#1e6a3e',sel?3:1.6,'6 4',true,sel?'rgba(30,106,62,.12)':null,true)}}
+  /* placed HQ */
+  if(S.hq){const t=testSite(S.hq.site);if(S.hq.mode==='building'){const zt=40,base=t.R.map(p=>scr(p[0],p[1],0)),top=t.R.map(p=>scr(p[0],p[1],zt));stroke(base,'#1e6a3e',2.6,'7 4',true,null,true);stroke(top,'#1e6a3e',2.6,'7 4',true,null,true);base.forEach((p,i)=>{out.push(`<path d="M${p[0]} ${p[1]}L${top[i][0]} ${top[i][1]}" stroke="#f6f1e3" stroke-width="5.5"/><path d="M${p[0]} ${p[1]}L${top[i][0]} ${top[i][1]}" stroke="#1e6a3e" stroke-width="2.6" stroke-dasharray="7 4"/>`)})}
+    else{const b=BIN[t.hitOwn[0].bin]&&B[BIN[t.hitOwn[0].bin][0]];if(b){const a=scr(b.cx,b.cy,b.hM),z=scr(b.cx,b.cy,b.hM+40);out.push(`<path d="M${a[0]} ${a[1]}L${z[0]} ${z[1]}" stroke="#1e6a3e" stroke-width="2.2" stroke-dasharray="5 4"/>`)}}}
+  /* tenancy flag on the arena */
+  {const a=scr(m.cx,m.cy,m.hM),z=scr(m.cx,m.cy,m.hM+45);out.push(`<path d="M${a[0]} ${a[1]}L${z[0]} ${z[1]}" stroke="#25665f" stroke-width="2.2" stroke-dasharray="5 4"/>`)}
+  /* selected building: double rule */
+  if(U.site){const ix=BIN[U.site];if(ix)for(const i of ix){const rs=B[i].rings;for(const r of rs){const p=r[0].map(q=>scr(q[0],q[1],B[i].hM));stroke(p,'#1c2420',4,null,true);stroke(p,'#f6f1e3',1.4,null,true)}}}
+  /* scale bar (L1 only) + north */
+  if(VIEW==='L1'){const mpp=(2*H0/camO.zoom)/Hh,px=100/mpp;out.push(`<g font-family="IBM Plex Mono,monospace" font-size="10" fill="#1c2420"><path d="M${W-px-14} ${Hh-34}h${px}" stroke="#1c2420" stroke-width="3"/><text x="${W-px-14}" y="${Hh-40}">100 m</text><path d="M${W-30} 64l6 -16l6 16z" fill="#1c2420"/><text x="${W-36}" y="42">N</text></g>`)}
+  else out.push(`<text x="${W-40}" y="42" font-family="IBM Plex Mono,monospace" font-size="10" fill="#1c2420">N ↑ (approx.)</text>`);
+  $('#ov').innerHTML=out.join('');
+  posMarkers()}
+window.__overlay=overlay;
+function buildMarkers(){MKS=[];const m=MSGB(),cl=CLB(),mo=MOB();
+  MKS.push({id:'arena',label:'Arena desk',sub:'BIN '+MSG_BIN+' · AUTHORED tenancy',x:m.cx,y:m.cy,z:m.hM+48,cls:'au',dy:-2,do:['go','arena'],cur:U.sys==='arena'});
+  MKS.push({id:'transit',label:'Transit desk',sub:'below ground · extent UNKNOWN',x:m.cx,y:m.cy,z:0,cls:'un',dy:52,do:['go','transit'],cur:U.sys==='transit'||U.sys==='form'});
+  {const yb=B[BIN['1084820'][0]];MKS.push({id:'yard',label:'C Yard · MTA',sub:'FacDB row · BIN 1084820',x:yb.cx,y:yb.cy,z:yb.hM+4,cls:'un',dy:0,do:['hop','site:1084820:SITED AT'],cur:U.site==='1084820'&&U.sys==='site'})}
+  MKS.push({id:'clinic',label:'35th St Health Ctr',sub:'FacDB row · no BOW system',x:cl.cx,y:cl.cy,z:cl.hM+4,cls:'un',dy:0,do:['hop','site:'+CLINIC_BIN+':SITED AT'],cur:U.site===CLINIC_BIN&&U.sys==='site'});
+  MKS.push({id:'moma',label:'Museum of Modern Art',sub:'FacDB row · no BOW system',x:mo.cx,y:mo.cy,z:mo.hM+4,cls:'un',dy:0,do:['hop','site:'+MOMA_BIN+':SITED AT'],cur:U.site===MOMA_BIN&&U.sys==='site'});
+  if(U.sys==='club')for(const s of Object.values(SITES)){const c=proj(s.lon,s.lat);MKS.push({id:'s'+s.id,label:'Site '+s.id,sub:s.name,x:c[0],y:c[1],z:0,cls:'au',dy:s.id==='A'?-84:-38,do:['siteSel',s.id],cur:U.siteSel===s.id})}
+  if(S.hq&&U.sys!=='club'){const c=proj(SITES[S.hq.site].lon,SITES[S.hq.site].lat);MKS.push({id:'hq',label:'Club HQ',sub:S.hq.mode==='building'?'AUTHORED proposal':'AUTHORED tenancy',x:c[0],y:c[1],z:S.hq.mode==='building'?44:0,cls:'au',dy:S.hq.site==='A'?-84:-6,do:['go','club'],cur:false})}
+  const host=$('#mk');host.innerHTML=MKS.map((k,i)=>`<button type="button" class="mk ${k.cls}" data-i="${i}" ${k.cur?'aria-current="true"':''} aria-label="${esc(k.label+': '+k.sub)}">${esc(k.label)}<small>${esc(k.sub)}</small></button>`).join('');
+  host.querySelectorAll('.mk').forEach(b=>b.addEventListener('click',()=>{const k=MKS[+b.dataset.i];doCmd(k.do[0],k.do[1],null)}))}
+function posMarkers(){const els=$$('#mk .mk');const order=MKS.map((k,i)=>i).sort((x,y)=>(MKS[y].cur?1:0)-(MKS[x].cur?1:0));
+  MKS.forEach((k,i)=>{const e=els[i];if(!e)return;const p=scr(k.x,k.y,k.z),y=p[1]+(k.dy||0);const vis=p[0]>40&&p[0]<W-40&&y>44&&y<Hh-30;e.style.display=vis?'':'none';e.style.left=p[0]+'px';e.style.top=y+'px'});
+  const placed=[];for(const i of order){const e=els[i];if(!e||e.style.display==='none')continue;const r=e.getBoundingClientRect(),mr=$('#mapwrap').getBoundingClientRect();if(r.left<mr.left+2||r.right>mr.right-2||r.top<mr.top+40||r.bottom>mr.bottom-24){e.style.display='none';continue}if(placed.some(q=>r.left<q.right+2&&r.right>q.left-2&&r.top<q.bottom+2&&r.bottom>q.top-2)){e.style.display='none'}else placed.push(r)}}
+function focusFor(sys){const m=MSGB(),h=U.radius;
+  switch(sys){case 'arena':case 'transit':case 'form':return{x:m.cx,y:m.cy,r:260};case 'hood':return{x:m.cx,y:m.cy,r:h*1.15};case 'city':case 'front':return{x:0,y:0,r:1150};case 'league':return{x:0,y:0,r:1150};
+   case 'club':{if(U.siteSel){const c=proj(SITES[U.siteSel].lon,SITES[U.siteSel].lat);return{x:c[0],y:c[1],r:200}}if(S.hq){const c=proj(SITES[S.hq.site].lon,SITES[S.hq.site].lat);return{x:c[0],y:c[1],r:220}}return{x:0,y:0,r:1150}}
+   case 'site':{const ix=BIN[U.site];if(ix){const b=B[ix[0]];return{x:b.cx,y:b.cy,r:220}}}}return{x:0,y:0,r:1150}}
+function paintBuildings(){const m={};const put=(bin,rgb)=>{(BIN[bin]||[]).forEach(i=>m[i]=rgb)};put(MSG_BIN,[0.60,0.76,0.72]);put(CLINIC_BIN,[0.88,0.76,0.52]);(BIN['1084820']||[]).forEach(i=>m[i]=[0.68,0.72,0.80]);put(MOMA_BIN,[0.88,0.76,0.52]);(BIN['1081127']||[]).forEach(i=>m[i]=[0.88,0.76,0.52]);(BIN['1081130']||[]).forEach(i=>m[i]=[0.88,0.76,0.52]);
+  if(U.site&&BIN[U.site])for(const i of BIN[U.site])m[i]=[0.98,0.86,0.42];retone(m)}
+function render(){document.body.dataset.g=GROUND[U.sys]||'front';document.body.classList.toggle('branch',U.branch!=='record'||!!U.pencil);document.body.classList.toggle('know',U.know);document.body.classList.toggle('real',U.real);
+  $('#bKnow').setAttribute('aria-pressed',String(U.know));$('#bReal').setAttribute('aria-pressed',String(U.real));
+  $$('#tabs button').forEach(b=>b.setAttribute('aria-pressed',String(U.tab===b.dataset.tab)));document.body.dataset.tab=U.tab;
+  renderTop();renderStanding();renderSheet();renderEdges();renderBand();renderLegend();mapNote();
+  if(B.length){buildMarkers();paintBuildings();if(U.fly){flyTo(focusFor(U.sys));U.fly=false}}
+  writeHash();req();
+  const lk=U.lastKey;if(lk){const e=document.querySelector(`#sheet [data-do="${lk[0]}"]${lk[1]!=null?`[data-a="${CSS.escape(lk[1])}"]`:''}`);if(e&&document.activeElement!==e&&!/^(ask|askgo)$/.test(lk[0]))try{e.focus({preventScroll:true})}catch(x){}}}
+/* ---- address in the URL ---- */
+function writeHash(){const h=`#s=${U.sys}${U.sys==='site'?':'+U.site:''}&m=n${S.n}&b=${U.branch}&vp=${S.seat?'seat:ops':'observer'}&v=${VIEW}&pin=${U.pin?'crowd':'none'}&r=${U.radius}${U.siteSel?'&site='+U.siteSel:''}`;try{history.replaceState(null,'',h)}catch(e){}}
+function readHash(){const h=location.hash.slice(1);if(!h)return;const q=Object.fromEntries(h.split('&').map(x=>x.split('=')));
+  if(q.s){const [s,site]=q.s.split(':');if(SHEETS[s]){U.sys=s;if(s==='site'&&site)U.site=site}}
+  if(q.v==='L3')U.view='L3';if(q.pin==='crowd')U.pin='crowd';if(q.r&&[150,400,800].includes(+q.r))U.radius=+q.r;if(q.site&&SITES[q.site])U.siteSel=q.site;
+  if(q.b&&q.b!=='record'&&U.branches[q.b])U.branch=q.b;
+  if(q.vp&&q.vp.startsWith('seat')&&!S.seat)U.seatBanner=true;U.hashMoment=q.m}
+/* ---- commands ---- */
+function pushPath(rel){U.path.push({sys:U.sys,rel,bin:U.sys==='site'?U.site:null})}
+const nm=(sys,bin)=>sys==='site'?'Site '+(bin||U.site):NAMES[sys];
+function hopTo(to,rel){if(to==='site'||String(to).startsWith('site:')){const [,bin,r2]=String(to).split(':');if(!BIN[bin]){U.notice={head:'NOT IN THIS EXCERPT',text:'No footprint with BIN '+bin+' in this box.'};return}
+    const rl=rel||r2||'';pushPath(rl||'SITED AT');U.sys='site';U.site=bin;U.relIn=rl;U.notice=null;U.why=null;U.fly=true;return}
+  const ix=U.path.findIndex(p=>p.sys===to);if(ix>=0){U.path=U.path.slice(0,ix);}else if(U.sys!==to)pushPath(rel||'');
+  U.sys=to;U.relIn=rel||'';U.notice=null;U.why=null;U.fly=true;if(U.path.length>6)U.path=U.path.slice(-6)}
+function doCmd(d,a,b,el){
+  U.lastKey=[d,a];U.refusal=null;
+  switch(d){
+   case 'front':U.path=[];U.sys='front';U.relIn='';U.notice=null;U.why=null;U.fly=true;trail('went to the front desk');break;
+   case 'go':if(U.sys==='front')U.path=[];hopTo(a,U.sys===a?'':'DIRECT');if(a==='club'&&!U.siteSel&&S.hq)U.siteSel=S.hq.site;trail('went to '+a);break;
+   case 'hop':{if(!a){const w=el&&el.dataset.w;U.notice={head:'NO SHEET YET',text:'This relation exists in the grammar, but no system stands behind it yet. The hole is honest; it can be recorded as a Want.',want:w||'an unbuilt relation'};trail('followed a relation with no sheet');break}
+     hopTo(a,b);trail(`followed ${b} to ${a}`);announce(`${b}: now looking at ${NAMES[a.split(':')[0]]||a}. Your standing line changed.`);break}
+   case 'edge':{const p=U.path[+a];U.path=U.path.slice(0,+a);U.sys=p.sys;if(p.bin)U.site=p.bin;U.relIn='';U.fly=true;U.why=null;trail('returned via a folded edge');break}
+   case 'pin':U.pin='crowd';trail('pinned tonight\'s crowd');announce("Pinned: tonight's arena crowd, 18,000 people. It travels with you.");break;
+   case 'unpin':U.pin=null;U.path=[];trail('dropped the pin');break;
+   case 'seat':act('take_seat');announce('You hold the Lamplighters operations seat.');break;
+   case 'ask':{const t=a==='crowd'?'arena':a==='hq'?'club':'form';U.pin='crowd';U.path=[];U.sys=t;U.relIn='ASK';U.noSys=null;U.notice=null;U.fly=true;if(t==='club'&&S.hq)U.siteSel=S.hq.site;trail('asked: '+a);announce('Arrived at '+NAMES[t]+'. The question became the pin.');break}
+   case 'askgo':{const q=(U.askText||'').toLowerCase();if(!q.trim()){break}let t=null;if(/crowd|tonight|city|attend/.test(q))t='crowd';else if(/hq|headquarter|where|stand|club/.test(q))t='hq';else if(/train|transit|yes|penn|subway/.test(q))t='yes';
+     if(t){doCmd('ask',t,null);return}U.noSys=U.askText;trail('asked something no system answers');announce('No system for this in this excerpt. Your words were kept.');break}
+   case 'wantask':act('want',{topic:U.noSys});U.noSys=null;U.askText='';break;
+   case 'want':act('want',{topic:a});U.notice=null;break;
+   case 'siteSel':U.siteSel=a;U.fly=true;trail('tested site '+a);break;
+   case 'place':{const ok=act('place_hq',{site:a,mode:b});if(ok){U.fly=true;announce('Placed. AUTHORED, drawn as a dashed outline.')}break}
+   case 'radius':U.radius=+a;U.fly=true;trail('radius '+a);break;
+   case 'binfind':{const v=(($('#binIn')||{}).value||'').trim();if(BIN[v]){hopTo('site:'+v+':','');}else{U.notice={head:'NOT IN THIS EXCERPT',text:'BIN '+v+' is not one of the '+fmt(B.length)+' footprints in this box.'};U.sys=U.sys}trail('found BIN '+v);break}
+   case 'stage':U.staged=!U.staged;trail('staged sample '+U.staged);break;
+   case 'trains':U.draft.trains=+a;U.draft.slots=U.draft.slots.slice(0,+a);break;
+   case 'count':U.draft.count=DR().riders;trail('attached rider count');break;
+   case 'slot':{const s=U.draft.slots;const i=s.indexOf(a);if(i>=0)s.splice(i,1);else s.push(a);break}
+   case 'rehearse':{const need=DR().riders,dd=U.draft;U.rehearsal=dd.count==null?{v:'NO',rule:'R-EV-1',text:'no rider count attached.'}:dd.count<need?{v:'NO',rule:'R-EV-1',text:`the count ${fmt(dd.count)} is below the pinned rail riders ${fmt(need)}.`}:dd.slots.length<dd.trains?{v:'NO',rule:'R-EV-2',text:`${dd.slots.length} free slots chosen for ${dd.trains} trains.`}:{v:"CAN'T TELL",text:'RULE and TIME pass. WILL is the operator\'s discretion; a rehearsal cannot say someone else\'s yes.'};trail('rehearsed: '+U.rehearsal.v);break}
+   case 'sign':act('sign_line');U.rehearsal=null;break;
+   case 'send':{const ok=act('send_request',{trains:U.draft.trains,count:U.draft.count,slots:[...U.draft.slots]});if(ok){U.rehearsal=null;U.sys='transit';U.relIn='SENT';U.fly=true;U.path=U.path.filter(p=>p.sys!=='form');announce('Sent. The page took the transit desk\'s register.')}break}
+   case 'wait':act('clock');break;
+   case 'withdraw':act('withdraw');U.draft={trains:2,count:null,slots:[]};break;
+   case 'pen':U.showPen=!U.showPen;if(U.showPen&&!U.pencil){U.pencil={crowd:S.crowd,railShare:S.railShare}}if(!U.showPen)U.pencil=null;U.why=null;trail('what if '+(U.showPen?'open':'closed'));break;
+   case 'release':U.pencil=null;U.showPen=false;trail('released the pencil');announce('Pencil erased. Nothing had forked.');break;
+   case 'keep':{const id='b'+(Object.keys(U.branches).length+1);U.branches[id]={a:{...U.pencil},at:S.n};U.branch=id;U.pencil=null;U.showPen=false;save();trail('kept branch '+id);announce(`Kept as ${id}. Your branch, diverged at act ${S.n}. The record is unchanged.`);break}
+   case 'return':U.branch='record';trail('returned to the record');announce('Back on the record.');break;
+   case 'why':U.why=a;trail('asked why '+a);break;
+   case 'whyback':U.why=null;break;}
+  render()}
+/* ---- wiring ---- */
+document.addEventListener('click',e=>{const t=e.target.closest('[data-do]');if(t){doCmd(t.dataset.do,t.dataset.a,t.dataset.b,t);return}
+  const bd=e.target.closest('[data-band]');if(bd){U.band=U.band===bd.dataset.band?null:bd.dataset.band;if(matchMedia('(max-width:760px)').matches)U.tab=U.band?'rec':'sheet';render();return}
+  const tb=e.target.closest('#tabs [data-tab]');if(tb){U.tab=tb.dataset.tab;U.band=U.tab==='rec'?(U.band||'record'):null;render();req();setTimeout(()=>{resize();req()},50)}});
+document.addEventListener('input',e=>{if(e.target.id==='pCrowd'||e.target.id==='pShare'){U.pencil={crowd:+$('#pCrowd').value,railShare:+$('#pShare').value/100};updateLive();renderEdges();const rb=$('#ribbon');if(rb){const tmp=document.createElement('div');tmp.innerHTML=ribbon();rb.replaceWith(tmp.firstElementChild)}document.body.classList.add('branch');req()}});
+$('#bKnow').addEventListener('click',()=>{U.know=!U.know;render()});$('#bReal').addEventListener('click',()=>{U.real=!U.real;render()});
+$('#vL1').addEventListener('click',()=>{setView('L1');render()});$('#vL3').addEventListener('click',()=>{setView('L3');render()});
+window.__pick=b=>{if(!b)return;pushPath('CLICK');U.sys='site';U.site=b.bin;U.relIn='';U.fly=true;U.why=null;trail('clicked BIN '+b.bin);announce('Site, BIN '+b.bin+'.');render()};
+/* ---- boot ---- */
+async function boot(){
+  resetWorld();
+  try{const r=await fetch('_shared/nyc/midtown-footprints.geojson');const gj=await r.json();const st=buildCity(gj);window.__stats={roof:st.tris.roof,wall:st.tris.wall};finishScene(st.lp)}
+  catch(e){$('#mapnote').textContent='footprints failed to load: UNKNOWN ('+e.message+')';renderStanding();renderSheet();return}
+  const had=restore();readHash();
+  if(U.view==='L3'){setView('L3',true)}
+  U.fly=true;render();foldQ();resize();flyTo(focusFor(U.sys),true);req();
+  if(U.seatBanner&&!S.seat){U.notice={head:'THIS ADDRESS NAMES A SEAT',text:'Opening it gives you the observer\'s view only. A seat arrives as an Offer redeemed by a present person: take the operations seat on the Arena desk.'};render()}
+  window.__RC={get S(){return S},get U(){return U},act,B:()=>B.length}}
+boot();
+</script>
+</body></html>
