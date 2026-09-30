@@ -17,7 +17,7 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
-body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:14px;line-height:1.35;min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:14px;line-height:1.35;height:100vh;min-height:520px;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
 button:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 5px var(--face)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -52,7 +52,7 @@ header .sub{font-style:italic;color:var(--muted);font-size:13px;white-space:nowr
 main{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 340px;grid-template-rows:auto minmax(200px,1fr);gap:8px 18px;padding:8px 20px 6px;min-height:0}
 #stick{grid-column:1;grid-row:1;min-width:0;position:relative}
 #bench{grid-column:1;grid-row:2;min-width:0;min-height:0;display:flex;flex-direction:column}
-#present{grid-column:2;grid-row:1/3;min-width:0;border-left:1px solid var(--ink);padding-left:16px;position:relative}
+#present{grid-column:2;grid-row:1/3;min-width:0;min-height:0;overflow-y:auto;overflow-x:hidden;border-left:1px solid var(--ink);padding-left:16px;position:relative}
 footer#status{flex:none;border-top:1px solid var(--ink);padding:5px 20px;font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:14px;justify-content:space-between}
 footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
@@ -67,12 +67,13 @@ footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .wk.now{color:var(--ink);font-weight:500}
 .knee{grid-row:2/5;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;border-radius:0}
 .knee span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;white-space:nowrap}
-.slot{grid-row:3;display:flex;flex-direction:column;gap:4px;padding-top:4px;min-height:140px;min-width:0}
+.slot{grid-row:3;display:flex;flex-direction:column;gap:4px;padding-top:4px;min-height:120px;min-width:0}
 .slug{position:relative;display:flex;flex-direction:column;flex:1 1 auto;min-width:0;padding:9px 8px 8px;background:var(--face);border:1.5px solid var(--ink);color:var(--ink);font-family:var(--serif);overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
 .slug::before{content:"";position:absolute;top:0;left:50%;width:14px;height:5px;margin-left:-7px;background:var(--paper);border:1.5px solid var(--ink);border-top:0;border-radius:0 0 6px 6px}
-.slug .when{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.85;margin-top:3px}
+.slug .when{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.85;margin-top:3px;padding-right:20px}
 .slug .what{font-size:13px;line-height:1.22;margin-top:4px;font-weight:400;overflow-wrap:anywhere;hyphens:auto}
-.slug .foot{margin-top:auto;padding-top:5px;display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.slug .foot{position:absolute;top:8px;right:8px;margin:0;padding:0;display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.slug.k-RECORDED .foot,.slug.br .foot{top:11px;right:12px}
 .slug.k-RECORDED,.slug.k-OBSERVED{background:var(--ink);color:var(--paper)}
 .slug.k-RECORDED{box-shadow:inset 0 0 0 3px var(--ink),inset 0 0 0 4px var(--paper),inset 0 0 0 6px var(--ink),inset 0 0 0 7px var(--paper)}
 .slug.k-RECORDED::before,.slug.k-OBSERVED::before{background:var(--paper)}
@@ -96,6 +97,7 @@ footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .slug.lg .what{font-size:11.5px;margin-top:0;line-height:1.18}
 .slug.lg .when{margin:0 0 1px;font-size:9.5px}
 .slug.lg .lock{position:absolute;right:4px;top:4px;width:12px;height:13px}
+.slug.lg .foot{display:none}
 .slug.lg.dashed{border-style:dashed}
 .slug.lg.k-OBSERVED{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .slug.lg.k-OBSERVED .lock{color:var(--paper)}
@@ -207,7 +209,7 @@ footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .panel{flex:1;min-height:0;overflow:auto;background:var(--face);border:1.5px solid var(--ink);border-top:0;padding:10px 14px 10px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:4px 22px;align-content:start}
 .panel.one{grid-template-columns:minmax(0,1fr)}
 .panel h3{margin:0 0 3px;font-size:17px;line-height:1.2;font-weight:700}
-.panel h4{margin:8px 0 3px;font-size:12px;font-variant:small-caps;letter-spacing:.07em;color:var(--muted);font-weight:700}
+.panel h4{margin:6px 0 2px;font-size:12px;font-variant:small-caps;letter-spacing:.07em;color:var(--muted);font-weight:700}
 .panel p{margin:0 0 6px;max-width:62ch}
 .panel .small{font-size:12px;color:var(--muted)}
 .btns{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}
@@ -235,7 +237,7 @@ footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .refuse .rule{font-family:var(--mono);font-size:11.5px;margin-top:4px}
 .tbl{width:100%;border-collapse:collapse;font-size:13px}
 .tbl th{font-variant:small-caps;letter-spacing:.05em;text-align:left;font-weight:700;border-bottom:1.5px solid var(--ink);padding:2px 6px 2px 0;font-size:12px}
-.tbl td{padding:3px 6px 3px 0;border-bottom:1px solid var(--paper3);font-family:var(--mono);font-size:12px;vertical-align:top}
+.tbl td{padding:2px 6px 2px 0;border-bottom:1px solid var(--paper3);font-family:var(--mono);font-size:12px;vertical-align:top}
 .tbl td:first-child{font-family:var(--serif);font-size:13px}
 .tbl .r{text-align:right}
 .tbl .chg{color:var(--warm2);font-weight:500}
@@ -561,591 +563,7 @@ function kindOfDial(k) {
   if (S.sys === 'reality') return k === 'rrec' && CUR.R.unk ? 'UNKNOWN' : CUR.R.lifted ? 'COMPUTED' : 'OBSERVED';
   const F = CUR.F;
   if (k === 'payroll') return F.payroll === RECORD.payroll ? 'RECORDED' : 'COMPUTED';
-  if (k === 'tax') return 'COMPUTED';
-  if (k === 'score') return F.weeks === 9 && F.last.b === RECORD.last.b && F.last.o === RECORD.last.o ? 'RECORDED' : 'AUTHORED';
-  return 'AUTHORED';
-}
-const KSRC = {
-  payroll: () => CUR.F.payroll === RECORD.payroll ? 'World record — the sum of the record’s payroll deltas from ' + money(START, 3) + ' (authored start)' : 'sum of the record’s payroll deltas, minus what was lifted',
-  tax: () => 'World rule, authored: ' + WD.taxRule.v.toLowerCase() + ' ' + money(TAX_LINE) + ' (the NBA’s real tax is incremental)',
-  cash: () => 'authored, illustrative: one-off deltas + a per-night delta on home nights',
-  seats: () => 'toy engine (authored): base ' + num(BASE_SEATS) + ' × price shift × form, capped at ' + num(CAP_SEATS) + '; illustrative',
-  wins: () => 'toy engine (authored): strength + a fixed draw per game; Week 9 fitted to the recorded result',
-  score: () => CUR.F.weeks === 9 && CUR.F.last.b === RECORD.last.b ? 'World record (Week 9, lost to Denver ' + W9B + EN + W9O + ')' : 'toy engine output (authored), not the record',
-  rtax: () => CUR.R.lifted ? 'COMPUTED, simplified: observed tax salary reversed by a stand-in you can set (illustrative, not real contracts)' : FX.reality.taxSalary.src + ', ' + FX.reality.taxSalary.asOf + ' [verify]',
-  rcap: () => CUR.R.lifted ? 'COMPUTED, simplified, from the same stand-in' : FX.reality.capPayroll.src + ', ' + FX.reality.capPayroll.asOf + ' [verify]',
-  rrec: () => CUR.R.unk ? 'UNKNOWN: results are not derived from rules' : FX.reality.realRecord2526.src + ' [verify]'
-};
-
-const KSHORT = {
-  payroll: () => CUR.F.payroll === RECORD.payroll ? 'World record' : 'sum of record deltas',
-  tax: () => 'World rule × payroll',
-  cash: () => 'illustrative deltas',
-  seats: () => 'toy engine',
-  wins: () => 'toy engine',
-  score: () => CUR.F.weeks === 9 && CUR.F.last.b === RECORD.last.b && CUR.F.last.o === RECORD.last.o ? 'World record' : 'toy engine',
-  rtax: () => CUR.R.lifted ? 'reversed by a stand-in' : 'fixture, ' + FX.reality.taxSalary.asOf + ' [verify]',
-  rcap: () => CUR.R.lifted ? 'reversed by a stand-in' : 'fixture, ' + FX.reality.capPayroll.asOf + ' [verify]',
-  rrec: () => CUR.R.unk ? 'not derived from rules' : 'BOW source [verify]'
-};
-/* ---- the act: the only way anything changes */
-function act(kind, p) {
-  p = p || {};
-  const E0 = S.sys === 'world' ? env() : null;
-  const log = (what) => { S.log.push({ n: ++S.seq, who: 'you', what: what, clock: clockNow(), hist: histNow() }); };
-  let msg = '';
-  if (kind !== 'putback') S.flash = null;
-  if (['select', 'tab', 'sys', 'fact', 'factall', 'putback', 'putbackAll', 'keep', 'toRecord', 'toBranch', 'reset', 'playOn', 'pair', 'forkSeat'].indexOf(kind) >= 0) S.notice = null;
-  switch (kind) {
-    case 'sys':
-      S.sys = p.sys; S.tab = 'act'; S.sel = null; S.fact = null; S.weigh = false; S.liftFocus = null; buildPresent();
-      log('moved to ' + (S.sys === 'reality' ? REALITY_NAME : WORLD_NAME)); msg = 'Now in ' + (S.sys === 'reality' ? REALITY_NAME + '. You can observe it and lift moves out of its record; you cannot act on the real team.' : WORLD_NAME + '. Hold an act to lift it out.'); break;
-    case 'tab': S.tab = p.tab; S.weigh = (p.tab === 'weigh'); if (S.weigh && !S.fact) S.fact = null; msg = 'Showing ' + p.tab; break;
-    case 'select':
-      if (S.sys === 'reality') { S.reality.sel = p.id; S.tab = 'act'; S.weigh = false; }
-      else if (S.tab === 'weigh' && String(p.id).indexOf('game:') !== 0) { S.sel = p.id; }
-      else { S.sel = p.id; S.tab = 'act'; S.weigh = false; }
-      msg = 'Selected ' + (S.sys === 'reality' ? '' : (String(p.id).indexOf('game:') === 0 ? 'Week ' + p.id.slice(5) + ' result' : labelOf(p.id))); break;
-    case 'pfact': S.pfact = p.fact; break;
-    case 'fact': if (S.sys === 'reality') { msg = 'In Reality, only lifts recompute rules-derived facts. Lift a move to see them change.'; break; } S.fact = p.fact; S.tab = 'weigh'; S.weigh = true; msg = 'Acts ordered by what they did to ' + FM[p.fact].phrase + '. An act that changed nothing is grey.'; break;
-    case 'factall': S.fact = null; S.tab = 'weigh'; S.weigh = true; msg = 'Acts ordered by how many facts they reached.'; break;
-    case 'lift': msg = doLift(p, log); break;
-    case 'putback': msg = doPutBack(p, log); break;
-    case 'putbackAll': msg = doPutBackAll(log); break;
-    case 'pair': msg = doPair(p, log); break;
-    case 'keep': msg = doKeep(log); break;
-    case 'forkSeat': msg = doForkSeat(log); break;
-    case 'toRecord': S.at = 'record'; S.sel = null; S.liftInfo = {}; S.tab = 'act'; S.weigh = false; log('returned to the record'); msg = 'Back on the record. Hash ' + RECORD.hash + '.'; break;
-    case 'toBranch': S.at = 'branch'; S.sel = null; S.tab = 'act'; log('entered your branch'); msg = 'In your branch: ' + S.branch.stampShort + '.'; break;
-    case 'dropBranch': S.branch = null; S.at = 'record'; S.tab = 'act'; S.sel = null; S.clamps = S.clamps.filter(c => c.at !== 'branch'); log('discarded your branch'); msg = 'Branch discarded.'; break;
-    case 'playOn': msg = doPlayOn(p, log); break;
-    case 'clamp': msg = doClamp(p, log); break;
-    case 'unclamp': S.clamps.splice(+p.i, 1); log('released a clamp'); msg = 'Clamp released.'; break;
-    case 'rerun': msg = doRerun(log); break;
-    case 'words': S.words = !S.words; document.body.classList.toggle('words', S.words); msg = 'How do we know: ' + (S.words ? 'showing kind, source and date' : 'hidden'); break;
-    case 'real': S.real = !S.real; document.body.classList.toggle('real', S.real); msg = 'What’s real: ' + (S.real ? 'showing what exists today and what would need AI' : 'hidden'); break;
-    case 'reset': doReset(); msg = 'Started over. The record is at rest.'; break;
-    case 'standin': S.reality.standIn[p.id] = +p.v; msg = 'Stand-in set'; break;
-  }
-  checkClamps();
-  render();
-  if (msg) say(msg);
-}
-
-function refuse(forId, title, rule) { S.notice = { for: forId, title: title, rule: rule }; }
-
-function doLift(p, log) {
-  if (S.sys === 'reality') {
-    const a = rAct(p.id);
-    if (a.type === 'outcome') { S.reality.sel = p.id; refuse(p.id, 'Refused — outcomes are not acts.', 'Rule: a game, an injury or a return is what happened, not something a seat chose. Lifting one would mean inventing a different game: a speculative frontier, not allowed here.'); log('tried to lift ' + a.when + ' (refused: outcome)'); return 'Refused. Outcomes are not acts.'; }
-    if (a.seat === 'league') { S.reality.sel = p.id; refuse(p.id, 'Refused — not your act. The League’s.', 'Rule: you may lift only acts taken from your own seat. This one belongs to the League.'); log('tried to lift the sale approval (refused: the League’s)'); return 'Refused. Not your act, the League’s.'; }
-    if (S.reality.lifted.has(a.id) || CUR.R.st[a.id] !== 'in') return '';
-    S.reality.lifted.add(a.id); S.reality.sel = a.id; S.notice = null;
-    log('lifted ' + labelOf(a.id) + ' out of Reality’s record');
-    const R = foldR(S.reality);
-    return 'Lifted ' + labelOf(a.id) + '. Tax salary ' + money(R.ts, 1) + ' computed with a stand-in. ' + Object.keys(R.st).filter(k => R.st[k] === 'dashed').map(k => labelOf(k) + ' is now impossible').join('; ') + '. Results and other clubs’ later moves are unknown.';
-  }
-  if (String(p.id).indexOf('game:') === 0) { const g = +p.id.slice(5); S.sel = p.id; refuse(p.id, 'Refused — outcomes are not acts.', 'Rule: only choices can be lifted. A score is what the acts produced' + (g === 9 ? ', and Denver’s half of it is Denver’s.' : '.') + ' There is nothing here to take out.'); log('tried to lift the Week ' + g + ' result (refused: an outcome, not an act)'); return 'Refused. Outcomes are not acts. Ask which acts reached it instead.'; }
-  const E = env(), a = findAct(p.id), st = CUR.F.status[p.id];
-  if (a.seat === 'league') { S.sel = a.id; refuse(a.id, 'Refused — not your act. The League’s.', 'Rule: you may lift only acts taken from your own seat (' + WD.seat.name + '). The League’s approval is the League’s, not yours.'); log('tried to lift the League’s approval (refused)'); return 'Refused. Not your act, the League’s. You can fork with their seat set.'; }
-  if (st !== 'in') return '';
-  const key = p.id + '|' + S.pfact, pred = S.preds && S.preds[key] != null ? S.preds[key] : null;
-  const before = CUR.F;
-  E.lifted.add(p.id); S.sel = p.id; S.notice = null; S.tab = 'act';
-  S.liftInfo[p.id] = { fact: S.pfact, pred: pred };
-  const F = fold(E), lk = lkey(E);
-  const seen = S.ledger[lk];
-  S.ledger[lk] = { n: (seen ? seen.n : 0) + 1, hash: F.hash, ids: Array.from(E.lifted), at: S.at };
-  log('lifted ' + labelOf(p.id) + (pred != null ? ' (guessed ' + FM[S.pfact].f(pred) + ' for ' + FM[S.pfact].phrase + ')' : ' (no guess)') + (p.via === 'hold' ? ' by holding' : ''));
-  const dashed = Object.keys(F.status).filter(k => F.status[k] === 'dashed' && before.status[k] === 'in').map(labelOf);
-  return 'Lifted ' + labelOf(p.id) + '. Payroll ' + money(F.payroll) + ', projected tax ' + money(F.tax) + ', record ' + F.wins + EN + F.losses + '.' + (dashed.length ? ' ' + dashed.join(' and ') + ' can no longer happen; they are dashed.' : ' Nothing after it needed it.') + (seen ? ' Same lift as before: same present, ' + F.hash + '.' : '');
-}
-const lkey = E => (E === S.rec ? 'R' : 'B') + '|' + Array.from(E.lifted).sort().join('+') + '|' + JSON.stringify(E.assume || {}) + '|' + (E.appended || []).map(a => a.id).join(',') + '|' + E.weeks;
-
-function doPutBack(p, log) {
-  if (S.sys === 'reality') { S.reality.lifted.delete(p.id); log('put ' + labelOf(p.id) + ' back'); const R = foldR(S.reality); return 'Put back ' + labelOf(p.id) + '. ' + (R.lifted ? '' : 'Reality is at rest again; hash ' + R.hash + '.'); }
-  const E = env(); E.lifted.delete(p.id); delete S.liftInfo[p.id]; S.notice = null;
-  log('put ' + labelOf(p.id) + ' back');
-  const F = fold(E), same = F.hash === RECORD.hash;
-  S.flash = { text: 'Snapped back in: ' + labelOf(p.id) + '.', hash: F.hash, same: same, rec: RECORD.hash };
-  return 'Put back ' + labelOf(p.id) + '. ' + (same ? 'The present hash is ' + F.hash + ', the record’s again.' : 'Hash ' + F.hash + '; the record’s is ' + RECORD.hash + '.');
-}
-function doPutBackAll(log) {
-  if (S.sys === 'reality') { S.reality.lifted.clear(); log('put everything back'); return 'Everything is back. Hash ' + foldR(S.reality).hash + '.'; }
-  const E = env(); E.lifted.clear(); S.liftInfo = {}; S.pair = null; S.notice = null; log('put everything back'); return 'Everything is back. Hash ' + fold(E).hash + '.';
-}
-function doPair(p, log) {
-  const E = env(), ids = p.ids.split(',');
-  E.lifted.clear(); S.liftInfo = {};
-  ids.forEach(i => { if (fold(E).status[i] === 'in') E.lifted.add(i); });
-  S.tab = 'pair'; S.weigh = false; S.sel = null;
-  ids.forEach(i => { const k = lkey(E); S.ledger[k] = { n: (S.ledger[k] ? S.ledger[k].n : 0) + 1, hash: fold(E).hash, ids: Array.from(E.lifted), at: S.at }; });
-  log('lifted ' + ids.map(labelOf).join(' and ') + ' together');
-  return 'Lifted ' + ids.map(labelOf).join(' and ') + ' together.';
-}
-function doKeep(log) {
-  const E = env();
-  if (S.at === 'branch') return 'You are already in a branch.';
-  if (E.lifted.size === 0) { refuse(null, 'Nothing to keep.', 'Keep needs a lift: lift an act first, then keep the world without it.'); return 'Nothing lifted, nothing to keep.'; }
-  const ids = Array.from(E.lifted), names = ids.map(i => LBL[i] ? LBL[i].replace(/^Week (\d+) (\w+)/, 'Week $1 $2') : labelOf(i));
-  const short = names.join(' + ') + ' omitted';
-  const be = { lifted: new Set(ids), assume: Object.assign({}, E.assume), appended: [], weeks: 9 };
-  S.branch = { env: be, short: short, stamp: 'Your branch · ' + short + ' · cut with hindsight · by you', stampShort: short, base: RECORD.hash, kept: fold(be).hash, then: weigh(be), assumptions: ['Luck fixed: same draw per game.', 'Acts that needed a lifted act are dashed, not re-decided.', 'Others’ acts as recorded.', 'Engine ' + ENGINE + ', illustrative.'] };
-  S.rec = newEnv(); S.at = 'branch'; S.sel = null; S.liftInfo = {}; S.tab = 'act'; S.weigh = false; S.notice = null;
-  log('kept the world without ' + names.join(' and ') + ' as a branch (base ' + RECORD.hash + ')');
-  return 'Kept. ' + S.branch.stamp + '. The record is untouched beside it.';
-}
-function doForkSeat(log) {
-  const be = { lifted: new Set(), assume: { league: 'declined' }, appended: [], weeks: 9 };
-  const short = 'League seat set to “does not approve”';
-  S.branch = { env: be, short: short, stamp: 'Your branch · ' + short + ' · cut with hindsight · by you', stampShort: short, base: RECORD.hash, kept: fold(be).hash, then: weigh(be), assumptions: ['The League’s answer is set by you (authored), not its act.', 'Luck fixed: same draw per game.', 'The trade and what needed it are dashed.', 'Engine ' + ENGINE + ', illustrative.'] };
-  S.rec = newEnv(); S.at = 'branch'; S.sel = null; S.tab = 'act'; S.weigh = false; S.notice = null; S.liftInfo = {};
-  log('forked with the League’s seat set to does-not-approve (base ' + RECORD.hash + ')');
-  return 'Forked with the League’s seat set. ' + S.branch.stamp + '.';
-}
-function doPlayOn(p, log) {
-  const E = env();
-  if (E.weeks >= 10) return 'Week 10 is already played.';
-  const g10 = 10;
-  if (p.opt) {
-    const o = OPTIONS.filter(x => x.id === p.opt)[0];
-    E.appended.push({ id: 'b-' + o.id, when: 'Year Two · Week 10', week: 10, what: o.what, k: 'RECORDED', branch: true, seat: 'gm', effects: o.effects, strength: o.strength || 0, needs: [] });
-    log('took a new act in the branch: ' + o.what.toLowerCase());
-  } else log('took no new act in Week 10 (recorded as absence, not as a choice)');
-  E.weeks = 10; S.tab = 'play'; S.sel = null; S.weigh = false;
-  const F = fold(E), g = F.games[9];
-  return 'Week 10 played: ' + (g.win ? 'won' : 'lost') + ' ' + g.b + EN + g.o + ' against ' + OPPN[g.opp] + '. ' + (p.opt ? 'Your new act is in branch ink.' : 'No act taken.');
-}
-function doClamp(p, log) {
-  const c = { id: p.id, fact: p.fact, at: S.at, sys: 'world', tripped: false, label: labelOf(p.id) + ' stops reaching ' + FM[p.fact].phrase };
-  if (S.clamps.some(x => x.id === c.id && x.fact === c.fact && x.at === c.at)) return 'Already clamped.';
-  S.clamps.push(c); log('clamped: tell me when ' + c.label); return 'Clamped. You will be told when ' + c.label + '.';
-}
-function doRerun(log) {
-  const E = env(), a = fold(E), b = fold(withLift(E, [])), lk = lkey(E);
-  S.lastRerun = { a: a.hash, b: b.hash, same: a.hash === b.hash, ids: Array.from(E.lifted) };
-  log('ran the same lift again from scratch: ' + a.hash + ' and ' + b.hash);
-  return 'Ran it again from scratch. ' + (a.hash === b.hash ? 'Same present: ' + a.hash + ' both times.' : 'Different!');
-}
-function doReset() {
-  S.at = 'record'; S.sel = null; S.fact = null; S.weigh = false; S.tab = 'act'; S.rec = newEnv(); S.branch = null; S.liftInfo = {}; S.ledger = {}; S.clamps = []; S.log = []; S.seq = 0; S.lastRerun = null; S.pair = null; S.preds = {}; S.notice = null;
-  S.reality = { lifted: new Set(), standIn: { 'r-holiday': -3.0, 'r-simons': -2.0 }, sel: null, liftInfo: {} }; S.sys = 'world'; buildPresent();
-}
-S.preds = {};
-
-function clampReach(c) {
-  const E = S.branch && c.at === 'branch' ? S.branch.env : c.at === 'record' ? S.rec : null;
-  if (!E) return null;
-  const F = fold(E); if (F.status[c.id] !== 'in') return { off: true };
-  const alt = fold(withLift(E, [c.id])), d = diff(F, alt, c.fact);
-  return { ch: d.ch, d: d.d, mag: d.mag };
-}
-function checkClamps() {
-  S.clamps.forEach(c => {
-    if (S.sys !== 'world' || c.at !== S.at) return;
-    const r = clampReach(c);
-    if (r && !r.off && !r.ch && !c.tripped) { c.tripped = true; c.trippedAt = clockNow(); S.log.push({ n: ++S.seq, who: 'clamp', what: 'tripped: ' + c.label, clock: clockNow(), hist: histNow() }); setTimeout(() => say('Clamp tripped: ' + c.label + '.'), 400); }
-    if (r && r.ch && c.tripped) c.tripped = false;
-  });
-}
-
-/* ================= RENDER ================= */
-function render() {
-  const ae = document.activeElement, fk = ae && ae.dataset ? ae.dataset.fk : null;
-  refold();
-  renderHead(); renderStick(); setAddr(); renderBench(); updatePresent(true); renderStatus();
-  if (fk) { const el = document.querySelector('[data-fk="' + fk + '"]'); if (el) el.focus({ preventScroll: true }); }
-}
-function renderHead() {
-  $$('.sys button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.sys === S.sys)));
-  $('#howBtn').setAttribute('aria-pressed', String(S.words)); $('#realBtn').setAttribute('aria-pressed', String(S.real));
-}
-function renderStatus() {
-  $('#statusL').textContent = 'PROTOTYPE · lifting acts out of a record · data: shared fixture, dated, verify · engine: ' + ENGINE + ' (illustrative, authored)';
-  $('#statusR').textContent = S.sys === 'reality' ? 'seat: observer · present hash ' + CUR.R.hash : 'seat: ' + WD.seat.name + ' · present hash ' + CUR.F.hash;
-}
-const capLine = (cls, txt, st) => '<div class="capline ' + cls + '"' + (st ? ' style="' + st + '"' : '') + '>' + txt + '</div>';
-const cap = (cls, txt) => capLine(cls, txt);
-const P_ = '<b>PROPOSED PLATFORM CAPABILITY</b> · ', NOAI = ' · <b>NO AI REQUIRED</b>';
-const CAPS = {
-  stick: P_ + 'acts as liftable slugs; dashes by dependency; locked by seat' + NOAI,
-  present: P_ + 'the present re-folded from the act log, luck fixed per game' + NOAI,
-  hash: '<b>REAL CURRENT PRODUCT CAPABILITY</b> (prototype-grade) · the Live World page already folds one act log to one SHA-256 state; the hash here is a small stand-in',
-  act: P_ + 'predict, lift, put back, keep-as-fork' + NOAI + ' · a plain-words summary would be <b>SMALL / CHEAP MODEL</b> (not used)',
-  weigh: P_ + 'weights by ablation, clamps' + NOAI,
-  pair: P_ + 'pair against the sum of singles' + NOAI + ' (cost grows with pairs)',
-  compare: P_ + 'two needles, one footprint' + NOAI,
-  play: P_ + 'play on inside a kept fork' + NOAI,
-  log: P_ + 'an act log with clock and history' + NOAI,
-  reality: P_ + 'lifts on a derived view of Reality' + NOAI + ' · lifting an on-court outcome is <b>SPECULATIVE FRONTIER</b> (refused here) · modelling other clubs’ replies would be <b>FRONTIER MODEL OCCASIONAL</b> (not used)'
-};
-/* ---- the stick */
-function timeCols(F, E) {
-  const cols = [{ key: 'y1', label: 'Year One', week: 0, w: 1.2 }, { key: 'w1', label: 'Week 1', week: 1, w: 1 }, { key: 'w2', label: 'Week 2', week: 2, w: 1 }, { key: 'w3', label: 'Week 3', week: 3, w: 1 }, { key: 'w4', label: 'Week 4', week: 4, w: 1 },
-    { key: 'w5', label: 'Wk 5', week: 5, w: 0.9 }, { key: 'w6', label: 'Week 6', week: 6, w: 1.4 }, { key: 'w7', label: 'Week 7', week: 7, w: 1 }, { key: 'w8', label: 'Week 8', week: 8, w: 1 }, { key: 'w9', label: 'Week 9 ◂ now', week: 9, w: 1, now: true }];
-  if (E.weeks >= 10) cols.push({ key: 'w10', label: 'Week 10', week: 10, w: 1 });
-  cols.forEach(c => { c.acts = F.acts.filter(a => a.week === c.week); });
-  return cols;
-}
-function weighCols(F, E, W) {
-  const live = F.acts.filter(a => W[a.id]);
-  const fact = S.fact;
-  live.sort((a, b) => {
-    const A = W[a.id], B = W[b.id];
-    if (fact) { const d = B.f[fact].mag / magScale(fact) - A.f[fact].mag / magScale(fact); if (Math.abs(d) > 1e-9) return d; }
-    return (B.reach - A.reach) || (totalMag(B) - totalMag(A)) || (a.week - b.week);
-  });
-  const dashed = F.acts.filter(a => F.status[a.id] === 'dashed'), lifted = F.acts.filter(a => F.status[a.id] === 'lifted' || F.status[a.id] === 'declined'), lg = F.acts.filter(a => a.seat === 'league' && F.status[a.id] === 'in');
-  return live.concat(dashed, lifted, lg).map((a, i) => ({ key: a.id, label: F.status[a.id] === 'in' && W[a.id] ? (W[a.id].reach ? W[a.id].reach + ' of 6' : 'none') : (a.seat === 'league' ? 'not yours' : F.status[a.id]), acts: [a], w: 1, wk: whenShort(a) }));
-}
-const magScale = k => { const m = FM[k]; return k === 'score' ? 20 : (m.hi - m.lo); };
-const totalMag = r => FACTS.reduce((s, k) => s + (r.f[k].ch ? r.f[k].mag / magScale(k) : 0), 0);
-
-function slugHTML(a, F, W, E) {
-  const st = F.status[a.id], sel = S.sel === a.id, kind = a.branch ? 'RECORDED' : a.k;
-  const lg = a.seat === 'league', br = !!a.branch;
-  let cls = 'slug k-' + kind + (br ? ' br' : '') + (sel ? ' sel' : '') + (lg ? ' lg' : '');
-  const w = W && W[a.id], zero = S.weigh && w && !w.reach;
-  if (zero) cls += ' zero';
-  let inner = '', why = '';
-  if (st === 'dashed') {
-    cls += ' dashed';
-    const need = F.why[a.id];
-    why = '<span class="why">impossible without ' + esc(labelOf(need).replace(/^the /, '')) + '</span>';
-  } else if (st === 'declined') { cls += ' dashed'; why = '<span class="why">declined — set by you</span>'; }
-  const cnt = '<span class="when">' + esc(a.who ? a.who + DOT + whenShort(a) : whenShort(a)) + '</span><span class="what">' + esc(a.what) + '</span>' + why;
-  let wt = '';
-  if (S.weigh && (st === 'in') && w) {
-    const fk = S.fact, foc = fk ? FACTS.indexOf(fk) : -1;
-    const pips = FACTS.map((k, i) => '<i class="' + (w.f[k].ch ? 'on ' : '') + (i === foc ? 'foc' : '') + '" title="' + FM[k].name + '"></i>').join('');
-    let line = '';
-    if (fk) {
-      const d = w.f[fk];
-      line = d.ch ? '<span class="bar" style="--w:' + Math.max(4, Math.min(100, Math.round(100 * d.mag / magScale(fk) / (maxMag(W, fk) || 1)))) + '%"></span><span>' + deltaText(fk, d.d) + '</span>' : '<span class="zeroT">nothing changed</span>';
-    } else line = w.reach ? '' : '<span class="zeroT">nothing changed</span>';
-    let thn = '';
-    if (S.branch && S.at === 'branch' && S.branch.then && S.branch.then[a.id] && S.branch.then[a.id].reach !== w.reach) thn = '<span class="thn">then ' + S.branch.then[a.id].reach + ' now ' + w.reach + '</span>';
-    else if (S.branch && S.at === 'branch' && S.branch.then && S.branch.then[a.id]) thn = '<span class="thn">then ' + S.branch.then[a.id].reach + ' now ' + w.reach + '</span>';
-    wt = '<span class="wt"><span class="pips">' + pips + '</span>' + line + thn + '<span class="kn">COMPUTED · replay of each lift</span></span>';
-  }
-  const foot = '<span class="foot"><i class="sw k-' + kind + '"></i><span class="sr">' + kind + '</span></span>';
-  const kn = '<span class="kn">' + kindNote(a) + '</span>';
-  const label = 'Act: ' + (a.who ? a.who + ', ' : '') + whenShort(a) + '. ' + a.what + '.' + (st === 'dashed' ? ' Dashed: impossible without ' + labelOf(F.why[a.id]) + '.' : '') + (lg ? ' Not your act.' : ' Press to look; hold to lift.') + ' ' + kind + '.';
-  const lock = lg ? '<svg class="lock" viewBox="0 0 12 13" aria-hidden="true"><rect x="1" y="5.5" width="10" height="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3 5.5V3.6a3 3 0 0 1 6 0v1.9" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>' : '';
-  return '<button type="button" class="' + cls + '" data-do="select" data-id="' + a.id + '" data-fk="slug-' + a.id + '" ' + (lg ? '' : 'data-hold="1" ') + 'aria-label="' + esc(label) + '">' + lock + cnt + wt + foot + kn + '</button>';
-}
-const maxMag = (W, k) => { let m = 0; Object.keys(W).forEach(id => { if (W[id].f[k].ch) m = Math.max(m, W[id].f[k].mag / magScale(k)); }); return m; };
-function deltaText(k, d) {
-  if (k === 'payroll' || k === 'tax' || k === 'cash') return smoney(d, k === 'cash' ? 2 : 1);
-  if (k === 'seats') return snum(d) + ' seats';
-  if (k === 'wins') return (d > 0 ? '+' : MINUS) + Math.abs(d) + (Math.abs(d) === 1 ? ' win' : ' wins');
-  return (d > 0 ? '+' : MINUS) + Math.abs(d) + ' pts';
-}
-function kindNote(a) {
-  if (a.branch) return 'RECORDED · your branch';
-  if (a.seat === 'league') return 'AUTHORED · illustrative [verify]';
-  if (a.k === 'RECORDED') return 'RECORDED · World record';
-  return 'AUTHORED · illustrative';
-}
-function gapHTML(a, F, E) {
-  const inBranch = S.at === 'branch', why = F.status[a.id] === 'declined' ? 'declined (set by you)' : inBranch ? 'omitted in your branch' : 'lifted out';
-  return '<button type="button" class="gap' + (inBranch ? ' br' : '') + '" data-do="select" data-id="' + a.id + '" data-fk="gap-' + a.id + '" aria-label="Gap: ' + esc(whenShort(a)) + ' is ' + why + '. Press to select."><span><b>' + esc(whenShort(a)) + '</b>' + why + '</span></button>';
-}
-function setAddr() {
-  if (S.sys === 'reality') { const R = CUR.R; $('#addr').textContent = 'boston.reality \u00b7 live ' + FX.meta.now + ' \u00b7 ' + (R.lifted ? 'derived view \u2212' + Array.from(S.reality.lifted).map(i => i.replace('r-', '')).join(' \u2212') : 'as recorded') + ' \u00b7 seat observer \u00b7 view ' + S.tab; return; }
-  const E = CUR.E, lifted = Array.from(E.lifted);
-  $('#addr').textContent = 'boston.year-two \u00b7 wk ' + E.weeks + ' \u00b7 ' + (S.at === 'branch' ? 'branch' : 'record') + (lifted.length ? ' \u2212' + lifted.map(i => i.split('-')[0]).join(' \u2212') : '') + (E.assume.league ? ' \u00b7 league:declined' : '') + ' \u00b7 seat gm \u00b7 view ' + (S.weigh ? 'what-counted' : S.tab);
-}
-function renderStick() {
-  if (S.sys === 'reality') return renderStickR();
-  const E = CUR.E, F = CUR.F, W = S.weigh ? weigh(E) : null;
-  const cols = S.weigh ? weighCols(F, E, W) : timeCols(F, E);
-  const tpl = '22px ' + cols.map(c => c.w + 'fr').join(' ');
-  const lastRow = 4;
-  let h = (S.real ? capLine('PROPOSED', CAPS.stick) : '');
-  const br = S.at === 'branch';
-  h += (br ? '<div class="frameBr">' : '') + '<div class="grid" style="grid-template-columns:' + tpl + ';grid-template-rows:' + (S.at === 'branch' ? 'auto' : '66px') + ' auto auto auto auto">';
-  // tray
-  const held = cols.map((c, i) => c.acts.filter(a => F.status[a.id] === 'lifted' && !br && a.seat !== 'league').map(a => ({ a: a, i: i }))).reduce((x, y) => x.concat(y), []);
-  if (br) {
-    h += '<div class="tray" style="grid-column:2/-1"><div class="stampTray"><div class="stamp">' + esc(S.branch.stamp) + '</div><div class="assume"><b>Assumptions:</b> ' + S.branch.assumptions.map(esc).join(' · ') + '</div>' + '<span class="kn">The fork is a frame in its own ink; the record stays readable beside it (hash ' + RECORD.hash + ').</span></div></div>';
-  } else if (!held.length) {
-    h += '<div class="tray" style="grid-column:2/-1"><div class="prompt">' + (S.weigh ? 'What counted: acts set in the order of what they reached.' : 'Hold an act to lift it out.') + '<small>' + (S.weigh ? 'Tap a dial to order them by what they did to that fact. Grey means nothing changed — a zero is a finding.' : 'You are ' + WD.seat.name + ': you may lift only what this seat did. Tap one first to guess what it did.') + '</small></div></div>';
-  } else {
-    held.forEach(x => {
-      const a = x.a, kind = a.branch ? 'RECORDED' : a.k, nextHeld = held.some(y => y.i === x.i + 1), span = (!nextHeld && x.i + 3 <= cols.length + 1) ? 2 : 1;
-      h += '<button type="button" class="held k-' + kind + '" style="grid-column:' + (x.i + 2) + ' / span ' + span + ';grid-row:1" data-do="select" data-id="' + a.id + '" data-fk="held-' + a.id + '" aria-label="Held out: ' + esc(whenShort(a)) + '. ' + esc(a.what) + '. Press to select."><span class="when">held out · ' + esc(whenShort(a)) + '</span><span class="what">' + esc(a.what) + '</span></button>';
-    });
-  }
-  h += '<div class="knee" style="grid-column:1;grid-row:2/' + (lastRow + 1) + '"><span>YEAR 0 · LEFT REALITY</span></div>';
-  cols.forEach((c, i) => {
-    const col = i + 2;
-    h += '<div class="wk' + (c.now ? ' now' : '') + '" style="grid-column:' + col + '">' + esc(S.weigh ? c.wk : c.label) + (S.weigh ? '<br>' + esc(c.label) : '') + '</div>';
-  });
-  cols.forEach((c, i) => {
-    const col = i + 2; let inner = '';
-    if (!c.acts.length) inner = '<div class="gap" style="border-style:dotted;border-color:var(--paper3)"><span>' + (c.week === 9 ? 'no act this week' : 'no act') + '</span></div>';
-    else {
-      const main = c.acts.filter(a => a.seat !== 'league'), lgs = c.acts.filter(a => a.seat === 'league');
-      main.forEach(a => { inner += (F.status[a.id] === 'lifted') ? gapHTML(a, F, E) : slugHTML(a, F, W, E); });
-      lgs.forEach(a => { inner += slugHTML(a, F, W, E); });
-    }
-    h += '<div class="slot" style="grid-column:' + col + '">' + inner + '</div>';
-  });
-  if (S.weigh) {
-    cols.forEach((c, i) => {
-      const a = c.acts[0], w = W[a.id];
-      h += '<div class="game info" style="grid-column:' + (i + 2) + ';grid-row:4;margin-top:5px;font-size:10.5px;white-space:normal;justify-content:center;background:transparent;border-style:dotted;border-color:var(--muted);color:var(--muted)">' + (w ? (w.games ? '<b style="color:var(--ink);font-weight:500">' + w.games + ' of ' + F.games.length + '</b> scores changed' : 'no score changed') : '—') + '</div>';
-    });
-  }
-  if (!S.weigh) {
-    cols.forEach((c, i) => {
-      const col = i + 2;
-      if (c.week === 0) { h += '<div class="gm" style="grid-column:' + col + ';grid-row:4;align-self:center;font-family:var(--mono);font-size:10px;color:var(--muted);padding-left:3px">results ▸</div>'; return; }
-      const g = F.games[c.week - 1]; if (!g) { h += '<div class="gm" style="grid-column:' + col + '"></div>'; return; }
-      const rg = RECORD.games[c.week - 1], same = rg && rg.b === g.b && rg.o === g.o;
-      const kind = (c.week === 9 && same) ? 'RECORDED' : 'AUTHORED';
-      const chg = rg && !same, sel = S.sel === 'game:' + g.g;
-      const lab = 'Week ' + g.g + ': ' + (g.win ? 'won ' : 'lost ') + g.b + ' to ' + g.o + (g.home ? ' at home against ' : ' away at ') + OPPN[g.opp] + (chg ? '. Changed; the record says ' + rg.b + ' to ' + rg.o : '') + '. ' + kind + '. An outcome, not an act.';
-      h += '<button type="button" class="game k-' + kind + (chg ? ' chg' : '') + (g.g === 10 ? ' newg' : '') + (sel ? ' sel' : '') + '" style="grid-column:' + col + '" data-do="select" data-id="game:' + g.g + '" data-fk="game-' + g.g + '" aria-label="' + esc(lab) + '"><span class="opp">' + (g.home ? 'vs ' : '@ ') + g.opp + '</span><span class="res">' + (g.win ? 'W ' : 'L ') + g.b + EN + g.o + '</span>' + (chg ? '<span class="was">was ' + rg.b + EN + rg.o + '</span>' : '') + '<span class="kn">' + kind + (kind === 'RECORDED' ? ' · World record' : ' · toy engine') + '</span></button>';
-    });
-  }
-  const recLabels = ACTS.filter(a => a.seat !== 'league').map(a => { const off = E.lifted.has(a.id); return '<span class="gs' + (off ? ' off' : '') + '">' + esc(whenShort(a).replace('Year One', 'Yr 1').replace('Week ', 'W')) + '</span>'; }).join(' ');
-  h += '<div class="ghost" style="grid-row:' + (lastRow + 1) + '"><span class="g">Reality, ghosted — its own calendar:<span class="gs">' + esc(rAct('r-holiday').when) + ' · Holiday trade</span><span class="gs">' + esc(rAct('r-simons').when) + ' · Simons trade</span></span>' + (br ? '<span class="g">The record, untouched:' + recLabels + '</span>' : '') + '</div>';
-  h += '</div>' + (br ? '</div>' : '');
-  $('#stick').innerHTML = h;
-}
-function renderStickR() {
-  const R = CUR.R, tpl = '22px ' + RACTS.map(() => '1fr').join(' ');
-  let h = (S.real ? capLine('SPEC', CAPS.reality) : '');
-  h += '<div class="grid" style="grid-template-columns:' + tpl + ';grid-template-rows:' + (S.at === 'branch' ? 'auto' : '66px') + ' auto auto auto auto">';
-  const held = RACTS.map((a, i) => ({ a: a, i: i })).filter(x => S.reality.lifted.has(x.a.id));
-  if (!held.length) h += '<div class="tray" style="grid-column:2/-1"><div class="prompt">Hold a move to lift it out.<small>You are an observer: you cannot act on the real team, but you can lift its moves out of a derived view. Only what the rules can derive recomputes; the rest goes dashed, never guessed.</small></div></div>';
-  else held.forEach(x => { h += '<button type="button" class="held k-OBSERVED" style="grid-column:' + (x.i + 2) + ';grid-row:1" data-do="select" data-id="' + x.a.id + '" data-fk="held-' + x.a.id + '" aria-label="Held out: ' + esc(x.a.when) + '. ' + esc(x.a.what) + '"><span class="when">held out · ' + esc(x.a.when) + '</span><span class="what">' + esc(x.a.what) + '</span></button>'; });
-  h += '<div class="knee" style="grid-column:1;grid-row:2/4"><span>OBSERVED · KEEPS ITS OWN CLOCK</span></div>';
-  RACTS.forEach((a, i) => { h += '<div class="wk" style="grid-column:' + (i + 2) + '">' + esc(a.when) + '</div>'; });
-  RACTS.forEach((a, i) => {
-    const st = R.st[a.id], sel = S.reality.sel === a.id, isOut = a.type === 'outcome', lg = a.seat === 'league';
-    let inner;
-    if (st === 'lifted') inner = '<button type="button" class="gap" data-do="select" data-id="' + a.id + '" data-fk="gap-' + a.id + '" aria-label="Gap: ' + esc(a.when) + ' is lifted out. Press to select."><span><b>' + esc(a.when) + '</b>lifted out</span></button>';
-    else {
-      const dashed = st === 'dashed';
-      const label = (isOut ? 'Outcome, not an act: ' : lg ? 'The League’s act, not yours: ' : 'Move: ') + a.when + '. ' + a.what + '.' + (dashed ? ' Dashed: impossible without ' + labelOf(R.why[a.id]) + '.' : '') + (isOut || lg ? '' : ' Press to look; hold to lift.');
-      inner = '<button type="button" class="slug k-OBSERVED' + (dashed ? ' dashed' : '') + (sel ? ' sel' : '') + (isOut ? ' out' : '') + (lg ? ' lg' : '') + '" style="' + (lg ? 'flex:1;min-height:0' : '') + '" data-do="select" data-id="' + a.id + '" data-fk="slug-' + a.id + '" ' + (isOut || lg ? '' : 'data-hold="1" ') + 'aria-label="' + esc(label) + '"><span class="when">' + (isOut ? 'outcome · not an act' : lg ? 'the League’s act' : 'Boston’s act') + '</span><span class="what">' + esc(a.what) + '</span>' + (dashed ? '<span class="why">impossible without ' + esc(labelOf(R.why[a.id]).replace(/^the /, '')) + ' — Simons arrived in that trade</span>' : '') + '<span class="foot"><i class="sw k-OBSERVED"></i><span class="sr">OBSERVED</span></span><span class="kn">OBSERVED · ' + esc(a.fx ? R_FIX(a.fx).sealed.src + ' · as of ' + R_FIX(a.fx).sealed.asOf : FX.reality.owner.src + ' · ' + FX.reality.owner.asOf) + ' [verify]</span></button>';
-    }
-    h += '<div class="slot" style="grid-column:' + (i + 2) + '">' + inner + '</div>';
-  });
-  const rc = R.unk;
-  h += '<div class="game k-' + (rc ? 'UNKNOWN' : 'OBSERVED') + '" style="grid-column:2/-1;grid-row:4;margin-top:5px;min-height:46px;flex-direction:row;align-items:center;gap:14px;padding:6px 12px"><span class="res">2025–26 results</span><span>' + (rc ? 'UNKNOWN — results are not derived from rules, so they are not guessed.' : esc(FX.reality.realRecord2526.v) + ' regular season (per BOW’s source) [verify]') + '</span><span class="kn">' + (rc ? 'UNKNOWN · dashed-empty' : 'OBSERVED · ' + esc(FX.reality.realRecord2526.src) + ' · ' + FX.reality.realRecord2526.asOf) + '</span></div>';
-  h += '<div class="ghost" style="grid-row:5"><span class="g">Your world, ghosted — a different calendar:<span class="gs">Boston · Year Two · Week 9</span></span></div>';
-  h += '</div>';
-  $('#stick').innerHTML = h;
-}
-
-/* ---- the present: dials built once per system, updated in place */
-const DIAL = {}; let SHOWN = {}; let tweenId = 0;
-function pt(t, r) { const a = Math.PI * (1 - t); return [100 + r * Math.cos(a), 100 - r * Math.sin(a)]; }
-const tOf = (k, v) => Math.max(0, Math.min(1, (v - FM[k].lo) / (FM[k].hi - FM[k].lo)));
-function gaugeSVG(k) {
-  const m = FM[k]; let s = '<svg viewBox="0 0 200 112" aria-hidden="true" focusable="false">';
-  s += '<path class="band-edge" d="M 16 100 A 84 84 0 0 1 184 100"/><path class="band-fill" d="M 20 100 A 80 80 0 0 1 180 100"/><path class="band-rule" d="M 20 100 A 80 80 0 0 1 180 100"/><path class="band-edge" d="M 24 100 A 76 76 0 0 1 176 100"/>';
-  for (let i = 0; i <= 10; i++) { const a = pt(i / 10, 88), b = pt(i / 10, i % 5 === 0 ? 97 : 93); s += '<line class="tick" x1="' + a[0].toFixed(1) + '" y1="' + a[1].toFixed(1) + '" x2="' + b[0].toFixed(1) + '" y2="' + b[1].toFixed(1) + '"/>'; }
-  m.mk.forEach(mk => { const t = tOf(k, mk.v), a = pt(t, 71), b = pt(t, 99); s += '<line class="mark" x1="' + a[0].toFixed(1) + '" y1="' + a[1].toFixed(1) + '" x2="' + b[0].toFixed(1) + '" y2="' + b[1].toFixed(1) + '"><title>' + esc(mk.t) + '</title></line>'; });
-  s += '<g class="nd ng-pred"><line class="nd-pred" x1="100" y1="100" x2="100" y2="27"/><circle cx="100" cy="27" r="3.4" fill="var(--paper)" stroke="var(--warm)" stroke-width="1.6"/></g>';
-  s += '<g class="nd ng-rec"><path class="nd-rec" d="M 96.4 100 L 100 24 L 103.6 100 Z"/></g>';
-  s += '<g class="nd ng-world"><path class="nd-world" d="M 97.2 100 L 100 31 L 102.8 100 Z"/></g>';
-  s += '<circle class="hub" cx="100" cy="100" r="6.5"/><circle class="hubIn" cx="100" cy="100" r="2.4"/></svg>';
-  return s;
-}
-function setNeedle(g, t) { if (g) g.setAttribute('transform', 'rotate(' + ((t - 0.5) * 180).toFixed(2) + ' 100 100)'); }
-function applyNeedles(root, k, v) {
-  setNeedle($('.ng-rec', root), tOf(k, v.rec));
-  const w = $('.ng-world', root); if (w) { if (v.world == null) w.setAttribute('visibility', 'hidden'); else { w.removeAttribute('visibility'); setNeedle(w, tOf(k, v.world)); } }
-  const p = $('.ng-pred', root); if (p) { if (v.pred == null) p.setAttribute('visibility', 'hidden'); else { p.removeAttribute('visibility'); setNeedle(p, tOf(k, v.pred)); } }
-}
-const CLAMP_SVG = '<svg class="clampMark" viewBox="0 0 26 26" aria-hidden="true"><path d="M6 4H18V8H10V18H18V22H6Z" fill="var(--warm)" stroke="var(--warm2)" stroke-width="1"/><rect x="18" y="10" width="6" height="6" fill="var(--warm2)"/></svg>';
-function buildPresent() {
-  const world = S.sys === 'world';
-  let h = '<h2>The present <small id="clockTxt"></small></h2><div class="seal" id="seal"></div><div id="capP"></div><div class="dials" id="dials">';
-  (world ? WORLD_DIALS : REAL_DIALS).forEach(k => {
-    const m = FM[k];
-    h += '<button type="button" class="dial" data-do="fact" data-fact="' + k + '" data-fk="dial-' + k + '" ' + (world ? '' : 'data-realdial="1" ') + 'id="dial-' + k + '"><span class="lab">' + esc(m.name) + '<em>' + esc(m.sub || '') + '</em></span>' + gaugeSVG(k) + CLAMP_SVG + '<span class="val"></span><span class="sub"></span><span class="kn"></span></button>';
-  });
-  if (!world) {
-    h += '<div class="plate unk" id="plateUnk"></div><div class="plate" id="plateBooks"></div>';
-  }
-  h += '</div>';
-  h += '<div class="legend"><span class="lg"><svg viewBox="0 0 16 16"><path d="M6.5 15 L8 1 L9.5 15 Z" fill="#fff" stroke="var(--ink)" stroke-width="1.2"/></svg> the record</span><span class="lg"><svg viewBox="0 0 16 16"><path d="M6.8 15 L8 2 L9.2 15 Z" fill="var(--warm)" stroke="var(--warm2)"/></svg> ' + (world ? 'this world' : 'derived view') + '</span><span class="lg"><svg viewBox="0 0 16 16"><line x1="8" y1="15" x2="8" y2="2" stroke="var(--warm)" stroke-width="1.8" stroke-dasharray="3 2.5"/></svg> your guess</span></div>';
-  h += '<div class="kindkey">' + ['OBSERVED', 'RECORDED', 'AUTHORED', 'COMPUTED', 'MODELED', 'GENERATED', 'UNKNOWN'].map(k => '<div class="row"><i class="sw k-' + k + '"></i><span><b>' + k + '</b> — ' + KW[k] + (k === 'MODELED' || k === 'GENERATED' ? ' (not used on this page)' : '') + '</span></div>').join('') + '</div>';
-  
-  $('#present').innerHTML = h;
-  Object.keys(DIAL).forEach(k => delete DIAL[k]);
-  (world ? WORLD_DIALS : REAL_DIALS).forEach(k => { DIAL[k] = $('#dial-' + k); });
-  SHOWN = {};
-}
-function updatePresent(animate) {
-  const world = S.sys === 'world', kinds = {};
-  const F = world ? CUR.F : CUR.R;
-  const ks = world ? WORLD_DIALS : REAL_DIALS, targets = {};
-  ks.forEach(k => {
-    const rec = world ? rawOf(k, RECORD) : rawOf(k, R0), now = rawOf(k, F);
-    let pred = null;
-    if (world) Object.keys(S.liftInfo).forEach(id => { const li = S.liftInfo[id]; if (li.fact === k && li.pred != null && CUR.E.lifted.has(id)) pred = li.pred; });
-    targets[k] = { rec: rec, world: (S.sys === 'reality' && k === 'rrec' && F.unk) ? null : now, pred: pred };
-  });
-  // static parts
-  $('#clockTxt').textContent = world ? (S.at === 'branch' ? 'your branch · ' : '') + 'Year Two · Week ' + F.weeks : 'Reality · as of ' + FX.meta.now;
-  const rh = world ? RECORD.hash : R0.hash, same = F.hash === rh;
-  $('#seal').innerHTML = '<span>present hash</span><span class="hx' + (world && S.at === 'branch' ? ' br' : '') + (S.flash && same ? ' hilite' : '') + '">' + F.hash + '</span><span class="' + (same ? 'ok' : 'no') + '">' + (same ? 'matches ' + (world ? 'the record' : 'Reality as recorded') + ' (' + rh + ')' : (world ? 'the record is ' : 'as recorded: ') + rh + ' — differs') + '</span><span class="kn">COMPUTED · small hash of the folded state</span>';
-  ks.forEach(k => {
-    const el = DIAL[k], kd = kindOfDial(k);
-    el.className = 'dial k-' + kd + (S.fact === k && S.weigh ? ' foc' : '') + (S.clamps.some(c => c.fact === k && c.at === S.at && world) ? ' clamped' : '') + (S.sys === 'reality' && k === 'rrec' && F.unk ? ' unk' : '');
-    const val = $('.val', el), sub = $('.sub', el);
-    const recTxt = world ? valText(k, RECORD) : valText(k, R0), nowTxt = valText(k, F);
-    const differs = world ? (k === 'score' ? (F.last.b !== RECORD.last.b || F.last.o !== RECORD.last.o || F.weeks !== 9) : Math.abs(rawOf(k, F) - rawOf(k, RECORD)) > (k === 'wins' || k === 'seats' ? 0.4 : 5000)) : (F.unk && k === 'rrec') || (k !== 'rrec' && Math.abs(rawOf(k, F) - rawOf(k, R0)) > 5000);
-    sub.className = 'sub' + (differs ? ' chg' : '');
-    let subTxt = '';
-    if (differs) { subTxt = '<span>record ' + esc(recTxt) + '</span>'; if (!(k === 'wins' || k === 'score' || k === 'rrec')) subTxt += ' <span>' + deltaTxtRaw(k, rawOf(k, F) - rawOf(k, world ? RECORD : R0)) + '</span>'; }
-    else if (k === 'seats' && F.capped) subTxt = 'sold out: capped at ' + num(CAP_SEATS);
-    else if (k === 'tax' && world && F.over === 0) subTxt = 'under the line: no tax';
-    sub.innerHTML = subTxt;
-    if (k === 'rtax') { const d = FX.league.season2627.tax.v - F.ts; sub.innerHTML = (differs ? '<span>record ' + recTxt + '</span> ' : '') + '<span>' + (d >= 0 ? money(d, 1) + ' under the line' : money(-d, 1) + ' over the line') + '</span>'; sub.className = 'sub' + (differs ? ' chg' : ''); }
-    if (k === 'rcap') { const d = FX.league.season2627.apron1.v - F.cp; sub.innerHTML = (differs ? '<span>record ' + recTxt + '</span> ' : '') + '<span>' + (d >= 0 ? money(d, 1) + ' under 1st apron' : money(-d, 1) + ' over 1st apron') + '</span>'; sub.className = 'sub' + (differs ? ' chg' : ''); }
-    $('.kn', el).textContent = kd + ' · ' + KSHORT[k]();
-    el.title = kd + ' · ' + KSRC[k]();
-    el.setAttribute('aria-label', FM[k].name + ': ' + nowTxt + (differs ? ' (the record says ' + recTxt + ')' : '') + '. Press to order the acts by what they did to it.');
-    kinds[k] = kd;
-  });
-  if (!world) {
-    $('#plateUnk').innerHTML = '<b>Unknown, not guessed</b>' + (F.unk ? 'What Chicago, Portland and Atlanta did next · every game result · the 2026 playoffs.<br><span class="kk">UNKNOWN · a different Boston would have changed what they did; nobody can derive it.</span>' : 'What other clubs did after each move: read from the Reality feed [verify]. Nothing in this store models it.<br><span class="kk">UNKNOWN in this store</span>');
-    $('#plateBooks').innerHTML = '<b>On Boston’s books, of the players in these moves</b><ul>' + F.books.map(n => '<li>' + esc(n) + '</li>').join('') + '</ul><span class="kk">' + (F.lifted ? 'COMPUTED from who was traded to whom (no salaries needed)' : 'OBSERVED · as recorded') + '</span>' + '';
-  }
-  $('#capP').innerHTML = S.real ? capLine('REAL', CAPS.hash) + capLine('PROPOSED', CAPS.present) : '';
-  // tween needles + text
-  const from = SHOWN, id = ++tweenId, t0 = performance.now(), dur = (animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) ? 520 : 0;
-  const lerp = (a, b, u) => (a == null || b == null) ? b : a + (b - a) * u;
-  const ease = u => 1 - Math.pow(1 - u, 3);
-  function frame(now) {
-    if (id !== tweenId) return;
-    const u = dur ? Math.min(1, (now - t0) / dur) : 1, e = ease(u);
-    ks.forEach(k => {
-      const f0 = from[k] || targets[k], tg = targets[k];
-      const cur = { rec: lerp(f0.rec, tg.rec, e), world: tg.world == null ? null : lerp(f0.world == null ? tg.world : f0.world, tg.world, e), pred: tg.pred };
-      applyNeedles(DIAL[k], k, cur);
-      const v = $('.val', DIAL[k]);
-      if (u >= 1) v.textContent = valText(k, F);
-      else if (k === 'wins') v.textContent = Math.round(cur.world) + EN + (F.weeks - Math.round(cur.world));
-      else if (k === 'score') v.textContent = snum(cur.world) + ' pts';
-      else if (k === 'rrec') v.textContent = valText(k, F);
-      else v.textContent = FM[k].f(cur.world);
-    });
-    if (u < 1) requestAnimationFrame(frame); else SHOWN = targets;
-  }
-  requestAnimationFrame(frame);
-}
-const deltaTxtRaw = (k, d) => (k === 'seats') ? snum(d) + ' seats' : smoney(d, k === 'cash' ? 2 : 1);
-
-/* ---- the bench */
-function tabsFor() {
-  if (S.sys === 'reality') return [['act', 'Act'], ['compare', 'Compare'], ['log', 'Log']];
-  const t = [['act', 'Act'], ['weigh', 'What counted'], ['pair', 'Two at once'], ['compare', 'Compare']];
-  if (S.at === 'branch') t.push(['play', 'Play on']);
-  t.push(['log', 'Log (' + S.log.length + ')']);
-  return t;
-}
-function renderBench() {
-  if (S.tab === 'play' && !(S.at === 'branch' && S.sys === 'world')) S.tab = 'act';
-  const tabs = tabsFor();
-  if (!tabs.some(t => t[0] === S.tab)) S.tab = 'act';
-  let h = '<div class="tabs" role="group" aria-label="Workbench">' + tabs.map(t => '<button type="button" data-do="tab" data-tab="' + t[0] + '" data-fk="tab-' + t[0] + '" aria-pressed="' + (S.tab === t[0]) + '">' + esc(t[1]) + '</button>').join('');
-  h += '<span class="sp">';
-  if (S.sys === 'world') {
-    if (S.at === 'branch') h += '<button type="button" class="btn br" data-do="toRecord" data-fk="toRecord" style="min-height:38px">Return to the record</button>';
-    else if (S.branch) h += '<button type="button" class="btn br" data-do="toBranch" data-fk="toBranch" style="min-height:38px">Enter your branch</button>';
-  }
-  h += '<button type="button" class="btn" data-do="reset" data-fk="reset" style="min-height:38px;margin-left:6px;font-weight:400">Start over</button></span></div>';
-  let body = '', one = false;
-  switch (S.tab) {
-    case 'act': body = S.sys === 'reality' ? panelActR() : panelAct(); break;
-    case 'weigh': body = panelWeigh(); break;
-    case 'pair': body = panelPair(); one = false; break;
-    case 'compare': body = S.sys === 'reality' ? panelCompareR() : panelCompare(); break;
-    case 'play': body = panelPlay(); break;
-    case 'log': body = panelLog(); one = true; break;
-  }
-  const capk = S.sys === 'reality' ? (S.tab === 'act' ? 'reality' : S.tab === 'compare' ? 'reality' : 'log') : S.tab;
-  const capx = S.real ? capLine(capk === 'reality' ? 'SPEC' : 'PROPOSED', CAPS[capk] || CAPS.act, 'grid-column:1/-1') : '';
-  $('#bench').innerHTML = h + '<div class="panel' + (one ? ' one' : '') + '" id="panel" role="region" aria-label="' + esc(S.tab) + '">' + capx + body + '</div>';
-  wireBig();
-}
-function kindSwatch(k) { return '<i class="sw k-' + k + '"></i>'; }
-function chipRow(sel, kindDo, includeAll) {
-  return '<div class="chips" role="group" aria-label="Fact">' + (includeAll ? '<button type="button" class="chip" data-do="factall" data-fk="chip-all" aria-pressed="' + (!S.fact) + '">All facts</button>' : '') + WORLD_DIALS.map(k => '<button type="button" class="chip" data-do="' + kindDo + '" data-fact="' + k + '" data-fk="chip-' + kindDo + '-' + k + '" aria-pressed="' + (sel === k) + '">' + esc(FM[k].name === 'Projected tax' ? 'Tax' : FM[k].name === 'Latest score' ? 'Score' : FM[k].name === 'Premium seats' ? 'Seats' : FM[k].name) + '</button>').join('') + '</div>';
-}
-function noticeHTML(id) { if (!S.notice || (S.notice.for || null) !== (id || null)) return ''; const n = S.notice; return '<div class="refuse" role="alert"><b>' + esc(n.title) + '</b><div class="rule">' + esc(n.rule) + '</div></div>'; }
-
-function panelAct() {
-  const b = panelActInner();
-  if (!S.flash || S.sys !== 'world') return b;
-  return '<div class="snap" style="grid-column:1/-1"><b>' + esc(S.flash.text) + '</b> Present hash <b>' + S.flash.hash + '</b> ' + (S.flash.same ? '= the record’s <b>' + S.flash.rec + '</b>. The world is the record again.' : 'and the record’s is ' + S.flash.rec + ': something else is still lifted.') + '</div>' + b;
-}
-function panelActInner() {
-  const F = CUR.F, E = CUR.E, sel = S.sel;
-  if (!sel) {
-    const n = noticeHTML(null);
-    return '<div><h3>Hold an act to lift it out.</h3><p>Each slug is something you did. The dials are what those acts add up to. Lift one and the present re-forms without it, with luck held fixed, so the only thing that changed is that act.</p><p class="small">Tap an act to look first and guess what it did. “What counted” shows which acts reached which dial. A lift removes an act; it does not choose the other side.</p><div class="btns"><button type="button" class="btn" data-do="tab" data-tab="weigh" data-fk="w-first">What counted</button><button type="button" class="btn" data-do="select" data-id="w6-trade" data-fk="w6-first">Look at the Week 6 trade</button></div>' + n + '</div><div><h4>What the textures say</h4><p class="small">' + kindSwatch('RECORDED') + ' RECORDED: written into BOW’s record. ' + kindSwatch('AUTHORED') + ' AUTHORED: written for this prototype, illustrative.</p><p class="small">' + kindSwatch('COMPUTED') + ' COMPUTED: follows from rules and state. The toy engine’s scores are AUTHORED, never hatched: no model ran.</p><p class="small">Nothing here is a basketball test: it is sentences, dates, money and a score.</p></div>';
-  }
-  if (sel.indexOf('game:') === 0) return panelGame(+sel.slice(5));
-  const a = findAct(sel), st = F.status[sel], kind = a.branch ? 'RECORDED' : a.k;
-  const head = '<h3>' + kindSwatch(kind) + ' ' + esc(a.who ? a.who + DOT : '') + esc(whenShort(a)) + '</h3><p style="font-size:17px;margin:2px 0 6px"><i>' + esc(a.what) + '</i></p>';
-  if (a.seat === 'league') {
-    const declined = st === 'declined', nt = noticeHTML(a.id);
-    let left;
-    if (declined) left = '<div class="refuse"><b>Set by you, not the League’s.</b><div class="rule">This branch sets the League’s answer by hand. That is an assumption, stamped as yours, not the League’s act.</div></div>';
-    else if (nt) left = nt + '<p>What you can do instead is set their seat and see what follows.</p><div class="btns"><button type="button" class="btn brf" data-do="forkSeat" data-fk="forkSeat">Fork with their seat set</button></div><p class="small">This cuts a branch where the League does not approve. The answer is your assumption, not the League’s act.</p>';
-    else left = '<p>This is the League’s act, set in the record next to yours. Your seat is ' + esc(WD.seat.name) + '.</p><div class="btns"><button type="button" class="btn" data-do="lift" data-id="' + a.id + '" data-fk="try-lift">Try to lift it</button></div>';
-    return '<div>' + head + left + '</div><div><h4>Why this is locked</h4><p class="small">Authority is what you can lift. The League’s approval is authored here [verify against the save]. Whether the League would have approved is not something you can take out, only something you can set.</p></div>';
-  }
-  if (st === 'dashed') {
-    const need = F.why[sel], na = findAct(need);
-    return '<div>' + head + '<div class="refuse"><b>Impossible without ' + esc(labelOf(need).replace(/^the /, '')) + '.</b><div class="rule">This act needed ' + esc(labelOf(need)) + ', which is ' + (F.status[need] === 'lifted' ? 'lifted out' : F.status[need] === 'declined' ? 'declined in this branch' : 'dashed too') + '. It is dashed, not deleted: put that act back and this one returns.</div></div><p>' + esc(whenShort(a)) + ' needed <i>' + esc(na ? na.what : need) + '</i></p><div class="btns"><button type="button" class="btn" data-do="select" data-id="' + need + '" data-fk="show-need">Show the act it needed</button>' + (F.status[need] === 'lifted' ? '<button type="button" class="btn pri" data-do="putback" data-id="' + need + '" data-fk="pb-need">Put ' + esc(labelOf(need)) + ' back</button>' : '') + '</div></div><div><h4>Path dependence</h4><p class="small">What turned to dashes is what could only happen because the lifted act did. It reached no number by itself: it had no way to exist.</p></div>';
-  }
-  if (st === 'lifted') return panelLifted(a, head);
-  // in: predict then lift
-  const fk = S.pfact, m = FM[fk], key = a.id + '|' + fk, rec = rawOf(fk, F), pv = S.preds[key] != null ? S.preds[key] : null;
-  const pd = toDisp(fk, pv != null ? pv : rec);
-  const notice = noticeHTML(a.id);
-  return '<div>' + head + '<p class="small">Your act · ' + esc(WD.seat.name) + '. ' + (a.branch ? 'RECORDED in your branch.' : kind === 'RECORDED' ? 'RECORDED in the World.' : 'AUTHORED: illustrative, written for this prototype.') + '</p><p>Guess first. Then lift it out and watch what the present does without it.</p>' + notice + '<div class="btns"><button type="button" class="btn pri" data-do="lift" data-id="' + a.id + '" data-fk="lift">Lift it out</button></div><p class="small">You can also hold the act in the strip. <span class="kn">' + esc(kindNote(a)) + '</span></p></div>' +
-    '<div class="dialbox"><h4 style="margin-top:0">What will ' + esc(m.phrase) + ' be without it?</h4>' + chipRow(fk, 'pfact', false) + '<div class="big" id="big" data-k="' + fk + '">' + gaugeSVG(fk) + '</div><div class="rng"><input type="range" id="predRange" aria-label="Your guess for ' + esc(m.phrase) + '" min="' + toDisp(fk, m.lo) + '" max="' + toDisp(fk, m.hi) + '" step="' + toDisp(fk, m.step) + '" value="' + pd + '"><output id="predOut">' + m.f(pv != null ? pv : rec) + '</output></div><div class="cap2"><span>' + m.ax(m.lo) + '</span><span>the record: ' + valText(fk, F) + '</span><span>' + m.ax(m.hi) + '</span></div></div>';
-}
-function panelLifted(a, head) {
-  const F = CUR.F, E = CUR.E;
-  const li = S.liftInfo[a.id] || { fact: S.pfact, pred: null }, fk = li.fact, m = FM[fk];
-  // footprint of this one lift relative to the world without it
-  const Eb = Object.assign({}, E, { lifted: new Set(Array.from(E.lifted).filter(i => i !== a.id)) }), Fb = fold(Eb);
-  const rows = FACTS.map(k => ({ k: k, d: diff(Fb, F, k), a: valText(k, Fb), b: valText(k, F) })).filter(r => r.d.ch);
-  const gch = gamesChanged(Fb, F);
-  const dashed = Object.keys(F.status).filter(id => F.status[id] === 'dashed' && Fb.status[id] === 'in');
-  let foot;
-  if (!rows.length && !gch && !dashed.length) foot = '<p class="verdict">Nothing changed.<small>The present is the same without this act. It is still in your record; it reached no fact.</small></p>';
-  else foot = '<h4>What it reached</h4><table class="tbl"><tr><th>Fact</th><th class="r">Before</th><th class="r">Now</th></tr>' + rows.map(r => '<tr><td>' + esc(FM[r.k].name) + '</td><td class="r">' + esc(r.a) + '</td><td class="r chg">' + esc(r.b) + '</td></tr>').join('') + '</table>' + ((gch || dashed.length) ? '<p class="small" style="margin-top:3px">' + (gch ? gch + ' of ' + F.games.length + ' game scores are different; the others kept their draws and results.' : '') + (dashed.length ? ' Dashed now: ' + dashed.map(id => esc(labelOf(id))).join(', ') + '.' : '') + '</p>' : '');
-  const said = li.pred != null ? 'You said <b>' + m.f(li.pred) + '</b>. Without it: <b>' + valText(fk, F) + '</b>.<br>The record says ' + valText(fk, Fb) + '.' : 'You did not guess. Without it: <b>' + valText(fk, F) + '</b>. The record says ' + valText(fk, Fb) + '.';
-  const twice = S.ledger[lkey(E)];
-  return '<div><h3>' + kindSwatch(a.branch ? 'RECORDED' : a.k) + ' Lifted out</h3><p style="font-size:16px;margin:0 0 4px"><i>' + esc(whenShort(a)) + ' · ' + esc(a.what) + '</i></p><div class="btns"><button type="button" class="btn pri" data-do="putback" data-id="' + a.id + '" data-fk="putback">Put it back</button>' + (S.at === 'record' ? '<button type="button" class="btn brf" data-do="keep" data-fk="keep">Keep this world</button>' : '') + '</div>' + foot + '<p class="small">' + (twice && twice.n > 1 ? ' You have lifted this exact set ' + twice.n + ' times: same present ' + twice.hash + ' each time.' : '') + '</p></div>' +
-    '<div class="dialbox"><h4 style="margin-top:0">' + esc(m.name) + ': your guess and the result</h4><div class="big" id="big" data-k="' + fk + '" data-lifted="1">' + gaugeSVG(fk) + '</div><p class="said">' + said + '</p><p class="small" style="text-align:center;margin:0">Luck held fixed: every game kept its own draw.</p>' + '' + '</div>';
-}
-function panelGame(g) {
-  const F = CUR.F, E = CUR.E, gm = F.games[g - 1], rg = RECORD.games[g - 1], same = rg && rg.b === gm.b && rg.o === gm.o;
-  const kind = (g === 9 && same) ? 'RECORDED' : 'AUTHORED';
-  const rows = [];
-  F.acts.forEach(a => { if (F.status[a.id] !== 'in' || a.seat === 'league') return; const alt = fold(withLift(E, [a.id])), x = alt.games[g - 1]; if (x && (x.b !== gm.b || x.o !== gm.o)) rows.push({ a: a, x: x }); });
-  const nt = noticeHTML('game:' + g), w9 = WD.acts.filter(a => /Denver/.test(a.what))[0];
-  return '<div><h3>' + kindSwatch(kind) + ' Week ' + g + ' · ' + (gm.win ? 'won' : 'lost') + ' ' + gm.b + EN + gm.o + (gm.home ? ' at home against ' : ' away at ') + esc(OPPN[gm.opp]) + '</h3>' + (nt || '<p>This is a result, not something a seat did.</p><div class="btns"><button type="button" class="btn" data-do="lift" data-id="game:' + g + '" data-fk="try-lift">Try to lift it</button></div>') + '<p class="small">' + (kind === 'RECORDED' ? 'RECORDED in the World: the one result that is not the toy engine’s.' : 'AUTHORED: the toy engine’s output for this game. Its draw is fixed: ' + gm.uB.toFixed(2) + ' and ' + gm.uO.toFixed(2) + '.') + '</p>' + (g === 9 ? '<p class="small">As recorded: ' + esc(w9.what) + ' <span class="kn">RECORDED · World record</span></p>' : '') + '</div><div><h4>Which acts reached this score</h4>' + (rows.length ? '<table class="tbl"><tr><th>Lift only…</th><th class="r">Score becomes</th></tr>' + rows.map(r => '<tr><td>' + esc(whenShort(r.a)) + '</td><td class="r chg">' + r.x.b + EN + r.x.o + '</td></tr>').join('') + '</table><p class="small" style="margin-top:4px">Each row lifts one act alone and replays with the same draws.</p>' : '<p>No single act moves this score.</p>') + '</div>';
-}
-function traceHTML(k) {
-  const F = CUR.F, lab = id => id === 'start' ? 'Year Two starts at' : whenShort(findAct(id) || { when: id });
-  if (k === 'payroll') return '<ul class="ledger">' + F.pc.map(x => '<li><span>' + (x.id === 'start' ? 'start' : esc(lab(x.id))) + '</span><span>' + (x.id === 'start' ? money(x.v, 3) + ' (authored)' : smoney(x.v, 3)) + '</span></li>').join('') + '<li><span>= payroll</span><span>' + money(F.payroll, 3) + '</span></li></ul>';
-  if (k === 'tax') return '<ul class="ledger"><li><span>rule</span><span>1.5 × (payroll − ' + money(TAX_LINE) + ') · World rule, authored</span></li><li><span>so</span><span>1.5 × ' + money(F.over, 2) + ' = ' + money(F.tax, 2) + '</span></li></ul><p class="small">The NBA’s real tax is incremental; this World’s is flat.</p><h4>Where the payroll came from</h4>' + traceHTML('payroll');
+  if (k === 'tax') return '<ul class="ledger"><li><span>rule</span><span>1.5 × (payroll − ' + money(TAX_LINE) + ') · World rule, authored; the NBA’s real tax is incremental</span></li><li><span>so</span><span>1.5 × ' + money(F.over, 2) + ' = ' + money(F.tax, 2) + '</span></li><li><span>payroll</span><span>' + F.pc.map(x => x.id === 'start' ? money(x.v, 3) + ' start (authored)' : smoney(x.v, 3) + ' ' + esc(lab(x.id))).join(' ') + ' = ' + money(F.payroll, 3) + '</span></li></ul>';
   if (k === 'cash') return '<ul class="ledger">' + (F.cc.length ? F.cc.map(x => '<li><span>' + esc(lab(x.id)) + '</span><span>' + smoney(x.v, 2) + (x.n ? ' (' + x.n + ' home nights)' : '') + '</span></li>').join('') : '<li><span>—</span><span>no acts in reach</span></li>') + '<li><span>= cash</span><span>' + money(F.cash, 2) + '</span></li></ul>';
   if (k === 'seats') return '<ul class="ledger wide"><li><span>base</span><span>' + num(BASE_SEATS) + ' (authored)</span></li><li><span>price shift</span><span>' + (F.shift ? (F.shift * 100).toFixed(0) + '%' : 'none') + '</span></li><li><span>form</span><span>' + (FORM * 100).toFixed(1) + '% per net win in Weeks 1–8; net ' + snum(F.net) + '</span></li><li><span>demand</span><span>' + num(F.demand) + '</span></li><li><span>= sold</span><span>' + num(F.seats) + (F.capped ? ' (sellout limit ' + num(CAP_SEATS) + ')' : '') + '</span></li></ul>';
   if (k === 'wins') return '<ul class="ledger wide">' + F.games.map(g => '<li><span>Week ' + g.g + '</span><span>' + (g.win ? 'W ' : 'L ') + g.b + EN + g.o + ' ' + (g.home ? 'vs ' : '@ ') + g.opp + '</span></li>').join('') + '</ul>';
@@ -1212,7 +630,7 @@ function panelPlay() {
     return '<div><h3>Week 10 played</h3><p>' + (g.win ? 'Won ' : 'Lost ') + g.b + EN + g.o + ' at ' + esc(OPPN[g.opp]) + '. <span class="small">AUTHORED: the toy engine’s output, its draw fixed.</span></p><p>' + (E.appended.length ? 'Your new act is in branch ink on the strip.' : 'You took no act. That is recorded as an absence, not as a choice.') + '</p><p class="small">Open “What counted”: each act now shows what it reached then, when you kept the world, and what it reaches now.</p><div class="btns"><button type="button" class="btn pri" data-do="tab" data-tab="weigh" data-fk="to-weigh">What counted</button><button type="button" class="btn br" data-do="toRecord" data-fk="toRecord2">Return to the record</button></div></div><div><h4>Where you are</h4><p class="small">' + esc(S.branch.stamp) + '. Base ' + S.branch.base + '. This branch: ' + F.hash + '.</p></div>';
   }
   const ob = OPTIONS.map(o => { const dis = o.needsDark && !analyticsDark; return '<button type="button" class="btn" ' + (dis ? 'disabled' : '') + ' data-do="playOn" data-opt="' + o.id + '" data-fk="opt-' + o.id + '">' + esc(o.what) + (o.price ? ' · ' + money(o.price, o.price < 1e6 ? 2 : 1) : ' · ' + smoney(o.effects.cash || 0, 2)) + '</button>'; }).join('');
-  return '<div><h3>Play on: Week 10, away at ' + esc(OPPN[g10.o]) + '</h3><p>Your branch is kept. Take one act, or none, and the week is played. New acts are set in branch ink.</p><div class="btns">' + ob + '<button type="button" class="btn" data-do="playOn" data-fk="opt-none">Play Week 10 with no new act</button></div><p class="small">' + (analyticsDark ? '' : 'Analytics is already open in this branch, so there is nothing to reopen. ') + 'Reopening Analytics costs ' + money(ANALYTICS.opensFor, 1) + ' (' + esc(ANALYTICS.why) + ').</p></div><div><h4>What playing on does</h4><p class="small">The next game gets its own fixed draw. Acts you take now reach forward, not back: Weeks 1–9 keep their results. The weights will change, and the strip will say so.</p></div>';
+  return '<div><h3>Play on: Week 10, away at ' + esc(OPPN[g10.o]) + '</h3><p>Your branch is kept. Take one act, or none, and the week is played. New acts are set in branch ink.</p><div class="btns">' + ob + '<button type="button" class="btn" data-do="playOn" data-fk="opt-none">Play Week 10 with no new act</button></div></div><div><h4>What playing on does</h4><p class="small">The next game gets its own fixed draw. Acts you take now reach forward, not back: Weeks 1–9 keep their results. ' + (analyticsDark ? '' : 'Analytics is already open here, so there is nothing to reopen. ') + 'Reopening Analytics costs ' + money(ANALYTICS.opensFor, 1) + ' (' + esc(ANALYTICS.why) + '). The weights will change, and the strip will say so.</p></div>';
 }
 function panelLog() {
   return '<div><h3>Every act, in order</h3><p class="small">Who, what, when in which clock, in which history. Toggles and tabs are not acts.</p>' + (S.log.length ? '<ul class="log">' + S.log.slice().reverse().map(l => '<li><b>#' + l.n + '</b> <span class="who">' + esc(l.who) + '</span> · ' + esc(l.what) + '<br><span class="who">' + esc(l.clock) + ' · ' + esc(l.hist) + '</span></li>').join('') + '</ul>' : '<p>Nothing yet. The record is at rest.</p>') + '</div>';

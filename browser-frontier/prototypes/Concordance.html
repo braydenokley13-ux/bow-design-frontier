@@ -225,14 +225,20 @@ tr.ref td{background:rgba(179,30,20,.08);border-bottom:2px solid var(--red);font
 #tools .sep{width:1px;height:16px;background:var(--paper);opacity:.5;margin:0 4px}
 #tools .tg:focus-visible{outline-color:var(--paper)}
 #topstrip{height:30px}
+.tlm.sealed{width:11em}
+.objs summary{cursor:pointer;font:600 11.5px var(--mono);padding:2px 0;min-height:24px}
+.pane .ph .act{border:1.5px solid var(--ink);background:var(--brass);padding:0 8px;min-height:22px;font:700 11px var(--mono)}
+.ctable td{padding:1px 4px}
+.lever[data-cap]::before,#agreeBtn[data-cap]::before{top:auto !important;bottom:-11px;right:auto !important;left:0}
+body.real .lever[data-cap]::before{max-width:240px}
 </style>
 </head>
 <body>
-<div id="topstrip"><button type="button" id="declare" data-act="declare" aria-pressed="false">Use Direct for screen readers and keyboard — remember it</button><span id="tools" data-cap="PROPOSED" data-ai="NO AI REQUIRED"></span></div>
+<div id="topstrip"><button type="button" id="declare" data-act="declare" aria-pressed="false">Use Direct for screen readers and keyboard — remember it</button><span id="tools"></span></div>
 <header id="hdr">
   <div class="brand"><span class="wm">CONCORDANCE</span><span class="sub">one ledger · every view</span></div>
   <div id="addr" class="addr" role="group" aria-label="Address"></div>
-  <div class="levers"><div id="lever" class="lever" role="group" aria-label="Ledger position"></div><button type="button" class="btn brass" id="agreeBtn" data-act="agree" data-cap="PROPOSED" data-ai="NO AI REQUIRED">Do these agree?</button><button type="button" class="btn" id="forkBtn" data-act="fork">What if…</button></div>
+  <div class="levers"><div id="lever" class="lever" role="group" aria-label="Ledger position"></div><button type="button" class="btn brass" id="agreeBtn" data-act="agree" data-cap="PROPOSED" data-ai="NO AI REQUIRED">Do these agree?</button><button type="button" class="btn" id="forkBtn" data-act="fork" data-cap="PROPOSED PLATFORM" data-ai="NO AI REQUIRED">What if…</button></div>
 </header>
 <section id="plan" class="plan" aria-label="Plan" data-cap="PROPOSED" data-ai="NO AI REQUIRED (rule table)"></section>
 <section id="reasons" class="reasons" hidden aria-label="The Plan's reasons"></section>
@@ -383,7 +389,7 @@ const ST={
   ui:{who:'newcomer',sr:false,device:'desktop',open:[],direct:'collapsed',pin:null,override:false,quiet:false,reasons:null,follow:null,agree:null,how:false,real:false,inject:null,compare:false,tab:'matters',pending:null,offer:null,compiled:false,tier:'3d',room:{station:'overview'}}
 };
 let FRAME=0,regs={},failed={},_c={key:null,S:null},_stale=null;
-ST._sz={};ST._szKey={};
+ST._sz={};ST._szKey={};ST._wasFailed={};ST._nh=null;
 const logOf=()=>ST.sys==='harrow'?ST.harrow:(ST.active==='branch'?ST.hist.branch:ST.hist.record);
 function cur(){
   const key=ST.sys+'|'+ST.active+'|'+logOf().length;
@@ -628,10 +634,10 @@ function vTimeline(SRC,S){
      B('file.gsw.get',0,0,'','get '+esc(sm['file.gsw.get'].text)).replace(/style="[^"]*"/,''))+
      (dense?'':B('file.den.status',0,0,'','Denver (illustrative) · '+esc(sm['file.den.status'].text)).replace(/style="[^"]*"/,'')+
      B('rule.taxRule',0,0,'','World rule: '+esc(sm['rule.taxRule'].text)).replace(/style="[^"]*"/,''))+'</div>';
-  m+=B('future.sealed',(X(6)+X(9))/2+2,80,'ac wrap','Weeks 7 to 9 · '+esc(sm['future.sealed'].text));
+  m+=B('future.sealed',(X(6)+X(9))/2+2,80,'ac wrap sealed','Weeks 7 to 9 · '+esc(sm['future.sealed'].text));
   m+=B('payroll.tax',X(6)+16,116,'','Projected tax '+esc(sm['payroll.tax'].text));
   m+=B('payroll.total',X(6)+16,over?yNow-16:yNow+24,'','Payroll '+esc(sm['payroll.total'].text));
-  m+=B('payroll.vsLine',X(6)+34,(yTax+yNow)/2,'',esc(sm['payroll.vsLine'].text)+' the line');
+  m+=B('payroll.vsLine',X(6)+34,(yTax+yNow)/2,'',esc(sm['payroll.vsLine'].text)+(dense?'':' the line'));
   m+=B('payroll.week.0',X(0),360,'ac','wk 0 · '+esc(sm['payroll.week.0'].text));
   m+=B('payroll.week.1',X(1),386,'ac','wk 1 · '+esc(sm['payroll.week.1'].text));
   m+=B('payroll.week.6',X(6)-26,360,'ac','wk 6 · '+esc(sm['payroll.week.6'].text));
@@ -766,8 +772,8 @@ function paintRulePlate(c){c=c||cv(512,256);const g=c.getContext('2d');g.fillSty
 function paintPeople(c){c=c||cv(384,100);const g=c.getContext('2d');g.fillStyle=PAPER;g.fillRect(0,0,384,100);g.setLineDash([10,7]);g.strokeStyle=INK;g.lineWidth=5;g.strokeRect(4,4,376,92);g.setLineDash([]);tx(g,'PEOPLE:',192,42,30,700,INK,'center',MONO);tx(g,'NOT RECORDED',192,80,34,700,INK,'center',MONO);return c}
 /* ---------------------------------------------------------------- 3D (three.js r160, lazy, procedural, nothing external) */
 let R3=null,R3loading=false,R3fail=false;
-const STATIONS={overview:{p:[0.1,2.3,6.4],t:[0.1,1.85,-1.0]},board:{p:[0.1,2.7,1.2],t:[0.1,3.45,-3.5]},desk:{p:[0.1,1.9,3.5],t:[0.05,0.85,0.95]},doors:{p:[0,1.5,0.2],t:[0,1.1,-2.6]}};
-function overviewFor(asp){const th=Math.tan(17*Math.PI/180),dist=Math.max(8.4,4.6/(th*asp));return {p:[0.1,2.3,-3.5+dist],t:[0.1,1.85,-1.0]}}
+const STATIONS={overview:{p:[0.1,2.5,5.9],t:[0.1,2.05,-1.0]},board:{p:[0.1,2.7,1.2],t:[0.1,3.45,-3.5]},desk:{p:[0.1,1.9,3.5],t:[0.05,0.85,0.95]},doors:{p:[0,1.5,0.2],t:[0,1.1,-2.6]}};
+function overviewFor(asp){const th=Math.tan(17*Math.PI/180),dist=Math.max(9.4,4.6/(th*asp));return {p:[0.1,2.5,-3.5+dist],t:[0.1,2.05,-1.0]}}
 const ROOMOBJ=[['board','Board','payroll.total'],['gsw','Trade file','file.gsw.status'],['den','Denver file','file.den.status'],['analytics','Analytics','dept.analytics.funded'],['scouting','Scouting','dept.scouting.funded'],['ticketing','Ticketing','dept.ticketing.funded'],['partnerships','Partners','dept.partnerships.funded']];
 function ensure3D(){
   if(R3||R3loading||R3fail)return;R3loading=true;
@@ -782,10 +788,10 @@ function build3D(T,OC){
   const host=document.createElement('div');host.style.cssText='position:absolute;inset:0';
   const renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(1);renderer.setClearColor(0xD8CFBA);
   host.appendChild(renderer.domElement);renderer.domElement.style.cssText='width:100%;height:100%;display:block;touch-action:none';
-  renderer.domElement.setAttribute('tabindex','0');renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','The owner’s Room: a desk with the trade file, the payroll board, four glass rooms. Direct has the same facts and acts in words.');
+  renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','The owner’s Room: a desk with the trade file, the payroll board, four glass rooms. Direct has the same facts and acts in words.');
   const scene=new T.Scene(),cam=new T.PerspectiveCamera(40,1.4,.1,60);
-  cam.fov=34;cam.position.set(0.1,2.3,6.4);
-  const ctl=new OC(cam,renderer.domElement);ctl.target.set(0.1,1.85,-1.0);ctl.enablePan=false;ctl.enableDamping=false;ctl.minAzimuthAngle=-.6;ctl.maxAzimuthAngle=.6;ctl.minPolarAngle=0.9;ctl.maxPolarAngle=1.9;ctl.minDistance=1.2;ctl.maxDistance=14;ctl.update();
+  cam.fov=34;cam.position.set(0.1,2.5,5.9);
+  const ctl=new OC(cam,renderer.domElement);ctl.target.set(0.1,2.05,-1.0);ctl.enablePan=false;ctl.enableDamping=false;ctl.minAzimuthAngle=-.6;ctl.maxAzimuthAngle=.6;ctl.minPolarAngle=0.9;ctl.maxPolarAngle=1.9;ctl.minDistance=1.2;ctl.maxDistance=14;ctl.update();
   scene.add(new T.AmbientLight(0xffffff,1.25));const dl=new T.DirectionalLight(0xfff1d6,1.5);dl.position.set(-3,5,4);scene.add(dl);
   const L=(c)=>new T.MeshLambertMaterial({color:c}),Bas=(c)=>new T.MeshBasicMaterial({color:c});
   const add=(geo,mat,x,y,z,ry)=>{const m=new T.Mesh(geo,mat);m.position.set(x,y,z);if(ry)m.rotation.y=ry;scene.add(m);return m};
@@ -882,7 +888,8 @@ function roomBar(SRC){
   const acts=SRC.files.gsw.status==='unsigned'?'<button type="button" class="btn sign sm" data-act="sign" data-file="gsw" data-via="room" aria-label="Sign the Golden State file as act '+(SRC.n+1)+', from the Room">Sign the Golden State file · act '+(SRC.n+1)+'</button><button type="button" class="btn sm" data-act="decline" data-file="gsw" data-via="room" aria-label="Decline the Golden State file, from the Room">Decline it</button>':'<span class="dnote">Golden State file: '+STATUS[SRC.files.gsw.status]+'.</span>';
   const den=SRC.files.den.status==='unsigned'?'<button type="button" class="btn sm" data-act="sign" data-file="den" data-via="room" aria-label="Try the Denver file as act '+(SRC.n+1)+', from the Room">Try the Denver file · act '+(SRC.n+1)+'</button>':'<span class="dnote">Denver file: '+STATUS[SRC.files.den.status]+'.</span>';
   const objs='<button type="button" class="pill" data-act="room" data-v="overview" aria-pressed="'+((ST.ui.room.station||'overview')==='overview')+'">Overview</button>'+ROOMOBJ.map(o=>'<button type="button" class="pill'+(fol(o[2])?' followed':'')+'" data-act="follow" data-path="'+o[2]+'" data-view="room" aria-label="Follow the '+o[1]+(o[0]==='analytics'||o[0]==='scouting'||o[0]==='ticketing'||o[0]==='partnerships'?' door':'')+' fact across views">'+o[1]+'</button>').join('');
-  return '<div class="roombar"><div class="rb1">'+acts+den+'</div><div class="rb2"><span class="lb">OBJECTS</span>'+objs+'</div></div>';
+  const szr=ST._sz.room,narrow=!!(szr&&szr.w<470);
+  return '<div class="roombar"><div class="rb1">'+acts+den+'</div>'+(narrow?'<details class="objs"><summary>Objects: board, file, doors</summary><div class="rb2">'+objs+'</div></details>':'<div class="rb2"><span class="lb">OBJECTS</span>'+objs+'</div>')+'</div>';
 }
 function vRoom(SRC,S){
   const A=ST.ui,M=roomModel(SRC);
@@ -891,6 +898,7 @@ function vRoom(SRC,S){
   const use3d=want3d&&R3&&R3.ok;
   const html='<div class="roomwrap"><div class="roomslot" id="roomslot">'+(want3d&&!use3d?'<p class="dnote" style="padding:12px">Building the Room…</p>':'')+'</div>'+roomBar(SRC)+'</div>';
   return {html:html,reg:M.reg,tier:use3d?'3D':'2.5D',mount:function(el){
+    noteSize('room',el.clientWidth,el.clientHeight);
     const slot=$('#roomslot',el);if(!slot)return;const w=slot.clientWidth,h=slot.clientHeight;if(w<10||h<10)return;
     if(use3d){slot.appendChild(R3.host);R3.host.style.position='absolute';const asp=w/h,stn=(A.room.station||'overview')==='overview'?overviewFor(asp):(STATIONS[A.room.station]||STATIONS.overview);if(R3.station!==A.room.station||(A.room.station==='overview'&&Math.abs(R3.lastAsp-asp)>.02)){R3.lastAsp=asp;R3.cam.position.set(stn.p[0],stn.p[1],stn.p[2]);R3.ctl.target.set(stn.t[0],stn.t[1],stn.t[2]);R3.ctl.update();R3.station=A.room.station}if(R3.lastW!==w||R3.lastH!==h){R3.renderer.setSize(w,h,false);R3.cam.aspect=w/h;R3.cam.updateProjectionMatrix();R3.lastW=w;R3.lastH=h}paint3D(M);R3.renderer.render(R3.scene,R3.cam)}
     else{const c=cv(w,h);c.style.cssText='width:100%;height:100%;display:block';c.setAttribute('role','img');c.setAttribute('aria-label','The owner’s Room in 2.5D: a desk with the trade file, the payroll board, four glass rooms. Direct has the same facts and acts in words.');slot.appendChild(c);draw25(c,M,A)}
@@ -918,15 +926,15 @@ function vLedger(SRC,S){
   svg+='</svg>';
   let m='';
   m+=B('event.fire',X(0)-4,12,'ar',esc(sm['event.fire'].text));
-  m+=B('ship.1',8,34,'','ship 1 · '+esc(sm['ship.1'].text));
-  m+=B('ship.2',X(1),34,'','ship 2 · '+esc(sm['ship.2'].text));
-  m+=B('ship.3',X(8),82,'','ship 3 · '+esc(sm['ship.3'].text));
+  m+=B('ship.1',8,34,'','1: '+esc(sm['ship.1'].text));
+  m+=B('ship.2',X(0)+10,34,'','2: '+esc(sm['ship.2'].text));
+  m+=B('ship.3',X(8),82,'','3: '+esc(sm['ship.3'].text));
   m+=B('clock.lead',X(-14),(LY.fab+LY.port)/2+22,'wrap','lead time · '+esc(sm['clock.lead'].text));
   m+=B('runway',X(rw)+12,LY.plant+22,'','stock runs out in '+esc(sm['runway'].text));
   m+=B('restart',X(9),LY.plant-30,'','Kaito restart · '+esc(sm['restart'].text));
   const rows=HARROW.promises.map(p=>'<tr><td class="nw">Promise '+p.id+'</td><td>'+mkBtn(reg,sm,'Ledger','ledger','promise.'+p.id,'cellbtn',null)+'</td><td>'+mkBtn(reg,sm,'Ledger','ledger','cover.'+p.id,'cellbtn',null)+'</td></tr>').join('');
-  const html='<div class="ledger'+(wide?' wide':'')+'"><div class="mbox" id="mbox"><div class="tlwrap" id="mwrap">'+svg+m+'</div></div><div class="ctable">'+(ST.ui.open.includes('room')?'':'<button type="button" class="btn sm brass" data-act="compile" style="margin:3px 0">Step onto the floor: compile a Room</button>')+'<table><caption class="sr">Customer promises against the runway</caption><thead><tr><th>Commitment</th><th>Due</th><th>Against the runway</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
-  return {html:html,reg:reg,mount:function(el){const w=$('#mwrap',el),pb=$('#mbox',el);if(!w||!pb)return;const bw=pb.clientWidth,bh=pb.clientHeight,r=640/290;let ww=Math.min(bw,bh*r),hh=ww/r;w.style.width=ww+'px';w.style.height=hh+'px';w.style.fontSize=Math.min(13.5,Math.max(11.5,ww/640*13))+'px';noteSize('ledger',el.clientWidth,el.clientHeight)}};
+  const html='<div class="ledger'+(wide?' wide':'')+'"><div class="mbox" id="mbox"><div class="tlwrap" id="mwrap">'+svg+m+'</div></div><div class="ctable">'+'<table><caption class="sr">Customer promises against the runway</caption><thead><tr><th>Commitment</th><th>Due</th><th>Against the runway</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+  return {html:html,reg:reg,hdr:(ST.ui.open.includes('room')?'':'<button type="button" class="act" data-act="compile" aria-label="Step onto the floor: compile a Room" style="margin-left:auto">Step onto the floor</button>'),mount:function(el){const w=$('#mwrap',el),pb=$('#mbox',el);if(!w||!pb)return;const bw=pb.clientWidth,bh=pb.clientHeight,r=640/290;let ww=Math.min(bw,bh*r),hh=ww/r;w.style.width=ww+'px';w.style.height=hh+'px';w.style.fontSize=Math.min(13.5,Math.max(11.5,ww/640*13))+'px';noteSize('ledger',el.clientWidth,el.clientHeight)}};
 }
 /* ---------------------------------------------------------------- a Room compiled from a schema nobody drew a view for */
 function compileHarrow(SRC){
@@ -1051,7 +1059,7 @@ function planHTML(S){
   const ch=A.open.map((v,i)=>(i?'':'lead: ')+VN[v]).join(' · ');
   const chips='<span>'+(P.lead==='direct'?'lead: Direct':ch)+'</span><span>Direct: '+(A.direct==='collapsed'?'collapsed':A.direct==='lead'?'leads':'open')+'</span>';
   let why=P.why;
-  if(A.pin)why='Pinned on this device: '+A.pin.map(v=>VN[v]).join(' and ')+'. The router does not change views under your hands.';
+  if(A.pin)why='Pinned on this device: '+A.pin.map(v=>VN[v]).join(' and ')+'. The router will not change them.';
   else if(A.quiet)why='You chose this. The router is quiet until the next moment.';
   const askName=VN[P.ask];
   return '<span class="tag">PLAN</span><span class="chips">'+chips+'</span><span class="why">'+esc(why)+'</span><span class="acts"><button type="button" class="btn sm" data-act="why" data-v="'+P.ask+'" aria-expanded="'+(!!(A.reasons))+'">Why not the '+askName+'?</button><button type="button" class="btn sm" data-act="pin" aria-pressed="'+(!!A.pin)+'">Pin on this device</button><button type="button" class="btn sm" data-act="reset">Reset</button></span>';
@@ -1101,7 +1109,7 @@ function noticesHTML(S){
   if(A.offer)o.push('<div class="notice"><b>OFFER</b><span class="grow">'+esc(A.offer.text)+'</span><button type="button" class="btn sm" data-act="takeoffer">Pair '+VN[A.offer.view]+'</button><button type="button" class="btn sm" data-act="dismiss">Not now</button></div>');
   if(S.sys==='boston'&&A.device!=='desktop'){
     const q=rungParity(S),R=RUNG[A.device];
-    o.push('<div class="notice dn" data-cap="PROPOSED" data-ai="NO AI REQUIRED"><b>'+esc(R.name.toUpperCase())+'</b><span class="grow"><b>CARRIED</b> '+q.matters+' open matters · '+q.reach+' of '+q.acts+' acts ('+(q.acts-q.inPlace)+' by hand-off to Direct) · refusals with rule names, same words, '+q.ref+' of '+q.refOf+' views (dry run) · '+q.tokens+' truth kinds · act '+S.n+' · '+S.h4+'. <b>SHED</b> '+esc(R.shed)+'. Authority and truth never shed.</span></div>');
+    o.push('<div class="notice dn" data-cap="PROPOSED PLATFORM · 2.5D rooms: REAL CURRENT (unmerged)" data-ai="NO AI REQUIRED"><b>'+esc(R.name.toUpperCase())+'</b><span class="grow"><b>CARRIED</b> '+q.matters+' open matters · '+q.reach+' of '+q.acts+' acts ('+(q.acts-q.inPlace)+' by hand-off to Direct) · refusals with rule names, same words, '+q.ref+' of '+q.refOf+' views (dry run) · '+q.tokens+' truth kinds · act '+S.n+' · '+S.h4+'. <b>SHED</b> '+esc(R.shed)+'. Authority and truth never shed.</span></div>');
   }
   if(A.tierNote)o.push('<div class="notice dn"><b>STEPPED DOWN</b><span class="grow">'+esc(A.tierNote)+'</span></div>');
   return o.join('');
@@ -1127,11 +1135,11 @@ function compareHTML(){
   return '<section class="pane" style="grid-column:1/-1"><div class="ph"><span class="nm">COMPARE</span><span class="org">branch beside the record</span><span class="fr">record act '+Sr.n+' · '+Sr.h4+'  |  branch act '+Sb.n+' · '+Sb.h4+'</span></div><div class="pb"><div class="tbl"><table><caption class="sr">What differs between the record and your branch</caption><thead><tr><th>What differs</th><th style="border-bottom-color:var(--ink)">The record · act '+Sr.n+'</th><th style="border-bottom-color:var(--green);color:var(--green)">Your branch · act '+Sb.n+'</th></tr></thead><tbody>'+rows+'</tbody></table><p class="dnote">'+(diff.length?diff.length+' facts differ. The record was not changed by anything you did in the branch.':'Nothing differs yet: the branch is still identical to the record at act 41. Act in the branch, then compare.')+' Weeks 7 to 9 are sealed in both.</p><div class="dc"><button type="button" class="btn" data-act="return">Return to the record</button><button type="button" class="btn" data-act="compare">Back to the branch</button></div></div></div></section>';
 }
 function fkOf(el){const d=el.dataset;return el.id?'#'+el.id:['b',d.act,d.file,d.view,d.path,d.id,d.v].join('|')}
-function howSheet(reg,sm){
+function howSheet(reg,sm,id){
   const seen={},rows=reg.filter(b=>!seen[b.path]&&(seen[b.path]=1)).map(b=>{const f=sm[b.path]||{};return '<div><span class="k"><span class="sw" data-t="'+b.token+'"></span>'+b.token+'</span><span>'+esc(b.text)+'</span><span class="dnote">'+esc(f.src||'')+(f.asOf?' · as of '+f.asOf:'')+(f.note?' · '+esc(f.note):'')+'</span></div>'}).join('');
   return '<div class="howsheet"><h5>HOW DO WE KNOW · '+Object.keys(seen).length+' marks in this view</h5>'+rows+'</div>';
 }
-const CAPS={room:['PROPOSED · seed REAL (unmerged Room)','NO AI REQUIRED'],timeline:['PROPOSED','NO AI REQUIRED'],table:['PROPOSED','NO AI REQUIRED'],voice:['PROPOSED','SMALL / CHEAP MODEL (on-device speech)'],ledger:['PROPOSED','NO AI REQUIRED']};
+const CAPS={room:['PROPOSED PLATFORM · seed: REAL CURRENT (unmerged Room)','NO AI REQUIRED'],timeline:['PROPOSED PLATFORM','NO AI REQUIRED'],table:['PROPOSED PLATFORM','NO AI REQUIRED'],voice:['PROPOSED PLATFORM','SMALL / CHEAP MODEL (on-device speech)'],ledger:['PROPOSED PLATFORM','NO AI REQUIRED']};
 /* ---------------------------------------------------------------- the one render: every open view redraws from state in the same frame */
 function render(){
   const S=cur(),A=ST.ui,sm=smap(S);FRAME++;
@@ -1140,7 +1148,7 @@ function render(){
   const B=$('#board');
   B.className=(A.direct==='lead'?'lead ':'')+(S.sys==='boston'&&ST.active==='branch'?'fork ':'')+(A.device==='phone'?'phone ':'')+(A.device==='voice'?'voicedev ':'');
   $('#addr').innerHTML=addrHTML(S);
-  const lv=$('#lever');lv.innerHTML='<b>ACT '+S.n+'</b><i>'+S.h4+' · '+(S.sys==='boston'?(ST.active==='branch'?'branch':'record'):'record')+'</i>';lv.setAttribute('data-cap','REAL CURRENT (lockstep fold, prototype-grade)');lv.setAttribute('data-ai','NO AI REQUIRED');
+  const lv=$('#lever');lv.innerHTML='<b>ACT '+S.n+'</b><i>'+S.h4+' · '+(S.sys==='boston'?(ST.active==='branch'?'branch':'record'):'record')+'</i>';lv.setAttribute('data-cap','REAL CURRENT · lockstep fold, prototype-grade');lv.setAttribute('data-ai','NO AI REQUIRED');
   $('#forkBtn').textContent=ST.active==='branch'?'Return to the record':'What if…';$('#forkBtn').dataset.act=ST.active==='branch'?'return':'fork';$('#forkBtn').hidden=S.sys!=='boston';
   $('#declare').setAttribute('aria-pressed',A.sr);
   $('#plan').innerHTML=planHTML(S);
@@ -1154,27 +1162,28 @@ function render(){
     const mism=mismatches(out.reg,src,S,sm);
     if(mism.length)failed[id]={at:S.n,mism:mism,reg:out.reg};else delete failed[id];
     const cv=coversFor(id,src,out.reg),cp=CAPS[id]||CAPS.timeline;
-    const html='<section class="pane" data-view="'+id+'" data-cap="'+cp[0]+'" data-ai="'+cp[1]+'" aria-label="'+VN[id]+'"><div class="ph"><span class="nm">'+VN[id].toUpperCase()+'</span><span class="org">'+ORIGIN[id]+(id==='room'&&out.tier?' · '+out.tier:'')+(id==='ledger'?'':'')+'</span><span class="fr" title="'+esc(SYS[S.sys].name+' · '+(S.sys==='boston'?'Week 6':'day 0')+' · act '+src.n+' · '+src.h4)+'">'+(S.sys==='boston'?'Week 6':'day 0')+' · act '+src.n+' · '+src.h4+'</span><button type="button" class="x" data-act="close" data-v="'+id+'" aria-label="Close '+VN[id]+'">×</button></div><div class="pb" id="pb-'+id+'">'+(mism.length?failCover(id,src,S,mism):out.html)+(A.how&&!mism.length?howSheet(out.reg,sm):'')+'</div>'+(cv.length?'<div class="pcov" data-cap="PROPOSED (arena cover: REAL, unmerged)" data-ai="NO AI REQUIRED"><span class="lb">CANNOT SHOW</span>'+cv.map(c=>'<span>'+esc(c.words)+' <button type="button" data-act="cover" data-view="'+id+'" data-id="'+c.id+'">'+esc(c.hand)+'</button></span>').join('')+'</div>':'')+'</section>';
+    const html='<section class="pane" data-view="'+id+'" data-cap="'+cp[0]+'" data-ai="'+cp[1]+'" aria-label="'+VN[id]+'"><div class="ph"><span class="nm">'+VN[id].toUpperCase()+'</span><span class="org">'+((id==='room'&&S.sys==='harrow')?'compiled':ORIGIN[id])+(id==='room'&&out.tier?' · '+out.tier:'')+'</span>'+(out.hdr||'')+'<span class="fr" title="'+esc(SYS[S.sys].name+' · '+(S.sys==='boston'?'Week 6':'day 0')+' · act '+src.n+' · '+src.h4)+'">'+(S.sys==='boston'?'Week 6':'day 0')+' · act '+src.n+' · '+src.h4+'</span><button type="button" class="x" data-act="close" data-v="'+id+'" aria-label="Close '+VN[id]+'">×</button></div><div class="pb" id="pb-'+id+'">'+(mism.length?failCover(id,src,S,mism):out.html)+(A.how&&!mism.length?howSheet(out.reg,sm,id):'')+'</div>'+(cv.length?'<div class="pcov" data-cap="PROPOSED PLATFORM · arena cover: REAL CURRENT (unmerged)" data-ai="NO AI REQUIRED"><span class="lb">CANNOT SHOW</span>'+cv.map(c=>'<span>'+esc(c.words)+' <button type="button" data-act="cover" data-view="'+id+'" data-id="'+c.id+'">'+esc(c.hand)+'</button></span>').join('')+'</div>':'')+'</section>';
     panes.insertAdjacentHTML('beforeend',html);
     if(!mism.length&&out.mount)mounts.push([id,out.mount]);
   });
   /* Direct: the oracle. Always compiled, even when collapsed. */
   const dd=vDirect(S);regs.direct=dd.reg;
   const D=$('#direct');D.className=A.direct==='collapsed'?'collapsed':A.direct==='lead'?'open lead':'open';
-  D.setAttribute('data-cap','PROPOSED (compiled from the Surface)');D.setAttribute('data-ai','NO AI REQUIRED');
+  D.setAttribute('data-cap','PROPOSED PLATFORM · compiled from the Surface');D.setAttribute('data-ai','NO AI REQUIRED');
   $('#mcount').textContent=sm['matters.open']?sm['matters.open'].text:'';
   const rc=receiptText(S);if($('#receipt').textContent!==rc)$('#receipt').textContent=rc;
   $('#dctl').innerHTML='<span class="fr" style="border:1.5px solid var(--ink);padding:0 6px;font:600 11.5px var(--mono);margin-right:6px;background:var(--card)">'+(S.sys==='boston'?'Week 6':'day 0')+' · act '+S.n+' · '+S.h4+' · compiled</span>'+(A.direct==='collapsed'?'<button type="button" class="btn sm" data-act="dmode" data-v="open">Open Direct</button>':(A.direct==='lead'?'<button type="button" class="btn sm" data-act="dmode" data-v="open">Dock</button>':'<button type="button" class="btn sm" data-act="dmode" data-v="collapsed">Collapse</button><button type="button" class="btn sm" data-act="dmode" data-v="lead">Lead</button>'));
   $('#dbody').innerHTML=A.direct==='collapsed'?'':dd.html;
   /* DOM order: Direct first when it leads (screen-reader order), else after the panes */
   if(A.direct==='lead')B.insertBefore(D,panes);else if(D.previousElementSibling!==panes)B.appendChild(D);
-  $('#notices').innerHTML=noticesHTML(S);$('#notices').setAttribute('aria-live','polite');
+  {const nh=noticesHTML(S),ne=$('#notices');if(ST._nh!==nh){ne.innerHTML=nh;ST._nh=nh}}
   $('#rig').innerHTML=rigHTML();$('#tools').innerHTML=toolsHTML();
   mounts.forEach(m=>{const el=$('#pb-'+m[0]);if(el)m[1](el)});
   /* focus: keep the user's place; a followed fact takes Direct's focus */
   if(ST._focusFollow){ST._focusFollow=false;const li=$('#dbody li[data-p="'+(A.follow&&A.follow.path)+'"]');if(li){li.focus();try{li.scrollIntoView({block:'nearest'})}catch(_){}}}
   else if(fk){const el=$$('button[data-act]').concat($$('#declare')).find(e=>fkOf(e)===fk);if(el)el.focus()}
   document.body.setAttribute('data-frame',FRAME);
+  {const now={};A.open.forEach(id=>{if(failed[id])now[id]=1});const nf=Object.keys(now).filter(id=>!ST._wasFailed[id]);ST._wasFailed=now;if(nf.length){$('#live').textContent=nf.map(id=>VN[id]).join(' and ')+' stopped matching the record at act '+S.n+'. Direct has the record.';if(A.direct==='collapsed'){A.direct='open';ST._again=true}}}
   if(ST._again&&!ST._re){ST._again=false;ST._re=true;try{render()}finally{ST._re=false}}
 }
 /* ---------------------------------------------------------------- events */

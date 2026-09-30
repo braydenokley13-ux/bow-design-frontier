@@ -134,12 +134,13 @@ ol.recl{list-style:none;margin:0;padding:0}
 /* ---------- bench / loom */
 .cap{font:500 12.5px/1.45 var(--mono);margin:0 0 7px;padding:5px 9px;border:1.5px solid var(--ink);background:var(--paper);display:flex;gap:8px;align-items:flex-start}
 .cap b{font-weight:700}
-.chartwrap{position:relative;width:min(100%,calc((100vh - var(--chrome,470px)) * 2.5714));margin:0 auto;aspect-ratio:900/350;background:var(--paper)}
+.chartwrap{position:relative;width:100%;margin:0 auto;aspect-ratio:900/350;background:var(--paper)}
 svg.chart{display:block;width:100%;height:100%}
 .frame{border:1.5px solid var(--rule)}
 .frame.f-pencil{border:2px dashed var(--graphite);outline:1.5px solid var(--graphite);outline-offset:-6px}
 .frame.f-branch{border:3px solid var(--green)}
 .fstrip{font:600 11.5px/1.4 var(--mono);padding:5px 10px;display:none}
+.f-refuse .fstrip{background:var(--vermSoft)!important;border-bottom:2px solid var(--verm)!important}
 .f-pencil .fstrip{display:block;background:var(--paper2);border-bottom:2px dashed var(--graphite)}
 .f-branch .fstrip{display:block;background:var(--greenSoft);color:#0f3f30;border-bottom:2px solid var(--green)}
 .sl{position:absolute;left:calc(42.111% - 11px);width:calc(20% + 22px);top:calc(80% - 20px);height:40px}
@@ -183,7 +184,7 @@ svg.chart{display:block;width:100%;height:100%}
 .restbar{position:relative;height:18px;border:1.5px solid var(--ink);background:var(--sheet)}
 .restbar i{position:absolute;left:0;top:0;bottom:0;background:#c6bda6;border-right:2px solid var(--ink)}
 .restbar u{position:absolute;top:-4px;bottom:-4px;width:0;border-left:2px dashed var(--verm)}
-.desk{display:grid;grid-template-columns:1.1fr 1.1fr 1fr;gap:14px;margin-top:8px;align-items:start}
+.desk{display:grid;grid-template-columns:1.5fr 1.05fr 1fr;gap:14px;margin-top:8px;align-items:start}
 .stand{font:400 12px/1.5 var(--mono);margin:0}
 .stand b{font-weight:700}
 .refuse-note{border:2px solid var(--verm);color:#6b1d0d;background:var(--vermSoft);padding:6px 9px;font:500 12px/1.4 var(--mono);margin-top:6px}
@@ -211,7 +212,7 @@ svg.chart{display:block;width:100%;height:100%}
 .plbody{position:relative;flex:1;min-width:0;border:2px solid var(--ink);background:var(--paper);padding:10px 16px 12px;box-shadow:inset 0 0 0 4px var(--paper),inset 0 0 0 5px var(--ink)}
 .showthru{position:absolute;inset:0;width:100%;height:100%;transform:scaleX(-1);opacity:.09;pointer-events:none}
 .showthru .thr{stroke-width:5}
-.plh{display:flex;justify-content:space-between;gap:12px;align-items:baseline;border-bottom:1.5px solid var(--ink);padding-bottom:4px;margin-bottom:6px;font:600 12.5px var(--mono);position:relative}
+.plh{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap;border-bottom:1.5px solid var(--ink);padding-bottom:4px;margin-bottom:6px;font:600 12.5px var(--mono);position:relative}
 .prow{display:grid;grid-template-columns:200px 150px 1fr;gap:10px;align-items:center;padding:4px 2px;border-bottom:1px solid var(--rule);font:400 11.5px/1.3 var(--mono);position:relative}
 .prow b{font-weight:700}.prow i{font-style:normal;color:var(--pencil)}
 .sig{display:flex;height:13px;width:140px;border:1.3px solid var(--ink);background:var(--sheet)}
@@ -239,7 +240,8 @@ svg.chart{display:block;width:100%;height:100%}
 .prt{padding-top:60px}
 .prt .ptab{border-left:0;max-width:190px}
 .pbot .ptab{border-top:0}
-.pact{display:flex;gap:12px;align-items:center;margin-left:auto;padding-right:6px;padding-top:6px}
+.pact{display:flex;gap:12px;align-items:center;flex:1;padding-right:6px;padding-top:6px;min-width:0}
+.pbot .note{flex:1}
 .portnote{margin:8px 0 0;padding:6px 9px;border:1.5px dashed var(--ink);font:400 12px/1.4 var(--mono);position:relative;background:var(--sheet)}
 .clouded{position:relative}
 /* ---------- stub */
@@ -253,7 +255,7 @@ svg.chart{display:block;width:100%;height:100%}
 
 
 /* ---------- open world: standing-in banner, slips, shortage list */
-.standin{border:2px solid var(--verm);background:var(--vermSoft);color:#5c180a;padding:6px 12px;font:500 12px/1.45 var(--mono)}
+.standin{border:2px solid var(--verm);background:var(--vermSoft);color:#5c180a;padding:4px 10px;font:500 11.5px/1.4 var(--mono)}
 .shlist{border-top:1.5px solid var(--ink)}
 .shrow{display:flex;gap:14px;align-items:flex-start;width:100%;text-align:left;border:0;border-bottom:1.5px solid var(--ink);background:transparent;padding:12px 8px;min-height:64px;font:400 17px/1.35 var(--serif)}
 .shrow:hover:not(.off){background:var(--paper2)}
@@ -268,7 +270,7 @@ svg.chart{display:block;width:100%;height:100%}
 .fam th{font:700 10px var(--mono);letter-spacing:.06em;color:var(--graphite)}
 .pip{display:inline-block;width:11px;height:9px;background:var(--ink);margin-right:2px;vertical-align:-1px}
 .pip.u{background:transparent;border:1.3px dashed var(--ink)}
-.gnd2{background:#fdfbf6;border:1.5px solid var(--ink);aspect-ratio:520/300}
+.gnd2{background:#fdfbf6;border:1.5px solid var(--ink);aspect-ratio:520/250}
 .slips{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 9px;padding:6px 2px 2px;margin-top:4px}
 .slip{position:relative;display:flex;flex-direction:column;gap:2px;background:#fdfaf1;border:1px solid var(--rule);padding:10px 7px 5px;transform:rotate(var(--r));font:400 11px/1.25 var(--mono);min-height:0;box-shadow:1px 2px 0 rgba(35,33,29,.18)}
 .slip::before{content:"";position:absolute;top:-4px;left:10px;width:22px;height:8px;background:var(--ink)}
@@ -290,8 +292,8 @@ svg.chart{display:block;width:100%;height:100%}
 .life{display:flex;align-items:center;gap:10px;font:500 11.5px var(--mono)}
 .lifek{width:9px;height:9px;background:var(--verm);display:inline-block}
 .ruler{display:flex;gap:1px;align-items:flex-end;height:16px}.ruler i{display:block;width:2px;height:8px;background:var(--graphite)}.ruler i:nth-child(6n){height:14px}
-.trmain{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(250px,1fr);gap:14px;align-items:start}
-.gcell{position:relative;aspect-ratio:520/300;margin-bottom:0}
+.trmain{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,1fr);gap:14px;align-items:start}
+.gcell{position:relative;aspect-ratio:520/250;margin-bottom:0}
 .lcol{display:flex;flex-direction:column;gap:6px;min-width:0}
 .permrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .permrow .lbl{flex-basis:100%}
@@ -299,14 +301,15 @@ svg.chart{display:block;width:100%;height:100%}
 .gcell .gnd{position:absolute;inset:0;z-index:1;background:#fdfbf6;border:1px solid var(--ink)}
 .gcell .mk{position:absolute;inset:0;z-index:3}
 .rcol{display:flex;flex-direction:column;gap:8px;min-width:0}
-.readout{border:1.5px solid var(--graphite);padding:6px 9px;background:rgba(251,249,242,.7)}
+.readout{border:1.5px solid var(--graphite);padding:5px 8px;background:rgba(251,249,242,.7)}
+.readout .note{font-size:11px;line-height:1.3;margin:1px 0}
 .readout .ans{font:700 24px/1.1 var(--mono);margin:1px 0}
 .readout.oe{border:2px dashed var(--verm)}
-.tblk{border:2px solid var(--ink);background:rgba(251,249,242,.8);font:500 11px/1.3 var(--mono)}
-.tblk .tb1{padding:4px 8px;border-bottom:2px solid var(--ink);font-size:12px;letter-spacing:.03em}
+.tblk{border:2px solid var(--ink);background:rgba(251,249,242,.8);font:500 10.5px/1.25 var(--mono)}
+.tblk .tb1{padding:3px 6px;border-bottom:2px solid var(--ink);font-size:11.5px;letter-spacing:.02em}
 .tblk .tb2{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--ink)}
 .tblk .tb2:last-child{border-bottom:0}
-.tblk .tb2 span{padding:3px 8px}.tblk .tb2 span+span{border-left:1px solid var(--ink)}
+.tblk .tb2 span{padding:2px 6px}.tblk .tb2 span+span{border-left:1px solid var(--ink)}
 .perm .pbtn{display:flex;flex-direction:column;gap:5px;margin-top:3px}
 .ledgerH{font:700 10.5px var(--mono);letter-spacing:.06em;margin:6px 0 4px;border-top:1.5px solid var(--graphite);padding-top:5px}
 .ledgerH small{font-weight:400;letter-spacing:0;color:var(--graphite);margin-left:6px}
@@ -331,8 +334,8 @@ svg.chart{display:block;width:100%;height:100%}
 
 
 /* ---------- review, want */
-.ladder{list-style:none;display:flex;margin:10px 0 8px;padding:0;gap:0}
-.ladder li{flex:1;padding:8px 10px;border:1.5px solid var(--ink);border-right:0;font:600 12px var(--mono);display:flex;gap:8px;align-items:center;background:var(--sheet)}
+.ladder{list-style:none;display:flex;margin:7px 0 6px;padding:0;gap:0}
+.ladder li{flex:1;padding:5px 10px;border:1.5px solid var(--ink);border-right:0;font:600 12px var(--mono);display:flex;gap:8px;align-items:center;background:var(--sheet)}
 .ladder li:last-child{border-right:1.5px solid var(--ink)}
 .ladder li span{border:1.3px solid currentColor;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;flex:none}
 .ladder li.now{background:var(--ink);color:var(--sheet)}
@@ -344,7 +347,7 @@ svg.chart{display:block;width:100%;height:100%}
 .revhead .brow{display:flex;gap:8px}
 .krvh,.krv{display:grid;grid-template-columns:230px 116px 1fr 150px;gap:10px;align-items:center;padding:2px 4px}
 .krvh{font:700 10px var(--mono);letter-spacing:.07em;border-bottom:1.5px solid var(--ink);color:var(--graphite)}
-.krv{border-bottom:1px solid var(--rule);font:400 13px/1.2 var(--serif);min-height:34px}
+.krv{border-bottom:1px solid var(--rule);font:400 13px/1.2 var(--serif);min-height:32px}
 .krv .kn{font-size:11px;line-height:1.35}
 .rvr{color:var(--verm);font-weight:700}.dis{color:var(--verm);font-weight:600}
 .lineage,.tomb{border:2px solid var(--verm);padding:6px 10px;margin-top:0;font:400 12px/1.5 var(--mono);background:var(--sheet)}
@@ -502,6 +505,7 @@ function renderMain(vchanged) {
   const v = S.view, m = $('#main');
   if (PERSIST[v]) { if (shell !== v) { m.innerHTML = PERSIST[v].shell(); shell = v; } PERSIST[v].paint(); }
   else { m.innerHTML = VIEWS[v](); shell = null; }
+  fitChart();
   if (vchanged) m.scrollTop = 0;
 }
 function renderSide() {
@@ -624,6 +628,18 @@ ACTS.go = p => {
   else logs.push({ who: 'you', kind: 'NAV', text: 'opened sheet ' + (SHEETS.find(s => s.v === p.view) || { name: p.view }).name, clock: 'session' });
   return { log: logs, say: 'Sheet ' + p.view };
 };
+
+/* the chart takes the height the sheet leaves it, never less than a legible size */
+function fitChart() {
+  const cw = $('#main .chartwrap'); if (!cw) return;
+  const m = $('#main'), sheet = cw.closest('.sheet'); if (!sheet) return;
+  cw.style.width = '100%';
+  const others = sheet.offsetHeight - cw.offsetHeight, avail = m.clientHeight - 22 - others;
+  const maxW = cw.parentElement.clientWidth;
+  cw.style.width = Math.max(420, Math.min(maxW, Math.floor(avail * 900 / 350))) + 'px';
+}
+window.addEventListener('resize', fitChart);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitChart);
 
 /* =====================================================================
    THE AIRLINE DAY · a typical day, illustrative (AUTHORED). One deterministic run.
@@ -1010,7 +1026,7 @@ VIEWS.bench = () => {
 /* ---------------------------------------------------------------- the Loom (persistent shell: the slider is never rebuilt mid-drag) */
 PERSIST.loom = { shell: loomShell, paint: paintLoom };
 function loomShell() {
-  return '<section class="sheet" id="loomSheet" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><header class="sh"><span class="no">SHEET C</span><h1 tabindex="-1">Loom</h1><span class="sub" id="loomSub"></span><span class="grow"></span><div class="hist" id="histTabs"></div><button type="button" class="btn sm" data-a="plate">Turn it over</button></header>' +
+  return '<section class="sheet" id="loomSheet" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><header class="sh"><span class="no">SHEET C</span><h1 tabindex="-1">Loom</h1><span class="sub" id="loomSub"></span><span class="grow"></span><div class="hist" id="histTabs"></div><span id="hdrBtn"></span></header>' +
     '<p class="cap" id="loomCap"></p><div class="frame" id="frame"><div class="fstrip" id="fstrip"></div><div class="chartwrap" id="chartwrap" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><div id="svgHost" style="position:absolute;inset:0"></div><div class="sl"><input id="hold" type="range" min="0" max="180" step="1" value="' + HOLD0 + '" aria-label="ORD hold in minutes. Push it longer to find where the mechanism stops."></div></div></div><div id="zone"></div></section>';
 }
 function paintLoom() {
@@ -1022,13 +1038,14 @@ function paintLoom() {
   const en = edgeOf(P, E);
   const capHtml = caption(R, E, P);
   $('#loomSheet').className = 'sheet' + (S.seat ? ' seat' : '');
-  $('#loomSheet').style.setProperty('--chrome', (470 + (branch || probe ? 56 : 0) + (S.seat ? 34 : 0) + (S.branches.length ? 0 : 0)) + 'px');
   $('#loomSub').innerHTML = S.seat ? '<span class="seatstamp">PRACTICE SEAT · crew scheduling · authored day</span>' : 'threads are things, knots are claims';
   $('#loomSheet .sh').classList.toggle('hastabs', !!S.branches.length && !S.seat);
+  $('#hdrBtn').innerHTML = S.seat ? '<button type="button" class="btn sm" data-a="seatLeave">Leave the seat</button>' : '<button type="button" class="btn sm" data-a="plate">Turn it over</button>';
   $('#histTabs').innerHTML = S.branches.length && !S.seat ? '<button type="button" class="htab" aria-pressed="' + (S.hist === 'record') + '" data-a="hist" ' + dp({ id: 'record' }) + '>RECORD · typical day</button>' + S.branches.map(b => '<button type="button" class="htab br" aria-pressed="' + (S.hist === b.id) + '" data-a="hist" ' + dp({ id: b.id }) + '>Your branch ' + b.id + '</button>').join('') : '';
   $('#loomCap').innerHTML = kc('COMPUTED') + '<span>' + capHtml + '</span>';
-  $('#frame').className = 'frame' + (branch ? ' f-branch' : probe ? ' f-pencil' : '');
-  $('#fstrip').innerHTML = branch ? 'YOUR BRANCH · diverged ' + esc(branch.moment) + ' · the record is one press away<br>assumes: ' + esc(branch.assumptions.slice(0, 2).join(' · ')) + (branch.assumptions.length > 2 ? ' · +' + (branch.assumptions.length - 2) + ' more' : '') : probe ? (P.removed ? 'PART REMOVED · not how the network is. ' + esc(partName(P.removed)) + ' is lifted out; press it again to put it back.' : 'PROBE · nothing is saved and the record is untouched. Keep it as a branch to stamp it.') : '';
+  const stripHtml = branch ? 'YOUR BRANCH · diverged ' + esc(branch.moment) + ' · the record is one press away<br>assumes: ' + esc(branch.assumptions.slice(0, 2).join(' · ')) + (branch.assumptions.length > 2 ? ' · +' + (branch.assumptions.length - 2) + ' more' : '') : probe ? (P.removed ? 'PART REMOVED · not how the network is. ' + esc(partName(P.removed)) + ' is lifted out; press it again to put it back.' : 'PROBE · nothing is saved and the record is untouched. Keep it as a branch to stamp it.') : '';
+  $('#fstrip').innerHTML = S.seat && S.refuse ? '<span role="alert" style="color:#6b1d0d">' + esc(S.refuse) + '</span>' : stripHtml;
+  $('#frame').className = 'frame' + (branch ? ' f-branch' : (S.seat && S.refuse) ? ' f-pencil f-refuse' : probe ? ' f-pencil' : '');
   const handOn = S.edgeFound && R.cut && !S.seat && !branch;
   const pencil = '';
   const opts = { mode: 'loom', E: E, R: R, S0: S0, cls: branch ? 'thr gr' : 'thr', label: 'Time and airport chart. ' + plain(capHtml), edgeAt: S.edgeFound && !branch ? en : null, hand: handOn, pencil: pencil };
@@ -1073,9 +1090,9 @@ function seatZone(R, E, P) {
   const s0 = S.seat0 || { rest: R.rest };
   const over = R.arr4 - R.limit;
   const restPct = Math.max(0, Math.min(100, R.rest / 960 * 100)), minPct = SCHED.minRest / 960 * 100;
-  return '<div data-cap="PROPOSED" data-cost="NO AI REQUIRED"><h2>Standing line <small>what this seat can and cannot do</small></h2><p class="stand"><b>You hold</b> the crew desk in a practice seat: an authored day, and nobody acts on a real airline.<br><b>Can:</b> extend a duty period, up to 2 h, for unforeseen circumstances (14 CFR 117.19, verify).<br><b>Cannot:</b> release the ORD hold (air traffic control), swap the aircraft (operations), rebook passengers (another seat).</p>' + (S.refuse ? '<div class="refuse-note" role="alert">' + esc(S.refuse) + '</div>' : '') + '</div>' +
+  return '<div data-cap="PROPOSED" data-cost="NO AI REQUIRED"><h2>Standing line <small>what this seat can and cannot do</small></h2><p class="stand"><b>You hold</b> the crew desk in a practice seat: an authored day, and nobody acts on a real airline.<br><b>Can:</b> extend a duty period up to 2 h for unforeseen circumstances (14 CFR 117.19, verify).<br><b>Cannot:</b> release the ORD hold (air traffic control), swap the aircraft (operations), rebook passengers (another seat).</p></div>' +
     '<div><h2>Open matter <small>leg 4 crew</small></h2><p class="stand">Duty limit <b>' + hhmm(R.limit) + '</b>' + (P.ext ? ' (extended +' + P.ext + ')' : '') + '. Leg 4 would land <b>' + hhmm(R.arr4) + '</b>: ' + (R.cut ? '<b style="color:var(--verm)">' + over + ' min over</b>, so it is cut.' : '<b>' + (-over) + ' min inside</b>, so it runs.') + '</p><div style="display:flex;flex-direction:column;gap:6px;margin-top:6px"><button type="button" class="btn sm you" data-a="extend" ' + dp({ min: 30 }) + '>Extend the duty period 30 min</button><div class="brow2"><button type="button" class="btn sm warn" data-a="extend" ' + dp({ min: 150 }) + '>Extend by 2 h 30 min</button><button type="button" class="btn sm warn" data-a="releaseHold">Release the ORD hold</button></div></div></div>' +
-    '<div><h2>Crew rest <small>before the next report</small></h2><div class="rest" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><div class="restbar" role="img" aria-label="Crew rest before the next report: ' + dur(R.rest) + '"><i style="width:' + restPct + '%"></i><u style="left:' + minPct + '%"></u></div><p class="note" style="margin-top:3px">' + dur(R.rest) + (s0.rest !== R.rest ? ' <b>(was ' + dur(s0.rest) + ')</b>' : '') + ' · dashed tick: 10 h minimum rest (illustrative; verify 14 CFR 117.25)</p><p class="note" style="margin-top:3px;border:1.5px dashed var(--ink);padding:2px 6px">Tomorrow’s first flight: sealed. You find out by living it.</p></div><button type="button" class="btn sm" data-a="seatLeave" style="margin-top:6px">Leave the seat</button></div>';
+    '<div><h2>Crew rest <small>before the next report</small></h2><div class="rest" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><div class="restbar" role="img" aria-label="Crew rest before the next report: ' + dur(R.rest) + '"><i style="width:' + restPct + '%"></i><u style="left:' + minPct + '%"></u></div><p class="note" style="margin-top:3px">' + dur(R.rest) + (s0.rest !== R.rest ? ' <b>(was ' + dur(s0.rest) + ')</b>' : '') + ' · dashed tick: 10 h minimum rest (illustrative; verify 14 CFR 117.25)</p><p class="note" style="margin-top:3px;border:1.5px dashed var(--ink);padding:2px 6px">Tomorrow’s first flight: sealed. You find out by living it.</p></div></div>';
 }
 
 /* ---------------------------------------------------------------- how do we know (per sheet) */
@@ -1154,13 +1171,13 @@ VIEWS.plate = () => {
   const partRows = PARTS.map(p => '<div class="prow' + (cl && p.id === 'duty' ? ' clouded' : '') + '"><div><b>' + p.name + '</b> <i>' + p.ver + '</i></div><div class="pr2">' + sigBar(sigOf(p)) + '</div><div class="pm">reviewed by [reviewer]' + (p.rule ? ' · from the fixture rule “' + esc(p.rule) + '”' : ' · not one of the fixture’s named rules') + '</div></div>').join('');
   const knotRows = KNOTS.map(k => { const ins = k.inputs(), sc = knotScores().find(x => x.id === k.id), mark = S.plate.distrust && top.id === k.id;
     return '<div class="knot' + (mark ? ' mark' : '') + (cl && k.id === 'c2' ? ' clouded' : '') + '"><div class="kh"><b>' + k.name + '</b>' + (mark ? '<span class="dtag">DISTRUST HERE</span>' : '') + '</div><div class="kl">' + kc('GENERATED', 'wired by a generator') + kc(k.claimK, k.claimK.toLowerCase() + ' claim') + '</div><p class="kt">' + esc(k.claim) + '</p><p class="ks2">' + esc(k.src) + '</p><p class="ks3">' + sc.unsound + ' unsound input' + (sc.unsound === 1 ? '' : 's') + ' · ' + sc.sourced + ' sourced</p></div>'; }).join('');
-  const note = S.plate.port && S.plate.port !== 'rule' ? '<p class="portnote" role="status"><b>' + P.find(p => p.id === S.plate.port).name + '</b> · ' + esc(P.find(p => p.id === S.plate.port).note) + '</p>' : '';
+  const note = S.plate.port && S.plate.port !== 'rule' ? '<p class="portnote" role="status" style="margin:0;flex:1"><b>' + P.find(p => p.id === S.plate.port).name + '</b> · ' + esc(P.find(p => p.id === S.plate.port).note) + '</p>' : '';
   const hash8 = hash(JSON.stringify([PARTS.map(p => p.id + p.ver), KNOTS.map(k => k.id), SCHED.legs.map(l => l.dep + '/' + l.block)])).slice(0, 12);
   return '<section class="sheet plate" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><header class="sh"><span class="no">SHEET D</span><h1 tabindex="-1">Plate</h1><span class="sub">the back of the mechanism: made of what, plugged into what</span><span class="grow"></span><button type="button" class="btn sm" data-a="go" ' + dp({ view: 'loom' }) + '>Turn it back over</button></header>' +
     '<div class="plwrap"><div class="ptop">' + tabBtn(P[0]) + tabBtn(P[1]) + '</div><div class="pmid"><div class="plbody"><svg class="showthru" viewBox="0 0 ' + VBW + ' ' + VBH + '" preserveAspectRatio="none" aria-hidden="true">' + (E.rot ? thread(R, 'thr', E, { bars: false }) : '') + '</svg>' +
-    '<div class="plh"><b>PLATE · propagation through shared resources</b><span class="mono">recipe ' + hash8 + ' ' + kc('COMPUTED', 'content address of the recipe') + '</span></div>' +
-    '<h2>Parts <small>truth signature · version · reviewer</small></h2>' + partRows + '<h2 style="margin-top:8px">Couplings <small>a coupling is a claim: sourced or asserted</small></h2><div class="knots">' + knotRows + '</div>' + note +
-    '</div><div class="prt">' + tabBtn(P[2]) + '</div></div><div class="pbot">' + tabBtn(P[3]) + '<div class="pact"><button type="button" class="btn sm warn" data-a="distrust">Where would I distrust this?</button><p class="note">Ports: ' + counts.LIVE + ' LIVE (no feed exists) · ' + counts.FIXTURE + ' FIXTURE · ' + counts.ASSUMED + ' ASSUMED · ' + counts.EMPTY + ' EMPTY</p></div></div></div></section>';
+    '<div class="plh"><b>PLATE · propagation through shared resources</b><span class="mono">ports: ' + counts.LIVE + ' LIVE (no feed exists) · ' + counts.FIXTURE + ' FIXTURE · ' + counts.ASSUMED + ' ASSUMED · ' + counts.EMPTY + ' EMPTY</span><span class="mono">recipe ' + hash8 + ' ' + kc('COMPUTED', 'content address') + '</span></div>' +
+    '<h2>Parts <small>truth signature · version · reviewer</small></h2>' + partRows + '<h2 style="margin-top:8px">Couplings <small>a coupling is a claim: sourced or asserted</small></h2><div class="knots">' + knotRows + '</div>' +
+    '</div><div class="prt">' + tabBtn(P[2]) + '</div></div><div class="pbot">' + tabBtn(P[3]) + '<div class="pact"><button type="button" class="btn sm warn" data-a="distrust">Where would I distrust this?</button>' + (note || '<p class="note">Press a port tab to read what plugs in there.</p>') + '</div></div></div></section>';
 };
 VIEWS.stub = () => {
   const E = envFor(), en = edgeOf(S.work, E), R = sim(S.work, E);
@@ -1212,10 +1229,10 @@ const SLIPS = [
 ];
 const LEVERS = [
   { k: 'd', name: 'Demand rise', long: 'Demand rise over the 2019 plan', unit: '%', min: 0, max: 40, ev: [10, 25], def: 18 },
-  { k: 'L', name: 'Locked in long-term deals', long: 'Capacity locked in long-term agreements', unit: '%', min: 0, max: 80, ev: [20, 50], def: 35 },
+  { k: 'L', name: 'Long-term deals', long: 'Capacity locked in long-term agreements', unit: '%', min: 0, max: 80, ev: [20, 50], def: 35 },
   { k: 'D', name: 'Orders placed twice', long: 'Orders placed twice', unit: '%', min: 0, max: 30, ev: [5, 15], def: 10 },
   { k: 'T', name: 'Months to add capacity', long: 'Months to add capacity', unit: ' mo', min: 6, max: 40, ev: [18, 30], def: 24 },
-  { k: 'O', name: 'Output lost to outages', long: 'Output lost to plant outages', unit: '% yr', min: 0, max: 8, ev: [1, 4], def: 2 },
+  { k: 'O', name: 'Outage losses', long: 'Output lost to plant outages', unit: '% yr', min: 0, max: 8, ev: [1, 4], def: 2 },
   { k: 'C', name: 'Car orders cancelled', long: 'Car-maker orders cancelled in 2020', unit: '%', min: 0, max: 50, ev: [10, 30], def: 20 },
   { k: 'R', name: 'Reorder trigger', long: 'Buyers’ reorder trigger', unit: ' days', min: 0, max: 50, ev: [10, 30], def: 20 }
 ];
@@ -1273,7 +1290,7 @@ function updateLife() {
 }
 
 /* ---------------------------------------------------------------- the observed ground (under the paper) */
-const GW = 520, GH = 300, GX0 = 50, GX1 = 500, GY0 = 268, GY1 = 22;
+const GW = 520, GH = 250, GX0 = 50, GX1 = 500, GY0 = 222, GY1 = 20;
 const gx = yr => GX0 + (yr - 2019) / 3 * (GX1 - GX0), gy = d => GY0 - d * (GY0 - GY1) / 45;
 function groundSVG() {
   let s = '<svg viewBox="0 0 ' + GW + ' ' + GH + '" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Observed ground: buyers’ median chip stock, about ' + SPEC_FACTS.rfi.d2019 + ' days in 2019 and under ' + SPEC_FACTS.rfi.d2021 + ' days in 2021. Nothing between the two is on this sheet." style="width:100%;height:100%;display:block">';
@@ -1303,19 +1320,19 @@ function modelSVG(a, ans) {
 /* ---------------------------------------------------------------- the plural question, then the open bench */
 VIEWS.plural = () => {
   const bench = S.semi.stage === 'bench';
-  let h = '<section class="sheet" data-cap="SPEC" data-cost="FRONTIER MODEL CONTINUOUS while compiling"><header class="sh"><span class="no">SHEET E</span><h1 tabindex="-1">' + (bench ? 'The 2021 shortage' : 'This is several questions') + '</h1><span class="sub">' + (bench ? 'an open bench: source slips clipped to an observed ground' : '“' + esc(S.q || 'Why are semiconductor shortages happening?') + '”') + '</span></header>' +
+  let h = '<section class="sheet" data-cap="SPEC" data-cost="FRONTIER MODEL CONTINUOUS while compiling"><header class="sh"><span class="no">SHEET E</span><h1 tabindex="-1">' + (bench ? 'The 2021 shortage' : 'This is several questions') + '</h1><span class="sub">' + (bench ? 'an open bench: source slips clipped to an observed ground' : '“' + esc(S.q || 'Why are semiconductor shortages happening?') + '”') + '</span>' + (bench ? '<span class="grow"></span><button type="button" class="btn sm pri" data-a="compile">Compile a working model from these slips</button>' : '') + '</header>' +
     '<div class="standin" role="note"><b>SPECULATIVE FRONTIER · STAND-IN.</b> BOW cannot compile open-world systems today. Every slip here is an authored stand-in for a compile that did not run. The only real figure is the Commerce RFI one [verify].</div>';
   if (!bench) {
     h += '<p class="note wide" style="margin:8px 0">At least three shortages are in the news, and they are different systems. Pick one. The others stay beside it as sibling questions.</p><div class="shlist" data-cap="SPEC" data-cost="SMALL / CHEAP MODEL">' +
       SHORTAGES.map((s, i) => s.on ? '<button type="button" class="shrow" data-a="pickShortage" ' + dp({ id: s.id }) + '><span class="shn">' + (i + 1) + '</span><span><b>' + esc(s.name) + '</b><br><i>' + esc(s.src) + '</i></span></button>' : '<div class="shrow off" role="group" aria-label="' + esc(s.name) + ', a sibling question, not compiled in this prototype"><span class="shn">' + (i + 1) + '</span><span><b>' + esc(s.name) + '</b><br><i>' + esc(s.src) + '</i><br><em>sibling question · kept beside, not compiled in this prototype</em></span></div>').join('') + '</div>';
   } else {
     const fams = SLIPS.map(s => s.fam).filter((f, i, a) => a.indexOf(f) === i);
-    h += '<div class="openb"><div class="og" data-cap="SPEC" data-cost="NO AI REQUIRED"><div class="gnd2">' + groundSVG() + '</div><p class="note" style="margin-top:3px;font-size:10.5px">' + kc('OBSERVED') + ' the ground: two points, Commerce RFI, Jan 2022 <b>[verify]</b>. Between them: nothing on this sheet.</p></div>' +
-      '<div data-cap="SPEC" data-cost="FRONTIER MODEL CONTINUOUS (the compile, minutes)"><h2>Claims cluster under mechanism families <small>filled: a slip read · dashed: unread</small></h2><table class="fam"><tr><th>FAMILY</th><th>SLIPS</th></tr>' + fams.map(f => '<tr><td>' + f + '</td><td>' + SLIPS.filter(s => s.fam === f).map(s => '<i class="pip' + (s.read ? '' : ' u') + '"></i>').join('') + '</td></tr>').join('') + '</table></div></div>' +
+    h += '<div class="openb"><div class="og" data-cap="SPEC" data-cost="NO AI REQUIRED"><div class="gnd2">' + groundSVG() + '</div><p class="note" style="margin-top:3px;font-size:10.5px">' + kc('OBSERVED') + ' the ground: two points, Commerce RFI, Jan 2022 <b>[verify]</b>. A real compile is a frontier model working for minutes; here it is one press.</p></div>' +
+      '<div data-cap="SPEC" data-cost="FRONTIER MODEL CONTINUOUS (the compile, minutes)"><h2>Claims cluster under mechanism families <small>' + SLIPS.length + ' sources · ' + SLIPS.filter(s => s.read).length + ' read · filled: read, dashed: unread</small></h2><table class="fam"><tr><th>FAMILY</th><th>SLIPS</th></tr>' + fams.map(f => '<tr><td>' + f + '</td><td>' + SLIPS.filter(s => s.fam === f).map(s => '<i class="pip' + (s.read ? '' : ' u') + '"></i>').join('') + '</td></tr>').join('') + '</table></div></div>' +
       '<div class="slips">' + SLIPS.map((s, i) => s.read ?
         '<div class="slip" style="--r:' + ((i % 5) - 2) * .4 + 'deg"><span class="sc">' + s.c + '</span><span class="sd">' + (i === 0 ? esc(s.src) + ' · ' : '') + esc(s.date) + '</span><span class="scl">' + esc(s.claim) + '</span><span class="sf">supports: ' + s.fam + (s.v ? ' · <em>' + esc(s.v) + ' [verify]</em>' : '') + '</span></div>' :
         '<div class="slip blank" style="--r:' + ((i % 5) - 2) * .4 + 'deg"><span class="sc">' + s.c + '</span><span class="sd">' + esc(s.date) + '</span><span class="scl">UNREAD · ' + s.why + '. Blank: never paraphrased from memory.</span><span class="sf">would support: ' + s.fam + '</span></div>').join('') + '</div>' +
-      '<div class="benchbar"><p class="bigcount" style="font-size:15px">' + SLIPS.length + ' sources · ' + SLIPS.filter(s => s.read).length + ' read · ' + fams.length + ' families</p><button type="button" class="btn pri" data-a="compile">Compile a working model from these slips</button><span class="note">A real compile is a frontier model working for minutes. Here it is one press.</span></div>';
+      '';
   }
   return h + '</section>';
 };
@@ -1337,7 +1354,7 @@ function paintModel() {
   const stat = M.status === 'REVIEWED' ? 'REVIEWED v1' : M.status === 'ISSUED' ? 'ISSUED FOR REVIEW' : 'SKETCH';
   $('#mkHost').innerHTML = modelSVG(a, ans);
   const oe = ans.outside.length;
-  $('#readout').innerHTML = '<div class="readout' + (oe ? ' oe' : '') + '"><span class="lbl">Answer · the median buyer’s chip stock at the end of 2021</span><p class="ans">' + f1(ans.lo) + '–' + f1(ans.hi) + ' days</p><p class="note">' + kc('MODELED', 'range from working-model v0, an authored stand-in') + '</p><p class="note"><b>scenario on a working model, not a forecast</b>' + (oe ? '<br><b style="color:var(--verm)">OUTSIDE EVIDENCE</b>: a lever is past what the slips support (' + ans.outside.map(k => LEVERS.find(l => l.k === k).name).join(', ') + ').' : '') + '</p><p class="note">Observed: under ' + SPEC_FACTS.rfi.d2021 + ' days (Commerce RFI, Jan 2022, verify). ' + (ans.mid > SPEC_FACTS.rfi.d2021 ? 'The model’s middle sits ' + f1(ans.mid - SPEC_FACTS.rfi.d2021) + ' above it: a gap, drawn.' : 'The model’s middle is under it.') + '</p></div>';
+  $('#readout').innerHTML = '<div class="readout' + (oe ? ' oe' : '') + '"><span class="lbl">Answer · median buyer’s chip stock, end of 2021</span><p class="ans">' + f1(ans.lo) + '–' + f1(ans.hi) + ' days</p><p class="note">' + kc('MODELED', 'working-model v0 · authored stand-in') + '</p><p class="note"><b>scenario on a working model, not a forecast</b></p>' + (oe ? '<p class="note"><b style="color:var(--verm)">OUTSIDE EVIDENCE</b>: ' + ans.outside.map(k => LEVERS.find(l => l.k === k).name).join(', ') + '</p>' : '') + '<p class="note">Observed: under ' + SPEC_FACTS.rfi.d2021 + ' days (Commerce RFI, verify). ' + (ans.mid > SPEC_FACTS.rfi.d2021 ? 'Model middle ' + f1(ans.mid - SPEC_FACTS.rfi.d2021) + ' above: a gap, drawn.' : 'Model middle is under it.') + '</p></div>';
   const src = SLIPS.length, rd = SLIPS.filter(s => s.read).length;
   $('#tblock').innerHTML = '<div class="tblk" data-cap="SPEC" data-cost="NO AI REQUIRED" aria-label="Title block: WORKING MODEL · NOT REVIEWED · compiled ' + NOWTXT + ' · ' + src + ' sources (' + rd + ' read) · 4 reviewed parts · 3 generated couplings · 7 assumed · 4 unknown · hindcast: none · CHECKED: — · APPROVED: —"><div class="tb1"><b>' + (M.status === 'SKETCH' ? 'WORKING MODEL · NOT REVIEWED' : stat + ' · sketch kept') + '</b></div><div class="tb2"><span>compiled ' + NOWTXT + '</span><span>' + src + ' sources (' + rd + ' read)</span></div><div class="tb2"><span>4 reviewed parts</span><span>3 generated couplings</span></div><div class="tb2"><span>' + LEVERS.length + ' assumed</span><span>' + UNKNOWNS.length + ' unknown</span></div><div class="tb2"><span>hindcast: none</span><span>status: ' + stat + '</span></div><div class="tb2"><span>CHECKED: ' + (M.approved ? '[reviewer A]' : '—') + '</span><span>APPROVED: ' + (M.approved ? '[reviewer B]' : '—') + '</span></div></div>';
   $('#perm').innerHTML = '<span class="lbl">What this sketch may not do</span><button type="button" class="btn sm warn" data-a="ruleRefuse" ' + dp({ w: 'follow' }) + '>Follow it</button><button type="button" class="btn sm warn" data-a="ruleRefuse" ' + dp({ w: 'embed' }) + '>Embed in a Moment</button><button type="button" class="btn sm warn" data-a="ruleRefuse" ' + dp({ w: 'ledger' }) + '>Use as a seat’s ledger</button>';
@@ -1421,7 +1438,7 @@ VIEWS.review = () => {
   else act = '<button type="button" class="btn you" data-a="follow"' + (M.followed ? ' disabled' : '') + '>' + (M.followed ? 'Following REVIEWED v1' : 'Follow REVIEWED v1') + '</button>';
   const disc = M.discarded ? '' : '<button type="button" class="btn" data-a="discard">Discard the sketch</button>';
   let after = '';
-  if (M.status === 'REVIEWED') after += '<div class="lineage" data-cap="SPEC" data-cost="NO AI REQUIRED"><b>LINEAGE</b> sketch #' + id + ' → REVIEWED v1 (a registry system) · <b>what review changed:</b> ' + c.sourced + ' sourced · ' + c.authored + ' reviewer-authored · ' + c.assumed + ' still assumed · dissent kept on “Orders placed twice”.<br>Holders of the old sketch now see: <i>a reviewed version exists — compare.</i> Nothing they hold changed silently. The sketch stays a sketch; it still cannot be followed.</div>';
+  if (M.status === 'REVIEWED') after += '<div class="lineage" data-cap="SPEC" data-cost="NO AI REQUIRED"><b>LINEAGE</b> sketch #' + id + ' → REVIEWED v1 (a registry system) · <b>what review changed:</b> ' + c.sourced + ' sourced · ' + c.authored + ' reviewer-authored · ' + c.assumed + ' still assumed · dissent kept on “Orders twice”.<br>Holders of the old sketch see: <i>a reviewed version exists — compare.</i> Nothing they hold changed silently; the sketch itself still cannot be followed.</div>';
   if (M.discarded) after += '<div class="tomb" data-cap="SPEC" data-cost="NO AI REQUIRED"><b>TOMBSTONE</b> · sketch #' + id + ' · discarded by its author<br>kept: the list of ' + LEVERS.length + ' assumptions and a receipt <span class="mono">' + hash(id + 'receipt').slice(0, 12) + '</span>. ' + (M.approved ? 'REVIEWED v1 stays in the registry, with lineage to a discarded sketch.' : '') + '<br>A link someone already holds does not go dead.<div class="brow" style="margin-top:6px"><button type="button" class="btn sm" data-a="openLink" aria-pressed="' + M.link + '">' + (M.link ? 'Close the shared link' : 'Open the shared link') + '</button></div>' + '</div>';
   after = after ? '<div class="afterg">' + after + '</div>' : '';
   return '<section class="sheet" data-cap="SPEC" data-cost="NO AI REQUIRED"><header class="sh"><span class="no">SHEET G</span><h1 tabindex="-1">Promote or discard</h1><span class="sub">status, as on a drawing</span><span class="grow"></span><button type="button" class="btn sm" data-a="go" ' + dp({ view: 'model' }) + '>Back to the tracing paper</button></header>' +

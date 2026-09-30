@@ -77,7 +77,9 @@ body.real .cap{display:block}
 .btn.br{border-color:var(--branch);color:var(--branch)}.btn.br.pri{background:var(--branch);color:#fff}
 .lk{background:none;border:0;padding:0;font:inherit;color:var(--gc);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:24px}
 /* truth grammar */
-.vw{display:inline-block;vertical-align:baseline}
+.vw{display:inline-block;vertical-align:baseline;max-width:100%}
+.v.wrap{white-space:normal;display:inline;padding:1px 6px;font-weight:400;line-height:1.5;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.vw:has(.wrap){display:inline}
 .v{display:inline-block;padding:0 6px;font:700 .92em/1.35 var(--mono);white-space:nowrap;border:1.5px solid var(--ink)}
 .k-OBSERVED{background:var(--ink);color:var(--paper)}
 .k-RECORDED{background:var(--ink);color:var(--paper);box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 3.5px var(--paper)}
@@ -353,8 +355,8 @@ var NOAI='NO AI REQUIRED';
 
 /* ---------------- truth-grammar chips ---------------- */
 var PROV=[];
-function chip(t,k,src,asof,ver){var key=k+'|'+t;if(!PROV.some(function(x){return x.key===key;}))PROV.push({key:key,t:t,k:k,src:src||'',asof:asof||'',ver:ver});return '<span class="vw"><span class="v k-'+k+'">'+t+'</span></span>';}
-var cf=function(f,t){return chip(esc(t!=null?t:f.v),f.k,f.src,f.asOf,f.verify);};
+function chip(t,k,src,asof,ver,wrap){var key=k+'|'+t;if(!PROV.some(function(x){return x.key===key;}))PROV.push({key:key,t:t,k:k,src:src||'',asof:asof||'',ver:ver});return '<span class="vw"><span class="v k-'+k+(wrap?' wrap':'')+'">'+t+'</span></span>';}
+var cf=function(f,t,w){return chip(esc(t!=null?t:f.v),f.k,f.src,f.asOf,f.verify,w);};
 var ca=function(t,n){return chip(esc(t),'AUTHORED',n||'illustrative — chosen for this prototype');};
 var cc=function(t,n){return chip(esc(t),'COMPUTED',n||'computed from the numbers shown');};
 var cr=function(t,n){return chip(esc(t),'RECORDED',n||'BOW World record');};
@@ -492,7 +494,7 @@ function neckRead(){
 }
 function whyNeck(){
   var mm=FX.moments.filter(function(m){return m.id==='m2025-06'||m.id==='m2026-02-05';});
-  var doors=mm.map(function(m){var o=S.door[m.id];return '<div class="door"><b>'+esc(m.question)+'</b><br>'+(o?'<span class="small">asked · </span>'+cf(m.sealed,m.sealed.v):'<button type="button" class="lk" data-a="door" data-p="'+m.id+'" data-f="door:'+m.id+'">Ask what happened (you are an observer)</button>')+'</div>';}).join('');
+  var doors=mm.map(function(m){var o=S.door[m.id];return '<div class="door"><b>'+esc(m.question)+'</b><br>'+(o?'<span class="small">asked · </span>'+cf(m.sealed,m.sealed.v,1):'<button type="button" class="lk" data-a="door" data-p="'+m.id+'" data-f="door:'+m.id+'">Ask what happened (you are an observer)</button>')+'</div>';}).join('');
   return '<h3>Why: traced to recorded causes</h3><table class="tr"><thead><tr><th>Cause</th><th>Value</th></tr></thead><tbody>'+
   '<tr><td>The tax line (a League rule, 2026–27)</td><td class="n">'+cf(L.tax,m3(TAX))+'</td></tr>'+
   '<tr><td>Boston’s tax salary</td><td class="n">'+pinChipT()+'</td></tr>'+
@@ -551,7 +553,7 @@ function paidSvg(){
 }
 function paidRead(){
   var tat=RE.contracts[0],mm=FX.moments.filter(function(m){return m.id==='m2025-05-12'||m.id==='m2026-03-06';});
-  var doors=mm.map(function(m){var o=S.door[m.id];return '<div class="door"><b>'+esc(m.question)+'</b><br>'+(o?cf(m.sealed,m.sealed.v):'<button type="button" class="lk" data-a="door" data-p="'+m.id+'" data-f="door:'+m.id+'">Ask what happened</button>')+'</div>';}).join('');
+  var doors=mm.map(function(m){var o=S.door[m.id];return '<div class="door"><b>'+esc(m.question)+'</b><br>'+(o?cf(m.sealed,m.sealed.v,1):'<button type="button" class="lk" data-a="door" data-p="'+m.id+'" data-f="door:'+m.id+'">Ask what happened</button>')+'</div>';}).join('');
   return '<h3>Paid to · Tatum’s slab, on his own clock</h3><p class="ans">'+esc(tat.player)+' · '+cf(tat.salary,'≈ '+m1(tat.salary.v))+' is '+cc(Math.round(tat.salary.v/ts()*100)+'% of tax salary')+'. '+cu('other contracts: [verify: Reality feed]')+' are not named here: the roster has changed.</p>'+doors+
   '<div class="rowb"><button type="button" class="btn sm" data-a="pushT" data-f="pushT" aria-pressed="'+(S.pen===5e6)+'">Push Tatum’s number +$5M (pencil)</button></div><p class="small">A push redraws every open sheet in pencil. Nothing is forked or recorded as canon.</p>';
 }
@@ -1015,7 +1017,7 @@ function act(kind,p){
     case 'door':var mo=FX.moments.filter(function(m){return m.id===p;})[0];S.door[p]=true;LOG('you (observer)','asked what happened at “'+mo.question+'”. Sealed hindsight opened for an observer.');msg='Outcome revealed to you as an observer.';break;
     case 'why':if(p==='neck'){S.why='neck';msg='Showing the causes behind the gap.';}else if(p===''){S.why=null;msg='Back to the sheet.';}else{S.g='desk';S.view='why';LOG('you (GM seat)','asked why payroll is '+fmtP(wpay())+'; the trace is every act and rule behind it.');msg='Showing why payroll is '+fmtP(wpay())+'.';}break;
     case 'hold':S.held[p]=S.held[p]?null:{at:S.n};LOG('you',(S.held[p]?'began holding':'stopped holding')+' “'+HELD[p].name+'”, a paper you have no side in; its clock now paces you.',{kind:'hold'});msg=(S.held[p]?'Holding ':'Stopped holding ')+HELD[p].name;break;
-    case 'enter':S.g='desk';S.seat=true;S.view='home';S.why=null;LOG('you','took the GM seat in Boston · Year Two, a World diverged from Reality at Year 0. Your word now counts for signing, trading, payroll.',{kind:'record',hist:'World record',clock:WD.clock.label});msg='You are in Boston, Year Two, as general manager.';break;
+    case 'enter':S.g='desk';S.seat=true;S.view='home';S.why=null;S.pen=0;S.peak=0;LOG('you','took the GM seat in Boston · Year Two, a World diverged from Reality at Year 0. Your word now counts for signing, trading, payroll.',{kind:'record',hist:'World record',clock:WD.clock.label});msg='You are in Boston, Year Two, as general manager.';break;
     case 'leave':S.g='reality';S.seat=false;if(!S.sheets.length)openSheet('neck');S.why=null;LOG('you','handed the seat back and returned to the reading copy of Reality. The World keeps its own calendar.');msg='Back in Reality, as an observer.';break;
     case 'openW':S.ws=p==='ledger'?'ledger':'rule';msg='Opened the '+(S.ws==='rule'?'rule':'ledger')+' sheet.';break;
     case 'draft':S.g='desk';S.view=p==='f1'?'form1':'form2';if(S.f[p].st!=='draft'){msg='Opened the paper in flight.';break;}LOG('you (GM seat)','opened a draft of the '+(p==='f1'?'Denver trade paper':'partner-night date request')+'. Nothing crosses until you send.',{kind:'rehearsal',hist:'draft · crosses nothing'});msg='Draft opened. Lines are derived from the rulebooks it touches.';break;

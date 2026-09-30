@@ -864,7 +864,7 @@ document.addEventListener('keydown', e => {
     box('timber', X1 + .12, 0, .38, X1 + .3, 2.62, 2.22, { tile: 1 });
     for (const sx of [X0 - .5, X1]) { const tri = new THREE.Shape(); tri.moveTo(-8.5, WH); tri.lineTo(8.5, WH); tri.lineTo(0, RIDGE + .05); tri.lineTo(-8.5, WH); const eg = new THREE.ExtrudeGeometry(tri, { depth: .5, bevelEnabled: false }); eg.rotateY(Math.PI / 2); eg.translate(sx, 0, 0); addGeo('brickCut', eg, { tile: .9 }); }
     /* south wall with four arches (the doors) */
-    const AX = [-10.2, -7.2, -4.2, -1.2], AWH = 1.1, AH = 2.4;
+    const AX = [-1.2, -4.2, -7.2, -10.2], AWH = 1.1, AH = 2.4;
     const archPath = (cx, r, path) => { const h = path || new THREE.Path(); h.moveTo(cx - r, -.01); h.lineTo(cx - r, AH); h.absarc(cx, AH, r, Math.PI, 0, true); h.lineTo(cx + r, -.01); h.lineTo(cx - r, -.01); return h; };
     { const sh = new THREE.Shape(); sh.moveTo(X0 - .5, -.4); sh.lineTo(X1 + .5, -.4); sh.lineTo(X1 + .5, WH); sh.lineTo(X0 - .5, WH); sh.lineTo(X0 - .5, -.4);
       for (const cx of AX) sh.holes.push(archPath(cx, AWH));
@@ -880,11 +880,11 @@ document.addEventListener('keydown', e => {
     box('truss', X0, RIDGE - .16, -.11, X1, RIDGE - .02, .11);
     for (const s of [-1, 1]) { const g = new THREE.BoxGeometry(27.4, .12, 8.9); g.rotateX(s * Math.atan2(RIDGE - WH, 8.5)); g.translate(0, (RIDGE + WH) / 2 + .08, s * 4.3); addGeo('roof', g, { tile: 2 }); }
     /* columns and girder along the north side of the floor */
-    for (const x of [-6.6, -1.6, 3.4]) { box('timber', x - .19, 0, -3.99, x + .19, 6.2, -3.61, { tile: 1, skip: '-y' }); box('steel', x - .27, 5.3, -4.07, x + .27, 5.36, -3.53); box('steel', x - .27, .0, -4.07, x + .27, .12, -3.53); }
-    box('timber', -7, 6.2, -4.12, 4, 6.55, -3.48, { tile: 1, swap: true });
+    for (const x of [-6.6, -1.6]) { box('timber', x - .19, 0, -3.99, x + .19, 6.2, -3.61, { tile: 1, skip: '-y' }); box('steel', x - .27, 5.3, -4.07, x + .27, 5.36, -3.53); box('steel', x - .27, .0, -4.07, x + .27, .12, -3.53); }
+    box('timber', -7, 6.2, -4.12, -1, 6.55, -3.48, { tile: 1, swap: true });
     /* the mezzanine rail and the stair */
     { const yb = DECK, zt = 6.1; box('steel', RX - .05, yb + 1.0, Z0 + .1, RX + .05, yb + 1.07, zt, { tile: 1 }); box('steel', RX - .02, yb + .5, Z0 + .1, RX + .02, yb + .54, zt);
-      for (let z = Z0 + .1; z <= zt + .01; z += .26) box('steel', RX - .015, yb, z - .015, RX + .015, yb + 1.0, z + .015);
+      for (let z = Z0 + .1; z <= zt + .01; z += .55) box('steel', RX - .012, yb, z - .012, RX + .012, yb + 1.0, z + .012);
       for (let z = Z0 + .1; z <= zt + .01; z += 1.6) box('steel', RX - .05, yb, z - .05, RX + .05, yb + 1.07, z + .05);
       const n = 18, run = (RX - .4) / n, rise = DECK / n;
       for (let i = 0; i < n; i++) { const xa = .4 + i * run; box('oak', xa, 0, 6.5, xa + run, rise * (i + 1), 7.9, { tile: 1, skip: '-y' }); }
@@ -893,7 +893,7 @@ document.addEventListener('keydown', e => {
       beam('steel', [.4, .56, 6.46], [RX, DECK + .56, 6.46], .03, .03); }
     /* the four department rooms behind glass, along the west wall (sides, back and floors are baked with lit/dark colours) */
     const RANGE = {}, ROOMKEYS = Object.keys(RZ);
-    const SHC = { lit: { floor: [1, .86, .62], wall: [1, .96, .86], ceil: [1, .98, .9] }, dark: { floor: [.15, .13, .10], wall: [.19, .18, .165], ceil: [.11, .108, .10] } };
+    const SHC = { lit: { floor: [1.3, 1.06, .74], wall: [1.28, 1.18, .98], ceil: [1.4, 1.3, 1.1] }, dark: { floor: [.06, .052, .04], wall: [.085, .08, .072], ceil: [.05, .048, .045] } };
     function roomShell(id, cz) {
       const g = acc('shell'), e = acc('emis'), s0 = g.p.length / 3, e0 = e.p.length / 3, x0 = X0 + .04, x1 = RXF - .04, z0 = cz - RW + .075, z1 = cz + RW - .075, C = SHC.lit;
       face('shell', '+y', x0, .012, z0, x1, .012, z1, { col: C.floor }); face('shell', '-y', x0, RH - .03, z0, x1, RH - .03, z1, { col: C.ceil }); face('shell', '+x', x0, 0, z0, x0, RH - .03, z1, { col: C.wall });
@@ -911,7 +911,7 @@ document.addEventListener('keydown', e => {
       quadTo(acc('glass'), [[RXF, .15, zr], [RXF, .15, zl], [RXF, RH - .16, zl], [RXF, RH - .16, zr]], [1, 0, 0], [[0, 0], [1, 0], [1, 1], [0, 1]], [1, 1, 1]);
     }
     /* furniture: one lit variant and one dark variant per room, swapped alone */
-    const C_OAK = [.8, .62, .4], C_ST = [.2, .22, .21], C_CREAM = [.96, .93, .84], C_SHEET = [.56, .55, .5];
+    const C_OAK = [.8, .62, .4], C_ST = [.2, .22, .21], C_CREAM = [.96, .93, .84], C_SHEET = [.34, .335, .31];
     for (const id of ROOMKEYS) {
       const cz = RZ[id], L_ = 'furn:' + id + ':lit', D_ = 'furn:' + id + ':dark';
       for (const dz of [-.75, .75]) {
@@ -919,7 +919,7 @@ document.addEventListener('keydown', e => {
         box(L_, -12.55, .72, zc - .5, -11.7, .77, zc + .5, { col: C_OAK }); for (const [ax, az] of [[-12.5, -.46], [-11.75, -.46], [-12.5, .46], [-11.75, .46]]) box(L_, ax - .025, 0, zc + az - .025, ax + .025, .72, zc + az + .025, { col: C_ST });
         box(L_, -12.1, .77, zc - .18, -11.85, .775, zc + .12, { col: C_CREAM }); box(L_, -12.3, .77, zc + .2, -12.1, .8, zc + .4, { col: [.95, .9, .78] });
         box(L_, -11.3, .43, zc - .21, -10.85, .47, zc + .21, { col: [.24, .27, .25] }); box(L_, -10.9, .47, zc - .21, -10.85, .98, zc + .21, { col: [.24, .27, .25] }); for (const [a, b] of [[-11.3, -.19], [-11.3, .19], [-10.85, -.19], [-10.85, .19]]) box(L_, a - .015, 0, zc + b - .015, a + .015, .43, zc + b + .015, { col: C_ST });
-        box(D_, -12.65, 0, zc - .55, -11.6, .9, zc + .55, { col: C_SHEET, ao: .28 }); box(D_, -12.5, .9, zc - .4, -11.75, 1.02, zc + .4, { col: [.6, .59, .54] });
+        box(D_, -12.65, 0, zc - .55, -11.6, .9, zc + .55, { col: C_SHEET, ao: .28 }); box(D_, -12.5, .9, zc - .4, -11.75, 1.02, zc + .4, { col: [.38, .37, .34] });
       }
       if (id !== 'scouting') { box(L_, -12.9, 1.5, cz - .9, -12.86, 2.5, cz + .9, { col: [.74, .58, .36] }); for (const q of [-.6, -.1, .4]) box(L_, -12.86, 1.8 + q * .2, cz + q - .1, -12.83, 2.05 + q * .2, cz + q + .12, { col: C_CREAM }); box(D_, -12.9, 1.5, cz - .9, -12.82, 2.5, cz + .9, { col: [.82, .8, .74] }); }
       for (const dz of [-1.05, 1.05]) {
@@ -1040,7 +1040,7 @@ document.addEventListener('keydown', e => {
       box('scafPl', cx - 1.7, 2.4, Z1 - 1.1, cx + 1.7, 2.44, Z1 - .4, { tile: 1 }); box('scafPl', cx - 1.7, 3.6, Z1 - 1.1, cx + 1.7, 3.64, Z1 - .4, { tile: 1 }); }
     /* history wall on the mezzanine's south wall: accretion, and one empty frame */
     box('plasterCut', 6.4, 3.75, Z1 - .05, 12.95, 7.3, Z1, { tile: 1.4, skip: '+z-y' });
-    [7.2, 8.5, 9.8, 11.1, 12.4].forEach((x, i) => { const y = 5.3; box('oakCut', x - .56, y - .7, Z1 - .11, x + .56, y - .64, Z1 - .05, { tile: 1 }); box('oakCut', x - .56, y + .64, Z1 - .11, x + .56, y + .7, Z1 - .05, { tile: 1 }); box('oakCut', x - .56, y - .64, Z1 - .11, x - .5, y + .64, Z1 - .05, { tile: 1 }); box('oakCut', x + .5, y - .64, Z1 - .11, x + .56, y + .64, Z1 - .05, { tile: 1 });
+    [12.4, 11.1, 9.8, 8.5, 7.2].forEach((x, i) => { const y = 5.3; box('oakCut', x - .56, y - .7, Z1 - .11, x + .56, y - .64, Z1 - .05, { tile: 1 }); box('oakCut', x - .56, y + .64, Z1 - .11, x + .56, y + .7, Z1 - .05, { tile: 1 }); box('oakCut', x - .56, y - .64, Z1 - .11, x - .5, y + .64, Z1 - .05, { tile: 1 }); box('oakCut', x + .5, y - .64, Z1 - .11, x + .56, y + .64, Z1 - .05, { tile: 1 });
       pl('hist.' + ['y1', 'w6', 'w9', 'mine', 'untraced'][i], 1.0, 1.28, 260, [x, y, Z1 - .075], FZM, 'atlasS'); hit('hist.' + ['y1', 'w6', 'w9', 'mine', 'untraced'][i], x - .56, y - .7, Z1 - .6, x + .56, y + .7, Z1); });
     /*__END_C1__*/
 
@@ -1080,8 +1080,8 @@ document.addEventListener('keydown', e => {
       const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(new THREE.BufferAttribute(new Uint32Array(idx), 1)); g.computeBoundingSphere(); return g;
     })();
     hit('win.arena', AC.x - RMAX, 0, AC.z - RMAX, AC.x + RMAX, 4, AC.z + RMAX);
-    { const r = rng(5); for (let i = 0; i < 34; i++) { const x = -200 + i * 12.5 + r() * 6, z = -120 - r() * 70, w = 8 + r() * 14, d = 8 + r() * 12, h = 16 + r() * 46 * (r() < .2 ? 1.5 : 1), k = .78 + r() * .12; box('sky', x, -.02, z, x + w, h, z + d, { col: [k, k * .98, k * .93], skip: '-y' }); }
-      for (const [x0, x1, z0, h] of [[-90, -50, -70, 9], [-60, -30, -50, 7], [50, 90, -80, 11], [45, 70, -30, 6], [-150, -100, -60, 12]]) box('sky', x0, -.02, z0, x1, h, z0 + 22, { col: [.8, .76, .7], skip: '-y' }); }
+    { const r = rng(5); for (let i = 0; i < 36; i++) { const x = -300 + i * 17 + r() * 8, z = -170 - r() * 90, w = 8 + r() * 16, d = 8 + r() * 12, h = 12 + r() * 30 * (r() < .2 ? 1.5 : 1), k = .86 + r() * .1; box('sky', x, -.02, z, x + w, h, z + d, { col: [k, k * .98, k * .93], skip: '-y' }); }
+      for (const [x0, x1, z0, h] of [[-90, -50, -80, 7], [-60, -30, -60, 5], [50, 90, -90, 8], [45, 70, -36, 4], [-150, -100, -70, 9]]) box('sky', x0, -.02, z0, x1, h, z0 + 22, { col: [.8, .76, .7], skip: '-y' }); }
     /* the paper-white site the maquette stands on (maquette only) */
     box('paper', -38, -2.4, Z0 - 3.2, 38, -.03, 22, { tile: 8, skip: '-y' }); box('paper', -38, -2.4, -60, 38, -.03, -22.6, { tile: 8, skip: '-y' }); box('paper', -38, -2.4, -22.6, 38, -1.05, Z0 - 3.2, { tile: 8, skip: '-y' });
     face('maqWater', '+y', -38, -.9, -22.6, 38, -.9, Z0 - 3.2, { tile: 24 });
@@ -1285,9 +1285,9 @@ document.addEventListener('keydown', e => {
       if (!br_) { g.fillStyle = '#f3ecd3'; g.font = fnt(600, 25); g.fillText(P_IN, x0, 186); bar(196, TF_IN, P.brassL, money(TF_IN), 'arrived by trade · Week 6'); if (why) bar(258, TF_OUT, '', money(TF_OUT), P_OUT + ' · left in Week 6', true); }
       else { g.fillStyle = '#f3ecd3'; g.font = fnt(600, 25); g.fillText(P_OUT, x0, 186); bar(196, TF_OUT, '#f3ecd3', money(TF_OUT), 'stays'); g.fillText(P_IN, x0, 284); bar(294, TF_IN, '', '—', 'not on the board · trade not made', true); }
       g.fillStyle = '#f3ecd3'; g.font = fnt(500, 25); g.globalAlpha = .9; g.fillText('All other contracts (not itemised in this prototype): ' + money(PAY - TF_IN), x0, br_ ? 384 : why ? 372 : 322); g.globalAlpha = 1;
-      g.font = fnt(600, 21); g.fillText('PAYROLL', 52, 448); g.font = fnt(700, 112); g.fillText(money(b.pay), 48, 545);
-      g.font = fnt(600, 33); g.fillText(b.over > 0 ? money(b.over) + ' over the World’s ' + money(LINE) + ' line' : money(-b.over) + ' under the World’s ' + money(LINE) + ' line', 452, 500); g.fillText('Projected tax ' + money(b.tax), 452, 544);
-      g.font = fnt(500, 27); g.fillText(br_ ? 'No one arrived by trade.' : 'Arrived by trade: ' + P_IN, 452, 596);
+      g.font = fnt(600, 21); g.fillText('PAYROLL', 52, 448); g.font = fnt(700, 96); g.fillText(money(b.pay), 48, 535);
+      g.font = fnt(600, 29); g.fillText(b.over > 0 ? money(b.over) + ' over the World’s ' + money(LINE) + ' line' : money(-b.over) + ' under the World’s ' + money(LINE) + ' line', 470, 490); g.fillText('Projected tax ' + money(b.tax), 470, 530);
+      g.font = fnt(500, 26); g.fillText(br_ ? 'No one arrived by trade.' : 'Arrived by trade: ' + P_IN, 52, 592);
       if (br_) { tapeBand(g, 0, 0, w, 20, P.br); tapeBand(g, 0, h - 20, w, 20, P.br); }
       m.userData.tex.needsUpdate = true;
     }
@@ -1438,18 +1438,18 @@ document.addEventListener('keydown', e => {
     const paperShadow = new THREE.Mesh(new THREE.PlaneGeometry(1.2, .98), new THREE.MeshBasicMaterial({ map: shTex, depthTest: false, depthWrite: false, transparent: true, opacity: .7 })); paperShadow.renderOrder = 99; paperShadow.position.set(.02, -.03, -.002);
     paperGrp.add(paperShadow, paperMesh);
     const POSES = {
-      door: { eye: [11.7, 1.62, 1.45], at: [8.5, 1.02, 1.05] }, rail: { eye: [6.9, 4.95, .6], at: [-6, 2.3, -.4] },
-      desk: { eye: [10.4, 4.5, -1.5], at: [9.95, 3.9, -6.6] }, 'desk-file': { eye: [10.4, 4.5, -1.5], at: [9.72, 3.95, -2.6] },
+      door: { eye: [11.7, 1.62, 1.45], at: [8.5, 1.02, 1.05] }, rail: { eye: [8.3, 5.0, 1.4], at: [-6.5, 2.0, -1.8] },
+      desk: { eye: [10.4, 4.5, -1.5], at: [9.75, 3.9, -6.6] }, 'desk-file': { eye: [10.4, 4.5, -1.5], at: [9.72, 3.95, -2.6] },
       'desk-league': { eye: [10.4, 4.5, -1.5], at: [-17, 2.8, -22.6] }, 'desk-bowl': { eye: [10.4, 4.5, -1.5], at: [24, 1.4, -46] },
       'desk-analytics': { eye: [10.4, 4.5, -1.5], at: [-10.7, 1.7, 4.4] }, 'desk-history': { eye: [10.4, 4.5, -1.5], at: [9.8, 5.0, 8] },
       money: { eye: [.8, 1.65, .4], at: [-12.9, 5.3, -.3] }, court: { eye: [4.5, 1.65, -.6], at: [-3.2, .4, 4.4] },
-      analytics: { eye: [-1.5, 1.65, 1.0], at: [-10.8, 1.5, 3.2] }, ticketing: { eye: [-1.5, 1.65, -1.0], at: [-10.8, 1.5, -3.2] },
-      film: { eye: [.8, 1.65, -3.2], at: [-5.2, 1.4, -5.9] }, arches: { eye: [-4.4, 1.65, -4.5], at: [-4.6, 2.5, 8] },
-      history: { eye: [9.6, 4.95, .6], at: [9.6, 5.2, 8] }, window: { eye: [9.0, 4.95, -4.5], at: [0, 2.8, -32] },
+      analytics: { eye: [-1.5, 1.65, 1.0], at: [-10.8, 2.4, 3.2] }, ticketing: { eye: [-1.5, 1.65, -1.0], at: [-10.8, 2.4, -3.2] },
+      film: { eye: [-2.6, 1.65, -.8], at: [-5.2, 1.5, -5.9] }, arches: { eye: [-3.2, 1.65, -2.8], at: [-5.4, 2.7, 8] },
+      history: { eye: [9.6, 4.95, .6], at: [9.6, 5.2, 8] }, window: { eye: [6.6, 4.95, -7.0], at: [-3.5, 0.6, -34] },
       why1: { eye: [-3.0, 1.65, 3.2], at: [-12.9, 5.5, 3.6] }, why2: { eye: [-3.0, 1.65, -1.2], at: [-12.9, 5.4, -1.4] }, why3: { eye: [-4.6, 1.65, -3.0], at: [-12.9, 5.4, -4.2] },
       why4: { eye: [-5.0, 1.65, -3.6], at: [-12.9, 5.2, -5.9] }, why5: { eye: [.8, 1.65, -3.0], at: [-5.6, 1.6, -5.9] }
     };
-    const MQ = { az: 35 * Math.PI / 180, el: 30 * Math.PI / 180, R: 112, tgt: V3(0, 1.5, -3) };
+    const MQ = { az: 40 * Math.PI / 180, el: 34 * Math.PI / 180, R: 108, tgt: V3(0, 1.5, -3) };
     const poseOf = name => { if (name === 'maquette') { const ce = Math.cos(MQ.el); return { eye: MQ.tgt.clone().add(V3(Math.sin(MQ.az) * ce, Math.sin(MQ.el), Math.cos(MQ.az) * ce).multiplyScalar(MQ.R)), at: MQ.tgt.clone(), fov: 20 }; } const p = POSES[name] || POSES.rail; return { eye: V3(...p.eye), at: V3(...p.at), fov: 50 }; };
     const CAM = { cur: { eye: V3(0, 5, 20), at: V3(), fov: 20 }, from: null, to: null, t0: 0, dur: 0, name: null };
     const LOOK = { yaw: 0, pitch: 0 };
@@ -1507,7 +1507,7 @@ document.addEventListener('keydown', e => {
     const BRICKM = new THREE.Mesh(new THREE.BoxGeometry(.22, .075, .11), MAT.brick); BRICKM.visible = false; scene.add(BRICKM);
     let maqMode = true;
     function setMaqMode(m) {
-      maqMode = m; GRP.maqOnly.visible = m; GRP.roomOnly.visible = !m; GRP.cut.visible = !m; scene.background = m ? PAPERBG : T.sky; scene.fog.near = m ? 9000 : 110; scene.fog.far = m ? 9500 : 470;
+      maqMode = m; GRP.maqOnly.visible = m; GRP.roomOnly.visible = !m; GRP.cut.visible = !m; scene.background = m ? PAPERBG : T.sky; scene.fog.near = m ? 9000 : 45; scene.fog.far = m ? 9500 : 300;
       hemi.intensity = m ? 1.1 : .95; renderer.toneMappingExposure = m ? 1.3 : 1.02; door.visible = !m; fill.visible = !m;
       if (m) { sun.position.set(26, 46, -22); sun.intensity = 2.2; const c = sun.shadow.camera; c.left = -34; c.right = 34; c.top = 34; c.bottom = -34; c.far = 160; } else { sun.position.set(15, 15, -44); sun.intensity = 2.7; const c = sun.shadow.camera; c.left = -26; c.right = 26; c.top = 15; c.bottom = -15; c.far = 120; }
       sun.shadow.camera.updateProjectionMatrix(); renderer.shadowMap.needsUpdate = true;

@@ -134,6 +134,9 @@
   "after": 1000
  },
  {
+  "shot": "10a-what-if-branch-in-its-own-ink-diverged-stamp"
+ },
+ {
   "click": "Compare with the record"
  },
  {
@@ -145,6 +148,19 @@
  },
  {
   "shot": "10b-return-to-the-record"
+ },
+ {
+  "click": "Start over at act 41"
+ },
+ {
+  "click": "Sign the Golden State file as act 42, from the Table",
+  "after": 1200
+ },
+ {
+  "shot": "03c-router-offers-at-the-next-moment-never-mid-act"
+ },
+ {
+  "click": "Not now"
  },
  {
   "click": "Start over at act 41"

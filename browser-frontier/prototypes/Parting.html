@@ -287,7 +287,13 @@ button.cf:hover{background:var(--sheet2)}
 .sw2{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 10px}
 .sw2 .btn{min-height:40px;font-size:11px;padding:0 10px}
 .sw2 .btn[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
-.vlist{list-style:none;padding:0;margin:8px 0;display:grid;gap:0}
+.evs{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}
+.evc{min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:0 8px;border:1.5px solid var(--ink);background:var(--sheet);font:600 10.5px var(--mono)}
+.evc .gl{display:flex}
+.evc .vg{width:22px;height:14px}
+.evc[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.evc[aria-pressed="true"] .vg{color:var(--sheet)}
+.vlist{list-style:none;padding:0;margin:4px 0;display:grid;gap:0}
 .vd{display:grid;grid-template-columns:34px 1fr;gap:8px;border-top:1.5px solid var(--ink);padding:7px 0}
 .vd .vw{font:700 12px var(--mono);letter-spacing:.06em}
 .vd .vg{width:32px;height:20px}
@@ -306,7 +312,8 @@ button.cf:hover{background:var(--sheet2)}
 .lock{font:400 11px/1.45 var(--mono);border:1.5px solid var(--ink);padding:5px 9px;background:var(--sheet);margin:4px 0;white-space:pre-wrap}
 .lock b{font-weight:600}
 .lock .a{color:var(--a1)} .lock .y{color:var(--you)}
-.refuse{border:2px solid var(--ink);box-shadow:inset 0 0 0 3px var(--sheet),inset 0 0 0 4.5px var(--ink);padding:10px 12px;margin:8px 0;background:var(--sheet)}
+.refuse{border:2px solid var(--ink);box-shadow:inset 0 0 0 3px var(--sheet),inset 0 0 0 4.5px var(--ink);padding:8px 12px;margin:6px 0;background:var(--sheet)}
+.refuse p{margin:0;font-size:15.5px;line-height:1.28}
 .refuse b{display:block;font:700 12px var(--mono);letter-spacing:.06em}
 .refuse .rule{font:600 12px var(--mono);margin:6px 0;padding:3px 6px;border:1.5px solid var(--ink);display:inline-block}
 .hole{border:1.5px dashed var(--pencil);padding:6px 10px;margin:6px 0;color:var(--pencil);font-size:15px}
@@ -539,7 +546,7 @@ var SUB1 = { id:'s1', name:'Fultz traded in 2019', by:'[another author]', ink:'a
 var SEATS = [
   { role:'General manager', who:'[author]', how:'Holds the seat since Year 1. A person.', kind:'person' },
   { role:'Owner', who:'[second person]', how:'Holds the seat by lease, to the end of Year 10. A person.', kind:'person' },
-  { role:'Analytics chief', who:'AGENT', how:'Holds the seat under warrant W-2: may draft trade proposals, may not sign, nothing over $5.0M (illustrative). No face, only a seal.', kind:'agent' }
+  { role:'Analytics chief', who:'AGENT', how:'Holds the seat under warrant W-2: drafts trade proposals, may not sign, nothing over $5.0M (illustrative).', kind:'agent' }
 ];
 function rost(who, v, thru, id, madeIn){ return { id:id, slot:'roster', who:who, team:'Boston', v:v, thru:thru, madeIn:madeIn,
   text:'roster('+who+', Boston) = '+v+(thru?', through '+thru:''), plain: who+(v?' is on':' is not on')+' Boston’s roster'+(thru?' through '+dlabel(thru):'') }; }
@@ -866,7 +873,7 @@ function pageSeat(){
     '<dl class="desk"><div><dt>Payroll at the start of Week '+sl.week+'</dt><dd><b>'+fm(pay)+'</b> <span data-kn="COMPUTED from her acts"></span></dd></div><div><dt>Record so far</dt><dd><b>'+rec+'</b> <span data-kn="RECORDED prefix, then GENERATED"></span></dd></div><div><dt>Open on this desk</dt><dd>'+esc(WD.openMatters[2].what)+'.</dd></div></dl>' +
     (acts ? '<h4 class="movesh">Her acts so far</h4><ul class="sit-note" style="padding-left:20px">'+acts+'</ul>' : '<h4 class="movesh">Her acts so far</h4><p class="sit-note">None yet — this is where she first parted from you.</p>') +
     '<h4 class="movesh">What this seat could do now</h4><div class="moves" role="group" aria-label="Moves in her seat" style="grid-template-columns:repeat('+Math.min(4,Object.keys(sl.opts).length)+',1fr)">'+opts+'</div>' + out +
-    '<div class="sealedsheet" style="min-height:0;grid-template-rows:auto"><p>The sheet is closed while you sit here.</p></div></div>';
+    (sit.took ? '' : '<div class="sealedsheet" style="min-height:0;grid-template-rows:auto"><p>The sheet is closed while you sit here.</p></div>') + '</div>';
 }
 function marginSit(){
   var sit=S.sheet.sit, B=byId(sit.wid), sl=seatSlot();
@@ -1013,14 +1020,14 @@ function marginInhab(){
   var seats = SEATS.map(function(s){
     return '<li'+(s.kind==='agent'?' data-cap="'+cap('S',3,'agents in seats of public forks, at scale')+'"':'')+'>'+(s.kind==='agent' ? sealSVG() : '<div class="who">'+(s.role==='Owner'?'OWNER':'GM')+'</div>')+
       '<div><b>'+esc(s.role)+' · '+esc(s.who)+'</b>'+esc(s.how)+
-      (s.kind==='agent' ? ' Seal: model <span class="mono">[model id]</span> · version <span class="mono">[x]</span>. A slot: no model ran here; the seat’s words are an authored stand-in.' : '')+'</div></li>';
+      (s.kind==='agent' ? ' Seal: model <span class="mono">[model id]</span> · version <span class="mono">[x]</span> — a slot; no model ran here.' : '')+'</div></li>';
   }).join('');
   var decls = DECL_MAIN.map(function(d){ return '<li data-kn="AUTHORED · '+esc(d.plain)+'">'+sw('AUTHORED')+esc(d.text)+'</li>'; }).join('');
   return '<h3 class="mh">A fork that lives</h3>' +
-    '<div class="stamp a1" data-cap="'+cap('S',null,'a fork persisting for years')+'"><b>'+esc(FORK.name)+'</b><small>PUBLIC · by '+esc(FORK.author)+' · diverged '+esc(FORK.diverged)+' · own clock, Year 9 of 9 · its history is AUTHORED, illustrative</small></div>' +
+    '<div class="stamp a1" data-cap="'+cap('S',null,'a fork persisting for years')+'"><b>'+esc(FORK.name)+'</b><small>PUBLIC · by '+esc(FORK.author)+' · diverged '+esc(FORK.diverged)+' · own clock, Year 9 of 9 · history AUTHORED, illustrative</small></div>' +
     '<h4 class="mh">Seats held</h4><ul class="seats">'+seats+'</ul>' +
     '<h4 class="mh">Declared assumptions</h4><ul class="decls" data-cap="'+cap('P',0)+'">'+decls+'</ul>' +
-    '<p class="small">Sub-forks hang where they diverged: <b>'+esc(SUB1.name)+'</b> from Year '+SUB1.start+(S.lin.mine ? ', and yours from Year '+S.lin.mine.start : '')+'. Tap a season to read it.</p>' +
+    '<p class="small">Tap a season to read it.</p>' +
     '<div class="tline"><b>TEACHER’S LINE</b>Ask: what would you need to know before you trusted a seat held by an agent? Who granted the warrant?</div>';
 }
 function marginYear(){
@@ -1031,7 +1038,7 @@ function marginYear(){
       '<p>This fork parted here: it kept the pick.</p>'+sealed+
       (L.asked ? '' : '<div class="btnrow"><button type="button" class="btn" data-a="ask">Ask what Reality did</button></div>');
   }
-  if(k===10) return '<h3 class="mh">Return to Reality</h3><p><b>'+esc(FX.reality.name)+'</b></p><p>'+esc(FX.reality.clock.label)+'. Now: '+esc(FX.reality.clock.now)+' · '+esc(FX.reality.clock.phase.v)+' <span class="mono" style="font-size:11px">[verify: camp dates]</span>.</p><p class="small">You can '+esc(FX.reality.youCan.join(', '))+'. You cannot '+esc(FX.reality.youCannot.join(', '))+'. The fork’s clock stopped at Year 9, a season behind. Nothing here was written to Reality.</p><div class="btnrow"><button type="button" class="btn" data-a="view" data-v="door">Back to Doors</button></div>';
+  if(k===10) return '<h3 class="mh">Return to Reality</h3><p><b>'+esc(FX.reality.name)+'</b></p><p>'+esc(FX.reality.clock.label)+'. Now: '+esc(dlabel(FX.reality.clock.now))+' · '+esc(FX.reality.clock.phase.v)+' <span class="mono" style="font-size:11px">[verify: camp dates]</span>.</p><p class="small">You can '+esc(FX.reality.youCan.join(', '))+'. You cannot '+esc(FX.reality.youCannot.join(', '))+'. The fork’s clock stopped at Year 9, a season behind. Nothing here was written to Reality.</p><div class="btnrow"><button type="button" class="btn" data-a="view" data-v="door">Back to Doors</button></div>';
   var Y=YEARS[k-1], evs=EVENTS.filter(function(e){ return yearOfDate(e.date)===k; });
   return '<h3 class="mh">Year '+k+' · '+Y.span+'</h3><p class="small">In the author’s ink. AUTHORED, illustrative: the author’s story for the fork, not what happened.</p>' +
     '<ol class="yrs" style="padding-left:20px;border-left:4px solid var(--a1);margin:8px 0;list-style:none;padding-left:12px">'+Y.acts.map(function(a){ return '<li>'+esc(a)+'</li>'; }).join('')+'</ol>' +
@@ -1047,25 +1054,25 @@ function verdictHTML(r, full){
 }
 function marginReality(){
   var L=S.lin, W=lineageWorlds(), sw=lworld(L.seamWorld), verd=seamFor(sw,L.arrived), next=EVENTS[L.arrived];
-  var sel = W.map(function(w){ return '<button type="button" class="btn" data-a="seamworld" data-v="'+w.id+'" aria-pressed="'+(L.seamWorld===w.id)+'">'+esc(w.id==='main'?'The author’s fork':w.id==='s1'?'Fultz traded in 2019':'Your fork')+'</button>'; }).join('');
+  var sel = W.map(function(w){ return '<button type="button" class="btn" data-a="seamworld" data-v="'+w.id+'" aria-pressed="'+(L.seamWorld===w.id)+'">'+esc(w.id==='main'?'Author’s fork':w.id==='s1'?'Fultz traded ’19':'Your fork')+'</button>'; }).join('');
   var fe = L.focusEv || L.arrived;
   var byEv = {}; verd.forEach(function(r){ (byEv[r.ev.id]=byEv[r.ev.id]||[]).push(r); });
-  var list = '', nowh='';
+  var strip = '', detail = '', i;
+  for(i=0;i<L.arrived;i++){
+    var e=EVENTS[i], rs=byEv[e.id]||[];
+    strip += '<button type="button" class="evc" data-a="focusev" data-v="'+(i+1)+'" aria-pressed="'+(i+1===fe)+'" aria-label="Open '+esc(evd(e))+': '+esc(rs.map(function(r){ return r.verdict; }).join(' and '))+'"><span class="gl">'+rs.map(function(r){ return VG[r.verdict]; }).join('')+'</span><span>'+esc(evd(e).replace(/ 20\d\d$/,''))+'</span></button>';
+    if(i+1===fe) detail = rs.map(function(r){ return verdictHTML(r,true); }).join('');
+  }
   if(fe===4 && L.arrived>=4){
     var rg=taxRange(), out = PRE_TAX.v>rg[1] || PRE_TAX.v<rg[0];
-    nowh = out ? '<li class="nowh" data-cap="'+cap('P',0)+'"><b>NO WORLD HERE HAD THIS</b>Reality’s projected tax that week, about '+fm(PRE_TAX.v)+' (OBSERVED, verify), is outside every world in this lineage: '+fm(rg[0])+' to '+fm(rg[1])+' (AUTHORED, illustrative). The sheet says so instead of guessing.</li>' : '';
+    if(out) detail += '<li class="nowh" data-cap="'+cap('P',0)+'"><b>NO WORLD HERE HAD THIS</b>Reality’s projected tax that week, about '+fm(PRE_TAX.v)+' (OBSERVED, verify), is outside every world in this lineage: '+fm(rg[0])+' to '+fm(rg[1])+' (AUTHORED, illustrative). The sheet says so instead of guessing.</li>';
   }
-  for(var i=L.arrived-1;i>=0;i--){
-    var e=EVENTS[i], rs=byEv[e.id]||[];
-    if(i+1===fe) list += rs.map(function(r){ return verdictHTML(r,true); }).join('') + nowh;
-    else list += '<li class="vd old"><button type="button" data-a="focusev" data-v="'+(i+1)+'" style="display:block;width:100%;text-align:left;min-height:36px" aria-label="Open '+esc(evd(e))+'"><span style="display:flex;gap:8px;align-items:center">'+rs.map(function(r){ return VG[r.verdict]; }).join('')+'<span class="mono" style="font-size:11px">'+esc(evd(e))+' · '+rs.map(function(r){ return r.verdict; }).join(' / ')+'</span></span></button></li>';
-  }
-  return '<h3 class="mh">Reality arrives</h3>' +
-    (L.arrived ? '<p class="small">A verdict is not a score: DIVERGED is not a failure.</p>' : '<p>Reality’s recorded moments walk through this lineage one at a time. Each gets a verdict against the fork’s declared assumptions. A verdict is not a score: DIVERGED is not a failure.</p>') +
-    '<div class="sw2" role="group" aria-label="Read the seam for which world">'+sel+'</div>' +
+  return '<div class="sw2" role="group" aria-label="Read the seam for which world">'+sel+'</div>' +
     '<div class="key" aria-label="Key to the verdict marks">'+['HELD','DIVERGED','IMPOSSIBLE','RE-DECLARE'].map(function(v){ return '<span>'+VG[v]+v.toLowerCase()+'</span>'; }).join('')+'</div>' +
-    (next ? '<div class="btnrow"><button type="button" class="btn solid" data-a="arrive" data-cap="'+cap('P',0)+'">Let Reality arrive: '+esc(evd(next))+'</button></div><p class="small">Next, named by its question: '+esc(next.q)+'</p>' : '<p class="small"><b>All '+EVENTS.length+' recorded moments have arrived.</b> Reality is a season past this fork’s clock.</p>') +
-    '<ol class="vlist" aria-label="Verdicts, newest first">'+list+'</ol>' +
+    (L.arrived ? '' : '<p>Reality’s recorded moments walk through this lineage one at a time. Each gets a verdict against the fork’s declared assumptions. A verdict is not a score: DIVERGED is not a failure.</p>') +
+    (next ? '<div class="btnrow"><button type="button" class="btn solid" data-a="arrive" data-cap="'+cap('P',0)+'">Let Reality arrive: '+esc(evd(next))+'</button></div><p class="small">Next, named by its question: '+esc(next.q)+'</p>' : '<p class="small"><b>All '+EVENTS.length+' recorded moments have arrived.</b> A verdict is not a score: DIVERGED is not a failure.</p>') +
+    (strip ? '<div class="evs" role="group" aria-label="Moments that have arrived">'+strip+'</div>' : '') +
+    '<ol class="vlist" aria-label="Verdict for the open moment" data-cap="'+cap('P',0)+'">'+detail+'</ol>' +
     (L.arrived ? '<div class="tline"><b>TEACHER’S LINE</b>Ask: why is DIVERGED not the same as wrong? What would the fork have to declare to turn RE-DECLARE into a verdict?</div>' : '');
 }
 function lockHTML(){
@@ -1093,9 +1100,9 @@ function marginLeague(){
   }
   if(!L.declared && !L.tried) t += '<div class="btnrow"><button type="button" class="btn solid" data-a="trytrade">Try the trade with Philadelphia</button></div>';
   if(L.tried && !L.declared){
-    t += '<div class="refuse" data-cap="'+cap('P',0)+'"><b>REFUSED · this address is not closed</b><span class="rule">RULE · an address is well-formed only when closed</span><p>The trade touches Philadelphia, which is only a member of the 29-club bulk pin. A bulk pin is read-only: Reality does not sign for a fork. Close Philadelphia as its own line: pin it at a named cut, or declare it.</p></div>' +
+    t += '<div class="refuse" data-cap="'+cap('P',0)+'"><b>REFUSED · this address is not closed</b><span class="rule">RULE · an address is well-formed only when closed</span><p>The trade touches Philadelphia, which sits only inside the 29-club bulk pin: a read-only reference. Reality does not sign for a fork. Close Philadelphia as its own line: pin it at a named cut, or declare it.</p></div>' +
       '<div class="btnrow"><button type="button" class="btn" data-a="pinphi">Pin Philadelphia at Year 9</button><button type="button" class="btn solid" data-a="declphi">Declare Philadelphia</button></div>';
-    if(L.pinTried) t += '<div class="hole"><b class="mono" style="font-size:11px">UNKNOWN</b> · nothing to pin: the shared store holds no Philadelphia books. <span class="mono" style="font-size:10.5px">[verify: needs Reality’s Philadelphia books at a cut]</span></div>';
+    if(L.pinTried) t += '<div class="hole"><b class="mono" style="font-size:11px">UNKNOWN</b> · no Philadelphia books in the shared store to pin. <span class="mono" style="font-size:10.5px">[verify]</span></div>';
   }
   if(L.declared && !L.traded) t += '<p>Philadelphia is closed: declared by you as an authored desk (illustrative). The lockfile is well-formed.</p><div class="btnrow"><button type="button" class="btn solid" data-a="trytrade">Try the trade again</button></div>';
   if(L.traded) t += '<div class="frame" data-cap="'+cap('P',0)+'"><span class="stampline">Trial · yours · not in the author’s record</span>' +
