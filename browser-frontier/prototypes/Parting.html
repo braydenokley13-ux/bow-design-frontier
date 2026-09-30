@@ -173,8 +173,8 @@ button.idx:hover{background:var(--sheet2)}
 .pairbtn{min-height:40px;padding:2px 9px 2px 6px;display:inline-flex;align-items:center;gap:6px;border:1.5px solid transparent;font-size:16px}
 .pairbtn:hover{border-color:var(--rule)}
 .pairbtn[aria-pressed="true"]{border-color:var(--ink);background:var(--sheet2);font-weight:700}
-.pairbtn .pin{width:13px;height:13px;border-radius:50%;border:1.5px solid var(--ink);background:var(--sheet)}
-.pairbtn.me .pin{background:var(--you);border-color:var(--you);box-shadow:0 0 0 2px var(--sheet),0 0 0 3.5px var(--you)}
+.pairbtn .pin{width:10px;height:10px;border-radius:0;transform:rotate(45deg);border:1.5px solid var(--ink);background:var(--ink);flex:0 0 auto;margin:0 2px}
+.pairbtn.me .pin{background:var(--you);border-color:var(--you)}
 
 /* ---------- margin cards ---------- */
 .mbody p{margin:0 0 8px}
