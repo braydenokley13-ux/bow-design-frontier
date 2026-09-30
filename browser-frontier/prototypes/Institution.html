@@ -95,6 +95,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid
 .grid4 .btn{text-align:center;padding:4px 2px;font-size:12.5px;min-height:42px}
 .grid4 .btn i{display:block;font:700 15px var(--sans);font-style:normal}
 .refuse{border:2px dashed var(--ink);padding:8px 10px;margin:0 0 10px;font:400 14.5px/1.4 var(--serif);background:var(--paper)}
+.refuse.sticky{position:sticky;top:-20px;z-index:3;margin:-20px -28px 14px;padding:12px 28px;border-width:0 0 3px;border-style:dashed;background:#fffdf5}
 .refuse b{font:700 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:2px}
 .rec{margin:0;padding:0;list-style:none;font:500 12.5px/1.35 var(--sans);max-height:112px;overflow:auto}
 .rec li{padding:3px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px}
@@ -559,7 +560,7 @@ function renderPanel(FXS) {
     h += '<div class="grid2">' + btn({ act: 'view', arg: { pose: 'window' }, label: 'Look out of the window' }, 'sm') + btn({ act: 'view', arg: { pose: 'history' }, label: 'Look at the history wall' }, 'sm') + '</div>';
   }
   h += '<p class="kick sect">The record · ' + (br() ? 'your branch' : 'your ink is blue') + '</p><ul class="rec" tabindex="0" aria-label="The record">' + recordRows(S.history).slice(-6).map(r => '<li><span class="no ' + (r.br ? 'bch' : r.mine ? 'mine' : '') + '">' + r.no + '</span><span class="' + (r.br ? 'bch' : r.mine ? 'mine' : '') + '">' + esc(r.what) + '</span></li>').join('') + '</ul>';
-  const sc = $('#pscroll'); sc.innerHTML = h;
+  const sc = $('#pscroll'), prevTop = sc.scrollTop, sig = [S.posture, S.paper, S.why, S.history, S.mode, S.signed, S.refusal && S.refusal.rule].join('|'), keepTop = renderPanel.sig === sig; renderPanel.sig = sig; sc.innerHTML = h; sc.scrollTop = keepTop ? prevTop : 0;
   const rl = sc.querySelector('.rec'); if (rl) rl.scrollTop = rl.scrollHeight;
   $('#addr').innerHTML = addressLine();
   $('#tgReal').setAttribute('aria-pressed', S.layers.real); $('#tgKnow').setAttribute('aria-pressed', S.layers.know); $('#tgSched').setAttribute('aria-pressed', S.mode === 'schedule');
@@ -569,11 +570,10 @@ function br() { return S.history === 'branch'; }
 function renderSchedule(FXS) {
   const el = $('#sched');
   const kn = S.layers.know, rl = S.layers.real;
-  let h = '<h1>Room schedule</h1><p class="addr" style="font:500 12px var(--sans);margin:0">' + addressLine() + '</p><p class="lede">The same building as the Room, written down. Every line starts with what kind of knowing it is. Every act is a button, and acting here changes the Room: act numbers match.</p>';
+  let h = (S.refusal ? '<div class="refuse sticky" role="note"><b>Refused by rule ' + esc(S.refusal.rule) + '</b>' + esc(S.refusal.why) + '</div>' : '') + '<h1>Room schedule</h1><p class="addr" style="font:500 12px var(--sans);margin:0">' + addressLine() + '</p><p class="lede">The same building as the Room, written down. Every line starts with what kind of knowing it is. Every act is a button, and acting here changes the Room: act numbers match.</p>';
   h += '<div class="ledger"><div class="clk"><b>World</b>' + AUTH.week + ' · ' + fmtClock(S.clock) + '</div><div class="clk you"><b>Your clock</b>' + (S.signed ? 'started ' + hm(S.seatStart) : S.left ? 'stopped' : 'not started') + '</div></div>';
   h += '<h2>Posture · where you stand</h2><p class="lede" style="margin:0 0 8px">' + esc(({ maquette: 'Outside, looking at the maquette. Nothing is touchable.', door: 'At the door.', rail: 'At the rail, reading the record.', desk: S.signed ? 'At the desk. You hold the seat.' : 'At the desk, unsigned. Sitting is free.' })[S.posture]) + '</p><div style="display:flex;gap:6px;flex-wrap:wrap;max-width:760px">' +
     [['arrive', 'Door'], ['look', 'Rail'], ['sit', 'Desk'], ['sign', 'Sign with the pen'], ['stand', 'Stand up'], ['outside', 'Outside (maquette)']].map(([a, l]) => '<button type="button" class="btn sm" style="flex:0 0 auto;width:auto" data-act="' + a + '" data-arg="{}" data-k="s:' + a + '">' + l + '</button>').join('') + '</div>';
-  if (S.refusal) h += '<div class="refuse" style="max-width:760px;margin-top:10px"><b>Refused by rule ' + esc(S.refusal.rule) + '</b>' + esc(S.refusal.why) + '</div>';
   const by = {}; FXS.forEach(f => (by[f.room] = by[f.room] || []).push(f));
   for (const rk of ['T', 'M', 'H', 'W', 'B', 'Y', 'X']) if (by[rk]) {
     h += '<h2 id="h-' + rk + '">' + ROOMS[rk] + '</h2><table><thead><tr><th>Mark</th><th>Fixture</th><th>Line</th><th>Address</th><th>Acts</th></tr></thead><tbody>';
