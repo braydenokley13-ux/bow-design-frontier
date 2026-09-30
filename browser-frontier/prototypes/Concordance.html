@@ -27,7 +27,7 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;paddin
 .mk[data-t=UNKNOWN]{background:transparent;border:1.5px dashed var(--ink2)}
 .mk[data-t=SEALED]{background:transparent;border:1.5px dashed var(--ink);color:var(--ink2)}
 .mk{padding:1px 6px;display:inline-block;border-radius:0}
-.sw{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:4px;border:1px solid var(--ink)}
+.sw{display:inline-block;width:22px;height:7px;vertical-align:2px;margin-right:6px;border:1px solid var(--ink)}
 .sw[data-t=OBSERVED]{background:var(--ink)}.sw[data-t=RECORDED]{background:var(--card);box-shadow:inset 0 0 0 2px var(--card),inset 0 0 0 3px var(--ink)}.sw[data-t=AUTHORED]{background:transparent}.sw[data-t=COMPUTED]{background:var(--tone)}.sw[data-t=MODELED]{background:repeating-linear-gradient(135deg,transparent 0 3px,var(--ink) 3px 4px)}.sw[data-t=GENERATED]{background-image:radial-gradient(var(--ink) 1px,transparent 1.4px);background-size:4px 4px}.sw[data-t=UNKNOWN]{border-style:dashed;background:transparent}.sw[data-t=SEALED]{border-style:dashed;background:transparent}
 /* chrome */
 #topstrip{display:flex;justify-content:space-between;align-items:center;padding:0 14px;height:28px;background:var(--ink);color:var(--paper);font:500 12px var(--mono);flex:none}
@@ -154,13 +154,21 @@ li.followed{background:rgba(199,162,72,.4);box-shadow:none !important;outline:2p
 .dnote{color:var(--ink2);font-size:12.5px}
 /* rig */
 #rig{display:flex;flex-wrap:wrap;gap:4px 14px;padding:4px 14px;border-top:2px solid var(--ink);background:var(--paper2);flex:none;align-items:center}
-#rig .g{display:flex;gap:4px;align-items:center}
+#rig .g{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+#rig .dnote{font-size:12px}
 #rig .gl{font:700 10.5px var(--mono);letter-spacing:.08em;color:var(--ink2);margin-right:2px}
 #rig .btn{min-height:32px;padding:2px 9px;font-size:13px;font-weight:600}
 #status{flex:none;font:500 11px var(--mono);padding:2px 14px;background:var(--ink);color:var(--paper);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* layers */
 [data-cap]{position:relative}
-body.real [data-cap]::before{content:attr(data-cap) " · " attr(data-ai);position:absolute;right:4px;top:-1px;z-index:30;background:var(--brass);border:1.5px solid var(--ink);font:700 9.5px var(--mono);padding:0 5px;letter-spacing:.04em;pointer-events:none;max-width:96%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rbadge{display:inline-block;flex:none;min-width:18px;height:18px;padding:0 4px;margin-right:6px;background:var(--brass);border:1.5px solid var(--ink);color:var(--ink);font:700 11px/15px var(--mono);text-align:center}
+.lever .rbadge{position:absolute;left:-10px;top:-10px;margin:0;z-index:5}
+#realsheet{flex:none;max-height:27vh;overflow:auto;padding:5px 14px 6px;background:var(--card);border-top:2px solid var(--ink);font-size:12.5px}
+#realsheet h3{margin:0 0 3px;font:700 11px var(--mono);letter-spacing:.08em}
+#realsheet ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1px 18px}
+#realsheet li{display:flex;gap:6px;align-items:baseline;border-bottom:1px dotted var(--ink2);padding:1px 0}
+#realsheet .cap{font:600 10.5px var(--mono)}
+#realsheet .rbadge{margin:0;align-self:center}
 .howsheet{position:absolute;left:0;right:0;bottom:0;max-height:64%;overflow:auto;background:var(--paper);border-top:2px solid var(--ink);padding:6px 10px;z-index:20;font-size:12.5px}
 .howsheet h5{margin:0 0 3px;font:700 11px var(--mono);letter-spacing:.06em}
 .howsheet div{display:flex;gap:6px;align-items:baseline;padding:1px 0;border-bottom:1px dotted var(--ink2)}
@@ -229,8 +237,6 @@ tr.ref td{background:rgba(179,30,20,.08);border-bottom:2px solid var(--red);font
 .objs summary{cursor:pointer;font:600 11.5px var(--mono);padding:2px 0;min-height:24px}
 .pane .ph .act{border:1.5px solid var(--ink);background:var(--brass);padding:0 8px;min-height:22px;font:700 11px var(--mono)}
 .ctable td{padding:1px 4px}
-.lever[data-cap]::before,#agreeBtn[data-cap]::before{top:auto !important;bottom:-11px;right:auto !important;left:0}
-body.real .lever[data-cap]::before{max-width:240px}
 </style>
 </head>
 <body>
@@ -244,6 +250,7 @@ body.real .lever[data-cap]::before{max-width:240px}
 <section id="reasons" class="reasons" hidden aria-label="The Plan's reasons"></section>
 <div id="notices"></div>
 <main id="board"><div id="panes"></div><aside id="direct" aria-label="Direct"><div id="dhead"><span class="nm">DIRECT</span><span id="mcount"></span><p id="receipt" role="status" aria-live="polite"></p><span id="dctl"></span></div><div id="dbody"></div></aside></main>
+<div id="realsheet" hidden></div>
 <footer id="rig" aria-label="Prototype rig"></footer>
 <div id="live" class="sr" role="status" aria-live="polite"></div>
 <div id="status">PROTOTYPE · signal box · one ledger, every view · data: shared fixture, dated, verify · illustrative values are marked</div>
@@ -274,24 +281,29 @@ function sha256(s){
 const TK={OBSERVED:{lead:'Observed',how:'reported from outside BOW'},RECORDED:{lead:'Recorded',how:'written into BOW’s own record'},AUTHORED:{lead:'Authored',how:'a rule or number someone chose on purpose'},COMPUTED:{lead:'Computed',how:'follows exactly from rules and state'},MODELED:{lead:'Modeled',how:'a named, versioned model ran'},GENERATED:{lead:'Generated',how:'made by a generator'},UNKNOWN:{lead:'Unknown',how:'nobody knows yet: a marked hole'},SEALED:{lead:'Sealed',how:'the future: you find out by living it'}};
 /* ---------------------------------------------------------------- system 1: Boston · Year Two (facts from the shared fixture) */
 const LINE=W.taxLine.v,HARD=W.hardLimit.v,TF=W.tradeFile,TAT=FX.reality.contracts[0].salary.v;
+/* one World, one numbering: every act number here is read from the shared fixture (record[].n), never restated */
+const REC=id=>W.record.find(r=>r.id===id);
+const HEAD=W.nextActNumber-1,TRADE_N=REC('w6-trade').n,NEXT_N=W.nextActNumber,WEEK=+/Week (\d+)/.exec(W.clock.label)[1];
+const CUP_SALARY=FX.league.season2627.exceptions.minimum.v; /* the two-way call-up is signed at the league minimum: AUTHORED, illustrative (fixture open matter) */
 const DEN_SALARY=28000000; /* AUTHORED, illustrative: a second file for the refusal, not a real contract */
 const FILES={
-  gsw:{id:'gsw',name:'Golden State file',short:'Golden State',send:[{p:'Derrick White',s:TF.send[0].salary.v}],get:[{p:'Jimmy Butler',s:TF.get[0].salary.v}]},
+  cup:{id:'cup',name:'Call-up file',short:'Call-up',send:[],get:[{p:'the two-way player',s:CUP_SALARY}]},
   den:{id:'den',name:'Denver file',short:'Denver',send:[],get:[{p:'a veteran contract',s:DEN_SALARY}]}
 };
 const delta=f=>f.get.reduce((a,x)=>a+x.s,0)-f.send.reduce((a,x)=>a+x.s,0);
 function base(){
-  const w1=W.record.find(r=>r.id==='w1-minimum').effects.payroll;
-  return {sys:'boston',n:41,week:6,payroll:TF.payrollBefore.v,hist:[{w:0,p:W.payrollStartYearTwo.v,k:'AUTHORED'},{w:1,p:W.payrollStartYearTwo.v+w1,k:'COMPUTED'}],files:{gsw:{status:'unsigned',act:null,via:null},den:{status:'unsigned',act:null,via:null}},ticks:[],refusal:null,last:null};
+  const w1=REC('w1-minimum').effects.payroll;
+  return {sys:'boston',n:HEAD,week:WEEK,payroll:W.payroll.v,hist:[{w:0,p:W.payrollStartYearTwo.v,k:'AUTHORED'},{w:1,p:W.payrollStartYearTwo.v+w1,k:'COMPUTED'},{w:6,p:W.payroll.v,k:'RECORDED',n:TRADE_N}],files:{cup:{status:'unsigned',act:null,via:null},den:{status:'unsigned',act:null,via:null}},ticks:[],refusal:null,last:null};
 }
 function stamp(S){
-  const core={n:S.n,payroll:S.payroll,files:{gsw:S.files.gsw.status,den:S.files.den.status},ticks:S.ticks.map(t=>[t.n,t.file,t.kind])};
+  /* SHA-256 over the canonical acts only: the fixture's record plus the acts this session added. Never navigation, never a refusal (no act spent). */
+  const core={acts:W.record.map(r=>[r.n,r.id]).concat(S.ticks.map(t=>[t.n,t.file,t.kind])),n:S.n,payroll:S.payroll};
   S.hash=sha256(JSON.stringify(core));S.h4=S.hash.slice(0,4);return S;
 }
 function applyE(S,e){
   const T=JSON.parse(JSON.stringify(S));delete T._sf;delete T._sm;
-  if(e.kind==='sign'){const f=FILES[e.file];T.payroll+=delta(f);T.files[e.file]={status:'signed',act:e.n,via:e.via};T.ticks.push({n:e.n,w:6,p:T.payroll,file:e.file,kind:'sign'});T.n=e.n;T.refusal=null;T.last={n:e.n,kind:'sign',file:e.file}}
-  else if(e.kind==='decline'){T.files[e.file]={status:'declined',act:e.n,via:e.via};T.ticks.push({n:e.n,w:6,p:T.payroll,file:e.file,kind:'decline'});T.n=e.n;T.refusal=null;T.last={n:e.n,kind:'decline',file:e.file}}
+  if(e.kind==='sign'){const f=FILES[e.file];T.payroll+=delta(f);T.files[e.file]={status:'signed',act:e.n,via:e.via};T.ticks.push({n:e.n,w:WEEK,p:T.payroll,file:e.file,kind:'sign'});T.n=e.n;T.refusal=null;T.last={n:e.n,kind:'sign',file:e.file}}
+  else if(e.kind==='decline'){T.files[e.file]={status:'declined',act:e.n,via:e.via};T.ticks.push({n:e.n,w:WEEK,p:T.payroll,file:e.file,kind:'decline'});T.n=e.n;T.refusal=null;T.last={n:e.n,kind:'decline',file:e.file}}
   else if(e.kind==='refused'){T.refusal={file:e.file,at:e.at,rule:e.rule,text:e.text,allow:e.allow,after:e.after}}
   return T;
 }
@@ -303,7 +315,7 @@ function checkRule(S,file){
 }
 function mattersOf(S){
   const m=[];
-  if(S.files.gsw.status==='unsigned')m.push({id:'gsw',text:'Golden State: send Derrick White, get Jimmy Butler. The file is unsigned.',file:'gsw'});
+  if(S.files.cup.status==='unsigned')m.push({id:'cup',text:'Convert the two-way call-up before the roster deadline (Week 9 · Friday). The file is unsigned; it would carry the league minimum, '+M(CUP_SALARY)+' (illustrative).',file:'cup'});
   if(S.files.den.status==='unsigned')m.push({id:'den',text:'Denver is asking: take a '+M(DEN_SALARY)+' contract for a future second-round pick (illustrative).',file:'den'});
   m.push({id:'owner',text:'The owner’s note on the tax bill is unanswered (read-only here).',file:null});
   return m;
@@ -313,18 +325,22 @@ function surfBoston(S){
   const F=[];
   const add=(path,cat,token,text,say,o)=>{o=o||{};F.push({path,cat,token,text,say,lead:o.lead||TK[token].lead,src:o.src||'',asOf:o.asOf||'',facet:o.facet||'',note:o.note||''})};
   const over=S.payroll-LINE,tax=Math.max(0,over)*1.5;
-  add('clock.week','Now','AUTHORED','Year Two · Week 6','{t}',{lead:'Authored World calendar',src:'World calendar (authored)',note:'World time, not a date'});
-  add('matters.open','Now','COMPUTED',mattersOf(S).length+' matters open','{t}',{src:'open matters in the seat'});
-  const g=S.files.gsw;
-  add('file.gsw.status','Golden State file','RECORDED',STATUS[g.status],'Golden State file, {t}',{src:'World trade file'});
-  add('file.gsw.send','Golden State file','RECORDED','Derrick White, '+M(FILES.gsw.send[0].s),'we send {t}',{src:'World trade file'});
-  add('file.gsw.get','Golden State file','RECORDED','Jimmy Butler, '+M(FILES.gsw.get[0].s),'we get {t}',{src:'World trade file'});
-  if(g.act)add('file.gsw.act','Golden State file','RECORDED','act '+g.act,'entered in the ledger as {t}',{src:'World act log'});
+  add('clock.week','Now','AUTHORED',W.clock.label,'the World is at {t}',{lead:'Authored World calendar',src:'World calendar (authored)',note:'World time, not a date'});
+  add('matters.open','Now','COMPUTED',mattersOf(S).length+' matters open','the seat holds {t}',{src:'open matters in the seat'});
+  /* the trade is settled history: act 40 in the World's record, read from the fixture */
+  add('trade.status','Golden State trade','RECORDED','signed by both owners','Golden State trade, {t}',{src:'World record, act '+TRADE_N+' (fixture record[].n)'});
+  add('trade.send','Golden State trade','RECORDED','Derrick White, '+M(TF.send[0].salary.v),'we sent {t}',{src:'World trade file'});
+  add('trade.get','Golden State trade','RECORDED','Jimmy Butler, '+M(TF.get[0].salary.v),'we got {t}',{src:'World trade file'});
+  add('trade.act','Golden State trade','RECORDED','act '+TRADE_N,'entered in the ledger as {t}',{src:'World act log'});
+  const g=S.files.cup;
+  add('file.cup.status','Call-up file','AUTHORED',STATUS[g.status].replace('signed by both owners','signed'),'Call-up file (illustrative), {t}',{src:'illustrative file: the fixture’s open matter, authored for this prototype'});
+  add('file.cup.get','Call-up file','AUTHORED','the two-way player, '+M(CUP_SALARY),'the call-up would carry {t}, the league minimum',{src:'illustrative, authored; the salary is the 2026–27 minimum read from the fixture'});
+  if(g.act)add('file.cup.act','Call-up file','AUTHORED','act '+g.act,'entered in the ledger as {t}',{src:'World act log'});
   const d=S.files.den;
   add('file.den.status','Denver file','AUTHORED',STATUS[d.status].replace('signed by both owners','signed'),'Denver file (illustrative), {t}',{src:'illustrative file, authored for this prototype'});
   add('file.den.get','Denver file','AUTHORED','a veteran contract, '+M(DEN_SALARY),'Denver would send us {t}, unnamed',{src:'illustrative, authored'});
   if(d.act)add('file.den.act','Denver file','AUTHORED','act '+d.act,'entered in the ledger as {t}',{src:'World act log'});
-  ['gsw','den'].forEach(id=>{if(S.files[id].status!=='unsigned')return;const af=S.payroll+delta(FILES[id]);add('file.'+id+'.after',id==='gsw'?'Golden State file':'Denver file','COMPUTED','payroll becomes '+M(af)+', '+M(af-LINE)+(af>LINE?' over':' under')+' the World’s line','if signed, {t}',{src:'the file’s salaries against the World record'})});
+  ['cup','den'].forEach(id=>{if(S.files[id].status!=='unsigned')return;const af=S.payroll+delta(FILES[id]);add('file.'+id+'.after',id==='cup'?'Call-up file':'Denver file','COMPUTED','payroll becomes '+M(af)+', '+M(af-LINE)+(af>LINE?' over':' under')+' the World’s line','if signed, {t}',{src:'the file’s salaries against the World record'})});
   add('payroll.total','Payroll','COMPUTED',M(S.payroll),'payroll {t}',{src:'World record, folded from the act log'});
   add('payroll.vsLine','Payroll','COMPUTED',M(over)+(over>0?' over':' under'),'{t} the World’s tax line',{src:'payroll less the World line'});
   add('payroll.toHard','Payroll','COMPUTED',M(HARD-S.payroll)+' under','{t} the World’s hard limit',{src:'hard limit less payroll'});
@@ -332,11 +348,12 @@ function surfBoston(S){
   add('rule.taxLine','World rules','AUTHORED',M(LINE),'tax line {t}',{lead:'Authored World rule',src:'World rule'});
   add('rule.hardLimit','World rules','AUTHORED',M(HARD),'hard limit {t}',{lead:'Authored World rule',src:'World rule'});
   add('rule.taxRule','World rules','AUTHORED','flat 1.5× over the line','the tax is charged {t} (the NBA’s real tax is incremental)',{lead:'Authored World rule',src:'World rule',facet:'rule-text'});
-  const white=S.files.gsw.status!=='signed',butler=S.files.gsw.status==='signed',denSigned=S.files.den.status==='signed';
-  const others=S.payroll-TAT-(white?FILES.gsw.send[0].s:0)-(butler?FILES.gsw.get[0].s:0)-(denSigned?DEN_SALARY:0);
+  const cupSigned=S.files.cup.status==='signed',denSigned=S.files.den.status==='signed';
+  const others=S.payroll-TAT-TF.get[0].salary.v-(cupSigned?CUP_SALARY:0)-(denSigned?DEN_SALARY:0);
   add('roster.tatum','Roster','OBSERVED','≈ '+M(TAT),'Jayson Tatum {t} (approximate; verify against the World save)',{src:'public reporting via fixture',asOf:'2026-09-29'});
-  add('roster.white','Roster','RECORDED',white?M(FILES.gsw.send[0].s)+', on the roster':'traded to Golden State','Derrick White, {t}',{src:'World trade file'});
-  add('roster.butler','Roster','RECORDED',butler?M(FILES.gsw.get[0].s)+', arrived by trade':'not on the roster','Jimmy Butler, {t}',{src:'World trade file'});
+  add('roster.white','Roster','RECORDED','traded to Golden State','Derrick White, {t}',{src:'World trade file, act '+TRADE_N});
+  add('roster.butler','Roster','RECORDED',M(TF.get[0].salary.v)+', arrived by trade','Jimmy Butler, {t}',{src:'World trade file, act '+TRADE_N});
+  if(cupSigned)add('roster.cup','Roster','AUTHORED','the two-way player, '+M(CUP_SALARY),'the call-up, {t}',{src:'illustrative'});
   if(denSigned)add('roster.den','Roster','AUTHORED','a veteran contract, '+M(DEN_SALARY),'Denver’s contract, {t}',{src:'illustrative'});
   add('roster.others','Roster','COMPUTED',M(others),'all other contracts together, {t} (payroll less the rows above)',{src:'payroll less the named rows'});
   add('roster.names','Roster','UNKNOWN','[verify: World save]','the other contracts by name: {t}',{src:'not in the shared fixture'});
@@ -348,8 +365,8 @@ function surfBoston(S){
   add('people.funded','Who','UNKNOWN','not recorded','who works in the funded rooms: {t}',{facet:'people',src:'no presence truth exists'});
   add('payroll.week.0','Payroll by week','AUTHORED',M(S.hist[0].p),'payroll at the start of Year Two, {t} (illustrative start)',{src:'illustrative: chosen so the record sums to the World’s payroll',facet:'series'});
   add('payroll.week.1','Payroll by week','COMPUTED',M(S.hist[1].p),'payroll after Week 1, {t}',{src:'start plus the Week 1 minimum signing',facet:'series'});
-  add('payroll.week.6','Payroll by week','COMPUTED',M(S.payroll),'payroll at Week 6, {t}',{src:'World record, folded from the act log',facet:'series'});
-  add('future.sealed','Payroll by week','SEALED','you find out by living it','Weeks 7 to 9: {t}',{src:'the unmodeled future'});
+  add('payroll.week.6','Payroll by week','COMPUTED',M(S.hist[2].p),'payroll after the Week 6 trade, {t}',{src:'start plus acts 36 and '+TRADE_N+' of the World record',facet:'series'});
+  add('future.sealed','Payroll by week','SEALED','you find out by living it','Week 10 on: {t}',{src:'the unmodeled future'});
   if(S.refusal){add('refusal.last','Refused','AUTHORED',S.refusal.rule+': '+S.refusal.text,'refused. {t}',{lead:'Authored World rule',src:'World rule'});add('refusal.allow','Refused','COMPUTED',S.refusal.allow,'what would allow it: {t}',{src:'the rule'})}
   return F;
 }
@@ -385,8 +402,8 @@ const SYS={
 };
 /* ---------------------------------------------------------------- the one state, the one act() */
 const ST={
-  sys:'boston',hist:{record:[],branch:null},active:'record',harrow:[],record:[],
-  ui:{who:'newcomer',sr:false,device:'desktop',open:[],direct:'collapsed',pin:null,override:false,quiet:false,reasons:null,follow:null,agree:null,how:false,real:false,inject:null,compare:false,tab:'matters',pending:null,offer:null,compiled:false,tier:'3d',room:{station:'overview'}}
+  sys:'boston',hist:{record:[],branch:null,forkAt:null},active:'record',harrow:[],record:[],
+  ui:{who:'newcomer',sr:false,device:(window.matchMedia&&matchMedia('(max-width:600px)').matches)?'phone':'desktop',proofOpen:false,open:[],direct:'collapsed',pin:null,override:false,quiet:false,reasons:null,follow:null,agree:null,how:false,real:false,inject:null,compare:false,tab:'matters',pending:null,offer:null,compiled:false,tier:'3d',room:{station:'overview'}}
 };
 let FRAME=0,regs={},failed={},_c={key:null,S:null},_stale=null;
 ST._sz={};ST._szKey={};ST._wasFailed={};ST._nh=null;
@@ -406,10 +423,10 @@ function receiptText(S){
   if(S.refusal)return refusalLine(S)+' No act spent: the ledger stays at act '+S.n+' · '+S.h4+'.';
   const pay='Computed: payroll '+sm['payroll.total'].text+', '+sm['payroll.vsLine'].text+'.';
   if(S.last){
-    const w=(S.last.kind==='sign'?(S.last.file==='gsw'?'trade signed':'Denver file signed'):(S.last.file==='gsw'?'trade declined':'Denver file declined'));
+    const w=(S.last.kind==='sign'?(S.last.file==='cup'?'the call-up file (illustrative) signed':'the Denver file (illustrative) signed'):(S.last.file==='cup'?'the call-up file (illustrative) declined':'the Denver file (illustrative) declined'));
     return 'Act '+S.n+'. Recorded: '+w+'. '+pay+' Authored World rule: projected tax '+sm['payroll.tax'].text+'.';
   }
-  return 'Act '+S.n+'. Nothing signed yet: '+sm['matters.open'].text+'. '+pay;
+  return 'Act '+S.n+'. Last recorded: the Golden State trade, act '+TRADE_N+'. Nothing new signed yet: '+sm['matters.open'].text+'. '+pay;
 }
 const staleOf=S=>{if(S.sys!=='boston')return S;if(!_stale)_stale=foldLog([]);return _stale};
 const VN={room:'Room',timeline:'Timeline',table:'Table',voice:'Voice',ledger:'Ledger',direct:'Direct'};
@@ -442,7 +459,7 @@ function pairWith(id){const A=ST.ui;if(A.open.includes(id))return;A.open.push(id
 /* the in-page record: every act, world or session, lands here first */
 function act(kind,p){
   p=p||{};const A=ST.ui,S0=cur();
-  const e={seq:ST.record.length+1,kind:kind,who:'you (GM, Boston)',clock:ST.sys==='boston'?'Year Two · Week 6':'Harrow · day 0',history:ST.sys==='boston'?ST.active:'harrow',view:p.via||p.view||null,file:p.file||null,path:p.path||null,v:p.v||null,at:S0.n};
+  const e={seq:ST.record.length+1,kind:kind,who:'you (GM, Boston)',clock:ST.sys==='boston'?W.clock.label:'Harrow · day 0',history:ST.sys==='boston'?ST.active:'harrow',view:p.via||p.view||null,file:p.file||null,path:p.path||null,v:p.v||null,at:S0.n};
   ST.record.push(e);let say=null;
   switch(kind){
     case 'sign':case 'decline':{
@@ -452,7 +469,7 @@ function act(kind,p){
       if(kind==='sign'){const r=checkRule(S0,p.file);
         if(r){log.push({kind:'refused',file:p.file,at:S0.n+1,via:p.via,rule:r.rule,text:r.text,allow:r.allow,after:r.after});e.result='refused';A.room.station='desk';break}}
       e.n=S0.n+1;e.result='accepted';log.push({kind:kind,n:e.n,file:p.file,via:p.via});
-      if(!A.pin&&!A.override&&ST.sys==='boston'&&!A.open.includes('timeline')&&A.who==='newcomer'&&A.device==='desktop'){A.offer={text:'Act '+e.n+' moved payroll past a line. The Timeline shows the step over it.',view:'timeline',kind:'pair'}}
+      if(!A.pin&&!A.override&&ST.sys==='boston'&&!A.open.includes('timeline')&&A.who==='newcomer'&&A.device==='desktop'){A.offer={text:'Act '+e.n+' moved payroll to '+M(S0.payroll+(kind==='sign'?delta(FILES[p.file]):0))+'. The Timeline shows the step against the tax line and the hard limit.',view:'timeline',kind:'pair'}}
       else if(A.pin||A.override)A.offer=null;
       break}
     case 'arrive':A.who=p.v;A.sr=A.sr;applyPlan();say='Plan for a '+p.v+'.';break;
@@ -475,7 +492,7 @@ function act(kind,p){
     case 'rebind':A.inject=null;say='Timeline rebound to the record.';break;
     case 'how':A.how=!A.how;break;
     case 'real':A.real=!A.real;break;
-    case 'fork':if(ST.sys==='boston'){ST.hist.branch=[];ST.active='branch';A.follow=null;A.compare=false;A.agree=null;say='Branch cut at act 41. The record is untouched.'}break;
+    case 'fork':if(ST.sys==='boston'){/* a fork starts from the CURRENT act, not from a fixed one */ST.hist.branch=ST.hist.record.slice();ST.hist.forkAt={n:S0.n,h4:S0.h4};ST.active='branch';A.follow=null;A.compare=false;A.agree=null;say='Branch cut at act '+S0.n+'. The record is untouched.'}break;
     case 'return':ST.active='record';A.compare=false;A.follow=null;A.agree=null;say='Back on the record.';break;
     case 'compare':A.compare=!A.compare;break;
     case 'cover':{const cv=COVERS[p.view]&&COVERS[p.view].find(c=>c.id===p.id);if(cv)A.offer={text:cv.words+' '+cv.hand,view:cv.to,kind:'pair'};break}
@@ -486,9 +503,11 @@ function act(kind,p){
     case 'remap':ST.harrow.push({kind:'remap',v:Number(p.v)});break;
     case 'voice':if(p.v==='ask'){A.pending=p.file}else if(p.v==='cancel'){A.pending=null}break;
     case 'room':A.room.station=p.v;break;
-    case 'restart':{ST.hist={record:[],branch:null};ST.active='record';ST.record=[];ST.harrow=[];ST.sys='boston';A.follow=null;A.agree=null;A.inject=null;A.compare=false;A.pending=null;A.offer=null;A.whyOpen=false;A.room.station='overview';applyPlan();say='Started over at act 41.';break}
+    case 'proof':A.proofOpen=!A.proofOpen;break;
+    case 'restart':{ST.hist={record:[],branch:null,forkAt:null};ST.active='record';ST.record=[];ST.harrow=[];ST.sys='boston';A.follow=null;A.agree=null;A.inject=null;A.compare=false;A.pending=null;A.offer=null;A.whyOpen=false;A.room.station='overview';applyPlan();say='Started over at act '+HEAD+'.';break}
     default:break;
   }
+  if(/^(arrive|device|sys|inject|restart)$/.test(kind))A.proofOpen=false;
   render();
   if(say)$('#live').textContent=say;
 }
@@ -521,7 +540,7 @@ const mkBtn=(reg,sm,where,view,path,cls,inner,style)=>{
 /* ---------------------------------------------------------------- DIRECT (compiled from the Surface; the oracle every view is checked against) */
 function relBoston(S,sm,sp){
   return [
-    'On the owner’s desk: the Golden State file, '+sp('file.gsw.status')+'; the Denver file, '+sp('file.den.status')+'.',
+    'On the owner’s desk: the call-up file, '+sp('file.cup.status')+'; the Denver file, '+sp('file.den.status')+'. The Golden State trade is filed in the folder beside them: '+sp('trade.status')+', '+sp('trade.act')+'.',
     'On the wall beside the desk, the board reads payroll '+sp('payroll.total')+', '+sp('payroll.vsLine')+' the World’s tax line.',
     'Beyond the glass, Analytics is '+sp('dept.analytics.funded')+' and Scouting is '+sp('dept.scouting.funded')+': both rooms are dark. Analytics: '+sp('dept.analytics.opens')+'.',
     'Also beyond the glass, Ticketing is '+sp('dept.ticketing.funded')+' and Partnerships is '+sp('dept.partnerships.funded')+': both rooms are lit. Who works in them: '+sp('people.funded')+'.'
@@ -533,7 +552,7 @@ function relHarrow(S,sm,sp){
 function ledgerTickets(S){
   const log=logOf(),out=[];
   if(ST.sys==='boston'){
-    out.push({n:41,html:'Checkpoint: the World record up to act 41 is folded here. <span class="mono">'+foldLog([]).h4+'</span>',cls:''});
+    [REC('w6-trade'),REC('w7-rotation'),REC('w8-extension')].forEach(r=>out.push({n:r.n,html:(r.k==='RECORDED'?'Recorded':'Authored, illustrative')+': '+esc(r.what)+'. (World record'+(r.n===HEAD?'; checkpoint: acts '+W.record[0].n+' to '+HEAD+' are folded here <span class="mono">'+foldLog([]).h4+'</span>':'')+')',cls:''}));
     let k=0;log.forEach((e,i)=>{
       if(e.kind==='refused'){out.push({n:'·',html:'Refused at the '+e.rule+': no act spent (it would have been act '+e.at+'). In '+(e.via||'?')+'.',cls:'no'});return}
       const h=foldLog(log.slice(0,i+1)).h4;const s2=foldLog(log.slice(0,i+1));
@@ -562,7 +581,7 @@ function vDirect(S){
     matters='<h4>Open matters</h4><ol>'+open.map((p,i)=>'<li><b>'+(i+1)+'.</b> '+esc(plain(sm['promise.'+p.id]))+' '+esc(plain(sm['cover.'+p.id]))+'</li>').join('')+'</ol><p class="dnote">This system has no seat acts in the prototype. The row order above is the order a compiler reads the Surface.</p>';
   }
   const tick=ledgerTickets(S).slice().reverse();
-  const ledger='<h4>Ledger · act numbers</h4><ol reversed>'+tick.map(t=>'<li class="tkt-l '+t.cls+'"><span class="actno">'+t.n+'</span> '+t.html+'</li>').join('')+'</ol><h4>In-page record (session)</h4><ul>'+ST.record.slice(-6).reverse().map(e=>'<li class="tkt-l">#'+e.seq+' '+esc(e.kind)+(e.file?' · '+e.file:'')+(e.path?' · '+esc(e.path):'')+(e.v?' · '+esc(e.v):'')+(e.view?' · in '+esc(e.view):'')+'</li>').join('')+'</ul>';
+  const ledger='<h4>Ledger · act numbers</h4><ol reversed>'+tick.map(t=>'<li class="tkt-l '+t.cls+'"><span class="actno">'+t.n+'</span> '+t.html+'</li>').join('')+'</ol><h4>Your trail (private, never hashed)</h4><ul>'+ST.record.slice(-6).reverse().map(e=>'<li class="tkt-l">· '+esc(e.kind)+(e.file?' · '+e.file:'')+(e.path?' · '+esc(e.path):'')+(e.v?' · '+esc(e.v):'')+(e.view?' · in '+esc(e.view):'')+'</li>').join('')+'</ul>';
   const cover='<p class="dnote"><span class="lead-w">NOT DRAWN HERE</span> '+esc(COVERS.direct[0].words)+' <button type="button" class="fbtn" data-act="cover" data-view="direct" data-id="prop">'+VN[COVERS.direct[0].to]+'</button></p>';
   let body;
   if(A.direct==='lead')body='<div class="dcols"><div>'+where+matters+ledger+cover+'</div><div>'+facts+'</div></div>';
@@ -582,16 +601,18 @@ function vTable(SRC,S){
   const sm=smap(SRC),reg=[];
   const b=(p,cls,inner)=>mkBtn(reg,sm,'Table','table',p,'cellbtn '+(cls||''),inner);
   const chg=x=>x&&x===SRC.n?'chg':'';
-  const g=SRC.files.gsw,d=SRC.files.den;
+  const c=SRC.files.cup,d=SRC.files.den;
   const doit=(id,st,p)=>st==='unsigned'?'<div class="dc">'+actBtns(id,'table',sm)+'</div>':(sm[p]?b(p,'actc'):'');
   const html='<div class="tbl"><h4><span>WHO WE PAY</span>'+b('clock.week')+'</h4><table><caption class="sr">Files, roster and money, from one ledger</caption>'+
   '<thead><tr><th>File</th><th>Status</th><th>Do it · or the act it became</th></tr></thead><tbody>'+
-  '<tr class="file '+chg(g.act)+'"><td>Golden State</td><td>'+b('file.gsw.status')+'</td><td>'+doit('gsw',g.status,'file.gsw.act')+'</td></tr>'+
+  '<tr class="file"><td>Golden State <span class="dnote">(filed)</span></td><td>'+b('trade.status')+'</td><td>'+b('trade.act','actc')+'</td></tr>'+
+  '<tr class="file '+chg(c.act)+'"><td>Call-up <span class="dnote">(illustr.)</span></td><td>'+b('file.cup.status')+'</td><td>'+doit('cup',c.status,'file.cup.act')+'</td></tr>'+
   '<tr class="file '+chg(d.act)+'"><td>Denver <span class="dnote">(illustr.)</span></td><td>'+b('file.den.status')+'</td><td>'+doit('den',d.status,'file.den.act')+'</td></tr>'+(sm['refusal.last']?'<tr class="ref"><td colspan="3"><span class="actno" style="background:var(--red);color:#fff">REFUSED</span> '+b('refusal.last','refb')+'<br>To allow it: '+b('refusal.allow')+'</td></tr>':'')+'</tbody>'+
   '<tr class="sec"><th>Roster</th><th>Salary</th><th>Act</th></tr>'+
   '<tr><td>Jayson Tatum</td><td>'+b('roster.tatum')+'</td><td></td></tr>'+
-  '<tr class="'+chg(g.act)+'"><td>Derrick White</td><td>'+b('roster.white')+'</td><td>'+(g.status==='signed'?b('file.gsw.act','actc'):'')+'</td></tr>'+
-  '<tr class="'+chg(g.act)+'"><td>Jimmy Butler</td><td>'+b('roster.butler')+'</td><td>'+(g.status==='signed'?b('file.gsw.act','actc'):'')+'</td></tr>'+
+  '<tr><td>Derrick White</td><td>'+b('roster.white')+'</td><td>'+b('trade.act','actc')+'</td></tr>'+
+  '<tr><td>Jimmy Butler</td><td>'+b('roster.butler')+'</td><td>'+b('trade.act','actc')+'</td></tr>'+
+  (sm['roster.cup']?'<tr class="chg"><td>Two-way call-up</td><td>'+b('roster.cup')+'</td><td>'+b('file.cup.act','actc')+'</td></tr>':'')+
   (sm['roster.den']?'<tr class="chg"><td>Denver’s contract</td><td>'+b('roster.den')+'</td><td>'+b('file.den.act','actc')+'</td></tr>':'')+
   '<tr><td>All others</td><td>'+b('roster.others')+' '+b('roster.names')+'</td><td></td></tr></tbody></table>'+
   '<div class="money"><div><span>Payroll</span>'+b('payroll.total')+'</div><div><span>Tax line</span>'+b('rule.taxLine')+'</div><div><span>Against the line</span>'+b('payroll.vsLine')+'</div><div><span>Hard limit</span>'+b('rule.hardLimit')+'</div><div><span>Projected tax</span>'+b('payroll.tax')+'</div><div><span>To the hard limit</span>'+b('payroll.toHard')+'</div><div style="grid-column:1/3"><span>Tax rule</span>'+b('rule.taxRule')+'</div></div></div>';
@@ -601,52 +622,53 @@ function vTableHarrow(SRC){return {html:'',reg:[]}}
 /* ---------------------------------------------------------------- TIMELINE */
 function vTimeline(SRC,S){
   const sm=smap(SRC),reg=[],H=SRC.hist;
-  const X=w=>70+w*60,Y=v=>320-(v/1e6-180)*(290/75);
+  /* weeks 0 to 13: "now" is the World's current week (from the fixture clock); everything after it is sealed */
+  const X=w=>70+w*40,Y=v=>320-(v/1e6-180)*(290/75);
   const pos=(x,y)=>'left:'+(x/6.4).toFixed(2)+'%;top:'+(y/4.2).toFixed(2)+'%';
   const B=(p,x,y,cls,inner)=>mkBtn(reg,sm,'payroll line','timeline',p,'tlm '+cls,inner,pos(x,y));
-  const yNow=Y(SRC.payroll),yTax=Y(LINE),yHard=Y(HARD),over=SRC.payroll>LINE;
-  let d='M'+X(0)+' '+Y(H[0].p)+' H'+X(1)+' V'+Y(H[1].p)+' H'+X(6);SRC.ticks.forEach(t=>{d+=' V'+Y(t.p)});
+  const yNow=Y(SRC.payroll),yTax=Y(LINE),yHard=Y(HARD),over=SRC.payroll>LINE,xN=X(WEEK);
+  let d='M'+X(0)+' '+Y(H[0].p)+' H'+X(1)+' V'+Y(H[1].p)+' H'+X(6)+' V'+Y(H[2].p)+' H'+xN;SRC.ticks.forEach(t=>{d+=' V'+Y(t.p)});
   let svg='<svg class="tlsvg" viewBox="0 0 640 420" role="img" aria-label="Payroll by week against the World tax line and hard limit. The same facts are in the marks and in Direct.">'+
    '<defs><clipPath id="above"><rect x="0" y="0" width="640" height="'+yTax.toFixed(1)+'"/></clipPath></defs>'+
-   '<rect x="'+(X(6)+3)+'" y="30" width="'+(X(9)-X(6)-3)+'" height="290" fill="none" stroke="#15140F" stroke-width="1.5" stroke-dasharray="6 4"/>'+
+   '<rect x="'+(xN+3)+'" y="30" width="'+(610-xN-3)+'" height="290" fill="none" stroke="#15140F" stroke-width="1.5" stroke-dasharray="6 4"/>'+
    '<path d="'+d+' V320 H'+X(0)+' Z" fill="#D9D3BF"/>'+
    '<line x1="70" x2="610" y1="'+yTax.toFixed(1)+'" y2="'+yTax.toFixed(1)+'" stroke="#C7A248" stroke-width="4"/>'+
    '<line x1="70" x2="610" y1="'+yHard.toFixed(1)+'" y2="'+yHard.toFixed(1)+'" stroke="#B31E14" stroke-width="2"/>'+
    '<path d="'+d+'" fill="none" stroke="#15140F" stroke-width="2.6"/>'+
    '<path d="'+d+'" fill="none" stroke="#B31E14" stroke-width="4.2" clip-path="url(#above)"/>'+
    '<line x1="70" x2="610" y1="320" y2="320" stroke="#15140F" stroke-width="2"/>';
-  for(let w=0;w<=9;w++)svg+='<line x1="'+X(w)+'" x2="'+X(w)+'" y1="320" y2="325" stroke="#15140F" stroke-width="1.5"/><text x="'+X(w)+'" y="338" font-family="IBM Plex Mono,DejaVu Sans Mono,monospace" font-size="11" text-anchor="middle" fill="#48453B">'+w+'</text>';
-  svg+='<line x1="'+(X(6)+10)+'" x2="'+(X(6)+10)+'" y1="'+yTax.toFixed(1)+'" y2="'+yNow.toFixed(1)+'" stroke="'+(over?'#B31E14':'#15140F')+'" stroke-width="3" '+(over?'':'stroke-dasharray="4 3"')+'/>';
-  [[0,Y(H[0].p)],[1,Y(H[1].p)],[6,yNow]].forEach(pt=>{svg+='<rect x="'+(X(pt[0])-4)+'" y="'+(pt[1]-4)+'" width="8" height="8" fill="#15140F"/><line x1="'+X(pt[0])+'" x2="'+X(pt[0])+'" y1="'+(pt[1]+4)+'" y2="'+(pt[0]===1?372:346)+'" stroke="#15140F" stroke-width="1" stroke-dasharray="1 3"/>'});
-  if(SRC.refusal){const ya=Y(SRC.refusal.after);svg+='<line x1="'+(X(6)+26)+'" x2="'+(X(6)+26)+'" y1="'+yNow.toFixed(1)+'" y2="'+ya.toFixed(1)+'" stroke="#B31E14" stroke-width="3" stroke-dasharray="5 4"/><path d="M'+(X(6)+19)+' '+(ya-4)+' l14 0 M'+(X(6)+19)+' '+(ya-9)+' l14 10" stroke="#B31E14" stroke-width="2.5"/>'}
+  for(let w=0;w<=13;w++)svg+='<line x1="'+X(w)+'" x2="'+X(w)+'" y1="320" y2="325" stroke="#15140F" stroke-width="1.5"/><text x="'+X(w)+'" y="338" font-family="IBM Plex Mono,DejaVu Sans Mono,monospace" font-size="11" text-anchor="middle" fill="#48453B">'+w+'</text>';
+  svg+='<line x1="'+(xN+10)+'" x2="'+(xN+10)+'" y1="'+yTax.toFixed(1)+'" y2="'+yNow.toFixed(1)+'" stroke="'+(over?'#B31E14':'#15140F')+'" stroke-width="3" '+(over?'':'stroke-dasharray="4 3"')+'/>';
+  [[0,Y(H[0].p)],[1,Y(H[1].p)],[6,Y(H[2].p)]].forEach(pt=>{svg+='<rect x="'+(X(pt[0])-4)+'" y="'+(pt[1]-4)+'" width="8" height="8" fill="#15140F"/><line x1="'+X(pt[0])+'" x2="'+X(pt[0])+'" y1="'+(pt[1]+4)+'" y2="'+(pt[0]===1?372:346)+'" stroke="#15140F" stroke-width="1" stroke-dasharray="1 3"/>'});
+  svg+='<rect x="'+(xN-4)+'" y="'+(yNow-4)+'" width="8" height="8" fill="#15140F"/>';
+  if(SRC.refusal){const ya=Y(SRC.refusal.after);svg+='<line x1="'+(xN+26)+'" x2="'+(xN+26)+'" y1="'+yNow.toFixed(1)+'" y2="'+ya.toFixed(1)+'" stroke="#B31E14" stroke-width="3" stroke-dasharray="5 4"/><path d="M'+(xN+19)+' '+(ya-4)+' l14 0 M'+(xN+19)+' '+(ya-9)+' l14 10" stroke="#B31E14" stroke-width="2.5"/>'}
   svg+='</svg>';
   let m='';
-  m+=B('clock.week',X(6),13,'ac','now · '+esc(sm['clock.week'].text));
+  m+=B('clock.week',xN,13,'ac','now · '+esc(sm['clock.week'].text));
   m+=B('rule.hardLimit',76,yHard-14,'','Hard limit '+esc(sm['rule.hardLimit'].text));
   const sz=ST._sz.timeline,ww0=sz?Math.min(sz.w,sz.h*640/420):700,dense=ww0<540||!!SRC.refusal;
   if(!dense)m+=B('payroll.toHard',236,yHard-14,'','to the limit · '+esc(sm['payroll.toHard'].text));
   m+=B('rule.taxLine',76,yTax-14,'','Tax line '+esc(sm['rule.taxLine'].text));
+  m+=B('trade.act',X(6)-10,(Y(H[1].p)+Y(H[2].p))/2-16,'ar','Golden State trade · '+esc(sm['trade.act'].text));
   let gy=62;
   if(SRC.refusal){m+='<div class="tlgroup" style="'+pos(96,gy)+'">'+B('refusal.last',0,0,'refuse wrap','REFUSED · '+esc(sm['refusal.last'].text)).replace(/style="[^"]*"/,'')+B('refusal.allow',0,0,'wrap','To allow it: '+esc(sm['refusal.allow'].text)).replace(/style="[^"]*"/,'')+'</div>';gy=172}
   m+='<div class="tlgroup" style="'+pos(96,gy)+'">'+
-     B('file.gsw.status',0,0,'','Golden State · '+esc(sm['file.gsw.status'].text)).replace(/style="[^"]*"/,'')+
-     (SRC.refusal?'':B('file.gsw.send',0,0,'','send '+esc(sm['file.gsw.send'].text)).replace(/style="[^"]*"/,'')+
-     B('file.gsw.get',0,0,'','get '+esc(sm['file.gsw.get'].text)).replace(/style="[^"]*"/,''))+
+     B('file.cup.status',0,0,'','Call-up · '+esc(sm['file.cup.status'].text)).replace(/style="[^"]*"/,'')+
+     (SRC.refusal?'':B('file.cup.get',0,0,'','get '+esc(sm['file.cup.get'].text)).replace(/style="[^"]*"/,''))+
      (dense?'':B('file.den.status',0,0,'','Denver (illustrative) · '+esc(sm['file.den.status'].text)).replace(/style="[^"]*"/,'')+
      B('rule.taxRule',0,0,'','World rule: '+esc(sm['rule.taxRule'].text)).replace(/style="[^"]*"/,''))+'</div>';
-  m+=B('future.sealed',(X(6)+X(9))/2+2,80,'ac wrap sealed','Weeks 7 to 9 · '+esc(sm['future.sealed'].text));
-  m+=B('payroll.tax',X(6)+16,116,'','Projected tax '+esc(sm['payroll.tax'].text));
-  m+=B('payroll.total',X(6)+16,over?yNow-16:yNow+24,'','Payroll '+esc(sm['payroll.total'].text));
-  m+=B('payroll.vsLine',X(6)+34,(yTax+yNow)/2,'',esc(sm['payroll.vsLine'].text)+(dense?'':' the line'));
+  m+=B('future.sealed',(xN+610)/2+2,60,'ac wrap sealed','Week 10 on · '+esc(sm['future.sealed'].text));
+  m+=B('payroll.tax',xN+16,98,'','Projected tax '+esc(sm['payroll.tax'].text));
+  m+=B('payroll.total',xN+34,over?yNow-16:yNow+24,'','Payroll '+esc(sm['payroll.total'].text));
+  m+=B('payroll.vsLine',xN+34,(yTax+yNow)/2,'',esc(sm['payroll.vsLine'].text)+(dense?'':' the line'));
   m+=B('payroll.week.0',X(0),360,'ac','wk 0 · '+esc(sm['payroll.week.0'].text));
   m+=B('payroll.week.1',X(1),386,'ac','wk 1 · '+esc(sm['payroll.week.1'].text));
-  m+=B('payroll.week.6',X(6)-26,360,'ac','wk 6 · '+esc(sm['payroll.week.6'].text));
+  m+=B('payroll.week.6',X(6),360,'ac','wk 6 · '+esc(sm['payroll.week.6'].text));
   /* the lever ticks: the act number is the lever number */
   const t0=SRC.ticks;
-  if(!t0.length){const gs=SRC.files.gsw.status==='unsigned';if(gs)m+='<button type="button" class="tlm tick ghost ac" style="'+pos(X(6),yNow+(over?0:-26))+'" data-act="sign" data-file="gsw" data-via="timeline" aria-label="Sign the Golden State file as act '+(SRC.n+1)+', from the Timeline">'+(SRC.n+1)+'?</button>'}
-  let prev=Y(H[1].p);
-  t0.forEach(t=>{const yy=Y(t.p);m+='<span class="tlm tick ac" style="'+pos(X(6),(yy+prev)/2===yy?yy-14:(yy+prev)/2)+';pointer-events:none" title="act '+t.n+'">'+t.n+'</span>';prev=yy});
-  /* the second file gets its own ghost lever when still open */
+  if(!t0.length){const gs=SRC.files.cup.status==='unsigned';if(gs)m+='<button type="button" class="tlm tick ghost ac" style="'+pos(xN,yNow)+'" data-act="sign" data-file="cup" data-via="timeline" aria-label="Sign the Call-up file as act '+(SRC.n+1)+', from the Timeline">'+(SRC.n+1)+'?</button>'}
+  let prev=Y(H[2].p);
+  t0.forEach(t=>{const yy=Y(t.p);m+='<span class="tlm tick ac" style="'+pos(xN,(yy+prev)/2===yy?yy-14:(yy+prev)/2)+';pointer-events:none" title="act '+t.n+'">'+t.n+'</span>';prev=yy});
   return {html:'<div class="tlwrap" id="tlwrap">'+svg+m+'</div>',reg:reg,mount:function(el){const w=$('#tlwrap',el);if(!w)return;const pb=w.parentElement,bw=pb.clientWidth,bh=pb.clientHeight,r=640/420;let ww=Math.min(bw,bh*r),hh=ww/r;w.style.width=ww+'px';w.style.height=hh+'px';w.style.fontSize=Math.max(11.5,ww/640*13)+'px';noteSize('timeline',bw,bh)}};
 }
 /* ---------------------------------------------------------------- VOICE (a transcript of what would be spoken) */
@@ -657,20 +679,21 @@ function vVoice(SRC,S){
   const log=logOf(),past=[];
   log.forEach((e,i)=>{const Sk=foldLog(log.slice(0,i+1));past.push(e.kind==='refused'?refusalLine(Sk):receiptText(Sk))});
   let cur1=[];
-  cur1.push('Boston, Year Two. '+B('clock.week')+'. '+B('matters.open')+'.');
-  if(SRC.files.gsw.status==='unsigned')cur1.push('One: the Golden State file is '+B('file.gsw.status')+'. We send '+B('file.gsw.send')+'; we get '+B('file.gsw.get')+'.');
-  else cur1.push('The Golden State file is '+B('file.gsw.status')+', '+B('file.gsw.act')+'.');
+  cur1.push('Boston. '+B('clock.week')+'. '+B('matters.open')+'.');
+  cur1.push('The Golden State trade is filed: '+B('trade.status')+', '+B('trade.act')+'.');
+  if(SRC.files.cup.status==='unsigned')cur1.push('One: the call-up file is '+B('file.cup.status')+'. We would get '+B('file.cup.get')+'.');
+  else cur1.push('The call-up file is '+B('file.cup.status')+', '+B('file.cup.act')+'.');
   cur1.push('Payroll is '+B('payroll.total')+', '+B('payroll.vsLine')+' the World’s tax line. Projected tax '+B('payroll.tax')+', under an authored World rule.');
   if(SRC.files.den.status==='unsigned')cur1.push('Two: Denver’s file is '+B('file.den.status')+'. Say “open Direct” to handle it; the Denver file is not spoken here.');
   if(SRC.refusal)cur1.push(B('refusal.last')+' What would allow it: '+B('refusal.allow')+'.');
   let pend='';
   if(A.pending&&SRC.files[A.pending]&&SRC.files[A.pending].status==='unsigned'){
-    pend='<p class="vl now">Read-back. Send Derrick White, get Jimmy Butler; '+B('file.'+A.pending+'.after')+'. Say “confirm”.</p>';
+    pend='<p class="vl now">Read-back. '+(A.pending==='cup'?'Get the two-way player at the league minimum':'Take the Denver contract')+'; '+B('file.'+A.pending+'.after')+'. Say “confirm”.</p>';
   }
   const btns=[];
-  if(SRC.files.gsw.status==='unsigned'){
-    if(A.pending)btns.push('<button type="button" class="btn sign" data-act="sign" data-file="gsw" data-via="voice">Say “confirm”</button><button type="button" class="btn" data-act="voice" data-v="cancel">Say “cancel”</button>');
-    else btns.push('<button type="button" class="btn sign" data-act="voice" data-v="ask" data-file="gsw">Say “sign the Golden State file”</button><button type="button" class="btn" data-act="decline" data-file="gsw" data-via="voice">Say “decline it”</button>');
+  if(SRC.files.cup.status==='unsigned'){
+    if(A.pending)btns.push('<button type="button" class="btn sign" data-act="sign" data-file="cup" data-via="voice">Say “confirm”</button><button type="button" class="btn" data-act="voice" data-v="cancel">Say “cancel”</button>');
+    else btns.push('<button type="button" class="btn sign" data-act="voice" data-v="ask" data-file="cup">Say “sign the call-up file”</button><button type="button" class="btn" data-act="decline" data-file="cup" data-via="voice">Say “decline it”</button>');
   }
   btns.push('<button type="button" class="btn" data-act="pair" data-v="direct">Say “open Direct”</button>');
   const html='<div class="voice"><p class="dnote">Simulated speech: buttons stand in for a voice, and this transcript stands in for the speaker. On a device, speech recognition would run on-device.</p>'+
@@ -685,15 +708,16 @@ function roomModel(SRC){
   const sm=smap(SRC),reg=[];
   const mk=(p,where)=>{const f=sm[p];if(!f)return null;reg.push({path:p,token:f.token,text:f.text,where:where});return f};
   const M={};
-  const g=SRC.files.gsw,d=SRC.files.den,signedG=g.status==='signed',denSigned=d.status==='signed';
-  const others=SRC.payroll-TAT-(signedG?0:FILES.gsw.send[0].s)-(signedG?FILES.gsw.get[0].s:0)-(denSigned?DEN_SALARY:0);
+  const g=SRC.files.cup,d=SRC.files.den,signedG=g.status==='signed',denSigned=d.status==='signed';
+  const others=SRC.payroll-TAT-TF.get[0].salary.v-(signedG?CUP_SALARY:0)-(denSigned?DEN_SALARY:0);
   M.board={clock:mk('clock.week','board'),total:mk('payroll.total','board'),vs:mk('payroll.vsLine','board'),tax:mk('payroll.tax','board'),taxLine:mk('rule.taxLine','board'),hard:mk('rule.hardLimit','board'),payroll:SRC.payroll,over:SRC.payroll>LINE,segs:[]};
   M.board.segs.push({name:'Tatum',f:mk('roster.tatum','board'),amt:TAT});
   M.board.segs.push({name:'All others',f:mk('roster.others','board'),amt:others});
-  if(!signedG)M.board.segs.push({name:'White',f:mk('roster.white','board'),amt:FILES.gsw.send[0].s});
-  else M.board.segs.push({name:'Butler',f:mk('roster.butler','board'),amt:FILES.gsw.get[0].s,isNew:true});
+  M.board.segs.push({name:'Butler',f:mk('roster.butler','board'),amt:TF.get[0].salary.v});
+  if(signedG)M.board.segs.push({name:'Call-up',f:mk('roster.cup','board'),amt:CUP_SALARY,isNew:true});
   if(denSigned)M.board.segs.push({name:'Denver',f:mk('roster.den','board'),amt:DEN_SALARY,isNew:true});
-  M.gsw={status:mk('file.gsw.status','trade file'),send:mk('file.gsw.send','trade file'),get:mk('file.gsw.get','trade file'),act:mk('file.gsw.act','trade file'),st:g.status};
+  M.cup={status:mk('file.cup.status','call-up file'),get:mk('file.cup.get','call-up file'),act:mk('file.cup.act','call-up file'),st:g.status};
+  M.trade={status:mk('trade.status','trade folder'),act:mk('trade.act','trade folder')};
   M.den={status:mk('file.den.status','Denver file'),get:mk('file.den.get','Denver file'),act:mk('file.den.act','Denver file'),st:d.status};
   M.slip=SRC.refusal?{last:mk('refusal.last','refusal slip'),allow:mk('refusal.allow','refusal slip')}:null;
   M.doors=W.departments.map(dp=>({id:dp.id,name:dp.name.toUpperCase(),funded:dp.funded,fd:mk('dept.'+dp.id+'.funded',dp.name+' door'),op:dp.funded?null:mk('dept.'+dp.id+'.opens',dp.name+' door')}));
@@ -733,7 +757,8 @@ function paintBoard(M,hl,c){
   let x=40;const y0=272,bh=110;
   B.segs.forEach(s=>{const w=s.amt/1e6*(944/260);if(s.f){const col=tokPaint(g,s.f.token,x,y0,w,bh);
       if(s.isNew&&B.over){/* the part of this bar past the tax line */const lx=boardX(LINE);if(x+w>lx){g.save();g.fillStyle=RED;g.globalAlpha=.9;g.fillRect(lx,y0,x+w-lx,10);g.fillRect(lx,y0+bh-10,x+w-lx,10);g.restore()}}
-      fitTx(g,s.name,x+w/2,y0+44,30,700,col,'center',SANS,w-14);fitTx(g,s.f.text.split(',')[0],x+w/2,y0+84,28,600,col,'center',MONO,w-14);
+      if(w>=70){fitTx(g,s.name,x+w/2,y0+44,30,700,col,'center',SANS,w-14);fitTx(g,s.f.text.split(',')[0],x+w/2,y0+84,28,600,col,'center',MONO,w-14)}
+      else{tx(g,s.name,x+w/2,y0-40,24,700,INK,'center',SANS);g.fillStyle=INK;g.fillRect(x+w/2-1,y0-34,2,30)}
       if(hl(s.f.path))hlRing(g,x,y0,w,bh)}
     x+=w});
   const lx=boardX(LINE),hx=boardX(HARD);
@@ -741,6 +766,12 @@ function paintBoard(M,hl,c){
   if(B.taxLine){const w=tx(g,'TAX LINE '+B.taxLine.text,lx+4,y0+bh+82,30,700,INK,'right',MONO);if(hl(B.taxLine.path))hlRing(g,lx+4-w,y0+bh+56,w,34)}
   if(B.hard){const w=tx(g,'HARD LIMIT '+B.hard.text,1010,y0+bh+128,30,700,RED,'right',MONO);if(hl(B.hard.path))hlRing(g,1010-w,y0+bh+102,w,34)}
   g.strokeStyle=INK;g.lineWidth=6;g.strokeRect(3,3,1018,570);
+  return c;
+}
+function paintFolder(T,hl,c){
+  c=c||cv(256,190);const g=c.getContext('2d');g.fillStyle='#22201A';g.fillRect(0,0,256,190);g.strokeStyle=BRASS;g.lineWidth=6;g.strokeRect(10,10,236,170);
+  if(T.status){const col=tokPaint(g,T.status.token,26,28,204,62);fitTx(g,'GOLDEN STATE',128,54,26,700,col,'center',MONO,190);fitTx(g,T.status.text.toUpperCase(),128,78,17,600,col,'center',MONO,190);if(hl(T.status.path))hlRing(g,26,28,204,62)}
+  if(T.act){const col=tokPaint(g,T.act.token,66,108,124,52);fitTx(g,T.act.text.toUpperCase(),128,144,30,700,col,'center',MONO,110);if(hl(T.act.path))hlRing(g,66,108,124,52)}
   return c;
 }
 function paintPaper(P,title,hl,tokenBox,c){
@@ -774,7 +805,7 @@ function paintPeople(c){c=c||cv(384,100);const g=c.getContext('2d');g.fillStyle=
 let R3=null,R3loading=false,R3fail=false;
 const STATIONS={overview:{p:[0.1,2.5,5.9],t:[0.1,2.05,-1.0]},board:{p:[0.1,2.7,1.2],t:[0.1,3.45,-3.5]},desk:{p:[0.1,1.9,3.5],t:[0.05,0.85,0.95]},doors:{p:[0,1.5,0.2],t:[0,1.1,-2.6]}};
 function overviewFor(asp){const th=Math.tan(17*Math.PI/180),dist=Math.max(9.4,4.6/(th*asp));return {p:[0.1,2.5,-3.5+dist],t:[0.1,2.05,-1.0]}}
-const ROOMOBJ=[['board','Board','payroll.total'],['gsw','Trade file','file.gsw.status'],['den','Denver file','file.den.status'],['analytics','Analytics','dept.analytics.funded'],['scouting','Scouting','dept.scouting.funded'],['ticketing','Ticketing','dept.ticketing.funded'],['partnerships','Partners','dept.partnerships.funded']];
+const ROOMOBJ=[['board','Board','payroll.total'],['trade','Trade folder','trade.status'],['cup','Call-up file','file.cup.status'],['den','Denver file','file.den.status'],['analytics','Analytics','dept.analytics.funded'],['scouting','Scouting','dept.scouting.funded'],['ticketing','Ticketing','dept.ticketing.funded'],['partnerships','Partners','dept.partnerships.funded']];
 function ensure3D(){
   if(R3||R3loading||R3fail)return;R3loading=true;
   Promise.all([import('three'),import('three/addons/OrbitControls.js')]).then(m=>{try{build3D(m[0],m[1].OrbitControls)}catch(e){R3fail=true;ST.ui.tierNote='The 3D Room could not start on this device ('+String(e.message||e).slice(0,60)+'). Showing the 2.5D Room: same acts, same record, no camera.'}R3loading=false;render()}).catch(e=>{R3fail=true;R3loading=false;ST.ui.tierNote='The 3D Room could not load here. Showing the 2.5D Room: same acts, same record, no camera.';render()});
@@ -788,7 +819,7 @@ function build3D(T,OC){
   const host=document.createElement('div');host.style.cssText='position:absolute;inset:0';
   const renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(1);renderer.setClearColor(0xD8CFBA);
   host.appendChild(renderer.domElement);renderer.domElement.style.cssText='width:100%;height:100%;display:block;touch-action:none';
-  renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','The owner’s Room: a desk with the trade file, the payroll board, four glass rooms. Direct has the same facts and acts in words.');
+  renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','The owner’s Room: a desk with the filed trade folder, the call-up file, the Denver file, the payroll board, four glass rooms. Direct has the same facts and acts in words.');
   const scene=new T.Scene(),cam=new T.PerspectiveCamera(40,1.4,.1,60);
   cam.fov=34;cam.position.set(0.1,2.5,5.9);
   const ctl=new OC(cam,renderer.domElement);ctl.target.set(0.1,2.05,-1.0);ctl.enablePan=false;ctl.enableDamping=false;ctl.minAzimuthAngle=-.6;ctl.maxAzimuthAngle=.6;ctl.minPolarAngle=0.9;ctl.maxPolarAngle=1.9;ctl.minDistance=1.2;ctl.maxDistance=14;ctl.update();
@@ -798,7 +829,7 @@ function build3D(T,OC){
   const plane=(w,h,mat,x,y,z,ry,rx)=>{const m=add(new T.PlaneGeometry(w,h),mat,x,y,z,ry);if(rx)m.rotation.x=rx;return m};
   const tex={},mats={};
   const mkTex=(c)=>{const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.anisotropy=4;return t};
-  const canv={board:cv(1024,576),gsw:cv(512,384),den:cv(512,384),slip:cv(512,288),rule:paintRulePlate(),ppl:paintPeople()};
+  const canv={board:cv(1024,576),folder:cv(256,190),cup:cv(512,384),den:cv(512,384),slip:cv(512,288),rule:paintRulePlate(),ppl:paintPeople()};
   W.departments.forEach(dp=>canv['s_'+dp.id]=cv(512,224));
   Object.keys(canv).forEach(k=>{tex[k]=mkTex(canv[k]);mats[k]=new T.MeshBasicMaterial({map:tex[k]})});
   const hit=[];const reg=(m,id)=>{m.userData.rid=id;hit.push(m)};
@@ -809,13 +840,13 @@ function build3D(T,OC){
   /* desk */
   scene.add(new T.Mesh(mergeBoxes(T,[{w:3.4,h:.09,d:1.3,x:.2,y:.8,z:1.0,c:0xA9814F},{w:3.2,h:.75,d:1.1,x:.2,y:.38,z:1.0,c:0x4A3520}]),new T.MeshLambertMaterial({vertexColors:true})));
   const folder=add(new T.BoxGeometry(.74,.05,.56),L(0x22201A),-1.3,.872,1.0,.18);
-  const flab=cv(256,190),fg=flab.getContext('2d');fg.fillStyle='#22201A';fg.fillRect(0,0,256,190);fg.strokeStyle=BRASS;fg.lineWidth=6;fg.strokeRect(12,12,232,166);tx(fg,'TRADE',128,88,54,700,BRASS,'center',MONO);tx(fg,'FILE',128,144,54,700,BRASS,'center',MONO);
-  const flt=mkTex(flab);const fl=plane(.56,.41,new T.MeshBasicMaterial({map:flt}),-1.3,.9,1.0);fl.rotation.x=-Math.PI/2;fl.rotation.z=-.18;
+  /* the filed trade folder: painted from the same facts as every other view (trade.status, trade.act) */
+  const fl=plane(.56,.41,mats.folder,-1.3,.9,1.0);fl.rotation.x=-Math.PI/2;fl.rotation.z=-.18;reg(fl,'trade');
   /* papers lean toward the viewer (34 degrees) so they can be read from the rail */
   const lean=(w,h,mat,x,zBottom)=>{const m=plane(w,h,mat,x,.845+h/2*.565,zBottom-h/2*.825,0);m.rotation.order='XYZ';m.rotation.x=-(Math.PI/2-.6);return m};
-  const p1=lean(.92,.69,mats.gsw,-.35,1.4);p1.rotation.z=.03;reg(p1,'gsw');
+  const p1=lean(.92,.69,mats.cup,-.35,1.4);p1.rotation.z=.03;reg(p1,'cup');
   const p2=lean(.7,.525,mats.den,1.35,1.5);p2.rotation.z=-.05;reg(p2,'den');
-  const sl=lean(.86,.48,mats.slip,.75,1.58);sl.visible=false;reg(sl,'gsw');
+  const sl=lean(.86,.48,mats.slip,.75,1.58);sl.visible=false;reg(sl,'cup');
   /* the payroll board: large, on the back wall above the rooms */
   const bd=plane(4.0,2.25,mats.board,0,3.55,-3.53,0);reg(bd,'board');
   scene.add(new T.Mesh(mergeBoxes(T,[{w:4.16,h:2.41,d:.05,x:0,y:3.55,z:-3.56,c:0x15140F}]),new T.MeshLambertMaterial({vertexColors:true})));
@@ -842,7 +873,7 @@ function build3D(T,OC){
     if(lit)plane(.9,.234,mats.ppl,cx,.55,cz+d/2+.03,0);
     rooms.push(sg);
   });
-  const objs={board:bd,gsw:p1,den:p2,analytics:rooms[0],scouting:rooms[1],ticketing:rooms[2],partnerships:rooms[3]};
+  const objs={board:bd,trade:fl,cup:p1,den:p2,analytics:rooms[0],scouting:rooms[1],ticketing:rooms[2],partnerships:rooms[3]};
   R3={T,host,renderer,scene,cam,ctl,canv,tex,objs,slip:sl,rp,lastW:0,lastH:0,ok:true,station:'overview',lastAsp:-1};
   /* click on an object follows its fact */
   const rc=new T.Raycaster(),v2=new T.Vector2();let down=null;
@@ -856,7 +887,8 @@ function build3D(T,OC){
 function paint3D(M){
   const A=ST.ui,hl=p=>A.follow&&A.follow.path===p;const R=R3;
   paintBoard(M,hl,R.canv.board);R.tex.board.needsUpdate=true;
-  paintPaper(M.gsw,'GOLDEN STATE',hl,null,R.canv.gsw);R.tex.gsw.needsUpdate=true;
+  paintFolder(M.trade,hl,R.canv.folder);R.tex.folder.needsUpdate=true;
+  paintPaper(M.cup,'CALL-UP · ILLUSTRATIVE',hl,null,R.canv.cup);R.tex.cup.needsUpdate=true;
   paintPaper(M.den,'DENVER · ILLUSTRATIVE',hl,null,R.canv.den);R.tex.den.needsUpdate=true;
   if(M.slip){paintSlip(M.slip,hl,R.canv.slip);R.tex.slip.needsUpdate=true}R.slip.visible=!!M.slip;
   M.doors.forEach(D=>{paintSign(D,hl,R.canv['s_'+D.id]);R.tex['s_'+D.id].needsUpdate=true});
@@ -878,14 +910,15 @@ function draw25(c,M,A){
   /* desk: an oblique top with papers lying on it */
   const dx=W2*.14,dy=H2*.72,dw=W2*.72,dd=H2*.22;g.fillStyle='#A9814F';g.beginPath();g.moveTo(dx+dd*.4,dy);g.lineTo(dx+dw+dd*.4,dy);g.lineTo(dx+dw,dy+dd);g.lineTo(dx,dy+dd);g.closePath();g.fill();g.fillStyle='#4A3520';g.fillRect(dx,dy+dd,dw,H2*.06);g.strokeStyle=INK;g.lineWidth=2;g.stroke();
   const flat=(cnv,x,y,w,h,sk)=>{g.save();g.transform(1,0,sk,.5,x,y);g.drawImage(cnv,0,0,w,h);g.restore()};
-  flat(paintPaper(M.gsw,'GOLDEN STATE',hl),dx+dw*.16,dy+dd*.08,dw*.24,dw*.24*.75,.7);
+  flat(paintFolder(M.trade,hl),dx+dw*.02,dy+dd*.12,dw*.13,dw*.13*190/256,.7);
+  flat(paintPaper(M.cup,'CALL-UP · ILLUSTRATIVE',hl),dx+dw*.19,dy+dd*.08,dw*.24,dw*.24*.75,.7);
   flat(paintPaper(M.den,'DENVER · ILLUSTRATIVE',hl),dx+dw*.5,dy+dd*.1,dw*.2,dw*.2*.75,.7);
   if(M.slip)flat(paintSlip(M.slip,hl),dx+dw*.34,dy+dd*.4,dw*.24,dw*.24*288/512,.7);
 }
 /* ---------------------------------------------------------------- the Room pane */
 function roomBar(SRC){
   const sm=smap(SRC),A=ST.ui;
-  const acts=SRC.files.gsw.status==='unsigned'?'<button type="button" class="btn sign sm" data-act="sign" data-file="gsw" data-via="room" aria-label="Sign the Golden State file as act '+(SRC.n+1)+', from the Room">Sign the Golden State file · act '+(SRC.n+1)+'</button><button type="button" class="btn sm" data-act="decline" data-file="gsw" data-via="room" aria-label="Decline the Golden State file, from the Room">Decline it</button>':'<span class="dnote">Golden State file: '+STATUS[SRC.files.gsw.status]+'.</span>';
+  const acts=SRC.files.cup.status==='unsigned'?'<button type="button" class="btn sign sm" data-act="sign" data-file="cup" data-via="room" aria-label="Sign the Call-up file as act '+(SRC.n+1)+', from the Room">Sign the Call-up file · act '+(SRC.n+1)+'</button><button type="button" class="btn sm" data-act="decline" data-file="cup" data-via="room" aria-label="Decline the Call-up file, from the Room">Decline it</button>':'<span class="dnote">Call-up file: '+STATUS[SRC.files.cup.status]+'.</span>';
   const den=SRC.files.den.status==='unsigned'?'<button type="button" class="btn sm" data-act="sign" data-file="den" data-via="room" aria-label="Try the Denver file as act '+(SRC.n+1)+', from the Room">Try the Denver file · act '+(SRC.n+1)+'</button>':'<span class="dnote">Denver file: '+STATUS[SRC.files.den.status]+'.</span>';
   const objs='<button type="button" class="pill" data-act="room" data-v="overview" aria-pressed="'+((ST.ui.room.station||'overview')==='overview')+'">Overview</button>'+ROOMOBJ.map(o=>'<button type="button" class="pill'+(fol(o[2])?' followed':'')+'" data-act="follow" data-path="'+o[2]+'" data-view="room" aria-label="Follow the '+o[1]+(o[0]==='analytics'||o[0]==='scouting'||o[0]==='ticketing'||o[0]==='partnerships'?' door':'')+' fact across views">'+o[1]+'</button>').join('');
   const szr=ST._sz.room,narrow=!!(szr&&szr.w<470);
@@ -901,7 +934,7 @@ function vRoom(SRC,S){
     noteSize('room',el.clientWidth,el.clientHeight);
     const slot=$('#roomslot',el);if(!slot)return;const w=slot.clientWidth,h=slot.clientHeight;if(w<10||h<10)return;
     if(use3d){slot.appendChild(R3.host);R3.host.style.position='absolute';const asp=w/h,stn=(A.room.station||'overview')==='overview'?overviewFor(asp):(STATIONS[A.room.station]||STATIONS.overview);if(R3.station!==A.room.station||(A.room.station==='overview'&&Math.abs(R3.lastAsp-asp)>.02)){R3.lastAsp=asp;R3.cam.position.set(stn.p[0],stn.p[1],stn.p[2]);R3.ctl.target.set(stn.t[0],stn.t[1],stn.t[2]);R3.ctl.update();R3.station=A.room.station}if(R3.lastW!==w||R3.lastH!==h){R3.renderer.setSize(w,h,false);R3.cam.aspect=w/h;R3.cam.updateProjectionMatrix();R3.lastW=w;R3.lastH=h}paint3D(M);R3.renderer.render(R3.scene,R3.cam)}
-    else{const c=cv(w,h);c.style.cssText='width:100%;height:100%;display:block';c.setAttribute('role','img');c.setAttribute('aria-label','The owner’s Room in 2.5D: a desk with the trade file, the payroll board, four glass rooms. Direct has the same facts and acts in words.');slot.appendChild(c);draw25(c,M,A)}
+    else{const c=cv(w,h);c.style.cssText='width:100%;height:100%;display:block';c.setAttribute('role','img');c.setAttribute('aria-label','The owner’s Room in 2.5D: a desk with the filed trade folder, the call-up file, the Denver file, the payroll board, four glass rooms. Direct has the same facts and acts in words.');slot.appendChild(c);draw25(c,M,A)}
   }};
 }
 
@@ -1031,8 +1064,8 @@ function agreeCheck(S){
   return {head:head,onlys:onlys,cx:cx,bad:contra.length>0,text:[head].concat(onlys,[cx]).join(' ')};
 }
 /* ---------------------------------------------------------------- downshift parity (a dry run of every view in the rung) */
-const VIEW_ACTS={room:['sign:gsw','decline:gsw','sign:den'],timeline:['sign:gsw'],table:['sign:gsw','decline:gsw','sign:den','decline:den'],voice:['sign:gsw','decline:gsw'],direct:['sign:gsw','decline:gsw','sign:den','decline:den']};
-const ALL_ACTS=['sign:gsw','decline:gsw','sign:den','decline:den'];
+const VIEW_ACTS={room:['sign:cup','decline:cup','sign:den'],timeline:['sign:cup'],table:['sign:cup','decline:cup','sign:den','decline:den'],voice:['sign:cup','decline:cup'],direct:['sign:cup','decline:cup','sign:den','decline:den']};
+const ALL_ACTS=['sign:cup','decline:cup','sign:den','decline:den'];
 const RUNG={desktop:{name:'Desktop · Room 3D',shed:'nothing yet'},chromebook:{name:'Chromebook · Room 2.5D',shed:'the camera and depth'},phone:{name:'Phone · Table + Direct',shed:'the Room, the chart, spatial gestalt'},voice:{name:'Voice · Direct spoken',shed:'everything drawn; order and words carry it'}};
 function rungParity(S){
   const A=ST.ui;const ids=A.open.filter(id=>VD[id]&&id!=='ledger').concat(['direct']);
@@ -1052,7 +1085,7 @@ function addrHTML(S){
   const A=ST.ui,vs=A.open.map(v=>VN[v]).join(' + ')+(A.direct==='collapsed'?'':' · Direct '+(A.direct==='lead'?'leads':'open'));
   const d='<span class="dot">·</span>';
   if(S.sys==='harrow')return '<span class="seg">Harrow Medical</span>'+d+'<span class="seg">day 0 · fire at 06:10</span>'+d+'<span class="seg">record</span>'+d+'<span class="seg">procurement seat</span>'+d+'<button type="button" class="seg" data-act="why" data-v="'+planFor(A,ST.sys).ask+'" aria-label="View: '+vs+'. Open the Plan">view: '+vs+'</button>';
-  return '<span class="seg">Boston · Year Two</span>'+d+'<span class="seg">Week 6</span>'+d+(ST.active==='branch'?'<span class="seg fork">Your branch</span>':'<span class="seg">record</span>')+d+'<span class="seg">GM seat</span>'+d+'<button type="button" class="seg" data-act="why" data-v="'+planFor(A,ST.sys).ask+'" aria-label="View: '+vs+'. Open the Plan">view: '+vs+'</button>';
+  return '<span class="seg">Boston · Year Two</span>'+d+'<span class="seg">Week '+WEEK+'</span>'+d+(ST.active==='branch'?'<span class="seg fork">Your branch</span>':'<span class="seg">record</span>')+d+'<span class="seg">GM seat</span>'+d+'<button type="button" class="seg" data-act="why" data-v="'+planFor(A,ST.sys).ask+'" aria-label="View: '+vs+'. Open the Plan">view: '+vs+'</button>';
 }
 function planHTML(S){
   const A=ST.ui,P=planFor(A,ST.sys);
@@ -1086,19 +1119,21 @@ function whyChain(S,path){
     return L;
   }
   if(/^(payroll\.|roster\.)/.test(path)&&!/^payroll\.week\.(0|1)$/.test(path)){
-    const b0=base();let p=b0.payroll;
-    L.push({n:'41',t:'Checkpoint: payroll '+M(b0.payroll)+' = start of Year Two '+M(S.hist[0].p)+' (Authored, illustrative) + the Week 1 minimum signing $'+((S.hist[1].p-S.hist[0].p)/1e6).toFixed(3)+'M (Recorded in the fixture)'});
+    let p=S.hist[0].p;
+    L.push({n:'start',t:'Start of Year Two '+M(p)+' (Authored, illustrative)'});
+    W.record.filter(r=>r.effects&&r.effects.payroll).forEach(r=>{L.push({n:String(r.n),t:r.what+' ('+(r.k==='RECORDED'?'Recorded':'Authored, illustrative')+'): payroll '+M(p)+' → '+M(p+r.effects.payroll)});p+=r.effects.payroll});
     S.ticks.forEach(t=>{const d=t.kind==='sign'?delta(FILES[t.file]):0;L.push({n:String(t.n),t:FILES[t.file].name+' '+(t.kind==='sign'?'signed':'declined')+' in '+(VN[S.files[t.file].via]||S.files[t.file].via)+': payroll '+M(p)+(t.kind==='sign'?' → '+M(p+d):' unchanged')});p+=d});
-    if(!S.ticks.length)L.push({n:'—',t:'No act since the checkpoint: nothing has moved this number yet'});
+    if(!S.ticks.length)L.push({n:'—',t:'No act since act '+HEAD+': nothing has moved this number yet'});
     L.push({n:'rule',t:'World rule (Authored): tax line '+M(LINE)+', '+sm['rule.taxRule'].text+'. Payroll '+M(S.payroll)+' is '+sm['payroll.vsLine'].text+' the line.'});
   }else if(/^file\./.test(path)){const id=path.split('.')[1],f=S.files[id];L.push({n:f.act?String(f.act):'—',t:f.act?FILES[id].name+' '+f.status+' in '+(VN[f.via]||f.via)+'; the record shows it at act '+f.act:FILES[id].name+' is still open: no act has touched it'})}
+  else if(/^trade\./.test(path)){L.push({n:String(TRADE_N),t:REC('w6-trade').what+': written into the World record at act '+TRADE_N+' (Recorded); the fixture numbers it, this page only reads it'})}
   else if(/^dept\./.test(path)){L.push({n:'Y1',t:'Year One: Business funded over Basketball Ops (Recorded); Analytics and Scouting have been dark since'})}
   else L.push({n:'rule',t:'An Authored World rule or calendar; no act in the record made it'});
   return L;
 }
 function noticesHTML(S){
   const A=ST.ui,o=[];
-  if(S.sys==='boston'&&ST.active==='branch')o.push('<div class="notice fork" style="background:var(--greenbg);border-bottom-color:var(--green)"><b style="color:var(--green)">YOUR BRANCH</b><span class="grow">diverged Week 6 · act 41 · '+foldLog([]).h4+'. Assumptions: World rules unchanged (authored); nothing after act 41 carries over from the record; Weeks 7 to 9 stay sealed.</span><button type="button" class="btn sm" data-act="compare" aria-pressed="'+A.compare+'">Compare with the record</button><button type="button" class="btn sm" data-act="return">Return to the record</button></div>');
+  if(S.sys==='boston'&&ST.active==='branch')o.push('<div class="notice fork" style="background:var(--greenbg);border-bottom-color:var(--green)"><b style="color:var(--green)">YOUR BRANCH</b><span class="grow">diverged Week '+WEEK+' · act '+(ST.hist.forkAt?ST.hist.forkAt.n:S.n)+' · '+(ST.hist.forkAt?ST.hist.forkAt.h4:S.h4)+'. Assumptions: World rules unchanged (authored); nothing the record does after act '+(ST.hist.forkAt?ST.hist.forkAt.n:S.n)+' carries over; Week 10 on stays sealed.</span><button type="button" class="btn sm" data-act="compare" aria-pressed="'+A.compare+'">Compare with the record</button><button type="button" class="btn sm" data-act="return">Return to the record</button></div>');
   if(A.follow){
     const f=smap(S)[A.follow.path];
     if(f){const ws=[];[A.open.concat('direct')].forEach(a=>a.forEach(id=>{if(id===A.follow.from)return;const w=id==='direct'?'Direct':whereOf(id,A.follow.path);if(w&&!ws.includes(w))ws.push(w)}));
@@ -1116,23 +1151,29 @@ function noticesHTML(S){
 }
 function toolsHTML(){
   const A=ST.ui,tg=(act,label,on,al)=>'<button type="button" class="tg" data-act="'+act+'" aria-pressed="'+(!!on)+'"'+(al?' aria-label="'+al+'"':'')+'>'+label+'</button>';
-  return tg('how','How do we know?',A.how)+tg('real','What’s real?',A.real)+(ST.sys==='boston'?'<span class="sep"></span>'+tg('inject','Inject a stale binding',!!A.inject)+'<button type="button" class="tg" data-act="restart" aria-label="Start over at act 41">Start over</button>':'');
+  return tg('how','How do we know?',A.how)+tg('real','What’s real?',A.real);
 }
 function rigHTML(){
   const A=ST.ui,pb=(act,v,label,on,al)=>'<button type="button" class="btn" data-act="'+act+'"'+(v?' data-v="'+v+'"':'')+' aria-pressed="'+(!!on)+'"'+(al?' aria-label="'+al+'"':'')+'>'+label+'</button>';
-  return '<div class="g"><span class="gl">ARRIVE AS</span>'+pb('arrive','newcomer','Newcomer',A.who==='newcomer')+pb('arrive','operator','Operator',A.who==='operator')+'</div>'+
+  const dn={desktop:'desktop 3D',chromebook:'Chromebook',phone:'phone',voice:'voice'};
+  const sum='audience '+A.who+' · device '+dn[A.device]+' · '+ST.sys+(A.inject?' · a stale binding is injected':'');
+  const head='<div class="g"><button type="button" class="btn sm" data-act="proof" aria-expanded="'+(!!A.proofOpen)+'">Proof controls</button><span class="dnote">'+esc(sum)+'</span></div>';
+  if(!A.proofOpen)return head;
+  return head+'<div class="g"><span class="gl">ARRIVE AS</span>'+pb('arrive','newcomer','Newcomer',A.who==='newcomer')+pb('arrive','operator','Operator',A.who==='operator')+'</div>'+
    '<div class="g"><span class="gl">DEVICE</span>'+pb('device','desktop','Desktop 3D',A.device==='desktop')+pb('device','chromebook','Chromebook',A.device==='chromebook')+pb('device','phone','Phone',A.device==='phone')+pb('device','voice','Voice',A.device==='voice')+'</div>'+
-   '<div class="g"><span class="gl">SYSTEM</span>'+pb('sys','boston','Boston',ST.sys==='boston','Boston · Year Two')+pb('sys','harrow','Harrow',ST.sys==='harrow','Harrow Medical')+'</div>';
+   '<div class="g"><span class="gl">SYSTEM</span>'+pb('sys','boston','Boston',ST.sys==='boston','Boston · Year Two')+pb('sys','harrow','Harrow',ST.sys==='harrow','Harrow Medical')+'</div>'+
+   (ST.sys==='boston'?'<div class="g"><span class="gl">PROOF</span>'+pb('inject',null,'Inject a stale binding',!!A.inject)+'<button type="button" class="btn" data-act="restart" aria-label="Start over at act '+HEAD+'">Start over</button></div>':'')+
+   '<p class="dnote" style="flex:1 1 100%;margin:0">Prototype rig. These switches exist to prove the contract (audience, device, system, a stale view). A visitor would never see them.</p>';
 }
-function cmpLabel(s){let x=s.split('{t}');let l=(x[0]||'').trim()||(x[1]||'').trim();l=l.replace(/[,:]$/,'').trim();return l?l[0].toUpperCase()+l.slice(1):s}
+function cmpLabel(s,p){let x=String(s).split('{t}');let l=(x[0]||'').trim()||(x[1]||'').trim();l=l.replace(/[,:]$/,'').trim();return l?l[0].toUpperCase()+l.slice(1):(p||'')}
 function compareHTML(){
   const Sr=foldLog(ST.hist.record),Sb=foldLog(ST.hist.branch||[]);
   const mr=smap(Sr),mb=smap(Sb);
   const paths=[];surf(Sr).concat(surf(Sb)).forEach(f=>{if(!paths.includes(f.path))paths.push(f.path)});
   const diff=paths.filter(p=>!(mr[p]&&mb[p]&&mr[p].text===mb[p].text&&mr[p].token===mb[p].token));
-  const keys=['payroll.total','payroll.vsLine','payroll.tax','file.gsw.status'];
-  const rows=(diff.length?diff:keys).map(p=>{const a=mr[p],b=mb[p];return '<tr><td>'+esc(cmpLabel((a||b).say||p))+'</td><td>'+(a?'<span class="mk" data-t="'+a.token+'">'+esc(a.text)+'</span>':'<span class="mk" data-t="UNKNOWN">not in the record</span>')+'</td><td>'+(b?'<span class="mk" data-t="'+b.token+'">'+esc(b.text)+'</span>':'<span class="mk" data-t="UNKNOWN">not in the branch</span>')+'</td></tr>'}).join('');
-  return '<section class="pane" style="grid-column:1/-1"><div class="ph"><span class="nm">COMPARE</span><span class="org">branch beside the record</span><span class="fr">record act '+Sr.n+' · '+Sr.h4+'  |  branch act '+Sb.n+' · '+Sb.h4+'</span></div><div class="pb"><div class="tbl"><table><caption class="sr">What differs between the record and your branch</caption><thead><tr><th>What differs</th><th style="border-bottom-color:var(--ink)">The record · act '+Sr.n+'</th><th style="border-bottom-color:var(--green);color:var(--green)">Your branch · act '+Sb.n+'</th></tr></thead><tbody>'+rows+'</tbody></table><p class="dnote">'+(diff.length?diff.length+' facts differ. The record was not changed by anything you did in the branch.':'Nothing differs yet: the branch is still identical to the record at act 41. Act in the branch, then compare.')+' Weeks 7 to 9 are sealed in both.</p><div class="dc"><button type="button" class="btn" data-act="return">Return to the record</button><button type="button" class="btn" data-act="compare">Back to the branch</button></div></div></div></section>';
+  const keys=['payroll.total','payroll.vsLine','payroll.tax','file.cup.status'];
+  const rows=(diff.length?diff:keys).map(p=>{const a=mr[p],b=mb[p];return '<tr><td>'+esc(cmpLabel((a||b).say||p,p))+'</td><td>'+(a?'<span class="mk" data-t="'+a.token+'">'+esc(a.text)+'</span>':'<span class="mk" data-t="UNKNOWN">not in the record</span>')+'</td><td>'+(b?'<span class="mk" data-t="'+b.token+'">'+esc(b.text)+'</span>':'<span class="mk" data-t="UNKNOWN">not in the branch</span>')+'</td></tr>'}).join('');
+  return '<section class="pane" style="grid-column:1/-1"><div class="ph"><span class="nm">COMPARE</span><span class="org">branch beside the record</span><span class="fr">record act '+Sr.n+' · '+Sr.h4+'  |  branch act '+Sb.n+' · '+Sb.h4+'</span></div><div class="pb"><div class="tbl"><table><caption class="sr">What differs between the record and your branch</caption><thead><tr><th>What differs</th><th style="border-bottom-color:var(--ink)">The record · act '+Sr.n+'</th><th style="border-bottom-color:var(--green);color:var(--green)">Your branch · act '+Sb.n+'</th></tr></thead><tbody>'+rows+'</tbody></table><p class="dnote">'+(diff.length?diff.length+' facts differ. The record was not changed by anything you did in the branch.':'Nothing differs yet: the branch is still identical to the record at act '+(ST.hist.forkAt?ST.hist.forkAt.n:Sr.n)+'. Act in the branch, then compare.')+' Week 10 on is sealed in both.</p><div class="dc"><button type="button" class="btn" data-act="return">Return to the record</button><button type="button" class="btn" data-act="compare">Back to the branch</button></div></div></div></section>';
 }
 function fkOf(el){const d=el.dataset;return el.id?'#'+el.id:['b',d.act,d.file,d.view,d.path,d.id,d.v].join('|')}
 function howSheet(reg,sm,id){
@@ -1140,6 +1181,22 @@ function howSheet(reg,sm,id){
   return '<div class="howsheet"><h5>HOW DO WE KNOW · '+Object.keys(seen).length+' marks in this view</h5>'+rows+'</div>';
 }
 const CAPS={room:['PROPOSED PLATFORM · seed: REAL CURRENT (unmerged Room)','NO AI REQUIRED'],timeline:['PROPOSED PLATFORM','NO AI REQUIRED'],table:['PROPOSED PLATFORM','NO AI REQUIRED'],voice:['PROPOSED PLATFORM','SMALL / CHEAP MODEL (on-device speech)'],ledger:['PROPOSED PLATFORM','NO AI REQUIRED']};
+function decorateReal(){
+  $$('.rbadge').forEach(e=>e.remove());
+  const sheet=$('#realsheet');
+  if(!ST.ui.real){sheet.hidden=true;sheet.innerHTML='';return}
+  const rows=[];
+  $$('[data-cap]').forEach((el,i)=>{
+    const n=i+1;let nm=el.getAttribute('aria-label')||'';
+    if(!nm&&el.classList.contains('pcov'))nm='Cannot-show cover · '+((el.closest('.pane')||document.body).getAttribute('aria-label')||'');
+    if(!nm){const b=el.querySelector('b');nm=(b?b.textContent:(el.id||'')).replace(/\s+/g,' ').trim()}
+    if(!nm)nm=el.textContent.replace(/\s+/g,' ').trim().slice(0,30);
+    const host=el.id==='direct'?$('#dhead'):el.classList.contains('pane')?$('.ph',el):el;
+    if(host){const b=document.createElement('span');b.className='rbadge';b.setAttribute('aria-hidden','true');b.textContent=n;host.insertBefore(b,host.firstChild)}
+    rows.push('<li><span class="rbadge" aria-hidden="true">'+n+'</span><span><b>'+esc(nm)+'</b> · <span class="cap">'+esc(el.getAttribute('data-cap'))+'</span> · '+esc(el.getAttribute('data-ai')||'')+'</span></li>');
+  });
+  sheet.hidden=false;sheet.innerHTML='<h3>WHAT’S REAL? · each numbered region: its capability status, then what a real product would need</h3><ul>'+rows.join('')+'</ul>';
+}
 /* ---------------------------------------------------------------- the one render: every open view redraws from state in the same frame */
 function render(){
   const S=cur(),A=ST.ui,sm=smap(S);FRAME++;
@@ -1162,7 +1219,7 @@ function render(){
     const mism=mismatches(out.reg,src,S,sm);
     if(mism.length)failed[id]={at:S.n,mism:mism,reg:out.reg};else delete failed[id];
     const cv=coversFor(id,src,out.reg),cp=CAPS[id]||CAPS.timeline;
-    const html='<section class="pane" data-view="'+id+'" data-cap="'+cp[0]+'" data-ai="'+cp[1]+'" aria-label="'+VN[id]+'"><div class="ph"><span class="nm">'+VN[id].toUpperCase()+'</span><span class="org">'+((id==='room'&&S.sys==='harrow')?'compiled':ORIGIN[id])+(id==='room'&&out.tier?' · '+out.tier:'')+'</span>'+(out.hdr||'')+'<span class="fr" title="'+esc(SYS[S.sys].name+' · '+(S.sys==='boston'?'Week 6':'day 0')+' · act '+src.n+' · '+src.h4)+'">'+(S.sys==='boston'?'Week 6':'day 0')+' · act '+src.n+' · '+src.h4+'</span><button type="button" class="x" data-act="close" data-v="'+id+'" aria-label="Close '+VN[id]+'">×</button></div><div class="pb" id="pb-'+id+'">'+(mism.length?failCover(id,src,S,mism):out.html)+(A.how&&!mism.length?howSheet(out.reg,sm,id):'')+'</div>'+(cv.length?'<div class="pcov" data-cap="PROPOSED PLATFORM · arena cover: REAL CURRENT (unmerged)" data-ai="NO AI REQUIRED"><span class="lb">CANNOT SHOW</span>'+cv.map(c=>'<span>'+esc(c.words)+' <button type="button" data-act="cover" data-view="'+id+'" data-id="'+c.id+'">'+esc(c.hand)+'</button></span>').join('')+'</div>':'')+'</section>';
+    const html='<section class="pane" data-view="'+id+'" data-cap="'+cp[0]+'" data-ai="'+cp[1]+'" aria-label="'+VN[id]+'"><div class="ph"><span class="nm">'+VN[id].toUpperCase()+'</span><span class="org">'+((id==='room'&&S.sys==='harrow')?'compiled':ORIGIN[id])+(id==='room'&&out.tier?' · '+out.tier:'')+'</span>'+(out.hdr||'')+'<span class="fr" title="'+esc(SYS[S.sys].name+' · '+(S.sys==='boston'?'Week '+WEEK:'day 0')+' · act '+src.n+' · '+src.h4)+'">'+(S.sys==='boston'?'Week '+WEEK:'day 0')+' · act '+src.n+' · '+src.h4+'</span><button type="button" class="x" data-act="close" data-v="'+id+'" aria-label="Close '+VN[id]+'">×</button></div><div class="pb" id="pb-'+id+'">'+(mism.length?failCover(id,src,S,mism):out.html)+(A.how&&!mism.length?howSheet(out.reg,sm,id):'')+'</div>'+(cv.length?'<div class="pcov" data-cap="PROPOSED PLATFORM · arena cover: REAL CURRENT (unmerged)" data-ai="NO AI REQUIRED"><span class="lb">CANNOT SHOW</span>'+cv.map(c=>'<span>'+esc(c.words)+' <button type="button" data-act="cover" data-view="'+id+'" data-id="'+c.id+'">'+esc(c.hand)+'</button></span>').join('')+'</div>':'')+'</section>';
     panes.insertAdjacentHTML('beforeend',html);
     if(!mism.length&&out.mount)mounts.push([id,out.mount]);
   });
@@ -1172,13 +1229,14 @@ function render(){
   D.setAttribute('data-cap','PROPOSED PLATFORM · compiled from the Surface');D.setAttribute('data-ai','NO AI REQUIRED');
   $('#mcount').textContent=sm['matters.open']?sm['matters.open'].text:'';
   const rc=receiptText(S);if($('#receipt').textContent!==rc)$('#receipt').textContent=rc;
-  $('#dctl').innerHTML='<span class="fr" style="border:1.5px solid var(--ink);padding:0 6px;font:600 11.5px var(--mono);margin-right:6px;background:var(--card)">'+(S.sys==='boston'?'Week 6':'day 0')+' · act '+S.n+' · '+S.h4+' · compiled</span>'+(A.direct==='collapsed'?'<button type="button" class="btn sm" data-act="dmode" data-v="open">Open Direct</button>':(A.direct==='lead'?'<button type="button" class="btn sm" data-act="dmode" data-v="open">Dock</button>':'<button type="button" class="btn sm" data-act="dmode" data-v="collapsed">Collapse</button><button type="button" class="btn sm" data-act="dmode" data-v="lead">Lead</button>'));
+  $('#dctl').innerHTML='<span class="fr" style="border:1.5px solid var(--ink);padding:0 6px;font:600 11.5px var(--mono);margin-right:6px;background:var(--card)">'+(S.sys==='boston'?'Week '+WEEK:'day 0')+' · act '+S.n+' · '+S.h4+' · compiled</span>'+(A.direct==='collapsed'?'<button type="button" class="btn sm" data-act="dmode" data-v="open">Open Direct</button>':(A.direct==='lead'?'<button type="button" class="btn sm" data-act="dmode" data-v="open">Dock</button>':'<button type="button" class="btn sm" data-act="dmode" data-v="collapsed">Collapse</button><button type="button" class="btn sm" data-act="dmode" data-v="lead">Lead</button>'));
   $('#dbody').innerHTML=A.direct==='collapsed'?'':dd.html;
   /* DOM order: Direct first when it leads (screen-reader order), else after the panes */
   if(A.direct==='lead')B.insertBefore(D,panes);else if(D.previousElementSibling!==panes)B.appendChild(D);
   {const nh=noticesHTML(S),ne=$('#notices');if(ST._nh!==nh){ne.innerHTML=nh;ST._nh=nh}}
   $('#rig').innerHTML=rigHTML();$('#tools').innerHTML=toolsHTML();
   mounts.forEach(m=>{const el=$('#pb-'+m[0]);if(el)m[1](el)});
+  decorateReal();
   /* focus: keep the user's place; a followed fact takes Direct's focus */
   if(ST._focusFollow){ST._focusFollow=false;const li=$('#dbody li[data-p="'+(A.follow&&A.follow.path)+'"]');if(li){li.focus();try{li.scrollIntoView({block:'nearest'})}catch(_){}}}
   else if(fk){const el=$$('button[data-act]').concat($$('#declare')).find(e=>fkOf(e)===fk);if(el)el.focus()}

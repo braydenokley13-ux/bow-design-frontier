@@ -29,8 +29,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .bar h1 small{font-weight:400;letter-spacing:.02em;text-transform:none;color:var(--dm);margin-left:8px}
 .sw{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .tb{border:1.5px solid var(--dt);background:transparent;padding:5px 10px;min-height:40px;font-size:12.5px;font-weight:500;border-radius:3px;color:var(--dt)}
-.tb[aria-pressed=true]{background:var(--dt);color:var(--desk)}
-.tb[aria-pressed=true]::before{content:"\25A0\00a0"}
+.tb[aria-pressed=true]{background:var(--dt);color:var(--desk);box-shadow:inset 0 -5px 0 var(--desk)}
 .eps{display:flex;gap:3px;border-top:1.5px solid var(--dt);border-bottom:1px solid var(--rule);padding:4px 0}
 .ep{flex:1 1 0;min-width:0;border:0;background:transparent;padding:6px 4px;min-height:40px;font-size:12.5px;font-weight:500;text-align:left;border-bottom:3px solid transparent;color:var(--dt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ep b{font-weight:600;margin-right:5px;color:var(--dm)}
@@ -76,9 +75,10 @@ button{font:inherit;color:inherit;cursor:pointer}
 .rail dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
 
 /* ---------- truth grammar: seven textures ---------- */
-.ks{display:inline-block;width:12px;height:12px;vertical-align:-1px;margin-right:6px;border:1.5px solid var(--ink);background:var(--paper)}
+/* truth swatches are BARS, never squares: a hollow square beside text reads as an unchecked checkbox */
+.ks{display:inline-block;width:20px;height:9px;vertical-align:1px;margin-right:6px;border:1.5px solid var(--ink);background:var(--paper);border-radius:0}
 .ks[data-k=OBSERVED]{background:var(--ink)}
-.ks[data-k=RECORDED]{background:var(--ink);box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3.5px var(--ink)}
+.ks[data-k=RECORDED]{background:var(--ink);box-shadow:inset 0 0 0 1.5px var(--paper)}
 .ks[data-k=AUTHORED]{background:transparent}
 .ks[data-k=COMPUTED]{background:#B9B2A2}
 .ks[data-k=MODELED]{background:repeating-linear-gradient(135deg,var(--ink) 0 1.5px,transparent 1.5px 4px)}
@@ -142,7 +142,7 @@ body.cap-on .cap{display:block}
 .hole{border:1.5px dashed var(--ink);padding:5px 9px;margin:4px 0;color:var(--muted)}
 .rule2{border:0;border-top:3px double var(--ink);margin:10px 0}
 .ln{display:flex;gap:8px;align-items:baseline;margin:4px 0}
-.ln .ks{flex:none;transform:translateY(2px)}
+.ln .ks{flex:none;transform:translateY(3px)}
 .ln>span{flex:1}
 .lbl{font:600 11px var(--serif);letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -223,8 +223,8 @@ body.cap-on .cap{display:block}
 .stp.done{border-top-color:var(--ink);color:var(--tx)}
 .stp.cur{border-top:7px double var(--ink);color:var(--tx);border-top-width:9px}
 .stp.nxt{border-top:3px solid var(--rule)}
-.ticks{display:inline-flex;gap:4px}
-.tick{display:inline-block;width:14px;height:14px;border:2px solid var(--ink);background:transparent}
+.ticks{display:inline-flex;gap:5px;align-items:flex-end}
+.tick{display:inline-block;width:6px;height:20px;border:2px solid var(--ink);background:transparent}
 .tick.on{background:var(--ink)}
 </style>
 <style>
@@ -256,6 +256,74 @@ body.cap-on .cap{display:block}
 .bow code{font:12px ui-monospace,'DejaVu Sans Mono',monospace}
 .bow.quiet .fr{color:var(--muted)}
 </style>
+<style>
+/* the record rail: open always on a desk, a disclosure below the stage on a phone */
+.railbox>summary{display:none;cursor:pointer;min-height:44px;padding:10px 12px;border:2px solid var(--dt);font:600 13px var(--sans);list-style:none}
+.railbox>summary::-webkit-details-marker{display:none}
+.railbox>summary::after{content:"  +";font-weight:400}
+.railbox[open]>summary::after{content:"  \2212"}
+.rail code{font:11px ui-monospace,'DejaVu Sans Mono',monospace;word-break:break-all}
+.clause{margin:0 0 2px}
+.kv.wrap{white-space:normal}
+.panelfix{position:fixed;z-index:30;top:118px;right:22px;width:min(600px,calc(100vw - 44px));max-height:calc(100vh - 140px);overflow:auto}
+/* ---------- a real phone layout (not a picture of a phone) ---------- */
+@media (max-width:700px){
+  html,body{font-size:15px}
+  .wrap{padding:0 12px 16px}
+  .status{font-size:11px;line-height:1.35}
+  .bar{flex-direction:column;align-items:stretch;gap:6px;padding:2px 0 6px}
+  .bar h1 small{display:block;margin:2px 0 0}
+  .sw{justify-content:stretch;gap:6px}
+  .sw .tb{flex:1 1 calc(50% - 6px);min-height:44px;padding:5px 6px;font-size:12.5px}
+  .eps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}
+  .ep{padding:5px 1px 4px;min-height:44px;font-size:11px;text-align:center;white-space:normal;line-height:1.15;border-bottom-width:3px}
+  .ep b{display:block;margin:0 0 1px;font-size:12px}
+  .legend{gap:3px 10px;font-size:11.5px}
+  .main{grid-template-columns:minmax(0,1fr);gap:12px}
+  .sthead{flex-wrap:wrap}
+  .sthead .tb{min-height:44px}
+  .cols,.cols.wide,.cols.sheet,.cols.text,.cols.stand,.cols.even{grid-template-columns:minmax(0,1fr);gap:12px}
+  .two,.three{grid-template-columns:minmax(0,1fr);gap:8px}
+  .pair{grid-template-columns:minmax(0,1fr)}
+  .hrow{grid-template-columns:minmax(0,1fr) auto}
+  .hrow .fr{grid-column:1 / -1}
+  .hrow .hmeta{grid-column:1}
+  .bb.sm{max-width:none}
+  .rail{max-height:none;overflow:visible;padding:0}
+  .railbox>summary{display:block}
+  .railbox>*:not(summary){margin-left:2px;margin-right:2px}
+  .asst .tr{height:auto;min-height:300px;max-height:none;overflow:visible}
+  .bub{max-width:92%}
+  .comp{padding:8px}
+  .paper .art{padding:10px 12px 12px}
+  .paper .mast b{font-size:24px}
+  .paper h3{font-size:22px}
+  .paper p{font-size:16.5px;line-height:1.8}
+  .mark{min-height:32px}
+  .phone,.call{width:100%;max-width:340px}
+  .phone .msgs{min-height:0}
+  .call .cbody{min-height:300px}
+  .voice .vt{max-height:none;min-height:0}
+  .vl{grid-template-columns:minmax(0,1fr);gap:2px}
+  .vl>b{padding-top:0}
+  .bowhd{padding-right:30px}
+  .bowbd{padding:10px 10px 22px}
+  .bow h3{font-size:18px}
+  .kv.big{font-size:22px}
+  .bb{padding:8px 10px}
+  .row{gap:6px}
+  .drift{gap:6px}
+  .stops{flex:1 1 100%;flex-wrap:wrap}
+  .stp{flex:1 1 45%}
+  .edge{gap:8px}
+  .mx{font-size:12px}
+  .mx th,.mx td{padding:3px 4px}
+  .mx thead th{font-size:10px;letter-spacing:.04em}
+  .note{font-size:13px}
+  .panelfix{top:6px;right:6px;left:6px;width:auto;max-height:calc(100vh - 12px)}
+  svg{max-width:100%;height:auto}
+}
+</style>
 </head>
 <body>
 <div id="app" class="wrap"></div>
@@ -286,7 +354,15 @@ const cap = (c, cost) => '<span class="cap" data-c="' + c + '">' + CAPS[c] + (co
 const B = (label, a, p, cls, x) => '<button type="button" class="' + (cls || 'bb') + '" data-a="' + a + '"' + (p != null ? ' data-p="' + esc(p) + '"' : '') + ' data-fk="' + a + '|' + (p == null ? '' : esc(p)) + '"' + (x ? ' ' + x : '') + '>' + label + '</button>';
 const TG = (label, a, p, on, cls) => B(label, a, p, cls || 'bb', 'aria-pressed="' + (on ? 'true' : 'false') + '"');
 const PV = { pay: 'RECORDED · World record, Boston · Year Two (fixture)', ros: 'AUTHORED · illustrative roster count', tax: 'COMPUTED · 1.5 × (payroll − the World’s line); World rule, authored' };
-const hash = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return ('0000000' + (h >>> 0).toString(16)).slice(-8); };
+/* SHA-256 (Web Crypto). Async: the first ask returns null and re-renders when the digest lands. */
+const SHA = { c: {}, p: {} };
+function sha(s) {
+  if (SHA.c[s]) return SHA.c[s];
+  if (!(window.crypto && crypto.subtle)) return 'unavailable';
+  if (!SHA.p[s]) { SHA.p[s] = 1; crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)).then(b => { SHA.c[s] = Array.from(new Uint8Array(b)).map(x => ('0' + x.toString(16)).slice(-2)).join(''); if (typeof render === 'function') render(); }); }
+  return null;
+}
+const shaShort = s => { const h = sha(s); return h ? h.slice(0, 16) : 'computing…'; };
 
 /* ---------------------------------------------------------------- canonical state */
 const TIMES = [
@@ -296,16 +372,16 @@ const TIMES = [
   { real: 'Mon 19 Oct 2026, 18:40', world: 'Year Two · Week 12 · Monday' }
 ];
 const S = {
-  scene: 'assistant', floor: false, know: false, cap: false, panel: false, n: 0, time: 0, seat: false, bound: null,
+  scene: 'assistant', floor: false, know: false, cap: false, panel: false, railOpen: false, next: W.nextActNumber, time: 0, seat: false, bound: null,
   log: [], revealed: {},
-  asst: { sent: false, cut: false, cutAt: 'today', enter: false },
+  asst: { sent: false, cut: false, cutAt: 'today', enter: false, draft: 'Is Boston over the tax line?', turns: [], q: '' },
   art: { mark: null, door: null, moment: null },
   msg: { later: false, open: null, see: false, kept: false },
   voice: { step: 0, miss: false, typed: false, opened: false },
   offer: { id: 'owner', phase: 'arrival', taken: { owner: [false, false, false], maya: [false] }, carrier: 'text', second: false, ghost: false, redeemed: { owner: false, maya: false } },
   ring: { phase: 'ringing', hold: null, answer: null, hung: false, note: null },
   w: { payroll: W.payroll.v, roster: 15, guard: true, callup: 'open', owner: 'open', denver: 'open', tradeBy: null },
-  orders: { away: false, fired: null, ratified: false, takeout: false },
+  orders: { away: false, fired: null, ratified: false, takeout: false, cl: { 1: { verb: 'decline' }, 2: { verb: 'accept' } }, edit: null, edited: {} },
   round: { started: false, stop: 0, res: {}, door: 'branch', end: false },
   stand: { sel: 'seat', sentence: false },
   floorAsk: { text: 'the Philadelphia call in June 2017', done: null, queued: false },
@@ -314,7 +390,10 @@ const S = {
 const T = () => TIMES[S.time];
 function log(who, what, o) {
   o = o || {};
-  S.log.unshift({ n: ++S.n, who: who, what: what, real: o.real || T().real, world: o.world !== undefined ? o.world : (S.seat ? T().world : 'no seat yet'), hist: o.hist || 'Reality (read only)', k: o.k || 'RECORDED', abs: !!o.abs, fork: !!o.fork });
+  /* Two logs, never merged: an act that changes Boston · Year Two takes the World's next number (fixture: 43 on);
+     everything else (navigation, reveals, refusals, dry runs, branches) is TRAIL: private, unnumbered, never hashed. */
+  const canon = o.canon !== undefined ? o.canon : (/^Boston · Year Two/.test(o.hist || '') && o.k !== 'AUTHORED' && !o.fork);
+  S.log.unshift({ n: canon ? S.next++ : null, canon: canon, who: who, what: what, real: o.real || T().real, world: o.world !== undefined ? o.world : (S.seat ? T().world : 'no seat yet'), hist: o.hist || 'Reality (read only)', k: o.k || 'RECORDED', abs: !!o.abs, fork: !!o.fork });
 }
 function say(t) { const l = $('#live'); if (l) { say.n = (say.n || 0) + 1; l.textContent = t + (say.n % 2 ? '' : '​'); } }
 /* World rule (authored): flat 1.5x over the World's own line — not the NBA's incremental tax. */
@@ -392,9 +471,19 @@ function header() {
     '<nav class="eps" aria-label="Where you are today">' + SCENES.map((s, i) => '<button type="button" class="ep" data-a="goto" data-p="' + s[0] + '" data-fk="goto|' + s[0] + '" aria-label="' + (i + 1) + ' ' + s[1] + '"' + (S.scene === s[0] ? ' aria-current="step"' : '') + '><b>' + (i + 1) + '</b>' + s[1] + '</button>').join('') + '</nav>' +
     (S.know ? '<div class="legend" aria-label="The seven textures">' + Object.keys(FX.meta.kinds).map(k => '<span>' + KD(k) + '<b>' + k + '</b> ' + esc(FX.meta.kinds[k]) + '</span>').join('') + '</div>' : '');
 }
+function canonHash() {
+  const c = S.log.filter(e => e.canon).slice().reverse();
+  if (!c.length) return null;
+  return c.map(e => e.n + '|' + e.who + '|' + e.what + '|' + e.hist).join('\n');
+}
 function rail() {
-  const w = S.w, wr = { open: 'open', declined: 'declined', accepted: 'accepted', 'declined-default': 'declined by default (no act)', 'accepted-order': 'accepted by standing order §2', 'declined-order': 'declined by standing order §1' };
-  return '<h2>The record<small>Stage view of canonical state — the prototype’s, not BOW’s</small></h2>' +
+  const w = S.w;
+  const od = S.orders.fired ? (S.orders.fired.wait ? 'declined by default (§' + S.orders.fired.c + ' left it to you)' : (S.orders.fired.verb === 'accept' ? 'accepted' : 'declined') + ' by standing order §' + S.orders.fired.c) : '';
+  const wr = { open: 'open', declined: 'declined', accepted: 'accepted', 'declined-default': 'declined by default (no act)', 'accepted-order': 'accepted by standing order §2', 'declined-order': od };
+  const canon = S.log.filter(e => e.canon), trail = S.log.filter(e => !e.canon);
+  const li = (e, num) => '<li class="' + (e.fork ? 'fk ' : '') + (e.abs ? 'abs' : '') + '"><span class="n">' + (num ? e.n : '·') + '</span>' + KD(e.k) + '<b>' + esc(e.who) + '</b> ' + esc(e.what) + '<span class="m">' + esc(e.real) + ' · ' + esc(e.world) + ' · ' + esc(e.hist) + '</span></li>';
+  const cs = canonHash(), hh = cs ? sha(cs) : null;
+  const body = '<h2>The record<small>Stage view of canonical state — the prototype’s, not BOW’s</small></h2>' +
     '<p class="clk">Real · ' + esc(T().real) + '<br>World · Boston · ' + esc(T().world) + (S.seat ? '' : ' <span class="tiny">(no seat yet)</span>') + '</p>' +
     '<h3 style="margin-top:0">Books · Boston · Year Two</h3><dl>' +
     '<dt>Seat</dt><dd>' + (S.seat ? 'GM · this device' : 'none') + '</dd>' +
@@ -404,12 +493,18 @@ function rail() {
     '<dt>Denver’s offer</dt><dd>' + esc(wr[w.denver] || w.denver) + '</dd>' +
     '<dt>Two-way call-up</dt><dd>' + esc(w.callup === 'lapsed' ? 'lapsed · no act' : w.callup) + '</dd>' +
     '<dt>Owner’s note</dt><dd>' + esc(w.owner === 'open' ? 'open' : w.owner === 'answered' ? 'answered' : 'no act') + '</dd></dl>' +
-    '<h3>Acts · newest first</h3><ol class="log" aria-label="Acts, newest first">' + (S.log.length ? S.log.slice(0, 40).map(e => '<li class="' + (e.fork ? 'fk ' : '') + (e.abs ? 'abs' : '') + '"><span class="n">' + e.n + '</span>' + KD(e.k) + '<b>' + esc(e.who) + '</b> ' + esc(e.what) + '<span class="m">' + esc(e.real) + ' · ' + esc(e.world) + ' · ' + esc(e.hist) + '</span></li>').join('') : '<li>Nothing yet. Every act you make lands here, with whose it is and in which history.</li>') + '</ol>' +
+    '<h3>Record · acts in this World, newest first</h3><p class="tiny" style="margin:0 0 4px;color:var(--dm)">Numbered by the World (the next act is ' + S.next + '). SHA-256 over these acts only: <code>' + (cs ? (hh ? esc(hh.slice(0, 16)) + '…' : 'computing…') : 'no act yet') + '</code></p>' +
+    '<ol class="log" aria-label="Record: acts in this World, newest first">' + (canon.length ? canon.slice(0, 14).map(e => li(e, true)).join('') : '<li>No act of yours in the World yet. An act lands here with its number and whose it is.</li>') + '</ol>' +
+    '<h3>Trail · private, unnumbered, never hashed</h3>' +
+    '<ol class="log" aria-label="Trail: what you looked at and tried, newest first">' + (trail.length ? trail.slice(0, 12).map(e => li(e, false)).join('') : '<li>Nothing yet. Reads, reveals, refusals, dry runs and branches go here.</li>') + '</ol>' +
     '<p class="tiny" style="margin-top:8px;color:var(--dm)">Payroll is the World record; the roster count and matters are illustrative (authored).</p>';
+  /* desktop: always open. phone: a disclosure below the stage. */
+  const phone = window.matchMedia && window.matchMedia('(max-width:700px)').matches;
+  return '<details class="railbox" id="railbox"' + (!phone || S.railOpen ? ' open' : '') + '><summary>The record · ' + canon.length + ' act' + (canon.length === 1 ? '' : 's') + ' in the World · payroll ' + M2(w.payroll) + '</summary>' + body + '</details>';
 }
 function panelHTML() {
   if (!S.panel) return '';
-  return '<div style="position:fixed;z-index:30;top:118px;right:22px;width:min(600px,calc(100vw - 44px))" role="region" aria-label="What a host can do, and what only BOW can">' +
+  return '<div class="panelfix" role="region" aria-label="What a host can do, and what only BOW can">' +
     bow('what a host can · what only BOW can', '<div class="two"><div><h4 style="margin-top:0">In a host surface you can</h4><ul><li>read a claim</li><li>verify a sentence</li><li>open a cut</li><li>carry an offer</li></ul><p class="tiny">A host may quote, point and carry. It never signs, never holds your branch, never sees your seat.</p></div><div><h4 style="margin-top:0">Only in BOW</h4><ul><li>sign a seat</li><li>hold a branch</li><li>compare</li><li>run your Round</li><li>see the frame BOW alone draws</li></ul></div></div><p class="sm" style="margin:6px 0 0"><b>What is home?</b> There is no home page. When you return, BOW opens inside the first stop of a finite Round and says how long it is.</p><div class="row">' + B('Close', 'panel', null, 'bb') + '</div>', { cap: cap('P', 'NO AI REQUIRED'), drawn: 'always reachable' }) + '</div>';
 }
 function nextBtn() {
@@ -418,6 +513,7 @@ function nextBtn() {
 }
 function render(top) {
   const ae = document.activeElement, fk = ae && ae.getAttribute ? ae.getAttribute('data-fk') : null;
+  const typing = ae && ae.tagName === 'INPUT' && ae.id ? { id: ae.id, a: ae.selectionStart, b: ae.selectionEnd } : null;
   document.body.classList.toggle('know', S.know);
   document.body.classList.toggle('cap-on', S.cap);
   const fn = SCENE[S.scene];
@@ -426,8 +522,11 @@ function render(top) {
   let el = fk && !top ? document.querySelector('[data-fk="' + fk.replace(/"/g, '\\"') + '"]') : null;
   if (!el && top) el = $('#st');
   if (el) el.focus({ preventScroll: true });
+  if (typing && !el) { const t = document.getElementById(typing.id); if (t) { t.focus({ preventScroll: true }); try { t.setSelectionRange(typing.a, typing.b); } catch (x) {} } }
   const tr = $('#tr'); if (tr) tr.scrollTop = tr.scrollHeight;
 }
+document.addEventListener('toggle', e => { if (e.target && e.target.id === 'railbox' && window.matchMedia('(max-width:700px)').matches) S.railOpen = e.target.open; }, true);
+if (window.matchMedia) { const mq = window.matchMedia('(max-width:700px)'); (mq.addEventListener ? mq.addEventListener('change', () => render()) : mq.addListener(() => render())); }
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-a]');
   if (!b || b.disabled) return;
@@ -448,47 +547,79 @@ ACTS.floor = () => { S.floor = !S.floor; log('you', S.floor ? 'switched models o
 /* ================================================================ 1 · INSIDE AN ASSISTANT */
 function claimSet() {
   const cp = R.capPayroll, ts = R.taxSalary, tx = L.tax, d = tx.v - ts.v;
-  return { cp: cp, ts: ts, tx: tx, d: d, hash: hash([cp.v, ts.v, tx.v, d].join('|')) };
+  const str = [cp.v, ts.v, tx.v, d].join('|');
+  return { cp: cp, ts: ts, tx: tx, d: d, hash: shaShort(str) };
+}
+sha([R.capPayroll.v, R.taxSalary.v, L.tax.v, L.tax.v - R.taxSalary.v].join('|'));
+/* What BOW can resolve from a typed question. Everything else is an honest "no system for this". */
+function resolveAsk(t) {
+  const team = /boston|celtics/i.test(t), topic = /tax|apron|luxury|payroll|salary|cap\b|over the line|past the line/i.test(t);
+  return team && topic ? 'boston.reality' : null;
 }
 SCENE.assistant = function () {
   const a = S.asst, q = claimSet();
+  const ub = t => '<div class="bub u"><small>You</small>' + esc(t) + '</div>';
   let tr;
-  if (!a.sent) {
+  if (!a.turns.length) {
     tr = '<p class="hint">Ask something about a team. The assistant answers in its own voice.<br>BOW is drawn only where a claim needs checking.</p>';
   } else {
-    const card = bow('claim card · Boston Celtics · Reality',
-      '<p class="lbl">Verify · the assistant’s sentence</p>' +
-      '<p style="margin:0 0 6px">“…Boston is <b>past the tax line</b> this season…”</p>' +
-      '<p><span class="stamp">Does not match the record</span> <span class="sm">True of cap payroll. Not true of tax salary, which is what the tax is charged on.</span></p>' +
-      '<h4>Two payrolls</h4><div class="two">' +
-      '<div><p class="lbl" style="margin:0 0 3px">Cap payroll</p>' + fv(q.cp, '≈ ' + M1(q.cp.v), 'big') + '<p class="tiny" style="margin:3px 0 0">counts against the cap</p></div>' +
-      '<div><p class="lbl" style="margin:0 0 3px">Tax salary</p>' + fv(q.ts, USD(q.ts.v), 'big') + '<p class="tiny" style="margin:3px 0 0">the tax is charged on this</p></div></div>' +
-      '<p style="margin:10px 0 6px">The tax line is ' + fv(L.tax, Mx(q.tx.v)) + '. Tax salary is ' + kv('COMPUTED', '≈ ' + M1(q.d) + ' under it', 'COMPUTED · ' + Mx(q.tx.v) + ' − ' + USD(q.ts.v) + ' = ' + USD(q.d) + ' · verify (inputs are verify)') + '.</p>' +
-      '<div class="row">' + TG('Open the cut', 'asst-cut', null, a.cut) + B('Enter as owner', 'asst-enter', null, 'bb pri') + '</div>',
-      { cap: cap('P', 'NO AI REQUIRED · the assistant pays its own tokens') });
-    const cut = a.cut ? bow('cut · read only',
-      '<h3>' + esc(cutData(a.cutAt).title) + '</h3><div class="row">' + TG('Today', 'asst-cutat', 'today', a.cutAt === 'today') + TG('Trade deadline · 5 Feb 2026', 'asst-cutat', 'deadline', a.cutAt === 'deadline') + '</div>' +
-      cutView(a.cutAt, 'cut-' + a.cutAt) + '<p class="tiny" style="margin-top:8px">Here you can look. Moving the cut, forking it and comparing: only in BOW.</p>', { cap: cap('P', 'NO AI REQUIRED') }) : '';
-    const enter = a.enter ? bow('hand-in · refused here',
-      '<p style="font-size:17px"><b>Signing happens in BOW, not here — the assistant cannot sign.</b></p>' +
-      '<p class="sm">Rule that refused: an act needs your present signature in BOW’s own threshold. A host can carry an offer; it can never redeem or sign one. Nothing was signed and no act was recorded.</p>' +
-      '<p class="sm">Reality cannot be acted on, so BOW hands you into your own copy, not into the real club’s chair.</p>' +
-      '<div class="row">' + B('Hand me over to BOW', 'asst-handin') + '</div>', { cap: cap('P', 'NO AI REQUIRED') }) : '';
-    const forged = a.forged ? '<div class="bub a"><small>Assistant</small><span style="display:block;border:1px solid #9AA0A6;border-radius:10px;padding:6px 10px;background:#F4F6F8">Verified by BOW: “Boston is past the tax line.”</span></div><p class="hint" style="margin:0;font-size:12.5px;text-align:left">The assistant wrote that itself. It can copy the words, not the frame: no threshold rule, no cut corner, no wordmark. Only the frames above are BOW’s.</p>' : '';
-    tr = '<div class="bub u"><small>You</small>Is Boston over the tax line?</div><div class="bub a"><small>Assistant</small>Boston is past the tax line this season, so expect a luxury tax bill.</div>' + card + cut + enter + forged;
+    tr = a.turns.map(t => t.ok ? '' :
+      ub(t.q) + '<div class="bub a"><small>Assistant · authored stand-in</small>I have no scripted reply to that one. (This prototype’s assistant only has a line about Boston’s tax line.)</div>' +
+      bow('no system for this',
+        '<p class="lbl">Your question, as you typed it</p><p style="margin:0 0 6px">“' + esc(t.q) + '”</p>' +
+        '<p style="font-size:17px"><b>No system for this.</b> <span class="sm">BOW holds one reading in this room: Boston Celtics · Reality, its tax line, cap payroll and tax salary. Your question names no team and no figure that reading can check, so BOW checked nothing and recorded nothing. It will not guess at another question.</span></p>' +
+        '<div class="row">' + B('Ask about Boston’s tax line instead', 'asst-suggest', null, 'bb') + '</div>', { cap: cap('P', 'NO AI REQUIRED · a small model would read looser phrasings') })).join('');
+    if (a.sent) {
+      const card = bow('claim card · Boston Celtics · Reality',
+        '<p class="lbl">Verify · the assistant’s sentence</p>' +
+        '<p style="margin:0 0 6px">“…Boston is <b>past the tax line</b> this season…”</p>' +
+        '<p><span class="stamp">Does not match the record</span> <span class="sm">True of cap payroll. Not true of tax salary, which is what the tax is charged on.</span></p>' +
+        '<h4>Two payrolls</h4><div class="two">' +
+        '<div><p class="lbl" style="margin:0 0 3px">Cap payroll</p>' + fv(q.cp, '≈ ' + M1(q.cp.v), 'big') + '<p class="tiny" style="margin:3px 0 0">counts against the cap</p></div>' +
+        '<div><p class="lbl" style="margin:0 0 3px">Tax salary</p>' + fv(q.ts, USD(q.ts.v), 'big') + '<p class="tiny" style="margin:3px 0 0">the tax is charged on this</p></div></div>' +
+        '<p style="margin:10px 0 6px">The tax line is ' + fv(L.tax, Mx(q.tx.v)) + '. Tax salary is ' + kv('COMPUTED', '≈ ' + M1(q.d) + ' under it', 'COMPUTED · ' + Mx(q.tx.v) + ' − ' + USD(q.ts.v) + ' = ' + USD(q.d) + ' · verify (inputs are verify)') + '.</p>' +
+        '<p class="tiny" style="margin:0 0 8px"><b>What checking cost here.</b> No model ran: the sentence was matched to four claims by an authored rule. With structured claims from the host (ids and values) BOW needs no model. A free sentence with no numbers in it needs a SMALL / CHEAP MODEL at BOW to read it.</p>' +
+        '<div class="row">' + TG('Open the cut', 'asst-cut', null, a.cut) + B('Enter as owner', 'asst-enter', null, 'bb pri') + '</div>',
+        { cap: cap('P', 'NO AI REQUIRED only if the host sends structured claims · a free sentence without numbers needs a SMALL / CHEAP MODEL at BOW') });
+      const cut = a.cut ? bow('cut · read only',
+        '<h3>' + esc(cutData(a.cutAt).title) + '</h3><div class="row">' + TG('Today', 'asst-cutat', 'today', a.cutAt === 'today') + TG('Trade deadline · 5 Feb 2026', 'asst-cutat', 'deadline', a.cutAt === 'deadline') + '</div>' +
+        cutView(a.cutAt, 'cut-' + a.cutAt) + '<p class="tiny" style="margin-top:8px">Here you can look. Moving the cut, forking it and comparing: only in BOW.</p>', { cap: cap('P', 'NO AI REQUIRED') }) : '';
+      const enter = a.enter ? bow('hand-in · refused here',
+        '<p style="font-size:17px"><b>Signing happens in BOW, not here — the assistant cannot sign.</b></p>' +
+        '<p class="sm">Rule that refused: an act needs your present signature in BOW’s own threshold. A host can carry an offer; it can never redeem or sign one. Nothing was signed and no act was recorded.</p>' +
+        '<p class="sm">Reality cannot be acted on, so BOW hands you into your own copy, not into the real club’s chair.</p>' +
+        '<div class="row">' + B('Hand me over to BOW', 'asst-handin') + '</div>', { cap: cap('P', 'NO AI REQUIRED') }) : '';
+      const forged = a.forged ? '<div class="bub a"><small>Assistant</small><span style="display:block;border:1px solid #9AA0A6;border-radius:10px;padding:6px 10px;background:#F4F6F8">Verified by BOW: “Boston is past the tax line.”</span></div><p class="hint" style="margin:0;font-size:12.5px;text-align:left">The assistant wrote that itself. It can copy the words, not the frame: no threshold rule, no cut corner, no wordmark. Only the frames above are BOW’s.</p>' : '';
+      tr += ub(a.q) + '<div class="bub a"><small>Assistant · authored stand-in</small>Boston is past the tax line this season, so expect a luxury tax bill.</div>' + card + cut + enter + forged;
+    }
   }
-  const wire = a.sent ? '<p><code>resolve("Boston tax line") → boston.reality</code></p><p>BOW’s closed, quotable text handed to the assistant:</p><p><code>c2 tax salary ' + USD(q.ts.v) + ' · c3 line ' + USD(q.tx.v) + ' · c4 ' + USD(q.d) + ' under · c1 cap payroll ≈ ' + M1(q.cp.v) + '</code></p><p>The assistant kept its own phrasing. <code>verify(sentence, c1–c4)</code> → <b>mismatch</b>. Claim set hash <code>' + q.hash + '</code> (computed here from the four values).</p><p>Deltas ship as claims so nobody subtracts by eye. BOW cannot force faithful quoting; it makes the truth cheap to quote and the deviation cheap to catch.</p>' : '<p>Nothing has crossed yet. When the assistant asks BOW, it gets back claims with ids, a state hash and closed text — never a style.</p>';
+  const wire = a.sent ? '<p><code>resolve("' + esc(a.q) + '") → boston.reality</code></p><p>BOW’s closed, quotable text handed to the assistant:</p><p><code>c2 tax salary ' + USD(q.ts.v) + ' · c3 line ' + USD(q.tx.v) + ' · c4 ' + USD(q.d) + ' under · c1 cap payroll ≈ ' + M1(q.cp.v) + '</code></p><p>The assistant kept its own phrasing. <code>verify(sentence, c1–c4)</code> → <b>mismatch</b>. Claim set hash <code>' + q.hash + '</code> (SHA-256 of the four values, first 16 of 64 hex, computed here).</p><p>Deltas ship as claims so nobody subtracts by eye. BOW cannot force faithful quoting; it makes the truth cheap to quote and the deviation cheap to catch.</p><p class="tiny"><b>Cost of checking.</b> A host that sends structured claims needs no model at BOW. A free sentence with no numbers needs a SMALL / CHEAP MODEL to read it. Here the match is an authored rule.</p>'
+    : a.turns.length ? '<p><code>resolve("' + esc(a.turns[a.turns.length - 1].q) + '") → no system</code></p><p>Nothing crossed. BOW answered “no system for this” and kept your words as you typed them.</p>' : '<p>Nothing has crossed yet. When the assistant asks BOW, it gets back claims with ids, a state hash and closed text — never a style.</p>';
+  const composer = a.sent
+    ? '<div class="comp"><input aria-label="Message to the assistant" disabled value="" placeholder="The check is above"><button type="button" class="hb" disabled>Sent</button></div>'
+    : '<div class="comp"><input id="askhost" aria-label="Message to the assistant" value="' + esc(a.draft) + '" placeholder="Message">' + B('Send', 'send', null, 'hb pri') + '</div>';
   return '<div class="cols"><div class="host asst rel"><div class="hh"><span class="dot"></span>Assistant<em>fictional host · generic</em></div>' + cap('S', 'assistants honouring the card at scale') + '<div class="tr" id="tr">' + tr + '</div>' +
-    (a.sent ? '<div class="stagectl" style="margin:0;padding:6px 12px;border-top:1px solid #C8C4BA;background:#F7F7F6">Stage test: ' + TG('Show a forged card', 'asst-forge', null, !!a.forged, 'tb') + '</div>' : '') + '<div class="comp"><input aria-label="Message to the assistant" readonly value="' + (a.sent ? '' : 'Is Boston over the tax line?') + '" placeholder="Message">' + (a.sent ? '<button type="button" class="hb" disabled>Sent</button>' : B('Send', 'send', null, 'hb pri')) + '</div></div>' +
+    (a.sent ? '<div class="stagectl" style="margin:0;padding:6px 12px;border-top:1px solid #C8C4BA;background:#F7F7F6">Stage test: ' + TG('Show a forged card', 'asst-forge', null, !!a.forged, 'tb') + B('Ask another question', 'asst-again', null, 'tb') + '</div>' : '') + composer + '</div>' +
     seam('the seam', wire + '<p class="tiny">SPECULATIVE at scale: whether assistants honour the card and quote it faithfully. MCP, MCP Apps and WebMCP exist outside BOW; no BOW server does.</p>') + '</div>';
 };
 ACTS.send = () => {
-  if (S.asst.sent) return;
-  S.asst.sent = true; const q = claimSet();
-  log('you', 'asked the assistant: “Is Boston over the tax line?”', { hist: 'Host transcript (not in any record)', k: 'AUTHORED' });
-  log('BOW', 'verified the assistant’s sentence against the record: mismatch (claim set ' + q.hash + ')', { hist: 'Reality (read only)', k: 'COMPUTED' });
+  const a = S.asst; if (a.sent) return;
+  const t = (a.draft || '').trim();
+  if (!t) { say('Type a question first.'); return; }
+  if (!resolveAsk(t)) {
+    a.turns.push({ q: t, ok: false }); a.draft = '';
+    log('you', 'asked the assistant: “' + t + '”', { hist: 'Host transcript (not in any record)', k: 'AUTHORED' });
+    log('BOW', 'no system for this question; checked nothing; kept your words as typed', { hist: 'nowhere (no system)', k: 'AUTHORED', abs: true });
+    say('BOW has no system for that question. Nothing was checked or recorded. Your words are kept as you typed them.');
+    return;
+  }
+  a.sent = true; a.q = t; a.turns.push({ q: t, ok: true }); a.draft = ''; const q = claimSet();
+  log('you', 'asked the assistant: “' + t + '”', { hist: 'Host transcript (not in any record)', k: 'AUTHORED' });
+  log('BOW', 'verified the assistant’s sentence against the record: mismatch (claim set SHA-256 ' + q.hash + ')', { hist: 'Reality (read only)', k: 'COMPUTED' });
   say('BOW drew a claim card. It flags the assistant’s sentence: does not match the record.');
 };
+ACTS['asst-suggest'] = () => { S.asst.draft = 'Is Boston over the tax line?'; say('The suggested question is in the message box. Press Send to ask it; nothing was sent for you.'); const i = document.getElementById('askhost'); if (i) i.focus(); };
+ACTS['asst-again'] = () => { S.asst = { sent: false, cut: false, cutAt: 'today', enter: false, draft: '', turns: [], q: '' }; say('Ask anything; BOW checks only what it holds.'); };
 ACTS['asst-forge'] = () => { S.asst.forged = !S.asst.forged; if (S.asst.forged) log('host', 'the assistant drew its own “verified” card: no BOW frame, so BOW did not draw it', { hist: 'Host transcript (not in any record)', k: 'GENERATED' }); };
 ACTS['asst-cut'] = () => { S.asst.cut = !S.asst.cut; if (S.asst.cut) log('you', 'opened the cut · ' + cutData(S.asst.cutAt).title, { hist: 'Reality (read only)', k: 'OBSERVED' }); };
 ACTS['asst-cutat'] = p => { S.asst.cutAt = p; log('you', 'moved the read-only cut to ' + cutData(p).title, { hist: 'Reality (read only)', k: 'OBSERVED' }); };
@@ -743,7 +874,7 @@ function threshold(id, o) {
     { own: 1, cap: cap('P', 'NO AI REQUIRED · REAL seeds: device-token hash, rejoin PIN with lockout, seats by lease (prototype-grade)') });
 }
 function offerSigned(id, o) {
-  const s2 = S.offer.second, g = S.offer.ghost, h1 = hash(notForYou()), h2 = hash(notForYou());
+  const s2 = S.offer.second, g = S.offer.ghost, hN = shaShort(notForYou());
   const clk = id === 'owner' ? '<div class="two"><div class="rec"><p class="recl">Your clock · real</p>' + esc(TIMES[0].real) + '</div><div class="rec"><p class="recl">The World’s clock · its own calendar</p>' + esc(TIMES[0].world) + '</div></div><p class="tiny" style="margin:4px 0 0">Your clock started beside the World’s. The World keeps running while you are away.</p>' : '';
   const dev = (name, sub, phrase, body) => '<div class="phone rel"><div class="sb"><span>' + name + '</span><span>simulated</span></div><div class="who">Phrase: ' + phrase + '<small>' + sub + '</small></div><div class="msgs" style="min-height:150px;padding:6px">' + body + '</div></div>';
   return '<div class="cols even"><div>' + bow('seat bound · ' + (id === 'owner' ? 'this device' : 'your copy'),
@@ -754,7 +885,7 @@ function offerSigned(id, o) {
     { own: 1, cap: cap('P', 'NO AI REQUIRED') }) + '</div>' +
     '<div><p style="margin:0 0 6px;font:600 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--dm)">Stage: other devices (simulated)</p><div class="stagectl" style="margin:0 0 8px">' + TG('Open the phrase on a second device', 'offer-second', null, s2, 'tb') + TG('Try a seat that doesn’t exist', 'offer-ghost', null, g, 'tb') + '</div>' +
     '<div class="pair">' + dev('Device B', 'opened the real phrase on a different phone', esc(o.phrase), s2 ? notForYou() : '<div class="pm">Nothing tried yet.</div>') + dev('Device C', 'a seat that never existed', 'plum · otter · wren', g ? notForYou() : '<div class="pm">Nothing tried yet.</div>') + '</div>' +
-    (s2 && g ? '<p class="sm" style="margin-top:8px"><b>Identical:</b> the two refusals render to the same hash, <code>' + h1 + '</code> = <code>' + h2 + '</code>. Nobody can tell a held seat from an empty one by asking.</p>' : '<p class="tiny" style="margin-top:8px">Try both. A held seat and an empty one must answer identically.</p>') + '</div></div>';
+    (s2 && g ? '<p class="sm" style="margin-top:8px"><b>The rule:</b> a held seat and an empty one must answer the same words, so nobody can tell them apart by asking.</p><p class="tiny" style="margin:4px 0 0"><b>Illustration, not evidence.</b> Both refusals here come from one template that is never given the seat, so they are the same by construction (SHA-256 of the drawn markup, first 16 hex: <code>' + hN + '</code>). Showing that a real service answers alike takes a test that sends a held seat and an empty one through it and compares the bytes. Nothing here does that.</p>' : '<p class="tiny" style="margin-top:8px">Try both. A held seat and an empty one must answer identically. (Here they will be identical by construction; see the note that appears.)</p>') + '</div></div>';
 }
 ACTS['offer-open'] = id => { S.offer.id = id; S.offer.phase = 'threshold'; log('you', 'opened the ' + (id === 'owner' ? 'Offer' : 'invitation') + ' (opening never acts)', { hist: 'Offer (no seat yet)', k: 'OBSERVED' }); say('BOW’s threshold: sign line by line.'); };
 ACTS['offer-back'] = id => { S.offer.phase = 'arrival'; };
@@ -780,7 +911,11 @@ function gauge(payroll, ghost) {
     tri(payroll, '#16120E', '#16120E', M2(payroll), true) + (ghost ? '<path d="M' + X(ghost) + ' ' + (y + 2) + ' l-7 13 h14 z" fill="none" stroke="#B0401A" stroke-width="2"/><text x="' + X(ghost) + '" y="' + (y + 40) + '" font-size="11" text-anchor="middle" fill="#B0401A" font-family="Spectral,serif" font-weight="600">' + M2(ghost) + '</text>' : '') + '</svg>';
 }
 function lastActLine() { const e = S.log.find(x => x.who === 'you' && /signed/.test(x.what)); return e ? 'your last act here: signed the seat, Week 9' : 'no act of yours here yet'; }
-function orderVerdict() { return S.w.guard ? { c: 2, txt: 'accept', why: '§2: accept seconds for players on minimum deals' } : { c: 1, txt: 'decline', why: '§1' }; }
+/* Standing-order clauses are structured: the person edits the verb, the words follow. An order answers only what its words say. */
+const CL = { 1: ' any offer for a first-round pick.', 2: ' seconds for players on minimum deals.' };
+const VERB = { accept: 'Accept', decline: 'Decline', wait: 'Leave for me:' };
+const clauseText = n => VERB[S.orders.cl[n].verb] + CL[n];
+function orderVerdict() { const n = S.w.guard ? 2 : 1, v = S.orders.cl[n].verb; return { c: n, verb: v, txt: v === 'wait' ? 'leave it to you' : v, why: '§' + n + ': ' + clauseText(n) }; }
 function receiptFor(payroll, roster) { return { payroll: payroll, roster: roster, tax: projTax(payroll) }; }
 SCENE.ring = function () {
   const r = S.ring, w = S.w;
@@ -811,7 +946,7 @@ function ringBrief() {
   const h = r.hold, ve = v.txt === 'accept';
   return bow('held · nothing committed', head + '<div class="two"><div class="rec"><p class="recl">The record · unchanged</p><p style="margin:0">Payroll ' + kv('RECORDED', M2(w.payroll), PV.pay) + '<br>Roster ' + kv('AUTHORED', w.roster, PV.ros) + '<br>Projected tax ' + kv('COMPUTED', M2(projTax(w.payroll)), PV.tax) + '</p><p class="tiny" style="margin:4px 0 0">Denver’s paper is still open on your desk.</p></div>' +
     '<div class="forkbox fork"><p class="recl">Your branch · diverged Week 10 Monday, 09:52</p><p style="margin:0"><b>Receipt: payroll would become ' + kv('COMPUTED', M2(h.payroll), PV.tax.replace('1.5 × (payroll − the World’s line); World rule, authored','the receipt of a dry run in a private fork')) + '; roster ' + kv('AUTHORED', h.roster, PV.ros) + '.</b><br>Projected tax ' + kv('COMPUTED', M2(h.tax), PV.tax) + ' <span class="tiny">World rule, authored</span></p><p class="tiny" style="margin:4px 0 0">Assumes: Denver’s offer stands as written · nothing else moves this week · the guard leaves, the pick arrives.</p></div></div>' + gz +
-    '<p class="sm" style="margin:4px 0 6px"><b>Your standing orders would answer: ' + esc(v.txt) + '</b> (' + esc(v.why) + '). BOW will say where your hand differs.</p>' +
+    '<p class="sm" style="margin:4px 0 6px"><b>Your standing orders would ' + (v.verb === 'wait' ? 'leave this for you' : 'answer: ' + esc(v.txt)) + '</b> (' + esc(v.why) + '). BOW will say where your hand differs.</p>' +
     '<div class="row">' + B('Commit: accept', 'ring-answer', 'accept', 'bb pri') + B('Decline instead', 'ring-answer', 'decline', 'bb') + B('Drop the hold', 'ring-drop', null, 'bb') + '</div>', { own: 1, cap: cap('P', 'NO AI REQUIRED · engine replay in a private fork') });
 }
 function ringResult() {
@@ -821,8 +956,8 @@ function ringResult() {
   if (a === 'accept') t += ln('RECORDED', 'Payroll ' + M2(af.payroll) + ' · roster ' + af.roster + ' · projected tax ' + M2(projTax(af.payroll)) + ' — now the record, and shown in the books, the rail and later in your Round.');
   if (a === 'decline' || a === 'lapse') t += ln('RECORDED', 'Payroll stays ' + M2(af.payroll) + ' · roster ' + af.roster + '.');
   if (a !== 'lapse') {
-    const same = (a === 'accept') === (v.txt === 'accept');
-    t += '<h4>Compared with your standing orders</h4><p class="sm">' + (same ? 'Same as standing order §' + v.c + '.' : '<b>Differs from standing order §' + v.c + '</b>, which would have answered “' + esc(v.txt) + '”. Noted. The order stays as written until you edit it; while you are away it would answer as written.') + '</p>';
+    const same = (a === 'accept') === (v.verb === 'accept');
+    t += '<h4>Compared with your standing orders</h4><p class="sm">' + (v.verb === 'wait' ? 'Standing order §' + v.c + ' leaves this for you, so there is nothing to compare.' : same ? 'Same as standing order §' + v.c + '.' : '<b>Differs from standing order §' + v.c + '</b>, which would have answered “' + esc(v.txt) + '”. Noted. The order stays as written until you edit it; while you are away it would answer as written.') + '</p>';
   }
   return t;
 }
@@ -835,7 +970,7 @@ ACTS['ring-answer'] = a => {
   if (a === 'accept') { w.payroll -= DEN.salary; w.roster -= 1; w.guard = false; w.denver = 'accepted'; w.tradeBy = 'you'; }
   else w.denver = 'declined';
   S.ring.after = { payroll: w.payroll, roster: w.roster };
-  log('you', (a === 'accept' ? 'accepted' : 'declined') + ' Denver’s offer' + ((a === 'accept') === (v.txt === 'accept') ? '' : ' (differs from standing order §' + v.c + ', noted)'), { hist: 'Boston · Year Two (your seat)', k: 'RECORDED' });
+  log('you', (a === 'accept' ? 'accepted' : 'declined') + ' Denver’s offer' + ((a === 'accept') === (v.verb === 'accept') || v.verb === 'wait' ? '' : ' (differs from standing order §' + v.c + ', noted)'), { hist: 'Boston · Year Two (your seat)', k: 'RECORDED' });
   say((a === 'accept' ? 'Accepted' : 'Declined') + '. Hang up when ready.');
   S.ring.phase = 'answered';
 };
@@ -850,7 +985,7 @@ function ensureRing() {
   if (S.time >= 1) return;
   S.time = 1;
   log('World', 'two-way call-up lapsed: the roster deadline passed and nobody converted it. Recorded as no act by you.', { real: 'Fri 2 Oct 2026', world: 'Year Two · Week 9 · Friday', hist: 'Boston · Year Two (World record)', k: 'RECORDED', abs: true });
-  log('BOW', 'rang from the seat: Denver’s offer expires 11:00; if nobody acts, declined', { hist: 'Boston · Year Two (your seat)', k: 'RECORDED' });
+  log('BOW', 'rang from the seat: Denver’s offer expires 11:00; if nobody acts, declined', { hist: 'Boston · Year Two (your seat)', k: 'RECORDED', canon: false });
   S.w.callup = 'lapsed';
 }
 function stockSeat() {
@@ -862,39 +997,59 @@ const goto0 = ACTS.goto;
 ACTS.goto = id => { goto0(id); if (id === 'round' && S.orders.away) S.round.started = true; };
 
 /* ================================================================ 7 · STANDING ORDERS */
-const ORDERS = [{ n: 1, t: 'Decline any offer for a first-round pick.' }, { n: 2, t: 'Accept seconds for players on minimum deals.' }];
 function firedText() {
   const f = S.orders.fired; if (!f) return '';
   return f.c === 2 ? 'Denver’s second call: ' + DEN.pick + ' for the guard on a minimum deal, same terms.' : 'Denver’s second call asks about your 2027 first-round pick (illustrative).';
 }
+function clauseEditor(n) {
+  const cur = S.orders.cl[n].verb;
+  return '<div class="rec" style="margin:4px 0 8px"><p class="recl">Edit §' + n + ' · before you go</p><div class="row">' +
+    ['accept', 'decline', 'wait'].map(v => TG('Set §' + n + ' to ' + (v === 'wait' ? 'Leave for me' : VERB[v]), 'order-verb', n + ':' + v, cur === v, 'bb sm" style="max-width:none')).join('') +
+    '</div><p class="tiny" style="margin:6px 0 0">§' + n + ' would read: “' + esc(clauseText(n)) + '” ' + (cur === 'wait' ? 'It answers nothing: the ring waits and the paper’s own default applies (declined, recorded as no act by you).' : 'It answers only what these words say.') + '</p></div>';
+}
 SCENE.orders = function () {
   if (!S.seat) return bow('no seat, no orders', '<p style="font-size:17px"><b>Orders answer for a seat. You hold none yet.</b></p><div class="row">' + B('Go to the Offer', 'goto', 'offer', 'bb pri') + '</div>');
   const o = S.orders, f = o.fired;
+  const clauses = [1, 2].map(n => '<div class="clause"><p style="margin:4px 0"><b>§' + n + '</b> ' + kv('AUTHORED', esc(clauseText(n)), null, 'wrap') + (o.edited[n] ? ' <span class="tiny">edited by you</span>' : '') + (o.away && f && f.c === n ? ' <span class="stamp">' + (f.wait ? 'read, left it to you' : 'fired') + '</span>' : '') + '</p>' +
+    (o.away ? '' : '<div class="row" style="margin:0 0 4px">' + TG('Edit §' + n, 'order-edit', n, o.edit === n, 'bb sm" style="max-width:none') + '</div>') + (!o.away && o.edit === n ? clauseEditor(n) : '') + '</div>').join('');
   const left = bow('standing orders · yours',
-    '<h4 style="margin-top:0">While you are away, these answer for you</h4>' + ORDERS.map(x => ln('AUTHORED', '<b>§' + x.n + '</b> ' + esc(x.t))).join('') +
+    '<h4 style="margin-top:0">While you are away, these answer for you</h4>' + clauses +
     '<p class="sm">An order answers only what its words say. Anything else waits and lapses to the paper’s own default. Every act an order takes is stamped by its number, never as you.</p>' +
-    (o.away ? '<p class="sm"><b>You were away 14 days.</b> Week 10 Monday → Week 12 Monday.</p>' : '<div class="row">' + B('Be away for 14 days', 'away', null, 'bb pri') + '</div><p class="tiny" style="margin:6px 0 0">Stage clock: this simulates the time passing. Nothing waits for you; the World keeps its own calendar.</p>'),
-    { own: 1, cap: cap('P', 'NO AI REQUIRED · reading orders written in words: SMALL / CHEAP MODEL') });
+    (o.away ? '<p class="sm"><b>You were away 14 days.</b> Week 10 Monday → Week 12 Monday.</p>' : '<div class="row">' + B('Be away for 14 days', 'away', null, 'bb pri') + '</div><p class="tiny" style="margin:6px 0 0">Stage clock: this simulates the time passing. Nothing waits for you; the World keeps its own calendar. Edit a clause first if you want your words to differ.</p>'),
+    { own: 1, cap: cap('P', 'NO AI REQUIRED · the clause is a structured choice here; reading orders written in free words: SMALL / CHEAP MODEL') });
   let right = '';
   if (o.away && f) {
-    const acc = f.c === 2;
+    const acc = f.verb === 'accept';
     right = bow('while you were away',
       '<p class="lbl" style="margin:0">' + esc(f.world) + ' · ' + esc(f.real) + '</p><p style="font-size:17px;margin:2px 0 6px"><b>' + esc(firedText()) + '</b></p>' +
-      '<p><span class="stamp">by your standing order §' + f.c + '</span> <span class="sm">not by you</span></p>' +
-      ln('RECORDED', acc ? 'Answered <b>accepted</b>. Payroll ' + M2(S.w.payroll) + ' · roster ' + S.w.roster + ' · projected tax ' + M2(projTax(S.w.payroll)) + '.' : 'Answered <b>declined</b>. Nothing on the books moved.') +
-      '<p class="sm"><b>The clause that fired:</b> “§' + f.c + ' ' + esc(ORDERS[f.c - 1].t) + '”</p>' +
-      (o.ratified ? '<p class="sm"><b>You ratified it</b>, Week 12 Monday. It stands as your act.</p>' : '<div class="row">' + B('Ratify it', 'order-ratify', null, 'bb pri') + TG('Take it out', 'order-takeout', null, o.takeout, 'bb you') + '</div>') +
-      (o.takeout ? '<div style="margin-top:10px">' + takeOut() + '</div>' : ''), { own: 1, cap: cap('P', 'NO AI REQUIRED · a covered act is stamped by whom') });
+      (f.wait ? '<p><span class="stamp">No order answered</span> <span class="sm">§' + f.c + ' left it for you; the paper’s own default applied</span></p>' : '<p><span class="stamp">by your standing order §' + f.c + '</span> <span class="sm">not by you</span></p>') +
+      (f.wait ? ln('RECORDED', 'Declined <b>by default</b>. Recorded as <b>no act</b> by you and none by an order. Nothing on the books moved.') : ln('RECORDED', acc ? (f.c === 1 ? 'Answered <b>accepted</b>. No salary moved: it was a pick, and it is Denver’s now (illustrative).' : 'Answered <b>accepted</b>. Payroll ' + M2(S.w.payroll) + ' · roster ' + S.w.roster + ' · projected tax ' + M2(projTax(S.w.payroll)) + '.') : 'Answered <b>declined</b>. Nothing on the books moved.')) +
+      '<p class="sm"><b>' + (f.wait ? 'The clause that read it' : 'The clause that fired') + ':</b> “§' + f.c + ' ' + esc(clauseText(f.c)) + '”' + (o.edited[f.c] ? ' <span class="tiny">(your edit)</span>' : '') + '</p>' +
+      (f.wait ? '' : o.ratified ? '<p class="sm"><b>You ratified it</b>, Week 12 Monday. It stands as your act.</p>' : '<div class="row">' + B('Ratify it', 'order-ratify', null, 'bb pri') + TG('Take it out', 'order-takeout', null, o.takeout, 'bb you') + '</div>') +
+      (o.takeout && !f.wait ? '<div style="margin-top:10px">' + takeOut() + '</div>' : ''), { own: 1, cap: cap('P', 'NO AI REQUIRED · a covered act is stamped by whom') });
   } else right = seam('how orders differ from a chat agent', '<p>A notification says “something happened”. A chat agent acts for you with no boundary. A standing order carries its own limits: it answers before a paper lapses, only inside your words, and reports after.</p><p>Where your hand and your order differ, the browser says so; the exceptions show what you actually decide on.</p>');
   return '<div class="cols sheet"><div>' + left + '</div><div>' + right + '</div></div>';
 };
 function takeOut() {
-  const f = S.orders.fired, acc = f.c === 2;
-  const nowP = S.w.payroll, wouldP = acc ? nowP + DEN.salary : nowP, wouldR = acc ? S.w.roster + 1 : S.w.roster;
+  const f = S.orders.fired, acc = f.verb === 'accept';
+  const nowP = S.w.payroll;
+  let branch;
+  if (f.c === 2) {
+    const wouldP = acc ? nowP + DEN.salary : nowP - DEN.salary, wouldR = acc ? S.w.roster + 1 : S.w.roster - 1;
+    branch = '<p style="margin:0">Payroll ' + kv('COMPUTED', M2(wouldP), PV.tax) + '<br>Roster ' + kv('AUTHORED', wouldR, PV.ros) + '<br>Projected tax ' + kv('COMPUTED', M2(projTax(wouldP)), PV.tax) + '</p>';
+  } else branch = '<div class="sealed"><b>Sealed.</b> What accepting a first-round request would have led to. You find out by living it.</div>';
   return '<div class="two"><div class="rec"><p class="recl">The record · stays as it is</p><p style="margin:0">Payroll ' + kv('RECORDED', M2(nowP), PV.pay) + '<br>Roster ' + kv('AUTHORED', S.w.roster, PV.ros) + '</p></div>' +
-    '<div class="forkbox fork"><p class="recl">Your branch · diverged ' + esc(f.world) + '</p>' + (acc ? '<p style="margin:0">Payroll ' + kv('COMPUTED', M2(wouldP), PV.tax) + '<br>Roster ' + kv('AUTHORED', wouldR, PV.ros) + '<br>Projected tax ' + kv('COMPUTED', M2(projTax(wouldP)), PV.tax) + '</p>' : '<div class="sealed"><b>Sealed.</b> What accepting a first-round request would have led to. You find out by living it.</div>') +
-    '<p class="tiny" style="margin:4px 0 0">Assumes: order §' + f.c + ' does not fire · nothing else differs. The record is not undone; this is a branch beside it.</p></div></div>';
+    '<div class="forkbox fork"><p class="recl">Your branch · diverged ' + esc(f.world) + '</p>' + branch +
+    '<p class="tiny" style="margin:4px 0 0">Assumes: ' + (f.c === 2 && !acc ? 'order §2 had said Accept' : 'order §' + f.c + ' does not fire') + ' · nothing else differs. The record is not undone; this is a branch beside it.</p></div></div>';
 }
+ACTS['order-edit'] = n => { S.orders.edit = S.orders.edit === +n ? null : +n; };
+ACTS['order-verb'] = p => {
+  const [n, v] = p.split(':'), before = clauseText(+n);
+  if (S.orders.cl[n].verb === v) return;
+  S.orders.cl[n].verb = v; S.orders.edited[n] = true;
+  log('you', 'edited standing order §' + n + ': “' + before + '” → “' + clauseText(+n) + '”', { hist: 'Your standing (private)', k: 'AUTHORED' });
+  say('Standing order ' + n + ' now reads: ' + clauseText(+n));
+};
 ACTS.away = () => {
   if (S.orders.away) return;
   stockSeat(); ensureRing();
@@ -902,17 +1057,22 @@ ACTS.away = () => {
   if (p === 'held') ACTS['ring-drop']();
   if (S.ring.phase === 'ringing' || S.ring.phase === 'call') ACTS['ring-lapse']();
   else if (S.ring.phase === 'answered') ACTS['ring-hangup']();
-  S.time = 2;
+  S.time = 2; S.orders.edit = null;
   const v = orderVerdict(), t2 = TIMES[2];
-  if (S.w.guard) { S.w.payroll -= DEN.salary; S.w.roster -= 1; S.w.guard = false; S.w.denver = 'accepted-order'; }
-  S.orders.fired = { c: v.c, real: t2.real, world: t2.world };
-  log('standing order §' + v.c, (v.c === 2 ? 'accepted ' : 'declined ') + firedText().replace('Denver’s second call: ', 'Denver’s second call — ') + ' (“§' + v.c + ' ' + ORDERS[v.c - 1].t + '”)', { real: t2.real, world: t2.world, hist: 'Boston · Year Two (your seat)', k: 'RECORDED' });
+  S.orders.fired = { c: v.c, verb: v.verb, wait: v.verb === 'wait', real: t2.real, world: t2.world };
+  if (v.c === 2) {
+    if (v.verb === 'accept') { S.w.payroll -= DEN.salary; S.w.roster -= 1; S.w.guard = false; S.w.denver = 'accepted-order'; }
+    else if (v.verb === 'decline') S.w.denver = 'declined-order';
+    else S.w.denver = 'declined-default';
+  }
+  if (v.verb === 'wait') log('World', 'Denver’s second call lapsed: §' + v.c + ' (“' + clauseText(v.c) + '”) left it for you, so the paper’s own default applied (declined). No act by you, none by an order.', { real: t2.real, world: t2.world, hist: 'Boston · Year Two (World record)', k: 'RECORDED', abs: true });
+  else log('standing order §' + v.c, (v.verb === 'accept' ? 'accepted ' : 'declined ') + firedText().replace('Denver’s second call: ', 'Denver’s second call — ') + ' (“§' + v.c + ' ' + clauseText(v.c) + '”)', { real: t2.real, world: t2.world, hist: 'Boston · Year Two (your seat)', k: 'RECORDED' });
   S.time = 3; S.orders.away = true;
-  log('you', 'was away 14 days: one ring answered by a standing order, one matter lapsed', { hist: 'Your standing (private)', k: 'AUTHORED' });
-  say('You were away 14 days. Standing order §' + v.c + ' answered one ring. It is stamped by the order, not by you.');
+  log('you', 'was away 14 days: one ring answered ' + (v.verb === 'wait' ? 'by the paper’s default' : 'by a standing order') + ', one matter lapsed', { hist: 'Your standing (private)', k: 'AUTHORED' });
+  say('You were away 14 days. ' + (v.verb === 'wait' ? 'No order answered; the default applied.' : 'Standing order §' + v.c + ' answered one ring. It is stamped by the order, not by you.'));
 };
 ACTS['order-ratify'] = () => { S.orders.ratified = true; log('you', 'ratified what standing order §' + S.orders.fired.c + ' did in your name', { hist: 'Boston · Year Two (your seat)', k: 'RECORDED' }); say('Ratified.'); };
-ACTS['order-takeout'] = () => { S.orders.takeout = !S.orders.takeout; if (S.orders.takeout) log('you', 'took the order’s act out into a branch (the record is not undone)', { real: TIMES[3].real, world: TIMES[3].world, hist: 'Your branch · order §' + S.orders.fired.c + ' does not fire', k: 'COMPUTED', fork: true }); };
+ACTS['order-takeout'] = () => { S.orders.takeout = !S.orders.takeout; if (S.orders.takeout) log('you', 'took the order’s act out into a branch (the record is not undone)', { real: TIMES[3].real, world: TIMES[3].world, hist: 'Your branch · order §' + S.orders.fired.c + (S.orders.fired.c === 2 && S.orders.fired.verb !== 'accept' ? ' had said Accept' : ' does not fire'), k: 'COMPUTED', fork: true }); };
 
 /* ================================================================ 8 · THE ROUND */
 const STOPS = [
@@ -946,8 +1106,8 @@ function whyTax() {
     c.items.map(x => '<div class="ln" style="margin-left:22px">' + KD(x.k) + '<span>' + esc(x.t) + ' <b>' + (x.first ? Mx(x.v) : (x.v < 0 ? '− ' : '+ ') + Mx(Math.abs(x.v))) + '</b>' + (x.note ? ' <span class="tiny">' + esc(x.note) + '</span>' : '') + '</span></div>').join('') + '</div>';
 }
 function seatDiff() {
-  const w = S.w, dn = { accepted: 'accepted by you at the ring', 'accepted-order': 'accepted by your standing order §2, stamped by the order', declined: 'declined by you', 'declined-default': 'declined by default (no act by you)' }[w.denver] || w.denver;
-  const denverLine = S.orders.fired && S.orders.fired.c === 1 ? 'Denver’s second call (a first-round pick) was declined by your standing order §1.' : 'Denver’s public notice: the guard trade is ' + dn + ' — signed facts only.';
+  const w = S.w, fd = S.orders.fired, dn = { accepted: 'accepted by you at the ring', 'accepted-order': 'accepted by your standing order §2, stamped by the order', 'declined-order': 'declined by your standing order §2, stamped by the order', declined: 'declined by you', 'declined-default': 'declined by default (no act by you)' }[w.denver] || w.denver;
+  const denverLine = fd && fd.c === 1 ? 'Denver’s second call (a first-round pick) was ' + (fd.wait ? 'left for you by your standing order §1, so the paper’s default declined it (no act by you).' : (fd.verb === 'accept' ? 'accepted' : 'declined') + ' by your standing order §1.') : 'Denver’s public notice: the guard trade is ' + dn + ' — signed facts only.';
   return '<div class="three">' +
     '<div><p class="lbl">You can see now that you couldn’t</p>' + ln('RECORDED', esc(denverLine)) + ln('AUTHORED', 'The owner’s note on the tax bill is readable: “What is the plan?” <span class="tiny">(authored)</span>') + ln('COMPUTED', 'Projected tax reads ' + M2(projTax(w.payroll)) + ' <span class="tiny">World rule, authored</span>') + '</div>' +
     '<div><p class="lbl">You can no longer do</p>' + ln('RECORDED', 'Convert the two-way call-up: the roster deadline passed in Week 9. The World recorded: <b>no act</b> by you.') + ln('RECORDED', 'Answer Denver’s Week 10 offer: it closed at 11:00.') + '</div>' +
@@ -1084,7 +1244,8 @@ SCENE.floor = function () {
   }
   return '<div class="cols sheet"><div>' + left + '</div><div>' + ask + '</div></div>';
 };
-document.addEventListener('input', e => { if (e.target && e.target.id === 'askq') S.floorAsk.text = e.target.value; });
+document.addEventListener('input', e => { if (e.target && e.target.id === 'askq') S.floorAsk.text = e.target.value; if (e.target && e.target.id === 'askhost') S.asst.draft = e.target.value; });
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target && e.target.id === 'askhost') { e.preventDefault(); act('send'); } });
 ACTS['floor-ask'] = () => { const t = S.floorAsk.text; const m = ASKMAP.find(x => x[0].test(t)); S.floorAsk.done = m ? m[1] : 'none'; log('you', 'asked in words: “' + t + '” → ' + (m ? 'matched a card (authored stand-in)' : 'no match'), { hist: 'Ask line (not a record)', k: 'AUTHORED' }); };
 ACTS['floor-again'] = () => { S.floorAsk.done = null; };
 ACTS['floor-pick'] = id => { S.floorAsk.done = id; log('you', 'chose from typed choices: ' + momentParts(id).q, { hist: 'Ask line (not a record)', k: 'AUTHORED' }); };
