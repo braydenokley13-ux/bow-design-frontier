@@ -104,6 +104,20 @@ the grammar met the city:
   and hash of the evidence it was tested against**, and replay reads the pin, not today's rows
   (footprints refresh weekly).
 
+**Independent critique** (`critique/CRITIC_3_CONVERGENCE.md`; a critic who built neither board, judging
+renders first): **COMBINE**. Keep the converting pin and the site checks and fold them into OneRecord's
+Boston World; park the map as a landing page. SCALE was judged STRONG ("a hop changes the subject along
+a named relation; the L1/L3 buttons only move the camera"), but the build does not go past the baseline
+the lane was asked to beat: one chain, arena → transit → neighbourhood → city. The critic's biggest
+failure was the ask box, which ignored "asdf" and sent "where is the Empire State Building?" to the club
+HQ without a word. A repair pass fixed it (parent-checked): unanswerable asks get NO SYSTEM FOR THIS with
+the words kept; places outside the excerpt say so; the Empire State Building opens its own site with a
+receipt naming the keyword router. The same pass drew the excerpt edge (the 800 m ring now states
+"80.3% covered", with the rest UNKNOWN), made the ENTER text true ("a practice seat taken with one
+click. This board draws no Offer") and put one form digest in every log that holds the act. **Across
+the two boards, acts are still not in one place**: OneRecord and RealityCity keep separate engines and
+address grammars.
+
 **The eight amendments the city forces on the act grammar** (lane D; all NO AI): READ lines — a G1
 holder gives a read, never a yes; one form clock — a World joins a Reality-dated Form only through a
 pinned coupling; one person, one side of a Form; ports before lines (no "ask anything of anyone");
@@ -330,6 +344,7 @@ worst case for amortization (lane E §7).
 | **A per-viewer "ask the city" guide** | **PARK** | E: the only AI cost that scales with audience; build only if it beats typed doors in a test |
 | **Citywide L3 as the default view** | **PARK** (context only; level of detail by subject extent) | B: 58,116 triangles for Midtown, about twice the 30k budget; E: attention and honesty cost, not pixels |
 | **Live feeds beyond the MTA** | **PARK** | A, E: dated snapshots by default; "live" is the photoreal of data |
+| **The city map as a landing page; RealityCity's pencil branch** | **PARK** | Critic 3: the map is one door ("what is here?"), not the front desk; a branch that saves slider values is a scenario, not a lineage |
 
 | Law | Who / why |
 |---|---|
