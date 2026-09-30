@@ -854,8 +854,8 @@ document.addEventListener('keydown', e => {
     box('brick', X0 - .5, -.4, Z0 - .5, X1 + .5, .9, Z0, { tile: .9, skip: '-y' }); box('brick', X0 - .5, 6.5, Z0 - .5, X1 + .5, WH, Z0, { tile: .9 }); box('brick', 11.8, .9, Z0 - .5, X1 + .5, 6.5, Z0, { tile: .9 });
     const gz0 = Z0 - .32, gz1 = Z0 - .14;
     box('steel', X0, .9, gz0, 11.8, .98, gz1); box('steel', X0, 6.42, gz0, 11.8, 6.5, gz1);
-    for (let x = X0; x < 11.81; x += 1.6) box('steel', x - .03, .98, gz0, x + .03, 6.42, gz1); box('steel', 11.77, .98, gz0, 11.83, 6.42, gz1);
-    for (const y of [2.7, 4.6]) box('steel', X0, y - .025, gz0, 11.8, y + .025, gz1);
+    for (let x = X0; x < 11.81; x += 1.6) box('steel', x - .02, .98, gz0, x + .02, 6.42, gz1); box('steel', 11.78, .98, gz0, 11.82, 6.42, gz1);
+    for (const y of [2.7, 4.6]) box('steel', X0, y - .018, gz0, 11.8, y + .018, gz1);
     quadTo(acc('glass'), [[X0, .98, Z0 - .22], [11.8, .98, Z0 - .22], [11.8, 6.42, Z0 - .22], [X0, 6.42, Z0 - .22]], [0, 0, 1], [[0, 0], [1, 0], [1, 1], [0, 1]], [1, 1, 1]);
     /* west, east walls (east with the entrance), gables: the near walls are cut away in the maquette */
     box('brick', X0 - .5, -.4, Z0 - .5, X0, WH, Z1 + .5, { tile: .9, skip: '-y' });
@@ -883,9 +883,9 @@ document.addEventListener('keydown', e => {
     for (const x of [-6.6, -1.6]) { box('timber', x - .19, 0, -3.99, x + .19, 6.2, -3.61, { tile: 1, skip: '-y' }); box('steel', x - .27, 5.3, -4.07, x + .27, 5.36, -3.53); box('steel', x - .27, .0, -4.07, x + .27, .12, -3.53); }
     box('timber', -7, 6.2, -4.12, -1, 6.55, -3.48, { tile: 1, swap: true });
     /* the mezzanine rail and the stair */
-    { const yb = DECK, zt = 6.1; box('steel', RX - .05, yb + 1.0, Z0 + .1, RX + .05, yb + 1.07, zt, { tile: 1 }); box('steel', RX - .02, yb + .5, Z0 + .1, RX + .02, yb + .54, zt);
-      for (let z = Z0 + .1; z <= zt + .01; z += .55) box('steel', RX - .012, yb, z - .012, RX + .012, yb + 1.0, z + .012);
-      for (let z = Z0 + .1; z <= zt + .01; z += 1.6) box('steel', RX - .05, yb, z - .05, RX + .05, yb + 1.07, z + .05);
+    { const yb = DECK, zt = 6.1; box('steel', RX - .04, yb + 1.0, Z0 + .1, RX + .04, yb + 1.05, zt, { tile: 1 }); box('steel', RX - .04, yb, Z0 + .1, RX + .04, yb + .07, zt);
+      quadTo(acc('glass'), [[RX, yb + .07, zt], [RX, yb + .07, Z0 + .1], [RX, yb + 1.0, Z0 + .1], [RX, yb + 1.0, zt]], [1, 0, 0], [[0, 0], [1, 0], [1, 1], [0, 1]], [1, 1, 1]);
+      for (let z = Z0 + .1; z <= zt + .01; z += 2.0) box('steel', RX - .03, yb, z - .03, RX + .03, yb + 1.05, z + .03);
       const n = 18, run = (RX - .4) / n, rise = DECK / n;
       for (let i = 0; i < n; i++) { const xa = .4 + i * run; box('oak', xa, 0, 6.5, xa + run, rise * (i + 1), 7.9, { tile: 1, skip: '-y' }); }
       box('steel', .4, 0, 6.42, RX, .1, 6.5); beam('steel', [.4, 1.02, 6.46], [RX, DECK + 1.02, 6.46], .05, .05);
@@ -902,7 +902,7 @@ document.addEventListener('keydown', e => {
       RANGE[id] = { s: [s0, sn], e: [[e0, e.p.length / 3]] };
     }
     for (const id of ROOMKEYS) roomShell(id, RZ[id]);
-    box('roomRoof', X0, RH - .03, -6.4, RXF + .05, RH + .16, 6.4, { tile: 2 });
+    box('roomRoof', X0, RH - .03, -6.4, RXF + .05, RH + .16, 6.4, { tile: 2 }); box('roomRoof', RXF - .02, RH - .03, -6.4, RXF + .1, RH + .78, 6.4, { tile: 2 });
     for (const id of ROOMKEYS) {
       const cz = RZ[id], zl = cz - RW, zr = cz + RW;
       box('steel', RXF - .04, 0, zl - .04, RXF + .04, .15, zr + .04); box('steel', RXF - .04, RH - .16, zl - .04, RXF + .04, RH, zr + .04);
@@ -940,7 +940,7 @@ document.addEventListener('keydown', e => {
     BRD.tax = panelMesh(494, 1024, 1.4, MWH, [BX, MWY, -4.1], FXP, { id: 'board.tax' });
     BRD.cash = panelMesh(440, 220, 1.1, .55, [BX, 6.55, -5.85], FXP, { id: 'plate.cash' });
     hit('board.roster', X0, MWY - MWH / 2, 1.0, X0 + .45, MWY + MWH / 2, 6.2); hit('board.cap', X0, MWY - MWH / 2, -3.15, X0 + .45, MWY + MWH / 2, .75); hit('board.tax', X0, MWY - MWH / 2, -4.8, X0 + .45, MWY + MWH / 2, -3.4); hit('plate.cash', X0, 6.25, -6.4, X0 + .45, 6.85, -5.3);
-    for (const id of ROOMKEYS) { pl('sign.' + id, 2.9, .62, 240, [X0 + .05, 3.98, RZ[id]], FXP); hit('dept.' + id, X0, 0, RZ[id] - RW, RXF, 4.4, RZ[id] + RW); }
+    for (const id of ROOMKEYS) { pl('sign.' + id, 2.9, .6, 240, [RXF + .105, RH + .37, RZ[id]], FXP, 'atlasS'); hit('dept.' + id, X0, 0, RZ[id] - RW, RXF, 4.4, RZ[id] + RW); }
     /* draft board inside Scouting */
     BRD.draft = panelMesh(512, 380, 1.7, 1.25, [-12.925, 1.85, RZ.scouting], FXP, { id: 'board.draft', glow: .05 });
     box('sheetDraft', -12.93, 1.2, RZ.scouting - .9, -12.85, 2.5, RZ.scouting + .9, { tile: .8 });
@@ -1063,9 +1063,9 @@ document.addEventListener('keydown', e => {
     for (let x = NB.x0; x <= NB.x1 + .01; x += 2.6) box('nbrScaf', x - .03, 0, NB.z1 + .25, x + .03, 6.5, NB.z1 + .31); for (const y of [2.1, 4.2, 6.3]) { box('nbrScaf', NB.x0, y - .03, NB.z1 + .25, NB.x1, y + .03, NB.z1 + .31); box('nbrScaf', NB.x0, y - .03, NB.z1 + .9, NB.x1, y + .03, NB.z1 + .96); box('nbrScafPl', NB.x0, y, NB.z1 + .2, NB.x1, y + .05, NB.z1 + .95, { tile: 1 }); }
     for (let x = NB.x0; x <= NB.x1 + .01; x += 2.6) box('nbrScaf', x - .03, 0, NB.z1 + .9, x + .03, 6.5, NB.z1 + .96);
     /* footbridge across the slip (exists once a branch does) */
-    box('bridgeDeck', -2.6, .02, -22.6, -1.4, .2, Z0 - 2.9, { tile: 1 }); for (const x of [-2.62, -1.42]) { box('bridgeRail', x, .2, -22.6, x + .04, 1.1, Z0 - 2.9); for (let z = -22.5; z < Z0 - 2.85; z += 1.6) box('bridgeRail', x - .02, .0, z - .04, x + .06, 1.1, z + .04); }
+    box('bridgeDeck', -2.6, .02, -22.6, -1.4, .2, Z0 - 2.9, { tile: 1 }); for (const x of [-2.62, -1.42]) { box('bridgeRail', x, 1.02, -22.6, x + .04, 1.08, Z0 - 2.9); for (let z = -22.5; z < Z0 - 2.85; z += 1.6) box('bridgeRail', x - .02, .0, z - .04, x + .06, 1.1, z + .04); }
     /* the arena: an open bowl model, seat rows on steps; the state of the next home night is painted on the treads */
-    const AC = { x: 24, z: -48 }, R0 = 7.5, TIERS = 6, TW = 1.75, RMAX = R0 + TIERS * TW, HT = t => .5 + t * .55;
+    const AC = { x: 18, z: -48 }, R0 = 7.5, TIERS = 6, TW = 1.75, RMAX = R0 + TIERS * TW, HT = t => .5 + t * .55;
     const bowlGeo = (() => {
       const pos = [], nor = [], uv = [], idx = [], SEG = 72, P = (r, a, y) => [AC.x + r * Math.cos(a), y, AC.z + r * Math.sin(a)], UVp = p => [(p[0] - AC.x) / RMAX * .5 + .5, .5 - (p[2] - AC.z) / RMAX * .5];
       const quad4 = (A, B, C, D, N, planar) => { const o = pos.length / 3; for (const p of [A, B, C, D]) { pos.push(...p); nor.push(...(typeof N === 'function' ? N(p) : N)); const u = planar ? UVp(p) : [.01, .01]; uv.push(u[0], u[1]); } idx.push(o, o + 1, o + 2, o, o + 2, o + 3); };
@@ -1093,7 +1093,7 @@ document.addEventListener('keydown', e => {
     const BOWL = { c: cv(1024, 1024) }; BOWL.g = BOWL.c.getContext('2d'); T.bowl = mkTex(BOWL.c); T.atlas = mkTex(AT.c);
     Object.assign(MAT, {
       atlas: L({ map: T.atlas, alphaTest: .03 }), roofM: S_({ map: T.timber, color: 0xd6b88c, roughness: .8, metalness: 0 }), scaf: S_({ color: 0xa8a8a0, roughness: .45, metalness: .7 }),
-      slat: L({ map: T.slat }), paper: L({ color: 0xffffff }), maqWater: L({ color: 0xc7d4d4 }), brassD: S_({ color: 0x8d6d22, roughness: .4, metalness: .8 }), bowl: L({ map: T.bowl })
+      slat: L({ map: T.slat }), paper: L({ color: 0xffffff }), maqWater: L({ color: 0xc7d4d4 }), brassD: new THREE.MeshLambertMaterial({ color: 0xb08a2c, emissive: 0x3a2c08 }), bowl: L({ map: T.bowl })
     });
     const M = {}; const bk = (name, mat, o = {}) => { const m = bake(name, mat, o); if (m) M[name] = m; return m; };
     const mergeAcc = (into, names) => { const t = acc(into); for (const n of names) { const a = ACC[n]; if (!a) continue; const off = t.p.length / 3; for (const v of a.p) t.p.push(v); for (const v of a.n) t.n.push(v); for (const v of a.u) t.u.push(v); for (const v of a.c) t.c.push(v); for (const v of a.i) t.i.push(v + off); delete ACC[n]; } };
@@ -1439,8 +1439,8 @@ document.addEventListener('keydown', e => {
     paperGrp.add(paperShadow, paperMesh);
     const POSES = {
       door: { eye: [11.7, 1.62, 1.45], at: [8.5, 1.02, 1.05] }, rail: { eye: [8.3, 5.0, 1.4], at: [-6.5, 2.0, -1.8] },
-      desk: { eye: [10.4, 4.5, -1.5], at: [9.75, 3.9, -6.6] }, 'desk-file': { eye: [10.4, 4.5, -1.5], at: [9.72, 3.95, -2.6] },
-      'desk-league': { eye: [10.4, 4.5, -1.5], at: [-17, 2.8, -22.6] }, 'desk-bowl': { eye: [10.4, 4.5, -1.5], at: [24, 1.4, -46] },
+      desk: { eye: [10.4, 4.5, -1.5], at: [9.35, 3.85, -6.6] }, 'desk-file': { eye: [10.4, 4.5, -1.5], at: [9.72, 3.95, -2.6] },
+      'desk-league': { eye: [10.4, 4.5, -1.5], at: [-17, 2.8, -22.6] }, 'desk-bowl': { eye: [10.4, 4.5, -1.5], at: [18, 1.2, -46] },
       'desk-analytics': { eye: [10.4, 4.5, -1.5], at: [-10.7, 1.7, 4.4] }, 'desk-history': { eye: [10.4, 4.5, -1.5], at: [9.8, 5.0, 8] },
       money: { eye: [.8, 1.65, .4], at: [-12.9, 5.3, -.3] }, court: { eye: [4.5, 1.65, -.6], at: [-3.2, .4, 4.4] },
       analytics: { eye: [-1.5, 1.65, 1.0], at: [-10.8, 2.4, 3.2] }, ticketing: { eye: [-1.5, 1.65, -1.0], at: [-10.8, 2.4, -3.2] },
@@ -1483,10 +1483,10 @@ document.addEventListener('keydown', e => {
     const STATS = { calls: 0, tris: 0 };
     /* paper: brought to the camera from where it lay */
     const PP = { id: null, t0: 0, dur: 300, from: V3(), out: false };
-    const REST = V3(-.14, -.02, -1.26);
+    const REST = V3(.3, -.27, -1.3);
     function stepPaper(now) {
       if (!paperGrp.visible) return false; const k = Math.min(1, (now - PP.t0) / PP.dur), e = ease(PP.out ? 1 - k : k);
-      paperGrp.position.lerpVectors(PP.from, REST, e); paperGrp.scale.setScalar(.3 + .7 * e); paperGrp.rotation.z = (1 - e) * .5 + .012; if (k >= 1 && PP.out) { paperGrp.visible = false; return false; } return k < 1;
+      paperGrp.position.lerpVectors(PP.from, REST, e); paperGrp.scale.setScalar((.3 + .7 * e) * .82); paperGrp.rotation.z = (1 - e) * .5 + .012; if (k >= 1 && PP.out) { paperGrp.visible = false; return false; } return k < 1;
     }
     function showPaper(fx) {
       camera.updateMatrixWorld(); const inv = camera.matrixWorld.clone().invert(); const a = (ANCH[fx.id] || V3(0, 0, 0)).clone().applyMatrix4(inv); PP.from.copy(a.z < -.4 ? a : V3(.3, -.5, -.8));
