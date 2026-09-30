@@ -32,7 +32,7 @@ Default cost is NO AI. SMALL appears only for routing a free-text question and p
 
 ### 2.1 Museum: the vase on Fifth Avenue
 
-**Anchor.** The Met is 3 km north of the Midtown pack, so it is a pin, not massing. Lane A's Midtown box contains MoMA, whose CC0 data excludes images. I use Met objects because all five below have `isPublicDomain: true` [M]. BOW does not run the Met. The Met is a source. The running system is a BOW World, "New York · 1817–1825" (BOW WORLD, AUTHORED over RECORDED anchors).
+**Anchor.** The Met is north of, and outside, the Midtown pack, so it is a pin, not massing. MoMA sits near the box's northern edge [verify], but its CC0 data excludes images. I use Met objects because all five below have `isPublicDomain: true` [M]. BOW does not run the Met. The Met is a source. The running system is a BOW World, "New York · 1817–1825" (BOW WORLD, AUTHORED over RECORDED anchors).
 
 **Flow.**
 1. ARRIVE at Met **6778** *Presentation Vase*, Thomas Fletcher, silver, 1824, accession 1982.4a,b, made in Philadelphia, 410 oz 5 dwt; metadata dated 2025-10-03 [M]. The door is its question: "Why does a silver vase honour a canal?" Three places, three typed relations: MADE AT Philadelphia (API field), HELD BY the Met, DEPICTS the canal route (from entry text, which returned HTTP 429 to me: [S] "New York merchants commissioned a pair of vases, presented March 1825 to Governor DeWitt Clinton for promoting the canal"; [verify]). [PROPOSED · NO AI; extracting DEPICTS from free text is PROPOSED · SMALL with human review]. Sibling **6779** (Fletcher, 1825, tags Eagles, Waterfalls) is drawn dashed: "may be its pair [verify]".
@@ -67,13 +67,15 @@ At 1:1 the answer is exact: x²/(1−x)² = 4 gives x = 2/3. The model sits 1.7 
 5. NAME: equilibrium; Le Chatelier's principle. The graph is also economics: the extra yield per extra mole of ethanol falls +17.9, +5.8, +2.7, +1.5 … +0.3 points [M]. Only when the AUTHORED price column appears does it become a decision. False-lesson guard: "chemistry equals economics" is not taught. The shape is shared and the price is authored.
 6. SCALE via MADE BY: Eastman's methyl acetate process replaced one reactor plus nine columns with one reactive-distillation column (Agreda and Heise, *Chem. Eng. Progress* 86(2), 1990) [S]. That is lever 2, removing water as it forms, built into a plant. PAID TO the feedstock market: NYMEX Henry Hub gas futures [S], matched in Aurora, Illinois [S]. Whether methanol here is gas-derived is [verify]. [PROPOSED · NO AI]
 
+**Knowledge moment.** lab → molecules → equation → graph → explanation: the flask stops at two-thirds because K is 4, and the same curve explains why ten times the ethanol gets 97.4%.
+
 **Challenge → Moment.** Emerges when the student's plan hits the hood limit: 10:1 is refused, naming the AUTHORED rule. Title: "Same flask, two benches: which 97% cost more?" Bench A at 10:1 gets 97.4% and Bench B at 5:1 gets 94.5%, so the last 2.9 points cost five more moles [M]. Sealed: the other bench's run.
 
 **Geography verdict.** Nearly none. Depth goes to L2 (molecule panel and graph). A 3D lab interior is expensive decoration.
 
 ### 2.3 Hospital: eight patients, three nurses
 
-**Anchor.** An AUTHORED hospital, "Riverside General", on a lot passing lane A's vacancy test. Patients are AUTHORED, with no personal data. Real hospitals enter only as a RECORDED moment. Lane A found Bellevue's lot listed under three operators, so "who runs this?" is already a checkable question.
+**Anchor.** An AUTHORED hospital, "Riverside General", on a lot passing lane A's vacancy test. Patients are AUTHORED, with no personal data. Real hospitals enter only as a RECORDED moment. Lane A found Bellevue's lot listed under three sources (city hospitals, corrections, state mental health), so "who runs this?" is already a checkable question.
 
 **Truth kinds.** RECORDED rules: NY ICU minimum of one nurse per two critical-care patients, 10 NYCRR 405.22 (NYSNA, 29 Aug 2023: in effect) [S]. RECORDED moment, Sandy, 29–30 Oct 2012: NYU Langone began moving about 300 patients when generators failed, Bellevue about 500; counts differ by outlet [S, verify]. Fuel pumps and tanks sat in basements a block from the East River [S]. MODELED: NYC evacuation-zone inundation from the NHC 2020 SLOSH NE1 model, 10 m, last updated 15 Dec 2022 [S]; it is not the 2012 storm and the sheet says so. Red cells keep 42 days at 6 °C, platelets 5 days on agitators (Red Cross) [S].
 
@@ -82,8 +84,10 @@ At 1:1 the answer is exact: x²/(1−x)² = 4 gives x = 2/3. The model sits 1.7 
 2. Layer the evacuation zone (DCP data) and SLOSH inundation over RECORDED footprints. HOW DO WE KNOW: named model, other storm. [PROPOSED · NO AI]
 3. WHAT IF, pumps on the roof: the Council can Declare, but "would they have stayed open" is UNKNOWN. The branch is marked ASSUMED and never forecast. [PROPOSED · NO AI]
 4. ENTER Riverside General, night charge nurse. Form "Open ICU bed 7": RULE (patients ≤ 2 × nurses), WILL (charge nurse), MONEY (agency shift, AUTHORED rate), TIME (19:00 shift start), KNOWING (blood bank tells count and result only). Three nurses cap the unit at 6; eight patients need 4. The refusal names the rule. [PROPOSED · NO AI]
-5. Biology that is executable: perishable stock. Platelet units age one day per day and vanish on day 5. BOW does not adjudicate *who needs* intensive care, which is a clinical determination (UNKNOWN, with that reason). [PROPOSED · NO AI]
-6. NAME: perishable inventory, waste against stockout. Donors are suppliers on a lead time (SCALE via PAID TO). CARRY (PEERS): capacity = rule × a scarce person, the same shape as an apron over a payroll (2.6).
+5. Biology that is executable: perishable stock. Platelet units expire after day 5. BOW does not adjudicate *who needs* intensive care, which is a clinical determination (UNKNOWN, with that reason). [PROPOSED · NO AI]
+6. NAME: perishable inventory, waste against stockout. Donors are suppliers on a lead time (SCALE via PAID TO). CARRY (PEERS): capacity = rule × a scarce person, the same shape as an apron over a payroll (2.6). [PROPOSED · NO AI]
+
+**Knowledge moment.** rule → capacity → shortage → perishable stock: the refusal (three nurses, eight patients) walks to the ratio, to the agency cost, to the blood-bank sheet where expiry is the price of overstocking.
 
 **Challenge → Moment.** Title: "Eight patients, three nurses, 18:40: what do you do?" Sealed: which platelets expire, which cases move.
 
@@ -91,7 +95,7 @@ At 1:1 the answer is exact: x²/(1−x)² = 4 gives x = 2/3. The model sits 1.7 
 
 ### 2.4 Port: one berth, two ships
 
-**Anchor.** Port Newark–Elizabeth, reached under the Bayonne Bridge [S]. The container terminals sit in New Jersey, not in the city. That is a surprise a map corrects. The Port Authority's open data stops at 2015–16 (lane A), so volume is a dated press figure: 8,897,531 TEU in 2025 [S]. The BOW terminal is AUTHORED and implies no real operator. NOAA AIS is historical replay only.
+**Anchor.** Port Newark–Elizabeth, reached under the Bayonne Bridge [S]. The largest container terminals (Port Newark, Elizabeth) sit in New Jersey, not in the city [verify]. That is a surprise a map corrects. The Port Authority's open data stops at 2015–16 (lane A), so volume is a dated press figure: 8,897,531 TEU in 2025 [S]. The BOW terminal is AUTHORED and implies no real operator. NOAA AIS is historical replay only.
 
 **Truth kinds.** RECORDED: bridge clearance raised from 151 to 215 ft, cleared June 2017, cost about $1.7B [S, verify]; the Panama Canal expansion, 2016 [S]. Cargo rules: 19 CFR 4.7 (carrier's cargo declaration 24 hours before loading abroad) and Part 149 (importer security filing, same lead time) [S, eCFR]. MODELED only when the named model runs: "M/M/1 queue v0.1".
 
@@ -116,9 +120,11 @@ At 1:1 the answer is exact: x²/(1−x)² = 4 gives x = 2/3. The model sits 1.7 
 **Flow.**
 1. ARRIVE at "March 1792 · a corner fails": a Cut. Seat: the Treasury Secretary, a real person by public facts, with no actor speaking as him. NOT YET: the Agreement. [PROPOSED · NO AI]
 2. Form "Authorize purchases": Bank of New York (WILL), Treasury cash (MONEY, amounts UNKNOWN until Sylla is read), brokers (KNOWING: they learn after), TIME (days). The recorded outcome is sealed until the seat acts. [PROPOSED · NO AI]
-3. NAME: lender of last resort. The claim that this anticipated later central-bank doctrine is one scholar's [S, verify]. Also offer the other seat, Duer's creditors, so the lesson is not a hero story.
+3. NAME: lender of last resort. The claim that this anticipated later central-bank doctrine is one scholar's [S, verify]. Also offer the other seat, Duer's creditors, so the lesson is not a hero story. [PROPOSED · NO AI]
 4. The Agreement: "Is a market rule a cartel?" WHY-walk: market → institution → regulation, then BOUND BY today's SEC-approved rule on exchange fibre and wireless [S]. [PROPOSED · NO AI]
 5. HERE: where is the NYSE's market? The primary data centre is in Mahwah, New Jersey [S]. The SEC required fibre lengths equalised to competitors, in a dispute over "two-millionths of a second" [S]. Two microseconds is about 400 m of glass (refractive index ≈ 1.47; computed [M]). CARRY: latency as money. [PROPOSED · NO AI]
+
+**Knowledge moment.** panic → intervention → institution → today's cable rule: company, capital, market and regulation as one two-century thread, each hop ending at a dated source.
 
 **Challenge → Moment.** Title: "March 1792 · prices are down a quarter in two weeks: do you buy?" Sealed: the recorded action and recovery.
 
@@ -126,15 +132,15 @@ At 1:1 the answer is exact: x²/(1−x)² = 4 gives x = 2/3. The model sits 1.7 
 
 ### 2.6 Arena: the trade that crossed a river
 
-**Anchor.** Lane A's worked cases, all [M]: Madison Square Garden is footprint BIN 1082908; its lot BBL 1007810001 is listed in PLUTO under the national rail corporation with year built 0 and area 0 (UNKNOWN). Barclays Center is BIN 3398156, lot owner "ARENA NOMINEE SUB B". Lot owner, arena operator and team are three systems; the operator and team are public facts still needing sources [verify].
+**Anchor.** Lane A's worked cases (measured by lane A): Madison Square Garden is footprint BIN 1082908; its lot BBL 1007810001 is listed in PLUTO under the national rail corporation with year built 0 and area 0 (UNKNOWN). Barclays Center is BIN 3398156, lot owner "ARENA NOMINEE SUB B". Lot owner, arena operator and team are three systems; the operator and team are public facts still needing sources [verify].
 
 **Flow.**
 1. ARRIVE on the Garden; RUN BY shows the lot's owner, and BOW's arena system is BOW-built authority beside it. The Room does not open by clicking a parcel. [PROPOSED · NO AI]
 2. Seat: Knicks GM in a BOW World. The mechanism is REAL · NO AI (CBA rules engine, sourced dated fact store, trade papers in the NBA League World, unmerged). The New York fixture is PROPOSED.
-3. Draft a Knicks–Nets paper. The real precedent: Bridges to New York, agreed 25 Jun 2024, completed 6 Jul 2024, five first-round picks and a swap, first trade between the clubs since 1983 [S, verify]. SEND is refused by the League line, which names the rule. [REAL · NO AI]
-4. The founder's chain, in four hinges: refusal → payroll (the Neck) → rule (BOUND BY) → contract (WRITTEN AS) → source (MADE BY: CBA, dated row). [PROPOSED · NO AI]
-5. Extend to media and labour: the cap follows league revenue, and NBA agreements with ESPN/ABC, NBC/Peacock and Amazon run 11 years to 2035–36, reported at $76B [S, nba.com and ESPN]. The cap can rise at most 10% a year [S]. Then demand: the arena night shows PLAYED, ESTIMATE or NOT KNOWN (REAL for Boston only), and transit load comes from lane B. [PROPOSED · NO AI]
-6. NAME: cap as institution. CARRY to the hospital: rule × scarce person.
+3. Draft a Knicks–Nets paper. The real precedent: Bridges to New York, agreed 25 Jun 2024, completed 6 Jul 2024, five first-round picks and a swap, first trade between the clubs since 1983 [S, verify]. SEND is refused by the League line, which names the rule. [REAL for the rules engine and trade papers; the refusal-names-the-rule form is PROPOSED · NO AI]
+4. **Knowledge moment**, the founder's chain, in four hinges: refusal → payroll (the Neck) → rule (BOUND BY) → contract (WRITTEN AS) → source (MADE BY: CBA, dated row). [PROPOSED · NO AI]
+5. Extend to media and labour: the cap follows league revenue [verify against the CBA], and NBA agreements with ESPN/ABC, NBC/Peacock and Amazon run 11 years to 2035–36, reported at $76B [S, nba.com and ESPN]. The cap can rise at most 10% a year [S]. Then demand: the arena night shows PLAYED, ESTIMATE or NOT KNOWN (REAL for Boston only), and transit load comes from lane B. [PROPOSED · NO AI]
+6. NAME: cap as institution. CARRY to the hospital: rule × scarce person. [PROPOSED · NO AI]
 
 **Challenge → Moment.** Cut at the deadline. Title: "25 Jun 2024 · Brooklyn is asked what a wing is worth". Real players appear by public facts, without likenesses.
 
@@ -142,7 +148,7 @@ At 1:1 the answer is exact: x²/(1−x)² = 4 gives x = 2/3. The model sits 1.7 
 
 ## 3. Where a challenge emerges, and how it becomes a Moment
 
-**The predicate (NO AI).** Offer a CHALLENGE when the persistent record holds all three: (a) a hard clock inside the horizon; (b) slack under a rule-computed constraint that a seat's lever can reach; (c) at least one line of the act held by another system. Boston's own Neck fits: $1.706M under the tax line, deadline days away, League and rival lines open (Jurisdiction board).
+**The predicate (NO AI).** Offer a CHALLENGE when the persistent record holds all three: (a) a hard clock inside the horizon; (b) slack under a rule-computed constraint that a seat's lever can reach; (c) at least one line of the act held by another system. Boston shows both halves: the Neck shows slack ($1.706M under the tax line, Jurisdiction board) and the Cut shows the clock (deadline week, 2 Feb 2026), with League and rival lines open.
 
 | System | Clock | Binding constraint | Yes held elsewhere | Sealed until the seat acts |
 |---|---|---|---|---|
@@ -160,7 +166,7 @@ Same flask, two benches: which 97% cost more?
 address  labs.bench4 · run 1 · main · seat student · card
 A  10:1 → 97.4%  MODELED (ideal-K v1); textbook 97% RECORDED
 B   5:1 → 94.5%  MODELED
-Last 2.9 points = 5 more moles of ethanol (price: AUTHORED)
+Last 2.9 points = 5 more moles of ethanol per mole of acid (price: AUTHORED)
 Sealed to visitors: the other bench's run
 ```
 
