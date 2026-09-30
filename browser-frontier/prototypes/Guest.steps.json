@@ -6,6 +6,24 @@
 "shot": "00-start-assistant"
 },
 {
+"fill": [
+"#askhost",
+"Who won the 2016 NBA finals?"
+]
+},
+{
+"click": "Send"
+},
+{
+"shot": "00b-assistant-typed-question-kept-no-system"
+},
+{
+"click": "Ask about Boston"
+},
+{
+"shot": "00c-suggestion-in-the-box-not-sent"
+},
+{
 "click": "Send"
 },
 {
@@ -226,6 +244,15 @@
 },
 {
 "shot": "07-orders-before-away"
+},
+{
+"click": "Edit §1"
+},
+{
+"click": "Set §1 to Leave for me"
+},
+{
+"shot": "07a-orders-clause-edited-by-you"
 },
 {
 "click": "Be away for 14 days"

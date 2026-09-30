@@ -237,6 +237,58 @@ tr.ref td{background:rgba(179,30,20,.08);border-bottom:2px solid var(--red);font
 .objs summary{cursor:pointer;font:600 11.5px var(--mono);padding:2px 0;min-height:24px}
 .pane .ph .act{border:1.5px solid var(--ink);background:var(--brass);padding:0 8px;min-height:22px;font:700 11px var(--mono)}
 .ctable td{padding:1px 4px}
+/* a real phone: what a 390-wide viewport receives (Table + Direct by detection, one column, the page scrolls) */
+@media (max-width:600px){
+  html,body{height:auto;min-height:100%}
+  body{display:block;overflow-x:hidden;overflow-y:auto}
+  #topstrip{height:auto;min-height:0;display:flex;flex-wrap:wrap;gap:3px 8px;padding:4px 10px;align-items:flex-start}
+  #topstrip #declare{white-space:normal;font-size:11.5px;text-align:left;min-height:30px;flex:1 1 100%}
+  #tools{flex:1 1 100%;flex-wrap:wrap}
+  #hdr{flex-wrap:wrap;gap:6px 10px;padding:6px 10px;min-height:0}
+  .brand{flex:1 1 100%;flex-direction:row;align-items:baseline;gap:8px}
+  .levers{flex:1 1 100%;order:2;gap:6px;justify-content:space-between}
+  .levers .btn{flex:1 1 auto;padding:4px 8px;justify-content:center;text-align:center}
+  .lever{flex:none;padding:2px 8px}.lever b{font-size:19px}
+  .addr{order:3;flex:1 1 100%;font-size:11.5px}
+  .plan{flex-wrap:wrap;gap:6px 8px;padding:6px 10px;min-height:0}
+  .plan .chips{display:none}
+  .plan .why{flex:1 1 100%;order:3;font-size:13px}
+  .plan .acts{flex:1 1 100%;order:4;flex-wrap:wrap}
+  .plan .acts .btn{flex:1 1 auto;justify-content:center;text-align:center}
+  .reasons{padding:6px 10px}.reasons .row{grid-template-columns:1fr;gap:2px}
+  .notice{flex-wrap:wrap;padding:5px 10px}.notice>b{flex:1 1 100%}
+  #board,#board.lead,#board.phone{display:block;flex:none;padding:8px 10px;overflow:visible;max-width:none;margin:0;border:0;border-radius:0;background:none}
+  #board.fork{box-shadow:inset 0 0 0 3px var(--green)}
+  #panes,#board.phone #panes,.lead #panes{display:block;flex:none;overflow:visible}
+  .pane{margin-bottom:8px;height:auto}
+  .ph{flex-wrap:wrap;row-gap:2px}
+  .pb{overflow:visible;height:auto}
+  .pane .pb .tbl{position:static;height:auto;overflow:visible}
+  .pane[data-view=room] .pb{height:400px;overflow:hidden}
+  .pane[data-view=timeline] .pb{height:290px;overflow:hidden}
+  .pane[data-view=ledger] .pb{height:290px;overflow:hidden}
+  .tbl{padding:6px 6px}
+  table{font-size:12.5px}
+  td.nw,.actc{white-space:normal}
+  .tbl .cellbtn{white-space:normal;font-size:12px}
+  .money{grid-template-columns:1fr}
+  #direct,#board.phone #direct{order:0;height:auto;max-height:none;margin-top:8px}
+  #direct.open,#direct.open.lead,#board.phone #direct{height:auto;max-height:none}
+  #dhead{flex-wrap:wrap;row-gap:2px;padding-bottom:3px}
+  #receipt,#direct.open #receipt{flex:1 1 100%;order:5;white-space:normal;overflow:visible}
+  #dctl{margin-left:auto;display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+  #dbody{overflow:visible}
+  .dcols,.dcols2,.lead .dcols{grid-template-columns:1fr}
+  .fcols{column-count:1}
+  .voice{height:auto;padding:8px 10px}
+  .roombar .rb1{gap:4px}
+  #rig{padding:6px 10px}
+  #realsheet{max-height:none;padding:6px 10px}
+  #realsheet ul{grid-template-columns:1fr}
+  #status{white-space:normal;font-size:10.5px}
+  .howsheet{position:static;max-height:none}
+  .failcover{position:static;margin:0}
+}
 </style>
 </head>
 <body>
@@ -320,13 +372,13 @@ function mattersOf(S){
   m.push({id:'owner',text:'The owner’s note on the tax bill is unanswered (read-only here).',file:null});
   return m;
 }
-const STATUS={unsigned:'unsigned',signed:'signed by both owners',declined:'declined by you'};
+const STATUS={unsigned:'unsigned',signed:'signed',declined:'declined by you'};
 function surfBoston(S){
   const F=[];
   const add=(path,cat,token,text,say,o)=>{o=o||{};F.push({path,cat,token,text,say,lead:o.lead||TK[token].lead,src:o.src||'',asOf:o.asOf||'',facet:o.facet||'',note:o.note||''})};
   const over=S.payroll-LINE,tax=Math.max(0,over)*1.5;
   add('clock.week','Now','AUTHORED',W.clock.label,'the World is at {t}',{lead:'Authored World calendar',src:'World calendar (authored)',note:'World time, not a date'});
-  add('matters.open','Now','COMPUTED',mattersOf(S).length+' matters open','the seat holds {t}',{src:'open matters in the seat'});
+  add('matters.open','Now','COMPUTED',mattersOf(S).length+(mattersOf(S).length===1?' matter':' matters')+' open','the seat holds {t}',{src:'open matters in the seat'});
   /* the trade is settled history: act 40 in the World's record, read from the fixture */
   add('trade.status','Golden State trade','RECORDED','signed by both owners','Golden State trade, {t}',{src:'World record, act '+TRADE_N+' (fixture record[].n)'});
   add('trade.send','Golden State trade','RECORDED','Derrick White, '+M(TF.send[0].salary.v),'we sent {t}',{src:'World trade file'});
@@ -610,7 +662,6 @@ function vTable(SRC,S){
   '<tr class="file '+chg(d.act)+'"><td>Denver <span class="dnote">(illustr.)</span></td><td>'+b('file.den.status')+'</td><td>'+doit('den',d.status,'file.den.act')+'</td></tr>'+(sm['refusal.last']?'<tr class="ref"><td colspan="3"><span class="actno" style="background:var(--red);color:#fff">REFUSED</span> '+b('refusal.last','refb')+'<br>To allow it: '+b('refusal.allow')+'</td></tr>':'')+'</tbody>'+
   '<tr class="sec"><th>Roster</th><th>Salary</th><th>Act</th></tr>'+
   '<tr><td>Jayson Tatum</td><td>'+b('roster.tatum')+'</td><td></td></tr>'+
-  '<tr><td>Derrick White</td><td>'+b('roster.white')+'</td><td>'+b('trade.act','actc')+'</td></tr>'+
   '<tr><td>Jimmy Butler</td><td>'+b('roster.butler')+'</td><td>'+b('trade.act','actc')+'</td></tr>'+
   (sm['roster.cup']?'<tr class="chg"><td>Two-way call-up</td><td>'+b('roster.cup')+'</td><td>'+b('file.cup.act','actc')+'</td></tr>':'')+
   (sm['roster.den']?'<tr class="chg"><td>Denver’s contract</td><td>'+b('roster.den')+'</td><td>'+b('file.den.act','actc')+'</td></tr>':'')+
@@ -649,16 +700,16 @@ function vTimeline(SRC,S){
   const sz=ST._sz.timeline,ww0=sz?Math.min(sz.w,sz.h*640/420):700,dense=ww0<540||!!SRC.refusal;
   if(!dense)m+=B('payroll.toHard',236,yHard-14,'','to the limit · '+esc(sm['payroll.toHard'].text));
   m+=B('rule.taxLine',76,yTax-14,'','Tax line '+esc(sm['rule.taxLine'].text));
-  m+=B('trade.act',X(6)-10,(Y(H[1].p)+Y(H[2].p))/2-16,'ar','Golden State trade · '+esc(sm['trade.act'].text));
+  m+=B('trade.act',X(6)+8,200,'',esc(sm['trade.act'].text)+' · trade');
   let gy=62;
   if(SRC.refusal){m+='<div class="tlgroup" style="'+pos(96,gy)+'">'+B('refusal.last',0,0,'refuse wrap','REFUSED · '+esc(sm['refusal.last'].text)).replace(/style="[^"]*"/,'')+B('refusal.allow',0,0,'wrap','To allow it: '+esc(sm['refusal.allow'].text)).replace(/style="[^"]*"/,'')+'</div>';gy=172}
   m+='<div class="tlgroup" style="'+pos(96,gy)+'">'+
      B('file.cup.status',0,0,'','Call-up · '+esc(sm['file.cup.status'].text)).replace(/style="[^"]*"/,'')+
      (SRC.refusal?'':B('file.cup.get',0,0,'','get '+esc(sm['file.cup.get'].text)).replace(/style="[^"]*"/,''))+
      (dense?'':B('file.den.status',0,0,'','Denver (illustrative) · '+esc(sm['file.den.status'].text)).replace(/style="[^"]*"/,'')+
-     B('rule.taxRule',0,0,'','World rule: '+esc(sm['rule.taxRule'].text)).replace(/style="[^"]*"/,''))+'</div>';
-  m+=B('future.sealed',(xN+610)/2+2,60,'ac wrap sealed','Week 10 on · '+esc(sm['future.sealed'].text));
-  m+=B('payroll.tax',xN+16,98,'','Projected tax '+esc(sm['payroll.tax'].text));
+     B('rule.taxRule',0,0,'',esc(sm['rule.taxRule'].text)).replace(/style="[^"]*"/,''))+'</div>';
+  m+=B('future.sealed',(xN+610)/2+2,262,'ac wrap sealed','Week 10 on · '+esc(sm['future.sealed'].text));
+  m+=B('payroll.tax',xN+16,106,'','Projected tax '+esc(sm['payroll.tax'].text));
   m+=B('payroll.total',xN+34,over?yNow-16:yNow+24,'','Payroll '+esc(sm['payroll.total'].text));
   m+=B('payroll.vsLine',xN+34,(yTax+yNow)/2,'',esc(sm['payroll.vsLine'].text)+(dense?'':' the line'));
   m+=B('payroll.week.0',X(0),360,'ac','wk 0 · '+esc(sm['payroll.week.0'].text));
@@ -751,14 +802,14 @@ function paintBoard(M,hl,c){
   if(B.clock){const w=tx(g,B.clock.text,1000,44,28,600,PAPER,'right',MONO);if(hl(B.clock.path))hlRing(g,1000-w-6,14,w+12,40)}
   tx(g,'PAYROLL',30,112,28,600,INK2,'left',MONO);
   if(B.total){const w=tx(g,B.total.text,30,196,104,700,INK,'left',MONO);if(hl(B.total.path))hlRing(g,30,110,w,100)}
-  if(B.vs){const w=tx(g,B.vs.text,560,150,58,700,B.over?RED:INK,'left',MONO);tx(g,'the World’s tax line',560+w+14,150,28,500,INK2,'left',SANS);if(hl(B.vs.path))hlRing(g,560,98,w,64)}
-  if(B.tax){tx(g,'Projected tax',560,204,30,500,INK2,'left',SANS);const w=tx(g,B.tax.text,800,204,44,700,INK,'left',MONO);if(hl(B.tax.path))hlRing(g,796,164,w+8,50)}
+  if(B.vs){const w=tx(g,B.vs.text,560,150,58,700,B.over?RED:INK,'left',MONO);tx(g,'the World’s tax line',560,180,24,500,INK2,'left',SANS);if(hl(B.vs.path))hlRing(g,560,98,w,64)}
+  if(B.tax){tx(g,'Projected tax',560,220,30,500,INK2,'left',SANS);const w=tx(g,B.tax.text,800,220,44,700,INK,'left',MONO);if(hl(B.tax.path))hlRing(g,796,180,w+8,50)}
   /* the stacked bar: who we pay, against the two lines */
   let x=40;const y0=272,bh=110;
   B.segs.forEach(s=>{const w=s.amt/1e6*(944/260);if(s.f){const col=tokPaint(g,s.f.token,x,y0,w,bh);
       if(s.isNew&&B.over){/* the part of this bar past the tax line */const lx=boardX(LINE);if(x+w>lx){g.save();g.fillStyle=RED;g.globalAlpha=.9;g.fillRect(lx,y0,x+w-lx,10);g.fillRect(lx,y0+bh-10,x+w-lx,10);g.restore()}}
       if(w>=70){fitTx(g,s.name,x+w/2,y0+44,30,700,col,'center',SANS,w-14);fitTx(g,s.f.text.split(',')[0],x+w/2,y0+84,28,600,col,'center',MONO,w-14)}
-      else{tx(g,s.name,x+w/2,y0-40,24,700,INK,'center',SANS);g.fillStyle=INK;g.fillRect(x+w/2-1,y0-34,2,30)}
+      else{tx(g,s.name,x+w/2,y0+bh+40,24,700,INK,'center',SANS);g.fillStyle=INK;g.fillRect(x+w/2-1,y0+bh+2,2,14)}
       if(hl(s.f.path))hlRing(g,x,y0,w,bh)}
     x+=w});
   const lx=boardX(LINE),hx=boardX(HARD);
@@ -1189,6 +1240,7 @@ function decorateReal(){
   $$('[data-cap]').forEach((el,i)=>{
     const n=i+1;let nm=el.getAttribute('aria-label')||'';
     if(!nm&&el.classList.contains('pcov'))nm='Cannot-show cover · '+((el.closest('.pane')||document.body).getAttribute('aria-label')||'');
+    if(!nm&&el.tagName==='BUTTON')nm=el.textContent.replace(/\s+/g,' ').trim();
     if(!nm){const b=el.querySelector('b');nm=(b?b.textContent:(el.id||'')).replace(/\s+/g,' ').trim()}
     if(!nm)nm=el.textContent.replace(/\s+/g,' ').trim().slice(0,30);
     const host=el.id==='direct'?$('#dhead'):el.classList.contains('pane')?$('.ph',el):el;
@@ -1235,8 +1287,8 @@ function render(){
   if(A.direct==='lead')B.insertBefore(D,panes);else if(D.previousElementSibling!==panes)B.appendChild(D);
   {const nh=noticesHTML(S),ne=$('#notices');if(ST._nh!==nh){ne.innerHTML=nh;ST._nh=nh}}
   $('#rig').innerHTML=rigHTML();$('#tools').innerHTML=toolsHTML();
-  mounts.forEach(m=>{const el=$('#pb-'+m[0]);if(el)m[1](el)});
   decorateReal();
+  mounts.forEach(m=>{const el=$('#pb-'+m[0]);if(el)m[1](el)});
   /* focus: keep the user's place; a followed fact takes Direct's focus */
   if(ST._focusFollow){ST._focusFollow=false;const li=$('#dbody li[data-p="'+(A.follow&&A.follow.path)+'"]');if(li){li.focus();try{li.scrollIntoView({block:'nearest'})}catch(_){}}}
   else if(fk){const el=$$('button[data-act]').concat($$('#declare')).find(e=>fkOf(e)===fk);if(el)el.focus()}

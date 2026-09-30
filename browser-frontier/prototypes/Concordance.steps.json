@@ -6,6 +6,15 @@
   "shot": "01-newcomer-plan-room-plus-table-direct-one-line"
  },
  {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Desktop 3D"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
   "click": "Operator",
   "exact": true
  },
@@ -26,6 +35,9 @@
  },
  {
   "click": "Use Direct for screen readers and keyboard"
+ },
+ {
+  "click": "Proof controls"
  },
  {
   "click": "Newcomer",
@@ -50,14 +62,14 @@
   "shot": "03b-override-paired-pinned-address-rewritten"
  },
  {
-  "click": "Sign the Golden State file as act 42, from the Room",
+  "click": "Sign the Call-up file as act 43, from the Room",
   "after": 1300
  },
  {
-  "shot": "04-act-42-lands-in-every-open-view-same-frame"
+  "shot": "04-act-43-lands-in-every-open-view-same-frame"
  },
  {
-  "click": "Follow $22.8M over (payroll.vsLine) across views, from the Timeline",
+  "click": "Follow $25.2M over (payroll.vsLine) across views, from the Timeline",
   "after": 1000
  },
  {
@@ -106,6 +118,9 @@
   "shot": "08-refusal-parity-room-timeline-voice-direct"
  },
  {
+  "click": "Proof controls"
+ },
+ {
   "click": "Inject a stale binding"
  },
  {
@@ -130,11 +145,15 @@
   "click": "What if…"
  },
  {
-  "click": "Decline the Golden State file, from the Room",
+  "click": "Matters",
+  "exact": true
+ },
+ {
+  "click": "Decline the Denver file, from Direct",
   "after": 1000
  },
  {
-  "shot": "10a-what-if-branch-in-its-own-ink-diverged-stamp"
+  "shot": "10a-what-if-branch-from-the-current-act-in-its-own-ink"
  },
  {
   "click": "Compare with the record"
@@ -150,10 +169,13 @@
   "shot": "10b-return-to-the-record"
  },
  {
-  "click": "Start over at act 41"
+  "click": "Proof controls"
  },
  {
-  "click": "Sign the Golden State file as act 42, from the Table",
+  "click": "Start over at act 42"
+ },
+ {
+  "click": "Sign the Call-up file as act 43, from the Table",
   "after": 1200
  },
  {
@@ -163,7 +185,13 @@
   "click": "Not now"
  },
  {
-  "click": "Start over at act 41"
+  "click": "Proof controls"
+ },
+ {
+  "click": "Start over at act 42"
+ },
+ {
+  "click": "Proof controls"
  },
  {
   "click": "Chromebook"
@@ -172,10 +200,30 @@
   "shot": "11a-downshift-chromebook-room-2-5d"
  },
  {
-  "click": "Phone"
+  "click": "Proof controls"
+ },
+ {
+  "click": "Phone",
+  "exact": true
  },
  {
   "shot": "11b-downshift-phone-table-plus-direct"
+ },
+ {
+  "click": "Sign the Call-up file as act 43, from the Table",
+  "after": 1100
+ },
+ {
+  "shot": "11b2-phone-act-lands-in-the-table-and-direct"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Start over at act 42"
+ },
+ {
+  "click": "Proof controls"
  },
  {
   "click": "Voice",
@@ -185,7 +233,7 @@
   "shot": "11c-downshift-voice-spoken-direct"
  },
  {
-  "click": "Say “sign the Golden State file”"
+  "click": "Say “sign the call-up file”"
  },
  {
   "shot": "11d-voice-read-back-before-signing"
@@ -195,13 +243,19 @@
   "after": 1000
  },
  {
-  "shot": "11e-voice-act-42-recorded-same-words"
+  "shot": "11e-voice-act-43-recorded-same-words"
+ },
+ {
+  "click": "Proof controls"
  },
  {
   "click": "Desktop 3D"
  },
  {
-  "shot": "11f-back-on-desktop-same-address-act-42"
+  "shot": "11f-back-on-desktop-same-address-act-43"
+ },
+ {
+  "click": "Proof controls"
  },
  {
   "click": "Harrow Medical"
