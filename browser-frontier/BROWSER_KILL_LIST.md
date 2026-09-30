@@ -61,5 +61,31 @@ correction that now binds every build. Sources: `critique/CRITIC_1_MEDIUM.md` (C
 | Photoreal city tiles as a substrate | **KILL** as substrate; optional "as photographed" lens only | NYC-A: view-only, no caching, no derived data, undated |
 | "A parcel is an institution" | **KILL** | NYC-A: Madison Square Garden's lot is Amtrak's in PLUTO; authority is BOW-built |
 
-Items added after the cross-domain attack and the New York stress test are in
-`BROWSER_CROSS_DOMAIN_ATTACK.md` §5 and `BROWSER_FOUNDER_PACKET.md` §B.
+## Added after wave 2 (cross-domain attack, New York stress test, convergence)
+Full reasoning in `BROWSER_CROSS_DOMAIN_ATTACK.md` §5 and `REALITY_CITY_STRESS_TEST.md` §10.
+
+| Item | Verdict | Who / why |
+|---|---|---|
+| **"Every system is enterable"** | **KILL** | CrossJurisdiction, CrossCut: nobody holds Yellowstone's range, so nobody can offer; systems nobody holds are observe-only (doors, recorded acts, the dispute, declarations, Wants) |
+| **The city as a state** (a city record, clock, hash or simulation) | **KILL** | NYC-D: a directory and a post office only |
+| **SCALE as camera zoom or "up/down"** | **KILL** | NYC-B: the camera follows the subject; "up" from the arena is six different relations |
+| **"All of New York" as executable institutions; photoreal or generated New York; L4 façades or interiors on real buildings; a door on every building** | **KILL** | NYC-A, NYC-E: terms, honesty, review cost, and 1.08M prisms against dozens of doors |
+| **Heterogeneous twelve-system cluster first** | **PARK** | NYC-E: first-of-kind everywhere; build vertical → flagship → cluster from verticals |
+| **The MODELED transit → attendance edge as a showcase** | **PARK** (a Want until a named model is authored and reviewed) | NYC-D, NYC-E: today's honest answer has no headcount |
+| **A per-viewer "ask the city" guide** | **PARK** | NYC-E: the only AI cost that scales with audience |
+| **The Council for systems nobody holds; seam grading of nature from an authored log** | **PARK** | CrossCut |
+
+| Law | Who / why |
+|---|---|
+| **Response lines** (nature answers; it never says yes) are distinct from **silent seats** | both cross-domain boards |
+| **Refusals name a rule, or say "no rule; a will"** | both cross-domain boards |
+| **The seal states its reason** (unknowable yet · withheld by the cut's rule · contested) | CrossCut |
+| **A parcel is not an institution; a site is where authorities meet; real and BOW namespaces never equal** | NYC-A, B, D |
+| **SITED-1: location carries only what is physically there; a pin wears the kind of its weakest bridge; a sum is a definer's claim** | NYC-B |
+| **An act pins the as-of and hash of the evidence it was tested against** | NYC-B (a real replay fault) |
+| **A G1 observed authority issues facts, never yeses; stand-ins are singletons** | NYC-D |
+| **A registry zero is UNKNOWN; snapshot before visit; drop personal names at ingest** | NYC-A, NYC-E |
+| **A hovered button keeps its own colours** (white text on a hover background went invisible on three boards) | parent, while playing RealityCity |
+
+Awaiting the founder's ruling: a typed "no verdict" when Reality cannot grade (no control, no
+instrument), and how "contested" is shown (`BROWSER_CROSS_DOMAIN_ATTACK.md` §4).
