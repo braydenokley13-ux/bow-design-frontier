@@ -101,6 +101,16 @@
   "shot": "18-second-client-the-room-from-outside"
  },
  {
+  "click": "Demo controls",
+  "shot": "18b-the-observer-cannot-restart-the-world"
+ },
+ {
+  "expectText": "Refused: seat GM is held by a live window"
+ },
+ {
+  "click": "Demo controls"
+ },
+ {
   "use": 0
  },
  {

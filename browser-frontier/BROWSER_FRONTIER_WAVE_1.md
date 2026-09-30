@@ -80,6 +80,10 @@ replays each board's script and screenshots every state:
 ```
 cd browser-frontier/harness && npm install
 node play.mjs OneRecord.html ../prototypes/OneRecord.steps.json --w 1440 --h 900
+# the critic's off-script path, and a fresh browser opening a fork address:
+node play.mjs OneRecord.html ../prototypes/OneRecord.offscript.steps.json --w 1440 --h 900
+node play.mjs 'OneRecord.html#s=boston.year-two&at=42&h=13ca7fd4&b=lift.a43%4042.13ca7fd4&seat=gm&view=room' \
+  ../prototypes/OneRecord.fresh.steps.json --w 1440 --h 900
 ```
 
 It needs a Chromium binary (path in `play.mjs`); it serves `browser-frontier/` itself and writes
