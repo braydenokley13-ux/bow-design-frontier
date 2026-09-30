@@ -601,14 +601,14 @@ function paint() {
   document.body.classList.toggle('in-branch', S.history === 'branch');
   $('#stamp').textContent = S.branch && S.history === 'branch' ? S.branch.stamp + ' · cut with hindsight' : '';
   $('#sched').hidden = S.mode !== 'schedule';
-  if (S.mode === 'schedule') renderSchedule(FXS);
-  renderPanel(FXS);
   if (ROOM) ROOM.update(S, FXS);
   /* the ledger's "gave up" list must equal what actually got covered (asserted, in code) */
   const want = S.signed ? LEDGER.gave.map(g => g.id).sort().join() : '';
   const have = ROOM ? ROOM.coveredIds().sort().join() : Object.keys(coveredNow()).sort().join();
   const ok = want === have; S.ledgerCheck = S.signed ? (ok ? 'ok' : 'bad') : null;
   if (!ok) console.error('ledger mismatch: ledger says [' + want + '] but the Room covers [' + have + ']');
+  if (S.mode === 'schedule') renderSchedule(FXS);
+  renderPanel(FXS);
 }
 window.__bow = { get S() { return S; }, act, paint, FIXTURES, get room() { return ROOM; }, reset() { S = fresh(); paint(); } };
 
@@ -1517,7 +1517,7 @@ document.addEventListener('keydown', e => {
     function update(Sx, fxs) {
       lastFXS = fxs; const br_ = Sx.history === 'branch', fund = br_ ? Sx.branch.funded : Sx.funded, inMaq = Sx.posture === 'maquette', reality = inMaq && Sx.maq === 'reality';
       /* rooms lit or dark (Reality: sheeted, nobody outside knows their funding) */
-      for (const id of ROOMKEYS) { const want = fund[id] ? 1 : 0; if (ROOMK[id] == null) setRoomK(id, want); else if (ROOMK[id] !== want && !ANIMS.some(a => a.room === id)) { const a0 = ROOMK[id]; tween(650, 250, k => setRoomK(id, a0 + (want - a0) * k)); ANIMS[ANIMS.length - 1].room = id; } }
+      for (const id of ROOMKEYS) { const want = fund[id] ? 1 : 0; if (ROOMK[id] == null) setRoomK(id, want); else if (ROOMK[id] !== want && !ANIMS.some(a => a.room === id)) { const a0 = ROOMK[id]; if (CUT) setRoomK(id, want); else { tween(650, 250, k => setRoomK(id, a0 + (want - a0) * k)); if (ANIMS.length) ANIMS[ANIMS.length - 1].room = id; } } }
       PARTS.sheetRooms.visible = reality;
       /* the five things signing changes, drawn from the same ledger */
       PARTS.sheetMaq.visible = Sx.signed; PARTS.shut.visible = Sx.signed; PARTS.trayF.visible = Sx.signed; PARTS.credF.visible = Sx.signed; PARTS.frost.visible = !Sx.signed;

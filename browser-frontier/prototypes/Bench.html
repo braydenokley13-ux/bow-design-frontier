@@ -1168,16 +1168,16 @@ VIEWS.plate = () => {
   const counts = { LIVE: 0, FIXTURE: 0, ASSUMED: 0, EMPTY: 0 }; ports.forEach(p => counts[p.st]++);
   const tabBtn = p => '<button type="button" class="ptab' + (cl && p.id === 'rule' ? ' clouded' : '') + '" data-a="port" ' + dp({ id: p.id }) + ' aria-pressed="' + (S.plate.port === p.id) + '"><span class="pt-h"><span class="pt-n">' + p.name + (p.id === 'rule' ? ' <i>steps out</i>' : '') + '</span>' + kc(p.st) + '</span><span class="pt-w">' + esc(p.what) + '</span></button>';
   const P = ports;
-  const partRows = PARTS.map(p => '<div class="prow' + (cl && p.id === 'duty' ? ' clouded' : '') + '"><div><b>' + p.name + '</b> <i>' + p.ver + '</i></div><div class="pr2">' + sigBar(sigOf(p)) + '</div><div class="pm">reviewed by [reviewer]' + (p.rule ? ' · from the fixture rule “' + esc(p.rule) + '”' : ' · not one of the fixture’s named rules') + '</div></div>').join('');
+  const partRows = PARTS.map(p => '<div class="prow' + (cl && p.id === 'duty' ? ' clouded' : '') + '"><div><b>' + p.name + '</b> <i>' + p.ver + '</i></div><div class="pr2">' + sigBar(sigOf(p)) + '</div><div class="pm">reviewed by [reviewer] · ' + (p.rule ? 'rule “' + esc(p.rule) + '”' : 'no named fixture rule') + '</div></div>').join('');
   const knotRows = KNOTS.map(k => { const ins = k.inputs(), sc = knotScores().find(x => x.id === k.id), mark = S.plate.distrust && top.id === k.id;
     return '<div class="knot' + (mark ? ' mark' : '') + (cl && k.id === 'c2' ? ' clouded' : '') + '"><div class="kh"><b>' + k.name + '</b>' + (mark ? '<span class="dtag">DISTRUST HERE</span>' : '') + '</div><div class="kl">' + kc('GENERATED', 'wired by a generator') + kc(k.claimK, k.claimK.toLowerCase() + ' claim') + '</div><p class="kt">' + esc(k.claim) + '</p><p class="ks2">' + esc(k.src) + '</p><p class="ks3">' + sc.unsound + ' unsound input' + (sc.unsound === 1 ? '' : 's') + ' · ' + sc.sourced + ' sourced</p></div>'; }).join('');
   const note = S.plate.port && S.plate.port !== 'rule' ? '<p class="portnote" role="status" style="margin:0;flex:1"><b>' + P.find(p => p.id === S.plate.port).name + '</b> · ' + esc(P.find(p => p.id === S.plate.port).note) + '</p>' : '';
   const hash8 = hash(JSON.stringify([PARTS.map(p => p.id + p.ver), KNOTS.map(k => k.id), SCHED.legs.map(l => l.dep + '/' + l.block)])).slice(0, 12);
   return '<section class="sheet plate" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><header class="sh"><span class="no">SHEET D</span><h1 tabindex="-1">Plate</h1><span class="sub">the back of the mechanism: made of what, plugged into what</span><span class="grow"></span><button type="button" class="btn sm" data-a="go" ' + dp({ view: 'loom' }) + '>Turn it back over</button></header>' +
     '<div class="plwrap"><div class="ptop">' + tabBtn(P[0]) + tabBtn(P[1]) + '</div><div class="pmid"><div class="plbody"><svg class="showthru" viewBox="0 0 ' + VBW + ' ' + VBH + '" preserveAspectRatio="none" aria-hidden="true">' + (E.rot ? thread(R, 'thr', E, { bars: false }) : '') + '</svg>' +
-    '<div class="plh"><b>PLATE · propagation through shared resources</b><span class="mono">ports: ' + counts.LIVE + ' LIVE (no feed exists) · ' + counts.FIXTURE + ' FIXTURE · ' + counts.ASSUMED + ' ASSUMED · ' + counts.EMPTY + ' EMPTY</span><span class="mono">recipe ' + hash8 + ' ' + kc('COMPUTED', 'content address') + '</span></div>' +
+    '<div class="plh"><b>PLATE · propagation through shared resources</b><span class="mono">recipe ' + hash8 + ' ' + kc('COMPUTED', 'content address') + '</span></div>' +
     '<h2>Parts <small>truth signature · version · reviewer</small></h2>' + partRows + '<h2 style="margin-top:8px">Couplings <small>a coupling is a claim: sourced or asserted</small></h2><div class="knots">' + knotRows + '</div>' +
-    '</div><div class="prt">' + tabBtn(P[2]) + '</div></div><div class="pbot">' + tabBtn(P[3]) + '<div class="pact"><button type="button" class="btn sm warn" data-a="distrust">Where would I distrust this?</button>' + (note || '<p class="note">Press a port tab to read what plugs in there.</p>') + '</div></div></div></section>';
+    '</div><div class="prt">' + tabBtn(P[2]) + '</div></div><div class="pbot">' + tabBtn(P[3]) + '<div class="pact"><button type="button" class="btn sm warn" data-a="distrust">Where would I distrust this?</button>' + (note || '<p class="note">Ports: ' + counts.LIVE + ' LIVE (no feed exists) · ' + counts.FIXTURE + ' FIXTURE · ' + counts.ASSUMED + ' ASSUMED · ' + counts.EMPTY + ' EMPTY. Press a tab to read what plugs in.</p>') + '</div></div></div></section>';
 };
 VIEWS.stub = () => {
   const E = envFor(), en = edgeOf(S.work, E), R = sim(S.work, E);
@@ -1188,6 +1188,7 @@ VIEWS.stub = () => {
     '<div class="benchbar"><button type="button" class="btn you" data-a="attach"' + (S.plate.rule ? ' disabled' : '') + '>Attach this sheet as the source for the extension</button>' + (S.plate.rule ? '<span class="note">Attached. The duty clock’s extension allowance now cites this stub, and the plate will say it is unreviewed.</span>' : '<span class="note">Nothing changes on the plate unless you attach it.</span>') + '</div></section>';
 };
 KNOW_MORE.plate = F => {
+  F('COMPUTED', 'Port states', PORTS().map(x => x.name + ' ' + x.st).join(' · ') + ' · 0 LIVE: no feed exists', null);
   F('COMPUTED', 'Truth signatures, in words', PARTS.map(p => p.short + ': ' + Object.keys(sigOf(p)).map(k => sigOf(p)[k] + ' ' + k.toLowerCase()).join(', ')).join(' · '), null);
   KNOTS.forEach(k => F(k.claimK === 'SOURCED' ? 'SOURCED' : 'AUTHORED', k.name + ': inputs', k.inputs().map(i => i.t + ' (' + i.k.toLowerCase() + ')').join('; '), null));
   F('GENERATED', 'Couplings: wired by', 'a generator; none has been reviewed', null);
@@ -1215,7 +1216,7 @@ const SHORTAGES = [
   { id: '2021', name: 'The 2021 shortage', src: 'US Commerce RFI, Jan 2022: buyers’ median chip stock fell from about ' + SPEC_FACTS.rfi.d2019 + ' days (2019) to under ' + SPEC_FACTS.rfi.d2021 + ' (2021) · verify', on: true }
 ];
 const SLIPS = [
-  { c: 'PRIMARY DATA', src: 'US Commerce semiconductor RFI · results', date: 'Jan 2022', claim: 'Buyers’ median chip stock: about ' + SPEC_FACTS.rfi.d2019 + ' days in 2019, under ' + SPEC_FACTS.rfi.d2021 + ' in 2021.', fam: 'INVENTORY DRAWDOWN', read: true, v: 'read from a search summary; page not opened' },
+  { c: 'PRIMARY DATA', src: 'US Commerce RFI', date: 'Jan 2022', claim: 'Buyers’ median chip stock: about ' + SPEC_FACTS.rfi.d2019 + ' days in 2019, under ' + SPEC_FACTS.rfi.d2021 + ' in 2021.', fam: 'INVENTORY DRAWDOWN', read: true, v: 'search summary; page not opened' },
   { c: 'REPORTING', src: '[trade-press story]', date: '2021 [verify]', claim: 'Car makers cut chip orders in 2020. The capacity they left went to other buyers.', fam: 'CAPACITY REALLOCATION', read: true },
   { c: 'ANALYST ESTIMATE', src: '[analyst note]', date: '2021 [verify]', claim: 'Demand for electronics ran above the pre-pandemic plan.', fam: 'DEMAND SURGE', read: true },
   { c: 'REPORTING', src: '[news story]', date: '2021 [verify]', claim: 'Some buyers held long-term supply agreements. Others bought on the spot.', fam: 'LONG-TERM AGREEMENTS', read: true },
@@ -1320,7 +1321,7 @@ function modelSVG(a, ans) {
 /* ---------------------------------------------------------------- the plural question, then the open bench */
 VIEWS.plural = () => {
   const bench = S.semi.stage === 'bench';
-  let h = '<section class="sheet" data-cap="SPEC" data-cost="FRONTIER MODEL CONTINUOUS while compiling"><header class="sh"><span class="no">SHEET E</span><h1 tabindex="-1">' + (bench ? 'The 2021 shortage' : 'This is several questions') + '</h1><span class="sub">' + (bench ? 'an open bench: source slips clipped to an observed ground' : '“' + esc(S.q || 'Why are semiconductor shortages happening?') + '”') + '</span>' + (bench ? '<span class="grow"></span><button type="button" class="btn sm pri" data-a="compile">Compile a working model from these slips</button>' : '') + '</header>' +
+  let h = '<section class="sheet" data-cap="SPEC" data-cost="FRONTIER MODEL CONTINUOUS while compiling"><header class="sh"><span class="no">SHEET E</span><h1 tabindex="-1">' + (bench ? 'The 2021 shortage' : 'This is several questions') + '</h1><span class="sub">' + (bench ? 'an open bench: source slips on observed ground' : '“' + esc(S.q || 'Why are semiconductor shortages happening?') + '”') + '</span>' + (bench ? '<span class="grow"></span><button type="button" class="btn sm pri" data-a="compile" aria-label="Compile a working model from these slips">Compile a working model</button>' : '') + '</header>' +
     '<div class="standin" role="note"><b>SPECULATIVE FRONTIER · STAND-IN.</b> BOW cannot compile open-world systems today. Every slip here is an authored stand-in for a compile that did not run. The only real figure is the Commerce RFI one [verify].</div>';
   if (!bench) {
     h += '<p class="note wide" style="margin:8px 0">At least three shortages are in the news, and they are different systems. Pick one. The others stay beside it as sibling questions.</p><div class="shlist" data-cap="SPEC" data-cost="SMALL / CHEAP MODEL">' +
@@ -1347,7 +1348,7 @@ function modelShell() {
     '<div class="tpwrap" id="tpwrap"><div class="paper"></div><span class="tape t1"></span><span class="tape t2"></span>' +
     '<div class="trrow1"><span class="stampbig" id="stampT">WORKING MODEL · NOT REVIEWED</span><span class="life" id="life" role="timer" aria-label="Life left of this working model"><span id="lifeK" class="lifek"></span><span>life left <b id="lifeT"></b></span><span class="ruler" aria-hidden="true">' + '<i></i>'.repeat(72) + '</span></span></div>' +
     '<div class="trmain"><div class="lcol"><div class="gcell" data-cap="SPEC" data-cost="NO AI REQUIRED (after the compile)"><div class="gnd" data-k="OBSERVED">' + groundSVG() + '</div><div class="mk" id="mkHost"></div></div><div class="permrow" id="perm"></div></div><div class="rcol"><div id="readout"></div><div id="tblock"></div><div id="mRefuse" role="alert"></div></div></div>' +
-    '<div class="ledgerH">THE WHAT IF IS THE LEDGER OF WHAT THIS MODEL GUESSED <small>seven assumptions · the toned strip on each track, and the pair of numbers, is the range the slips support</small></div><div class="ledger7">' + socks + '</div><div class="unkrow">' + unk + '</div></div></section>';
+    '<div class="ledgerH">THE WHAT IF IS THE LEDGER OF WHAT THIS MODEL GUESSED <small>seven assumptions · toned strip and numbers: the range the slips support</small></div><div class="ledger7">' + socks + '</div><div class="unkrow">' + unk + '</div></div></section>';
 }
 function paintModel() {
   const M = S.model, a = M.lev, ans = answer(a);

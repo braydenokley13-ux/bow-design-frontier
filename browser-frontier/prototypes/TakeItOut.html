@@ -70,10 +70,11 @@ footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .slot{grid-row:3;display:flex;flex-direction:column;gap:4px;padding-top:4px;min-height:120px;min-width:0}
 .slug{position:relative;display:flex;flex-direction:column;flex:1 1 auto;min-width:0;padding:9px 8px 8px;background:var(--face);border:1.5px solid var(--ink);color:var(--ink);font-family:var(--serif);overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
 .slug::before{content:"";position:absolute;top:0;left:50%;width:14px;height:5px;margin-left:-7px;background:var(--paper);border:1.5px solid var(--ink);border-top:0;border-radius:0 0 6px 6px}
-.slug .when{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.85;margin-top:3px;padding-right:20px}
+.slug .when{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.85;margin-top:3px;padding-right:16px}
 .slug .what{font-size:13px;line-height:1.22;margin-top:4px;font-weight:400;overflow-wrap:anywhere;hyphens:auto}
 .slug .foot{position:absolute;top:8px;right:8px;margin:0;padding:0;display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.04em}
 .slug.k-RECORDED .foot,.slug.br .foot{top:11px;right:12px}
+.slug .foot i.sw{width:11px;height:11px}
 .slug.k-RECORDED,.slug.k-OBSERVED{background:var(--ink);color:var(--paper)}
 .slug.k-RECORDED{box-shadow:inset 0 0 0 3px var(--ink),inset 0 0 0 4px var(--paper),inset 0 0 0 6px var(--ink),inset 0 0 0 7px var(--paper)}
 .slug.k-RECORDED::before,.slug.k-OBSERVED::before{background:var(--paper)}
@@ -108,7 +109,7 @@ footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .gap{flex:1 1 auto;border:1.5px dashed var(--ink);background:transparent;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-family:var(--mono);font-size:10.5px;color:var(--muted);min-width:0}
 .gap b{display:block;color:var(--ink);font-weight:500;margin-bottom:2px}
 .gap.br{border-color:var(--warm);color:var(--warm2)}
-.held{align-self:stretch;margin-bottom:8px;position:relative;display:flex;flex-direction:column;justify-content:flex-start;min-width:0;padding:7px 8px 6px;border:1.5px solid var(--ink);background:var(--face);box-shadow:0 5px 0 -1px var(--paper3),0 6px 0 -1px var(--ink);transform:rotate(-1.4deg);animation:rise .5s cubic-bezier(.2,.9,.25,1) both;font-size:12px;line-height:1.2;overflow:hidden}
+.held{align-self:stretch;margin-bottom:14px;position:relative;display:flex;flex-direction:column;justify-content:flex-start;min-width:0;padding:7px 8px 6px;border:1.5px solid var(--ink);background:var(--face);box-shadow:0 5px 0 -1px var(--paper3),0 6px 0 -1px var(--ink);transform:rotate(-1.4deg);animation:rise .5s cubic-bezier(.2,.9,.25,1) both;font-size:12px;line-height:1.2;overflow:hidden}
 .held.k-RECORDED,.held.k-OBSERVED{background:var(--ink);color:var(--paper)}
 .held.br{background:var(--warm);color:var(--paper);border-color:var(--warm2)}
 .held .when{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.05em}
@@ -153,7 +154,7 @@ footer#status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .slug.k-RECORDED .wt .pips i.on,.slug.k-OBSERVED .wt .pips i.on{background:var(--paper)}
 
 /* ---------- present (dials) */
-#present h2{font-size:15px;margin:0 0 2px;display:flex;justify-content:space-between;align-items:baseline;letter-spacing:.02em}
+#present h2{font-size:15px;margin:0 0 2px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;letter-spacing:.02em}
 #present h2 small{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--muted)}
 .seal{display:flex;align-items:center;gap:8px;padding:5px 0 6px;border-bottom:1px solid var(--ink);font-family:var(--mono);font-size:11px;flex-wrap:wrap;line-height:1.25}
 .seal .hx{font-size:15px;font-weight:500;padding:1px 6px;border:1.5px solid var(--ink);background:var(--face)}
@@ -632,6 +633,7 @@ function act(kind, p) {
     case 'standin': S.reality.standIn[p.id] = +p.v; msg = 'Stand-in set'; break;
   }
   checkClamps();
+  S.focusNext = kind === 'lift' ? 'putback' : kind === 'putback' ? 'lift' : kind === 'keep' ? 'toRecord' : null;
   render();
   if (msg) say(msg);
 }
@@ -758,6 +760,7 @@ function render() {
   const ae = document.activeElement, fk = ae && ae.dataset ? ae.dataset.fk : null;
   refold();
   renderHead(); renderStick(); setAddr(); renderBench(); updatePresent(true); renderStatus();
+  if (S.focusNext) { const el = document.querySelector('[data-fk="' + S.focusNext + '"]'); S.focusNext = null; if (el) { el.focus({ preventScroll: true }); return; } }
   if (fk) { const el = document.querySelector('[data-fk="' + fk + '"]'); if (el) el.focus({ preventScroll: true }); }
 }
 function renderHead() {
