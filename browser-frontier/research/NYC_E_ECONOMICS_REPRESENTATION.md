@@ -3,9 +3,10 @@
 Lane E, adversarial critic, 30 Sep 2026. No code. Evidence tags:
 **[P]** a primary page I read this session · **[M]** my own measurement this session · **[A]** lane A's
 reading or measurement (29 Sep) · **[R]** read in the BOW repo · **[S]** search snippet only, verify.
-Any untagged cost is an **estimate** from drivers: an order of magnitude, not a forecast. Units: PH, PW, PM and PY are person-hours, -weeks, -months and -years. Claim labels: REAL
-CURRENT PRODUCT CAPABILITY / PROPOSED PLATFORM CAPABILITY / SPECULATIVE FRONTIER. AI labels: NO AI ·
-SMALL · FRONTIER OCCASIONAL · FRONTIER CONTINUOUS.
+Any untagged cost is an **estimate** from drivers: an order of magnitude, not a forecast. Units: PH,
+PW, PM, PY = person-hours, -weeks, -months, -years. Claim labels: REAL CURRENT PRODUCT CAPABILITY /
+PROPOSED PLATFORM CAPABILITY / SPECULATIVE FRONTIER. AI labels: NO AI · SMALL · FRONTIER OCCASIONAL ·
+FRONTIER CONTINUOUS.
 
 ## 0. Verdict
 
@@ -50,14 +51,13 @@ Two more are missing: Site and Review.
   outlets' has never meant two sources."
 - Two published payroll definitions differ by "up to ~$52M on one club".
 
-That is one domain with one rulebook, in the best-documented sports league there is, and it already
-needs a person before every class. New York multiplies that.
+One domain, one rulebook, the best-documented league there is, and it already needs a person before
+every class. New York multiplies that.
 
-**The substrate names institutions but does not describe how they operate.** Measured today [M]:
-- The Facilities Database lists 34,446 facilities citywide, and 1,306 inside lane A's Midtown box.
-- 1,292 of those 1,306 (98.9%) record capacity as 0. Lane A's rule reads that as UNKNOWN.
-- FacDB covers only government-funded, licensed or certified facilities [A]. The brief's media
-  companies, banks, agencies and sponsors are not in it at all.
+**The substrate names institutions but does not describe how they operate.** FacDB lists 34,446
+facilities citywide and 1,306 in lane A's Midtown box; 1,292 of those (98.9%) record capacity 0, read
+as UNKNOWN [M]. It covers only government-funded, licensed or certified facilities [A]: the brief's
+media companies, banks, agencies and sponsors are absent.
 
 **Attacks on specific claims:**
 - *"Cost in proportion to shapes and domains, never to the number of systems"* (RE §1): true for
@@ -74,9 +74,8 @@ needs a person before every class. New York multiplies that.
 
 ## 2. The L0–L5 ladder, priced
 
-Per system is given as first of its kind → nth instance. Per neighbourhood means a Midtown-sized box
-(about 4k buildings and 1.3k facilities). Per city means 1.08M buildings, 858k lots and 34k facilities
-[A][M]. All figures are estimates unless tagged.
+Neighbourhood = a Midtown-sized box (~4k buildings, 1.3k facilities); city = 1.08M buildings, 858k
+lots, 34k facilities [A][M]. Estimates unless tagged.
 
 | Level | Per system | Per neighbourhood | Per city | AI | Dominant driver |
 |---|---|---|---|---|---|
@@ -116,9 +115,9 @@ compile does not exist yet).
 
 | System | Honest posture | Cheapest authoritative facts | Geo works? | Depth worth paying for | Cost class |
 |---|---|---|---|---|---|
-| Club | REALITY through public facts, or an AUTHORED club (lane B's fictional HQ) | pr.nba.com thresholds; cap trackers, which come from one publisher and are refreshed by hand [R]; completed box scores; SEC filings of the Knicks' parent, MSG Sports [S] | no | L2 cap sheet; reuse the Boston L5 kit | kit exists; CBA engine REAL; facts recur |
-| Arena | REALITY site; AUTHORED or MODELED operations | footprint BIN 1082908; lot BBL 1007810001, listed in PLUTO under the national rail corporation [A]. Arena owner and the clubs' licences: MSG Entertainment, arena licence agreements [S] | **yes** (crowd → street → transit) | L3 massing (COMPUTED) and L2 bowl (Boston's three kinds of night). **No L5 interior of the real Garden** | Site: four parties on one site |
-| League | REALITY rules | CBA, pr.nba.com | **no.** The most powerful authority in the cluster has no useful geography | L0–L2 | engine REAL |
+| Club | REALITY via public facts, or AUTHORED (lane B's fictional HQ) | pr.nba.com; hand-refreshed single-publisher cap trackers [R]; box scores; SEC filings of MSG Sports, the Knicks' parent [S] | no | L2 cap sheet; Boston's L5 kit | kit exists; CBA engine REAL; facts recur |
+| Arena | REALITY site; AUTHORED or MODELED operations | BIN 1082908; lot BBL 1007810001 under the national rail corporation in PLUTO [A]; arena owner MSG Entertainment, clubs as licensees [S] | **yes** (crowd → transit) | L3 massing + L2 bowl. **No L5 interior of the real Garden** | Site: four parties |
+| League | REALITY rules | CBA, pr.nba.com | **no:** the cluster's most powerful authority has no useful geography | L0–L2 | engine REAL |
 | Agency | AUTHORED | none public | no | L0–L2 | small schema |
 | Media | AUTHORED; reported rights deals RECORDED with sources | reporting | no | L0–L2 | ledger family |
 | Sponsors | AUTHORED | reporting | weak | L0–L1 | ledger family |
@@ -126,9 +125,9 @@ compile does not exist yet).
 | Transit | REALITY, OBSERVED | MTA GTFS / GTFS-RT, free under mirror, no-modify and lag terms [A]. Nine subway feeds totalled 301 KB in one poll at 04:01 UTC [M] | **yes** (network, stations, headways) | L1 map + Marey chart (L2) | cheap facts; the mirror needs operations |
 | Port | REALITY, snapshot | PANYNJ open data last updated 2015–16 [A]; press releases entered by hand; AIS (CC0) for history | **yes** (berths, channels) | L1 + L2 berth schedule | new kit; facts once a year, by hand |
 | Hospital | AUTHORED operations on a real site; never implies the real operator | NYS DOH facility list [A]; federal cost reports [verify] | partly (catchment) | L0–L2 staffing board | new kit **and** new rulebook: expensive |
-| University chem lab | AUTHORED | none | **no: pure decoration** | L2 molecules and equations: a premium domain notation, not a place | new kit and model; chemistry review |
-| Museum | REALITY collection | Met Open Access: CC0 metadata, 502,881 objects, images only when public domain [A] | inside the building yes; the city weakly (provenance is global) | L1 timelines + L2 collection | cheap facts; new kit |
-| Historical center | REALITY archive | NYPL metadata CC0; many old maps and photos are non-commercial, share-alike or still copyrighted [A] | yes (time-maps), but limited by rights | L1 | rights ledger does the heavy work |
+| University chem lab | AUTHORED | none | **no: pure decoration** | L2 molecules and equations | new kit and model; chemistry review |
+| Museum | REALITY collection | Met Open Access: CC0 metadata, 502,881 objects, public-domain images only [A] | in-building yes; city weakly | L1 timelines + L2 collection | cheap facts; new kit |
+| Historical center | REALITY archive | NYPL CC0 metadata; old maps and photos often NC, SA or copyrighted [A] | yes (time-maps), rights-limited | L1 | rights ledger heavy |
 
 Geography does real work for 4 of the 13 systems (arena, transit, port, historical maps) and some work
 for 2 more (hospital, museum). **For 7 of 13 it is decoration.**
@@ -144,8 +143,8 @@ for 2 more (hospital, museum). **For 7 of 13 it is decoration.**
 | Site bindings | 13 × hours |
 | Edges: 15–30 | days each |
 
-In total, **about 1–3 person-years** for a cluster that is honest at L0–L2. Drawing the city is under
-5% of that (estimate). Nobody recorded what Boston cost, so measure before quoting any of this.
+Total: **about 1–3 person-years** for a cluster honest at L0–L2, under 5% of it spent drawing the city
+(estimate). Boston's cost was never recorded; measure before quoting any of this.
 
 ## 5. "All of New York"
 
@@ -195,24 +194,21 @@ plus edges, plus review) ÷ the doors people actually open.
 | First cluster, heterogeneous (NYC as briefed) | ~12 first-of-kind | facts + Site + edges | shallow, plus edge doors | mixed | **high** |
 | Cluster built from existing verticals | low | Site + edges | edges add doors on systems already paid for | yes | **low; can beat verticals** |
 
-**The edge is where the economics turn.**
-- **RECORDED edges are cheap doors.** Examples: located-in, owns, licenses, serves ("the arena sits
-  above Penn Station; the A, C and E stop at 34 St"). Each costs one Site binding and one source.
-- **MODELED edges are the most expensive doors.** Examples: crowd → ridership, disruption →
-  attendance. Each needs a named model, a validation story and review. A live event also cannot be
-  hindcast (research E).
+**The edge is where the economics turn.** RECORDED edges (located-in, owns, licenses, serves: "the
+arena sits above Penn Station; the A, C and E stop at 34 St") cost one Site binding and one source:
+cheap doors. MODELED edges (crowd → ridership, disruption → attendance) need a named model, validation
+and review, and a live event cannot be hindcast (research E): the most expensive doors.
 
 The founder's invocation example is MODELED. The cheap honest answer is the RECORDED lines at 34 St,
 the OBSERVED delay with its lag stamp, "MODELED: not run. No model couples transit to attendance", and
 a Want. It costs almost nothing. The modeled answer costs months and still reads "not validated for
 this event".
 
-**Verdict.** A first cluster built from heterogeneous systems is not cheaper per useful door than an
-isolated World. Once the verticals exist, clusters become the cheapest source of doors, because a
-cluster's marginal cost is then only Sites and RECORDED edges on schemas already paid for. The order
-is: vertical → flagship → cluster from verticals. NYC's first cluster should come from what the
-verticals already cover (club, arena, league), plus transit, whose facts are free. It should not start
-from the full civilization list.
+**Verdict.** A first, heterogeneous cluster is not cheaper per useful door than an isolated World.
+Once verticals exist, clusters become the cheapest door source: their marginal cost is only Sites and
+RECORDED edges on schemas already paid for. Order: vertical → flagship → cluster from verticals. NYC's
+first cluster should be what the verticals cover (club, arena, league) plus transit, whose facts are
+free, not the full civilization list.
 
 ## 8. What STUDIO must provide (PROPOSED)
 
@@ -255,9 +251,8 @@ provenance gate. Studio needs six things:
    a year on R2 (estimate). The real cost is someone on call.
 5. **A privacy filter at ingest.** Drop personal owner names (566,788 one- and two-family lots [A])
    and party names in DOB and ACRIS. Use fictional names on shared screens.
-6. **An identity crosswalk and Site relations.** Map BIN, BBL, FacDB uid, OSM id and Wikidata QID to
-   BOW ids, and allow many authorities per parcel. At MSG they are the rail corporation's lot [A],
-   the arena owner, the club owner and a licence [S].
+6. **An identity crosswalk and Site relations:** BIN, BBL, FacDB uid, OSM id and QID → BOW ids, many
+   authorities per parcel (MSG: rail corporation's lot [A], arena owner, club owner, licence [S]).
 7. **The Fact pipeline, costed by tier:**
 
    | Tier | Cost | Examples |
