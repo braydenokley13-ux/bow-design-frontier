@@ -112,3 +112,27 @@ REAL CURRENT: no-LLM runtime posture (D166, D179); device-bound seats and rejoin
 join codes (BOW Economics Live); seats by lease (Live World page, prototype-grade); the read-only
 Harbor → NBA crossing (unmerged). PROPOSED: everything in §2–5. SPECULATIVE: assistants honouring the
 card and quoting faithfully at scale; spatial devices with a BOW-owned threshold.
+
+## 8. Corrections after the platform critique (`critique/CRITIC_2_PLATFORM.md` §3B)
+
+1. **Inside a host, BOW truth is CLAIMED, not VERIFIED — unless claims are signed.** A sandbox protects
+   BOW's card from restyling; it does nothing about the host drawing its own "Verified by BOW" beside it
+   (the Guest's forged-card test). So the ClaimSet carries **signatures**, not bare hashes, and a
+   verifier the reader controls (the Browser, or a small verifier extension) checks them. This makes the
+   Browser part of the trust model, not merely a destination — and weakens "observing happens mostly in
+   other people's surfaces" as a *truth* claim.
+2. **A `seat` in an address is a viewpoint.** Six prototypes put a seat in the address line (following
+   the Wave 2 canon). Opening an address with a seat must yield exactly what an observer may see, and
+   say so; authority only ever travels as an Offer.
+3. **"Now" comes from the record's clock**, never the device's (the Cut's Reality clock ticked from the
+   device while claiming liveness).
+4. **`resolve(text)` must never guess.** Bench turned "late" into a confident airline claim; Jurisdiction
+   refused everything outside three questions. The law stands; neither prototype met it.
+5. **Identical-under-enumeration is a server property** (timing, status, size) — one page cannot prove
+   it. The Guest's "Not for you" demonstration is an illustration, not evidence.
+6. **What BOW may republish from Reality is a decision, not an assumption.** Licensed feeds (official
+   league data) cannot be "wide and free"; the free layer is BOW's own records, public facts with
+   sources, and open data under its terms.
+7. **In practice nothing can be invoked from outside yet**: no URL, no endpoint, no embed; every host in
+   the Guest is drawn inside the BOW page. The cheapest real step: serve one signed claim set as JSON for
+   the Live World record and check it from a second client.

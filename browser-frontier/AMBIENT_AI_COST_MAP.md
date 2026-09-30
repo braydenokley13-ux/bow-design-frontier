@@ -168,3 +168,29 @@ becomes AUTHORED once reviewed. The floor never moves.
 - In a real cohort most sessions reach R3: the ladder is not holding.
 - Visible cost chills asking.
 - Any lesson step cannot finish with AI off.
+
+## 10. Corrections after the platform critique (`critique/CRITIC_2_PLATFORM.md` §2e, §3B)
+
+- **`verify` of a free sentence is not NO AI.** The Guest's flagship mismatch ("Boston is past the tax
+  line this season") contains no number, so numeral matching cannot catch it. Checking free sentences
+  costs a SMALL model call **at BOW, per sentence**, unless hosts send structured claims (ids + values).
+  Corrected row: *Claim card inside a host* — NO AI when the host sends structured claims; SMALL per
+  sentence otherwise.
+- **Content addressing needs collision-resistant hashes.** "The second asker pays nothing" and every
+  memo keyed by (record hash, …) assume it; three prototypes used 24- or 32-bit toy hashes. SHA-256 (or
+  a successor) is a platform law, not a per-board choice.
+- **Open-world compiles should wait for pooled Wants.** Caching does not bound a long tail of mostly
+  unique questions. Compile only when a place's merged Wants cross a threshold: the dearest AI cost
+  becomes a network effect, and the default answer stays honest ("no system for this").
+- **A cached counterparty archetype is an exploit.** If every fork's Denver answers the same way, the
+  first player to find its acceptance boundary has a dominant strategy against every copy. Archetypes
+  need a seeded, per-fork draw (like the per-game luck in TakeItOut).
+- **Agents move load onto BOW even when BOW runs no model:** every proposed act costs a rules check, a
+  log append, a ring and storage. Warrants need act-rate budgets as well as scope.
+- **At a million AI seats, "occasional" becomes continuous** (Jurisdiction, Parting): price agent seats
+  per seat-time, not per act.
+- **The hidden human cost is the knowledge frame:** mining "what was knowable then" for a cut is
+  frontier work plus human review per moment of every system. Label it as the dominant cost of time
+  navigation on Reality.
+- The critic found **no hidden per-click model call** in any prototype, and nothing breaks with AI off:
+  the floor holds.

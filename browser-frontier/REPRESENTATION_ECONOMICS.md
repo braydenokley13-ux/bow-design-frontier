@@ -138,3 +138,28 @@ Direct twin, not in baked textures — which also makes it cheaper.
   restraint applies — derive it from three hand-built domains first).
 - The Downshift loses authority or truth on some rung (a refusal missing on voice, a token lost on the
   phone): the floor promise is broken.
+
+## 9. Corrections after the platform critique (`critique/CRITIC_2_PLATFORM.md` §3)
+
+1. **A fourth unit: FACT.** The table in §1 priced an instance as "a data binding, nobody pays". That is
+   true only for state BOW's own engine produces (Worlds, forks, class sessions). For **Reality**, the
+   binding is cheap and the DATA is the cost: typed, sourced, dated, licensed facts, per system, over
+   time — including *when each fact became known* (the Cut's knowledge frame). The prototypes show the
+   gap everywhere (Parting cannot pin Philadelphia: "no Philadelphia books"; TakeItOut's Reality lift runs
+   on stand-ins; the Cut authored a knowledge plane for one door of five). So:
+
+   | Unit | Cost | Grows with |
+   |---|---|---|
+   | Fact | sourcing, verification, licensing, as-of and known-at stamping | systems × time × sources (breaks the "never per system" rule — and it is where the money goes at scale) |
+
+   Live official league data is a licensed product (the critic believes NBA data is distributed
+   exclusively through Sportradar — verify). "Observing is wide and free" (Wave 2's commercial line)
+   holds only for what BOW may republish.
+2. **A compiled Room is a parameterized template**, not a fixed per-schema asset: layout may read state
+   (Concordance's shelf count is `ceil(onHand/unit)`). Cache per schema × kit × tier; state binds live.
+3. **The Institution prototype is not evidence for the baking claims** in §4–5: it runs real-time
+   shadows with tone mapping (measured: 31 draw calls, ~4.4k triangles at the maquette, ~1.1 MB, 10 MB
+   heap). It is light, but the baked-lightmap economics rest on the unmerged Boston pipeline alone.
+4. **The phone rung is what a phone receives**, chosen by detecting the device — not a picture of a phone
+   inside a desktop page. At a real 390 px width, seven of nine boards broke; the contract now requires
+   390×844 and 1024×600.
