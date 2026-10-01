@@ -1,0 +1,54 @@
+[
+ {
+  "wait": 1000,
+  "shot": "01-a-fork-address-in-a-fresh-browser-is-refused-not-a-crash"
+ },
+ {
+  "expectText": "this copy has no act with that id"
+ },
+ {
+  "expectText": "Your address was left exactly as you wrote it"
+ },
+ {
+  "open2": "OneRecord.html#s=boston.year-two&at=42&h=13ca7fd4&b=main&seat=gm&view=room&lift=a40",
+  "shot": "02-lift-a40-fresh"
+ },
+ {
+  "expectText": "Act 40 here is called"
+ },
+ {
+  "open2": "OneRecord.html#s=denver.year-two&at=42&h=13ca7fd4&b=main&seat=gm&view=room",
+  "shot": "03-denver-year-two-refused"
+ },
+ {
+  "expectText": "this page holds boston.year-two and nothing else"
+ },
+ {
+  "open2": "OneRecord.html#s=boston.year-two&at=42&h=13ca7fd4&b=main&seat=cfo&view=room",
+  "shot": "04-seat-cfo-refused"
+ },
+ {
+  "expectText": "is not a seat in boston.year-two"
+ },
+ {
+  "open2": "OneRecord.html#s=boston.year-two&at=abc&h=13ca7fd4&b=main&seat=gm&view=room",
+  "shot": "05-a-moment-that-is-not-a-moment"
+ },
+ {
+  "expectText": "A moment is an act number"
+ },
+ {
+  "open2": "OneRecord.html#%25%25%25",
+  "shot": "06-an-address-with-no-keys"
+ },
+ {
+  "expectText": "has none of them"
+ },
+ {
+  "click": "Open boston.year-two at its head instead",
+  "shot": "07-only-on-request-does-the-page-rewrite-the-address"
+ },
+ {
+  "expectText": "Opened boston.year-two at its head"
+ }
+]

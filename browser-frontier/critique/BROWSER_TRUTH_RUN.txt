@@ -1,0 +1,10 @@
+# Independent play-through of every prototype with its own play script, 1440x900, headless Chromium (software GL), 30 Sep 2026 ~03:15 UTC, run by the parent session — not by the builders.
+Institution.html: 31 shots → shots/_final-Institution · pageErrors 0 · consoleErrors 0 · failedSteps 0 · failedRequests 0 · overflowX false · unlabeled 0
+Cut.html: 25 shots → shots/_final-Cut · pageErrors 0 · consoleErrors 0 · failedSteps 0 · failedRequests 0 · overflowX false · unlabeled 0
+Jurisdiction.html: 44 shots → shots/_final-Jurisdiction · pageErrors 0 · consoleErrors 0 · failedSteps 0 · failedRequests 0 · overflowX false · unlabeled 0
+Guest.html: 54 shots → shots/_final-Guest · pageErrors 0 · consoleErrors 0 · failedSteps 0 · failedRequests 0 · overflowX false · unlabeled 0
+Bench.html: 41 shots → shots/_final-Bench · pageErrors 0 · consoleErrors 0 · failedSteps 0 · failedRequests 0 · overflowX false · unlabeled 0
+TakeItOut.html: 32 shots → shots/_final-TakeItOut · pageErrors 0 · consoleErrors 0 · failedSteps 0 · failedRequests 0 · overflowX false · unlabeled 0
+Parting.html: 39 shots → shots/_final-Parting · pageErrors 0 · consoleErrors 0 · failedSteps 0 · failedRequests 0 · overflowX false · unlabeled 0
+EnterTournament.html: 51 shots → shots/_final-EnterTournament · pageErrors 0 · consoleErrors 0 · failedSteps 0 · failedRequests 0 · overflowX false · unlabeled 0
+Concordance.html: 29 shots → shots/_final-Concordance · pageErrors 0 · consoleErrors 0 · failedSteps 0 · failedRequests 0 · overflowX false · unlabeled 0

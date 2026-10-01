@@ -1,0 +1,1643 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Bench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@400;500;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<script src="_shared/boston-fixture.js"></script>
+<style>
+:root{
+  --desk:#d8cfba; --paper:#f3eee1; --sheet:#f8f4ea; --paper2:#ebe4d3; --paper3:#ddd4be;
+  --ink:#23211d; --graphite:#48443d; --pencil:#5e584e; --rule:#b4ab95; --ghost:#b0a790;
+  --verm:#b3311a; --vermSoft:#f0d5ca; --green:#1c6b52; --greenSoft:#d5e7dd;
+  --mono:'Chivo Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+  --serif:'Newsreader','Iowan Old Style',Georgia,'Times New Roman',serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--desk);color:var(--ink);font:400 15px/1.4 var(--serif);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--verm);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#app{display:grid;grid-template-columns:172px minmax(0,1fr) 272px;grid-template-rows:auto auto minmax(0,1fr) auto;height:100vh;min-height:0}
+/* ---------- top bar: a drawing's title strip */
+#top{grid-column:1/-1;grid-row:1;display:grid;grid-template-columns:172px minmax(0,1fr) auto;border-bottom:1.5px solid var(--ink);background:var(--sheet)}
+#top .cell{padding:4px 12px;border-right:1.5px solid var(--ink);display:flex;align-items:center;gap:10px;min-width:0}
+#top .cell:last-child{border-right:0}
+.brand{flex-direction:column;align-items:flex-start!important;gap:0!important;line-height:1.15}
+.brand b{font:700 11px var(--mono);letter-spacing:.09em}
+.brand span{font:500 10.5px var(--mono);color:var(--pencil);letter-spacing:.06em}
+.lbl{font:500 10px var(--mono);letter-spacing:.09em;color:var(--pencil);text-transform:uppercase}
+#addr{font:500 12px var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.tog{gap:6px!important}
+.tg{min-height:40px;padding:4px 10px;border:1.5px solid var(--ink);background:var(--sheet);font:500 11.5px var(--mono);letter-spacing:.02em}
+.tg[aria-pressed=true]{background:var(--ink);color:var(--sheet)}
+#realstrip{grid-column:1/-1;grid-row:2;background:var(--vermSoft);border-bottom:1.5px solid var(--verm);padding:5px 14px;font:500 11.5px/1.35 var(--mono);color:#6b1d0d}
+#realstrip[hidden]{display:none}
+/* ---------- index */
+#idx{grid-row:3;grid-column:1;border-right:1.5px solid var(--ink);background:var(--paper);padding:12px 0;display:flex;flex-direction:column;gap:2px;overflow:auto}
+#idx h2{font:500 10px var(--mono);letter-spacing:.1em;color:var(--pencil);margin:0 12px 6px;text-transform:uppercase}
+.ix{display:flex;gap:8px;align-items:baseline;text-align:left;width:100%;min-height:44px;padding:6px 12px;border:0;border-left:4px solid transparent;background:none;font:500 12px/1.25 var(--mono)}
+.ix b{font-weight:700;width:14px;flex:none}
+.ix.on{background:var(--sheet);border-left-color:var(--ink);font-weight:700}
+.ix:disabled{color:var(--pencil);cursor:default;opacity:.85}
+.ix:disabled span{border-bottom:1px dashed var(--pencil)}
+#idx .note{margin:auto 12px 4px;font:400 10.5px/1.4 var(--mono);color:var(--pencil)}
+/* ---------- main */
+#main{grid-row:3;grid-column:2;overflow:auto;padding:10px 12px 8px;min-width:0}
+#main:focus{outline:none}
+.sheet{position:relative;background:var(--sheet);border:1.5px solid var(--ink);box-shadow:3px 3px 0 var(--rule);padding:8px 16px 10px}
+.sh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1.5px solid var(--ink);padding-bottom:5px;margin-bottom:7px}
+.sh.hastabs .sub{display:none}
+.sh .no{font:700 11px var(--mono);letter-spacing:.09em;border:1.5px solid var(--ink);padding:1px 6px}
+.sh h1{font:600 24px/1.1 var(--serif);margin:0;letter-spacing:-.005em}
+.sh h1:focus{outline:none}
+.sh .sub{font:500 11.5px var(--mono);color:var(--pencil)}
+.grow{flex:1}
+.btn{min-height:44px;padding:6px 14px;border:1.5px solid var(--ink);background:var(--sheet);font:600 12.5px var(--mono);letter-spacing:.01em;text-align:left}
+.btn:hover:not(:disabled){background:var(--paper2)}
+.btn.pri{background:var(--ink);color:var(--sheet)}
+.btn.pri:hover:not(:disabled){background:#000}
+.btn.you{border-color:var(--green);color:var(--green)}
+.btn.you:hover:not(:disabled){background:var(--greenSoft)}
+.btn.warn{border-color:var(--verm);color:var(--verm)}
+.btn:disabled{border-style:dashed;color:var(--pencil);cursor:default;background:transparent}
+.btn.sm{min-height:40px;padding:3px 10px;font-size:11.5px}
+h2{font:700 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;margin:0 0 5px;color:var(--graphite)}
+h2 small{font-weight:400;letter-spacing:0;text-transform:none;color:var(--pencil);margin-left:6px}
+.mono{font-family:var(--mono)}
+.note{font:400 12px/1.4 var(--mono);color:var(--graphite);margin:0}
+.serif-i{font-style:italic}
+/* ---------- status */
+#status{grid-column:1/-1;grid-row:4;border-top:1.5px solid var(--ink);background:var(--sheet);padding:5px 14px;font:500 11px var(--mono);color:var(--graphite);display:flex;gap:10px;justify-content:space-between}
+/* ---------- side */
+#side{grid-row:3;grid-column:3;border-left:1.5px solid var(--ink);background:var(--paper);display:flex;flex-direction:column;min-height:0;min-width:0}
+#side section{padding:9px 12px;min-height:0}
+#side .know{border-bottom:1.5px solid var(--ink);max-height:62%;overflow:auto;background:var(--sheet)}
+#side .rec{flex:1;overflow:auto}
+.krow{display:grid;grid-template-columns:auto 1fr;gap:0 8px;padding:3px 0;border-bottom:1px solid var(--rule);font:400 11px/1.35 var(--mono)}
+.krow b{font-weight:700}
+.krow .ks{color:var(--graphite);grid-column:2}
+.legend{font:400 10.5px/1.5 var(--mono);margin-top:6px;display:grid;grid-template-columns:1fr 1fr;gap:1px 8px}
+.ent{border-left:3px solid var(--rule);padding:3px 0 5px 8px;margin:0 0 5px;font:400 11px/1.35 var(--mono)}
+.ent .h{font-weight:700;letter-spacing:.02em}
+.ent .m{color:var(--pencil);font-size:10.5px}
+.ent.you{border-left-color:var(--green)}
+.ent.you .h{color:var(--green)}
+.ent.refuse{border-left-color:var(--verm)}
+.ent.refuse .h{color:var(--verm)}
+.ent.probe .h{font-style:italic;font-weight:500}
+.ent.dim .h{font-weight:500;color:var(--graphite)}
+.ent.rev{border-left-color:var(--verm)}
+.ent.rev .h{color:var(--verm)}
+ol.recl{list-style:none;margin:0;padding:0}
+/* ---------- kind swatches: seven textures */
+.sw{display:inline-block;width:20px;height:12px;border:1.3px solid var(--ink);vertical-align:-1px;margin-right:6px;flex:none;background:var(--sheet)}
+.k-OBSERVED,.k-REVIEWED,.k-SOURCED{background:var(--ink)}
+.k-RECORDED{background:var(--ink);box-shadow:inset 0 0 0 2px var(--sheet),inset 0 0 0 3px var(--ink)}
+.k-AUTHORED,.k-ASSUMED,.k-ASSERTED,.k-FIXTURE{background:transparent}
+.k-COMPUTED{background:#c6bda6}
+.k-MODELED{background:repeating-linear-gradient(135deg,var(--ink) 0 1.3px,transparent 1.3px 4px)}
+.k-GENERATED{background:radial-gradient(circle,var(--ink) 1px,transparent 1.3px) 0 0/4px 4px}
+.k-UNKNOWN,.k-GAP,.k-EMPTY{border-style:dashed;background:transparent}
+.k-LIVE{background:var(--ink)}
+.k-FIXTURE{box-shadow:inset 0 0 0 2px var(--sheet),inset 0 0 0 3px var(--ink)}
+.kc{display:inline-flex;align-items:baseline;font:600 10.5px var(--mono);letter-spacing:.04em}
+/* ---------- capability layer */
+[data-cap]{position:relative}
+.captag{position:absolute;z-index:20;font:600 9.5px/1.25 var(--mono);letter-spacing:.02em;padding:2px 6px;background:var(--sheet);border:1.5px solid var(--ink);color:var(--ink);max-width:70%;pointer-events:none;text-align:left}
+.captag{top:-10px;right:8px}
+.captag.c-SPEC{background:var(--verm);border-color:var(--verm);color:#fff8ee}
+.captag.c-REAL{background:var(--ink);color:var(--sheet)}
+/* ---------- ask */
+.askline{display:flex;gap:10px;align-items:flex-end;margin:6px 0 10px}
+.askline label{display:block}
+.askline .fld{flex:1}
+.askline input{width:100%;font:italic 400 28px/1.2 var(--serif);padding:4px 2px 3px;border:0;border-bottom:2px solid var(--ink);background:transparent;color:var(--ink);border-radius:0}
+.askline input::placeholder{color:var(--pencil)}
+.askline input:focus-visible{outline:3px solid var(--verm);outline-offset:3px}
+.exl{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.exl .btn{font-weight:500;font-family:var(--serif);font-size:15px;font-style:italic}
+.tblock{display:grid;grid-template-columns:1.1fr 1.3fr 1.2fr;border:1.5px solid var(--ink);margin:6px 0 10px}
+.tblock>div{padding:8px 12px;border-right:1.5px solid var(--ink);min-width:0}
+.tblock>div:last-child{border-right:0}
+.tblock .big{font:600 19px/1.25 var(--serif);margin:3px 0 0}
+.tblock .dyn{font:700 15px/1.3 var(--mono);letter-spacing:.02em;margin:5px 0 0}
+.nbtabs{display:flex;gap:8px;flex-wrap:wrap;margin:5px 0}
+.nb{min-height:44px;padding:5px 12px;border:1.5px dashed var(--ink);background:var(--sheet);font:600 12px var(--mono)}
+.nb[aria-pressed=true]{border-style:solid;background:var(--paper2)}
+.nbnote{border:1.5px dashed var(--ink);padding:7px 12px;margin:2px 0 10px;font:400 12.5px/1.45 var(--mono);max-width:820px}
+.wide{max-width:none}
+/* ---------- bench / loom */
+.cap{font:500 12.5px/1.45 var(--mono);margin:0 0 7px;padding:5px 9px;border:1.5px solid var(--ink);background:var(--paper);display:flex;gap:8px;align-items:flex-start}
+.cap b{font-weight:700}
+.chartwrap{position:relative;width:100%;margin:0 auto;aspect-ratio:900/350;background:var(--paper)}
+svg.chart{display:block;width:100%;height:100%}
+.frame{border:1.5px solid var(--rule)}
+.frame.f-pencil{border:2px dashed var(--graphite);outline:1.5px solid var(--graphite);outline-offset:-6px}
+.frame.f-branch{border:3px solid var(--green)}
+.fstrip{font:600 11.5px/1.4 var(--mono);padding:5px 10px;display:none}
+.f-refuse .fstrip{background:var(--vermSoft)!important;border-bottom:2px solid var(--verm)!important}
+.f-pencil .fstrip{display:block;background:var(--paper2);border-bottom:2px dashed var(--graphite)}
+.f-branch .fstrip{display:block;background:var(--greenSoft);color:#0f3f30;border-bottom:2px solid var(--green)}
+.sl{position:absolute;left:calc(42.111% - 11px);width:calc(20% + 22px);top:calc(80% - 20px);height:40px}
+.sl input{width:100%;height:40px;margin:0;background:transparent;-webkit-appearance:none;appearance:none;cursor:ew-resize}
+.sl input::-webkit-slider-runnable-track{height:40px;background:transparent}
+.sl input::-moz-range-track{height:40px;background:transparent}
+.sl input::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:40px;background:var(--sheet);border:2px solid var(--ink);box-shadow:inset 0 0 0 3px var(--sheet),inset 0 0 0 4px var(--ink)}
+.sl input::-moz-range-thumb{width:18px;height:36px;background:var(--sheet);border:2px solid var(--ink);border-radius:0}
+.sl input:focus-visible{outline:none}
+.sl input:focus-visible::-webkit-slider-thumb{outline:3px solid var(--verm);outline-offset:2px}
+.sl input:focus-visible::-moz-range-thumb{outline:3px solid var(--verm);outline-offset:2px}
+.sl input:disabled{cursor:default}
+.sl input:disabled::-webkit-slider-thumb{border-style:dashed;background:var(--paper2)}
+.zone{display:grid;grid-template-columns:1.35fr 1.05fr 1fr;gap:14px;margin-top:8px;align-items:start}
+.zone .col{min-width:0}
+.parts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.part{display:block;text-align:left;border:1.5px solid var(--ink);background:var(--sheet);padding:4px 8px;min-height:50px}
+.part .pn{display:block;font:700 11.5px var(--mono)}
+.part .pn i{font-weight:400;font-style:normal;color:var(--pencil)}
+.part .pr{display:block;font:600 10.5px var(--mono);letter-spacing:.03em;color:var(--verm)}
+.part .pd{display:block;font:400 10.5px/1.3 var(--mono);color:var(--graphite)}
+.part[aria-pressed=true]{background:var(--paper2);border-style:dashed;border-width:2px}
+.edge{border:1.5px solid var(--ink);padding:7px 10px;min-height:96px;background:var(--paper)}
+.edge p{margin:0 0 5px}
+.edge .hand{color:var(--verm);font:600 12px/1.35 var(--mono);display:flex;gap:8px;align-items:flex-start}
+.edge .hand svg{flex:none;width:34px;height:20px;fill:var(--verm);margin-top:1px}
+.edgeN{font:700 14px/1.3 var(--mono)}
+.col .btn+.btn{margin-top:6px}
+.brow{display:flex;gap:6px;flex-wrap:wrap}
+.hist{display:flex;gap:6px;flex-wrap:wrap}
+.htab{min-height:40px;padding:3px 10px;border:1.5px solid var(--ink);background:var(--sheet);font:600 11.5px var(--mono)}
+.htab[aria-pressed=true]{background:var(--ink);color:var(--sheet)}
+.htab.br{border-color:var(--green);color:var(--green)}
+.htab.br[aria-pressed=true]{background:var(--green);color:#fff}
+.cmp{width:100%;border-collapse:collapse;font:400 11.5px/1.35 var(--mono)}
+.cmp th,.cmp td{border:1px solid var(--rule);padding:3px 7px;text-align:left;vertical-align:top}
+.cmp th{background:var(--paper2);font-weight:700}
+.cmp td.g{color:var(--green);font-weight:700}
+.cmp td.v{color:var(--verm);font-weight:700}
+.rest{margin:4px 0}
+.restbar{position:relative;height:18px;border:1.5px solid var(--ink);background:var(--sheet)}
+.restbar i{position:absolute;left:0;top:0;bottom:0;background:#c6bda6;border-right:2px solid var(--ink)}
+.restbar u{position:absolute;top:-4px;bottom:-4px;width:0;border-left:2px dashed var(--verm)}
+.desk{display:grid;grid-template-columns:1.5fr 1.05fr 1fr;gap:14px;margin-top:8px;align-items:start}
+.stand{font:400 12px/1.5 var(--mono);margin:0}
+.stand b{font-weight:700}
+.refuse-note{border:2px solid var(--verm);color:#6b1d0d;background:var(--vermSoft);padding:6px 9px;font:500 12px/1.4 var(--mono);margin-top:6px}
+/* seat: the ground changes (ledger paper) */
+.sheet.seat{background:var(--greenSoft);border-color:var(--green);background-image:repeating-linear-gradient(0deg,transparent 0 23px,rgba(28,107,82,.28) 23px 24px);background-position:0 8px}
+.sheet.seat .sh{border-bottom-color:var(--green)}
+.sheet.seat .chartwrap{background:var(--sheet)}
+.seatstamp{font:700 11.5px var(--mono);letter-spacing:.06em;color:var(--green);border:2px solid var(--green);padding:2px 8px;background:var(--sheet)}
+.bigcount{font:700 17px/1.3 var(--mono);letter-spacing:.01em;margin:0}
+.ledger{display:grid;grid-template-columns:1fr 1fr;gap:2px 20px;margin-top:6px;font:400 11.5px/1.35 var(--mono)}
+.ledger .r{display:flex;align-items:baseline;gap:0;padding:3px 0;border-bottom:1px solid var(--rule);min-width:0}
+.ledger .r span{min-width:0}
+.ledger .r>span:first-child{flex:none;width:126px}
+.ledger .r b{font-weight:700}
+.ledger .r.new{background:var(--paper2)}
+.benchbar{display:flex;gap:16px;align-items:center;margin:8px 0 2px;flex-wrap:wrap}
+
+/* ---------- plate (the back of the sheet) */
+.sheet.plate{background:#efe8d4}
+.plwrap{display:flex;flex-direction:column;gap:0}
+.ptop,.pbot{display:flex;gap:12px;align-items:flex-start}
+.ptop{padding:0 0 0 22px}
+.pbot{padding:0 0 0 22px;justify-content:flex-start}
+.pmid{display:flex;align-items:flex-start}
+.plbody{position:relative;flex:1;min-width:0;border:2px solid var(--ink);background:var(--paper);padding:10px 16px 12px;box-shadow:inset 0 0 0 4px var(--paper),inset 0 0 0 5px var(--ink)}
+.showthru{position:absolute;inset:0;width:100%;height:100%;transform:scaleX(-1);opacity:.09;pointer-events:none}
+.showthru .thr{stroke-width:5}
+.plh{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap;border-bottom:1.5px solid var(--ink);padding-bottom:4px;margin-bottom:6px;font:600 12.5px var(--mono);position:relative}
+.prow{display:grid;grid-template-columns:190px 145px 1fr;gap:10px;align-items:center;padding:2px 2px;border-bottom:1px solid var(--rule);font:400 11.5px/1.3 var(--mono);position:relative}
+.prow b{font-weight:700}.prow i{font-style:normal;color:var(--pencil)}
+.sig{display:flex;height:13px;width:140px;border:1.3px solid var(--ink);background:var(--sheet)}
+.seg{display:block;height:100%;border-right:1.3px solid var(--ink)}.seg:last-child{border-right:0}
+.seg.k-UNKNOWN{border-style:solid;background:repeating-linear-gradient(90deg,transparent 0 3px,var(--ink) 3px 4px)}
+.sigw{display:block;font-size:10px;color:var(--graphite);margin-top:2px}
+.pm{color:var(--graphite);font-size:10.5px}
+.knots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;position:relative}
+.knot{border:1.5px solid var(--ink);padding:6px 8px;background:var(--sheet);position:relative;min-width:0}
+.knot.mark{border-color:var(--verm);outline:3px solid var(--verm);outline-offset:2px}
+.kh{display:flex;justify-content:space-between;gap:6px;font:700 11.5px var(--mono);align-items:baseline}
+.dtag{font:700 9.5px var(--mono);background:var(--verm);color:#fff8ee;padding:1px 5px;letter-spacing:.04em;white-space:nowrap}
+.kl{display:flex;flex-wrap:wrap;gap:2px 8px;margin:3px 0}
+.kt{margin:2px 0;font:400 12.5px/1.25 var(--serif)}
+.ks2{margin:2px 0;font:400 10px/1.3 var(--mono);color:var(--graphite)}
+.ks3{margin:2px 0 0;font:600 10.5px/1.35 var(--mono)}
+.ptab{display:block;text-align:left;border:1.5px solid var(--ink);background:var(--sheet);padding:4px 10px;min-height:46px;min-width:0;max-width:330px}
+.pt-h{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.ptab[aria-pressed=true]{background:var(--paper2);border-width:2.5px}
+.ptab .pt-w{display:block;font:400 11px/1.3 var(--mono);color:var(--graphite)}
+.ptab .pt-n{display:block;font:700 11.5px var(--mono)}.ptab .pt-n i{font-style:normal;font-weight:400;color:var(--verm)}
+
+.ptop .ptab{border-bottom:0}
+.brow2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.prt{padding-top:60px}
+.prt .ptab{border-left:0;max-width:190px}
+.pbot .ptab{border-top:0}
+.pact{display:flex;gap:12px;align-items:center;flex:1;padding-right:6px;padding-top:6px;min-width:0}
+.pbot .note{flex:1}
+.portnote{margin:8px 0 0;padding:6px 9px;border:1.5px dashed var(--ink);font:400 12px/1.4 var(--mono);position:relative;background:var(--sheet)}
+.clouded{position:relative}
+/* ---------- stub */
+.sheet.stub{background:#f1efe9;border-color:var(--graphite)}
+.sheet.stub .sh{border-bottom-style:double;border-bottom-width:4px}
+.pin{border:1.5px solid var(--verm);padding:6px 10px;margin:4px 0 10px;background:var(--sheet)}
+.statute{display:grid;grid-template-columns:1fr 1fr;gap:0;font:400 16px/1.5 var(--serif);column-rule:1px solid var(--ink)}
+.statute>div{padding:0 18px 0 0}.statute>div+div{padding:0 0 0 18px;border-left:1px solid var(--ink)}
+.statute h2{font-size:11px;margin-bottom:6px}
+.statute p{margin:0 0 8px}
+
+
+/* ---------- open world: standing-in banner, slips, shortage list */
+.standin{border:2px solid var(--verm);background:var(--vermSoft);color:#5c180a;padding:4px 10px;font:500 11.5px/1.4 var(--mono)}
+.shlist{border-top:1.5px solid var(--ink)}
+.shrow{display:flex;gap:14px;align-items:flex-start;width:100%;text-align:left;border:0;border-bottom:1.5px solid var(--ink);background:transparent;padding:12px 8px;min-height:64px;font:400 17px/1.35 var(--serif)}
+.shrow:hover:not(.off){background:var(--paper2)}
+.shrow i{font:400 11.5px/1.5 var(--mono);font-style:normal;color:var(--graphite)}
+.shrow em{font:600 11.5px var(--mono);font-style:normal;color:var(--pencil)}
+.shrow b{font-weight:600;font-size:19px}
+.shrow.off{border-bottom-style:dashed;color:var(--pencil)}
+.shn{font:700 12px var(--mono);border:1.5px solid currentColor;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex:none;margin-top:2px}
+.openb{display:grid;grid-template-columns:minmax(300px,370px) 1fr;gap:14px;margin-top:5px;align-items:start}
+.fam{width:100%;border-collapse:collapse;font:400 11px/1.25 var(--mono)}
+.fam td,.fam th{border-bottom:1px solid var(--rule);padding:1px 6px 1px 0;text-align:left;font-weight:400}
+.fam th{font:700 10px var(--mono);letter-spacing:.06em;color:var(--graphite)}
+.pip{display:inline-block;width:11px;height:9px;background:var(--ink);margin-right:2px;vertical-align:-1px}
+.pip.u{background:transparent;border:1.3px dashed var(--ink)}
+.gnd2{background:#fdfbf6;border:1.5px solid var(--ink);aspect-ratio:520/250}
+.slips{display:grid;grid-template-columns:repeat(6,1fr);gap:8px 8px;padding:6px 2px 0;margin-top:0}
+.slip{position:relative;display:flex;flex-direction:column;gap:2px;background:#fdfaf1;border:1px solid var(--rule);padding:10px 7px 5px;transform:rotate(var(--r));font:400 11px/1.25 var(--mono);min-height:0;box-shadow:1px 2px 0 rgba(35,33,29,.18)}
+.slip::before{content:"";position:absolute;top:-4px;left:10px;width:22px;height:8px;background:var(--ink)}
+.slip .sc{font:700 9.5px var(--mono);letter-spacing:.04em;border:1.3px solid var(--ink);padding:0 4px;align-self:flex-start}
+.slip .sd{font-size:10px;color:var(--graphite)}
+.slip .scl{font:400 12px/1.25 var(--serif);margin:2px 0}
+.slip .sf{font-size:10px;color:var(--pencil);margin-top:auto}
+.slip .sf em{font-style:normal;color:var(--verm)}
+.slip.blank{background:transparent;border:1.5px dashed var(--ink)}
+.slip.blank .scl{font:italic 400 12.5px/1.3 var(--serif);color:var(--graphite)}
+/* ---------- the working model on tracing paper */
+.tpwrap{position:relative;isolation:isolate;background:#cfc6b0;border:2px solid var(--ink);padding:10px 14px 10px;margin-top:2px}
+.tpwrap .paper{position:absolute;inset:0;z-index:2;background:rgba(251,249,242,.66);outline:1px solid rgba(35,33,29,.5);outline-offset:-5px;box-shadow:inset 0 0 0 4px rgba(251,249,242,.4);pointer-events:none}
+.tpwrap>*:not(.paper):not(.tape){position:relative;z-index:3}
+.tape{position:absolute;z-index:4;width:64px;height:20px;background:rgba(214,192,128,.72);border:1px solid rgba(120,100,40,.35)}
+.tape.t1{top:-8px;left:26px;transform:rotate(-5deg)}.tape.t2{top:-8px;right:26px;transform:rotate(4deg)}
+.trrow1{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:6px}
+.stampbig{font:700 14px var(--mono);letter-spacing:.06em;border:2.5px solid var(--verm);color:var(--verm);padding:2px 10px;transform:rotate(-1deg);background:rgba(251,249,242,.85)}
+.life{display:flex;align-items:center;gap:10px;font:500 11.5px var(--mono)}
+.lifek{width:9px;height:9px;background:var(--verm);display:inline-block}
+.ruler{display:flex;gap:1px;align-items:flex-end;height:16px}.ruler i{display:block;width:2px;height:8px;background:var(--graphite)}.ruler i:nth-child(6n){height:14px}
+.trmain{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,1fr);gap:14px;align-items:start}
+.gcell{position:relative;aspect-ratio:520/250;margin-bottom:0}
+.lcol{display:flex;flex-direction:column;gap:6px;min-width:0}
+.permrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.permrow .lbl{flex-basis:100%}
+#mRefuse:empty{display:none}
+.gcell .gnd{position:absolute;inset:0;z-index:1;background:#fdfbf6;border:1px solid var(--ink)}
+.gcell .mk{position:absolute;inset:0;z-index:3}
+.rcol{display:flex;flex-direction:column;gap:8px;min-width:0}
+.readout{border:1.5px solid var(--graphite);padding:5px 8px;background:rgba(251,249,242,.7)}
+.readout .note{font-size:11px;line-height:1.3;margin:1px 0}
+.readout .ans{font:700 24px/1.1 var(--mono);margin:1px 0}
+.readout.oe{border:2px dashed var(--verm)}
+.tblk{border:2px solid var(--ink);background:rgba(251,249,242,.8);font:500 10.5px/1.25 var(--mono)}
+.tblk .tb1{padding:3px 6px;border-bottom:2px solid var(--ink);font-size:11.5px;letter-spacing:.02em}
+.tblk .tb2{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--ink)}
+.tblk .tb2:last-child{border-bottom:0}
+.tblk .tb2 span{padding:2px 6px}.tblk .tb2 span+span{border-left:1px solid var(--ink)}
+.perm .pbtn{display:flex;flex-direction:column;gap:5px;margin-top:3px}
+.ledgerH{font:700 10.5px var(--mono);letter-spacing:.06em;margin:6px 0 4px;border-top:1.5px solid var(--graphite);padding-top:5px}
+.ledgerH small{font-weight:400;letter-spacing:0;color:var(--graphite);margin-left:6px}
+.ledger7{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.sock{border:1.5px solid var(--graphite);background:rgba(251,249,242,.75);padding:4px 6px 5px;min-width:0;font:400 10.5px/1.25 var(--mono)}
+.sock label{display:block;font-weight:700;min-height:24px;line-height:1.15}
+.sock.outs{border:2px solid var(--verm)}
+.lv{width:100%;height:24px;margin:2px 0;background:transparent;-webkit-appearance:none;appearance:none;cursor:ew-resize}
+.lv::-webkit-slider-runnable-track{height:24px;background:linear-gradient(to right,transparent var(--ea),#cfc7b1 var(--ea),#cfc7b1 var(--eb),transparent var(--eb)) center/100% 12px no-repeat,linear-gradient(var(--graphite),var(--graphite)) center/100% 2px no-repeat}
+.lv::-moz-range-track{height:24px;background:linear-gradient(to right,transparent var(--ea),#cfc7b1 var(--ea),#cfc7b1 var(--eb),transparent var(--eb)) center/100% 12px no-repeat,linear-gradient(var(--graphite),var(--graphite)) center/100% 2px no-repeat}
+.lv::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:24px;background:var(--sheet);border:2px solid var(--ink);margin-top:0}
+.lv::-moz-range-thumb{width:10px;height:22px;background:var(--sheet);border:2px solid var(--ink);border-radius:0}
+.lv:focus-visible{outline:none}.lv:focus-visible::-webkit-slider-thumb{outline:3px solid var(--verm);outline-offset:2px}.lv:focus-visible::-moz-range-thumb{outline:3px solid var(--verm);outline-offset:2px}
+.sv{display:flex;justify-content:space-between;gap:4px}.sv output{font-weight:700}.evr{color:var(--graphite);font-size:10px}
+.lean{height:5px;border:1px solid var(--graphite);margin:3px 0 2px}.lean i{display:block;height:100%;background:var(--graphite);width:0}
+.oe{font:700 9.5px var(--mono);color:var(--graphite)}.sock.outs .oe{color:var(--verm)}
+.unkrow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.usock{display:block;text-align:left;border:1.5px dashed var(--ink);background:transparent;padding:4px 8px;min-height:44px;font:400 10.5px/1.3 var(--mono)}
+.usock b{display:block;font-size:11px}.usock:hover{background:rgba(251,249,242,.7)}
+
+.sheet.discarded .stampbig{border-style:dashed}
+
+
+/* ---------- review, want */
+.ladder{list-style:none;display:flex;margin:7px 0 6px;padding:0;gap:0}
+.ladder li{flex:1;padding:5px 10px;border:1.5px solid var(--ink);border-right:0;font:600 12px var(--mono);display:flex;gap:8px;align-items:center;background:var(--sheet)}
+.ladder li:last-child{border-right:1.5px solid var(--ink)}
+.ladder li span{border:1.3px solid currentColor;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;flex:none}
+.ladder li.now{background:var(--ink);color:var(--sheet)}
+.ladder li.now b{font-weight:500;font-size:10.5px;margin-left:auto}
+.ladder li.past{background:var(--paper2)}
+.ladder li.next{border-style:dashed;color:var(--pencil)}
+.ladder li.was{text-decoration:line-through;color:var(--pencil)}
+.revhead{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:4px 0;flex-wrap:wrap}
+.revhead .brow{display:flex;gap:8px}
+.krvh,.krv{display:grid;grid-template-columns:200px 104px 1fr auto;gap:10px;align-items:center;padding:2px 4px}
+.krvh{font:700 10px var(--mono);letter-spacing:.07em;border-bottom:1.5px solid var(--ink);color:var(--graphite)}
+.krv{border-bottom:1px solid var(--rule);font:400 13px/1.2 var(--serif);min-height:32px}
+.krv .kn{font-size:11px;line-height:1.35}
+.rvr{color:var(--verm);font-weight:700}.dis{color:var(--verm);font-weight:600}
+.lineage,.tomb{border:2px solid var(--verm);padding:6px 10px;margin-top:0;font:400 12px/1.5 var(--mono);background:var(--sheet)}
+.tomb{border-style:dashed;border-color:var(--ink)}
+.frozen{border:2px dashed var(--ink);padding:8px 12px;margin-top:8px;background:var(--paper2);position:relative}
+.ribbon{display:inline-block;font:700 12px var(--mono);letter-spacing:.06em;background:var(--verm);color:#fff8ee;padding:2px 10px;transform:rotate(-1.5deg)}
+.afterg{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:12px;margin-top:8px;align-items:start}
+.wanth{font:600 40px/1.05 var(--serif);margin:4px 0 4px;letter-spacing:-.01em}
+.wcols{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:18px;align-items:start}
+.anch{border:1.5px solid var(--ink);padding:8px 10px;background:var(--paper)}
+.miss{display:flex;flex-direction:column;gap:7px}
+.msock{display:flex;gap:8px;align-items:flex-start;border:1.5px dashed var(--ink);padding:7px 10px;font:400 12px/1.4 var(--mono)}
+.room{border:0}
+
+/* ---------- pan container for the wide time chart; the phone-only hold slider */
+.pan{overflow-x:auto}
+.holdrow,.phoneonly{display:none}
+/* ---------- a real phone layout (not a picture of a phone): one column, sheet tabs across the top, the record below */
+@media (max-width:700px){
+  html,body{height:auto}
+  body{font-size:15px}
+  #app{display:block;height:auto;min-height:0}
+  #top{display:block}
+  #top .cell{border-right:0;border-bottom:1px solid var(--ink);padding:5px 10px;flex-wrap:wrap;min-height:0}
+  .brand{flex-direction:row!important;align-items:baseline!important;gap:10px!important}
+  #addr{white-space:normal;overflow:visible;text-overflow:clip;word-break:break-word;font-size:11px;line-height:1.35}
+  #top .cell.tog{display:flex}
+  .tg{flex:1 1 0;min-height:44px}
+  #realstrip{padding:5px 10px;font-size:11px}
+  #idx{flex-direction:row;overflow-x:auto;padding:0;gap:0;border-right:0;border-bottom:1.5px solid var(--ink)}
+  #idx h2,#idx .note{display:none}
+  .ix{flex:none;width:auto;min-width:64px;border-left:0;border-bottom:4px solid transparent;padding:6px 10px;gap:6px}
+  .ix.on{border-bottom-color:var(--ink)}
+  .ix span{white-space:nowrap}
+  #main{overflow:visible;padding:8px 6px}
+  #side{border-left:0;border-top:1.5px solid var(--ink);display:block}
+  #side section{padding:9px 10px}
+  #side .know{max-height:none}
+  #side .rec{max-height:360px;overflow:auto}
+  #status{display:block;font-size:10.5px;line-height:1.35}
+  .sheet{padding:8px 10px 10px;box-shadow:2px 2px 0 var(--rule)}
+  .sh{gap:8px}
+  .sh h1{font-size:22px}
+  .btn{min-height:44px}
+  .askline{flex-wrap:wrap}
+  .askline input{font-size:21px}
+  .askline .btn{width:100%}
+  .exl .btn{font-size:14px}
+  .tblock{grid-template-columns:minmax(0,1fr)}
+  .tblock>div{border-right:0;border-bottom:1.5px solid var(--ink)}
+  .tblock>div:last-child{border-bottom:0}
+  .tblock .big{font-size:17px}
+  .wanth{font-size:30px}
+  .wcols,.zone,.desk,.openb,.trmain,.knots,.statute,.afterg{grid-template-columns:minmax(0,1fr);gap:12px}
+  .statute>div,.statute>div+div{padding:0;border-left:0}
+  .ledger{grid-template-columns:minmax(0,1fr)}
+  .ledger .r>span:first-child{width:112px}
+  .ledger7{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .unkrow{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .slips{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .prow{grid-template-columns:minmax(0,1fr);gap:2px}
+  .krvh{display:none}
+  .krv{grid-template-columns:minmax(0,1fr);gap:4px;padding:6px 4px}
+  .ladder{flex-direction:column}
+  .ladder li{border-right:1.5px solid var(--ink);border-bottom:0}
+  .ladder li:last-child{border-bottom:1.5px solid var(--ink)}
+  .ptop,.pbot{flex-direction:column;padding-left:0}
+  .pmid{flex-direction:column}
+  .prt{padding-top:0}
+  .prt .ptab{max-width:none;border-left:1.5px solid var(--ink)}
+  .ptab{max-width:none;width:100%}
+  .ptop .ptab{border-bottom:1.5px solid var(--ink)}
+  .pbot .ptab{border-top:1.5px solid var(--ink)}
+  .pact{flex-direction:column;align-items:stretch;padding-right:0}
+  .plbody{padding:8px 10px}
+  .plh{flex-direction:column;gap:2px}
+  .trrow1{flex-wrap:wrap;gap:6px}
+  .stampbig{font-size:12px}
+  .tpwrap{padding:10px 8px}
+  .revhead{align-items:flex-start}
+  .revhead .brow{flex-wrap:wrap}
+  .shrow{gap:10px;padding:10px 4px;font-size:16px}
+  .shrow b{font-size:17px}
+  .cmp{font-size:11px}
+  .cmp th,.cmp td{padding:3px 4px}
+  /* the time chart is pannable at a legible scale, with its own full-width hold slider */
+  .chartwrap{width:840px!important;max-width:none}
+  .sl{display:none}
+  .holdrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0;padding:6px 8px;border:1.5px solid var(--ink);background:var(--paper)}
+  .holdrow label{font:600 12px var(--mono)}
+  .holdrow input[type=range]{flex:1 1 200px;min-width:0;height:44px}
+  .phoneonly{display:block}
+}
+@media (max-height:700px) and (min-width:701px){.exl{gap:6px;margin-bottom:8px}.exl .btn{min-height:40px;font-size:13.5px;padding:3px 10px}.askline input{font-size:24px}.wanth{font-size:32px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* svg text and marks */
+svg .apt{font:700 12px var(--mono);fill:var(--ink)}
+svg .hl{font:400 10.5px var(--mono);fill:var(--pencil)}
+svg .axl{font:400 10.5px var(--mono);fill:var(--pencil)}
+svg .rowline{stroke:var(--rule);stroke-width:1}
+svg .hr{stroke:#dcd4c0;stroke-width:.8}
+svg .axis{stroke:var(--ink);stroke-width:1.2}
+svg .ghost{stroke:var(--ghost);stroke-width:1.4;fill:none}
+svg .thr{stroke:var(--ink);stroke-width:2.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+svg .thr.gr{stroke:var(--green)}
+svg .refl{stroke:var(--pencil);stroke-width:1.3;stroke-dasharray:6 4;fill:none}
+svg .would{stroke:var(--verm);stroke-width:2;stroke-dasharray:7 5;fill:none}
+svg .dark{fill:var(--ink)}
+svg .slk{fill:var(--paper3);stroke:var(--ink);stroke-width:.9}
+svg .tl{font:600 11px var(--mono);fill:var(--ink)}
+svg .tl.v{fill:var(--verm)}
+svg .tl.g{fill:var(--green)}
+svg .tl.p{fill:var(--pencil);font-weight:400}
+svg .dl{font:500 11px var(--mono);fill:var(--graphite);font-style:italic}
+svg .tabtxt{font:600 11.5px var(--mono)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="stip" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".95" fill="#23211d"/><circle cx="3.7" cy="3.7" r=".95" fill="#23211d"/></pattern>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(135)"><line x1="0" y1="0" x2="0" y2="6" stroke="#23211d" stroke-width="1.3"/></pattern>
+    <pattern id="hatchP" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(135)"><line x1="0" y1="0" x2="0" y2="6" stroke="#5e584e" stroke-width="1.2"/></pattern>
+    <symbol id="hand" viewBox="0 0 34 20"><rect x="0.5" y="5" width="5" height="11"/><path d="M8 7H13L14.8 4H17.6L16.6 7H30.6C32.6 7 32.6 10.4 30.6 10.4H24.4C26.6 10.4 26.6 13.2 24.4 13.2H25.2C27.2 13.2 27.2 16 25.2 16H24C25.8 16 25.8 18.6 23.8 18.6H14L8 16.6Z"/></symbol>
+  </defs>
+</svg>
+<div id="app">
+  <header id="top">
+    <div class="cell brand"><b>BOW BROWSER</b><span>P5 · THE BENCH</span></div>
+    <div class="cell"><span class="lbl">Address</span><code id="addr"></code></div>
+    <div class="cell tog"><button type="button" class="tg" id="tKnow" aria-pressed="false" data-a="know">How do we know?</button><button type="button" class="tg" id="tReal" aria-pressed="false" data-a="real">What's real?</button></div>
+  </header>
+  <div id="realstrip" hidden></div>
+  <nav id="idx" aria-label="Sheets"></nav>
+  <main id="main" tabindex="-1"></main>
+  <aside id="side" aria-label="Record and provenance"></aside>
+  <footer id="status"><span>PROTOTYPE · The Bench · find the system behind the question · data: shared fixture, dated, verify · no real airline, supply chain or transit system is connected</span></footer>
+</div>
+<div id="live" class="sr" aria-live="polite" role="status"></div>
+<script>
+(function(){'use strict';
+/* =====================================================================
+   THE BENCH · core: fixture reads, state, ONE act() function, render
+   Everything on screen is painted from S. Every act appends to S.log.
+   ===================================================================== */
+const FX = window.BOW_FIXTURE, AIR = FX.domains.air;
+const HOLD0 = parseInt(String(AIR.event.v).match(/\d+/)[0], 10);      // 40, read from the fixture, never pasted
+const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const hhmm = m => String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+const dur = m => Math.floor(m / 60) + ' h ' + String(m % 60).padStart(2, '0') + ' min';
+const dp = o => 'data-p="' + esc(JSON.stringify(o)) + '"';
+function rng(seed) { let a = seed >>> 0; return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function hash(str) { /* SHA-256 (FIPS 180-4) over the UTF-8 bytes of str, synchronous; hex */
+  const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  const b = new TextEncoder().encode(str), n = b.length, L = ((n + 9 + 63) >> 6) << 6, m = new Uint8Array(L);
+  m.set(b); m[n] = 0x80; const bits = n * 8; for (let i = 0; i < 4; i++) m[L - 1 - i] = (bits >>> (8 * i)) & 255; m[L - 5] = Math.floor(bits / 4294967296) & 255;
+  const H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19], W = new Array(64);
+  const r = (x, k) => (x >>> k) | (x << (32 - k));
+  for (let o = 0; o < L; o += 64) {
+    for (let t = 0; t < 16; t++) W[t] = (m[o + 4 * t] << 24) | (m[o + 4 * t + 1] << 16) | (m[o + 4 * t + 2] << 8) | m[o + 4 * t + 3];
+    for (let t = 16; t < 64; t++) { const s0 = r(W[t - 15], 7) ^ r(W[t - 15], 18) ^ (W[t - 15] >>> 3), s1 = r(W[t - 2], 17) ^ r(W[t - 2], 19) ^ (W[t - 2] >>> 10); W[t] = (W[t - 16] + s0 + W[t - 7] + s1) | 0; }
+    let [a, bb, c, d, e, f, g, h] = H;
+    for (let t = 0; t < 64; t++) { const t1 = (h + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[t] + W[t]) | 0, t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & bb) ^ (a & c) ^ (bb & c))) | 0; h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = bb; bb = a; a = (t1 + t2) | 0; }
+    H[0] = (H[0] + a) | 0; H[1] = (H[1] + bb) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0; H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+  }
+  return H.map(x => (x >>> 0).toString(16).padStart(8, '0')).join('');
+}
+
+/* Facts the spec supplied that are not in the shared store: each carries kind, source, as-of and verify. */
+const SPEC_FACTS = {
+  cfr:  { k: 'OBSERVED', src: '14 CFR 117.19 (eCFR), via research note E', asOf: '29 Sep 2026', verify: true, maxExtMin: 120 },
+  bts:  { k: 'OBSERVED', src: 'BTS delay-cause reporting (late-arriving aircraft is a standard cause), via research note E', asOf: '29 Sep 2026', verify: true },
+  rfi:  { k: 'OBSERVED', src: 'US Commerce semiconductor RFI, Jan 2022, read from a search summary (page not opened)', asOf: 'Jan 2022', verify: true, d2019: 40, d2021: 5 }
+};
+const CAPTXT = { REAL: 'REAL CURRENT PRODUCT CAPABILITY', PROPOSED: 'PROPOSED PLATFORM CAPABILITY', SPEC: 'SPECULATIVE FRONTIER' };
+const kc = (k, txt) => '<span class="kc"><i class="sw k-' + k + '"></i>' + (txt || k) + '</span>';
+
+/* ---------------------------------------------------------------- state */
+const REC = { hold: HOLD0, removed: null, ext: 0 };                 // the record: the typical day
+const S = {
+  view: 'ask', reached: { ask: 1 },
+  know: false, real: false,
+  q: '', qDraft: null, qk: null, nb: null,
+  arrived: [], assembling: false, timer: null,
+  work: { hold: HOLD0, removed: null, ext: 0 }, pushFrom: HOLD0,
+  hist: 'record', branches: [], compare: false,
+  edgeFound: false,
+  seat: false, seat0: null, seatActed: false, refuse: null,
+  plate: { distrust: false, port: null, rule: false, cloud: false },
+  semi: { stage: 'ask' },
+  model: null,                                                     // built by the compile act
+  want: { filed: false },
+  log: [], n: 0
+};
+const ACTS = {}, VIEWS = {}, PERSIST = {}, KNOW_MORE = {};
+const histLabel = () => S.hist === 'record' ? 'record' : 'branch ' + S.hist;
+
+function act(kind, p) {
+  p = p || {};
+  const fn = ACTS[kind];
+  if (!fn) throw new Error('unknown act ' + kind);
+  const res = fn(p) || {};
+  const logs = res.log ? [].concat(res.log) : [];
+  if (!p.live) for (const l of logs) { S.n++; S.log.unshift(Object.assign({ n: S.n, hist: histLabel() }, l)); }
+  if (S.log.length > 220) S.log.length = 220;
+  render();
+  if (res.say) announce(res.say);
+}
+function announce(msg) { const l = $('#live'); l.textContent = ''; setTimeout(() => { l.textContent = msg; }, 30); }
+
+/* ---------------------------------------------------------------- shell rendering */
+const SHEETS = [
+  { v: 'ask', no: 'A', name: 'Ask' }, { v: 'bench', no: 'B', name: 'Bench' }, { v: 'loom', no: 'C', name: 'Loom' },
+  { v: 'plate', no: 'D', name: 'Plate' }, { v: 'plural', no: 'E', name: 'Plural question' },
+  { v: 'model', no: 'F', name: 'Working model' }, { v: 'review', no: 'G', name: 'Review' }, { v: 'want', no: 'H', name: 'Want' }
+];
+const sheetOf = v => v === 'stub' ? 'plate' : v;
+let lastView = null, shell = null;
+
+function renderIdx() {
+  const cur = sheetOf(S.view);
+  $('#idx').innerHTML = '<h2>Sheets</h2>' + SHEETS.map(s => {
+    const on = s.v === cur, ok = !!S.reached[s.v];
+    return '<button type="button" class="ix' + (on ? ' on' : '') + '" data-a="go" ' + dp({ view: s.v }) + ' aria-label="Sheet ' + s.no + ': ' + s.name + '"' + (ok ? '' : ' disabled') + (on ? ' aria-current="page"' : '') + '><b>' + s.no + '</b><span>' + s.name + '</span></button>';
+  }).join('') + '<p class="note">Sheets open as you go. A dashed name has not been reached yet.</p>';
+}
+function renderAddr() {
+  const v = S.view; let sys, moment;
+  if (v === 'ask') { sys = S.qk === 'reg' ? 'boston-payroll-vs-lines (Jurisdiction board)' : S.qk === 'askback' ? 'not yet: asking you back' : '—'; moment = S.qk === 'reg' ? 'Reality · 29 Sep 2026' : '—'; }
+  else if (v === 'plural' || v === 'model' || v === 'review') { sys = 'semiconductor-shortage'; moment = v === 'plural' ? 'question' : 'compiled 29 Sep 2026'; }
+  else if (v === 'want') { const pl = placeOf(S.q); sys = 'no system · ' + (pl ? pl.name : 'no place named'); moment = 'Reality · now'; }
+  else { sys = 'airline-rotation'; moment = 'a typical day (authored)'; }
+  const branch = (v === 'loom' && S.hist !== 'record') ? 'branch ' + S.hist : (v === 'model' || v === 'review') ? (S.model && S.model.status ? S.model.status.toLowerCase() : 'sketch') : 'record';
+  const seat = (v === 'loom' && S.seat) ? 'crew desk (practice)' : 'viewer';
+  const vn = { ask: 'ask', bench: 'bench', loom: S.seat ? 'desk' : 'loom', plate: 'plate', stub: 'FAA duty limits (stub)', plural: 'open bench', model: 'tracing paper', review: 'review', want: 'want' }[v];
+  $('#addr').textContent = 'bench › ' + sys + ' › ' + moment + ' › ' + branch + ' › ' + seat + ' › ' + vn;
+}
+function renderToggles() {
+  $('#tKnow').setAttribute('aria-pressed', S.know ? 'true' : 'false');
+  $('#tReal').setAttribute('aria-pressed', S.real ? 'true' : 'false');
+  const st = $('#realstrip');
+  if (S.real) { st.hidden = false; st.innerHTML = '<b>' + CAPTXT.REAL + ':</b> none of the airline or semiconductor machinery exists. The nearest real thing is BOW Economics Live’s dated, sourced fact store and its CBA rules engine: one narrow, hand-verified domain. Every region below carries its own label.'; }
+  else { st.hidden = true; st.innerHTML = ''; }
+}
+function renderMain(vchanged) {
+  const v = S.view, m = $('#main');
+  if (PERSIST[v]) { if (shell !== v) { m.innerHTML = PERSIST[v].shell(); shell = v; } PERSIST[v].paint(); }
+  else { m.innerHTML = VIEWS[v](); shell = null; }
+  fitChart();
+  if (vchanged) { m.scrollTop = 0; if (lastView !== null && window.matchMedia && matchMedia('(max-width:700px)').matches) m.scrollIntoView({ block: 'start' }); }
+}
+function renderSide() {
+  let h = '';
+  if (S.know) {
+    const rows = (typeof knowRows === 'function' ? knowRows() : []);
+    h += '<section class="know" aria-label="How do we know"><h2>How do we know? <small>on this sheet</small></h2>' +
+      rows.map(r => '<div class="krow"><span>' + kc(r.k) + '</span><b>' + esc(r.t) + '</b><span class="ks">' + esc(r.src) + (r.asOf ? ' · as of ' + esc(r.asOf) : ' · no as-of (authored)') + (r.verify ? ' · <b>[verify]</b>' : '') + '</span></div>').join('') +
+      '<div class="legend">' + ['OBSERVED', 'RECORDED', 'AUTHORED', 'COMPUTED', 'MODELED', 'GENERATED', 'UNKNOWN'].map(k => '<span>' + kc(k) + '</span>').join('') + '</div></section>';
+  }
+  h += '<section class="rec" aria-label="The record"><h2>The record <small>newest first · your ink is green</small></h2><ol class="recl">' +
+    (S.log.length ? S.log.map(e => {
+      const cls = e.kind === 'REFUSE' ? 'refuse' : (e.who === 'you' || e.who === 'seat') ? 'you' : e.who === 'reviewer' ? 'rev' : e.kind === 'PROBE' ? 'probe' : (e.kind === 'NAV' || e.kind === 'ARRIVE') ? 'dim' : '';
+      return '<li class="ent ' + cls + '"><div class="h">#' + String(e.n).padStart(2, '0') + ' ' + esc(e.kind) + ' · ' + esc(e.who) + '</div><div>' + esc(e.text) + '</div><div class="m">' + esc(e.clock || '') + ' · ' + esc(e.hist) + '</div></li>';
+    }).join('') : '<li class="note">Nothing yet. Every act you make lands here, in the clock and the history it was made in.</li>') + '</ol></section>';
+  $('#side').innerHTML = h;
+}
+function applyCaps() {
+  $$('.captag').forEach(n => n.remove());
+  if (!S.real) return;
+  $$('[data-cap]').forEach(el => {
+    let d = 0, p = el.parentElement; while (p) { if (p.hasAttribute && p.hasAttribute('data-cap')) d++; p = p.parentElement; }
+    const t = document.createElement('span');
+    t.className = 'captag c-' + el.dataset.cap + ' d' + Math.min(d, 2);
+    t.textContent = CAPTXT[el.dataset.cap] + (el.dataset.cost ? ' · ' + el.dataset.cost : '');
+    el.prepend(t);
+  });
+}
+/* revision clouds: scalloped outlines drawn around elements marked .clouded */
+function applyClouds() {
+  $$('svg.cloud').forEach(n => n.remove());
+  $$('.clouded').forEach(el => {
+    const w = el.offsetWidth, h = el.offsetHeight; if (!w || !h) return;
+    const r = 7, pad = 4; let d = ''; const x0 = -pad, y0 = -pad, x1 = w + pad, y1 = h + pad;
+    const arcs = (ax, ay, bx, by, sweep) => { const len = Math.hypot(bx - ax, by - ay), n = Math.max(2, Math.round(len / (r * 1.7))); let s = ''; for (let i = 1; i <= n; i++) s += 'A' + r + ' ' + r + ' 0 0 ' + sweep + ' ' + (ax + (bx - ax) * i / n).toFixed(1) + ' ' + (ay + (by - ay) * i / n).toFixed(1) + ' '; return s; };
+    d = 'M' + x0 + ' ' + y0 + ' ' + arcs(x0, y0, x1, y0, 1) + arcs(x1, y0, x1, y1, 1) + arcs(x1, y1, x0, y1, 1) + arcs(x0, y1, x0, y0, 1) + 'Z';
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'cloud'); svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('viewBox', '-12 -12 ' + (w + 24) + ' ' + (h + 24)); svg.setAttribute('width', w + 24); svg.setAttribute('height', h + 24);
+    svg.style.cssText = 'position:absolute;left:-12px;top:-12px;pointer-events:none;overflow:visible;z-index:6';
+    svg.innerHTML = '<path d="' + d + '" fill="none" stroke="#b3311a" stroke-width="2"/>';
+    if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+    el.appendChild(svg);
+  });
+}
+function focusKey() { const a = document.activeElement; if (!a || a === document.body) return null; if (a.dataset && a.dataset.a) return '[data-a="' + a.dataset.a + '"]' + (a.dataset.p ? '[data-p="' + CSS.escape(a.dataset.p).replace(/\\"/g, '"') + '"]' : ''); return a.id ? '#' + a.id : null; }
+function restoreFocus(k, key2) {
+  if (!k) return;
+  let el = null;
+  try { el = document.querySelector(k); } catch (e) { el = null; }
+  if (!el && key2) el = key2();
+  if (el && el !== document.activeElement) el.focus({ preventScroll: true });
+}
+function render() {
+  const vchanged = S.view !== lastView;
+  const a = document.activeElement;
+  let fk = null;
+  if (a && a !== document.body) {
+    if (a.dataset && a.dataset.a) { fk = { a: a.dataset.a, p: a.dataset.p || '' }; } else if (a.id) fk = { id: a.id };
+  }
+  renderIdx(); renderAddr(); renderToggles();
+  renderMain(vchanged);
+  renderSide(); applyCaps(); applyClouds();
+  if (vchanged) { const h = $('#main h1'); if (h) h.focus({ preventScroll: true }); }
+  else if (fk) {
+    let el = null;
+    if (fk.id) el = document.getElementById(fk.id);
+    else el = $$('[data-a="' + fk.a + '"]').find(x => (x.dataset.p || '') === fk.p);
+    if (el && !el.disabled && el !== document.activeElement) el.focus({ preventScroll: true });
+  }
+  lastView = S.view;
+}
+
+/* ---------------------------------------------------------------- global events */
+let holdTimer = null, held = null, suppressClick = false;
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-a]');
+  if (!b || b.disabled) return;
+  if (suppressClick) { suppressClick = false; return; }
+  let p = {};
+  if (b.dataset.p) { try { p = JSON.parse(b.dataset.p); } catch (_) { p = { v: b.dataset.p }; } }
+  act(b.dataset.a, p);
+});
+document.addEventListener('submit', e => {
+  if (e.target.id === 'askform') { e.preventDefault(); const q = ($('#q').value || '').trim(); if (q) act('ask', { q: q }); }
+});
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id === 'q') S.qDraft = t.value;
+  else if (t.id === 'hold' || t.id === 'hold2') act('push', { hold: +t.value, live: true });
+  else if (t.dataset && t.dataset.lev) act('lever', { k: t.dataset.lev, v: +t.value, live: true });
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'hold' || t.id === 'hold2') act('push', { hold: +t.value });
+  else if (t.dataset && t.dataset.lev) act('lever', { k: t.dataset.lev, v: +t.value });
+});
+/* press-and-hold a part: it lifts while held and goes back on release (a click toggles it instead) */
+document.addEventListener('pointerdown', e => {
+  const b = e.target.closest('.part'); if (!b || b.disabled) return;
+  const part = JSON.parse(b.dataset.p).part, prev = S.work.removed;
+  clearTimeout(holdTimer);
+  holdTimer = setTimeout(() => { held = { part: part, prev: prev }; suppressClick = true; act('lift', { part: part, hold: true }); }, 420);
+});
+function endHold() {
+  clearTimeout(holdTimer);
+  if (held) { const h = held; held = null; act('putback', { hold: true, prev: h.prev }); }
+}
+document.addEventListener('pointerup', endHold);
+document.addEventListener('pointercancel', endHold);
+
+ACTS.know = () => { S.know = !S.know; return { say: S.know ? 'Provenance layer on' : 'Provenance layer off' }; };
+ACTS.real = () => { S.real = !S.real; return { say: S.real ? 'Capability layer on' : 'Capability layer off' }; };
+ACTS.go = p => {
+  const from = S.view; S.view = p.view; S.reached[p.view] = 1;
+  const logs = [];
+  if (S.seat && p.view !== 'loom') { S.seat = false; logs.push({ who: 'you', kind: 'ACT', text: 'left the crew desk without handing over: no act recorded (absence, not a choice)', clock: 'authored day' }); }
+  if (p.view !== 'plate' && p.view !== 'stub') S.plate.cloud = false;
+  if (p.run) logs.push({ who: 'you', kind: 'RUN', text: 'ran what was on the bench: ' + S.arrived.length + ' of ' + ARR.length + ' items (' + countLine() + ')', clock: 'session' });
+  else logs.push({ who: 'you', kind: 'NAV', text: 'opened sheet ' + (SHEETS.find(s => s.v === p.view) || { name: p.view }).name, clock: 'session' });
+  return { log: logs, say: 'Sheet ' + p.view };
+};
+
+/* the chart takes the height the sheet leaves it, never less than a legible size */
+function fitChart() {
+  const cw = $('#main .chartwrap'); if (!cw) return;
+  const m = $('#main'), sheet = cw.closest('.sheet'); if (!sheet) return;
+  cw.style.width = '100%';
+  const others = sheet.offsetHeight - cw.offsetHeight, avail = m.clientHeight - 22 - others;
+  const maxW = cw.parentElement.clientWidth;
+  cw.style.width = Math.max(420, Math.min(maxW, Math.floor(avail * 900 / 350))) + 'px';
+}
+window.addEventListener('resize', fitChart);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitChart);
+
+/* =====================================================================
+   THE AIRLINE DAY · a typical day, illustrative (AUTHORED). One deterministic run.
+   All times are minutes on one BOS clock. Rotation, hold and rules are read from the fixture (domains.air).
+   ===================================================================== */
+const SCHED = {
+  report: 300, dutyLen: 690, nextReport: 1740,                          // crew report 05:00 is a PLACEHOLDER (no public source); 11.5 h is an authored simplification
+  legs: [
+    { n: 1, from: AIR.rotation[0], to: AIR.rotation[1], dep: 360, block: 85 },
+    { n: 2, from: AIR.rotation[1], to: AIR.rotation[2], dep: 490, block: 125 },
+    { n: 3, from: AIR.rotation[2], to: AIR.rotation[3], dep: 670, block: 120 },
+    { n: 4, from: AIR.rotation[3], to: AIR.rotation[4], dep: 835, block: 80 }
+  ],
+  minTurn: [35, 40, 35], holdAt: 615,
+  bank: [{ id: 'A', dep: 830, pax: 9 }, { id: 'B', dep: 860, pax: 14 }, { id: 'C', dep: 900, pax: 6 }],
+  mct: 35, bankWin: [790, 910], minRest: 600
+};
+SCHED.schedTurn = [0, 1, 2].map(i => SCHED.legs[i + 1].dep - (SCHED.legs[i].dep + SCHED.legs[i].block));
+SCHED.limit0 = SCHED.report + SCHED.dutyLen;
+const PARTS = [
+  { id: 'rot', name: 'AIRCRAFT ROTATION', short: 'ROTATION', ver: 'v2.1', rule: AIR.rules[2], sig: { AUTHORED: 8 } },
+  { id: 'turns', name: 'TURN BUFFERS', short: 'TURN BUFFERS', ver: 'v1.4', rule: null, sig: { AUTHORED: 3, COMPUTED: 3 } },
+  { id: 'duty', name: 'CREW DUTY CLOCK', short: 'DUTY CLOCK', ver: 'v1.1', rule: AIR.rules[0], sig: { AUTHORED: 2, OBSERVED: 1, UNKNOWN: 1 } },
+  { id: 'bank', name: 'PHL CONNECTION BANK', short: 'CONNECTION BANK', ver: 'v1.0', rule: AIR.rules[1], sig: { AUTHORED: 7 } }
+];
+const partName = id => (PARTS.find(p => p.id === id) || { name: id }).name;
+const ARR = [
+  { id: 'rot', t: 'part', k: 'REVIEWED', name: 'AIRCRAFT ROTATION v2.1', origin: 'reviewed by [reviewer] · v2.1', log: 'part arrived: AIRCRAFT ROTATION v2.1 · REVIEWED by [reviewer]' },
+  { id: 'turns', t: 'part', k: 'REVIEWED', name: 'TURN BUFFERS v1.4', origin: 'reviewed by [reviewer] · v1.4', log: 'part arrived: TURN BUFFERS v1.4 · REVIEWED by [reviewer]' },
+  { id: 'duty', t: 'part', k: 'REVIEWED', name: 'CREW DUTY CLOCK v1.1', origin: 'reviewed by [reviewer] · v1.1', log: 'part arrived: CREW DUTY CLOCK v1.1 · REVIEWED by [reviewer]' },
+  { id: 'bank', t: 'part', k: 'REVIEWED', name: 'PHL CONNECTION BANK v1.0', origin: 'reviewed by [reviewer] · v1.0', log: 'part arrived: PHL CONNECTION BANK v1.0 · REVIEWED by [reviewer]' },
+  { id: 'hold', t: 'assumed', k: 'AUTHORED', name: 'ORD hold · ' + HOLD0 + ' min', origin: 'a thin slip · AUTHORED “typical day”: no live feed exists', log: 'slip pinned: ORD hold ' + HOLD0 + ' min · AUTHORED typical day (no live feed exists) · counts as assumed' },
+  { id: 'c1', t: 'coupling', k: 'GENERATED', name: 'c1 · a late aircraft carries its delay', origin: 'GENERATED wiring · not reviewed', log: 'coupling wired: c1 late aircraft · GENERATED, not reviewed' },
+  { id: 'c2', t: 'coupling', k: 'GENERATED', name: 'c2 · late minutes are minutes on the crew clock', origin: 'GENERATED wiring · not reviewed', log: 'coupling wired: c2 crew clock · GENERATED, not reviewed' },
+  { id: 'c3', t: 'coupling', k: 'GENERATED', name: 'c3 · a late arrival can miss the bank', origin: 'GENERATED wiring · not reviewed', log: 'coupling wired: c3 missed connection · GENERATED, not reviewed' },
+  { id: 'crew', t: 'assumed', k: 'AUTHORED', name: 'one crew flies all four legs and is ready when the aircraft is', origin: 'ASSUMED · nobody has checked it', log: 'assumption marked: one crew, all four legs · ASSUMED' },
+  { id: 'gap', t: 'gap', k: 'UNKNOWN', name: 'crew report time', origin: 'GAP · no public source · the run uses 05:00 as a placeholder', log: 'socket left open: crew report time · no public source (GAP)' }
+];
+function envFor() { const a = new Set(S.arrived); return { rot: a.has('rot'), turns: a.has('turns'), duty: a.has('duty'), bank: a.has('bank'), hold: a.has('hold'), c1: a.has('c1'), c2: a.has('c2'), c3: a.has('c3'), crew: a.has('crew'), gap: a.has('gap') }; }
+function countLine() {
+  const a = S.arrived.map(id => ARR.find(x => x.id === id));
+  const n = t => a.filter(x => x.t === t).length;
+  return n('part') + ' reviewed · ' + n('coupling') + ' generated couplings · ' + n('assumed') + ' assumed · ' + n('gap') + ' gap';
+}
+
+/* ---------------------------------------------------------------- the run: a pure function of parts, parameters and the hold */
+function sim(P, E) {
+  const rem = P.removed, L = SCHED.legs;
+  const carry = E.c1 && rem !== 'rot';                                   // does the aircraft carry lateness from leg to leg?
+  const slack = E.turns && rem !== 'turns';                              // can a late turn be shortened toward its minimum?
+  const need = i => slack ? SCHED.minTurn[i] : SCHED.schedTurn[i];
+  const hold = E.hold ? P.hold : 0, H0 = SCHED.holdAt, H1 = H0 + hold;
+  const closed = t => hold > 0 && t >= H0 && t < H1;
+  const dep1 = L[0].dep, arr1 = dep1 + L[0].block;
+  const dep2 = Math.max(L[1].dep, carry ? arr1 + need(0) : 0);
+  let arr2 = dep2 + L[1].block; if (closed(arr2)) arr2 = H1;            // ORD is closed: the arrival waits
+  let dep3 = Math.max(L[2].dep, carry ? arr2 + need(1) : 0); if (closed(dep3)) dep3 = H1;
+  const arr3 = dep3 + L[2].block;
+  const dep4 = Math.max(L[3].dep, carry ? arr3 + need(2) : 0), arr4 = dep4 + L[3].block;
+  const dutyOn = E.duty && E.c2 && rem !== 'duty';
+  const limit = SCHED.limit0 + P.ext;
+  const cut = dutyOn && arr4 > limit;
+  const bankOn = E.bank && E.c3 && rem !== 'bank';
+  const flights = SCHED.bank.map(f => ({ id: f.id, dep: f.dep, pax: f.pax, ok: arr3 + SCHED.mct <= f.dep }));
+  const missed = bankOn ? flights.filter(f => !f.ok).reduce((s, f) => s + f.pax, 0) : 0;
+  const missedFl = bankOn ? flights.filter(f => !f.ok).length : 0;
+  const endDuty = cut ? arr3 : arr4;
+  return {
+    P: P, carry: carry, slack: slack, hold: hold, H0: H0, H1: H1, cut: cut, dutyOn: dutyOn, bankOn: bankOn, limit: limit,
+    legs: [
+      { n: 1, from: L[0].from, to: L[0].to, dep: dep1, arr: arr1, run: true },
+      { n: 2, from: L[1].from, to: L[1].to, dep: dep2, arr: arr2, run: true },
+      { n: 3, from: L[2].from, to: L[2].to, dep: dep3, arr: arr3, run: true },
+      { n: 4, from: L[3].from, to: L[3].to, dep: dep4, arr: arr4, run: !cut }
+    ],
+    turns: [
+      { at: L[0].to, a: arr1, d: dep2, min: SCHED.minTurn[0] },
+      { at: L[1].to, a: arr2, d: dep3, min: SCHED.minTurn[1] },
+      { at: L[2].to, a: arr3, d: cut ? arr3 + SCHED.minTurn[2] : dep4, min: SCHED.minTurn[2] }
+    ],
+    dep3: dep3, arr2: arr2, arr3: arr3, dep4: dep4, arr4: arr4,
+    d: { arr2: arr2 - (L[1].dep + L[1].block), dep3: dep3 - L[2].dep, arr3: arr3 - (L[2].dep + L[2].block), dep4: dep4 - L[3].dep, arr4: arr4 - (L[3].dep + L[3].block) },
+    abs2: carry ? Math.max(0, (arr2 - 615) - (dep3 - L[2].dep)) : 0,
+    abs3: carry ? Math.max(0, (arr3 - 790) - (dep4 - L[3].dep)) : 0,
+    flights: flights, missed: missed, missedFl: missedFl, endDuty: endDuty, rest: SCHED.nextReport - endDuty
+  };
+}
+function edgeOf(P, E) { for (let h = 0; h <= 300; h++) { if (sim({ hold: h, removed: P.removed, ext: P.ext }, E).cut) return h; } return null; }
+function rolesOf(P, E) {
+  const P0 = { hold: P.hold, removed: null, ext: P.ext }, base = sim(P0, E);
+  const ar = sim({ hold: P.hold, removed: 'rot', ext: P.ext }, E), at = sim({ hold: P.hold, removed: 'turns', ext: P.ext }, E);
+  const ad = sim({ hold: P.hold, removed: 'duty', ext: P.ext }, E), ab = sim({ hold: P.hold, removed: 'bank', ext: P.ext }, E);
+  const h = base.hold;
+  const sp = base.d.arr4 - ar.d.arr4, ab2 = at.d.arr4 - base.d.arr4;
+  return {
+    rot: { l: 'SPREADS', d: sp > 0 ? 'carries ' + sp + ' min from ORD to BOS' : 'nothing to carry at ' + h + ' min' },
+    turns: { l: 'ABSORBS', d: ab2 > 0 ? 'takes ' + ab2 + ' of ' + h + ' min' : 'nothing to absorb at ' + h + ' min' },
+    duty: { l: 'CUTS', d: base.cut !== ad.cut ? 'the crew clock cuts leg 4' : 'does nothing at ' + h + ' min' },
+    bank: { l: 'CONVERTS', d: base.missed > 0 ? base.d.arr3 + ' late min at PHL → ' + base.missed + ' passengers miss' : 'nothing to convert at ' + h + ' min' }
+  };
+}
+const sameP = (a, b) => a.hold === b.hold && a.removed === b.removed && a.ext === b.ext;
+function assumptionsOf(P) {
+  const a = [];
+  if (P.hold !== HOLD0) a.push('ORD hold pushed ' + HOLD0 + ' → ' + P.hold + ' min');
+  if (P.removed) a.push(partName(P.removed) + ' lifted out');
+  if (P.ext) a.push('crew duty extended +' + P.ext + ' min at the practice seat');
+  a.push('crew report time 05:00 (a placeholder: no public source)');
+  a.push('one crew flies all four legs (assumed)');
+  a.push('minimum connection ' + SCHED.mct + ' min (authored)');
+  return a;
+}
+
+/* ---------------------------------------------------------------- the Loom chart: a Marey / Ibry time-space chart */
+const VBW = 900, VBH = 350, X = t => t - 236;
+const ROWY = { BOS: 112, PHL: 196, ORD: 280 }, CREWY = 40, AXY = 316;
+function tab(x, y, text, kind, anchor) {
+  const w = Math.round(text.length * 6.9 + 14), h = 18, x0 = anchor === 'end' ? x - w : x;
+  if (kind === 'rev') return '<g data-k="REVIEWED"><rect x="' + x0 + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="#23211d"/><text class="tabtxt" x="' + (x0 + 7) + '" y="' + (y + 13) + '" fill="#f8f4ea">' + esc(text) + '</text></g>';
+  if (kind === 'gen') return '<g data-k="GENERATED"><rect x="' + x0 + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="url(#stip)" stroke="#23211d" stroke-width="1.2"/><rect x="' + (x0 + 3) + '" y="' + (y + 3) + '" width="' + (w - 6) + '" height="' + (h - 6) + '" fill="#f8f4ea"/><text class="tabtxt" x="' + (x0 + 7) + '" y="' + (y + 13) + '" fill="#23211d">' + esc(text) + '</text></g>';
+  if (kind === 'gap') return '<g data-k="UNKNOWN"><rect x="' + x0 + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="#f8f4ea" stroke="#23211d" stroke-width="1.2" stroke-dasharray="4 3"/><text class="tabtxt" x="' + (x0 + 7) + '" y="' + (y + 13) + '" fill="#23211d">' + esc(text) + '</text></g>';
+  return '<g data-k="AUTHORED"><rect x="' + x0 + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="#f8f4ea" stroke="#23211d" stroke-width="1.2"/><text class="tabtxt" x="' + (x0 + 7) + '" y="' + (y + 13) + '" fill="#23211d" font-style="italic">' + esc(text) + '</text></g>';
+}
+function gridSVG() {
+  let s = '';
+  for (let t = 300; t <= 1120; t += 60) s += '<line class="hr" x1="' + X(t) + '" x2="' + X(t) + '" y1="' + (CREWY + 16) + '" y2="' + AXY + '"/><text class="hl" x="' + X(t) + '" y="' + (AXY + 14) + '" text-anchor="middle">' + String(t / 60).padStart(2, '0') + '</text>';
+  Object.keys(ROWY).forEach(ap => { const y = ROWY[ap]; s += '<line class="rowline" x1="' + (X(300) - 6) + '" x2="' + X(1120) + '" y1="' + y + '" y2="' + y + '"/><text class="apt" x="4" y="' + (y + 4) + '">' + ap + '</text>'; });
+  s += '<line class="axis" x1="' + X(300) + '" x2="' + X(1120) + '" y1="' + AXY + '" y2="' + AXY + '"/>';
+  s += '<text class="axl" x="' + X(1120) + '" y="' + (AXY + 32) + '" text-anchor="end">hours on one BOS clock · a typical day · illustrative</text>';
+  return s;
+}
+function schedPts(S0) { const L = S0.legs; return [[L[0].dep, L[0].from], [L[0].arr, L[0].to], [L[1].dep, L[1].from], [L[1].arr, L[1].to], [L[2].dep, L[2].from], [L[2].arr, L[2].to], [L[3].dep, L[3].from], [L[3].arr, L[3].to]].map(p => X(p[0]) + ',' + ROWY[p[1]]).join(' '); }
+function thread(R, cls, E, o) {
+  let s = '';
+  R.legs.forEach(l => { if (l.run) s += '<line class="' + cls + '" x1="' + X(l.dep) + '" y1="' + ROWY[l.from] + '" x2="' + X(l.arr) + '" y2="' + ROWY[l.to] + '"/>'; });
+  if (R.carry) {
+    R.turns.forEach(t => {
+      const y = ROWY[t.at];
+      if (o.bars !== false && E.turns) {
+        if (R.slack) {
+          const de = Math.min(t.d, t.a + t.min);
+          s += '<rect class="dark" x="' + X(t.a) + '" y="' + (y - 4.5) + '" width="' + Math.max(1, de - t.a) + '" height="9"/>';
+          if (t.d > de) s += '<rect class="slk" x="' + X(de) + '" y="' + (y - 4.5) + '" width="' + (t.d - de) + '" height="9"/>';
+        } else s += '<rect class="dark" x="' + X(t.a) + '" y="' + (y - 4.5) + '" width="' + Math.max(1, t.d - t.a) + '" height="9"/>';
+      } else s += '<line class="' + cls + '" x1="' + X(t.a) + '" x2="' + X(t.d) + '" y1="' + y + '" y2="' + y + '"/>';
+    });
+  } else if (o.bars !== false) {
+    R.legs.forEach(l => { if (l.run) s += '<circle cx="' + X(l.dep) + '" cy="' + ROWY[l.from] + '" r="3.4" fill="#f8f4ea" stroke="#23211d" stroke-width="1.6"/><circle cx="' + X(l.arr) + '" cy="' + ROWY[l.to] + '" r="3.4" fill="#f8f4ea" stroke="#23211d" stroke-width="1.6"/>'; });
+  }
+  return s;
+}
+function bankSVG(E, R, o) {
+  const y0 = ROWY.PHL - 34, y1 = ROWY.PHL + 58, x0 = X(SCHED.bankWin[0]), x1 = X(SCHED.bankWin[1]);
+  let s = '<g data-k="AUTHORED"><rect x="' + x0 + '" y="' + y0 + '" width="' + (x1 - x0) + '" height="' + (y1 - y0) + '" fill="#e7e0cd" stroke="#23211d" stroke-width="1.2"/>';
+  s += '<text class="tl p" x="' + x0 + '" y="' + (y0 - 5) + '">PHL BANK</text>';
+  s += '</g>';
+  const arr3 = R.arr3, offs = { A: 12, B: 21, C: 30 }, lit = R.bankOn || o.bench;
+  SCHED.bank.forEach(f => {
+    const x = X(f.dep), yb = ROWY.PHL + 42, ok = (arr3 + SCHED.mct <= f.dep) || o.bench, y = ROWY.PHL + offs[f.id];
+    s += '<line stroke="#23211d" stroke-width="1.7" x1="' + x + '" x2="' + x + '" y1="' + (ROWY.PHL + 8) + '" y2="' + yb + '"/><text class="tl" x="' + x + '" y="' + (yb + 13) + '" text-anchor="middle">' + f.id + ' ' + f.pax + '</text>';
+    if (lit) {
+      if (ok) s += '<path d="M' + X(arr3) + ' ' + ROWY.PHL + ' V' + y + ' H' + x + '" fill="none" stroke="#23211d" stroke-width="1.5"/><circle cx="' + x + '" cy="' + y + '" r="2.6" fill="#23211d"/>';
+      else {
+        const xe = X(arr3 + SCHED.mct);
+        s += '<path d="M' + X(arr3) + ' ' + ROWY.PHL + ' V' + y + ' H' + xe + '" fill="none" stroke="#b3311a" stroke-width="1.7" stroke-dasharray="4 3"/><path d="M' + (xe - 4) + ' ' + (y - 4) + ' l8 8 m0 -8 l-8 8" stroke="#b3311a" stroke-width="2"/>';
+        s += '<path d="M' + (x - 4) + ' ' + (ROWY.PHL + 12) + ' l8 8 m0 -8 l-8 8" stroke="#b3311a" stroke-width="2" fill="none"/>';
+      }
+    }
+  });
+  return s;
+}
+function crewSVG(E, R, o) {
+  if (!E.duty) return '';
+  const y = CREWY, rep = SCHED.report, lim0 = SCHED.limit0;
+  let s = '<text class="apt" x="4" y="' + (y + 4) + '">CREW</text>';
+  const endD = R.endDuty;
+  s += '<rect data-k="COMPUTED" x="' + X(rep) + '" y="' + (y - 7) + '" width="' + Math.max(2, X(endD) - X(rep)) + '" height="14" fill="#c6bda6" stroke="#23211d" stroke-width="1.2"/>';
+  if (R.cut) s += '<rect x="' + X(R.arr3) + '" y="' + (y - 7) + '" width="' + (X(R.arr4) - X(R.arr3)) + '" height="14" fill="none" stroke="#b3311a" stroke-width="1.8" stroke-dasharray="6 4"/>';
+  if (R.P.ext > 0) s += '<rect x="' + X(lim0) + '" y="' + (y - 7) + '" width="' + R.P.ext + '" height="14" fill="#d5e7dd" stroke="#1c6b52" stroke-width="1.8"/><line x1="' + X(lim0 + R.P.ext) + '" x2="' + X(lim0 + R.P.ext) + '" y1="' + (y - 14) + '" y2="' + (y + 14) + '" stroke="#1c6b52" stroke-width="3"/><text class="tl g" x="' + (X(lim0 + R.P.ext) + 5) + '" y="' + (y - 12) + '">+' + R.P.ext + ' → ' + hhmm(lim0 + R.P.ext) + '</text>';
+  s += '<line x1="' + X(lim0) + '" x2="' + X(lim0) + '" y1="' + (y - 14) + '" y2="' + (y + 14) + '" stroke="#b3311a" stroke-width="3"/><text class="tl v" x="' + (X(lim0) - 5) + '" y="' + (y - 12) + '" text-anchor="end">limit ' + hhmm(lim0) + '</text>';
+  if (E.gap) s += '<rect data-k="UNKNOWN" x="' + (X(rep) - 8) + '" y="' + (y - 12) + '" width="34" height="24" fill="none" stroke="#23211d" stroke-width="1.3" stroke-dasharray="4 3"/>';
+  if (!o.bench && E.gap) s += '<text class="tl p" x="' + (X(rep) + 2) + '" y="' + (y + 26) + '">report ' + hhmm(rep) + ' · placeholder: no public source</text>';
+  return s;
+}
+function holdSVG(R, o) {
+  const y = ROWY.ORD;
+  if (o.bench) return '<g data-k="AUTHORED"><rect x="' + X(SCHED.holdAt) + '" y="' + (y - 24) + '" width="' + HOLD0 + '" height="10" fill="#f8f4ea" stroke="#23211d" stroke-width="1.3"/><line x1="' + X(SCHED.holdAt) + '" x2="' + X(SCHED.holdAt) + '" y1="' + (y - 14) + '" y2="' + y + '" stroke="#23211d" stroke-width="1" stroke-dasharray="2 2"/></g>';
+  if (R.hold <= 0) return '';
+  const x0 = X(R.H0), x1 = X(R.H1);
+  return '<g data-k="AUTHORED"><rect x="' + x0 + '" y="' + (y - 26) + '" width="' + (x1 - x0) + '" height="52" fill="#e7e0cd" stroke="#23211d" stroke-width="1.4"/><line x1="' + x0 + '" x2="' + x0 + '" y1="' + (y - 26) + '" y2="' + (y + 26) + '" stroke="#23211d" stroke-width="4"/><line x1="' + x1 + '" x2="' + x1 + '" y1="' + (y - 26) + '" y2="' + (y + 26) + '" stroke="#23211d" stroke-width="4"/></g><text class="tl" x="' + (x0 - 8) + '" y="' + (y + 25) + '" text-anchor="end">ORD closed ' + R.hold + ' min</text>';
+}
+function knotSVG(E, R, o) {
+  let s = '';
+  const ring = (x, y) => '<circle data-k="GENERATED" cx="' + x + '" cy="' + y + '" r="8" fill="url(#stip)" stroke="#23211d" stroke-width="1.5"/>';
+  if (E.c1) s += ring(X(R.dep3), ROWY.ORD);
+  if (E.c3) s += ring(X(R.arr3), ROWY.PHL);
+  if (E.c2) { const ex = R.cut ? R.arr3 : R.arr4, ty = R.cut ? ROWY.PHL - 10 : ROWY.BOS + 2; s += '<line x1="' + X(ex) + '" x2="' + X(ex) + '" y1="' + (CREWY + 10) + '" y2="' + ty + '" stroke="#23211d" stroke-width="3" stroke-dasharray="1 5" stroke-linecap="round"/>' + ring(X(ex), CREWY); }
+  return s;
+}
+function benchPlates(E) {
+  let s = '';
+  if (E.rot) s += tab(X(360) + 4, 84, 'ROTATION v2.1', 'rev');
+  if (E.turns) s += tab(X(445) - 88, 212, 'TURN BUFFERS v1.4', 'rev');
+  if (E.duty) s += tab(X(300) + 4, 56, 'DUTY CLOCK v1.1', 'rev');
+  if (E.bank) s += tab(X(790) - 14, 260, 'CONNECTION BANK v1.0', 'rev');
+  if (E.hold) s += tab(X(SCHED.holdAt) + HOLD0, 296, 'ORD hold · typical day', 'auth', 'end');
+  if (E.c1) s += tab(X(670) + 12, 296, 'c1 LATE AIRCRAFT', 'gen');
+  if (E.c2) s += tab(X(915) + 8, 62, 'c2 CLOCK', 'gen');
+  if (E.c3) s += tab(X(910) + 24, 260, 'c3 MISSED CONNECTION', 'gen');
+  if (E.crew) s += tab(X(300) + 150, 56, 'assumed: same crew, all legs', 'auth');
+  if (E.gap) s += tab(X(300) + 366, 56, 'crew report time: no public source', 'gap');
+  return s;
+}
+function chartSVG(o) {
+  const E = o.E, R = o.R, S0 = o.S0, bench = o.mode === 'bench';
+  let s = '<svg class="chart" viewBox="0 0 ' + VBW + ' ' + VBH + '" role="img" aria-label="' + esc(o.label || 'time and airport chart') + '" preserveAspectRatio="xMidYMid meet">';
+  s += gridSVG();
+  if (E.bank) s += bankSVG(E, R, { bench: bench });
+  if (E.hold) s += holdSVG(R, { bench: bench });
+  if (E.rot && !bench) s += '<polyline class="ghost" points="' + schedPts(S0) + '"/>';
+  if (o.ref && E.rot) s += thread(o.ref, 'refl', E, { bars: false });
+  if (o.other && E.rot) s += thread(o.other, 'thr', E, { bars: false });
+  if (E.rot) s += thread(R, o.cls || 'thr', E, { bench: bench });
+  s += crewSVG(E, R, { bench: bench });
+  s += knotSVG(E, R, { bench: bench });
+  if (E.rot && !bench) {
+    const l4 = R.legs[3];
+    if (R.cut) {
+      s += '<line class="would" x1="' + X(l4.dep) + '" y1="' + ROWY.PHL + '" x2="' + X(l4.arr) + '" y2="' + ROWY.BOS + '"/><path d="M' + (X(l4.dep) - 8) + ' ' + (ROWY.PHL - 8) + ' l16 16 m0 -16 l-16 16" stroke="#b3311a" stroke-width="3" fill="none"/><text class="tl v" x="' + (X(l4.dep) + 14) + '" y="' + (ROWY.PHL + 20) + '">LEG 4 CUT</text>';
+      s += '<text class="tl v" x="' + (X(l4.arr) - 4) + '" y="' + (ROWY.BOS - 10) + '" text-anchor="end">would land ' + hhmm(l4.arr) + '</text>';
+    } else {
+      s += '<text class="dl" x="' + (X(l4.arr) - 4) + '" y="' + (ROWY.BOS - 10) + '" text-anchor="end">BOS ' + hhmm(l4.arr) + (R.d.arr4 > 0 ? ' · +' + R.d.arr4 : '') + '</text>';
+    }
+    if (R.d.arr2 > 0) s += '<text class="dl" x="' + (X(R.arr2) + 7) + '" y="' + (ROWY.ORD - 9) + '">+' + R.d.arr2 + '</text>';
+    if (R.d.arr3 > 0) s += '<text class="dl" x="' + (X(R.arr3) - 6) + '" y="' + (ROWY.PHL - 10) + '" text-anchor="end">+' + R.d.arr3 + '</text>';
+    if (o.edgeAt != null && o.edgeAt <= 180) { const ex = X(SCHED.holdAt + o.edgeAt); s += '<line x1="' + ex + '" x2="' + ex + '" y1="' + (ROWY.ORD - 52) + '" y2="' + (ROWY.ORD + 34) + '" stroke="#b3311a" stroke-width="2" stroke-dasharray="3 3"/><text class="tl v" x="' + ex + '" y="' + (ROWY.ORD - 56) + '" text-anchor="middle">edge ' + o.edgeAt + '</text>'; }
+    if (R.hold !== HOLD0 && R.hold > 0) { const rx = X(SCHED.holdAt + HOLD0); s += '<line x1="' + rx + '" x2="' + rx + '" y1="' + (ROWY.ORD - 34) + '" y2="' + (ROWY.ORD - 26) + '" stroke="#5e584e" stroke-width="2"/><text class="tl p" x="' + rx + '" y="' + (ROWY.ORD - 38) + '" text-anchor="middle">record ' + HOLD0 + '</text>'; }
+    if (o.hand) { const lx = X(SCHED.limit0); s += '<use href="#hand" x="' + (lx - 214) + '" y="' + (CREWY + 20) + '" width="34" height="20" fill="#b3311a"/><text class="tl v" x="' + (lx - 174) + '" y="' + (CREWY + 34) + '">a person can extend this</text>'; }
+  }
+  if (bench) s += benchPlates(E);
+  if (o.pencil) s += o.pencil;
+  s += '</svg>';
+  return s;
+}
+function caption(R, E, P) {
+  if (!E.rot) return 'Nothing to run yet: the rotation has not arrived.';
+  const b = [];
+  b.push(E.hold ? 'ORD closed <b>' + R.hold + ' min</b>' : 'no hold on the bench yet');
+  if (!R.carry) b.push('the aircraft <b>carries nothing</b>');
+  else if (R.hold > 0) b.push('ORD turn absorbs <b>' + R.abs2 + '</b>, PHL <b>' + R.abs3 + '</b>');
+  b.push(R.cut ? 'leg 4 <b>cut</b> (would land ' + hhmm(R.arr4) + ')' : 'BOS <b>' + (R.d.arr4 > 0 ? '+' + R.d.arr4 : 'on time') + '</b> at ' + hhmm(R.arr4));
+  if (R.bankOn) b.push('<b>' + R.missedFl + ' of ' + SCHED.bank.length + '</b> onward flights missed (' + R.missed + ' people)');
+  if (R.dutyOn) b.push('crew ends ' + hhmm(R.endDuty) + ', limit ' + hhmm(R.limit));
+  if (ARR.length - S.arrived.length > 0) b.push('running with ' + S.arrived.length + ' of ' + ARR.length + ' items');
+  return b.join(' · ');
+}
+const plain = h => h.replace(/<[^>]+>/g, '');
+
+/* ---------------------------------------------------------------- acts: ask, bench */
+/* The reading is an authored stand-in for a small model (labelled so on screen). It has four outcomes, never a silent guess:
+   a system BOW holds (air / semi / reg), a question asked back when the reading is weak, or "no system" plus a Want under the place named. */
+const AIR_STRONG = /\b(flights?|airlines?|airports?|planes?|aircraft|crews?|layovers?|pilots?)\b/, AIR_WEAK = /\b(delays?|delayed|late)\b/;
+const SEMI_STRONG = /\b(semiconductors?|chips?|foundr(y|ies)|wafers?|microchips?)\b/, SEMI_WEAK = /\b(shortages?)\b/;
+const BOS_Q = /\b(boston|celtics)\b/, TAX_Q = /\b(tax|apron|payroll|salary|luxury|cap)\b/;
+function classify(q) {
+  const s = q.toLowerCase();
+  if (BOS_Q.test(s) && TAX_Q.test(s)) return { k: 'reg' };
+  if (AIR_STRONG.test(s)) return { k: 'air' };
+  if (SEMI_STRONG.test(s)) return { k: 'semi' };
+  const wa = s.match(AIR_WEAK), ws = s.match(SEMI_WEAK);
+  if (wa || ws) return { k: 'askback', opts: [wa && 'air', ws && 'semi', 'none'].filter(Boolean), words: [wa && wa[0], ws && ws[0]].filter(Boolean) };
+  return { k: 'want' };
+}
+/* a Want is filed under the place the question names; a gazetteer of two, authored. No place named is a real answer. */
+const GAZ = [
+  { id: 'ns', name: 'North Station', verify: true, re: /north station|green line|td garden|\bgarden\b|mbta|\bthe t\b|train|subway/i },
+  { id: 'bos', name: 'Boston · the Celtics', verify: false, re: /celtics|boston/i }
+];
+const placeOf = q => GAZ.find(g => g.re.test(q || '')) || null;
+ACTS.ask = p => {
+  const c = classify(p.q);
+  S.q = p.q; S.qDraft = null; S.qk = c.k; S.qc = c; S.nb = null; S.want = { filed: false };
+  const pl = c.k === 'want' ? placeOf(p.q) : null;
+  const read = { air: 'read as a claim about propagation through shared resources', semi: 'read as several questions, not one', reg: 'read as a question a reviewed system already answers: Boston payroll against the lines (the Jurisdiction board)', askback: 'read weakly (only “' + (c.words || []).join('” and “') + '” pointed anywhere): asked back instead of guessing', want: 'read as a question with no system behind it; place named: ' + (pl ? pl.name : 'no place named') }[c.k];
+  if (c.k === 'semi') { S.view = 'plural'; S.reached.plural = 1; S.semi.stage = 'ask'; }
+  if (c.k === 'want') { S.view = 'want'; S.reached.want = 1; }
+  if (c.k === 'air' || c.k === 'reg' || c.k === 'askback') S.view = 'ask';
+  return { log: { who: 'you', kind: 'ASK', text: '“' + p.q + '”: ' + read + ' (an authored stand-in for a small model)', clock: 'session' }, say: 'Question read: ' + read };
+};
+ACTS.askback = p => {
+  const ch = p.choice, txt = { air: 'late flights: the airline rotation', semi: 'a chip shortage', none: 'neither' }[ch];
+  if (ch === 'air') { S.qk = 'air'; }
+  if (ch === 'semi') { S.qk = 'semi'; S.view = 'plural'; S.reached.plural = 1; S.semi.stage = 'ask'; }
+  if (ch === 'none') { S.qk = 'want'; S.view = 'want'; S.reached.want = 1; S.want = { filed: false }; }
+  return { log: { who: 'you', kind: 'ASK', text: 'answered BOW’s question about “' + S.q + '”: ' + txt + '. Your words were kept as typed.', clock: 'session' }, say: 'Reading confirmed: ' + txt + '.' };
+};
+ACTS.nb = p => { S.nb = S.nb === p.id ? null : p.id; return { log: { who: 'you', kind: 'NAV', text: (S.nb ? 'opened neighbour ' : 'closed neighbour ') + (p.id === 'atp' ? 'AIR-TRAFFIC PROGRAMS' : 'AIRLINE-WIDE OUTAGE'), clock: 'session' } }; };
+ACTS.assemble = () => {
+  S.view = 'bench'; S.reached.bench = 1;
+  const logs = [{ who: 'you', kind: 'RUN', text: 'asked the bench to assemble PROPAGATION THROUGH SHARED RESOURCES from typed ports', clock: 'session' }];
+  if (S.arrived.length === 0) {
+    S.assembling = true;
+    if (RM) { while (S.arrived.length < ARR.length) logs.push(pushArrival()); S.assembling = false; }
+    else { logs.push(pushArrival()); S.timer = setInterval(() => { if (S.arrived.length >= ARR.length) { clearInterval(S.timer); return; } act('arrive'); }, 430); }
+  }
+  return { log: logs, say: 'The bench is open. Parts are arriving with their origin printed on them.' };
+};
+function pushArrival() {
+  const it = ARR[S.arrived.length]; S.arrived.push(it.id);
+  if (S.arrived.length >= ARR.length) { S.assembling = false; clearInterval(S.timer); }
+  return { who: 'bench', kind: 'ARRIVE', text: it.log, clock: 'session' };
+}
+ACTS.arrive = () => {
+  if (S.arrived.length >= ARR.length) return null;
+  const l = pushArrival();
+  return { log: l, say: S.arrived.length >= ARR.length ? 'Bench complete: ' + countLine() : null };
+};
+
+/* ---------------------------------------------------------------- acts: the loom */
+ACTS.push = p => {
+  const E = envFor(), from = S.pushFrom;
+  S.work.hold = p.hold;
+  const r = sim(S.work, E);
+  if (r.cut && !S.edgeFound) S.edgeFound = true;
+  if (p.live) return null;
+  S.pushFrom = p.hold;
+  const en = edgeOf(S.work, E);
+  return { log: { who: 'you', kind: 'PROBE', text: 'pushed the ORD hold ' + from + ' → ' + p.hold + ' min (a probe, nothing saved): ' + (r.cut ? 'leg 4 cut' : 'BOS ' + (r.d.arr4 > 0 ? '+' + r.d.arr4 : 'on time') + ', ' + r.missed + ' passengers miss') + (r.cut && en != null ? ' · edge found at ' + en : ''), clock: 'BOS clock · ' + hhmm(SCHED.holdAt) + ' · typical day' }, say: 'Hold ' + p.hold + ' minutes. ' + (r.cut ? 'Leg 4 is cut.' : 'Leg 4 runs, ' + (r.d.arr4 > 0 ? r.d.arr4 + ' minutes late.' : 'on time.')) };
+};
+ACTS.part = p => (S.work.removed === p.part ? ACTS.putback({}) : ACTS.lift({ part: p.part }));
+ACTS.lift = p => {
+  S.work.removed = p.part;
+  return { log: { who: 'you', kind: 'PROBE', text: 'lifted ' + partName(p.part) + ' and ran the day without it, inside a pencil frame: part removed, not how the network is', clock: 'BOS clock · typical day' }, say: partName(p.part) + ' lifted out. The pencil frame says: not how the network is.' };
+};
+ACTS.putback = p => {
+  const was = S.work.removed; S.work.removed = p.prev !== undefined ? p.prev : null;
+  return { log: { who: 'you', kind: 'PROBE', text: 'put ' + (was ? partName(was) : 'the part') + ' back', clock: 'BOS clock · typical day' }, say: 'Put back.' };
+};
+ACTS.reset = () => {
+  S.work = { hold: HOLD0, removed: null, ext: 0 }; S.pushFrom = HOLD0;
+  return { log: { who: 'you', kind: 'RETURN', text: 'returned the working state to the record: the typical day, ORD hold ' + HOLD0 + ' min', clock: 'BOS clock · typical day' }, say: 'Back on the record.' };
+};
+ACTS.keep = () => {
+  const id = 'B' + (S.branches.length + 1), P = Object.assign({}, S.work);
+  S.branches.push({ id: id, params: P, moment: hhmm(SCHED.holdAt) + ' · ORD closes, on the typical day', assumptions: assumptionsOf(P) });
+  S.hist = id; S.compare = false; S.seat = false;
+  S.work = { hold: HOLD0, removed: null, ext: 0 }; S.pushFrom = HOLD0;
+  return { log: { who: 'you', kind: 'FORK', text: 'kept a branch (' + id + '), diverged at ' + hhmm(SCHED.holdAt) + ' when ORD closes: ' + assumptionsOf(P).slice(0, Math.max(1, assumptionsOf(P).length - 3)).join('; ') + '. The record is untouched.', clock: 'BOS clock · ' + hhmm(SCHED.holdAt) }, say: 'Branch ' + id + ' kept. The record stays as it was.' };
+};
+ACTS.hist = p => {
+  S.hist = p.id; if (p.id === 'record') S.compare = false;
+  return { log: { who: 'you', kind: p.id === 'record' ? 'RETURN' : 'NAV', text: p.id === 'record' ? 'returned to the record' : 'opened branch ' + p.id, clock: 'session' }, say: p.id === 'record' ? 'Back on the record.' : 'Branch ' + p.id };
+};
+ACTS.compare = () => { S.compare = !S.compare; return { log: { who: 'you', kind: 'COMPARE', text: S.compare ? 'laid branch ' + S.hist + ' beside the record' : 'took the comparison down', clock: 'session' }, say: S.compare ? 'Comparing the branch with the record.' : 'Comparison off.' }; };
+ACTS.seatOpen = () => {
+  const E = envFor(), R = sim(S.work, E);
+  S.seat = true; S.seatActed = false; S.refuse = null; S.seat0 = { rest: R.rest, cut: R.cut, arr4: R.arr4, ext: S.work.ext };
+  return { log: { who: 'you', kind: 'ENTER', text: 'took the crew-scheduling desk as a PRACTICE SEAT: an authored day, nobody acts on a real airline', clock: 'BOS clock · ' + hhmm(R.dep4) + ' · authored day' }, say: 'Practice seat: crew scheduling. The ground has changed.' };
+};
+ACTS.extend = p => {
+  const E = envFor(), before = sim(S.work, E), max = SPEC_FACTS.cfr.maxExtMin;
+  if (S.work.ext + p.min > max) {
+    S.refuse = 'Refused by the rule: 14 CFR 117.19 allows a duty period to be extended by up to 2 h for unforeseen circumstances (verify). You asked for ' + (S.work.ext + p.min) + ' min in all, and the rule stops at ' + max + '.';
+    return { log: { who: 'seat', kind: 'REFUSE', text: 'extend duty +' + p.min + ' min refused: 14 CFR 117.19 allows up to 2 h (verify); ' + (S.work.ext + p.min) + ' min in all is over it', clock: 'BOS clock · ' + hhmm(before.dep4) + ' · authored day' }, say: 'Refused. The rule allows up to two hours.' };
+  }
+  S.refuse = null; S.work.ext += p.min; S.seatActed = true;
+  const after = sim(S.work, E);
+  return { log: { who: 'seat', kind: 'ACT', text: 'extended the crew duty period +' + p.min + ' min (within the rule): leg 4 ' + (after.cut ? 'is still cut' : 'runs') + '; next-day rest ' + dur(before.rest) + ' → ' + dur(after.rest), clock: 'BOS clock · ' + hhmm(before.dep4) + ' · authored day' }, say: 'Duty extended by ' + p.min + ' minutes. Leg 4 ' + (after.cut ? 'is still cut.' : 'runs.') + ' Next-day rest is now ' + dur(after.rest) + '.' };
+};
+ACTS.releaseHold = () => {
+  S.refuse = 'Refused by the standing line: this seat cannot release the ORD hold. Air traffic control holds it; a crew desk holds only duty periods.';
+  return { log: { who: 'seat', kind: 'REFUSE', text: 'release the ORD hold refused: not this seat’s to hold (air traffic control holds it)', clock: 'BOS clock · authored day' }, say: 'Refused. This seat cannot release the hold.' };
+};
+ACTS.seatLeave = () => {
+  const acted = S.seatActed; S.seat = false; S.refuse = null;
+  return { log: { who: 'you', kind: 'ACT', text: acted ? 'handed the desk over in your own words: extended duty, then left the seat' : 'left the seat without acting: no act recorded (absence, not a choice)', clock: 'BOS clock · authored day' }, say: acted ? 'Left the seat. Your extension stays in the probe.' : 'Left the seat. Nothing was recorded, and that is recorded as absence.' };
+};
+
+/* ---------------------------------------------------------------- views: Ask, Bench */
+VIEWS.ask = () => {
+  const q = S.qDraft != null ? S.qDraft : S.q;
+  const ex = ['Why are airline delays spreading?', 'Why are semiconductor shortages happening?', 'Why is Boston close to the tax line?', 'Will the Green Line run after the game?'];
+  let h = '<section class="sheet" data-cap="PROPOSED" data-cost="SMALL / CHEAP MODEL"><header class="sh"><span class="no">SHEET A</span><h1 tabindex="-1">Ask</h1><span class="sub">a question BOW has no page for</span></header>' +
+    '<form id="askform" class="askline"><div class="fld"><label class="lbl" for="q">Your question</label><input id="q" type="text" autocomplete="off" spellcheck="false" placeholder="What do you want to understand?" value="' + esc(q || '') + '"></div><button type="submit" class="btn pri">Ask</button></form>' +
+    '<p class="lbl" style="margin:0 0 5px">Or start from one of these</p><div class="exl">' + ex.map(e => '<button type="button" class="btn" data-a="ask" ' + dp({ q: e }) + '>' + esc(e) + '</button>').join('') + '</div>';
+  if (S.qk === 'air') {
+    h += '<div class="tblock" data-cap="PROPOSED" data-cost="SMALL / CHEAP MODEL"><div><span class="lbl">You asked</span><p class="big serif-i">“' + esc(S.q) + '”</p></div>' +
+      '<div><span class="lbl">BOW restates it as a claim to test</span><p class="big">A delay at one airport shows up later, elsewhere.</p></div>' +
+      '<div><span class="lbl">The dynamic</span><p class="dyn">PROPAGATION THROUGH SHARED RESOURCES</p><p class="note">An aircraft, a crew and a passenger connection are each used by more than one flight.</p></div></div>' +
+      '<span class="lbl">Neighbours BOW set aside <span style="text-transform:none;letter-spacing:0">(press one to see why)</span></span><div class="nbtabs" data-cap="PROPOSED" data-cost="SMALL / CHEAP MODEL">' +
+      [['atp', 'AIR-TRAFFIC PROGRAMS'], ['out', 'AIRLINE-WIDE OUTAGE']].map(n => '<button type="button" class="nb" aria-pressed="' + (S.nb === n[0]) + '" data-a="nb" ' + dp({ id: n[0] }) + '>' + n[1] + '</button>').join('') + '</div>';
+    if (S.nb === 'atp') h += '<p class="nbnote"><b>AIR-TRAFFIC PROGRAMS</b> · a government program that holds flights at their origin. It can start a delay. It does not explain why a delay passes from flight to flight, so it stays a neighbour. On the plate it becomes a port called SLOTS.</p>';
+    if (S.nb === 'out') h += '<p class="nbnote"><b>AIRLINE-WIDE OUTAGE</b> · one failure that lands on many flights at once. That is a common cause, not a delay handed from one flight to the next. A different system.</p>';
+    h += '<div class="benchbar"><button type="button" class="btn pri" data-a="assemble">Assemble this system</button><span class="note">Assembly from typed ports needs no AI. Reading the question is an authored stand-in for a small model.</span></div>';
+  } else if (S.qk === 'reg') {
+    const R = FX.reality, L = FX.league.season2627, gap = L.tax.v - R.taxSalary.v, M1 = v => '$' + (+(v / 1e6).toFixed(1)) + 'M';
+    h += '<div class="tblock" data-cap="PROPOSED" data-cost="SMALL / CHEAP MODEL"><div><span class="lbl">You asked</span><p class="big serif-i">“' + esc(S.q) + '”</p></div>' +
+      '<div><span class="lbl">BOW restates it as a claim to test</span><p class="big">Boston’s tax salary sits about ' + M1(gap) + ' under the tax line.</p></div>' +
+      '<div><span class="lbl">The dynamic</span><p class="dyn">PAYROLL AGAINST THE LINES</p><p class="note">One payroll counts against the cap. A different one is what the tax is charged on.</p></div></div>' +
+      '<div class="regbox" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><p class="wanth" style="font-size:28px">A reviewed system exists.</p>' +
+      '<p class="note wide" style="margin-bottom:6px">Boston payroll against the lines, on the Jurisdiction board. BOW did not write an answer here; it found the system that has one. ' + kc('AUTHORED', 'registry entry: an authored stand-in, no review workflow exists') + '</p>' +
+      '<div class="ledger" style="grid-template-columns:1fr">' + [['OBSERVED', 'Tax line, ' + L.label, M1(L.tax.v) + ' [verify]'], ['OBSERVED', 'Cap payroll (counts against the cap)', '≈ ' + M1(R.capPayroll.v) + ' [verify]'], ['OBSERVED', 'Tax salary (what the tax is charged on)', '$' + Math.round(R.taxSalary.v).toLocaleString('en-US') + ' [verify]'], ['COMPUTED', 'Tax salary against the line', '≈ ' + M1(gap) + ' under']].map(r => '<div class="r"><span>' + kc(r[0]) + '</span><span><b>' + esc(r[1]) + '</b> · ' + esc(r[2]) + '</span></div>').join('') + '</div>' +
+      '<div class="benchbar"><a class="btn pri" href="Jurisdiction.html" style="display:inline-flex;align-items:center;text-decoration:none">Open it on the Jurisdiction board</a><span class="note">A link out. Nothing on this bench is used by that board, and nothing of it is used here.</span></div></div>';
+  } else if (S.qk === 'askback') {
+    const c = S.qc || { opts: [], words: [] }, lab = { air: 'Late flights: the airline rotation', semi: 'A chip shortage', none: 'Neither: leave a want' };
+    h += '<div class="askback" data-cap="PROPOSED" data-cost="SMALL / CHEAP MODEL"><span class="lbl">You asked</span><p class="big serif-i" style="font:italic 400 24px/1.25 var(--serif);margin:3px 0 6px">“' + esc(S.q) + '”</p>' +
+      '<p class="wanth" style="font-size:28px">Which do you mean?</p><p class="note wide" style="margin-bottom:8px">Only ' + (c.words || []).map(w => '“' + esc(w) + '”').join(' and ') + ' pointed anywhere BOW has a system. That is a weak reading, and a wrong guess would look exactly as sure as a right one, so BOW asks. Your words stay as you typed them.</p>' +
+      '<div class="brow">' + (c.opts || []).map(o => '<button type="button" class="btn' + (o === 'none' ? '' : ' pri') + '" data-a="askback" ' + dp({ choice: o }) + '>' + lab[o] + '</button>').join('') + '</div></div>';
+  } else h += '<p class="note wide">Type a question, or pick one. BOW does not answer in words: it looks for the system behind the question, shows what it is made of, and says plainly when there is none.</p>';
+  return h + '</section>';
+};
+VIEWS.bench = () => {
+  const E = envFor(), S0 = sim({ hold: 0, removed: null, ext: 0 }, E);
+  const a = S.arrived.map(id => ARR.find(x => x.id === id));
+  return '<section class="sheet" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><header class="sh"><span class="no">SHEET B</span><h1 tabindex="-1">Bench</h1><span class="sub">parts arrive with their origin printed on them</span></header>' +
+    '<p class="note phoneonly" style="margin-bottom:4px">Pan the chart sideways to see the whole day.</p><div class="pan"><div class="chartwrap" data-cap="PROPOSED" data-cost="NO AI REQUIRED (typed-port assembly)" style="background:var(--paper);border:1.5px solid var(--rule)">' + chartSVG({ mode: 'bench', E: E, R: S0, S0: S0, label: 'The empty time and airport frame, filling as parts arrive: ' + countLine() }) + '</div></div>' +
+    '<div class="benchbar"><p class="bigcount" data-cap="PROPOSED" data-cost="FRONTIER MODEL OCCASIONAL (a coupling with no declared port)">' + countLine() + '</p><button type="button" class="btn pri" data-a="go" ' + dp({ view: 'loom', run: 1 }) + (a.length ? '' : ' disabled') + '>Run what you have</button></div>' +
+    '<div class="ledger">' + a.map((x, i) => '<div class="r' + (i === a.length - 1 && S.assembling ? ' new' : '') + '"><span>' + kc(x.k) + '</span><span><b>' + esc(x.name) + '</b> · ' + esc(x.origin) + '</span></div>').join('') + '</div></section>';
+};
+
+/* ---------------------------------------------------------------- the Loom (persistent shell: the slider is never rebuilt mid-drag) */
+PERSIST.loom = { shell: loomShell, paint: paintLoom };
+function loomShell() {
+  return '<section class="sheet" id="loomSheet" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><header class="sh"><span class="no">SHEET C</span><h1 tabindex="-1">Loom</h1><span class="sub" id="loomSub"></span><span class="grow"></span><div class="hist" id="histTabs"></div><span id="hdrBtn"></span></header>' +
+    '<p class="cap" id="loomCap"></p><div class="frame" id="frame"><div class="fstrip" id="fstrip"></div><p class="note phoneonly" style="margin:4px 8px 0">Pan the chart sideways to see the whole day.</p><div class="pan"><div class="chartwrap" id="chartwrap" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><div id="svgHost" style="position:absolute;inset:0"></div><div class="sl"><input id="hold" type="range" min="0" max="180" step="1" value="' + HOLD0 + '" aria-label="ORD hold in minutes. Push it longer to find where the mechanism stops."></div></div></div><div class="holdrow"><label for="hold2">ORD hold: <output id="holdOut">' + HOLD0 + '</output> min</label><input id="hold2" type="range" min="0" max="180" step="1" value="' + HOLD0 + '" aria-label="ORD hold in minutes, full-width slider. Push it longer to find where the mechanism stops."></div></div><div id="zone"></div></section>';
+}
+function paintLoom() {
+  const E = envFor(), branch = S.hist !== 'record' ? S.branches.find(b => b.id === S.hist) : null;
+  const P = branch ? branch.params : S.work;
+  const R = sim(P, E), S0 = sim({ hold: 0, removed: null, ext: 0 }, E), RR = sim(REC, E);
+  const probe = !branch && !sameP(P, REC);
+  const roles = rolesOf(P, E);
+  const en = edgeOf(P, E);
+  const capHtml = caption(R, E, P);
+  $('#loomSheet').className = 'sheet' + (S.seat ? ' seat' : '');
+  $('#loomSub').innerHTML = S.seat ? '<span class="seatstamp">PRACTICE SEAT · crew scheduling · authored day</span>' : 'threads are things, knots are claims';
+  $('#loomSheet .sh').classList.toggle('hastabs', !!S.branches.length && !S.seat);
+  $('#hdrBtn').innerHTML = S.seat ? '<button type="button" class="btn sm" data-a="seatLeave">Leave the seat</button>' : '<button type="button" class="btn sm" data-a="plate">Turn it over</button>';
+  $('#histTabs').innerHTML = S.branches.length && !S.seat ? '<button type="button" class="htab" aria-pressed="' + (S.hist === 'record') + '" data-a="hist" ' + dp({ id: 'record' }) + '>RECORD · typical day</button>' + S.branches.map(b => '<button type="button" class="htab br" aria-pressed="' + (S.hist === b.id) + '" data-a="hist" ' + dp({ id: b.id }) + '>Your branch ' + b.id + '</button>').join('') : '';
+  $('#loomCap').innerHTML = kc('COMPUTED') + '<span>' + capHtml + '</span>';
+  const stripHtml = branch ? 'YOUR BRANCH · diverged ' + esc(branch.moment) + ' · the record is one press away<br>assumes: ' + esc(branch.assumptions.slice(0, 2).join(' · ')) + (branch.assumptions.length > 2 ? ' · +' + (branch.assumptions.length - 2) + ' more' : '') : probe ? (P.removed ? 'PART REMOVED · not how the network is. ' + esc(partName(P.removed)) + ' is lifted out; press it again to put it back.' : 'PROBE · nothing is saved and the record is untouched. Keep it as a branch to stamp it.') : '';
+  $('#fstrip').innerHTML = S.seat && S.refuse ? '<span role="alert" style="color:#6b1d0d">' + esc(S.refuse) + '</span>' : stripHtml;
+  $('#frame').className = 'frame' + (branch ? ' f-branch' : (S.seat && S.refuse) ? ' f-pencil f-refuse' : probe ? ' f-pencil' : '');
+  const handOn = S.edgeFound && R.cut && !S.seat && !branch;
+  const pencil = '';
+  const opts = { mode: 'loom', E: E, R: R, S0: S0, cls: branch ? 'thr gr' : 'thr', label: 'Time and airport chart. ' + plain(capHtml), edgeAt: S.edgeFound && !branch ? en : null, hand: handOn, pencil: pencil };
+  if (branch && S.compare) opts.other = RR; else if (probe) opts.ref = RR;
+  $('#svgHost').innerHTML = chartSVG(opts);
+  const inp = $('#hold');
+  if (document.activeElement !== inp || +inp.value !== P.hold) inp.value = P.hold;
+  inp.disabled = !!branch || !E.hold || S.seat;
+  inp.setAttribute('aria-valuetext', P.hold + ' minutes');
+  const inp2 = $('#hold2'); if (inp2) { if (document.activeElement !== inp2 || +inp2.value !== P.hold) inp2.value = P.hold; inp2.disabled = inp.disabled; inp2.setAttribute('aria-valuetext', P.hold + ' minutes'); const ho = $('#holdOut'); if (ho) ho.textContent = P.hold; }
+  $('#zone').className = S.seat ? 'desk' : 'zone';
+  $('#zone').innerHTML = S.seat ? seatZone(R, E, P) : loomZone(R, E, P, roles, en, branch, probe, RR);
+}
+function loomZone(R, E, P, roles, en, branch, probe, RR) {
+  const parts = PARTS.map(p => { const on = P.removed === p.id, r = roles[p.id]; return '<button type="button" class="part" aria-pressed="' + on + '" aria-label="Lift ' + p.short + '" data-a="part" ' + dp({ part: p.id }) + (branch || !E[p.id] ? ' disabled' : '') + '><span class="pn">' + p.short + ' <i>' + p.ver + '</i></span><span class="pr">' + r.l + '</span><span class="pd">' + esc(r.d) + '</span></button>'; }).join('');
+  let edge;
+  if (branch) edge = '<p class="note">Frozen in the branch. The hold, the parts and the extension are what the branch assumed. Return to the record to push again.</p>';
+  else if (!E.hold) edge = '<p class="note">The ORD hold slip has not arrived on the bench yet.</p>';
+  else if (!S.edgeFound) edge = '<p class="note">Drag the handle on the ORD row longer, or use the arrow keys. Watch the thread, the turns and the crew bar. Somewhere the mechanism stops.</p>';
+  else {
+    edge = '<p class="edgeN">' + (en == null ? 'No edge in this frame: nothing cuts leg 4.' : 'At ' + en + ' min leg 4 is cut; at ' + (en - 1) + ' min it still runs.') + '</p>' + kc('COMPUTED') +
+      '<p class="hand" style="margin-top:6px"><svg viewBox="0 0 34 20" aria-hidden="true"><use href="#hand"/></svg><span>A person can extend this, up to 2 h (14 CFR 117.19, verify).</span></p>' +
+      '<button type="button" class="btn sm you" data-a="seatOpen" style="margin-top:6px"' + (en == null ? ' disabled' : '') + '>Who holds it?</button>';
+  }
+  let br = '';
+  if (branch) {
+    br = '<button type="button" class="btn sm" aria-pressed="' + S.compare + '" data-a="compare">' + (S.compare ? 'Take the comparison down' : 'Compare with the record') + '</button><button type="button" class="btn sm" data-a="hist" ' + dp({ id: 'record' }) + '>Return to the record</button>';
+  } else {
+    br = '<button type="button" class="btn sm you" data-a="keep"' + (probe ? '' : ' disabled') + '>Keep as a branch</button><button type="button" class="btn sm" data-a="reset"' + (probe ? '' : ' disabled') + '>Put it back · return to the record</button>';
+  }
+  const cmp = branch && S.compare ? compareTable(R, RR, P) : '';
+  return '<div class="col" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><h2>Parts <small>press and hold to lift · click to toggle</small></h2><div class="parts">' + parts + '</div></div>' +
+    (cmp ? '<div class="col" style="grid-column:2/3">' + cmp + '</div>' : '<div class="col" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><h2>The edge <small>found by pushing</small></h2><div class="edge">' + edge + '</div></div>') +
+    '<div class="col" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><h2>Branch <small>' + (branch ? 'you are inside branch ' + branch.id : probe ? 'a probe is open' : 'you are on the record') + '</small></h2><div class="brow" style="flex-direction:column;align-items:stretch">' + br + '</div></div>';
+}
+function compareTable(B, R, P) {
+  const row = (a, r, b, g) => '<tr><th>' + a + '</th><td>' + r + '</td><td class="' + (g || 'g') + '">' + b + '</td></tr>';
+  return '<h2>Compare <small>the branch against the record</small></h2><table class="cmp"><tr><th></th><th>RECORD</th><th>BRANCH ' + S.hist + '</th></tr>' +
+    row('ORD hold', R.hold + ' min', B.hold + ' min') + row('Leg 4', R.cut ? 'cut' : 'runs · ' + hhmm(R.arr4), B.cut ? 'cut · would land ' + hhmm(B.arr4) : 'runs · ' + hhmm(B.arr4)) +
+    row('Missed passengers', R.missed, B.missed) + row('Crew rest', dur(R.rest), dur(B.rest)) + '</table>';
+}
+function seatZone(R, E, P) {
+  const s0 = S.seat0 || { rest: R.rest };
+  const over = R.arr4 - R.limit;
+  const restPct = Math.max(0, Math.min(100, R.rest / 960 * 100)), minPct = SCHED.minRest / 960 * 100;
+  return '<div data-cap="PROPOSED" data-cost="NO AI REQUIRED"><h2>Standing line <small>what this seat can and cannot do</small></h2><p class="stand"><b>You hold</b> the crew desk in a practice seat: an authored day, and nobody acts on a real airline.<br><b>Can:</b> extend a duty period up to 2 h for unforeseen circumstances (14 CFR 117.19, verify).<br><b>Cannot:</b> release the ORD hold (air traffic control), swap the aircraft (operations), rebook passengers (another seat).</p></div>' +
+    '<div><h2>Open matter <small>leg 4 crew</small></h2><p class="stand">Duty limit <b>' + hhmm(R.limit) + '</b>' + (P.ext ? ' (extended +' + P.ext + ')' : '') + '. Leg 4 would land <b>' + hhmm(R.arr4) + '</b>: ' + (R.cut ? '<b style="color:var(--verm)">' + over + ' min over</b>, so it is cut.' : '<b>' + (-over) + ' min inside</b>, so it runs.') + '</p><div style="display:flex;flex-direction:column;gap:6px;margin-top:6px"><button type="button" class="btn sm you" data-a="extend" ' + dp({ min: 30 }) + '>Extend the duty period 30 min</button><div class="brow2"><button type="button" class="btn sm warn" data-a="extend" ' + dp({ min: 150 }) + '>Extend by 2 h 30 min</button><button type="button" class="btn sm warn" data-a="releaseHold">Release the ORD hold</button></div></div></div>' +
+    '<div><h2>Crew rest <small>before the next report</small></h2><div class="rest" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><div class="restbar" role="img" aria-label="Crew rest before the next report: ' + dur(R.rest) + '"><i style="width:' + restPct + '%"></i><u style="left:' + minPct + '%"></u></div><p class="note" style="margin-top:3px">' + dur(R.rest) + (s0.rest !== R.rest ? ' <b>(was ' + dur(s0.rest) + ')</b>' : '') + ' · dashed tick: 10 h minimum rest (illustrative; verify 14 CFR 117.25)</p><p class="note" style="margin-top:3px;border:1.5px dashed var(--ink);padding:2px 6px">Tomorrow’s first flight: sealed. You find out by living it.</p></div></div>';
+}
+
+/* ---------------------------------------------------------------- how do we know (per sheet) */
+function knowRows() {
+  const v = S.view, rows = [];
+  const F = (k, t, src, asOf, verify) => rows.push({ k: k, t: t, src: src, asOf: asOf, verify: verify });
+  if (v === 'ask' && S.qk === 'reg') {
+    const R = FX.reality, L = FX.league.season2627;
+    F('AUTHORED', 'The reading: “a reviewed system exists”', 'an authored registry stand-in for a small model plus a registry; no review workflow exists', null);
+    F('OBSERVED', 'Tax line ' + L.label, L.tax.src, L.tax.asOf, L.tax.verify);
+    F('OBSERVED', 'Cap payroll and tax salary', R.capPayroll.src + ' · ' + R.taxSalary.src, R.taxSalary.asOf, true);
+    F('COMPUTED', 'Tax salary against the line', 'the line minus the tax salary; both inputs are verify', null);
+  } else if (v === 'ask' && S.qk === 'askback') { F('AUTHORED', 'The weak reading and the question asked back', 'an authored stand-in for a small model; the words you typed are kept as typed', null); }
+  else if (v === 'ask') { F('AUTHORED', 'The restatement and the dynamic', 'an authored lookup standing in for a small model', null); F('AUTHORED', 'The two neighbours', 'authored; each is a rejected reading of the question', null); }
+  if (v === 'bench' || v === 'loom') {
+    F('AUTHORED', 'The rotation BOS→PHL→ORD→PHL→BOS', 'BOW fixture domains.air (illustrative)', null);
+    F('AUTHORED', 'ORD hold, ' + HOLD0 + ' min', 'BOW fixture domains.air.event: a typical day, no live feed exists', null);
+    F('AUTHORED', 'Flight times, turns, the bank, 05:00 report, 11.5 h limit', 'written for this prototype: illustrative', null);
+    F('UNKNOWN', 'Crew report time', 'no public source; the run uses a placeholder', null);
+    F('GENERATED', 'Couplings c1 c2 c3', 'assembled by a generator, not reviewed', null);
+    F('COMPUTED', 'The thread, the slack, the edge, the roles', 'a pure run of the parts above; ablation for each role', null);
+    F('OBSERVED', 'A person can extend a duty period up to 2 h', SPEC_FACTS.cfr.src, SPEC_FACTS.cfr.asOf, true);
+    F('RECORDED', 'Your acts', 'this bench’s record, in your ink', null);
+  }
+  if (KNOW_MORE[v]) KNOW_MORE[v](F);
+  return rows;
+}
+
+/* =====================================================================
+   THE PLATE · turn the Loom over: parts with truth signatures, couplings, ports as tabs
+   ===================================================================== */
+const KNOTS = [
+  { id: 'c1', name: 'c1 · LATE AIRCRAFT', claim: 'A late-arriving aircraft delays its next departure.', claimK: 'SOURCED', src: 'BTS: late-arriving aircraft is a standard delay cause (verify).',
+    inputs: () => [{ t: 'the wiring itself', k: 'GENERATED' }, { t: 'BTS delay-cause category', k: 'SOURCED' }] },
+  { id: 'c2', name: 'c2 · CLOCK', claim: 'Late minutes are minutes on the crew’s duty clock.', claimK: 'ASSERTED', src: 'Asserted: one authored limit where the published table varies (verify 14 CFR 117 Table B).',
+    inputs: () => [{ t: 'the wiring itself', k: 'GENERATED' }, { t: 'crew report time', k: 'UNKNOWN' }, { t: 'one crew flies all four legs', k: 'ASSUMED' }, { t: '11.5 h limit, simplified', k: 'ASSUMED' }, { t: 'extension allowance, up to 2 h', k: S.plate.rule ? 'SOURCED' : 'ASSUMED' }] },
+  { id: 'c3', name: 'c3 · MISSED CONNECTION', claim: 'A late arrival can miss its onward flight.', claimK: 'ASSERTED', src: 'Asserted: no public minimum connection time for this carrier (' + SCHED.mct + ' min is authored).',
+    inputs: () => [{ t: 'the wiring itself', k: 'GENERATED' }, { t: 'minimum connection ' + SCHED.mct + ' min', k: 'ASSUMED' }, { t: 'passengers per onward flight', k: 'AUTHORED' }] }
+];
+const UNSOUND = { GENERATED: 1, UNKNOWN: 1, ASSUMED: 1 };
+function knotScores() {
+  return KNOTS.map(k => { const ins = k.inputs(); return { id: k.id, unsound: ins.filter(i => UNSOUND[i.k]).length, sourced: ins.filter(i => i.k === 'SOURCED').length, n: ins.length }; })
+    .sort((a, b) => (b.unsound - a.unsound) || (a.sourced - b.sourced));
+}
+function sigOf(p) {
+  if (p.id === 'duty') return S.plate.rule ? { AUTHORED: 2, OBSERVED: 1, UNKNOWN: 1 } : { AUTHORED: 3, UNKNOWN: 1 };
+  return p.sig;
+}
+const PORTS = () => [
+  { id: 'weather', name: 'WEATHER', st: 'ASSUMED', what: 'plugs into forecasts: none bound; the hold is a typical day', note: 'No weather feed is bound. The ORD hold is an authored typical day (' + HOLD0 + ' min), so nothing here is tonight.' },
+  { id: 'slots', name: 'SLOTS', st: 'EMPTY', what: 'plugs into air-traffic programs: BOW has none', note: 'This is the neighbour BOW set aside on the Ask sheet. A program that holds flights at their origin would plug in here. No such system exists in BOW.' },
+  { id: 'rule', name: 'RULE: FAA DUTY LIMITS', st: 'FIXTURE', what: S.plate.rule ? 'stub sheet attached, dated, not reviewed' : 'a dated fixture, verify', note: '' },
+  { id: 'rebook', name: 'REBOOKING', st: 'EMPTY', what: 'goes out to airline rebooking policy: BOW has none', note: 'Passengers on a cut leg 4 leave this system here. Nothing in BOW models where they go next.' }
+];
+ACTS.plate = () => { S.view = 'plate'; S.reached.plate = 1; S.plate.cloud = false; return { log: { who: 'you', kind: 'NAV', text: 'turned the Loom over: the plate', clock: 'session' }, say: 'The back of the mechanism: parts, couplings and ports.' }; };
+ACTS.distrust = () => {
+  S.plate.distrust = true; S.plate.cloud = false;
+  const top = knotScores()[0], k = KNOTS.find(x => x.id === top.id);
+  return { log: { who: 'you', kind: 'ASK', text: 'asked where to distrust this: ' + k.name + ' has ' + top.unsound + ' unsound inputs and ' + top.sourced + ' sourced (computed)', clock: 'session' }, say: 'Most to distrust: ' + k.name + '.' };
+};
+ACTS.port = p => {
+  if (p.id === 'rule') {
+    S.view = 'stub'; S.reached.stub = 1; S.plate.cloud = false;
+    const E = envFor(), en = edgeOf(S.work, E);
+    return { log: { who: 'you', kind: 'NAV', text: 'stepped out through the RULE port to FAA duty limits (a stub sheet), carrying the pin: leg 4 cut at ' + (en == null ? '—' : en) + ' min of hold', clock: 'session' }, say: 'Stepped out to the FAA duty limits stub, carrying the pin.' };
+  }
+  S.plate.port = p.id;
+  return { log: { who: 'you', kind: 'NAV', text: 'read the ' + p.id.toUpperCase() + ' port', clock: 'session' }, say: 'Port read.' };
+};
+ACTS.attach = () => { S.plate.rule = true; return { log: { who: 'you', kind: 'ACT', text: 'attached the FAA duty limits stub as the source for the duty clock’s extension allowance (up to 2 h): unreviewed, verify', clock: 'session' }, say: 'Stub attached as the source for the extension allowance.' }; };
+ACTS.back = () => { S.view = 'plate'; S.plate.cloud = !!S.plate.rule; return { log: { who: 'you', kind: 'NAV', text: 'came back from the stub to the plate' + (S.plate.rule ? '; revision clouds ring what changed' : ' with nothing changed'), clock: 'session' }, say: S.plate.rule ? 'Back on the plate. Revision clouds ring what changed.' : 'Back on the plate.' }; };
+
+function sigBar(sig) {
+  const tot = Object.keys(sig).reduce((s, k) => s + sig[k], 0), order = ['OBSERVED', 'RECORDED', 'AUTHORED', 'COMPUTED', 'MODELED', 'GENERATED', 'UNKNOWN'];
+  return '<span class="sig" role="img" aria-label="truth signature: ' + order.filter(k => sig[k]).map(k => sig[k] + ' ' + k.toLowerCase()).join(', ') + '">' + order.filter(k => sig[k]).map(k => '<i class="seg k-' + k + '" style="flex:' + sig[k] + '"></i>').join('') + '</span>' +
+    '';
+}
+VIEWS.plate = () => {
+  const E = envFor(), R = sim(REC, E), cl = S.plate.cloud && S.plate.rule, ports = PORTS(), top = knotScores()[0];
+  const counts = { LIVE: 0, FIXTURE: 0, ASSUMED: 0, EMPTY: 0 }; ports.forEach(p => counts[p.st]++);
+  const tabBtn = p => '<button type="button" class="ptab' + (cl && p.id === 'rule' ? ' clouded' : '') + '" data-a="port" ' + dp({ id: p.id }) + ' aria-pressed="' + (S.plate.port === p.id) + '"><span class="pt-h"><span class="pt-n">' + p.name + (p.id === 'rule' ? ' <i>steps out</i>' : '') + '</span>' + kc(p.st) + '</span><span class="pt-w">' + esc(p.what) + '</span></button>';
+  const P = ports;
+  const partRows = PARTS.map(p => '<div class="prow' + (cl && p.id === 'duty' ? ' clouded' : '') + '"><div><b>' + p.name + '</b> <i>' + p.ver + '</i></div><div class="pr2">' + sigBar(sigOf(p)) + '</div><div class="pm">reviewed by [reviewer] · ' + (p.rule ? 'rule “' + esc(p.rule) + '”' : 'no named fixture rule') + '</div></div>').join('');
+  const knotRows = KNOTS.map(k => { const ins = k.inputs(), sc = knotScores().find(x => x.id === k.id), mark = S.plate.distrust && top.id === k.id;
+    return '<div class="knot' + (mark ? ' mark' : '') + (cl && k.id === 'c2' ? ' clouded' : '') + '"><div class="kh"><b>' + k.name + '</b>' + (mark ? '<span class="dtag">DISTRUST HERE</span>' : '') + '</div><div class="kl">' + kc('GENERATED', 'wired by a generator') + kc(k.claimK, k.claimK.toLowerCase() + ' claim') + '</div><p class="kt">' + esc(k.claim) + '</p><p class="ks2">' + esc(k.src) + '</p><p class="ks3">' + sc.unsound + ' unsound input' + (sc.unsound === 1 ? '' : 's') + ' · ' + sc.sourced + ' sourced</p></div>'; }).join('');
+  const note = S.plate.port && S.plate.port !== 'rule' ? '<p class="portnote" role="status" style="margin:0;flex:1"><b>' + P.find(p => p.id === S.plate.port).name + '</b> · ' + esc(P.find(p => p.id === S.plate.port).note) + '</p>' : '';
+  const hash8 = hash(JSON.stringify([PARTS.map(p => p.id + p.ver), KNOTS.map(k => k.id), SCHED.legs.map(l => l.dep + '/' + l.block)])).slice(0, 12);
+  return '<section class="sheet plate" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><header class="sh"><span class="no">SHEET D</span><h1 tabindex="-1">Plate</h1><span class="sub">the back of the mechanism: made of what, plugged into what</span><span class="grow"></span><button type="button" class="btn sm" data-a="go" ' + dp({ view: 'loom' }) + '>Turn it back over</button></header>' +
+    '<div class="plwrap"><div class="ptop">' + tabBtn(P[0]) + tabBtn(P[1]) + '</div><div class="pmid"><div class="plbody"><svg class="showthru" viewBox="0 0 ' + VBW + ' ' + VBH + '" preserveAspectRatio="none" aria-hidden="true">' + (E.rot ? thread(R, 'thr', E, { bars: false }) : '') + '</svg>' +
+    '<div class="plh"><b>PLATE · propagation through shared resources</b><span class="mono">recipe ' + hash8 + ' ' + kc('COMPUTED', 'content address') + '</span></div>' +
+    '<h2>Parts <small>truth signature · version · reviewer</small></h2>' + partRows + '<h2 style="margin-top:8px">Couplings <small>a coupling is a claim: sourced or asserted</small></h2><div class="knots">' + knotRows + '</div>' +
+    '</div><div class="prt">' + tabBtn(P[2]) + '</div></div><div class="pbot">' + tabBtn(P[3]) + '<div class="pact"><button type="button" class="btn sm warn" data-a="distrust">Where would I distrust this?</button>' + (note || '<p class="note">Ports: ' + counts.LIVE + ' LIVE (no feed exists) · ' + counts.FIXTURE + ' FIXTURE · ' + counts.ASSUMED + ' ASSUMED · ' + counts.EMPTY + ' EMPTY. Press a tab to read what plugs in.</p>') + '</div></div></div></section>';
+};
+VIEWS.stub = () => {
+  const E = envFor(), en = edgeOf(S.work, E), R = sim(S.work, E);
+  return '<section class="sheet stub" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><header class="sh"><span class="no">SHEET D · STUB</span><h1 tabindex="-1">FAA duty limits</h1><span class="sub">a stub sheet: nobody at BOW has reviewed the rule text</span><span class="grow"></span><button type="button" class="btn sm" data-a="back">Back to the plate</button></header>' +
+    '<div class="pin" data-cap="PROPOSED" data-cost="NO AI REQUIRED"><span class="lbl">Carrying the pin from the Loom</span><p class="mono" style="margin:3px 0 0;font-size:13px">' + (en == null ? 'No edge was found in the loom.' : 'Leg 4 is cut when ORD holds <b>' + en + ' min</b>') + ' · duty limit <b>' + hhmm(R.limit) + '</b> (authored 11.5 h from a 05:00 placeholder report' + (S.work.ext ? ', extended +' + S.work.ext : '') + ')</p></div>' +
+    '<div class="statute"><div><h2>14 CFR 117.19 · flight duty period extensions</h2><p class="serif-i">A paraphrase, not a quotation [verify against the eCFR text].</p><p>Where <b>unforeseen operational circumstances</b> arise, the pilot in command and the airline may extend a flight duty period by <b>up to 2 hours</b>.</p><p class="mono" style="font-size:12px">' + kc('OBSERVED') + ' ' + esc(SPEC_FACTS.cfr.src) + ' · as of ' + SPEC_FACTS.cfr.asOf + ' · <b>[verify]</b></p></div>' +
+    '<div><h2>What the Loom takes from this sheet</h2><p><b>120 minutes</b>: the most a person may extend a duty period. Nothing else.</p><p>The Loom’s limit itself is one authored number, 11.5 hours. The published tables vary with report time and the number of flight segments [verify: 14 CFR 117 Table B], and the crew’s report time is not public. Those stay on the plate as a GAP and an ASSUMED input.</p></div></div>' +
+    '<div class="benchbar"><button type="button" class="btn you" data-a="attach"' + (S.plate.rule ? ' disabled' : '') + '>Attach this sheet as the source for the extension</button>' + (S.plate.rule ? '<span class="note">Attached. The duty clock’s extension allowance now cites this stub, and the plate will say it is unreviewed.</span>' : '<span class="note">Nothing changes on the plate unless you attach it.</span>') + '</div></section>';
+};
+KNOW_MORE.plate = F => {
+  F('COMPUTED', 'Port states', PORTS().map(x => x.name + ' ' + x.st).join(' · ') + ' · 0 LIVE: no feed exists', null);
+  F('COMPUTED', 'Truth signatures, in words', PARTS.map(p => p.short + ': ' + Object.keys(sigOf(p)).map(k => sigOf(p)[k] + ' ' + k.toLowerCase()).join(', ')).join(' · '), null);
+  KNOTS.forEach(k => F(k.claimK === 'SOURCED' ? 'SOURCED' : 'AUTHORED', k.name + ': inputs', k.inputs().map(i => i.t + ' (' + i.k.toLowerCase() + ')').join('; '), null));
+  F('GENERATED', 'Couplings: wired by', 'a generator; none has been reviewed', null);
+  F('OBSERVED', 'c1 claim: late aircraft is a delay cause', SPEC_FACTS.bts.src, SPEC_FACTS.bts.asOf, true);
+  F('AUTHORED', 'c2 and c3 claims', 'asserted; no source names the values used', null);
+  F('COMPUTED', 'Where would I distrust this?', 'unsound inputs (generated, unknown, assumed) minus sourced ones, per knot', null);
+  F('RECORDED', 'Recipe address', 'a hash of the part versions and the schedule (illustrative)', null);
+};
+KNOW_MORE.stub = F => {
+  F('OBSERVED', 'Extension up to 2 h for unforeseen circumstances', SPEC_FACTS.cfr.src, SPEC_FACTS.cfr.asOf, true);
+  F('AUTHORED', 'The 11.5 h limit and the 05:00 report', 'authored for this prototype; the published table varies [verify]', null);
+  F('UNKNOWN', 'Crew report time', 'no public source', null);
+};
+
+/* =====================================================================
+   OPEN WORLD (SPECULATIVE FRONTIER) · semiconductor shortages.
+   Nothing on these sheets was compiled. The slips, the parts and the numbers are AUTHORED stand-ins
+   for what a compile would produce; the chrome says so. The only real figure is the Commerce RFI one.
+   ===================================================================== */
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const NOWTXT = (d => d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear())(new Date(FX.meta.now + 'T00:00:00Z'));
+const SHORTAGES = [
+  { id: 'memory', name: 'AI-driven memory demand', src: 'trade press: Maintenance World, 23 Sep 2026, citing KB Securities · verify', on: false },
+  { id: 'auto', name: 'Automotive parts after the Nexperia dispute', src: 'trade press: Tom’s Hardware, Automotive Logistics · verify', on: false },
+  { id: '2021', name: 'The 2021 shortage', src: 'US Commerce RFI, Jan 2022: buyers’ median chip stock fell from about ' + SPEC_FACTS.rfi.d2019 + ' days (2019) to under ' + SPEC_FACTS.rfi.d2021 + ' (2021) · verify', on: true }
+];
+const SLIPS = [
+  { c: 'PRIMARY DATA', src: 'US Commerce RFI', date: 'Jan 2022', claim: 'Buyers’ median chip stock: about ' + SPEC_FACTS.rfi.d2019 + ' days in 2019, under ' + SPEC_FACTS.rfi.d2021 + ' in 2021.', fam: 'INVENTORY DRAWDOWN', read: true, v: 'search summary; page not opened' },
+  { c: 'REPORTING', src: '[trade-press story]', date: '2021 [verify]', claim: 'Car makers cut chip orders in 2020. The capacity they left went to other buyers.', fam: 'CAPACITY REALLOCATION', read: true },
+  { c: 'ANALYST ESTIMATE', src: '[analyst note]', date: '2021 [verify]', claim: 'Demand for electronics ran above the pre-pandemic plan.', fam: 'DEMAND SURGE', read: true },
+  { c: 'REPORTING', src: '[news story]', date: '2021 [verify]', claim: 'Some buyers held long-term supply agreements. Others bought on the spot.', fam: 'LONG-TERM AGREEMENTS', read: true },
+  { c: 'ANALYST ESTIMATE', src: '[analyst note]', date: '2021 [verify]', claim: 'Some buyers may have ordered twice to secure supply. The share is contested.', fam: 'DOUBLE ORDERING', read: true },
+  { c: 'OFFICIAL STATEMENT', src: '[a chipmaker’s statement]', date: '2021 [verify]', claim: 'A new chip plant takes years to build and staff.', fam: 'CAPACITY LEAD TIME', read: true },
+  { c: 'REPORTING', src: '[news story]', date: '2021 [verify]', claim: 'Buyers running lean kept few days of stock on hand.', fam: 'REORDER TRIGGER', read: true },
+  { c: 'REPORTING', src: '[news story]', date: '2021 [verify]', claim: 'Some parts came from a single supplier.', fam: 'SINGLE-SOURCE DEPENDENCY', read: true },
+  { c: 'OFFICIAL STATEMENT', src: '[government statement]', date: '2021 [verify]', claim: 'Officials urged more chip capacity at home.', fam: 'CAPACITY LEAD TIME', read: true },
+  { c: 'REPORTING', src: '[news story about plant outages]', date: '2021 [verify]', claim: null, fam: 'PLANT OUTAGES', read: false, why: 'not opened' },
+  { c: 'ANALYST ESTIMATE', src: '[paywalled analyst report]', date: '[date]', claim: null, fam: 'EXPORT CONTROLS', read: false, why: 'behind a subscription' }
+];
+const LEVERS = [
+  { k: 'd', name: 'Demand rise', long: 'Demand rise over the 2019 plan', unit: '%', min: 0, max: 40, ev: [10, 25], def: 18 },
+  { k: 'L', name: 'Long-term deals', long: 'Capacity locked in long-term agreements', unit: '%', min: 0, max: 80, ev: [20, 50], def: 35 },
+  { k: 'D', name: 'Orders placed twice', long: 'Orders placed twice', unit: '%', min: 0, max: 30, ev: [5, 15], def: 10 },
+  { k: 'T', name: 'Months to add capacity', long: 'Months to add capacity', unit: ' mo', min: 6, max: 40, ev: [18, 30], def: 24 },
+  { k: 'O', name: 'Outage losses', long: 'Output lost to plant outages', unit: '% yr', min: 0, max: 8, ev: [1, 4], def: 2 },
+  { k: 'C', name: 'Car orders cancelled', long: 'Car-maker orders cancelled in 2020', unit: '%', min: 0, max: 50, ev: [10, 30], def: 20 },
+  { k: 'R', name: 'Reorder trigger', long: 'Buyers’ reorder trigger', unit: ' days', min: 0, max: 50, ev: [10, 30], def: 20 }
+];
+const UNKNOWNS = [
+  { k: 'single', name: 'Single-source dependency', part: 'SINGLE-SOURCE' },
+  { k: 'export', name: 'Export controls', part: 'EXPORT CONTROLS' },
+  { k: 'alloc', name: 'How foundries ranked buyers', part: 'ALLOCATION RULE' },
+  { k: 'distr', name: 'Stock held by distributors', part: 'DISTRIBUTOR STOCK' }
+];
+/* the stand-in "model": one small deterministic function, not a compile; it moves the way the assumptions say and no further */
+function answer(a) {
+  const press = 0.9 * a.d + 0.5 * a.D + 1.2 * a.O + 0.14 * a.C + 0.09 * a.L + 0.16 * a.T;
+  const mid = Math.max(0, Math.min(40, 40 - press + 0.3 * (a.R - 20)));
+  const outside = LEVERS.filter(l => a[l.k] < l.ev[0] || a[l.k] > l.ev[1]).map(l => l.k);
+  const half = (1.5 + 0.35 * UNKNOWNS.length) * (outside.length ? 1.6 : 1);
+  return { mid: mid, lo: Math.max(0, mid - half), hi: Math.min(40, mid + half), half: half, outside: outside };
+}
+function leanOf(a, l) { const lo = Object.assign({}, a), hi = Object.assign({}, a); lo[l.k] = l.ev[0]; hi[l.k] = l.ev[1]; return Math.abs(answer(hi).mid - answer(lo).mid); }
+const f1 = n => (Math.round(n * 10) / 10).toFixed(1);
+const defLev = () => { const o = {}; LEVERS.forEach(l => { o[l.k] = l.def; }); return o; };
+
+ACTS.pickShortage = p => { S.semi.stage = 'bench'; return { log: { who: 'you', kind: 'ASK', text: 'picked ' + (SHORTAGES.find(s => s.id === p.id) || {}).name + ' from the three shortages; the other two stay beside it as sibling questions', clock: 'session' }, say: 'The 2021 shortage picked. An open bench: source slips on observed ground.' }; };
+ACTS.compile = () => {
+  S.model = { compiledAt: Date.now(), lev: defLev(), refusal: null, status: 'SKETCH', signs: {}, discarded: false, approved: false, link: false, followed: false, moved: {} };
+  S.view = 'model'; S.reached.model = 1; S.reached.review = 1;
+  clearInterval(S.lifeTimer); S.lifeTimer = setInterval(updateLife, 1000);
+  return { log: { who: 'bench', kind: 'COMPILE', text: 'compiled a working model from ' + SLIPS.length + ' sources (' + SLIPS.filter(s => s.read).length + ' read): status SKETCH, 72-hour life. An authored stand-in: no compile ran', clock: 'compile clock · ' + NOWTXT }, say: 'Working model on tracing paper. Not reviewed. It lives 72 hours.' };
+};
+ACTS.lever = p => {
+  const M = S.model, l = LEVERS.find(x => x.k === p.k); M.lev[p.k] = p.v; M.moved[p.k] = 1; M.refusal = null;
+  if (p.live) return null;
+  const a = answer(M.lev);
+  return { log: { who: 'you', kind: 'PROBE', text: 'moved “' + l.long + '” to ' + p.v + l.unit + ': answer ' + f1(a.lo) + '–' + f1(a.hi) + ' days' + (a.outside.length ? ' · OUTSIDE EVIDENCE' : '') + ' (a scenario on a working model, not a forecast)', clock: 'compile clock · ' + NOWTXT }, say: 'Answer now ' + f1(a.lo) + ' to ' + f1(a.hi) + ' days.' + (a.outside.length ? ' Outside evidence.' : '') };
+};
+ACTS.leverRefuse = p => {
+  const u = UNKNOWNS.find(x => x.k === p.k);
+  S.model.refusal = 'Refused: no part behind this lever. The working model has no ' + u.part + ' part, so “' + u.name + '” cannot be moved. A lever moves only what the compile admits it guessed.';
+  return { log: { who: 'you', kind: 'REFUSE', text: '“' + u.name + '” refused: no ' + u.part + ' part behind the lever', clock: 'compile clock · ' + NOWTXT }, say: 'Refused. No part behind that lever: ' + u.part + '.' };
+};
+ACTS.ruleRefuse = p => {
+  const T = {
+    follow: ['follow it', 'Refused by the rule: a working model cannot be followed. Following keeps a system for you over time. This sketch lives 72 hours and no one has reviewed it.'],
+    embed: ['embed it in a Moment', 'Refused by the rule: a working model cannot be embedded in a Moment. A Moment is the unit that travels, and nothing unreviewed travels.'],
+    ledger: ['use it as a seat’s ledger', 'Refused by the rule: a working model cannot be a seat’s ledger. A seat’s books are what a person signs for, and nobody has signed for this.']
+  }[p.w];
+  S.model.refusal = T[1];
+  return { log: { who: 'you', kind: 'REFUSE', text: 'asked to ' + T[0] + ': ' + T[1].replace('Refused by the rule: ', 'refused, '), clock: 'compile clock · ' + NOWTXT }, say: T[1] };
+};
+function updateLife() {
+  const M = S.model, el = $('#life'); if (!M || !el) return;
+  const tot = 72 * 3600, el_s = Math.floor((Date.now() - M.compiledAt) / 1000), left = Math.max(0, tot - el_s);
+  const h = Math.floor(left / 3600), m = Math.floor(left % 3600 / 60), s = left % 60;
+  const t = $('#lifeT'); if (t) t.textContent = h + ' h ' + String(m).padStart(2, '0') + ' min ' + String(s).padStart(2, '0') + ' s';
+  const k = $('#lifeK'); if (k && !RM) k.style.opacity = s % 2 ? '1' : '.25';
+}
+
+/* ---------------------------------------------------------------- the observed ground (under the paper) */
+const GW = 520, GH = 250, GX0 = 50, GX1 = 500, GY0 = 222, GY1 = 20;
+const gx = yr => GX0 + (yr - 2019) / 3 * (GX1 - GX0), gy = d => GY0 - d * (GY0 - GY1) / 45;
+function groundSVG() {
+  let s = '<svg viewBox="0 0 ' + GW + ' ' + GH + '" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Observed ground: buyers’ median chip stock, about ' + SPEC_FACTS.rfi.d2019 + ' days in 2019 and under ' + SPEC_FACTS.rfi.d2021 + ' days in 2021. Nothing between the two is on this sheet." style="width:100%;height:100%;display:block">';
+  [0, 10, 20, 30, 40].forEach(d => { s += '<line x1="' + GX0 + '" x2="' + GX1 + '" y1="' + gy(d) + '" y2="' + gy(d) + '" stroke="#23211d" stroke-width="' + (d === 0 ? 1.6 : .8) + '" opacity="' + (d === 0 ? 1 : .4) + '"/><text x="' + (GX0 - 6) + '" y="' + (gy(d) + 4) + '" text-anchor="end" font-family="Chivo Mono,monospace" font-size="12.5" fill="#23211d">' + d + '</text>'; });
+  [2019, 2020, 2021, 2022].forEach(y => { s += '<line x1="' + gx(y) + '" x2="' + gx(y) + '" y1="' + GY0 + '" y2="' + (GY0 + 5) + '" stroke="#23211d" stroke-width="1.4"/><text x="' + gx(y) + '" y="' + (GY0 + 19) + '" text-anchor="middle" font-family="Chivo Mono,monospace" font-size="12.5" fill="#23211d">' + y + '</text>'; });
+  s += '<text x="' + GX0 + '" y="13" font-family="Chivo Mono,monospace" font-size="12" fill="#23211d">median buyer’s chip stock, days · OBSERVED</text>';
+  s += '<circle cx="' + gx(2019) + '" cy="' + gy(SPEC_FACTS.rfi.d2019) + '" r="6" fill="#23211d"/><text x="' + (gx(2019) + 10) + '" y="' + (gy(SPEC_FACTS.rfi.d2019) - 6) + '" font-family="Chivo Mono,monospace" font-size="13" font-weight="700" fill="#23211d">about ' + SPEC_FACTS.rfi.d2019 + ' days</text>';
+  s += '<line x1="' + gx(2021) + '" x2="' + gx(2021) + '" y1="' + gy(0) + '" y2="' + gy(SPEC_FACTS.rfi.d2021) + '" stroke="#23211d" stroke-width="9"/><path d="M' + (gx(2021) - 9) + ' ' + gy(SPEC_FACTS.rfi.d2021) + ' h18" stroke="#23211d" stroke-width="2.4"/><text x="' + (gx(2021) - 14) + '" y="' + gy(1.2) + '" text-anchor="end" font-family="Chivo Mono,monospace" font-size="13" font-weight="700" fill="#23211d">under ' + SPEC_FACTS.rfi.d2021 + ' days</text>';
+  s += '<line x1="' + (gx(2019) + 8) + '" y1="' + (gy(SPEC_FACTS.rfi.d2019) + 4) + '" x2="' + (gx(2021) - 8) + '" y2="' + (gy(SPEC_FACTS.rfi.d2021) - 8) + '" stroke="#23211d" stroke-width="1.4" stroke-dasharray="5 5"/><text x="' + (gx(2019) + 14) + '" y="' + (gy(9)) + '" font-family="Chivo Mono,monospace" font-size="12" fill="#23211d">no series between: not on this sheet</text>';
+  return s + '</svg>';
+}
+function modelSVG(a, ans) {
+  const x19 = gx(2019), x20 = gx(2020), x21 = gx(2021), mid20 = 40 - (40 - ans.mid) * 0.4, half20 = ans.half * 0.4;
+  let s = '<svg viewBox="0 0 ' + GW + ' ' + GH + '" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Working model on tracing paper: answer band ' + f1(ans.lo) + ' to ' + f1(ans.hi) + ' days at the end of 2021. A scenario on a working model, not a forecast." style="width:100%;height:100%;display:block;font-family:Chivo Mono,monospace">';
+  const poly = x19 + ',' + gy(40) + ' ' + x20 + ',' + gy(mid20 + half20) + ' ' + x21 + ',' + gy(ans.hi) + ' ' + x21 + ',' + gy(ans.lo) + ' ' + x20 + ',' + gy(Math.max(0, mid20 - half20));
+  if (ans.outside.length) s += '<polygon points="' + poly + '" fill="none" stroke="#b3311a" stroke-width="2" stroke-dasharray="6 4"/><text x="' + (x20 - 60) + '" y="' + (gy(mid20) + 56) + '" font-size="15" font-weight="700" fill="#b3311a">OUTSIDE EVIDENCE</text>';
+  else s += '<polygon data-k="MODELED" points="' + poly + '" fill="url(#hatchP)" stroke="#48443d" stroke-width="1.4"/>';
+  s += '<polyline points="' + x19 + ',' + gy(40) + ' ' + x20 + ',' + gy(mid20) + ' ' + x21 + ',' + gy(ans.mid) + '" fill="none" stroke="#48443d" stroke-width="2.4" stroke-linejoin="round" stroke-dasharray="1 0"/>';
+  [[x19, gy(40)], [x20, gy(mid20)], [x21, gy(ans.mid)]].forEach(p => { s += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="3.5" fill="#f8f4ea" stroke="#48443d" stroke-width="1.8"/>'; });
+  s += '<text x="' + (x21 + 12) + '" y="' + (gy(ans.hi) - 8) + '" font-size="14" font-weight="700" fill="#23211d">' + f1(ans.lo) + '–' + f1(ans.hi) + ' days</text>';
+  const obs = SPEC_FACTS.rfi.d2021;
+  if (ans.mid > obs) s += '<line x1="' + (x21 + 34) + '" x2="' + (x21 + 34) + '" y1="' + gy(ans.mid) + '" y2="' + gy(obs) + '" stroke="#b3311a" stroke-width="2"/><path d="M' + (x21 + 28) + ' ' + gy(ans.mid) + ' h12 M' + (x21 + 28) + ' ' + gy(obs) + ' h12" stroke="#b3311a" stroke-width="2"/><text x="' + (x21 + 44) + '" y="' + ((gy(ans.mid) + gy(obs)) / 2 + 4) + '" font-size="13" fill="#b3311a" font-weight="700">gap +' + f1(ans.mid - obs) + '</text>';
+  s += '<g transform="translate(300 34) rotate(-3)"><rect x="0" y="0" width="196" height="34" fill="#f8f4ea" stroke="#b3311a" stroke-width="1.8"/><text x="8" y="14" font-size="10.5" font-weight="700" fill="#b3311a">SCENARIO ON A WORKING</text><text x="8" y="27" font-size="10.5" font-weight="700" fill="#b3311a">MODEL, NOT A FORECAST</text></g>';
+  return s + '</svg>';
+}
+
+/* ---------------------------------------------------------------- the plural question, then the open bench */
+VIEWS.plural = () => {
+  const bench = S.semi.stage === 'bench';
+  let h = '<section class="sheet" data-cap="SPEC" data-cost="FRONTIER MODEL CONTINUOUS while compiling"><header class="sh"><span class="no">SHEET E</span><h1 tabindex="-1">' + (bench ? 'The 2021 shortage' : 'This is several questions') + '</h1><span class="sub">' + (bench ? 'open bench' : '“' + esc(S.q || 'Why are semiconductor shortages happening?') + '”') + '</span>' + (bench ? '<span class="grow"></span><button type="button" class="btn sm pri" data-a="compile" aria-label="Compile a working model from these slips">Compile a working model</button>' : '') + '</header>' +
+    '<div class="standin" role="note"><b>SPECULATIVE FRONTIER · STAND-IN.</b> BOW cannot compile open-world systems today. Every slip here is an authored stand-in for a compile that did not run. The only real figure is the Commerce RFI one [verify].</div>';
+  if (!bench) {
+    h += '<p class="note wide" style="margin:8px 0">At least three shortages are in the news, and they are different systems. Pick one. The others stay beside it as sibling questions.</p><div class="shlist" data-cap="SPEC" data-cost="SMALL / CHEAP MODEL">' +
+      SHORTAGES.map((s, i) => s.on ? '<button type="button" class="shrow" data-a="pickShortage" ' + dp({ id: s.id }) + '><span class="shn">' + (i + 1) + '</span><span><b>' + esc(s.name) + '</b><br><i>' + esc(s.src) + '</i></span></button>' : '<div class="shrow off" role="group" aria-label="' + esc(s.name) + ', a sibling question, not compiled in this prototype"><span class="shn">' + (i + 1) + '</span><span><b>' + esc(s.name) + '</b><br><i>' + esc(s.src) + '</i><br><em>sibling question · kept beside, not compiled in this prototype</em></span></div>').join('') + '</div>';
+  } else {
+    const fams = SLIPS.map(s => s.fam).filter((f, i, a) => a.indexOf(f) === i);
+    h += '<div class="openb"><div class="og" data-cap="SPEC" data-cost="NO AI REQUIRED"><div class="gnd2">' + groundSVG() + '</div><p class="note" style="margin-top:3px;font-size:10.5px">' + kc('OBSERVED') + ' the ground: two points, Commerce RFI, Jan 2022 <b>[verify]</b>. Nothing else is real here.</p></div>' +
+      '<div data-cap="SPEC" data-cost="FRONTIER MODEL CONTINUOUS (the compile, minutes)"><h2>Claims cluster under mechanism families</h2><table class="fam"><tr><th>FAMILY</th><th>' + SLIPS.filter(s => s.read).length + ' OF ' + SLIPS.length + ' SLIPS READ</th></tr>' + fams.map(f => '<tr><td>' + f + '</td><td>' + SLIPS.filter(s => s.fam === f).map(s => '<i class="pip' + (s.read ? '' : ' u') + '"></i>').join('') + '</td></tr>').join('') + '</table></div></div>' +
+      '<div class="slips">' + SLIPS.map((s, i) => s.read ?
+        '<div class="slip" style="--r:' + ((i % 5) - 2) * .4 + 'deg"><span class="sc">' + s.c + '</span><span class="sd">' + (i === 0 ? esc(s.src) + ' · ' : '') + esc(s.date) + '</span><span class="scl">' + esc(s.claim) + '</span><span class="sf">supports: ' + s.fam + (s.v ? ' · <em>' + esc(s.v) + ' [verify]</em>' : '') + '</span></div>' :
+        '<div class="slip blank" style="--r:' + ((i % 5) - 2) * .4 + 'deg"><span class="sc">' + s.c + '</span><span class="sd">' + esc(s.date) + '</span><span class="scl">UNREAD · ' + s.why + '. Blank: never paraphrased from memory.</span><span class="sf">would support: ' + s.fam + '</span></div>').join('') + '</div>' +
+      '';
+  }
+  return h + '</section>';
+};
+
+/* ---------------------------------------------------------------- the working model on tracing paper (persistent shell: sliders never rebuilt mid-drag) */
+PERSIST.model = { shell: modelShell, paint: paintModel };
+function modelShell() {
+  const socks = LEVERS.map(l => { const a = l.ev[0] / (l.max - l.min) * 100 - l.min / (l.max - l.min) * 100, b = (l.ev[1] - l.min) / (l.max - l.min) * 100, a2 = (l.ev[0] - l.min) / (l.max - l.min) * 100;
+    return '<div class="sock" id="sock-' + l.k + '"><label for="lev-' + l.k + '">' + l.name + '</label><input class="lv" id="lev-' + l.k + '" type="range" data-lev="' + l.k + '" min="' + l.min + '" max="' + l.max + '" step="1" value="' + l.def + '" style="--ea:' + a2 + '%;--eb:' + b + '%"><div class="sv"><output id="out-' + l.k + '"></output><span class="evr" title="evidence range">' + l.ev[0] + '–' + l.ev[1] + '</span></div><div class="lean" aria-hidden="true"><i id="lean-' + l.k + '"></i></div><div class="oe" id="oe-' + l.k + '"></div></div>'; }).join('');
+  const unk = UNKNOWNS.map(u => '<button type="button" class="usock" data-a="leverRefuse" ' + dp({ k: u.k }) + '><b>' + u.name + '</b><span>UNKNOWN · try to move it</span></button>').join('');
+  return '<section class="sheet" id="modelSheet" data-cap="SPEC" data-cost="FRONTIER MODEL CONTINUOUS while compiling, then NO AI REQUIRED"><header class="sh"><span class="no">SHEET F</span><h1 tabindex="-1">Working model</h1><span class="sub">graphite on tracing paper over observed ground</span><span class="grow"></span><button type="button" class="btn sm pri" data-a="go" ' + dp({ view: 'review' }) + '>Promote or discard</button></header>' +
+    '<div class="tpwrap" id="tpwrap"><div class="paper"></div><span class="tape t1"></span><span class="tape t2"></span>' +
+    '<div class="trrow1"><span class="stampbig" id="stampT">WORKING MODEL · NOT REVIEWED</span><span class="life" id="life" role="timer" aria-label="Life left of this working model"><span id="lifeK" class="lifek"></span><span>life left <b id="lifeT"></b></span><span class="ruler" aria-hidden="true">' + '<i></i>'.repeat(72) + '</span></span></div>' +
+    '<div class="trmain"><div class="lcol"><div class="gcell" data-cap="SPEC" data-cost="NO AI REQUIRED (after the compile)"><div class="gnd" data-k="OBSERVED">' + groundSVG() + '</div><div class="mk" id="mkHost"></div></div><div class="permrow" id="perm"></div></div><div class="rcol"><div id="readout"></div><div id="tblock"></div><div id="mRefuse" role="alert"></div></div></div>' +
+    '<div class="ledgerH">THE WHAT IF IS THE LEDGER OF WHAT THIS MODEL GUESSED <small>the strip on each track is the range the slips support</small></div><div class="ledger7">' + socks + '</div><div class="unkrow">' + unk + '</div></div></section>';
+}
+function paintModel() {
+  const M = S.model, a = M.lev, ans = answer(a);
+  const stat = M.status === 'REVIEWED' ? 'REVIEWED v1' : M.status === 'ISSUED' ? 'ISSUED FOR REVIEW' : 'SKETCH';
+  $('#mkHost').innerHTML = modelSVG(a, ans);
+  const oe = ans.outside.length;
+  $('#readout').innerHTML = '<div class="readout' + (oe ? ' oe' : '') + '"><span class="lbl">Answer · median buyer’s chip stock, end of 2021</span><p class="ans">' + f1(ans.lo) + '–' + f1(ans.hi) + ' days</p><p class="note">' + kc('MODELED', 'working-model v0 · authored stand-in') + '</p><p class="note"><b>scenario on a working model, not a forecast</b></p>' + (oe ? '<p class="note"><b style="color:var(--verm)">OUTSIDE EVIDENCE</b>: ' + ans.outside.map(k => LEVERS.find(l => l.k === k).name).join(', ') + '</p>' : '') + '<p class="note">Observed: under ' + SPEC_FACTS.rfi.d2021 + ' days (Commerce RFI, verify). ' + (ans.mid > SPEC_FACTS.rfi.d2021 ? 'Model middle ' + f1(ans.mid - SPEC_FACTS.rfi.d2021) + ' above: a gap, drawn.' : 'Model middle is under it.') + '</p></div>';
+  const src = SLIPS.length, rd = SLIPS.filter(s => s.read).length;
+  $('#tblock').innerHTML = '<div class="tblk" data-cap="SPEC" data-cost="NO AI REQUIRED" aria-label="Title block: WORKING MODEL · NOT REVIEWED · compiled ' + NOWTXT + ' · ' + src + ' sources (' + rd + ' read) · 4 reviewed parts · 3 generated couplings · 7 assumed · 4 unknown · hindcast: none · CHECKED: — · APPROVED: —"><div class="tb1"><b>' + (M.status === 'SKETCH' ? 'WORKING MODEL · NOT REVIEWED' : stat + ' · sketch kept') + '</b></div><div class="tb2"><span>compiled ' + NOWTXT + '</span><span>' + src + ' sources (' + rd + ' read)</span></div><div class="tb2"><span>4 reviewed parts</span><span>3 generated couplings</span></div><div class="tb2"><span>' + LEVERS.length + ' assumed</span><span>' + UNKNOWNS.length + ' unknown</span></div><div class="tb2"><span>hindcast: none</span><span>status: ' + stat + '</span></div><div class="tb2"><span>CHECKED: ' + (M.approved ? '[reviewer A]' : '—') + '</span><span>APPROVED: ' + (M.approved ? '[reviewer B]' : '—') + '</span></div></div>';
+  $('#perm').innerHTML = '<span class="lbl">What this sketch may not do</span><button type="button" class="btn sm warn" data-a="ruleRefuse" ' + dp({ w: 'follow' }) + '>Follow it</button><button type="button" class="btn sm warn" data-a="ruleRefuse" ' + dp({ w: 'embed' }) + '>Embed in a Moment</button><button type="button" class="btn sm warn" data-a="ruleRefuse" ' + dp({ w: 'ledger' }) + '>Use as a seat’s ledger</button>';
+  const leans = LEVERS.map(l => leanOf(a, l)), mx = Math.max.apply(null, leans);
+  LEVERS.forEach((l, i) => {
+    const inp = $('#lev-' + l.k); if (document.activeElement !== inp) inp.value = a[l.k];
+    $('#out-' + l.k).textContent = a[l.k] + l.unit;
+    $('#lean-' + l.k).style.width = Math.round(leans[i] / mx * 100) + '%';
+    const out = a[l.k] < l.ev[0] || a[l.k] > l.ev[1], sk = $('#sock-' + l.k);
+    sk.classList.toggle('outs', out); $('#oe-' + l.k).textContent = out ? 'OUTSIDE EVIDENCE' : (M.signs[l.k] ? M.signs[l.k].o : 'assumed');
+    inp.setAttribute('aria-valuetext', a[l.k] + l.unit + (out ? ', outside evidence' : ''));
+  });
+  $('#mRefuse').innerHTML = M.refusal ? '<div class="refuse-note">' + esc(M.refusal) + '</div>' : '';
+  $('#modelSheet').classList.toggle('discarded', M.discarded);
+  $('#stampT').textContent = M.discarded ? 'DISCARDED BY ITS AUTHOR' : M.status === 'REVIEWED' ? 'SKETCH · A REVIEWED VERSION EXISTS' : 'WORKING MODEL · NOT REVIEWED';
+  updateLife();
+}
+KNOW_MORE.plural = F => {
+  F('OBSERVED', 'Median buyer chip stock: about ' + SPEC_FACTS.rfi.d2019 + ' days (2019), under ' + SPEC_FACTS.rfi.d2021 + ' (2021)', SPEC_FACTS.rfi.src, SPEC_FACTS.rfi.asOf, true);
+  F('AUTHORED', 'Every other slip', 'an authored stand-in for a compile: class, source and date are brackets to be filled', null, true);
+  F('UNKNOWN', 'Two unread slips', 'left blank: not opened, never paraphrased', null);
+  F('AUTHORED', 'The three shortages', 'named from trade press, verify', '23 Sep 2026', true);
+};
+KNOW_MORE.model = F => {
+  F('OBSERVED', 'The ground: two points', SPEC_FACTS.rfi.src, SPEC_FACTS.rfi.asOf, true);
+  F('GENERATED', 'Model structure and couplings', 'stand-in for a compile: 4 reviewed generic parts, 3 generated couplings', null);
+  F('MODELED', 'The answer band', 'working-model v0, one authored function, run in this page; a range; hindcast: none', null);
+  F('AUTHORED', 'Seven assumptions and their ranges', 'illustrative; the toned strip is the range the slips are said to support', null);
+  F('UNKNOWN', 'Four unknowns', 'no value, no part: shown as dashed sockets', null);
+  F('COMPUTED', 'Lean bars and the gap', 'answer with each assumption moved across its range; the model’s middle minus the observed bound', null);
+};
+
+/* =====================================================================
+   PROMOTE OR DISCARD (SPECULATIVE FRONTIER) and THE WANT (PROPOSED)
+   The reviewers and their signatures are AUTHORED stand-ins; the chrome says so.
+   ===================================================================== */
+const REVIEW = {
+  d: { by: '[reviewer A]', o: 'SOURCED', note: 'sourced to the analyst-note slip (a stand-in)' },
+  L: { by: '[reviewer B]', o: 'AUTHORED', note: 'authored by the reviewer, with a stated range' },
+  D: { by: '[reviewer B]', o: 'AUTHORED', note: 'authored by the reviewer', dissent: { by: '[reviewer A]', o: 'STRUCK', note: 'would strike it: the share is contested and no slip supports a number' } },
+  T: { by: '[reviewer A]', o: 'SOURCED', note: 'sourced to the chipmaker-statement slip (a stand-in)' },
+  O: { by: '[reviewer A]', o: 'ASSUMED', note: 'left assumed: the outage slip is unread' },
+  C: { by: '[reviewer A]', o: 'AUTHORED', note: 'authored by the reviewer' },
+  R: { by: '[reviewer B]', o: 'ASSUMED', note: 'left assumed: no source found' }
+};
+const LADDER = ['SKETCH', 'ISSUED FOR REVIEW', 'REVIEWED v1', 'SUPERSEDED'];
+const sketchId = () => hash(JSON.stringify([LEVERS.map(l => l.k + l.def), SLIPS.map(s => s.fam), NOWTXT])).slice(0, 8);
+function ledgerCounts(M) { let assumed = 0, authored = 0, sourced = 0; LEVERS.forEach(l => { const s = M.signs[l.k]; if (!s || s.o === 'ASSUMED') assumed++; else if (s.o === 'AUTHORED') authored++; else sourced++; }); return { assumed: assumed, authored: authored, sourced: sourced }; }
+function ledgerLine(M) { const c = ledgerCounts(M); return Object.keys(M.signs).length ? '7 assumed → ' + c.assumed + ' assumed · ' + c.authored + ' reviewer-authored · ' + c.sourced + ' sourced' : '7 assumed'; }
+const ladderIx = M => M.status === 'REVIEWED' ? 2 : M.status === 'ISSUED' ? 1 : 0;
+
+ACTS.issue = () => { const M = S.model; M.status = 'ISSUED'; return { log: { who: 'you', kind: 'REVIEW', text: 'issued the sketch for review: seven knots routed to named reviewers ([reviewer A], [reviewer B])', clock: 'compile clock · ' + NOWTXT }, say: 'Issued for review. Seven knots wait for signatures.' }; };
+ACTS.sign = p => {
+  const M = S.model, r = REVIEW[p.k], l = LEVERS.find(x => x.k === p.k); M.signs[p.k] = r;
+  const logs = [{ who: 'reviewer', kind: 'REVIEW', text: r.by + ' signs “' + l.long + '”: ' + r.o + ' · ' + r.note, clock: 'review clock · authored stand-in' }];
+  if (r.dissent) logs.push({ who: 'reviewer', kind: 'REVIEW', text: r.dissent.by + ' dissents on “' + l.long + '”: ' + r.dissent.o + ' · ' + r.dissent.note + ' (dissent stays on the knot)', clock: 'review clock · authored stand-in' });
+  return { log: logs, say: r.by + ' signed ' + l.long + ': ' + r.o.toLowerCase() + '. ' + ledgerLine(M) };
+};
+ACTS.signRest = () => {
+  const M = S.model, logs = [];
+  LEVERS.forEach(l => { if (!M.signs[l.k]) { const r = REVIEW[l.k]; M.signs[l.k] = r; logs.push({ who: 'reviewer', kind: 'REVIEW', text: r.by + ' signs “' + l.long + '”: ' + r.o + (r.dissent ? ' · dissent by ' + r.dissent.by + ': ' + r.dissent.o : ''), clock: 'review clock · authored stand-in' }); } });
+  return { log: logs, say: 'All seven knots signed. ' + ledgerLine(M) };
+};
+ACTS.approve = () => { const M = S.model; M.status = 'REVIEWED'; M.approved = true; return { log: { who: 'reviewer', kind: 'REVIEW', text: 'approved as REVIEWED v1: a registry system with lineage to sketch #' + sketchId() + '; ' + ledgerLine(M), clock: 'review clock · authored stand-in' }, say: 'Approved as reviewed version one. The sketch stays, with lineage.' }; };
+ACTS.discard = () => { const M = S.model; M.discarded = true; return { log: { who: 'you', kind: 'DISCARD', text: 'discarded sketch #' + sketchId() + ': a tombstone keeps its seven assumptions and a receipt; a link already shared still resolves to the frozen sketch', clock: 'compile clock · ' + NOWTXT }, say: 'Sketch discarded. A tombstone remains.' }; };
+ACTS.openLink = () => { S.model.link = !S.model.link; return { log: { who: 'you', kind: 'NAV', text: S.model.link ? 'opened the shared link: it resolves to the frozen sketch, marked DISCARDED BY ITS AUTHOR' : 'closed the shared link', clock: 'session' }, say: S.model.link ? 'The shared link opens the frozen sketch: discarded by its author.' : 'Link closed.' }; };
+ACTS.follow = () => { const M = S.model; M.followed = true; return { log: { who: 'you', kind: 'ACT', text: 'followed REVIEWED v1 (allowed now: it has been reviewed; the sketch still could not be followed)', clock: 'review clock · authored stand-in' }, say: 'Following reviewed version one.' }; };
+
+function frozenLink(M, id) {
+  return '<div class="frozen" data-cap="SPEC" data-cost="NO AI REQUIRED"><div class="ribbon">DISCARDED BY ITS AUTHOR</div><p class="mono" style="margin:6px 0">bow://bench/sketch-' + id + ' · resolves to the frozen sketch, as it was</p><div class="tblk" style="max-width:560px"><div class="tb1"><b>WORKING MODEL · NOT REVIEWED</b></div><div class="tb2"><span>compiled ' + NOWTXT + '</span><span>' + SLIPS.length + ' sources (' + SLIPS.filter(s => s.read).length + ' read)</span></div><div class="tb2"><span>4 reviewed parts</span><span>3 generated couplings</span></div><div class="tb2"><span>' + LEVERS.length + ' assumed</span><span>' + UNKNOWNS.length + ' unknown</span></div><div class="tb2"><span>hindcast: none</span><span>CHECKED: — · APPROVED: —</span></div></div><p class="note" style="margin-top:6px">Nothing shared silently changes or vanishes. The answer you saw is gone with the sketch; its assumptions are kept.</p></div>';
+}
+VIEWS.review = () => {
+  const M = S.model, ix = ladderIx(M), c = ledgerCounts(M), signed = Object.keys(M.signs).length, id = sketchId();
+  const ladder = '<ol class="ladder" data-cap="SPEC" data-cost="NO AI REQUIRED">' + LADDER.map((n, i) => '<li class="' + (M.discarded && i === 0 ? 'was' : i === ix ? 'now' : i < ix ? 'past' : 'next') + '"><span>' + (i + 1) + '</span>' + n + (i === ix ? ' <b>you are here</b>' : '') + '</li>').join('') + '</ol>';
+  const rows = LEVERS.map(l => { const s = M.signs[l.k];
+    return '<div class="krv"><div><b>' + esc(l.name) + '</b> <span class="mono" style="font-size:10.5px;color:var(--graphite)">range ' + l.ev[0] + '–' + l.ev[1] + l.unit + '</span></div><div>' + (s ? kc(s.o === 'SOURCED' ? 'SOURCED' : s.o === 'AUTHORED' ? 'AUTHORED' : 'ASSUMED', s.o) : kc('ASSUMED', 'ASSUMED')) + '</div><div class="mono kn">' + (s ? '<span class="rvr">' + s.by + '</span> ' + esc(s.note) + (s.dissent ? '<br><span class="dis">DISSENT · ' + s.dissent.by + ' · ' + s.dissent.o + ': ' + esc(s.dissent.note) + '</span>' : '') : (M.status === 'ISSUED' ? 'waiting for a signature' : 'not issued')) + '</div><div>' + (M.status === 'ISSUED' && !s ? '<button type="button" class="btn sm warn" data-a="sign" ' + dp({ k: l.k }) + '>' + REVIEW[l.k].by + ' signs</button>' : '') + '</div></div>'; }).join('');
+  let act;
+  if (M.discarded) act = '';
+  else if (M.status === 'SKETCH') act = '<button type="button" class="btn pri" data-a="issue">Issue for review</button>';
+  else if (M.status === 'ISSUED') act = '<button type="button" class="btn warn" data-a="signRest"' + (signed === 7 ? ' disabled' : '') + '>Sign the rest</button><button type="button" class="btn pri" data-a="approve"' + (signed === 7 ? '' : ' disabled') + '>Approve as REVIEWED v1</button>';
+  else act = '<button type="button" class="btn you" data-a="follow"' + (M.followed ? ' disabled' : '') + '>' + (M.followed ? 'Following REVIEWED v1' : 'Follow REVIEWED v1') + '</button>';
+  const disc = M.discarded ? '' : '<button type="button" class="btn" data-a="discard">Discard the sketch</button>';
+  let after = '';
+  if (M.status === 'REVIEWED') after += '<div class="lineage" data-cap="SPEC" data-cost="NO AI REQUIRED"><b>LINEAGE</b> sketch #' + id + ' → REVIEWED v1 (a registry system) · <b>what review changed:</b> ' + c.sourced + ' sourced · ' + c.authored + ' reviewer-authored · ' + c.assumed + ' still assumed · dissent kept on “Orders twice”.<br>Holders of the old sketch see: <i>a reviewed version exists — compare.</i> Nothing they hold changed silently; the sketch itself still cannot be followed.</div>';
+  if (M.discarded) after += '<div class="tomb" data-cap="SPEC" data-cost="NO AI REQUIRED"><b>TOMBSTONE</b> · sketch #' + id + ' · discarded by its author<br>kept: the list of ' + LEVERS.length + ' assumptions and a receipt <span class="mono">' + hash(id + 'receipt').slice(0, 12) + '</span>. ' + (M.approved ? 'REVIEWED v1 stays in the registry, with lineage to a discarded sketch.' : '') + '<br>A link someone already holds does not go dead.<div class="brow" style="margin-top:6px"><button type="button" class="btn sm" data-a="openLink" aria-pressed="' + M.link + '">' + (M.link ? 'Close the shared link' : 'Open the shared link') + '</button></div>' + '</div>';
+  after = after ? '<div class="afterg">' + after + '</div>' : '';
+  return '<section class="sheet" data-cap="SPEC" data-cost="NO AI REQUIRED"><header class="sh"><span class="no">SHEET G</span><h1 tabindex="-1">Promote or discard</h1><span class="sub">status, as on a drawing</span><span class="grow"></span><button type="button" class="btn sm" data-a="go" ' + dp({ view: 'model' }) + '>Back to the tracing paper</button></header>' +
+    '<div class="standin" role="note"><b>STAND-IN.</b> Reviewers, signatures and outcomes are authored for this prototype. No review workflow exists.</div>' + ladder +
+    '<div class="revhead"><p class="bigcount" style="font-size:15px">' + ledgerLine(M) + '</p><div class="brow">' + act + disc + '</div></div>' +
+    (M.discarded && M.link ? frozenLink(M, id) : '<div class="krvh"><span>KNOT · what the model guessed</span><span>NOW</span><span>REVIEWER’S MARK</span><span></span></div>' + rows) + after + '</section>';
+};
+
+/* ---------------------------------------------------------------- THE WANT */
+ACTS.want = () => {
+  const pl = placeOf(S.q), name = pl ? pl.name + (pl.verify ? ' [verify: station]' : '') : 'no place named';
+  S.want = { filed: true };
+  return { log: { who: 'you', kind: 'WANT', text: 'left a want under ' + name + ': “' + S.q + '”. Identical wants merge; you are the only asker.', clock: 'Reality clock · ' + NOWTXT }, say: 'Want filed under ' + (pl ? pl.name : 'no place named') + '. It is an empty room until a system appears.' };
+};
+function wantSlots(q) {
+  const rel = /runs? after|after the (game|match)|tonight/i.test(q);
+  return { relation: rel ? 'runs after' : 'not named', window: rel ? 'after tonight’s game' : 'not named' };
+}
+VIEWS.want = () => {
+  const arena = FX.neighbours.find(n => n.id === 'arena'), live = FX.reality.liveEvent, R = FX.reality;
+  const q = S.q || 'Will the Green Line run after the game?';
+  const pl = placeOf(q), ns = pl && pl.id === 'ns', bos = pl && pl.id === 'bos', slots = wantSlots(q);
+  const placeName = pl ? pl.name + (pl.verify ? ' [verify: station]' : '') : 'no place named';
+  const shortQ = q.length > 34 ? q.slice(0, 33) + '…' : q;
+  const anchor = ns ? '<div class="anch"><p class="mono" style="margin:0 0 4px"><b>TD Garden · ' + esc(arena.name) + '</b> <span style="color:var(--pencil)">[verify: arena name]</span></p><p class="note">Holds ' + esc(arena.holds) + '.</p><p class="note" style="margin-top:6px">Tonight’s event: ' + kc('UNKNOWN', 'UNKNOWN') + ' <span>' + esc(live.note) + '</span></p><p class="note" style="margin-top:6px">The arena knows when the game ends. It does not run trains.</p></div>'
+    : bos ? '<div class="anch"><p class="mono" style="margin:0 0 4px"><b>' + esc(R.name) + '</b></p><p class="note">BOW holds a dated reading of this club (29 Sep 2026): its payroll against the league’s lines. It holds nothing that answers what you asked.</p></div>'
+    : '<div class="anch"><p class="mono" style="margin:0"><b>No place named, so no anchor found.</b></p><p class="note">BOW has no system near this question, so there is nothing true to stand on. It will not invent one, and it will not pick a place for you.</p></div>';
+  const miss = ns ? [['LINE STATUS', 'would be a live feed; none exists'], ['POST-GAME TIMETABLE', 'would be a dated fixture'], ['WHO CAN HOLD A TRAIN', 'would be a seat: someone with that authority']].map(m => '<div class="msock">' + kc('UNKNOWN', '') + '<span><b>needs: ' + m[0] + '</b><br>' + m[1] + '</span></div>').join('')
+    : '<div class="msock">' + kc('UNKNOWN', '') + '<span><b>needs: a system that can answer this</b><br>BOW cannot name its shape yet.</span></div>';
+  const filed = S.want.filed;
+  const room = '<div class="room"><svg viewBox="0 0 300 108" role="img" aria-label="An empty dashed room filed under ' + esc(placeName) + '" style="width:100%;display:block"><rect x="3" y="3" width="294" height="102" fill="none" stroke="#23211d" stroke-width="2" stroke-dasharray="8 6"/><text x="14" y="24" font-family="Chivo Mono,monospace" font-size="11" font-weight="700" fill="#23211d">' + esc(pl ? pl.name : 'no place named') + (ns ? ' · Green Line' : '') + '</text><text x="14" y="40" font-family="Chivo Mono,monospace" font-size="11" font-weight="700" fill="#23211d">' + (ns ? 'runs after · the game' : esc(shortQ)) + '</text><text x="14" y="57" font-family="Chivo Mono,monospace" font-size="11" fill="#5e584e">an empty room. 1 want: yours.</text><text x="14" y="72" font-family="Chivo Mono,monospace" font-size="10.5" fill="#5e584e">relation: ' + esc(slots.relation) + '</text><text x="14" y="86" font-family="Chivo Mono,monospace" font-size="10.5" fill="#5e584e">window: ' + esc(slots.window) + '</text><text x="14" y="99" font-family="Chivo Mono,monospace" font-size="10" fill="#5e584e">no chart of how many others asked</svg></div>';
+  return '<section class="sheet" data-cap="PROPOSED" data-cost="SMALL / CHEAP MODEL (near-duplicate wants only)"><header class="sh"><span class="no">SHEET H</span><h1 tabindex="-1">Want</h1><span class="sub">“' + esc(q) + '”</span></header>' +
+    '<p class="wanth">No system for this.</p><p class="note wide" style="margin-bottom:10px">BOW wrote no answer. A plausible paragraph is easy to generate, and nobody would have checked it. This is what BOW can say instead.</p>' +
+    '<div class="wcols"><div data-cap="PROPOSED" data-cost="NO AI REQUIRED"><h2>The nearest true anchor</h2>' + anchor + '</div>' +
+    '<div data-cap="PROPOSED" data-cost="NO AI REQUIRED"><h2>The shape of the missing thing</h2><div class="miss">' + miss + '</div></div>' +
+    '<div data-cap="PROPOSED" data-cost="SMALL / CHEAP MODEL"><h2>Leave a want</h2>' + (filed ? room + '<p class="note" style="margin-top:6px">Filed under ' + (pl ? 'the place your question names (' + esc(pl.name) + ')' : 'no place: your question named none') + ', not in a global chart. Identical wants merge. When a system appears it fills this room, stamped with who built it and whether it is REVIEWED, UNREVIEWED or GENERATED, and you are addressed.</p>' + (pl ? '' : '<p class="note" style="margin-top:6px">With no place named, the want waits in the unplaced room. It cannot be matched to a system until someone says where it belongs.</p>') + '<p class="note" style="margin-top:6px"><b>Promise BOW cannot keep:</b> that one will appear. It only promises the room stays yours.</p>' :
+      '<p class="note">Filed under the place it names (' + esc(placeName) + '), or under “no place named” when it names none. Never in a global chart. Identical wants merge; a small model is used only for near-duplicates.</p><button type="button" class="btn pri" data-a="want" style="margin-top:8px">Leave a want</button>') + '</div></div></section>';
+};
+KNOW_MORE.review = F => {
+  F('AUTHORED', 'Reviewers, signatures and the outcome of each knot', 'authored stand-ins for a review workflow that does not exist', null);
+  F('COMPUTED', 'The ledger line and the lineage counts', 'counted from the signatures on the knots', null);
+  F('RECORDED', 'Tombstone and receipt hash', 'SHA-256 of the sketch id (a content address, not a signature)', null);
+};
+KNOW_MORE.want = F => {
+  const pl = placeOf(S.q || 'Will the Green Line run after the game?');
+  if (pl && pl.id === 'ns') {
+    F('UNKNOWN', 'Tonight’s event', FX.reality.liveEvent.note, null);
+    F('OBSERVED', 'The arena business holds its own calendar and events', 'BOW fixture neighbours[arena]', '29 Sep 2026', true);
+    F('UNKNOWN', 'Line status, the post-game timetable, who can hold a train', 'no system, no feed, no seat known', null);
+  } else if (pl) F('OBSERVED', 'BOW holds a dated reading of ' + pl.name, 'BOW fixture reality (29 Sep 2026)', '29 Sep 2026', true);
+  else F('UNKNOWN', 'A place for this question', 'the words name no place BOW knows; nothing is guessed', null);
+  F('AUTHORED', 'The want’s slots: place, relation, window', 'authored; the place comes from a two-entry gazetteer, the rest from the words as typed; a small model would only merge near-duplicates', null);
+};
+
+/* ---------------------------------------------------------------- boot */
+render();
+
+
+})();
+</script>
+</body>
+</html>

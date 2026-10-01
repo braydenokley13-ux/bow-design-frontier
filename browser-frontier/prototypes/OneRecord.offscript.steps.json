@@ -1,0 +1,169 @@
+[
+ {
+  "wait": 900,
+  "shot": "01-fresh-offer"
+ },
+ {
+  "click": "Redeem the Offer"
+ },
+ {
+  "click": "Pick up"
+ },
+ {
+  "click": "Sign Boston"
+ },
+ {
+  "click": "Let Denver"
+ },
+ {
+  "click": "hours run",
+  "shot": "02-act-43-lands"
+ },
+ {
+  "click": "Write my standing orders"
+ },
+ {
+  "click": "Strike clause 2",
+  "shot": "03-clause-2-struck-nothing-covers-denvers-second-call"
+ },
+ {
+  "click": "Put the phone down for 14 days",
+  "shot": "04-away-the-call-lapses-the-head-is-a-no-act-entry"
+ },
+ {
+  "expectText": "no act ×2 after act 44"
+ },
+ {
+  "click": "Do these agree?",
+  "shot": "05-do-these-agree-address-line-and-head-name-one-digest"
+ },
+ {
+  "expectText": "They agree"
+ },
+ {
+  "expectText": "the address line"
+ },
+ {
+  "click": "Do these agree?"
+ },
+ {
+  "click": "Open BOW, 14 days later",
+  "shot": "06-the-round-is-read-from-the-record-lapsed-no-act"
+ },
+ {
+  "expectText": "lapsed · no act"
+ },
+ {
+  "click": "Send my answer",
+  "shot": "07-a-blank-answer-is-refused"
+ },
+ {
+  "expectText": "A blank answer would be words nobody wrote"
+ },
+ {
+  "type": [
+   "#ownertext",
+   "We will not add salary this season."
+  ]
+ },
+ {
+  "click": "Send my answer",
+  "shot": "08-the-owner-note-answered-in-the-persons-own-words"
+ },
+ {
+  "expectText": "in your own words"
+ },
+ {
+  "click": "Table",
+  "exact": true
+ },
+ {
+  "click": "Record",
+  "exact": true,
+  "shot": "09-earlier-acts-say-before-you-only-new-ones-say-you"
+ },
+ {
+  "expectText": "Boston · GM seat (before you)"
+ },
+ {
+  "open2": "OneRecord.html#s=denver.year-two&at=43&h=b9f0a0c9&b=main&seat=gm&view=room",
+  "shot": "10-a-system-this-page-does-not-hold-is-refused-not-rewritten"
+ },
+ {
+  "expectText": "this page holds boston.year-two and nothing else"
+ },
+ {
+  "click": "Do these agree?",
+  "shot": "11-do-these-agree-says-disagree-when-the-address-is-not-the-record"
+ },
+ {
+  "expectText": "DISAGREE"
+ },
+ {
+  "open2": "OneRecord.html#s=boston.year-two&at=42&h=13ca7fd4&b=main&seat=gm&view=room&lift=a40",
+  "shot": "12-lift-a40-refused-with-a-named-reason-and-a-hint"
+ },
+ {
+  "expectText": "Act 40 here is called"
+ },
+ {
+  "open2": "OneRecord.html#s=boston.year-two&at=42&h=deadbeef&b=main&seat=gm&view=room",
+  "shot": "13-a-wrong-digest-is-a-named-mismatch-address-kept-as-given"
+ },
+ {
+  "expectText": "MISMATCH: the address names act 42"
+ },
+ {
+  "click": "Do these agree?",
+  "shot": "14-disagree-when-the-address-line-differs"
+ },
+ {
+  "expectText": "DISAGREE"
+ },
+ {
+  "click": "Demo controls",
+  "shot": "15-an-observer-cannot-restart-the-stand-in-world"
+ },
+ {
+  "expectText": "Refused: seat GM is held by a live window"
+ },
+ {
+  "use": 0
+ },
+ {
+  "click": "Desk",
+  "exact": true
+ },
+ {
+  "click": "Hand the seat back",
+  "shot": "16-hand-the-seat-back-asks-first"
+ },
+ {
+  "click": "Yes, hand it back",
+  "shot": "17-the-seat-is-handed-back-act-recorded-nobody-holds-it"
+ },
+ {
+  "expectText": "Nobody holds General manager, Boston"
+ },
+ {
+  "click": "Redeem the Offer",
+  "shot": "18-redeemed-again-earlier-acts-are-not-yours"
+ },
+ {
+  "click": "Demo controls"
+ },
+ {
+  "click": "Tamper with the stored record",
+  "shot": "19-test-hook-the-store-is-edited-behind-the-writers-back"
+ },
+ {
+  "expectText": "MISMATCH"
+ },
+ {
+  "use": 1,
+  "shot": "20-another-window-reads-the-edited-store-and-says-mismatch"
+ },
+ {
+  "expectText": "MISMATCH — the stored record does not verify"
+ }
+]

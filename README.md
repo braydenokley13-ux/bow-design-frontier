@@ -50,6 +50,12 @@ These are prototypes and design evidence, not product code. None of it has been 
 - `evidence/w3-clone-test/` holds the four screenshot-only copies and the critics' probe scripts.
 - `econ/bow-economic-architecture.html` is the standalone "BOW Economic Architecture: Design Implications" page.
 - `tools/render/render.mjs` is the render harness used to play each board in headless Chromium and screenshot every state for critique.
+- `browser-frontier/` is the **BOW Browser Founding Frontier** (29–30 Sep 2026): what the native human interface to executable reality should be, with Boston basketball as the flagship and New York as a Reality City stress test.
+  - Start with `browser-frontier/BROWSER_FOUNDER_PACKET.md` (the answers) and `browser-frontier/BROWSER_FRONTIER_WAVE_1.md` (what was done and where the evidence is).
+  - `prototypes/` holds thirteen standalone interactive boards, including `OneRecord.html` (the convergence proof), `CrossJurisdiction.html` and `CrossCut.html` (the cross-domain attack) and `RealityCity.html` (real Midtown footprints). Serve `browser-frontier/` with any static server.
+  - `harness/play.mjs` replays each board's `.steps.json` in headless Chromium at any viewport and writes screenshots plus a report of errors, overflow and unlabeled controls.
+  - `research/`, `critique/` and `briefs/` hold the thirteen research reports, the independent critics and the working briefs.
+  - Everything there is design evidence. There is no `bow-browser` repository and no production Browser infrastructure.
 
 ## Medium & Protocol Frontier (`medium/`), 29 Sep 2026
 

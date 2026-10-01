@@ -1,0 +1,314 @@
+[
+ {
+  "wait": 700
+ },
+ {
+  "shot": "sealed-door"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Enter"
+ },
+ {
+  "shot": "your-act-chosen-by-keyboard"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Tab"
+ },
+ {
+  "press": "Enter"
+ },
+ {
+  "wait": 1600
+ },
+ {
+  "shot": "weeks-running"
+ },
+ {
+  "wait": 2600
+ },
+ {
+  "shot": "sheet-opens"
+ },
+ {
+  "click": "6",
+  "exact": true
+ },
+ {
+  "shot": "dots-split-at-the-call"
+ },
+ {
+  "click": "9",
+  "exact": true
+ },
+ {
+  "click": "A pile of"
+ },
+ {
+  "shot": "pile-tapped-rule"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "shot": "pile-with-know-layer"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "click": "What’s real?"
+ },
+ {
+  "shot": "sheet-whats-real"
+ },
+ {
+  "click": "What’s real?"
+ },
+ {
+  "click": "Where payroll parts"
+ },
+ {
+  "shot": "where-payroll-parts"
+ },
+ {
+  "click": "Where wins parts"
+ },
+ {
+  "shot": "where-wins-part"
+ },
+ {
+  "click": "Go to the record",
+  "nth": 0
+ },
+ {
+  "shot": "return-to-the-record"
+ },
+ {
+  "click": "Your pair",
+  "exact": true
+ },
+ {
+  "click": "Sol & Bea",
+  "exact": true
+ },
+ {
+  "shot": "two-worlds-walk"
+ },
+ {
+  "click": "Adopt Sol",
+  "nth": 0
+ },
+ {
+  "shot": "adopt-first-not-the-crux"
+ },
+ {
+  "click": "Adopt Sol",
+  "nth": 1
+ },
+ {
+  "shot": "adopt-second-closes"
+ },
+ {
+  "click": "Put both down"
+ },
+ {
+  "click": "Your pair",
+  "exact": true
+ },
+ {
+  "click": "Zed & Ana",
+  "exact": true
+ },
+ {
+  "shot": "zed-crux"
+ },
+ {
+  "click": "Sit where Zed"
+ },
+ {
+  "shot": "sit-where-she-sat"
+ },
+ {
+  "click": "Trim payroll to $199.9M"
+ },
+ {
+  "shot": "sit-act-branch"
+ },
+ {
+  "click": "Return to my own sheet",
+  "nth": 0
+ },
+ {
+  "shot": "back-on-my-sheet"
+ },
+ {
+  "click": "Forks",
+  "exact": true
+ },
+ {
+  "shot": "lineage-opens"
+ },
+ {
+  "click": "The door:"
+ },
+ {
+  "shot": "door-sealed-for-observer"
+ },
+ {
+  "click": "Ask what Reality did"
+ },
+ {
+  "shot": "door-asked"
+ },
+ {
+  "click": "Year 3 ·"
+ },
+ {
+  "shot": "lineage-year"
+ },
+ {
+  "click": "Reality arrives",
+  "exact": true
+ },
+ {
+  "click": "Let Reality arrive: 12 May 2025"
+ },
+ {
+  "shot": "seam-tatum-diverged"
+ },
+ {
+  "click": "Let Reality arrive: late Jun 2025"
+ },
+ {
+  "shot": "seam-apron-summer"
+ },
+ {
+  "click": "Let Reality arrive: 30 Jun 2025"
+ },
+ {
+  "shot": "seam-held"
+ },
+ {
+  "click": "Let Reality arrive: 5 Feb 2026"
+ },
+ {
+  "shot": "seam-impossible-no-world"
+ },
+ {
+  "click": "Read the seam for Fultz traded in 2019"
+ },
+ {
+  "shot": "seam-other-world"
+ },
+ {
+  "click": "League · Year 9",
+  "exact": true
+ },
+ {
+  "shot": "league-closed-by-pin"
+ },
+ {
+  "click": "Try the trade with Philadelphia"
+ },
+ {
+  "shot": "closure-refused"
+ },
+ {
+  "click": "Pin Philadelphia at Year 9"
+ },
+ {
+  "shot": "pin-is-a-hole"
+ },
+ {
+  "click": "Declare Philadelphia"
+ },
+ {
+  "shot": "declared"
+ },
+ {
+  "click": "Try the trade again"
+ },
+ {
+  "shot": "trade-runs-in-the-fork"
+ },
+ {
+  "click": "Year 5 ·"
+ },
+ {
+  "click": "Fork from Year 5"
+ },
+ {
+  "shot": "fork-again-preview"
+ },
+ {
+  "fill": [
+   "#nm",
+   "Room in Year 5"
+  ]
+ },
+ {
+  "click": "Goes (as Reality)",
+  "nth": 0
+ },
+ {
+  "click": "Keep my fork"
+ },
+ {
+  "shot": "sub-fork-kept"
+ },
+ {
+  "click": "Read the seam for my fork"
+ },
+ {
+  "shot": "seam-for-my-fork"
+ },
+ {
+  "click": "Return to Reality, now"
+ },
+ {
+  "shot": "return-to-reality"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "shot": "layer-how-do-we-know"
+ },
+ {
+  "click": "What’s real?"
+ },
+ {
+  "shot": "layer-whats-real"
+ },
+ {
+  "click": "Doors",
+  "exact": true
+ },
+ {
+  "shot": "return-to-doors"
+ }
+]

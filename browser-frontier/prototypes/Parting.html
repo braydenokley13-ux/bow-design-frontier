@@ -1,0 +1,1277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Parting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="_shared/boston-fixture.js"></script>
+<style>
+:root{
+  --paper:#f2ecdb; --sheet:#f8f4e6; --sheet2:#efe8d3;
+  --ink:#15120e; --pencil:#57534a; --faint:#8d8878; --rule:#b9b39f;
+  --you:#1f3f8f; --a1:#9b2c1c; --a2:#2c6b3f;
+  --serif:'Crimson Pro',Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  --grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M24 0V120M48 0V120M72 0V120M96 0V120M0 24H120M0 48H120M0 72H120M0 96H120' stroke='%23386675' stroke-opacity='.11' fill='none'/%3E%3Cpath d='M0 0V120M0 0H120' stroke='%23386675' stroke-opacity='.22' fill='none'/%3E%3C/svg%3E");
+  --stip:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='5'%3E%3Ccircle cx='1' cy='1' r='.75' fill='%2315120e'/%3E%3Ccircle cx='3.5' cy='3.5' r='.75' fill='%2315120e'/%3E%3C/svg%3E");
+  --hatch:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Cpath d='M0 6L6 0' stroke='%2315120e' stroke-width='1'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font:400 17px/1.38 var(--serif);color:var(--ink);background:var(--paper) var(--grid);overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit}
+button:disabled{cursor:not-allowed}
+:focus-visible{outline:3px solid var(--you);outline-offset:2px}
+h1,h2,h3,h4,p,ul,ol,dl,dd{margin:0}
+.mono{font-family:var(--mono)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#app{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;height:100vh}
+
+/* ---------- top ---------- */
+.top{display:flex;align-items:center;gap:14px;padding:6px 20px;border-bottom:3px double var(--ink);background:var(--paper) var(--grid)}
+.brand{font:600 13px var(--mono);letter-spacing:.14em;white-space:nowrap}
+.brand span{margin-left:8px;padding:1px 6px;border:1.5px solid var(--ink);letter-spacing:0}
+.addr{flex:1;min-width:0;font:400 12px var(--mono);color:var(--pencil);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-bottom:1.5px solid var(--pencil);padding:4px 2px}
+.nav{display:flex;gap:6px}
+.tab,.tg{min-height:44px;padding:0 14px;border:1.5px solid var(--ink);font:600 12px var(--mono);letter-spacing:.04em;background:var(--sheet)}
+.tab[aria-pressed="true"],.tg[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.tgs{display:flex;gap:6px}
+
+/* ---------- book ---------- */
+.book{display:grid;grid-template-columns:minmax(0,1fr) 392px;padding:12px 20px 8px;min-height:0}
+.page{background:var(--sheet) var(--grid);border:1.5px solid var(--ink);min-height:0;position:relative}
+.page.left{padding:12px 18px 10px;overflow:auto}
+.page.margin{display:flex;flex-direction:column;border-left:5px double var(--ink);background:var(--sheet2) var(--grid)}
+.mbody{flex:1;min-height:0;overflow:auto;padding:12px 14px}
+.rec{border-top:3px double var(--ink);padding:5px 14px 6px;height:112px;overflow:auto;background:var(--sheet);position:relative}
+.rec h4,.mh{font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.mh{margin-bottom:8px;font-size:12.5px}
+.rec .h{display:flex;justify-content:space-between;align-items:center;gap:8px;font:400 11px var(--mono);color:var(--pencil);margin-bottom:4px}
+.trl{min-height:32px;padding:0 10px;border:1.5px solid var(--ink);font:600 11px var(--mono);background:var(--sheet);color:var(--ink);flex:none}
+.trl[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.rec ol{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:3px}
+.rec li{font:400 11.5px/1.3 var(--mono);border-bottom:1px solid var(--rule);padding-bottom:2px}
+.rec li b{font-weight:600}
+.rec li small{display:block;color:var(--pencil);font-size:10.5px}
+.status{display:flex;justify-content:space-between;gap:16px;padding:5px 20px 6px;font:400 11px var(--mono);color:var(--pencil);border-top:1px solid var(--rule)}
+.status span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+
+/* ---------- kinds: the seven textures ---------- */
+.sw{display:inline-block;width:20px;height:9px;border:1.5px solid var(--ink);vertical-align:0;margin-right:6px;flex:none}   /* a bar: a hollow square beside text reads as an unchecked box */
+.k-OBSERVED{background:var(--ink)}
+.k-RECORDED{background:var(--ink);box-shadow:inset 0 0 0 1.5px var(--sheet)}
+.k-AUTHORED{background:transparent}
+.k-COMPUTED{background:rgba(21,18,14,.22)}
+.k-MODELED{background:var(--sheet) var(--hatch)}
+.k-GENERATED{background:var(--sheet) var(--stip)}
+.k-UNKNOWN{background:transparent;border-style:dashed}
+.legend{display:none;flex-wrap:wrap;gap:4px 12px;margin-bottom:10px;padding:8px 10px;border:1.5px solid var(--ink);background:var(--sheet);font:400 11px var(--mono)}
+.know .legend{display:flex}
+.legend span{display:inline-flex;align-items:center}
+[data-kn]::after{display:none}
+.know [data-kn]::after{display:inline;content:'  ⟨' attr(data-kn) '⟩';font:400 10.5px/1.3 var(--mono);color:var(--you);font-style:normal}
+.tline{display:none;margin-top:10px;padding:8px 10px;border:1.5px solid var(--you);color:var(--you);font-style:italic}
+.know .tline{display:block}
+.tline b{font:600 11px var(--mono);letter-spacing:.06em;font-style:normal;display:block}
+/* capability overlay */
+.real [data-cap]{outline:1.5px solid var(--ink);outline-offset:-1px}
+.real [data-cap]::before{content:attr(data-cap);position:absolute;right:0;top:0;z-index:9;max-width:88%;background:var(--ink);color:var(--sheet);font:600 9.5px/1.25 var(--mono);letter-spacing:.02em;padding:2px 6px;pointer-events:none}
+.real [data-cap] [data-cap]::before{top:auto;bottom:0}
+.real .pairs[data-cap]::before,.real .rec[data-cap]::before{top:auto;bottom:0}
+[data-cap]{position:relative}
+
+/* ---------- shelf ---------- */
+.shelf{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;margin-bottom:8px;font:400 11px var(--mono)}
+.shelf .lab{letter-spacing:.08em;color:var(--pencil);margin-right:4px}
+.idx{padding:4px 10px;border:1.5px solid var(--ink);border-bottom-width:3px;background:var(--sheet);font:400 12px/1.25 var(--serif);min-height:32px;display:inline-flex;align-items:center}
+button.idx:hover{background:var(--sheet2)}
+.idx.on{background:var(--ink);color:var(--sheet)}
+.eyebrow{font:600 11.5px var(--mono);letter-spacing:.1em;color:var(--pencil)}
+
+/* ---------- the door ---------- */
+.door h1{font:700 40px/1.04 var(--serif);margin:4px 0 6px}
+.door .seat{color:var(--pencil);font-style:italic}
+.desk{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:12px 0 0;border-top:1.5px solid var(--ink)}
+.desk>div{padding:8px 12px 8px 0}
+.desk dt{font:600 11px var(--mono);letter-spacing:.06em;color:var(--pencil);text-transform:uppercase}
+.desk dd{font-size:17px}
+.desk b{font-weight:700}
+.movesh{margin:14px 0 4px;font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.moves{display:grid;grid-template-columns:repeat(3,1fr);border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+.move{position:relative;display:flex;flex-direction:column;gap:4px;padding:12px 14px 12px 20px;min-height:120px;border-right:1px solid var(--pencil)}
+.move:last-child{border-right:0}
+.move[aria-pressed="true"]{background:rgba(31,63,143,.09);box-shadow:inset 8px 0 0 var(--you)}
+.move[aria-pressed="true"] .t::after{content:'  · chosen';font:600 11px var(--mono);letter-spacing:.06em;color:var(--you)}
+.move:hover{background:rgba(21,18,14,.05)}
+.move .t{font:700 22px/1.1 var(--serif)}
+.move .d{font-size:16px}
+.move .n{font:400 12.5px var(--mono);color:var(--pencil)}
+.commit{display:flex;align-items:center;gap:16px;margin-top:12px;min-height:52px}
+.go{min-height:48px;padding:0 20px;background:var(--ink);color:var(--sheet);font:600 14px var(--mono);letter-spacing:.03em}
+.go:disabled{background:transparent;color:var(--faint);border:1.5px dashed var(--faint)}
+.commit .hint{color:var(--pencil);font-style:italic;font-size:16px}
+.sealedsheet{margin-top:12px;border:2px dashed var(--pencil);padding:14px 18px;min-height:140px;display:grid;grid-template-rows:repeat(3,26px) auto;gap:8px;align-content:center;color:var(--pencil)}
+.sealedsheet i{display:block;border-bottom:1.5px dashed var(--rule)}
+.sealedsheet p{font-style:italic;font-size:19px;text-align:center;color:var(--ink)}
+
+/* ---------- the sheet ---------- */
+.dhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:6px}
+.dhead h2{font:700 27px/1.05 var(--serif)}
+.dhead .fixed{font-size:16px;text-align:right;max-width:52%;line-height:1.2}
+.dotkey{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:-2px;margin-right:4px}
+.weekbar{display:flex;align-items:center;gap:8px;margin:4px 0 6px;font:600 11px var(--mono);letter-spacing:.08em}
+.wk{min-width:44px;min-height:40px;border:1.5px solid var(--ink);text-align:center;font:600 14px var(--mono);background:var(--sheet)}
+.wk[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.run{min-height:40px;padding:0 12px;border:1.5px solid var(--ink);font:600 12px var(--mono);background:var(--sheet)}
+.weekbar .note{margin-left:auto;font:400 11px var(--mono);letter-spacing:0;color:var(--pencil)}
+.sheet{border-top:2px solid var(--ink)}
+.ln{display:grid;grid-template-columns:168px minmax(0,1fr);border-bottom:1px solid var(--pencil)}
+.lbl{padding:6px 10px 6px 0;display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.lbl h3{font:700 18px/1.1 var(--serif)}
+.lbl .sub{font:400 11px var(--mono);color:var(--pencil)}
+.pbtn{margin-top:auto;min-height:32px;padding:0 8px;border:1.5px solid var(--ink);font:600 11px var(--mono);background:var(--sheet)}
+.pbtn[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.plot{position:relative;height:130px;border-left:1px solid var(--rule)}
+.ln[data-line=payroll] .plot{height:clamp(112px,16.5vh,150px)}
+.ln[data-line=tax] .plot{height:clamp(80px,11vh,104px)}
+.ln[data-line=wins] .plot{height:clamp(76px,10.5vh,98px)}
+.plot .ax{position:absolute;left:0;right:0;bottom:22px;border-top:1.5px solid var(--ink)}
+.plot .tk{position:absolute;bottom:6px;transform:translateX(-50%);font:400 10.5px var(--mono);color:var(--pencil)}
+.plot .tm{position:absolute;bottom:17px;width:1px;height:5px;background:var(--ink)}
+.plot .vt{position:absolute;bottom:22px;width:1.5px;height:6px;background:var(--pencil)}
+.dot{position:absolute;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--ink);background:var(--sheet);padding:0}
+.dot::after{content:'';position:absolute;inset:-5px}
+.dot:hover{border-width:2.5px}
+.dot.me{background:var(--you);border-color:var(--you);box-shadow:inset 0 0 0 2px var(--sheet),inset 0 0 0 3px var(--you),0 0 0 3px var(--sheet),0 0 0 4.5px var(--you);z-index:3}
+.dot.pick{z-index:4;border-width:3px}
+.dot .n{position:absolute;left:50%;top:-17px;transform:translateX(-50%);font:600 11px var(--mono);color:var(--ink);background:var(--sheet);padding:0 3px;display:none}
+.dot.pick .n{display:block}
+.dot.seat{z-index:4}
+.dot.seat::before{content:'';position:absolute;inset:-7px;border:2px solid var(--ink)}
+.rectick{position:absolute;top:2px;bottom:22px;width:2px;background:var(--ink);box-shadow:3px 0 0 var(--sheet),4px 0 0 var(--ink);z-index:1}
+.rtl{position:absolute;top:1px;min-height:22px;padding:0 5px;font:600 10.5px var(--mono);white-space:nowrap;background:var(--sheet);border:1.5px solid var(--ink);z-index:6}
+.rtl:hover{background:var(--ink);color:var(--sheet)}
+.unkmk{position:absolute;top:4px;right:6px;border:1.5px dashed var(--pencil);color:var(--pencil);font:400 10.5px var(--mono);padding:1px 6px;background:var(--sheet)}
+.rulemk{position:absolute;top:14px;bottom:22px;width:10px;border:1.5px solid var(--ink);background:transparent;z-index:1}
+.rulemk.fresh{transform-origin:bottom;animation:draw .55s ease-out both}
+.rulemk.fresh span{animation:fadein .5s .35s both}
+@keyframes draw{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.rulemk span{position:absolute;top:-13px;left:14px;font:600 11px var(--mono);white-space:nowrap;background:var(--sheet);border:1.5px solid var(--ink);padding:1px 6px}
+.pilebtn{position:absolute;min-height:26px;padding:3px 8px 0;border:1.5px solid var(--pencil);border-bottom:0;font:600 10.5px/1.2 var(--mono);text-align:center;background:var(--sheet);z-index:5;white-space:nowrap}
+.pilebtn[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+.parting{position:absolute;top:0;left:0;background:var(--ink);color:var(--sheet);font:600 10.5px var(--mono);letter-spacing:.06em;padding:2px 8px;z-index:6}
+.rl .rbody{display:flex;align-items:center;gap:14px;padding:3px 0 3px 12px;min-height:38px}
+.outbox{display:inline-flex;align-items:baseline;gap:8px;border:2px solid var(--ink);padding:3px 12px;font:700 19px var(--serif);background:transparent}
+.rl em{font-size:16px;color:var(--pencil)}
+.rl h3{font-size:16px}
+.pairs{display:flex;flex-wrap:wrap;gap:2px 6px;margin-top:8px;align-items:center}
+.pairs .lab{font:600 11px var(--mono);letter-spacing:.08em;color:var(--pencil);margin-right:4px}
+.pairbtn{min-height:40px;padding:2px 9px 2px 6px;display:inline-flex;align-items:center;gap:6px;border:1.5px solid transparent;font-size:16px}
+.pairbtn:hover{border-color:var(--rule)}
+.pairbtn[aria-pressed="true"]{border-color:var(--ink);background:var(--sheet2);font-weight:700}
+.pairbtn .pin{width:10px;height:10px;border-radius:0;transform:rotate(45deg);border:1.5px solid var(--ink);background:var(--ink);flex:0 0 auto;margin:0 2px}
+.pairbtn.me .pin{background:var(--you);border-color:var(--you)}
+
+/* ---------- margin cards ---------- */
+.mbody p{margin:0 0 8px}
+.mbody .small{font-size:15px;color:var(--pencil)}
+.how{list-style:none;padding:0;margin:8px 0;display:flex;flex-direction:column;gap:6px;font-size:16px}
+.how li{display:flex;align-items:baseline}
+.rt{display:inline-block;width:2px;height:14px;background:var(--ink);box-shadow:3px 0 0 var(--sheet),4px 0 0 var(--ink);margin:0 10px 0 4px;vertical-align:-2px}
+.stamp{border:2px solid var(--ink);box-shadow:inset 0 0 0 3px var(--sheet),inset 0 0 0 4.5px var(--ink);padding:12px 14px;margin:8px 0;background:var(--sheet)}
+.stamp b{display:block;font:700 22px/1.15 var(--serif)}
+.stamp small{display:block;margin-top:4px;font:400 11px/1.35 var(--mono);color:var(--pencil)}
+.strata{display:grid;gap:0;margin:8px 0;border:1.5px solid var(--ink)}
+.strata>div{padding:6px 10px;font-size:15px;border-bottom:1px solid var(--pencil)}
+.strata>div:last-child{border-bottom:0}
+.strata .b1{box-shadow:inset 0 0 0 2px var(--sheet),inset 0 0 0 3px var(--ink);background:rgba(21,18,14,.05)}
+.strata .b2{display:flex;flex-wrap:wrap;gap:4px 8px;font-weight:600;background:var(--sheet)}
+.strata .b2 span{border:1.5px solid var(--ink);padding:0 8px;font-weight:400}
+.strata .b3{background:var(--sheet);color:var(--ink)}
+.strata .b3 span{background:var(--sheet);padding:0 4px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.chip{border:1.5px solid var(--ink);padding:2px 10px;font:600 13px var(--serif);background:var(--sheet)}
+.chip.me{border-color:var(--you);color:var(--you)}
+.walk{list-style:none;padding:0;margin:8px 0;counter-reset:w}
+.walk li{position:relative;padding:2px 0 4px 34px;border-left:2px solid var(--ink);margin-left:10px}
+.walk li::before{counter-increment:w;content:counter(w);position:absolute;left:-13px;top:4px;width:24px;height:24px;background:var(--ink);color:var(--sheet);font:600 12px/24px var(--mono);text-align:center}
+.walk li:nth-child(1)::before{background:var(--sheet);color:var(--ink);border:2px solid var(--ink);line-height:20px}
+.walk b{font:600 11.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;display:block}
+.walk p{margin:1px 0 0;font-size:15px;line-height:1.25}
+.diff{border-top:1px solid var(--pencil);padding:5px 0 6px;display:grid;grid-template-columns:minmax(0,1fr) 116px;column-gap:8px;align-items:center}
+.diff b{grid-column:1/3}
+.diff .vals{grid-column:1;min-width:0}
+.diff b{font:600 12px var(--mono);letter-spacing:.04em}
+.diff p{margin:0;font-size:15px;line-height:1.25}
+.adopt{min-height:44px;padding:2px 6px;border:1.5px solid var(--ink);font:600 10.5px/1.25 var(--mono);background:var(--sheet);display:block;width:100%;text-align:center}
+.adopt[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.rerun{border:2px solid var(--you);padding:6px 10px 8px;margin:8px 0;background:var(--sheet)}
+.rerun table{border-collapse:collapse;width:100%;font:400 12.5px var(--mono)}
+.rerun td,.rerun th{padding:3px 4px;text-align:right;border-bottom:1px solid var(--rule)}
+.rerun th{text-align:left;font-weight:600}
+.rerun .v{margin-top:5px;font:700 16.5px/1.2 var(--serif)}
+.rerun .frame{position:static;border:0;padding:0;margin:0 0 3px;background:none;font:600 10px var(--mono);letter-spacing:.05em;color:var(--you)}
+.btn{min-height:44px;padding:0 14px;border:1.5px solid var(--ink);font:600 12.5px var(--mono);background:var(--sheet);display:inline-flex;align-items:center;letter-spacing:.02em}
+.btn.solid{background:var(--ink);color:var(--sheet)}
+.btn:hover{background:var(--sheet2)} .btn.solid:hover{background:#3a352c}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.recl{list-style:none;padding:0;margin:8px 0;font-size:15.5px;line-height:1.25}
+.recl li{border-top:1px solid var(--rule);padding:4px 0}
+.ledger{display:grid;gap:8px;margin:8px 0}
+.ledger>div{border:1.5px solid var(--ink);padding:6px 10px;background:var(--sheet)}
+.ledger h4{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.ledger ul{margin:0;padding-left:18px;font-size:15.5px}
+.ledger li{margin:2px 0}
+.ledger .gone{border-style:dashed}
+.seatpage h2{font:700 30px/1.05 var(--serif);margin:4px 0 6px}
+.frame{border:2px solid var(--you);padding:10px 14px;margin:12px 0;background:var(--sheet);position:relative}
+.frame .stampline{position:absolute;top:-11px;left:12px;white-space:nowrap;max-width:92%;background:var(--sheet);padding:0 8px;font:600 11px var(--mono);letter-spacing:.05em;color:var(--you)}
+.frame p{margin:4px 0}
+.unk{border:1.5px dashed var(--pencil);padding:2px 8px;color:var(--pencil);display:inline-block;font-size:15px}
+.sit-note{font-size:17px;max-width:66ch;margin:6px 0}
+.sw3{display:flex;align-items:center;gap:4px;margin:3px 0}
+.sw3 span{flex:none;width:86px;font-size:13px;line-height:1.1}
+.sw3 .btn{min-height:40px;font-size:10.5px;padding:0 8px}
+.sw3 .btn[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.key{display:flex;flex-wrap:wrap;gap:2px 10px;font:400 10.5px var(--mono);margin:4px 0 6px}
+.key span{display:inline-flex;align-items:center;gap:2px}
+.key .vg{width:24px;height:16px}
+/* ---------- part 2: the lineage ---------- */
+.cover{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:8px}
+.cover h1{font:700 31px/1.05 var(--serif);color:var(--a1)}
+.cover .by{font:400 12px var(--mono);color:var(--pencil);margin-top:2px}
+.pubstamp{border:2px solid var(--a1);box-shadow:inset 0 0 0 3px var(--sheet),inset 0 0 0 4.5px var(--a1);color:var(--a1);padding:6px 12px;font:600 10.5px/1.35 var(--mono);letter-spacing:.05em;text-align:center;max-width:250px}
+.core{display:grid;grid-template-columns:62px 96px minmax(190px,1fr) 172px 172px;border-top:2px solid var(--ink)}
+.yr{display:contents}
+.colab{display:none}
+.core .cy,.core .cr,.core .cf,.core .cs{border-bottom:1px solid var(--rule);min-height:clamp(36px,4.5vh,42px);min-width:0}
+.core .ch{min-height:44px;padding:4px 8px;font:600 11.5px/1.25 var(--serif);border-bottom:2px solid var(--ink);display:flex;flex-direction:column;justify-content:flex-end}
+.core .ch small{font:400 10px var(--mono);color:var(--pencil)}
+.core .ch.slot{border:1.5px dashed var(--pencil);border-bottom:2px solid var(--ink);color:var(--pencil);font-weight:400;font-style:italic}
+.cy{padding:3px 6px;font:600 11px var(--mono)}
+.cy small{display:block;font-weight:400;font-size:9.5px;color:var(--pencil)}
+.cr{position:relative}
+.cr::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:2px;background:var(--ink)}
+.cr .tk2{position:absolute;left:20px;height:2px;width:16px;background:var(--ink)}
+.cr .tk2.later{height:1px;opacity:.55}
+.cr .rd{position:absolute;left:40px;font:400 10px/1 var(--mono);white-space:nowrap}
+.cr .rd b{font-weight:600}
+.cf,.cs{position:relative;display:flex;align-items:center;gap:6px;padding:3px 6px 3px 10px;font-size:14.5px;line-height:1.15;text-align:left;border:1.5px solid var(--ink2,var(--a1));border-left-width:4px;background:var(--sheet)}
+.cf{color:var(--ink)}
+.cf .sw,.cs .sw{border-color:var(--ink2,var(--a1))}
+.cf::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:5px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='5'%3E%3Cpath d='M0 2.5Q5.5 0 11 2.5T22 2.5' stroke='%2357534a' stroke-width='.9' fill='none'/%3E%3C/svg%3E") repeat-x;pointer-events:none;z-index:2}
+.cf.trialrow{}
+button.cf:hover{background:var(--sheet2)}
+.cf .txt,.cs .txt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cs{font-size:12.5px}
+.cs.pre{border-left:2px dotted var(--pencil);background:transparent;color:var(--pencil);font:400 10px var(--mono);white-space:nowrap;overflow:hidden;align-items:flex-end;padding-bottom:1px}
+.cs.void{border-left:0;background:transparent}
+.cs.mine{border-left-color:var(--you);background:transparent;color:var(--pencil);font-style:italic}
+.cs.emp{border-style:dashed;border-left-style:dashed}
+.cs .tab2{position:absolute;top:0;left:-4px;transform:translateY(-100%);background:var(--ink2);color:var(--sheet);font:600 10px/1 var(--mono);padding:2px 5px;white-space:nowrap;z-index:3}
+.crowsel{background:rgba(21,18,14,.07)!important;box-shadow:inset 0 0 0 2px var(--ink)}
+.vg{width:28px;height:18px;flex:none;color:var(--ink)}
+.trial{flex:none;border:1.5px solid var(--you);color:var(--you);font:600 9.5px var(--mono);padding:1px 4px}
+.ltabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:8px}
+.ltab{min-height:46px;border:1.5px solid var(--ink);font:600 10.5px/1.2 var(--mono);text-align:center;background:var(--sheet);padding:0 3px}
+.ltab[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.stamp.a1{border-color:var(--a1);box-shadow:inset 0 0 0 3px var(--sheet),inset 0 0 0 4.5px var(--a1);color:var(--ink)}
+.stamp.a1 b{color:var(--a1)}
+.seats{list-style:none;padding:0;margin:6px 0;display:grid;gap:8px}
+.seats li{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:start;border-top:1px solid var(--pencil);padding-top:6px;font-size:15.5px;line-height:1.25}
+.seats b{font:600 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;display:block}
+.seats .who{width:54px;height:54px;border:2px solid var(--a1);display:flex;align-items:center;justify-content:center;font:600 9px var(--mono);text-align:center;color:var(--a1)}
+.seats svg{width:54px;height:54px;display:block}
+.decls{list-style:none;padding:0;margin:6px 0;font:400 11.5px/1.35 var(--mono)}
+.decls li{border-top:1px solid var(--rule);padding:3px 0}
+.decls em{display:block;font:400 15px var(--serif);color:var(--pencil)}
+.sw2{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 10px}
+.sw2 .btn{min-height:40px;font-size:11px;padding:0 10px}
+.sw2 .btn[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.evs{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}
+.evc{min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:0 8px;border:1.5px solid var(--ink);background:var(--sheet);font:600 10.5px var(--mono)}
+.evc .gl{display:flex}
+.evc .vg{width:22px;height:14px}
+.evc[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.evc[aria-pressed="true"] .vg{color:var(--sheet)}
+.vlist{list-style:none;padding:0;margin:4px 0;display:grid;gap:0}
+.vd{display:grid;grid-template-columns:34px 1fr;gap:8px;border-top:1.5px solid var(--ink);padding:7px 0}
+.vd .vw{font:700 12px var(--mono);letter-spacing:.06em}
+.vd .vg{width:32px;height:20px}
+.vd p{margin:2px 0;font-size:15.5px;line-height:1.28}
+.vd p.q{font:400 11px var(--mono);color:var(--pencil)}
+.vd.old{display:block;padding:3px 0}
+.vd.old button{display:contents}
+.nowh{border:2px dashed var(--ink);padding:8px 10px;margin:8px 0;background:transparent}
+.nowh b{font:700 12px var(--mono);letter-spacing:.06em;display:block}
+.rack{display:grid;grid-template-columns:repeat(15,1fr);gap:4px 2px;margin:6px 0 4px;justify-items:center}
+.rk{display:flex;flex-direction:column;align-items:center;gap:1px;font:600 8.5px var(--mono);height:30px}
+.rk i{width:18px;height:18px;border-radius:50%;background:var(--ink);display:block}
+.rk.bos i{background:var(--a1);box-shadow:inset 0 0 0 2.5px var(--sheet),inset 0 0 0 4px var(--a1)}
+.rk.phi i{background:transparent;border:2px dashed var(--ink)}
+.rk.phi.done i{border:2px solid var(--you);background:transparent}
+.lock{font:400 11px/1.45 var(--mono);border:1.5px solid var(--ink);padding:5px 9px;background:var(--sheet);margin:4px 0;white-space:pre-wrap}
+.lock b{font-weight:600}
+.lock .a{color:var(--a1)} .lock .y{color:var(--you)}
+.refuse{border:2px solid var(--ink);box-shadow:inset 0 0 0 3px var(--sheet),inset 0 0 0 4.5px var(--ink);padding:8px 12px;margin:6px 0;background:var(--sheet)}
+.refuse p{margin:0;font-size:15.5px;line-height:1.28}
+.refuse b{display:block;font:700 12px var(--mono);letter-spacing:.06em}
+.refuse .rule{font:600 12px var(--mono);margin:6px 0;padding:3px 6px;border:1.5px solid var(--ink);display:inline-block}
+.hole{border:1.5px dashed var(--pencil);padding:6px 10px;margin:6px 0;color:var(--pencil);font-size:15px}
+.sealtxt{border:1.5px solid var(--ink);padding:8px 10px;margin:8px 0;background:var(--sheet)}
+.sealtxt.unk{border-style:dashed;color:var(--pencil)}
+.yrs li{margin:3px 0}
+input.nm{width:100%;min-height:44px;border:1.5px solid var(--you);background:var(--sheet);font:600 17px var(--serif);padding:0 10px;color:var(--ink)}
+label.lb{display:block;font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;margin:8px 0 3px}
+
+/* ---------- a real phone layout (not a picture of a phone): one column, the sheet, then the margin, then the record ---------- */
+@media (max-width:700px){
+  html,body{height:auto}
+  body{overflow:auto;font-size:16px}
+  #app{display:block;height:auto}
+  .top{flex-wrap:wrap;gap:6px 10px;padding:6px 10px}
+  .addr{order:5;flex:1 1 100%;white-space:normal;overflow:visible;text-overflow:clip;font-size:11px;line-height:1.3}
+  .nav{flex:1 1 auto}.nav .tab{flex:1}
+  .tgs{flex:1 1 100%}.tgs .tg{flex:1;padding:0 6px}
+  .tab,.tg{padding:0 10px}
+  .book{display:block;padding:8px 8px 6px}
+  .page.left{padding:10px 10px 12px;overflow:visible}
+  .page.margin{margin-top:10px;border-left:1.5px solid var(--ink);border-top:5px double var(--ink)}
+  .mbody{overflow:visible;padding:10px}
+  .rec{height:auto;max-height:280px;padding:5px 10px 6px}
+  .status{flex-direction:column;gap:2px;padding:5px 10px}
+  .status span{white-space:normal;overflow:visible}
+  .door h1{font-size:28px}
+  .desk,.moves{grid-template-columns:minmax(0,1fr)!important}
+  .desk>div{padding:6px 0}
+  .move{min-height:0;border-right:0;border-bottom:1px solid var(--pencil)}
+  .move:last-child{border-bottom:0}
+  .commit{flex-wrap:wrap;gap:8px}
+  .go{width:100%}
+  .dhead{flex-direction:column;align-items:flex-start;gap:4px}
+  .dhead h2{font-size:23px}
+  .dhead .fixed{max-width:none;text-align:left}
+  .weekbar{flex-wrap:wrap}
+  .weekbar .note{margin-left:0;flex:1 1 100%}
+  .ln{grid-template-columns:minmax(0,1fr)}
+  .lbl{flex-direction:row;align-items:center;flex-wrap:wrap;gap:6px 10px;padding:6px 0 2px}
+  .pbtn{margin-top:0}
+  .plot{border-left:0}
+  .rl .rbody{padding-left:0;flex-wrap:wrap;gap:6px 10px}
+  .pairs{gap:2px 4px}
+  .pairbtn{font-size:15px}
+  .tab2,.cs .tab2{position:static;transform:none;display:inline-block;margin-right:6px}
+  /* the lineage: one block per season, Reality first, then the fork, then the branches */
+  .core{display:block;border-top:2px solid var(--ink)}
+  .core .ch{display:none}
+  .core .yr{display:block;border-bottom:2px solid var(--ink);padding:4px 0 6px}
+  .core .cy{display:flex;align-items:baseline;gap:8px;border-bottom:0;padding:2px 4px;min-height:0}
+  .core .cy small{display:inline}
+  .core .cr,.core .cf,.core .cs{display:block;position:relative;width:100%;min-height:40px;margin:3px 0}
+  .core .cf{display:flex;min-height:44px}
+  .core .cs.void{display:none}
+  .core .cs.pre{min-height:22px}
+  .colab{display:block;font:600 9.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--pencil);padding:0 0 1px 2px}
+  .cr{min-height:44px}
+  .cr .colab{position:absolute;left:0;top:0}
+  .cr::before{top:12px}
+  .cr .tk2{margin-top:10px}
+  .cr .rd{margin-top:10px}
+  .cs .colab{position:absolute;top:1px;right:6px;padding:0}
+  .cs{padding-top:12px}
+  .cover{flex-direction:column;align-items:flex-start;gap:8px}
+  .cover h1{font-size:26px}
+  .pubstamp{max-width:none}
+  .ltabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rack{grid-template-columns:repeat(10,1fr)}
+  .diff{grid-template-columns:minmax(0,1fr)}
+  .sw3{flex-wrap:wrap}
+  .sw3 span{width:100%}
+  .seatpage h2{font-size:24px}
+  .btn,.pbtn,.adopt{white-space:normal;text-align:center}
+  .frame .stampline{position:static;display:block;white-space:normal;max-width:none;padding:0;margin:0 0 4px;line-height:1.25}
+  .ln[data-line=payroll] .plot{height:176px}
+  .rulemk span{top:14px;white-space:normal;width:180px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-height:820px){
+  .sealedsheet{padding:8px 18px;min-height:0;grid-template-rows:repeat(2,20px) auto}
+  .sealedsheet i:nth-of-type(3){display:none}
+  .door .seat{margin-bottom:0}
+  .rec{height:92px}
+  .rec li small{display:none}
+  .door h1{font-size:34px}
+  .move{min-height:104px}
+  .dhead h2{font-size:24px}
+  .sealedsheet{min-height:118px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div class="brand">THE PARTING<span>P7</span></div>
+    <div class="addr" id="addr"></div>
+    <nav class="nav" aria-label="Where you are">
+      <button type="button" class="tab" id="tabDoor" data-a="view" data-v="door" aria-pressed="true">Doors</button>
+      <button type="button" class="tab" id="tabForks" data-a="view" data-v="lineage" aria-pressed="false">Forks</button>
+    </nav>
+    <div class="tgs">
+      <button type="button" class="tg" id="tgKnow" data-a="know" aria-pressed="false">How do we know?</button>
+      <button type="button" class="tg" id="tgReal" data-a="real" aria-pressed="false">What’s real?</button>
+    </div>
+  </header>
+  <main class="book">
+    <section class="page left" id="page" aria-label="Notebook page"></section>
+    <aside class="page margin" aria-label="Margin">
+      <div class="mbody" id="mbody"></div>
+      <div class="rec" id="rec"></div>
+    </aside>
+  </main>
+  <footer class="status"><span id="st1"></span><span id="st2"></span></footer>
+  <div id="live" class="sr" aria-live="polite"></div>
+</div>
+<script>
+(function(){
+'use strict';
+var FX = window.BOW_FIXTURE;
+if(!FX){ document.body.textContent = 'The shared fixture did not load.'; return; }
+
+/* =====================================================================
+   helpers
+   ===================================================================== */
+function $(s, r){ return (r||document).querySelector(s); }
+function $$(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
+function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function fm(n){ var s=(n/1e6).toFixed(3).replace(/(\.\d)0+$/,'$1').replace(/(\.\d\d)0$/,'$1'); return '$'+s+'M'; }
+function sw(k){ return '<i class="sw k-'+k+'" aria-hidden="true"></i>'; }
+var swk = sw;   /* pageLineage has a local named sw */
+var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+var CAP = { R:'■ REAL CURRENT PRODUCT CAPABILITY', P:'◇ PROPOSED PLATFORM CAPABILITY', S:'▨ SPECULATIVE FRONTIER' };
+var AIC = ['NO AI REQUIRED','SMALL / CHEAP MODEL','FRONTIER MODEL OCCASIONAL','FRONTIER MODEL CONTINUOUS'];
+function cap(c, a, extra){ return esc(CAP[c] + (a==null ? '' : ' · ' + AIC[a]) + (extra ? ' · ' + extra : '')); }
+function sha256(str){
+  var b=unescape(encodeURIComponent(str)),l=b.length,w=[],i,j,k=[
+  0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+  0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+  0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+  0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2],
+  h=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  var R=function(x,n){return (x>>>n)|(x<<(32-n));};
+  for(i=0;i<l;i++)w[i>>2]|=b.charCodeAt(i)<<(24-(i%4)*8);
+  w[l>>2]|=0x80<<(24-(l%4)*8);
+  w[(((l+8)>>6)<<4)+15]=l*8;
+  for(j=0;j<w.length;j+=16){
+    var a=h.slice(),x=[],t1,t2;
+    for(i=0;i<64;i++){
+      if(i<16)x[i]=w[j+i]|0;
+      else{var s0=R(x[i-15],7)^R(x[i-15],18)^(x[i-15]>>>3),s1=R(x[i-2],17)^R(x[i-2],19)^(x[i-2]>>>10);x[i]=(x[i-16]+s0+x[i-7]+s1)|0;}
+      t1=(a[7]+(R(a[4],6)^R(a[4],11)^R(a[4],25))+((a[4]&a[5])^(~a[4]&a[6]))+k[i]+x[i])|0;
+      t2=((R(a[0],2)^R(a[0],13)^R(a[0],22))+((a[0]&a[1])^(a[0]&a[2])^(a[1]&a[2])))|0;
+      a=[(t1+t2)|0,a[0],a[1],a[2],(a[3]+t1)|0,a[4],a[5],a[6]];
+    }
+    for(i=0;i<8;i++)h[i]=(h[i]+a[i])|0;
+  }
+  return h.map(function(v){return ('00000000'+(v>>>0).toString(16)).slice(-8);}).join('');
+}
+
+/* =====================================================================
+   PART 1 DATA — the door, its rule, and twelve worlds
+   Facts come from the shared fixture. Anything chosen for this prototype is AUTHORED (illustrative).
+   ===================================================================== */
+var WD = FX.world, TF = WD.tradeFile;
+var LINE = WD.taxLine.v, HARD = WD.hardLimit.v;
+var RATE = WD.projectedTax.v / (WD.payroll.v - WD.taxLine.v);     /* 1.5 — derived from the fixture's own numbers */
+var P0 = TF.payrollBefore.v;
+var SEND = TF.send[0].salary.v, GET = TF.get[0].salary.v;
+var MINX = FX.league.season2627.exceptions.minimum.v;
+var COUNTER_IN = 41000000, BIG_OUT = 3900000, TRIM_C = 100000, TRIM_W = 1300000;   /* AUTHORED, illustrative */
+var DOOR_Q = TF.week + ' · ' + TF.with + ' calls about ' + TF.send[0].player;
+var WHITE = TF.send[0].player, BUTLER = TF.get[0].player;
+
+var SLOTS = [
+  { id:'w6', week:6, name:'The call', dflt:'keep', opts:{
+    keep:   { label:'Keep '+WHITE.split(' ')[1], past:'kept '+WHITE.split(' ')[1], d:0 },
+    butler: { label:'Take '+BUTLER.split(' ')[1], past:'took '+BUTLER.split(' ')[1], d:GET-SEND },
+    counter:{ label:'Counter: a cheaper wing', past:'countered with a cheaper wing', d:COUNTER_IN-SEND } } },
+  { id:'w7', week:7, name:'The bench', dflt:'none', opts:{
+    none:{ label:'No act', past:'made no act', d:0, absent:true },
+    min: { label:'Sign a guard at the minimum', past:'signed a guard at the minimum', d:MINX },
+    big: { label:'Send the backup big out for a second', past:'sent the backup big out for a second', d:-BIG_OUT } } },
+  { id:'w8', week:8, name:'The owner’s note', dflt:'none', opts:{
+    none: { label:'No act', past:'made no act', d:0, absent:true },
+    min:  { label:'Sign a guard at the minimum', past:'signed a guard at the minimum', d:MINX },
+    trimC:{ label:'Trim payroll to '+fm(LINE-TRIM_C), past:'trimmed payroll to '+fm(LINE-TRIM_C), target:LINE-TRIM_C },
+    trimW:{ label:'Trim payroll to '+fm(LINE-TRIM_W), past:'trimmed payroll to '+fm(LINE-TRIM_W), target:LINE-TRIM_W } } }
+];
+var PAIRS = [   /* SCRIPTED STAND-INS — AUTHORED for this prototype (a hand-written array; nothing generated them). Fictional names. games = results of Weeks 7, 8, 9 (scripted). */
+  { id:'p1',  name:'Wren & Cal',   acts:{w6:'keep',   w7:'none', w8:'none'},  games:'WLW' },
+  { id:'p2',  name:'Dot & Ravi',   acts:{w6:'keep',   w7:'min',  w8:'none'},  games:'LWL' },
+  { id:'p3',  name:'Juno & Pilar', acts:{w6:'keep',   w7:'none', w8:'min'},   games:'WWW' },
+  { id:'p4',  name:'Otis & Mae',   acts:{w6:'keep',   w7:'min',  w8:'min'},   games:'LLW' },
+  { id:'p5',  name:'Sol & Bea',    acts:{w6:'counter',w7:'none', w8:'trimC'}, games:'WLW' },
+  { id:'p6',  name:'Ike & Nadia',  acts:{w6:'counter',w7:'big',  w8:'trimC'}, games:'LWL' },
+  { id:'p7',  name:'Lu & Pax',     acts:{w6:'counter',w7:'none', w8:'none'},  games:'WWL' },
+  { id:'p8',  name:'Zed & Ana',    acts:{w6:'butler', w7:'none', w8:'trimC'}, games:'LWL' },
+  { id:'p9',  name:'Kit & Omar',   acts:{w6:'butler', w7:'none', w8:'none'},  games:'WLW' },
+  { id:'p10', name:'Rae & Jun',    acts:{w6:'butler', w7:'big',  w8:'none'},  games:'WWW' },
+  { id:'p11', name:'Ari & Liv',    acts:{w6:'counter',w7:'min',  w8:'trimW'}, games:'LLL' }
+];
+var YOUGAMES = { keep:'LWW', butler:'WLL', counter:'WLW' };   /* AUTHORED, illustrative: no game engine ran */
+
+function byId(id){ return id==='you' ? you() : PAIRS.filter(function(p){ return p.id===id; })[0]; }
+function you(){ var c = S.door.chosen || 'keep'; return { id:'you', name:'Your pair', me:true, acts:{ w6:c, w7:'none', w8:'none' }, games:YOUGAMES[c] }; }
+function worlds(){ return [you()].concat(PAIRS); }
+function actOf(w, s){ return w.acts[s.id] || s.dflt; }
+function payrollAt(acts, wk){
+  var p = P0;
+  SLOTS.forEach(function(s){ if(s.week<=wk){ var o = s.opts[acts[s.id]||s.dflt]; p = (o.target!==undefined) ? Math.min(p, o.target) : p + o.d; } });
+  return p;
+}
+function taxOf(p){ return RATE * Math.max(0, p - LINE); }
+function winsAt(w, wk){ if(wk<=5) return 3; var n=0; for(var i=0;i<Math.max(0,wk-6);i++) if(w.games.charAt(i)==='W') n++; return 4+n; }
+function recStr(w, wk){ var W=winsAt(w,wk); return W+'–'+(wk-W); }
+
+var LINES = [
+  { id:'payroll', name:'Payroll', sub:'$M · after each act', dom:[186e6,226e6], ticks:[190,195,200,205,210,215,220,225].map(function(t){return t*1e6;}), tl:function(v){return String(Math.round(v/1e6));},
+    val:function(w,wk){ return payrollAt(w.acts,wk); }, f:fm, rec:function(){ return payrollAt({w6:'butler'},9); } },
+  { id:'tax', name:'Projected tax', sub:'$M · World rule', dom:[-2e6,38e6], ticks:[0,10,20,30].map(function(t){return t*1e6;}), tl:function(v){return String(Math.round(v/1e6));},
+    val:function(w,wk){ return taxOf(payrollAt(w.acts,wk)); }, f:fm, rec:function(){ return taxOf(payrollAt({w6:'butler'},9)); } },
+  { id:'wins', name:'Wins', sub:'games won so far', dom:[3.3,7.7], ticks:[4,5,6,7], tl:function(v){return String(v);},
+    val:function(w,wk){ return winsAt(w,wk); }, f:function(v){ return String(v); } }
+];
+var RULES = [
+  { id:'rate', name:'Tax per $1 over the line', sub:'derived, each world', scope:' that crossed',
+    val:function(w,wk){ var p=payrollAt(w.acts,wk); return p>LINE ? taxOf(p)/(p-LINE) : null; }, show:function(v){ return '$'+v.toFixed(2); } },
+  { id:'hard', name:'Payroll past the hard limit', sub:'derived, each world', scope:'',
+    val:function(w,wk){ return Math.max(0, payrollAt(w.acts,wk)-HARD); }, show:function(v){ return v===0 ? 'none' : fm(v); } }
+];
+function ruleAgree(R, wk){
+  var vals = worlds().map(function(w){ return R.val(w,wk); }).filter(function(v){ return v!==null; });
+  var set = {}; vals.forEach(function(v){ set[Math.round(v*100)/100]=1; });
+  var keys = Object.keys(set);
+  return keys.length===1 ? { v:vals[0], n:vals.length } : null;
+}
+function firstPartWeek(L){
+  for(var wk=6; wk<=9; wk++){ var s={}; worlds().forEach(function(w){ s[Math.round(L.val(w,wk)*100)]=1; }); if(Object.keys(s).length>1) return wk; }
+  return null;
+}
+/* a pile: the densest cluster of worlds on the payroll line, and — only if the rulebook has a kink just above it — the rule that makes it */
+var KINKS = [ { at:LINE, rule:'World rule: flat 1.5× over '+fm(LINE)+', authored' }, { at:HARD, rule:'World rule: hard limit '+fm(HARD)+', authored' } ];
+function findPile(wk){
+  var vs = worlds().map(function(w){ return { id:w.id, v:payrollAt(w.acts,wk), path:SLOTS.filter(function(s){ return s.week<=wk; }).map(function(s){ return actOf(w,s); }).join('>') }; }).sort(function(a,b){ return a.v-b.v; });
+  var best=null;
+  for(var i=0;i<vs.length;i++){
+    var g=[vs[i]]; for(var j=i+1;j<vs.length && vs[j].v-vs[i].v<=1600000;j++) g.push(vs[j]);
+    var paths={}; g.forEach(function(x){ paths[x.path]=1; });
+    /* a pile is worlds that got near each other by DIFFERENT roads; the same road twice is one choice, not a pile */
+    if(g.length>=4 && Object.keys(paths).length>=3 && (!best || g.length>best.length)) best=g;
+  }
+  if(!best) return null;
+  var hi = best[best.length-1].v, lo = best[0].v, kink=null;
+  KINKS.forEach(function(k){ if(hi<k.at && k.at-hi<=800000) kink=k; });
+  return { ids:best.map(function(x){return x.id;}), lo:lo, hi:hi, kink:kink };
+}
+function swarm(items, x0, x1, dom, D, H){
+  var px = function(v){ return x0 + (v-dom[0])/(dom[1]-dom[0])*(x1-x0); };
+  var step = D*0.92, placed=[], out={};
+  items.slice().sort(function(a,b){ return a.v-b.v || (a.id<b.id?-1:1); }).forEach(function(it){
+    var cx = px(it.v), best=null, lv, k, s;
+    for(lv=0; lv*step + D <= H || lv===0; lv++){
+      for(k=0;k<=9;k++){
+        for(s=0;s<(k?2:1);s++){
+          var dx=(s?-1:1)*k*D*0.55, cost=lv+k*0.5;
+          if(best && cost>=best.cost) continue;
+          var x=cx+dx, y=lv*step;
+          if(placed.every(function(p){ return Math.hypot(p.x-x,p.y-y) >= D*0.98; })) best={x:x,y:y,cost:cost};
+        }
+      }
+    }
+    if(!best) best={x:cx,y:0,cost:0};
+    placed.push(best); out[it.id]={x:best.x,y:best.y,tx:cx};
+  });
+  return out;
+}
+
+/* =====================================================================
+   PART 2 DATA — the lineage "Keep No. 1 — Fultz" (fixture: forks[0]) and Reality's recorded moments
+   The fork's own recorded history is AUTHORED, illustrative — the author's story, not what happened.
+   ===================================================================== */
+var FORK = Object.assign({}, FX.forks[0], { author:'Marisol Vega' }), DOOR17 = FX.moments[0], M25 = FX.moments[1], M6 = FX.moments[2], M26 = FX.moments[3];
+var L2526 = FX.league.season2526;
+var FORK_PAYROLL = 176400000, PHI_IN = 12000000, SUB_TAX9 = 4600000;     /* AUTHORED, illustrative */
+var PRE_TAX = FX.cuts.deadline2026.state.filter(function(x){ return /^Projected luxury tax/.test(x.what); })[0].value;   /* OBSERVED ≈$39.5M, verify */
+var YEARS = [
+  { k:1, span:'2017–18', head:'Said no to Philadelphia. Took Fultz at No. 1.', acts:['Declined Philadelphia’s call about No. 1','Took Fultz at No. 1','Signed him on the rookie scale'] },
+  { k:2, span:'2018–19', head:'Built a young core around him.', acts:['Signed a veteran guard at the minimum','Kept payroll under the tax line'] },
+  { k:3, span:'2019–20', head:'Extension talks with Fultz’s camp.', acts:['Opened extension talks with Fultz’s camp','Held him at the deadline'] },
+  { k:4, span:'2020–21', head:'Spent cap room on a big.', acts:['Used cap room on a starting big','Drafted a wing late in the first round'] },
+  { k:5, span:'2021–22', head:'First tax year. Paid it once.', acts:['Went over the tax line for the first time','Paid the tax and kept the roster together'] },
+  { k:6, span:'2022–23', head:'Rebuilt the bench cheaply.', acts:['Let two veterans walk','Filled the bench with minimum deals'] },
+  { k:7, span:'2023–24', head:'Traded for Jrue Holiday (the fork’s version).', acts:['Traded a first-round pick for Jrue Holiday','Moved him into the starting five'] },
+  { k:8, span:'2024–25', head:'Kept Holiday as the aprons closed in.', acts:['Kept Jrue Holiday through the second-apron squeeze','Declared: Jayson Tatum is not on this roster'] },
+  { k:9, span:'2025–26', head:'Season under way.', acts:['Payroll '+fm(FORK_PAYROLL)+' (authored, illustrative)', fm(L2526.tax.v-FORK_PAYROLL)+' under the 2025–26 tax line (the line is OBSERVED, verify)'] }
+];
+var SUB1 = { id:'s1', name:'Fultz traded in 2019', by:'Tomas Reyes', ink:'a2', start:3,
+  lines:{ 3:'Traded Fultz to a rival for a future first.', 4:'Used the pick and cap room on two wings.', 5:'Stayed under the tax.', 6:'Built through the draft.', 7:'Traded for Jrue Holiday (this fork’s version).', 8:'Moved Holiday in the apron summer.', 9:'Season under way.' } };
+var SEATS = [
+  { role:'General manager', who:FORK.author, how:'Holds the seat since Year 1. A person (fictional name).', kind:'person' },
+  { role:'Owner', who:'Priya Nandakumar', how:'Holds the seat by lease, to the end of Year 10. A person (fictional name).', kind:'person' },
+  { role:'Analytics chief', who:'AGENT', how:'Holds the seat under warrant W-2: drafts trade proposals, may not sign, nothing over $5.0M (illustrative).', kind:'agent' }
+];
+function rost(who, v, thru, id, madeIn){ return { id:id, slot:'roster', who:who, team:'Boston', v:v, thru:thru, madeIn:madeIn,
+  text:'roster('+who+', Boston) = '+v+(thru?', through '+thru:''), plain: who+(v?' is on':' is not on')+' Boston’s roster'+(thru?' through '+dlabel(thru):'') }; }
+var DECL_MAIN = [
+  rost('Jayson Tatum', false, null, 'a1', 1),
+  rost('Jrue Holiday', true, '2026-07-01', 'a2', 7),
+  { id:'a3', slot:'rules', who:'league rules', team:'', v:'reality', madeIn:1, text:'league.rules = Reality (pinned)', plain:'The league’s rules are Reality’s, pinned' }
+];
+var DECL_SUB1 = [ DECL_MAIN[0], rost('Jrue Holiday', true, '2025-06-24', 'b2', 7), DECL_MAIN[2] ];
+function need(who, v){ return { slot:'roster', who:who, team:'Boston', v:v }; }
+var EVENTS = [
+  { id:'e1', date:'2025-05-12', q:M25.question, src:M25.sealed, parts:[
+    { id:'e1a', label:'Jayson Tatum ruptures his right Achilles', short:'the Tatum injury', needs:[need('Jayson Tatum',true)], sets:[] } ] },
+  { id:'e2', date:'2025-06-24', dshow:'late Jun 2025', q:M6.question, src:M6.sealed, parts:[
+    { id:'e2a', label:'Jrue Holiday to Portland for Anfernee Simons and two second-round picks', short:'the Holiday trade', needs:[need('Jrue Holiday',true)], sets:[need('Jrue Holiday',false), need('Anfernee Simons',true)] },
+    { id:'e2b', label:'Kristaps Porziņģis to Atlanta in a three-team deal; Boston gets Georges Niang and a 2031 second', short:'the Porziņģis deal', needs:[need('Kristaps Porziņģis',true)], sets:[need('Kristaps Porziņģis',false), need('Georges Niang',true)] } ] },
+  { id:'e3', date:'2025-06-30', q:'30 Jun 2025 · What are the 2025–26 lines?', src:{ v:'The league sets the 2025–26 cap at '+fm(L2526.cap.v)+', the tax line at '+fm(L2526.tax.v)+', the aprons at '+fm(L2526.apron1.v)+' and '+fm(L2526.apron2.v)+'.', src:L2526.cap.src, asOf:L2526.cap.asOf }, parts:[
+    { id:'e3a', label:'The league publishes the 2025–26 cap, tax line and aprons', short:'the new lines', needs:[{ slot:'rules', who:'league rules', team:'', v:'reality' }], sets:[] } ] },
+  { id:'e4', date:'2026-02-05', q:M26.question, src:M26.sealed, parts:[
+    { id:'e4a', label:'Anfernee Simons to Chicago for Nikola Vučević', short:'the Simons trade', needs:[need('Anfernee Simons',true)], sets:[need('Anfernee Simons',false), need('Nikola Vučević',true)] } ] }
+];
+var VG = {
+  'HELD':'<svg class="vg" viewBox="0 0 30 20" aria-hidden="true"><path d="M2 10H28" stroke="currentColor" stroke-width="2" fill="none"/><path d="M8 4V16M13 4V16M18 4V16M23 4V16" stroke="currentColor" stroke-width="1.6"/></svg>',
+  'DIVERGED':'<svg class="vg" viewBox="0 0 30 20" aria-hidden="true"><path d="M2 5H12L18 15H28" stroke="currentColor" stroke-width="2" fill="none"/></svg>',
+  'IMPOSSIBLE':'<svg class="vg" viewBox="0 0 30 20" aria-hidden="true"><path d="M2 10L8 4L11 15L15 3L19 16L23 5L28 10" stroke="currentColor" stroke-width="2" fill="none"/></svg>',
+  'RE-DECLARE':'<svg class="vg" viewBox="0 0 30 20" aria-hidden="true"><circle cx="15" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3.2 2.6"/></svg>'
+};
+var MODENAME = { inhab:'Inhabitants', reality:'Reality arrives', league:'League · Year 9', fork:'Fork from here', year:'a season' };
+function yearOfDate(d){ var Y=+d.slice(0,4), m=+d.slice(5,7); return m>=7 ? Y-2016 : Y-2017; }
+function evd(e){ return e.dshow || dlabel(e.date); }
+function dlabel(d){ var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return (+d.slice(8,10))+' '+M[+d.slice(5,7)-1]+' '+d.slice(0,4); }
+
+
+/* =====================================================================
+   STATE — one object, one act()
+   ===================================================================== */
+var S = {
+  view:'door', know:false, real:false,
+  door:{ pending:null, chosen:null },
+  sheet:{ week:6, part:null, pile:false, mode:'sealed', picks:[], adopted:[], sit:null },
+  timer:null
+};
+S.lin = { mode:'inhab', sel:null, arrived:0, focusEv:0, seamWorld:'main', asked:false,
+  tried:0, pinTried:false, declared:false, traded:false, mine:null, name:'Cap-space year', hol:'none', por:'none' };
+
+/* Two logs, never merged. RECORD: acts that change state, numbered with the World's numbers (fixture world.record[].n: the Week 6 call is #40, the
+   two weeks after it #41 and #42, the next act #43) and hashed with SHA-256. Acts inside a public fork are numbered f1, f2 … in that fork's own history.
+   TRAIL: navigation, picks, reveals, re-runs, drafts and refusals. Private, numbered t1, t2 …, and NEVER hashed. */
+var RECORD = [], TRAIL = [], LOG = RECORD, FORKN = 0;
+var HASH = sha256('');
+var WN = {}; WD.record.forEach(function(r){ WN[r.id] = r.n; });
+var SLOTNUM = { w6:WN['w6-trade'], w7:WN['w7-rotation'], w8:WN['w8-extension'] };
+function rehash(){ HASH = sha256(RECORD.map(function(e){ return [e.n,e.who,e.kind,e.what,e.clock,e.hist].join('|'); }).join('\n')); }
+
+function clockLabel(){
+  if(S.view==='door') return 'Year Two · Week ' + (S.door.chosen ? S.sheet.week : 6);
+  return lineageClock();
+}
+function histLabel(){
+  if(S.view==='door') return S.sheet.sit ? (byId(S.sheet.sit.wid).name+'’s world, in her seat') : 'Boston · Year Two, your world';
+  return lineageHist();
+}
+var QUIET = { know:1, real:1, pickmove:1, name:1, dec:1, trail:1 };
+var CANON = { commit:1, sitact:1, keep:1, declphi:1 };   /* the acts that change a world; everything else is the person's trail */
+function act(kind, p){
+  p = p || {};
+  var who = 'Your pair', what = '', sh = S.sheet, i, extra = null;
+  sh.fresh = false;
+  switch(kind){
+    case 'view': S.view = p.v; who='You'; what = 'Went to ' + (p.v==='door' ? 'Doors' : 'Forks'); break;
+    case 'trail': S.showTrail = !S.showTrail; break;
+    case 'know': S.know = !S.know; break;
+    case 'real': S.real = !S.real; break;
+    case 'pickmove': S.door.pending = p.v; break;
+    case 'commit':
+      if(!S.door.pending) return;
+      S.door.chosen = S.door.pending; sh.mode='note'; sh.week=6; sh.part=null; sh.pile=false; sh.picks=[]; sh.adopted=[]; sh.sit=null;
+      what = 'Committed: ' + SLOTS[0].opts[S.door.chosen].label + '. Signed Week 6. The dot is fixed.';
+      startRun(); extra={ who:'The World', what:'Weeks 7 to 9 ran on their own. Your pair made no act after the call: recorded as absence, not as a choice.' };
+      break;
+    case 'runweeks': who='You'; what='Ran the weeks again, 6 to 9'; startRun(); break;
+    case 'week': clearTimeout(S.timer); sh.week = +p.v; who='You'; what='Read the sheet as of Week '+p.v; break;
+    case 'pile': sh.pile = true; sh.fresh = true; sh.mode='pile'; who='You'; { var pl=findPile(sh.week); what='Tapped a pile of '+(pl?pl.ids.length:0)+' worlds; the rule under it: '+(pl&&pl.kink?pl.kink.rule:'none found'); } break;
+    case 'part': clearTimeout(S.timer); sh.part=p.v; sh.mode='part'; { var L=LINES.filter(function(l){return l.id===p.v;})[0]; sh.week=firstPartWeek(L)||sh.week; who='You'; what='Went to where '+L.name.toLowerCase()+' first parts: Week '+sh.week; } break;
+    case 'pick':
+      who='You';
+      if(sh.picks.indexOf(p.v)>=0){ sh.picks=sh.picks.filter(function(x){return x!==p.v;}); what='Put down '+byId(p.v).name; }
+      else { sh.picks = sh.picks.concat([p.v]).slice(-2); what='Picked '+byId(p.v).name; }
+      sh.adopted=[]; sh.mode = sh.picks.length ? 'pair' : 'note'; sh.sit=null;
+      break;
+    case 'record': sh.mode='record'; sh.sit=null; who='You'; what='Returned to the record: the World’s own recorded acts, read beside your pair'; break;
+    case 'clearpicks': sh.picks=[]; sh.adopted=[]; sh.mode='note'; who='You'; what='Put both dots down'; break;
+    case 'adopt': {
+      who='You'; var ix=sh.adopted.indexOf(p.v); if(ix>=0) sh.adopted.splice(ix,1); else sh.adopted.push(p.v);
+      what=(ix>=0?'Took back':'Adopted')+' '+byId(sh.picks[1]).name+'’s value for '+SLOTS.filter(function(s){return s.id===p.v;})[0].name+' and re-ran (nothing forked)'; break; }
+    case 'resetadopt': sh.adopted=[]; who='You'; what='Cleared the re-run'; break;
+    case 'sit': {
+      var A=byId(sh.picks[0]), B=byId(p.v), fi=null;
+      SLOTS.forEach(function(s){ if(!fi && actOf(A,s)!==actOf(B,s)) fi=s; });
+      sh.sit = { wid:B.id, slot:(fi||SLOTS[0]).id, took:null }; who='You'; what='Sat where '+B.name+' sat: '+(fi||SLOTS[0]).name+', Week '+(fi||SLOTS[0]).week+', with '+B.name+'’s knowledge and none of yours'; break; }
+    case 'sitact': who='You (in her seat)'; sh.sit.took = p.v; { var sl=SLOTS.filter(function(s){return s.id===sh.sit.slot;})[0]; what='In '+byId(sh.sit.wid).name+'’s seat, Week '+sl.week+': '+sl.opts[p.v].label+' (a branch in your ink; her world unchanged)'; } break;
+    case 'leave': what='Left '+byId(sh.sit.wid).name+'’s seat and returned to your own sheet'; who='You'; sh.sit=null; break;
+    default: if(!ACT2(kind, p, function(w,t){ who=w; what=t; })) return;
+  }
+  if(!QUIET[kind] && what){
+    var canon = CANON[kind] || (kind==='trytrade' && S.lin.traded);
+    if(canon){
+      var n = kind==='commit' ? SLOTNUM.w6 : kind==='sitact' ? SLOTNUM[S.sheet.sit.slot] : 'f' + (++FORKN);
+      RECORD.push({ n:n, who:who, kind:kind, what:what, clock:clockLabel(), hist:histLabel() });
+      if(extra){   /* the two weeks after the call: nobody acted. That is recorded, as absence (#41, #42), not as a choice. */
+        RECORD.push({ n:SLOTNUM.w7, who:extra.who, kind:'absence', what:'Week 7: no act by your pair (absence, recorded)', clock:'Year Two · Week 7', hist:'Boston · Year Two, your world' });
+        RECORD.push({ n:SLOTNUM.w8, who:extra.who, kind:'absence', what:'Week 8: no act by your pair (absence, recorded). Week 9 was played on the World’s own calendar.', clock:'Year Two · Week 8', hist:'Boston · Year Two, your world' });
+      }
+      rehash();
+    } else TRAIL.push({ n:'t' + (TRAIL.length+1), who:who, kind:kind, what:what, clock:clockLabel(), hist:histLabel() });
+    announce(what);
+  } else if(kind==='know'||kind==='real'){ announce((kind==='know'?'How do we know? ':'What’s real? ')+(S[kind]?'on':'off')); }
+  render();
+}
+function startRun(){
+  var sh=S.sheet; clearTimeout(S.timer);
+  if(RM){ sh.week=9; return; }
+  sh.week=6;
+  var tick=function(){ if(sh.week<9){ sh.week++; render(); S.timer=setTimeout(tick, 850); } };
+  S.timer=setTimeout(tick, 900);
+}
+function announce(t){ var l=$('#live'); l.textContent=''; setTimeout(function(){ l.textContent=t; }, 30); }
+
+/* =====================================================================
+   RENDER
+   ===================================================================== */
+var LASTVIEW = null;
+function render(){
+  var page=$('#page'), mb=$('#mbody');
+  var prev = {}; $$('[data-flip]', page).forEach(function(el){ var r=el.getBoundingClientRect(); prev[el.dataset.flip]=[r.left,r.top]; });
+  var ae = document.activeElement, fk = ae && ae.dataset && ae.dataset.a ? ae.dataset.a+'|'+(ae.dataset.v||'') : null;
+  var ps = page.scrollTop, ms = mb.scrollTop, rs = $('#rec').scrollTop;
+  page.innerHTML = S.view==='door' ? pageDoor() : pageLineage();
+  mb.innerHTML = (S.know ? legendHTML() : legendHTML()) + (S.view==='door' ? marginDoor() : marginLineage());
+  renderRec(); syncHeader();
+  if(S.view==='door' && S.door.chosen && !S.sheet.sit) fillPlots();
+  if(!RM){ $$('[data-flip]', page).forEach(function(el){ var o=prev[el.dataset.flip]; if(!o) return; var r=el.getBoundingClientRect(), dx=o[0]-r.left, dy=o[1]-r.top; if(Math.abs(dx)+Math.abs(dy)>1 && el.animate) el.animate([{transform:'translate('+dx+'px,'+dy+'px)'},{transform:'none'}],{duration:520,easing:'cubic-bezier(.3,.7,.2,1)'}); }); }
+  if(LASTVIEW===S.view+S.sheet.mode){ page.scrollTop=ps; mb.scrollTop=ms; }
+  LASTVIEW = S.view+S.sheet.mode;
+  $('#rec').scrollTop = rs;
+  if(fk){ var sel=$$('#page [data-a], #mbody [data-a], .top [data-a]').filter(function(b){ return b.dataset.a+'|'+(b.dataset.v||'')===fk; })[0]; if(sel && sel!==document.activeElement){ try{ sel.focus({preventScroll:true}); }catch(e){} } }
+}
+function legendHTML(){
+  var K = FX.meta.kinds;
+  return '<div class="legend" aria-label="The seven kinds, by texture">' + Object.keys(K).map(function(k){ return '<span title="'+esc(K[k])+'">'+sw(k)+k+'</span>'; }).join('') + '</div>';
+}
+function syncHeader(){
+  document.body.className = (S.know?'know ':'') + (S.real?'real':'');
+  $('#tabDoor').setAttribute('aria-pressed', S.view==='door'); $('#tabForks').setAttribute('aria-pressed', S.view==='lineage');
+  $('#tgKnow').setAttribute('aria-pressed', S.know); $('#tgReal').setAttribute('aria-pressed', S.real);
+  $('#addr').textContent = S.view==='door' ? addrDoor() : addrLineage();
+  $('#addr').title = $('#addr').textContent;
+  $('#st1').textContent = 'PROTOTYPE · P7 The Parting · navigate by where many worlds part · data: shared fixture, dated, verify · other worlds scripted (AUTHORED)';
+  $('#st2').textContent = RECORD.length + ' acts · sha256 ' + HASH.slice(0,12) + ' (acts only) · trail ' + TRAIL.length + ' (never hashed)';
+}
+function addrDoor(){
+  var sh=S.sheet, seat = sh.sit ? 'seat: '+byId(sh.sit.wid).name : 'GM · your pair';
+  var view = !S.door.chosen ? 'door · sealed' : sh.sit ? 'sitting' : sh.mode==='pair' && sh.picks.length===2 ? 'two worlds: '+sh.picks.map(function(i){return byId(i).name;}).join(' + ') : sh.mode==='part' ? 'where '+sh.part+' parts' : sh.mode==='pile' ? 'pile-up' : 'sheet · as of Week '+sh.week;
+  return 'Boston · Year Two › Week 6 · ' + TF.with + ' calls about ' + WHITE + ' › your world › ' + seat + ' › ' + view;
+}
+function renderRec(){
+  var el=$('#rec'), tr=S.showTrail, list = tr ? TRAIL : RECORD;
+  el.setAttribute('data-cap', cap('P',0,'seed: Live World act-log SHA-256 fold is REAL, prototype-grade'));
+  el.innerHTML = '<div class="h"><h4>'+(tr?'Your trail':'The record')+'</h4><span>'+(tr ? TRAIL.length+' steps · private · never hashed' : RECORD.length+' acts · SHA-256 '+HASH.slice(0,16)+' · acts only')+'</span><button type="button" class="trl" data-a="trail" aria-pressed="'+(!!tr)+'">Trail ('+TRAIL.length+')</button></div><ol aria-label="'+(tr?'Trail':'Acts')+', newest first">' +
+    (list.length ? list.slice().reverse().slice(0,40).map(function(e){ return '<li><b>'+(tr?e.n:'#'+e.n)+'</b> '+esc(e.who)+' — '+esc(e.what)+'<small>'+esc(e.clock)+' · '+esc(e.hist)+'</small></li>'; }).join('') : '<li>'+(tr?'Nothing yet. Where you looked and what you tried goes here, unnumbered by the World.':'No act yet. Only acts that change a world land here, with the World’s number, whose it is, and which history.')+'</li>') + '</ol>';
+}
+
+/* ---------- the door (sealed) and the sheet ---------- */
+function shelfHTML(cur){
+  return '<nav class="shelf" aria-label="Doors where worlds part"><span class="lab">DOORS · WORLDS PART HERE</span>' +
+    (cur==='w' ? '<span class="idx on" aria-current="page">'+esc(DOOR_Q)+'</span><button type="button" class="idx" data-a="view" data-v="lineage" aria-label="Go to forks: '+esc(FX.moments[0].question)+'">'+esc(FX.moments[0].question)+'</button>'
+               : '<button type="button" class="idx" data-a="view" data-v="door">'+esc(DOOR_Q)+'</button><span class="idx on" aria-current="page">'+esc(FX.moments[0].question)+'</span>') +
+    '<span class="lab" data-kn="ordered by how far worlds spread at a door, never by how many came · PROPOSED"></span></nav>';
+}
+function pageDoor(){ return S.door.chosen ? (S.sheet.sit ? pageSeat() : pageSheet()) : pageSealed(); }
+function moveHTML(id){
+  var o = SLOTS[0].opts[id], desc, num;
+  if(id==='keep'){ desc = 'Say no. '+WHITE+' ('+fm(SEND)+') stays.'; num = 'payroll stays '+fm(P0); }
+  else if(id==='butler'){ desc = 'Send '+WHITE+' ('+fm(SEND)+'). Get '+BUTLER+' ('+fm(GET)+').'; num = 'payroll +'+fm(GET-SEND); }
+  else { desc = 'Send '+WHITE+' ('+fm(SEND)+'). Ask for a wing at '+fm(COUNTER_IN)+' instead.'; num = 'payroll +'+fm(COUNTER_IN-SEND)+' · the wing is illustrative'; }
+  return '<button type="button" class="move" data-a="pickmove" data-v="'+id+'" aria-pressed="'+(S.door.pending===id)+'"><span class="t">'+esc(o.label)+'</span><span class="d">'+esc(desc)+'</span><span class="n" data-kn="'+(id==='counter'?'AUTHORED · illustrative counter':'RECORDED · from the World trade file')+'">'+esc(num)+'</span></button>';
+}
+function pageSealed(){
+  var pend = S.door.pending;
+  return shelfHTML('w') + '<div class="door" data-cap="'+cap('P',0)+'">' +
+    '<p class="eyebrow">A DOOR · NAMED BY ITS QUESTION</p>' +
+    '<h1>'+esc(DOOR_Q)+'</h1>' +
+    '<p class="seat">Your seat: '+esc(WD.seat.name)+'. Your partner sits beside you. Names on shared screens are fictional.</p>' +
+    '<dl class="desk"><div><dt>Payroll now</dt><dd><b>'+fm(P0)+'</b> <span data-kn="RECORDED · World record"></span></dd></div>' +
+    '<div><dt>The call</dt><dd>'+esc(TF.with)+' wants '+esc(WHITE)+'.</dd></div>' +
+    '<div><dt>Open on your desk</dt><dd>'+esc(WD.openMatters[2].what)+'. <span data-kn="AUTHORED · illustrative"></span></dd></div></dl>' +
+    '<h2 class="movesh">Three moves. None is marked better.</h2>' +
+    '<div class="moves" role="group" aria-label="Three moves">'+moveHTML('keep')+moveHTML('butler')+moveHTML('counter')+'</div>' +
+    '<div class="commit"><button type="button" class="go" data-a="commit"'+(pend?'':' disabled')+'>'+(pend?'Commit: '+esc(SLOTS[0].opts[pend].label):'Commit a move')+'</button><span class="hint">'+(pend?'Once committed, your dot is fixed. Nothing else changes until then.':'Pick one. You can change your mind until you commit.')+'</span></div>' +
+    '<div class="sealedsheet" data-cap="'+cap('P',0)+'"><i></i><i></i><i></i><p>You’ll see how other worlds went after you act.</p></div></div>';
+}
+function marginSealed(){
+  return '<h3 class="mh">Sealed</h3><p>No other world is drawn. No counts, no ranking, no “most pairs did…”.</p><p>You’ll see how other worlds went after you act.</p><p class="small">Why: a crowd you can see changes what you do. So the door stays shut until the move is yours.</p>' +
+    '<div class="tline"><b>TEACHER’S LINE</b>Let pairs choose before anyone looks at a screen. The sheet opens on the board only after every pair has committed.</div>';
+}
+function pageSheet(){
+  var sh=S.sheet, wk=sh.week, o=SLOTS[0].opts[S.door.chosen];
+  var lines = LINES.map(function(L){
+    return '<section class="ln" data-line="'+L.id+'"'+(L.id==='payroll' ? ' data-cap="'+cap('P',0,'pile-ups and first parting are computed')+'"' : L.id==='wins' ? ' data-cap="'+cap('P',1,'naming a crux in words; authored text here')+'"' : '')+'><header class="lbl"><h3>'+esc(L.name)+'</h3><span class="sub" data-kn="'+(L.id==='wins'?'AUTHORED for others (scripted) and for yours (illustrative) · no game engine ran':L.id==='payroll'?'COMPUTED from acts + World rule · black tick RECORDED':'COMPUTED from acts + World rule')+'">'+esc(L.id==='wins' ? 'through Week '+wk : L.sub)+'</span>' +
+      '<button type="button" class="pbtn" data-a="part" data-v="'+L.id+'" aria-pressed="'+(sh.part===L.id)+'" aria-label="Where '+esc(L.name.toLowerCase())+' parts">Where they part</button></header>' +
+      '<div class="plot" data-line="'+L.id+'"></div></section>';
+  }).join('');
+  var rules = RULES.map(function(R){
+    var ag = ruleAgree(R, wk);
+    return '<section class="ln rl"><header class="lbl"><h3>'+esc(R.name)+'</h3></header><div class="rbody">' +
+      (ag ? '<span class="outbox" data-kn="derived · agrees although choices differ · drawn outlined as a rule">'+esc(R.show(ag.v))+'</span><em>same in every world'+esc(R.scope)+'</em>' : '<em>differs between worlds</em>') + '</div></section>';
+  }).join('');
+  var strip = worlds().map(function(w){ return '<button type="button" class="pairbtn'+(w.me?' me':'')+'" data-a="pick" data-v="'+w.id+'" aria-pressed="'+(sh.picks.indexOf(w.id)>=0)+'"><span class="pin"></span>'+esc(w.name)+'</button>'; }).join('');
+  return shelfHTML('w') +
+    '<div class="dhead"><div><p class="eyebrow">THE SHEET · WEEK 6 DOOR</p><h2>Where the worlds went</h2></div><p class="fixed"><i class="dotkey" style="background:var(--you);box-shadow:0 0 0 2px var(--sheet),0 0 0 3.5px var(--you)"></i>Your move, fixed: <b>'+esc(o.past)+'</b></p></div>' +
+    '<div class="weekbar" role="group" aria-label="As of week"><span>AS OF WEEK</span>' + [6,7,8,9].map(function(w){ return '<button type="button" class="wk" data-a="week" data-v="'+w+'" aria-pressed="'+(wk===w)+'">'+w+'</button>'; }).join('') + '<button type="button" class="run" data-a="runweeks">Run the weeks</button><span class="note">no act after the call is recorded as absence, not a choice</span></div>' +
+    '<div class="sheet" data-cap="'+cap('P',0,'seed: /board class reveal is REAL')+'">'+lines+rules+'</div>' +
+    '<div class="pairs" role="group" aria-label="The twelve worlds" data-cap="'+cap('P',2,'scripted worlds: AUTHORED stand-ins, offline')+'"><span class="lab" data-kn="the other eleven are scripted for this prototype · AUTHORED · not students’">THE TWELVE WORLDS</span>'+strip+'</div>';
+}
+function fillPlots(){
+  var sh=S.sheet, wk=sh.week, W=worlds(), pile=findPile(wk);
+  $$('.plot').forEach(function(pl){
+    var L = LINES.filter(function(l){ return l.id===pl.dataset.line; })[0];
+    var w = pl.clientWidth, h = pl.clientHeight, x0=20, x1=w-24, ax=22, D=20;
+    var px = function(v){ return x0 + (v-L.dom[0])/(L.dom[1]-L.dom[0])*(x1-x0); };
+    var items = W.map(function(x){ return { id:x.id, v:L.val(x,wk) }; });
+    var pos = swarm(items, x0, x1, L.dom, D, h-ax-8);
+    var html = '<div class="ax"></div>';
+    L.ticks.forEach(function(t){ html += '<i class="tm" style="left:'+px(t)+'px"></i><span class="tk" style="left:'+px(t)+'px">'+L.tl(t)+'</span>'; });
+    if(sh.part===L.id){ var pw=firstPartWeek(L); if(pw===wk) html += '<div class="parting">FIRST PARTING · WEEK '+pw+'</div>'; }
+    if(L.rec){ var rv=L.rec(); html += '<div class="rectick" style="left:'+px(rv)+'px"></div><button type="button" class="rtl" data-a="record" style="left:'+(px(rv)+8+92>w ? px(rv)-8-92 : px(rv)+8)+'px" aria-label="Go to the record, from the '+esc(L.name.toLowerCase())+' line">the record ▸</button>'; }
+    else { html += '<div class="unkmk">the record: wins not in the fixture · UNKNOWN</div>'; }
+    if(L.id==='payroll' && sh.pile && pile && pile.kink){ html += '<div class="rulemk'+(sh.fresh?' fresh':'')+'" style="left:'+(px(pile.kink.at)-5)+'px"><span>'+esc(pile.kink.rule)+'</span></div>'; }
+    items.forEach(function(it){ html += '<i class="vt" style="left:'+px(it.v)+'px"></i>'; });
+    var pickIx = sh.picks;
+    W.forEach(function(x){
+      var p=pos[x.id], pk=pickIx.indexOf(x.id), seat = sh.sit && sh.sit.wid===x.id;
+      html += '<button type="button" tabindex="-1" class="dot'+(x.me?' me':'')+(pk>=0?' pick':'')+(seat?' seat':'')+'" data-a="pick" data-v="'+x.id+'" data-flip="'+L.id+':'+x.id+'" aria-pressed="'+(pk>=0)+'" aria-label="'+esc(x.name)+', '+esc(L.name)+' '+esc(L.f(L.val(x,wk)))+'" title="'+esc(x.name)+' · '+esc(L.f(L.val(x,wk)))+(x.me?' · RECORDED':' · AUTHORED, scripted')+'" style="left:'+(p.x-D/2)+'px;bottom:'+(ax+3+p.y)+'px"><span class="n">'+(pk>=0?pk+1:'')+'</span></button>';
+    });
+    if(L.id==='payroll' && pile){
+      var xs=pile.ids.map(function(id){ return pos[id].x; }), mnx=Math.min.apply(null,xs)-D, mxx=Math.max.apply(null,xs)+D, ys=[0];
+      Object.keys(pos).forEach(function(id){ if(pos[id].x>=mnx && pos[id].x<=mxx) ys.push(pos[id].y); });
+      var cx=(Math.min.apply(null,xs)+Math.max.apply(null,xs))/2, top=Math.max.apply(null,ys)+D+ax+8, bw=Math.max(178, Math.max.apply(null,xs)-Math.min.apply(null,xs)+D+14);
+      html += '<button type="button" class="pilebtn" data-a="pile" aria-pressed="'+sh.pile+'" aria-label="A pile of '+pile.ids.length+' worlds within '+fm(pile.hi-pile.lo)+' of each other: what makes it?" style="left:'+(cx-bw/2)+'px;bottom:'+top+'px;width:'+bw+'px">pile-up · '+pile.ids.length+' worlds · tap</button>';
+    }
+    pl.innerHTML = html;
+  });
+}
+function marginNote(){
+  return '<h3 class="mh">The sheet, opened</h3><p>Your move is fixed. Each line is worked out from what worlds did — payroll, projected tax, wins. None of it was handed out.</p>' +
+    '<ul class="how"><li>'+sw('RECORDED')+'Ringed dot: your world, on the record.</li><li>'+sw('AUTHORED')+'Outlined dots: other pairs’ worlds — AUTHORED stand-ins here, not students’.</li><li>'+sw('AUTHORED')+'Outlined box: the same in every world.</li><li><span class="rt"></span>Black tick: the World’s own record.</li></ul>' +
+    '<p class="small">Try: run the weeks · tap a pile · “Where they part” · pick two dots.</p>' +
+    '<div class="tline"><b>TEACHER’S LINE</b>Keep the board on the sheet. Say nothing about a “best” world — there is no rank on it.</div>';
+}
+function marginPile(){
+  var pl=findPile(S.sheet.week);
+  if(!pl) return '<h3 class="mh">No pile at Week '+S.sheet.week+'</h3><p>Nothing bunches here. An absent pile is a finding, not a bug: try Week 8 or 9.</p>';
+  return '<h3 class="mh">A pile nobody drew</h3><p>'+pl.ids.length+' worlds sit within '+fm(pl.hi-pl.lo)+' of each other, between '+fm(pl.lo)+' and '+fm(pl.hi)+'. No pair was told to stop there.</p>' +
+    (pl.kink ? '<div class="stamp" data-cap="'+cap('P',0)+'"><b>'+esc(pl.kink.rule.replace(', authored',''))+'</b><small>AUTHORED · source: World rule (BOW Worlds branch) · the NBA’s real tax is incremental; this is the World’s own · '+esc(WD.taxRule.note)+'</small></div><p>The pile is the rule, drawn by choices. Why each pair stopped where it did is not on this sheet.</p>' : '<p>No rule in this World’s rulebook explains this pile.</p>') +
+    '<div class="tline"><b>TEACHER’S LINE</b>Ask: why are so many worlds just under this line? Let the class answer before you name it.</div>';
+}
+function partText(L){
+  var pw=firstPartWeek(L), used={}, out=[];
+  if(!pw) return { pw:null, t:'No world differs on this line.' };
+  var slot = SLOTS.filter(function(s){ return s.week===pw; })[0];
+  if(slot){ worlds().forEach(function(w){ var k=actOf(w,slot); if(!used[k]){ used[k]=1; out.push(slot.opts[k].past); } }); }
+  if(L.id==='wins') return { pw:pw, t:'Wins part at Week '+pw+', the first game after the call. Every world stood at '+recStr(you(),6)+' before it. The call changed no game already played.' };
+  if(L.id==='tax') return { pw:pw, t:'Projected tax parts at Week '+pw+', with payroll — it is worked out from payroll, so it cannot part sooner. Before Week '+pw+' nobody owed anything.' };
+  return { pw:pw, t:'Payroll parts at Week '+pw+', at the call. Every world stood at '+fm(P0)+' before it (shared: five weeks of acts, read through and not copied). At the call the dots split: '+out.join('; ')+'.', used:out };
+}
+function marginPart(){
+  var L = LINES.filter(function(l){ return l.id===S.sheet.part; })[0], pt=partText(L), pw=pt.pw;
+  var slot = SLOTS.filter(function(s){ return s.week===pw; })[0];
+  var b2 = slot ? '<div class="b2"><b>Week '+pw+' · '+esc(slot.name)+'</b>'+Object.keys(slot.opts).filter(function(k){ return worlds().some(function(w){ return actOf(w,slot)===k; }); }).map(function(k){ return '<span>'+esc(slot.opts[k].label)+'</span>'; }).join('')+'</div>' : '<div class="b2"><b>Week '+pw+' · a game, not an act</b><span>W</span><span>L</span></div>';
+  return '<h3 class="mh">Where '+esc(L.name.toLowerCase())+' first parts</h3>' +
+    '<div class="strata" data-cap="'+cap('P',1,'authored words here; a real one would name the crux')+'"><div class="b1">Weeks 1–'+(pw-1)+' · same in every world · read through, not copied</div>'+b2+'<div class="b3"><span>Weeks '+(pw+1<10?pw+1:9)+'–9 · the dots move apart or together</span></div></div>' +
+    '<p>'+esc(pt.t)+'</p><p class="small">The sheet has jumped to Week '+pw+'. Unranked: the moves are listed, not counted.</p>' +
+    '<div class="tline"><b>TEACHER’S LINE</b>Ask: what did the call change at once, and what only showed up a game later?</div>';
+}
+function rerunNums(A,B){
+  var acts = { w6:A.acts.w6, w7:A.acts.w7, w8:A.acts.w8 };
+  S.sheet.adopted.forEach(function(id){ acts[id]=B.acts[id]||SLOTS.filter(function(s){return s.id===id;})[0].dflt; });
+  return { pa:payrollAt(A.acts,9), pb:payrollAt(B.acts,9), pr:payrollAt(acts,9), acts:acts };
+}
+function marginPair(){
+  var sh=S.sheet, A=byId(sh.picks[0]), B=byId(sh.picks[1]);
+  var chips = '<div class="chips"><span class="chip'+(A.me?' me':'')+'">1 · '+esc(A.name)+'</span>'+(B?'<span class="chip">2 · '+esc(B.name)+'</span>':'')+'</div>';
+  if(!B) return '<h3 class="mh">One dot picked</h3>'+chips+'<p>Pick a second world. The Browser will walk to the last place you two agreed, then to the first place you parted.</p><div class="btnrow"><button type="button" class="btn" data-a="clearpicks">Put it down</button></div>';
+  var diffs = SLOTS.filter(function(s){ return actOf(A,s)!==actOf(B,s); });
+  var fi = SLOTS.indexOf(diffs[0]);
+  var lastAgree = fi>0 ? 'Week '+SLOTS[fi-1].week+' · '+SLOTS[fi-1].name+'. Both '+SLOTS[fi-1].opts[actOf(A,SLOTS[fi-1])].past+'.' : 'Weeks 1–5 · the shared record, read through and not copied.';
+  var firstPart = diffs.length ? 'Week '+diffs[0].week+' · '+diffs[0].name+'. '+esc(A.name)+' '+diffs[0].opts[actOf(A,diffs[0])].past+'; '+esc(B.name)+' '+diffs[0].opts[actOf(B,diffs[0])].past+'.' : 'No act separates them; only the games they played (scripted).';
+  var rr = rerunNums(A,B), gap0=Math.abs(rr.pa-rr.pb), gap1=Math.abs(rr.pr-rr.pb), t0=taxOf(rr.pa), tr=taxOf(rr.pr), tb=taxOf(rr.pb);
+  var verdict;
+  if(!sh.adopted.length) verdict = 'Gap: '+fm(gap0)+' of payroll at Week 9. Adopt '+esc(B.name)+'’s value for one assumption and re-run.';
+  else if(gap1<1) {
+    var solo = sh.adopted.filter(function(id){ var one={w6:A.acts.w6,w7:A.acts.w7,w8:A.acts.w8}; one[id]=B.acts[id]; return Math.abs(payrollAt(one,9)-rr.pb)<1; });
+    verdict = solo.length ? 'The gap closed. Adopting the Week '+SLOTS.filter(function(s){return s.id===solo[0];})[0].week+' act alone closes it: that is the crux.' : 'The gap closed, but only with all of these together.';
+  } else verdict = 'The gap is still '+fm(gap1)+'. That was not the crux. Go on to the next place you parted.';
+  var diffHTML = diffs.map(function(s){
+    var on = sh.adopted.indexOf(s.id)>=0;
+    return '<div class="diff"><b>Week '+s.week+' · '+esc(s.name)+'</b><div class="vals"><p>'+esc(A.name)+': '+esc(s.opts[actOf(A,s)].label)+'</p><p>'+esc(B.name)+': '+esc(s.opts[actOf(B,s)].label)+'</p></div><button type="button" class="adopt" data-a="adopt" data-v="'+s.id+'" aria-pressed="'+on+'" aria-label="Adopt '+esc(B.name)+'’s value for this assumption: '+esc(s.name)+'">Adopt '+esc(B.name)+'’s value</button></div>';
+  }).join('');
+  return '<h3 class="mh">Two worlds, one crux</h3>'+chips +
+    '<div class="btnrow" style="margin:4px 0 6px"><button type="button" class="btn solid" data-a="sit" data-v="'+B.id+'" data-cap="'+cap('P',0)+'">Sit where '+esc(B.name)+' sat</button><button type="button" class="btn" data-a="clearpicks">Put both down</button></div>' +
+    '<ol class="walk" data-cap="'+cap('P',0)+'"><li><b>Last place you agreed</b><p>'+esc(lastAgree)+'</p></li><li><b>First place you parted</b><p>'+firstPart+'</p></li></ol>' + diffHTML +
+    '<div class="rerun" data-cap="'+cap('P',0)+'"><div class="frame">RE-RUN · NOTHING FORKED · '+esc(A.name.toUpperCase())+'’S WORLD IS UNCHANGED</div>' +
+    '<table><tr><th></th><th>'+esc(A.name)+'</th><th>re-run</th><th>'+esc(B.name)+'</th></tr>' +
+    '<tr><th>Payroll · Wk 9</th><td>'+fm(rr.pa)+'</td><td>'+fm(rr.pr)+'</td><td>'+fm(rr.pb)+'</td></tr>' +
+    '<tr><th>Tax · Wk 9</th><td>'+fm(t0)+'</td><td>'+fm(tr)+'</td><td>'+fm(tb)+'</td></tr></table>' +
+    '<p class="v" data-kn="money re-runs by the World rule (COMPUTED); wins are scripted, so a game engine would be needed to re-run them">'+verdict+'</p></div>' +
+    '<div class="tline"><b>TEACHER’S LINE</b>The first place two worlds part is not always the crux. Let pairs test it.</div>';
+}
+/* ---------- sit where she sat ---------- */
+function seatSlot(){ return SLOTS.filter(function(s){ return s.id===S.sheet.sit.slot; })[0]; }
+function pageSeat(){
+  var sit=S.sheet.sit, B=byId(sit.wid), sl=seatSlot(), pw=sl.week-1, i;
+  var pay=payrollAt(B.acts, pw), rec=recStr(B, pw<=5?5:pw);
+  var acts=''; for(i=0;i<SLOTS.length;i++){ if(SLOTS[i].week<sl.week){ acts += '<li>Week '+SLOTS[i].week+' · '+esc(SLOTS[i].name)+': '+esc(B.name)+' '+esc(SLOTS[i].opts[actOf(B,SLOTS[i])].past)+'. <span data-kn="AUTHORED · scripted"></span></li>'; } }
+  var opts = Object.keys(sl.opts).map(function(k){ var o=sl.opts[k]; return '<button type="button" class="move" data-a="sitact" data-v="'+k+'" aria-pressed="'+(sit.took===k)+'"><span class="t">'+esc(o.label)+'</span><span class="n">'+(o.target!==undefined ? 'payroll becomes '+fm(Math.min(pay,o.target)) : (o.d===0 ? 'payroll unchanged' : 'payroll '+(o.d>0?'+':'−')+fm(Math.abs(o.d))))+'</span></button>'; }).join('');
+  var out='';
+  if(sit.took){
+    var acts2={ w6:B.acts.w6, w7:B.acts.w7, w8:B.acts.w8 }; var passed=false;
+    SLOTS.forEach(function(s){ if(s.id===sit.slot){ acts2[s.id]=sit.took; passed=true; } else if(passed){ acts2[s.id]=s.dflt; } });
+    var p9=payrollAt(acts2,9), hers=payrollAt(B.acts,9);
+    out = '<div class="frame" data-cap="'+cap('P',0)+'"><span class="stampline">Your branch · diverged Week '+sl.week+' · from '+esc(B.name)+'’s world · by you</span>' +
+      '<p>You took: <b>'+esc(sl.opts[sit.took].label)+'</b>. She took: <b>'+esc(sl.opts[actOf(B,sl)].label)+'</b>.</p>' +
+      '<p>Payroll, Week 9: <b>'+fm(p9)+'</b> <span data-kn="COMPUTED · World rule"></span> · projected tax <b>'+fm(taxOf(p9))+'</b> · hers: '+fm(hers)+'.</p>' +
+      '<p>Wins: <span class="unk">not simulated here — a game engine would tell</span></p></div>' +
+      '<div class="btnrow"><button type="button" class="btn solid" data-a="leave">Return to my own sheet</button></div>';
+  } else out = '<p class="sit-note">Her result is sealed until you act. Then you will see what she did.</p>';
+  return shelfHTML('w') + '<div class="seatpage" data-cap="'+cap('P',0)+'"><p class="eyebrow">YOU ARE SITTING IN '+esc(B.name.toUpperCase())+'’S SEAT</p><h2>'+esc(B.name)+' · Year Two · Week '+sl.week+' · '+esc(sl.name)+'</h2>' +
+    '<p class="sit-note">You know only what this seat knew then. The sheet is closed to you here.</p>' +
+    '<dl class="desk"><div><dt>Payroll at the start of Week '+sl.week+'</dt><dd><b>'+fm(pay)+'</b> <span data-kn="COMPUTED from her acts"></span></dd></div><div><dt>Record so far</dt><dd><b>'+rec+'</b> <span data-kn="RECORDED prefix, then AUTHORED (scripted)"></span></dd></div><div><dt>Open on this desk</dt><dd>'+esc(WD.openMatters[2].what)+'.</dd></div></dl>' +
+    (acts ? '<h4 class="movesh">Her acts so far</h4><ul class="sit-note" style="padding-left:20px">'+acts+'</ul>' : '<h4 class="movesh">Her acts so far</h4><p class="sit-note">None yet — this is where she first parted from you.</p>') +
+    '<h4 class="movesh">What this seat could do now</h4><div class="moves" role="group" aria-label="Moves in her seat" style="grid-template-columns:repeat('+Math.min(4,Object.keys(sl.opts).length)+',1fr)">'+opts+'</div>' + out +
+    (sit.took ? '' : '<div class="sealedsheet" style="min-height:0;grid-template-rows:auto"><p>The sheet is closed while you sit here.</p></div>') + '</div>';
+}
+function marginSit(){
+  var sit=S.sheet.sit, B=byId(sit.wid), sl=seatSlot();
+  return '<h3 class="mh">Sit where '+esc(B.name)+' sat</h3><p>You entered her world at Week '+sl.week+', the place you two first parted, with her knowledge and none of yours.</p>' +
+    '<div class="ledger" data-cap="'+cap('P',0)+'"><div><h4>You gained</h4><ul><li>Her desk as it stood at Week '+sl.week+'</li><li>Her acts up to here</li><li>The moves she had, unranked</li></ul></div>' +
+    '<div class="gone"><h4>You gave up</h4><ul><li>The sheet — where the other worlds ended</li><li>Your own result from Week '+sl.week+' on</li><li>What you saw at the pile: this seat did not have it</li></ul></div></div>' +
+    '<p class="small">Fictional names only. Her world is not changed by what you do here: you make a branch in your own ink.</p>' +
+    (sit.took ? '<div class="btnrow"><button type="button" class="btn" data-a="leave">Return to my own sheet</button></div>' : '') +
+    '<div class="tline"><b>TEACHER’S LINE</b>Ask: what did you not know at this moment that you know now? That gap is the price of the seat.</div>';
+}
+function marginRecord(){
+  var me=you(), rec={ w6:'butler', w7:'none', w8:'none' }, o=SLOTS[0].opts, same = me.acts.w6==='butler';
+  var recActs = WD.acts.map(function(a){ return '<li>'+sw('RECORDED')+'<b class="mono" style="font-size:11px">'+esc(a.when)+'</b><br>'+esc(a.what)+'</li>'; }).join('');
+  var rp = WD.payroll.v, mp = payrollAt(me.acts,9);
+  return '<h3 class="mh">The record</h3><p>The World’s own history. Every world on the sheet can be read beside it. It is one world among the dots, not the answer.</p>' +
+    '<ol class="recl" data-cap="'+cap('P',0)+'">'+recActs+'</ol>' +
+    '<div class="rerun" data-cap="'+cap('P',0)+'"><div class="frame">YOUR PAIR BESIDE THE RECORD</div><table><tr><th></th><th>The record</th><th>Your pair</th></tr>' +
+    '<tr><th>Week 6</th><td>'+esc(o.butler.past)+'</td><td>'+esc(o[me.acts.w6].past)+'</td></tr>' +
+    '<tr><th>Payroll · Wk 9</th><td>'+fm(rp)+'</td><td>'+fm(mp)+'</td></tr></table>' +
+    '<p class="v">'+(same ? 'Your pair parted from the record nowhere: you made the recorded move.' : 'Your pair parted from the record at Week 6, the call. Payroll differs by '+fm(Math.abs(rp-mp))+'.')+'</p></div>' +
+    '<div class="tline"><b>TEACHER’S LINE</b>The record is what happened once. The dots are what could have.</div>';
+}
+function marginDoor(){
+  var d=S.door, sh=S.sheet;
+  if(!d.chosen) return marginSealed();
+  if(sh.sit) return marginSit();
+  if(sh.mode==='record') return marginRecord();
+  if(sh.mode==='pile') return marginPile();
+  if(sh.mode==='part') return marginPart();
+  if(sh.mode==='pair') return marginPair();
+  return marginNote();
+}
+/* =====================================================================
+   PART 2 — the lineage: a fork as a place that lives
+   ===================================================================== */
+function lineageClock(){ return 'Fork · Year 9 of 9 (authored calendar)'; }
+function lineageHist(){ var L=S.lin; return (L.mode==='fork' || (L.mine && L.seamWorld==='mine')) && L.mine ? L.mine.name+' (yours, from Year '+L.mine.start+')' : FORK.name+' · by '+FORK.author; }
+function addrLineage(){
+  var L=S.lin, v = L.mode==='reality' ? 'Reality arrives · '+L.arrived+' of '+EVENTS.length : L.mode==='league' ? 'League · Year 9' : L.mode==='fork' ? (L.sel ? 'fork from Year '+L.sel : L.mine ? 'your fork “'+L.mine.name+'” from Year '+L.mine.start : 'fork · choose a season') : L.mode==='year' ? (L.sel===0?'the door':'Year '+L.sel) : 'inhabitants';
+  return FORK.name+' › Year 9 › by '+FORK.author+', diverged '+FORK.diverged+' › seat: observer › '+v;
+}
+function lineageWorlds(){
+  var w=[ { id:'main', name:FORK.name, by:FORK.author, ink:'a1', start:1, decl:DECL_MAIN, tax9:0 }, { id:'s1', name:SUB1.name, by:SUB1.by, ink:'a2', start:SUB1.start, decl:DECL_SUB1, tax9:SUB_TAX9 } ];
+  if(S.lin.mine) w.push({ id:'mine', name:S.lin.mine.name, by:'you', ink:'you', start:S.lin.mine.start, decl:mineDecl(), tax9:0 });
+  return w;
+}
+function lworld(id){ return lineageWorlds().filter(function(w){ return w.id===id; })[0] || lineageWorlds()[0]; }
+function mineDecl(){
+  var m=S.lin.mine, d=DECL_MAIN.filter(function(x){ return x.madeIn < m.start; });
+  if(m.hol!=='none') d.push(rost('Jrue Holiday', true, m.hol==='stays' ? '2026-07-01' : '2025-06-24', 'y1', m.start));
+  if(m.por!=='none') d.push(rost('Kristaps Porziņģis', true, m.por==='stays' ? '2026-07-01' : '2025-06-24', 'y2', m.start));
+  return d;
+}
+/* the seam: typed assumptions against Reality's recorded moments — computed, never scored */
+function keyOf(x){ return x.slot+':'+x.who+':'+(x.team||''); }
+function declFor(world, x){ var d=null; world.decl.forEach(function(q){ if(keyOf(q)===keyOf(x)) d=q; }); return d; }
+function verdictPart(world, ev, pt, derived){
+  var res={ ev:ev, pt:pt, verdict:null, why:'', used:[], trace:'' }, open=null, n, d, dv, i;
+  for(i=0;i<pt.needs.length && !res.verdict;i++){
+    n=pt.needs[i]; d=declFor(world,n);
+    if(d && (!d.thru || ev.date<=d.thru)){
+      res.used.push(d.id);
+      if(d.v!==n.v){ res.verdict='DIVERGED'; res.trace=d.id+' (declared) ≠ '+pt.id+' (Reality)'; res.why='Reality’s act needs '+n.who+' on '+n.team+'. This fork declared: '+d.plain+'. So it is not in this world — a difference, not a failure.'; }
+    } else if(keyOf(n) in derived){
+      dv=derived[keyOf(n)];
+      if(dv.v===undefined) open=n;
+      else if(dv.v!==n.v){ res.verdict='IMPOSSIBLE'; res.trace=(dv.cause||'')+' → '+n.who.split(' ').pop()+' never arrives → '+pt.id+' cannot happen'; res.why='This act needs '+n.who+' on '+n.team+'. In this fork he never arrived: '+dv.via+' diverged first. So it cannot happen here.'; }
+    } else open=n;
+  }
+  if(!res.verdict){
+    for(i=0;i<pt.sets.length && !res.verdict;i++){ d=declFor(world,pt.sets[i]); if(d && d.thru && d.thru>ev.date && d.v!==pt.sets[i].v){ res.used.push(d.id); res.verdict='DIVERGED'; res.trace=d.id+' (declared) ≠ '+pt.id+' effect (Reality)'; res.why='Reality did it. This fork declared: '+d.plain+'. Both records stand; neither overwrites the other.'; } }
+  }
+  if(!res.verdict){
+    if(open){ res.verdict='RE-DECLARE'; res.trace='no declaration for '+open.who+'; nothing derived'; res.why='This act needs '+open.who+' on '+open.team+'. This fork never said where he is. Open: a declaration is due, and nothing was decided for it.'; }
+    else { res.verdict='HELD'; res.trace=(res.used.join(', ')||'pinned')+' = '+pt.id; res.why = pt.needs[0].slot==='rules' ? 'This fork pinned the league’s rules to Reality. The new lines arrive exactly as Reality set them.' : 'Reality’s record matches what this fork declared'+(res.used.length?' ('+res.used.join(', ')+')':'')+'. Nothing to reconcile.'; }
+  }
+  pt.sets.forEach(function(st){
+    var k=keyOf(st);
+    if(res.verdict==='HELD') derived[k]={ v:st.v };
+    else if(!declFor(world,st)) derived[k]={ v: res.verdict==='RE-DECLARE' ? undefined : false, via:pt.short, cause:res.trace };
+  });
+  return res;
+}
+function seamFor(world, upto){
+  var derived={}, out=[];
+  EVENTS.slice(0,upto).forEach(function(ev){ ev.parts.forEach(function(pt){ out.push(verdictPart(world, ev, pt, derived)); }); });
+  return out;
+}
+function vword(v){ return v; }
+function taxRange(){ var t=lineageWorlds().map(function(w){ return w.tax9; }); return [Math.min.apply(null,t), Math.max.apply(null,t)]; }
+
+function pageLineage(){
+  var L=S.lin, W=lineageWorlds(), sw=lworld(L.seamWorld), verd=seamFor(sw, L.arrived), i, k;
+  var mine = L.mine, s1=SUB1;
+  var head = '<div class="ch cy"></div><div class="ch">Reality<small>solid black</small></div>' +
+    '<div class="ch" style="--ink2:var(--a1);color:var(--a1)">'+esc(FORK.name)+'<small>by '+esc(FORK.author)+' · diverged '+esc(FORK.diverged)+'</small></div>' +
+    '<div class="ch" style="color:var(--a2)">'+esc(s1.name)+'<small>by '+esc(s1.by)+' · from Year '+s1.start+'</small></div>' +
+    (mine ? '<div class="ch" style="color:var(--you)">'+esc(mine.name)+'<small>by you · from Year '+mine.start+'</small></div>' : '<div class="ch slot">your fork would hang here</div>');
+  var rows='';
+  for(k=0;k<=10;k++){
+    var yr='';
+    var Y = k>=1 && k<=9 ? YEARS[k-1] : null, sel = L.sel===k && (L.mode==='year' || L.mode==='fork');
+    var evs = EVENTS.filter(function(e){ return yearOfDate(e.date)===k; });
+    /* year label */
+    yr += '<div class="cy'+(sel?' crowsel':'')+'">'+(k===0?'door':k===10?'NOW':'Y'+k)+'<small>'+(Y?Y.span:k===0?'17 Jun 2017':'29 Sep 2026')+'</small></div>';
+    /* reality */
+    var rc='<div class="cr'+(sel?' crowsel':'')+'"><span class="colab">Reality · OBSERVED</span>';
+    if(k===0) rc += '<i class="tk2" style="top:18px"></i><span class="rd" style="top:14px"><b>17 Jun ’17</b></span>';
+    if(k===10) rc += '<i class="tk2" style="top:18px"></i><button type="button" class="rd" data-a="lsel" data-v="10" data-fk="row10" style="left:40px;top:12px;min-height:24px;padding:0 4px;border:1.5px solid var(--ink);background:var(--sheet);font:600 10px var(--mono)" aria-label="Return to Reality, now">NOW ▸</button>';
+    evs.forEach(function(e,ix){ var top = evs.length===1 ? 18 : 5+ix*11, arr = EVENTS.indexOf(e) < L.arrived; rc += '<i class="tk2'+(arr?'':' later')+'" style="top:'+top+'px"></i><span class="rd" style="top:'+(top-4)+'px"><b>'+esc(evd(e).replace(/ 20\d\d$/,''))+'</b>'+(arr?' ▸':'')+'</span>'; });
+    yr += rc+'</div>';
+    /* the fork band */
+    var glyphs = verd.filter(function(r){ return yearOfDate(r.ev.date)===k; });
+    var gl = ''; if(sw.id==='main') gl = glyphs.map(function(r){ return VG[r.verdict]; }).join('');
+    if(k===0) yr += '<button type="button" class="cf'+(sel?' crowsel':'')+'" data-a="lsel" data-v="0" data-fk="row0" aria-label="The door: '+esc(DOOR17.question)+'"><span class="txt">The door · '+esc(DOOR17.question.replace(/^17 Jun 2017 · /,''))+'</span></button>';
+    else if(k===10) yr += '<div class="cf" style="border-left-color:var(--pencil);color:var(--pencil);font-style:italic;font-size:13px"><span class="txt">The fork’s clock stops at Year 9. Reality is a season on.</span></div>';
+    else yr += '<button type="button" class="cf'+(sel?' crowsel':'')+'" data-a="lsel" data-v="'+k+'" aria-label="Year '+k+' · '+Y.span+' — '+esc(Y.head)+' (AUTHORED: the author’s story)">'+swk('AUTHORED')+'<span class="txt">'+esc(Y.head)+'</span>'+(k===9 && L.traded ? '<span class="trial">trial · PHI</span>' : '')+gl+'</button>';
+    /* sub-fork 1 */
+    yr += subCell(k, s1.id, s1.start, s1.lines[k], 'a2', sw.id==='s1' ? glyphs : null, false);
+    /* yours */
+    if(mine) yr += subCell(k, 'mine', mine.start, 'no acts yet', 'you', sw.id==='mine' ? glyphs : null, true);
+    else yr += '<div class="cs void"></div>';
+    rows += '<div class="yr">'+yr+'</div>';
+  }
+  var pub = '<div class="pubstamp" data-cap="'+cap('S',null,'forks that live for years, with runnable archived rulebooks')+'">PUBLIC · ANYONE MAY READ IT · ANYONE MAY FORK IT<br>no popularity number is drawn</div>';
+  return shelfHTML('l') +
+    '<div class="cover"><div><p class="eyebrow">A FORK THAT LIVES · A LINEAGE, NOT A FILE</p><h1>'+esc(FORK.name)+'</h1><p class="by" data-kn="black ticks: OBSERVED, from the shared fixture, dated, verify · the fork’s bands: AUTHORED, the author’s story, illustrative">by '+esc(FORK.author)+' · diverged '+esc(FORK.diverged)+' · its own clock: Year 9 of 9 · REPLAY: Reality arrives when you let it</p></div>'+pub+'</div>' +
+    '<div class="core" role="group" aria-label="The lineage: one band per season; Reality in solid black at the left" data-cap="'+cap('P',0)+'">'+head+rows+'</div>';
+}
+function subCell(k, id, start, text, ink, glyphs, isMine){
+  var L=S.lin, style='style="--ink2:var(--'+ink+')"', gl = glyphs ? glyphs.map(function(r){ return VG[r.verdict]; }).join('') : '';
+  if(k===0) return '<div class="cs void"></div>';
+  if(k<start) return '<div class="cs pre" '+style+'>'+(k===start-1?'shared · not copied':'')+'</div>';
+  if(k===10) return '<div class="cs void"></div>';
+  var tab = k===start ? '<span class="tab2">'+(isMine?'Your branch':'branch')+' · diverged Y'+start+'</span>' : '';
+  var empty = isMine && text==='no acts yet';   /* nothing written yet: dashed-empty, not outlined */
+  return '<div class="cs'+(isMine?' mine':'')+(empty?' emp':'')+'" '+style+'><span class="colab">'+(isMine?'Your fork · '+(empty?'UNKNOWN':'AUTHORED'):'Other author’s fork · AUTHORED')+'</span>'+tab+sw(empty?'UNKNOWN':'AUTHORED')+'<span class="txt" title="'+esc(text||'')+'">'+esc(text||'')+'</span>'+gl+'</div>';
+}
+function ltabs(){
+  var L=S.lin;
+  return '<div class="ltabs" role="group" aria-label="What to look at">' + [['inhab','Inhabitants'],['reality','Reality arrives'],['league','League · Year 9'],['fork','Fork from here']].map(function(t){ return '<button type="button" class="ltab" data-a="lmode" data-v="'+t[0]+'" aria-pressed="'+(L.mode===t[0])+'">'+t[1]+'</button>'; }).join('') + '</div>';
+}
+function sealSVG(){
+  return '<svg viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="25" fill="none" stroke="#15120e" stroke-width="2"/><circle cx="27" cy="27" r="19" fill="none" stroke="#15120e" stroke-width="1.2" stroke-dasharray="2 2.4"/><defs><pattern id="stp" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".75" fill="#15120e"/><circle cx="3.5" cy="3.5" r=".75" fill="#15120e"/></pattern></defs><circle cx="27" cy="27" r="13" fill="url(#stp)" stroke="#15120e" stroke-width="1"/><rect x="11" y="21" width="32" height="18" fill="#f8f4e6"/><text x="27" y="26" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6.5" font-weight="700" fill="#15120e">AGENT</text><text x="27" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="#15120e">W-2</text></svg>';
+}
+function marginInhab(){
+  var seats = SEATS.map(function(s){
+    return '<li'+(s.kind==='agent'?' data-cap="'+cap('S',3,'agents in seats of public forks, at scale')+'"':'')+'>'+(s.kind==='agent' ? sealSVG() : '<div class="who">'+(s.role==='Owner'?'OWNER':'GM')+'</div>')+
+      '<div><b>'+esc(s.role)+' · '+esc(s.who)+'</b>'+esc(s.how)+
+      (s.kind==='agent' ? ' Seal: model <span class="mono">[model id]</span> · version <span class="mono">[x]</span> — a slot; no model ran here.' : '')+'</div></li>';
+  }).join('');
+  var decls = DECL_MAIN.map(function(d){ return '<li data-kn="AUTHORED · '+esc(d.plain)+'">'+sw('AUTHORED')+esc(d.text)+'</li>'; }).join('');
+  return '<h3 class="mh">A fork that lives</h3>' +
+    '<div class="stamp a1" data-cap="'+cap('S',null,'a fork persisting for years')+'"><b>'+esc(FORK.name)+'</b><small>PUBLIC · by '+esc(FORK.author)+' · diverged '+esc(FORK.diverged)+' · own clock, Year 9 of 9 · history AUTHORED, illustrative</small></div>' +
+    '<h4 class="mh">Seats held</h4><ul class="seats">'+seats+'</ul>' +
+    '<h4 class="mh">Declared assumptions</h4><ul class="decls" data-cap="'+cap('P',0)+'">'+decls+'</ul>' +
+    '<p class="small">Tap a season to read it.</p>' +
+    '<div class="tline"><b>TEACHER’S LINE</b>Ask: what would you need to know before you trusted a seat held by an agent? Who granted the warrant?</div>';
+}
+function marginYear(){
+  var L=S.lin, k=L.sel;
+  if(k===0){
+    var sealed = L.asked ? '<div class="sealtxt" data-kn="OBSERVED · '+esc(DOOR17.sealed.src)+' · as of '+esc(DOOR17.sealed.asOf)+'"><b class="mono" style="font-size:11px">WHAT REALITY DID · ASKED BY AN OBSERVER</b><br>'+esc(DOOR17.sealed.v)+'</div>' : '<div class="sealtxt unk">Sealed. Reality’s answer stays sealed until the person in the seat acts — or an observer asks.</div>';
+    return '<h3 class="mh">The door</h3><p><b>'+esc(DOOR17.question)+'</b></p><p class="small">Seat: '+esc(DOOR17.seat)+'. A door is named by its question, never its answer.</p>' +
+      '<p>This fork parted here: it kept the pick.</p>'+sealed+
+      (L.asked ? '' : '<div class="btnrow"><button type="button" class="btn" data-a="ask">Ask what Reality did</button></div>');
+  }
+  if(k===10) return '<h3 class="mh">Return to Reality</h3><p><b>'+esc(FX.reality.name)+'</b></p><p>'+esc(FX.reality.clock.label)+'. Now: '+esc(dlabel(FX.reality.clock.now))+' · '+esc(FX.reality.clock.phase.v)+' <span class="mono" style="font-size:11px">[verify: camp dates]</span>.</p><p class="small">You can '+esc(FX.reality.youCan.join(', '))+'. You cannot '+esc(FX.reality.youCannot.join(', '))+'. The fork’s clock stopped at Year 9, a season behind. Nothing here was written to Reality.</p><div class="btnrow"><button type="button" class="btn" data-a="view" data-v="door">Back to Doors</button></div>';
+  var Y=YEARS[k-1], evs=EVENTS.filter(function(e){ return yearOfDate(e.date)===k; });
+  return '<h3 class="mh">Year '+k+' · '+Y.span+'</h3><p class="small">In the author’s ink. AUTHORED, illustrative: the author’s story for the fork, not what happened.</p>' +
+    '<ol class="yrs" style="padding-left:20px;border-left:4px solid var(--a1);margin:8px 0;list-style:none;padding-left:12px">'+Y.acts.map(function(a){ return '<li>'+sw('AUTHORED')+esc(a)+'</li>'; }).join('')+'</ol>' +
+    (evs.length ? '<p class="small">Reality’s recorded moments in this season: '+evs.map(function(e){ return esc(evd(e)); }).join(' · ')+'. They arrive when you let them.</p>' : '') +
+    '<div class="btnrow"><button type="button" class="btn solid" data-a="cut" data-v="'+k+'" aria-label="Fork from Year '+k+'" data-cap="'+cap('P',0)+'">Fork from Year '+k+'</button></div>' +
+    '<p class="small">A fork here inherits Years 1–'+(k-1)+' by reference. Nothing is copied.</p>';
+}
+function verdictHTML(r, full){
+  var src = r.ev.src;
+  return '<li class="vd'+(full?'':' old')+'"><div>'+VG[r.verdict]+'</div><div><span class="vw">'+r.verdict+'</span>' +
+    '<p class="q" data-kn="OBSERVED · '+esc(src.src||'')+' · as of '+esc(src.asOf||'')+'">'+esc(evd(r.ev))+' · '+esc(r.pt.label)+'</p>' +
+    (full ? '<p>'+esc(r.why)+'</p><p class="q" data-cap="'+cap('P',0)+'">trace · '+esc(r.trace)+'</p>' : '') + '</div></li>';
+}
+function marginReality(){
+  var L=S.lin, W=lineageWorlds(), sw=lworld(L.seamWorld), verd=seamFor(sw,L.arrived), next=EVENTS[L.arrived];
+  var sel = W.map(function(w){ return '<button type="button" class="btn" data-a="seamworld" data-v="'+w.id+'" aria-pressed="'+(L.seamWorld===w.id)+'" aria-label="Read the seam for '+esc(w.name)+'">'+esc(w.id==='main'?'Author’s fork':w.id==='s1'?'Fultz traded ’19':'Your fork')+'</button>'; }).join('');
+  var fe = L.focusEv || L.arrived;
+  var byEv = {}; verd.forEach(function(r){ (byEv[r.ev.id]=byEv[r.ev.id]||[]).push(r); });
+  var strip = '', detail = '', i;
+  for(i=0;i<L.arrived;i++){
+    var e=EVENTS[i], rs=byEv[e.id]||[];
+    strip += '<button type="button" class="evc" data-a="focusev" data-v="'+(i+1)+'" aria-pressed="'+(i+1===fe)+'" aria-label="Open '+esc(evd(e))+': '+esc(rs.map(function(r){ return r.verdict; }).join(' and '))+'"><span class="gl">'+rs.map(function(r){ return VG[r.verdict]; }).join('')+'</span><span>'+esc(evd(e).replace(/ 20\d\d$/,''))+'</span></button>';
+    if(i+1===fe) detail = rs.map(function(r){ return verdictHTML(r,true); }).join('');
+  }
+  if(fe===4 && L.arrived>=4){
+    var rg=taxRange(), out = PRE_TAX.v>rg[1] || PRE_TAX.v<rg[0];
+    if(out) detail += '<li class="nowh" data-cap="'+cap('P',0)+'"><b>NO WORLD HERE HAD THIS</b>Reality’s projected tax that week, about '+fm(PRE_TAX.v)+' (OBSERVED, verify), is outside every world in this lineage: '+fm(rg[0])+' to '+fm(rg[1])+' (AUTHORED, illustrative). The sheet says so instead of guessing.</li>';
+  }
+  return '<div class="sw2" role="group" aria-label="Read the seam for which world">'+sel+'</div>' +
+    '<div class="key" aria-label="Key to the verdict marks">'+['HELD','DIVERGED','IMPOSSIBLE','RE-DECLARE'].map(function(v){ return '<span>'+VG[v]+v.toLowerCase()+'</span>'; }).join('')+'</div>' +
+    (L.arrived ? '' : '<p>Reality’s recorded moments walk through this lineage one at a time. Each gets a verdict against the fork’s declared assumptions. A verdict is not a score: DIVERGED is not a failure.</p>') +
+    (next ? '<div class="btnrow"><button type="button" class="btn solid" data-a="arrive" data-cap="'+cap('P',0)+'">Let Reality arrive: '+esc(evd(next))+'</button></div><p class="small">Next, named by its question: '+esc(next.q)+'</p>' : '<p class="small"><b>All '+EVENTS.length+' recorded moments have arrived.</b> A verdict is not a score: DIVERGED is not a failure.</p>') +
+    (strip ? '<div class="evs" role="group" aria-label="Moments that have arrived">'+strip+'</div>' : '') +
+    '<ol class="vlist" aria-label="Verdict for the open moment" data-cap="'+cap('P',0)+'">'+detail+'</ol>' +
+    (L.arrived ? '<div class="tline"><b>TEACHER’S LINE</b>Ask: why is DIVERGED not the same as wrong? What would the fork have to declare to turn RE-DECLARE into a verdict?</div>' : '');
+}
+function lockHTML(){
+  var L=S.lin, phi = L.declared;
+  return '<div class="lock" data-cap="'+cap('P',0)+'"><b>League · Year 9</b> — a lockfile<br>' +
+    'rules&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:= Reality (pinned) · 2025–26<br>' +
+    '<span class="a">Boston&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:= this fork · by '+esc(FORK.author)+'</span><br>' +
+    (phi ? '<span class="y">Philadelphia := declared by you · authored, illustrative</span><br>'+(29-1)+' clubs&nbsp;&nbsp;&nbsp;:= Reality (pinned) · read-only' : '29 clubs&nbsp;&nbsp;&nbsp;:= Reality (pinned) · read-only')+'</div>';
+}
+function rackHTML(){
+  var L=S.lin, h='', i;
+  for(i=0;i<30;i++){
+    var c = i===0 ? 'bos' : i===12 ? 'phi'+(L.declared?' done':'') : '';
+    h += '<span class="rk '+c+'"><i></i>'+(i===0?'BOS':i===12?'PHI':'')+'</span>';
+  }
+  return '<div class="rack" role="img" aria-label="Thirty clubs. Boston is this fork. Philadelphia is '+(L.declared?'declared by you':'open')+'. The other 28 are pinned to Reality.">'+h+'</div>';
+}
+function marginLeague(){
+  var L=S.lin, over = FORK_PAYROLL+PHI_IN-L2526.tax.v, t;
+  t = '<h3 class="mh">League · Year 9</h3>' + rackHTML() + lockHTML();
+  if(!L.tried){
+    t += '<p>This fork’s Boston plays in a League. The other clubs are Reality, pinned; Boston’s books are the fork’s.</p>' +
+      '<p><b>The trade:</b> Boston sends its 2027 first-round pick (authored). Philadelphia sends a wing at '+fm(PHI_IN)+' (illustrative).</p>' +
+      '<p class="small">A trade you try runs in a trial on top of the fork. Nothing is written to the author’s record.</p>';
+  }
+  if(!L.declared && !L.tried) t += '<div class="btnrow"><button type="button" class="btn solid" data-a="trytrade">Try the trade with Philadelphia</button></div>';
+  if(L.tried && !L.declared){
+    t += '<div class="refuse" data-cap="'+cap('P',0)+'"><b>REFUSED · this address is not closed</b><span class="rule">RULE · an address is well-formed only when closed</span><p>The trade touches Philadelphia, which sits only inside the 29-club bulk pin: a read-only reference. Reality does not sign for a fork. Close Philadelphia as its own line: pin it at a named cut, or declare it.</p></div>' +
+      '<div class="btnrow"><button type="button" class="btn" data-a="pinphi">Pin Philadelphia at Year 9</button><button type="button" class="btn solid" data-a="declphi">Declare Philadelphia</button></div>';
+    if(L.pinTried) t += '<div class="hole"><b class="mono" style="font-size:11px">UNKNOWN</b> · no Philadelphia books in the shared store to pin. <span class="mono" style="font-size:10.5px">[verify]</span></div>';
+  }
+  if(L.declared && !L.traded) t += '<p>Philadelphia is closed: declared by you as an authored desk (illustrative). The lockfile is well-formed.</p><div class="btnrow"><button type="button" class="btn solid" data-a="trytrade">Try the trade again</button></div>';
+  if(L.traded) t += '<div class="frame" data-cap="'+cap('P',0)+'"><span class="stampline">Trial · yours · not in the author’s record</span>' +
+    '<p>Boston payroll: '+fm(FORK_PAYROLL)+' (authored) + '+fm(PHI_IN)+' = <b>'+fm(FORK_PAYROLL+PHI_IN)+'</b> <span data-kn="COMPUTED"></span></p>' +
+    '<p>League rule, pinned to Reality: 2025–26 tax line '+fm(L2526.tax.v)+' <span data-kn="OBSERVED · '+esc(L2526.tax.src)+' · verify"></span>. Boston is <b>'+(over>0?fm(over)+' over':fm(-over)+' under')+'</b> it.</p>' +
+    '<p>Tax bill: <span class="unk">UNKNOWN [verify: bracket rates are not in the shared fixture]</span></p></div>';
+  return t;
+}
+function marginFork(){
+  var L=S.lin, k=L.sel && L.sel>=1 ? L.sel : null, mine=L.mine;
+  var t='<h3 class="mh">Fork again, from inside</h3>';
+  if(!k && !mine) return t+'<p>Tap a season in the lineage, then fork from it. Your fork inherits everything before that season by reference, takes your ink, and hangs from the lineage where you cut.</p>';
+  if(k){
+    var pre=YEARS.slice(0,k-1), n=pre.reduce(function(a,y){ return a+y.acts.length; },0);
+    var opt = function(key, who){ return '<div class="sw3" role="group" aria-label="Declare '+esc(who)+'"><span>'+esc(who)+'</span>' + [['none','Not declared'],['stays','Stays'],['goes','Goes (as Reality)']].map(function(o){ return '<button type="button" class="btn" data-a="dec" data-v="'+key+'" data-w="'+o[0]+'" aria-pressed="'+(L[key]===o[0])+'">'+o[1]+'</button>'; }).join('') + '</div>'; };
+    t += '<div class="frame" data-cap="'+cap('P',0)+'"><span class="stampline">Your branch · diverged Year '+k+' · '+YEARS[k-1].span+'</span>' +
+      '<p><b>Inherits Years 1–'+(k-1)+'</b> of '+esc(FORK.name)+' by reference: '+(k-1)+' seasons, '+n+' acts, <b>0 copied</b>. Your ink is blue; it hangs from the lineage at Year '+k+'. Inherited declarations: '+(DECL_MAIN.filter(function(d){ return d.madeIn<k; }).map(function(d){ return d.id; }).join(', ')||'none')+'.</p>' +
+      '<label class="lb" for="nm">Name your fork</label><input class="nm" id="nm" data-a="name" value="'+esc(L.name)+'" autocomplete="off">' +
+      '<label class="lb">Declare, for a verdict later</label>'+opt('hol','Jrue Holiday')+opt('por','Kristaps Porziņģis')+'</div>' +
+      '<div class="btnrow"><button type="button" class="btn solid" data-a="keep">Keep my fork</button></div>';
+  }
+  if(mine) t += '<div class="stamp" style="border-color:var(--you);box-shadow:inset 0 0 0 3px var(--sheet),inset 0 0 0 4.5px var(--you)"><b style="color:var(--you)">'+esc(mine.name)+'</b><small>Your branch · diverged Year '+mine.start+' · from '+esc(FORK.name)+' · by you · private: nothing is published in this prototype · shared prefix Years 1–'+(mine.start-1)+', no history copied</small></div>' +
+    '<div class="btnrow"><button type="button" class="btn" data-a="readmine">Read the seam for my fork</button></div>';
+  return t;
+}
+function marginLineage(){
+  var L=S.lin, body = L.mode==='reality' ? marginReality() : L.mode==='league' ? marginLeague() : L.mode==='fork' ? marginFork() : (L.mode==='year' && L.sel!=null) ? marginYear() : marginInhab();
+  return ltabs()+body;
+}
+function ACT2(kind, p, set){
+  var L=S.lin, W;
+  switch(kind){
+    case 'lmode': L.mode=p.v; set('You','Opened '+MODENAME[p.v]); return true;
+    case 'lsel': L.sel=+p.v; L.mode='year'; set('You', L.sel===0 ? 'Opened the door: '+DOOR17.question : L.sel===10 ? 'Looked at Reality, now: the live record beside the fork' : 'Opened Year '+L.sel+' · '+YEARS[L.sel-1].span+' of the lineage'); return true;
+    case 'ask': L.asked=true; set('You (observer)','Asked what Reality did at the door: the sealed outcome opened for this observer'); return true;
+    case 'arrive': {
+      if(L.arrived>=EVENTS.length) return false;
+      L.arrived++; L.focusEv=L.arrived; L.mode='reality';
+      var ev=EVENTS[L.arrived-1], rs=seamFor(lworld(L.seamWorld), L.arrived).filter(function(r){ return r.ev===ev; });
+      set('Reality (replay)', evd(ev)+' arrived at '+lworld(L.seamWorld).name+': '+rs.map(function(r){ return r.verdict; }).join(' / ')); return true; }
+    case 'focusev': L.focusEv=+p.v; set('You','Opened the verdict for '+evd(EVENTS[L.focusEv-1])); return true;
+    case 'seamworld': L.seamWorld=p.v; set('You','Read the seam for '+lworld(p.v).name); return true;
+    case 'readmine': L.seamWorld='mine'; L.mode='reality'; set('You','Read the seam for '+L.mine.name); return true;
+    case 'trytrade':
+      L.tried++; L.mode='league';
+      if(!L.declared){ set('You (trial)','Tried a trade with Philadelphia: REFUSED — an address is well-formed only when closed'); }
+      else { L.traded=true; set('You (trial)','Trial trade ran inside the fork: 2027 first out, a '+fm(PHI_IN)+' wing in; payroll '+fm(FORK_PAYROLL+PHI_IN)+' vs the '+fm(L2526.tax.v)+' line (trial, not written to the author’s record)'); }
+      return true;
+    case 'pinphi': L.pinTried=true; set('You','Tried to pin Philadelphia at Year 9: nothing to pin — no Philadelphia books in the shared store (UNKNOWN)'); return true;
+    case 'declphi': L.declared=true; set('You','Declared Philadelphia as an authored desk (illustrative): a '+fm(PHI_IN)+' wing for Boston’s 2027 first. The lockfile is closed'); return true;
+    case 'cut': L.sel=+p.v; L.mode='fork'; set('You','Chose to fork from Year '+L.sel+' of the lineage'); return true;
+    case 'dec': L[p.v]=p.w; set('You','Draft declaration'); return true;
+    case 'keep': {
+      var k=L.sel; if(!k) return false;
+      var nm=(L.name||'').trim() || 'Your fork';
+      L.mine={ start:k, name:nm, hol:L.hol, por:L.por }; L.mode='fork'; L.sel=null;
+      var n=YEARS.slice(0,k-1).reduce(function(a,y){ return a+y.acts.length; },0);
+      set('You','Kept a fork from Year '+k+': “'+nm+'”. Inherits Years 1–'+(k-1)+' ('+n+' acts) by reference, 0 copied. Stamp: Your branch · diverged Year '+k+' · by you'); return true; }
+  }
+  return false;
+}
+
+
+
+/* =====================================================================
+   events
+   ===================================================================== */
+document.addEventListener('click', function(ev){
+  var b = ev.target.closest('[data-a]'); if(!b || b.disabled || b.tagName==='INPUT') return;
+  act(b.dataset.a, { v:b.dataset.v, w:b.dataset.w });
+});
+document.addEventListener('input', function(ev){ var t=ev.target; if(t && t.dataset && t.dataset.a==='name'){ S.lin.name=t.value; } });
+var rz=null; window.addEventListener('resize', function(){ clearTimeout(rz); rz=setTimeout(render, 120); });
+render();
+window.__parting = { S:S, RECORD:RECORD, TRAIL:TRAIL, act:act };
+})();
+</script>
+</body>
+</html>

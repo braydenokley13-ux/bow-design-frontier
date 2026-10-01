@@ -1,0 +1,408 @@
+[
+ {
+  "wait": 600
+ },
+ {
+  "shot": "board-discover"
+ },
+ {
+  "click": "Open E0"
+ },
+ {
+  "shot": "E0-observer"
+ },
+ {
+  "click": "Open SINCE"
+ },
+ {
+  "shot": "E0-observer-since-read"
+ },
+ {
+  "click": "Close SINCE"
+ },
+ {
+  "click": "Ask for the handover"
+ },
+ {
+  "click": "Take line 1"
+ },
+ {
+  "click": "Take line 2"
+ },
+ {
+  "click": "Hand back line 3"
+ },
+ {
+  "shot": "E0-sign-line-by-line"
+ },
+ {
+  "click": "Sign and start my clock"
+ },
+ {
+  "shot": "E0-after-enter"
+ },
+ {
+  "click": "Let line 2 lapse"
+ },
+ {
+  "click": "Offer a bench salary"
+ },
+ {
+  "shot": "E0-first-act"
+ },
+ {
+  "click": "Why · what if"
+ },
+ {
+  "shot": "E0-why-what-if"
+ },
+ {
+  "click": "This lane"
+ },
+ {
+  "shot": "E0-about"
+ },
+ {
+  "click": "Record"
+ },
+ {
+  "shot": "E0-record"
+ },
+ {
+  "click": "Hand over",
+  "exact": true
+ },
+ {
+  "shot": "E0-return"
+ },
+ {
+  "click": "Return to the record"
+ },
+ {
+  "shot": "E0-return-to-the-record-branch-kept"
+ },
+ {
+  "click": "The board"
+ },
+ {
+  "click": "Open E1"
+ },
+ {
+  "shot": "E1-before-at-the-rail"
+ },
+ {
+  "click": "Sign with the pen",
+  "force": true
+ },
+ {
+  "shot": "E1-refused-standing"
+ },
+ {
+  "click": "Sit at the desk",
+  "nth": 1
+ },
+ {
+  "shot": "E1-sit-rehearsal"
+ },
+ {
+  "click": "Sign with the pen"
+ },
+ {
+  "shot": "E1-after-signed-frosted"
+ },
+ {
+  "click": "Stand up (restores nothing)"
+ },
+ {
+  "shot": "E1-stood-up-nothing-restored"
+ },
+ {
+  "click": "Sit at the desk",
+  "nth": 1
+ },
+ {
+  "click": "Offer a bench salary"
+ },
+ {
+  "shot": "E1-first-act"
+ },
+ {
+  "click": "Hand over",
+  "exact": true
+ },
+ {
+  "click": "The board"
+ },
+ {
+  "click": "Open E2"
+ },
+ {
+  "shot": "E2-before"
+ },
+ {
+  "click": "Open the SINCE drawer"
+ },
+ {
+  "shot": "E2-since-drawer-open"
+ },
+ {
+  "click": "Seal the drawer"
+ },
+ {
+  "shot": "E2-sealed"
+ },
+ {
+  "click": "Take the seat"
+ },
+ {
+  "shot": "E2-after-enter-stamped"
+ },
+ {
+  "click": "Offer a bench salary"
+ },
+ {
+  "shot": "E2-first-act"
+ },
+ {
+  "click": "Why · what if"
+ },
+ {
+  "shot": "E2-why-what-if"
+ },
+ {
+  "click": "Eight changes"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "shot": "E2-how-do-we-know-layer"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "click": "Hand over",
+  "exact": true
+ },
+ {
+  "click": "The board"
+ },
+ {
+  "click": "Open E3"
+ },
+ {
+  "shot": "E3-before-envelope"
+ },
+ {
+  "click": "Take the seat myself",
+  "force": true
+ },
+ {
+  "shot": "E3-refused-self-appoint"
+ },
+ {
+  "click": "Open the Offer"
+ },
+ {
+  "shot": "E3-threshold"
+ },
+ {
+  "click": "Sign and redeem"
+ },
+ {
+  "shot": "E3-after-bound"
+ },
+ {
+  "click": "Try the phrase on the hallway device"
+ },
+ {
+  "shot": "E3-hallway-not-for-you"
+ },
+ {
+  "click": "Offer a bench salary"
+ },
+ {
+  "shot": "E3-first-act"
+ },
+ {
+  "click": "What’s real?"
+ },
+ {
+  "shot": "E3-whats-real-layer"
+ },
+ {
+  "click": "What’s real?"
+ },
+ {
+  "click": "Hand the copy back"
+ },
+ {
+  "click": "The board"
+ },
+ {
+  "click": "Open E4"
+ },
+ {
+  "shot": "E4-before-ringing"
+ },
+ {
+  "click": "Let it ring"
+ },
+ {
+  "shot": "E4-rang-out"
+ },
+ {
+  "click": "Ring again"
+ },
+ {
+  "click": "Pick up"
+ },
+ {
+  "shot": "E4-after-pickup-brief"
+ },
+ {
+  "click": "Write a standing order"
+ },
+ {
+  "click": "Answer for me: take no action"
+ },
+ {
+  "shot": "E4-standing-order"
+ },
+ {
+  "click": "Hang up"
+ },
+ {
+  "shot": "E4-away-order-answered"
+ },
+ {
+  "click": "Ring again"
+ },
+ {
+  "click": "Pick up"
+ },
+ {
+  "click": "Offer a bench salary"
+ },
+ {
+  "shot": "E4-first-act"
+ },
+ {
+  "click": "Hang up"
+ },
+ {
+  "click": "The board"
+ },
+ {
+  "click": "Open E5"
+ },
+ {
+  "shot": "E5-before-paper-found"
+ },
+ {
+  "click": "Open the paper"
+ },
+ {
+  "shot": "E5-both-faces-readable"
+ },
+ {
+  "click": "Take Boston’s face"
+ },
+ {
+  "shot": "E5-after-face-taken"
+ },
+ {
+  "click": "Offer a bench salary"
+ },
+ {
+  "shot": "E5-first-act"
+ },
+ {
+  "click": "The board"
+ },
+ {
+  "click": "Open E6"
+ },
+ {
+  "shot": "E6-before-gauge-reads"
+ },
+ {
+  "click": "Tail first: why"
+ },
+ {
+  "click": "Take the seat"
+ },
+ {
+  "shot": "E6-after-enter-lever"
+ },
+ {
+  "range": [
+   "#lev",
+   40
+  ]
+ },
+ {
+  "shot": "E6-draft-not-forked"
+ },
+ {
+  "range": [
+   "#lev",
+   90
+  ]
+ },
+ {
+  "shot": "E6-refused-beyond-scope"
+ },
+ {
+  "range": [
+   "#lev",
+   40
+  ]
+ },
+ {
+  "click": "Keep this draft"
+ },
+ {
+  "shot": "E6-first-act"
+ },
+ {
+  "click": "Compare all seven"
+ },
+ {
+  "shot": "compare-gave-up"
+ },
+ {
+  "click": "Leaving is"
+ },
+ {
+  "shot": "compare-leaving"
+ },
+ {
+  "click": "An AI agent would enter by"
+ },
+ {
+  "shot": "compare-agent"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "click": "What’s real?"
+ },
+ {
+  "shot": "compare-how-real-layers"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "click": "What’s real?"
+ },
+ {
+  "click": "The board"
+ },
+ {
+  "shot": "board-after-all-lanes"
+ }
+]

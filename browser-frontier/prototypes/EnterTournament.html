@@ -1,0 +1,1255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Enter Tournament — seven ways across one threshold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--table:#E6E1D3;--paper:#FCFAF4;--paper2:#F3EFE3;--ink:#1E1C19;--ink2:#46423B;--mute:#62594D;--rule:#C9C1AD;--dot:#8D8574;--fork:#0D5B62;--forkbg:#E3EFED;--stamp:#9A2A1C;--brass:#7C5E14;--kraft:#D9C6A0;--focus:#B4470C;
+--serif:Fraunces,Georgia,'Times New Roman',serif;--sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--table);color:var(--ink);font:15px/1.42 var(--sans);overflow-x:hidden}
+button{font:inherit;color:inherit}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus{outline:none}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+.top{display:flex;align-items:center;gap:10px;padding:6px 16px;border-bottom:1.5px solid var(--ink);background:var(--paper);min-height:54px;flex:none}
+.brand{font:600 21px/1 var(--serif);letter-spacing:.005em;margin:0}
+.brand small{display:block;font:500 11.5px var(--sans);color:var(--mute);letter-spacing:.07em;text-transform:uppercase;margin-top:4px}
+.nav{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
+main{flex:1;min-height:0;display:flex;gap:14px;padding:12px 16px}
+main.board,main.compare{display:block;overflow:auto;padding:14px 16px}
+.status{flex:none;display:flex;gap:14px;align-items:center;padding:3px 16px;font:12px var(--mono);border-top:1.5px solid var(--ink);background:var(--paper);color:var(--ink2);min-height:27px;flex-wrap:wrap}
+.status .clk{margin-left:auto}
+.status .legend{display:none;gap:8px;align-items:center;font:10.5px var(--sans)}
+.status .tx{width:11px;height:11px;margin-right:3px}
+.how .status .legend{display:flex}
+/* buttons */
+.b{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:6px 16px;border:1.5px solid var(--ink);background:var(--paper);font:600 14px/1.25 var(--sans);cursor:pointer;text-align:center;border-radius:2px}
+.b:hover{background:var(--paper2)}
+.b.sm{min-height:36px;padding:4px 12px;font-size:13px}
+.b.pri{background:var(--ink);color:var(--paper)}
+.b.pri:hover{background:#3a3631}
+.b.fk{background:var(--fork);border-color:var(--fork);color:#fff}
+.b.fk:hover{background:#0a4a50}
+.b.on{background:var(--ink);color:var(--paper)}
+.b[aria-pressed=true]:not(.fk):not(.pri){background:var(--ink);color:var(--paper)}
+.b[aria-disabled=true]{border-style:dashed;color:var(--mute);background:transparent}
+.b.stampb{border-color:var(--stamp);color:var(--stamp)}
+/* truth textures */
+.tx{display:inline-block;width:13px;height:13px;vertical-align:-1px;margin-right:6px;flex:none;background:transparent}
+.tx-OBSERVED{background:var(--ink)}
+.tx-RECORDED{background:var(--ink);box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3.5px var(--ink)}
+.tx-AUTHORED{border:1.6px solid var(--ink)}
+.tx-COMPUTED{background:#A79F8B}
+.tx-MODELED{background:repeating-linear-gradient(135deg,var(--ink) 0 1.2px,transparent 1.2px 3.5px);border:1px solid var(--ink)}
+.tx-GENERATED{background:radial-gradient(var(--ink) 1.1px,transparent 1.4px) 0 0/4px 4px;border:1px solid var(--ink)}
+.tx-UNKNOWN{border:1.6px dashed var(--ink)}
+.fact{display:inline}
+.fw{display:none!important}
+.how .fw{display:block!important;font:11.5px/1.3 var(--sans);color:var(--mute);margin:1px 0 3px 19px}
+.how .fact{display:inline-block;vertical-align:top}
+.how .fw::before{content:"How we know: "}
+.cap{display:none;position:absolute;bottom:0;right:0;z-index:6;font:600 10.5px/1.2 var(--sans);letter-spacing:.03em;padding:2px 6px;background:var(--brass);color:#fff;max-width:70%;text-align:right}
+.real .cap{display:block}
+.real .reg{outline:1.5px dashed var(--brass);outline-offset:1px}
+.reg{position:relative}
+.cap.cP{background:var(--brass)}.cap.cR{background:var(--fork)}.cap.cS{background:var(--stamp)}
+/* marks */
+.mk{display:inline-block;width:22px;height:22px;flex:none;vertical-align:middle;position:relative}
+.mk2{background:var(--ink)}
+.mk1{border:2.5px solid var(--ink)}
+.mk0::after{content:"";position:absolute;left:8px;top:8px;width:6px;height:6px;border-radius:50%;background:var(--dot)}
+.mkU{border:1.5px dashed var(--dot)}
+.mk.sm{width:18px;height:18px}.mk.sm.mk0::after{left:6px;top:6px}
+.strip{display:inline-flex;gap:4px;align-items:center}
+/* steps rail */
+.steps{display:flex;gap:0;margin:0;padding:0;list-style:none;font:12px var(--sans);color:var(--mute);flex:none;flex-wrap:wrap}
+.steps li{padding:4px 12px 4px 0;margin-right:10px;border-bottom:2px solid var(--rule);display:flex;align-items:center;gap:6px}
+.steps b{display:inline-grid;place-items:center;width:20px;height:20px;border:1.5px solid var(--mute);font:600 11px var(--mono)}
+.steps li.done{color:var(--ink2);border-color:var(--ink2)}.steps li.done b{background:var(--ink2);color:var(--paper);border-color:var(--ink2)}
+.steps li.cur{color:var(--ink);font-weight:600;border-color:var(--ink)}.steps li.cur b{border-color:var(--ink);background:var(--paper)}
+/* stage */
+.stage{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;min-height:0;position:relative}
+.obs{display:flex;align-items:center;gap:10px;flex:none;flex-wrap:wrap;padding:5px 10px;background:var(--paper);border:1.5px solid var(--ink);border-style:solid}
+.obs .badge{font:600 11px var(--sans);letter-spacing:.09em;padding:3px 8px;border:1.5px solid var(--ink)}
+.obs.seat{border-color:var(--fork);background:var(--forkbg)}
+.obs.seat .badge{background:var(--fork);color:#fff;border-color:var(--fork)}
+.obs .cutl{flex:1;min-width:200px;font-size:13.5px}
+.exh{flex:1;min-height:0;position:relative;background:var(--paper);border:3px double var(--ink);padding:10px 14px 12px;display:flex;flex-direction:column;overflow:auto}
+.exh.inFork{border:2.5px solid var(--fork);background:#FDFCF8;box-shadow:inset 0 0 0 4px var(--paper),inset 0 0 0 5.5px var(--forkbg)}
+.ftab{flex:none;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font:12px var(--sans);color:var(--mute);margin:-2px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--rule)}
+.ftab b{font:600 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.inFork .ftab b{color:var(--fork)}
+.hs{font:600 12px var(--sans);color:var(--stamp);border:1.5px solid var(--stamp);padding:0 6px;transform:rotate(-1.2deg);display:inline-block}
+.ex-body{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center}
+.status .cap{position:static;display:none;margin-right:2px}.real .status .cap{display:inline-block}
+.bar{flex:none;background:var(--paper);border:1.5px solid var(--ink);padding:8px 12px;display:flex;flex-direction:column;gap:6px}
+.bar .say{margin:0;font-size:14px;color:var(--ink2)}
+.bar .btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.bar label{font-size:13px;display:inline-flex;gap:6px;align-items:center}
+.bar input[type=text]{min-height:44px;padding:4px 10px;border:1.5px solid var(--ink);background:#fff;font:15px var(--sans);min-width:0}
+.refuse{margin:0;padding:5px 10px;border:1.5px dashed var(--stamp);color:var(--stamp);font-size:13.5px;font-weight:500}
+.refuse b{letter-spacing:.08em;margin-right:6px}
+h2,h3{font-family:var(--serif);margin:0;font-weight:600}
+h2{font-size:22px}h3{font-size:16px}
+.k{font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.mono{font-family:var(--mono)}
+/* receipt */
+.receipt{flex:none;display:flex;flex-wrap:wrap;gap:6px 14px;background:var(--forkbg);border:1.5px solid var(--fork);padding:6px 12px;font-size:12.5px;color:var(--ink)}
+.receipt b{color:var(--fork);letter-spacing:.06em;text-transform:uppercase;font-size:11px}
+.receipt span{display:inline-block}
+/* since popover */
+.since{position:absolute;right:0;top:108px;width:min(470px,96%);max-height:70%;overflow:auto;z-index:8;background:var(--paper);border:2px solid var(--ink);padding:10px 12px;box-shadow:6px 6px 0 var(--ink)}
+.since ul{list-style:none;margin:6px 0;padding:0}
+.since li{padding:5px 0;border-top:1px solid var(--rule);font-size:13.5px}
+.since .d{font:12px var(--mono);color:var(--mute)}
+/* aside */
+.aside{width:392px;flex:none;min-height:0;display:flex;flex-direction:column;background:var(--paper);border:1.5px solid var(--ink)}
+.tabs{display:flex;flex:none;border-bottom:1.5px solid var(--ink)}
+.tabs .b{flex:1;border:0;border-right:1.5px solid var(--ink);min-height:42px;padding:4px 6px;font-size:12.5px;border-radius:0}
+.tabs .b:last-child{border-right:0}
+.pane{flex:1;min-height:0;overflow:auto;padding:10px 12px}
+.pane h3{margin-bottom:6px}
+.dl{list-style:none;margin:8px 0 0;padding:0}
+.dr{display:grid;grid-template-columns:26px 112px 1fr;gap:2px 8px;align-items:start;padding:6px 0;border-top:1px solid var(--rule)}
+.dr .dn{font:600 11.5px var(--sans);letter-spacing:.06em;padding-top:3px}
+.dr .dt{font-size:13px;color:var(--ink2)}
+.dr.z .dt{color:var(--mute)}
+.key{display:flex;gap:12px;font-size:12px;color:var(--mute);align-items:center;flex-wrap:wrap}
+.key span{display:inline-flex;gap:5px;align-items:center}
+.abt dt{font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-top:9px}
+.abt dd{margin:2px 0 0;font-size:13.5px}
+.hold{border:1.5px dashed var(--dot);padding:12px;color:var(--mute);font-size:13.5px;margin-top:8px}
+.log{list-style:none;margin:8px 0 0;padding:0}
+.log li{border-top:1px solid var(--rule);padding:6px 0 6px 6px;font-size:12.5px;line-height:1.35}
+.log li .m{font:11px var(--mono);color:var(--mute);display:block}
+.log li.ref{border-left:3px dashed var(--stamp);color:var(--stamp)}
+.log li.rd{color:var(--ink2)}
+.log li.ab .w{border:1.5px dashed var(--stamp);color:var(--stamp);padding:0 5px;font:600 11px var(--sans);letter-spacing:.06em}
+.log li.rc{border-left:4px double var(--ink)}
+.log li.fk{border-left:4px double var(--fork)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.pair>div{padding:8px;font-size:13px}
+.pair .rec{border:3px double var(--ink)}.pair .frk{border:2.5px solid var(--fork);background:var(--forkbg)}
+.pair .sealed{border:1.5px dashed var(--ink);margin-top:6px;padding:6px;color:var(--mute)}
+.why{list-style:none;margin:6px 0 0;padding:0}
+.why li{padding:5px 0 5px 12px;border-left:2px solid var(--ink);margin-left:6px;font-size:13px;position:relative}
+.why li::before{content:"";position:absolute;left:-6px;top:11px;width:9px;height:9px;background:var(--paper);border:2px solid var(--ink)}
+.why .r{font:11px var(--mono);color:var(--mute);display:block}
+/* board */
+.bd{display:grid;grid-template-columns:minmax(330px,420px) 1fr;gap:18px;align-items:start;max-width:1400px;margin:0 auto}
+.seatsheet{background:var(--paper);border:3px double var(--ink);padding:14px 16px}
+.seatsheet h2{margin:2px 0 6px}
+.seatsheet p{margin:4px 0}
+.seatsheet ol{margin:6px 0 8px 18px;padding:0;font-size:14px}
+.seatsheet li{margin:3px 0}
+.actline{border:1.5px dashed var(--ink);padding:6px 8px;margin:8px 0;font-size:14px}
+.exidx{background:var(--paper);border:1.5px solid var(--ink)}
+.exhead{display:flex;align-items:baseline;gap:10px;padding:8px 12px;border-bottom:1.5px solid var(--ink)}
+.ex{display:grid;grid-template-columns:44px 74px minmax(0,1fr) 150px 210px;gap:12px;align-items:center;width:100%;text-align:left;padding:7px 12px;border:0;border-bottom:1px solid var(--rule);background:transparent;cursor:pointer;min-height:66px;border-radius:0}
+.ex:hover{background:var(--paper2)}
+.ex .tg{font:600 15px var(--mono);border:1.5px solid var(--ink);padding:5px 0;text-align:center}
+.ex .nm{font:600 15px var(--serif)}
+.ex .nm small{display:block;font:400 13px var(--sans);color:var(--ink2);margin-top:1px}
+.ex .st{font-size:12.5px;color:var(--mute)}
+.ex svg{width:74px;height:48px}
+.exfoot{display:flex;gap:10px;padding:10px 12px;flex-wrap:wrap;align-items:center}
+/* compare */
+.cmp{max-width:1400px;margin:0 auto;background:var(--paper);border:1.5px solid var(--ink)}
+.cmp table{border-collapse:collapse;width:100%}
+.cmp th,.cmp td{border-top:1px solid var(--rule);padding:4px 8px;vertical-align:middle;text-align:left}
+.cmp thead th{border-top:0;font:600 10.5px var(--sans);letter-spacing:.07em;color:var(--ink2);vertical-align:bottom}
+.cmp th.v{width:38px;padding:6px 3px;text-align:center}
+.cmp th.v span{writing-mode:vertical-rl;transform:rotate(180deg);display:inline-block;height:98px;text-align:left}
+.cmp td.m{text-align:center;padding:6px 3px}
+.cmp td.ico{width:60px;padding:2px 4px}.cmp td.ico svg{width:56px;height:36px;display:block}
+.cmp .ln{font:600 15px var(--serif)}
+.cmp .ln small{display:block;font:11.5px var(--sans);color:var(--mute)}
+.cmp td.tx2{font-size:13px;color:var(--ink2);min-width:260px}
+.cmp .np{border:1.5px dashed var(--dot);padding:5px 8px;color:var(--mute);font-size:12.5px}
+.cmptop{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 12px;border-bottom:1.5px solid var(--ink)}
+.cmptop .grp{display:flex;gap:6px;flex-wrap:wrap}
+/* lane materials */
+.sheet{background:#fff;border:1px solid var(--ink);box-shadow:3px 3px 0 var(--rule);padding:12px 20px;max-width:760px;margin:0 auto;width:100%}
+.sheet h3{font-size:17px}
+.lines{list-style:none;margin:8px 0;padding:0}
+.line{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--rule)}
+.line .n{font:600 14px var(--mono);color:var(--mute)}
+.line .due{display:block;font:12px var(--mono);color:var(--mute);margin-top:2px}
+.line .tk{display:flex;gap:6px}
+.inkw{font:italic 600 19px var(--serif);color:var(--fork)}
+.noact{display:inline-block;border:2px dashed var(--stamp);color:var(--stamp);font:600 12px var(--sans);letter-spacing:.1em;padding:1px 8px;transform:rotate(-2deg)}
+.ledger{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.ledger>div{padding:6px 9px;font-size:12.5px;border:1.5px dashed var(--ink)}
+.ledger.set>div{border:3px double var(--ink)}
+.clocks{display:flex;gap:12px;margin:6px 0}
+.clk2{border:1.5px solid var(--ink);padding:3px 10px;font:500 14px var(--mono)}
+.clk2.mine{border-color:var(--fork);color:var(--fork);background:var(--forkbg)}
+.struck{text-decoration:line-through;color:var(--mute)}
+.rules>li{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);font-size:14.5px}
+.devs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.dev{border:3px solid var(--ink);border-radius:8px 8px 2px 2px;padding:8px 10px;min-height:104px;background:#fff;position:relative;font-size:13px}
+.dev::after{content:'';position:absolute;left:30%;right:30%;bottom:-11px;height:8px;background:var(--ink)}
+.dev.ok{border-color:var(--fork)}.dev.ok::after{background:var(--fork)}.dev.no{border-color:var(--stamp)}.dev.no::after{background:var(--stamp)}
+.log li.dft{border-left:3px dotted var(--fork)}.log li.dft .w{border:1.5px dotted var(--fork);color:var(--fork);padding:0 5px;font:600 11px var(--sans);letter-spacing:.06em}
+.paper{background:#fff;border:1px solid var(--ink);box-shadow:4px 4px 0 var(--rule);display:grid;align-items:stretch}
+.paper .ph{grid-column:1/-1;display:flex;gap:10px;align-items:baseline;padding:6px 16px;border-bottom:1.5px solid var(--ink);background:var(--paper2)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:1180px){.aside{width:340px}.ex{grid-template-columns:40px 60px minmax(0,1fr) 120px 190px;gap:8px}.ex svg{width:60px;height:40px}}
+.spot{position:absolute;z-index:3;background:var(--paper)}
+.plane{background:var(--paper);padding:6px 12px 8px;font-size:13px}
+.plane.rec{border:3px double var(--ink)}
+.plane.dash{border:2px dashed var(--ink);background:transparent}
+.plane h3{font-size:14px;margin-bottom:4px}
+.plane h3 .k{margin-left:6px}
+.pr{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px;padding:2px 0;border-top:1px solid var(--rule);font-size:12.5px}
+.pk{color:var(--ink2)}
+.sl{list-style:none;margin:6px 0 0;padding:0;font-size:12.5px;max-height:200px;overflow:auto}
+.sl li{padding:3px 0;border-top:1px solid var(--rule)}
+.sl .d{font:11.5px var(--mono);color:var(--mute)}
+.card{background:#fff;border:1px solid var(--ink);border-top:6px solid var(--stamp);box-shadow:3px 3px 0 var(--rule);padding:12px 16px}
+.brief .pr{grid-template-columns:96px 1fr}
+.meter{height:9px;border:1.5px solid var(--ink);background:#fff;margin-top:3px}
+.meter i{display:block;height:100%;background:var(--ink);transform-origin:left;animation:drain 20s linear forwards}
+@keyframes drain{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-1.6deg)}75%{transform:rotate(1.6deg)}}
+.shake{animation:shake .45s infinite;transform-origin:140px 130px}
+.waves{animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.35}}
+.pages{display:grid;gap:0;align-items:start;flex:1;min-height:0}
+.page{background:#fff;border:0;padding:12px 18px;min-height:0;font-size:14.5px}
+.page+.page{box-shadow:inset 12px 0 10px -10px rgba(30,28,25,.28)}
+.page.mine{outline:2.5px solid var(--fork);outline-offset:-6px;background:#FDFCF8}
+.page.closedp{outline:2px dashed var(--ink);outline-offset:-6px;background:transparent}
+.fdl{margin:6px 0;font-size:13.5px}.fdl dt{font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-top:6px}.fdl dd{margin:1px 0 0}
+.stk{padding:0 0 0 14px;font-size:13px}
+.stk ul{list-style:none;margin:6px 0 0;padding:0}
+.stk li{border:1.5px solid var(--ink);background:#fff;padding:5px 8px;margin-bottom:6px;display:flex;flex-direction:column;gap:1px;font-size:12.5px}
+.stk li .mono{font-size:11.5px;color:var(--fork)}
+.ins{border:1.5px solid var(--ink);padding:8px 10px;background:var(--paper2);position:relative}
+.pl{margin:4px 0 0 18px;padding:0;font-size:13px}
+.reading{margin-top:4px;padding-top:4px;border-top:1px solid var(--rule)}
+@media (max-height:830px){.plane{padding:4px 10px 6px}.plane .pr{padding:1px 0}.plane h3{margin-bottom:2px}.top{min-height:46px;padding:2px 16px}.brand small{display:none}.obs{padding:3px 10px}.exh{padding:6px 12px 8px}.ftab{margin-bottom:4px;padding-bottom:3px}.bar{padding:6px 12px;gap:4px}.stage{gap:6px}main{padding:8px 16px}.status{min-height:24px}}
+/*@@CSS*/
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="live" class="sr" aria-live="polite" role="status"></div>
+<script src="_shared/boston-fixture.js"></script>
+<script>
+(function(){
+'use strict';
+var FX=window.BOW_FIXTURE, CUT=FX.cuts.deadline2026, S26=FX.league.season2526;
+var CUTL=CUT.beforeFirstReport.label;
+var CUTD=CUT.beforeFirstReport.date;
+var TAX=CUT.state.find(function(s){return /Projected/.test(s.what)}).value;
+var LINE=S26.tax;
+var NOW=FX.meta.now;
+var DEAD=CUT.known.find(function(k){return /deadline/i.test(k.what)}).value;
+var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fdate(s){var p=s.split('-');return (+p[2])+' '+MONTHS[+p[1]-1]+' '+p[0]}
+var HS='entered with hindsight through '+fdate(NOW);
+var D0=fdate(CUTD);
+var $=function(s,r){return (r||document).querySelector(s)};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function M(v){return '$'+(+(v/1e6).toFixed(3))+'M'}
+function au(t,n){return {v:t,k:'AUTHORED',src:'this prototype — illustrative',asOf:null,verify:false,note:n||null}}
+function fact(f,text){
+  var t=text!=null?text:(f.v==null?(f.note||'unknown'):f.v);
+  var w=f.k+' · '+(f.src||'this prototype')+(f.asOf?' · as of '+f.asOf:'')+(f.verify?' · verify':'')+(f.note&&f.v!=null?' · '+f.note:'');
+  return '<span class="fact"><i class="tx tx-'+f.k+'" aria-hidden="true"></i><span class="sr">'+f.k.toLowerCase()+': </span><span class="fv">'+esc(t)+'</span><span class="fw">'+esc(w)+'</span></span>';
+}
+var TAXC=function(){return fact(TAX,'≈ '+M(TAX.v))};
+var CAPL={R:'REAL CURRENT PRODUCT CAPABILITY',P:'PROPOSED PLATFORM CAPABILITY',S:'SPECULATIVE FRONTIER'};
+function cp(l,ai){return '<span class="cap c'+l+'">'+CAPL[l]+(ai?' · '+ai:'')+'</span>'}
+function attr(o){return esc(JSON.stringify(o))}
+function B(label,kind,p,cls,x){return '<button type="button" class="b '+(cls||'')+'" data-act="'+kind+'"'+(p?' data-p="'+attr(p)+'"':'')+' data-fk="'+kind+(p&&(p.m||p.mode||p.name)?'-'+(p.m||p.mode||p.name):'')+'" '+(x||'')+'>'+label+'</button>'}
+function U(label,ui,p,cls,x){return '<button type="button" class="b '+(cls||'')+'" data-ui="'+ui+'"'+(p?' data-p="'+attr(p)+'"':'')+' data-fk="u-'+ui+(p?'-'+Object.keys(p).map(function(k){return p[k]}).join('-'):'')+'" '+(x||'')+'>'+label+'</button>'}
+
+/* ---------------------------------------------------------------- the shared seat (identical in every lane) */
+var MT=[
+  {id:'m1',who:'The owner',ask:'What is the plan for the tax bill?',line:function(){return 'The owner wants a plan for the '+TAXC()+' projected tax by Thursday.'},plain:function(){return 'the owner wants a plan for the ≈ '+M(TAX.v)+' projected tax by Thursday'},short:'the owner’s plan',due:'by Thursday'},
+  {id:'m2',who:'A bench player’s agent',ask:'What is his role?',line:function(){return 'A bench player’s agent asks about his role.'},plain:function(){return 'a bench player’s agent asks about his role'},short:'the agent’s question',due:'this week'},
+  {id:'m3',who:'A club',ask:'A club has called: about whom?',line:function(){return 'A club has called about a trade. Who it is: withheld until you answer.'},plain:function(){return 'a club has called about a trade; who it is is withheld until you answer'},short:'the club’s call',due:'Thursday'}
+];
+var ACT_TXT='Offer a bench salary plus a second-round pick to shed tax';
+var PANES=[
+  {id:'outside',name:'The outside view',sub:'what has happened since (SINCE)'},
+  {id:'clubs',name:'Other clubs’ desks',sub:'who is calling whom'},
+  {id:'league',name:'The League office’s desk',sub:'the vote record'},
+  {id:'owner',name:'The owner’s private notes',sub:'what the owner has not told you'}
+];
+var DIMS=[['IDENTITY','Who you are in the record'],['ROLE','Which seat you hold'],['INFORMATION','What you can read'],['AUTHORITY','What you may do, and who says so'],['RESPONSIBILITY','What is now yours to answer for'],['TIME','Whose clock you are on'],['PLACE','Where you are'],['ACTIONS','What you can do here']];
+var LANES=[],LANE={};
+function base(){return {entered:false,asked:false,sinceOpen:false,acted:false,left:false,t:0,t0:0,who:'observer',stamp:null}}
+function wclock(L){var m=540+L.t;return 'Mon 2 Feb 2026 · '+('0'+Math.floor(m/60)).slice(-2)+':'+('0'+m%60).slice(-2)}
+function mclock(L){return '+'+(L.t-L.t0)+' min in the seat'}
+function enter(L,who){L.entered=true;L.who=who||'Maya K. (fictional)';L.t0=L.t;L.stamp=L.asked?HS:null;L.sinceOpen=false}
+
+/* ---------------------------------------------------------------- state */
+var S={ui:{view:'board',lane:null,tab:'changes',how:false,real:false,cmp:'gave'},lanes:{},log:[],n:0,refusal:null};
+function reset(){S.lanes={};S.log=[];S.n=0;S.refusal=null;LANES.forEach(function(l){S.lanes[l.id]=l.init()})}
+function say(t){var l=$('#live');l.textContent='';setTimeout(function(){l.textContent=t},30)}
+
+function push(id,L,kind,what,x){
+  S.n++;
+  var e={n:S.n,lane:id,kind:kind,who:L.entered?L.who:'observer',what:what,world:wclock(L),mine:L.entered?mclock(L):null,
+    hist:L.entered?'Fork '+id+' · diverged '+D0:'Reality · read only',stamp:L.entered?L.stamp:null,k:L.entered?'RECORDED':'read'};
+  for(var k in (x||{}))e[k]=x[k];
+  S.log.push(e);return e;
+}
+function act(kind,p){
+  p=p||{};
+  var id=/^e\d\./.test(kind)?kind.slice(0,2).toUpperCase():(p.lane||S.ui.lane);
+  var L=S.lanes[id],LN=LANE[id];if(!L)return;
+  var res=kind==='since'?sinceR(L):LN.reduce(kind,p,L,id);
+  var arr=[].concat(res||[]),refused=false,announce=[];
+  arr.forEach(function(r){
+    if(r.refuse){refused=true;S.refusal={lane:id,text:r.refuse};push(id,L,'refusal','Refused: '+r.refuse,{k:'refusal'});announce.push('Refused. '+r.refuse);return}
+    if(r.say)announce.push(r.say);
+    if(r.draft||!r.log)return;
+    if(r.replace){var last=S.log[S.log.length-1];if(last&&last.lane===id&&last.kind===kind){S.log.pop();S.n--}}
+    push(id,L,kind,r.log,{k:r.absence?'absence':(r.tag||(L.entered?'RECORDED':'read')),absence:!!r.absence,who:r.who||(L.entered?L.who:'observer')});
+  });
+  if(!refused)S.refusal=null;
+  if(L.acted&&!L.actN&&S.log.length)L.actN=S.log[S.log.length-1].n;
+  render();
+  if(announce.length)say(announce.join(' '));
+}
+function sinceR(L){
+  if(L.sealed&&!L.entered)return {refuse:'the SINCE drawer is locked. Rule: a seal is not reopened for this fork. Leave and cut a new fork to read it; that fork would carry its own mark.'};
+  if(L.entered)return {refuse:'SINCE is sealed for a seat. Rule: the desk knows only what was knowable at the cut ('+D0+'). Leave the seat to read it as an observer.'};
+  L.sinceOpen=!L.sinceOpen;
+  if(L.sinceOpen){L.asked=true;return {log:'Opened SINCE as an observer: read what happened after this moment. This will mark any seat you take.',say:'SINCE is open. Reading it marks a seat you take with hindsight.'}}
+  return {log:'Closed SINCE (what was read stays read).',say:'SINCE closed.'};
+}
+function stampTxt(L){return L.stamp?'<span class="hs">'+esc(L.stamp)+'</span>':''}
+function marksOf(id){var L=S.lanes[id];return LANE[id].marks(L)}
+function done(id){return !!S.lanes[id].acted}
+function status(id){var L=S.lanes[id];return (L.left?'left · branch kept':L.acted?'first act made':L.entered?'in the seat':L.asked?'observing · read SINCE':'not entered')+(L.stamp?' · hindsight mark':'')}
+
+/* ---------------------------------------------------------------- shared views */
+function obs(id,L,o){
+  o=o||{};var ret=L.left&&S.ui.rec,seat=L.entered&&!ret;
+  return '<div class="obs '+(seat?'seat':'')+'"><span class="badge">'+(seat?'IN THE SEAT':ret?'OBSERVER · RETURNED':'OBSERVER')+'</span>'+
+    '<span class="cutl"><b>'+esc(CUTL)+'</b> · the tax bill is the problem</span>'+
+    (o.noSince?'':'<button type="button" class="b sm" data-act="since" data-fk="since" aria-expanded="'+(L.sinceOpen?'true':'false')+'"'+(L.entered?' aria-disabled="true"':'')+'>'+(L.entered?'SINCE · sealed':L.sinceOpen?'Close SINCE':'Open SINCE')+'</button>')+'</div>'+
+    (L.sinceOpen&&!seat&&!o.noSince?sincePop():'');
+}
+function sincePop(){
+  var items=CUT.sealed.map(function(s){return '<li><span class="d">'+(s.date?fdate(s.date):'later')+'</span> — '+esc(s.what)+'<br>'+fact(s.value)+'</li>'}).join('');
+  return '<section class="since" role="region" aria-label="SINCE: what happened after this moment, observer only"><h3>SINCE · observer only</h3><p class="k">named by what happened, because you asked</p><ul>'+items+'</ul><p style="font-size:12.5px;margin:4px 0 0">Reading this marks any seat you take from here: <b>'+esc(HS)+'</b>.</p></section>';
+}
+function factRows(){
+  var unk=[],h='';
+  CUT.state.forEach(function(s){
+    if(s.value.k==='UNKNOWN')unk.push(fact(s.value));
+    else h+='<div class="pr"><span class="pk">'+esc(/Projected/.test(s.what)?'Projected luxury tax':s.what)+'</span><span>'+fact(s.value,typeof s.value.v==='number'?'≈ '+M(s.value.v):null)+'</span></div>';
+  });
+  return h+'<div class="pr"><span class="pk">Record and payroll at the cut</span><span>'+unk.join(' ')+'</span></div>';
+}
+function returned(id,L){
+  var es=S.log.filter(function(e){return e.lane===id}),acts=es.filter(function(e){return e.k==='RECORDED'&&!e.absence}).length,ab=es.filter(function(e){return e.absence}).length;
+  var last=es.filter(function(e){return /\.(offer|keep)$/.test(e.kind)||/^Shed|^Offer|Answered by your standing order/.test(e.what)}).pop();
+  return '<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start"><section class="plane rec"><h3>The record · Reality <span class="k">read only · unchanged</span></h3>'+factRows()+'<p style="margin:6px 0 0;font-size:12.5px;color:var(--mute)">What happened next is sealed unless an observer asks SINCE on a new fork. Nothing in this branch entered Reality.</p></section>'+
+   '<section class="plane" style="border:2.5px solid var(--fork);background:var(--forkbg)"><h3 style="color:var(--fork)">Your branch · kept <span class="k">its own ink, beside the record</span></h3><p style="margin:4px 0;font-size:13.5px">Diverged '+esc(CUTL)+'.</p><p style="margin:4px 0;font-size:13.5px">'+acts+' entr'+(acts===1?'y':'ies')+' recorded'+(ab?', '+ab+' NO ACT':'')+'. Last act: '+esc(last?last.what:'none')+'</p>'+(L.stamp?'<p style="margin:6px 0 0">'+stampTxt(L)+'</p>':'<p style="margin:6px 0 0;font-size:13px">No hindsight mark: SINCE was never opened before entry.</p>')+'<p style="margin:6px 0 0;font-size:12.5px;color:var(--ink2)">Assumes: only what was knowable then · the offer is illustrative.</p></section></div>';
+}
+function stepsRail(id,L){
+  var ln=LANE[id],cur=ln.step(L);
+  return '<ol class="steps" aria-label="Steps in lane '+id+'">'+ln.steps.map(function(s,i){return '<li class="'+(i<cur?'done':i===cur?'cur':'')+'"'+(i===cur?' aria-current="step"':'')+'><b>'+(i+1)+'</b>'+esc(s)+'</li>'}).join('')+'</ol>';
+}
+function ftab(id,L){
+  if(!L.entered||(L.left&&S.ui.rec))return '<div class="ftab"><b>The record</b><span>Deadline week · read only. Nothing you do here is written into Reality.</span></div>';
+  var acts=S.log.filter(function(e){return e.lane===id&&e.k!=='refusal'&&e.k!=='read'&&e.k!=='draft'}).length;
+  return '<div class="ftab"><b>Your branch</b><span>diverged '+esc(CUTL)+' · '+acts+' entr'+(acts===1?'y':'ies')+'</span>'+stampTxt(L)+
+    '<span>Assumes: the desk knows only what was knowable then · the offer is illustrative · Reality is never written.</span></div>';
+}
+function receipt(id,L){
+  var lastN=L.actN||0;
+  var ms=LANE[id].mstat?LANE[id].mstat(L):{ans:2,open:1,lap:0,back:0};
+  return '<div class="receipt reg" aria-label="What the act changed, in five places"><b>Changed in five places</b>'+
+    '<span>Record: entry #'+lastN+', in the fork</span><span>Gauge: '+TAXC()+' · offer out · outcome sealed</span>'+
+    '<span>Matters: '+ms.ans+' answered by the offer'+(ms.back?', '+ms.back+' handed back':'')+(ms.lap?', '+ms.lap+' NO ACT':'')+', '+ms.open+' open</span>'+
+    '<span>Fork: stamped'+(L.stamp?' “'+esc(L.stamp)+'”':' (no hindsight)')+'</span><span>Reality: unchanged</span></div>';
+}
+function strip(ms,cls){
+  return '<span class="strip" role="img" aria-label="'+DIMS.map(function(d,i){return d[0]+' '+['not changed','partly','changed'][ms[i][0]]}).join(', ')+'">'+ms.map(function(m,i){return '<span class="mk mk'+m[0]+' '+(cls||'')+'" title="'+DIMS[i][0]+'"></span>'}).join('')+'</span>';
+}
+function aside(id,L){
+  var tabs=[['changes','Eight changes'],['lane','This lane'],['why','Why · what if'],['rec','Record']];
+  var t=S.ui.tab,ln=LANE[id],h='';
+  if(t==='changes'){
+    var ms=ln.marks(L);
+    h='<h3>What this door changed</h3><p class="k">computed from what the lane actually did'+(L.acted?'':' · in progress')+'</p><div style="margin:8px 0">'+strip(ms)+'</div>'+
+      '<div class="key"><span><i class="mk mk2 sm"></i>changed</span><span><i class="mk mk1 sm"></i>partly</span><span><i class="mk mk0 sm"></i>not changed</span></div><ul class="dl">'+
+      DIMS.map(function(d,i){return '<li class="dr '+(ms[i][0]?'':'z')+'"><span class="mk mk'+ms[i][0]+'" role="img" aria-label="'+['not changed','partly changed','changed'][ms[i][0]]+'"></span><span class="dn">'+d[0]+'</span><span class="dt">'+ms[i][1]+'</span></li>'}).join('')+'</ul>';
+  }else if(t==='lane'){
+    var a=ln.about;
+    h='<h3>About this door</h3>'+(L.acted?'':'<p class="hold">Fills when the lane reaches its first act. Play it to read what you gave up, how leaving works, and how an agent or another domain would use it.</p>')+
+      '<dl class="abt">'+[['You gave up',a.gave],['Leaving is',a.leave],['An AI agent would enter by',a.agent,'S'],['Survives voice? spatial? screen reader?',a.survive],['In a chemistry lab this is',a.chem],['In a supply chain this is',a.supply]].map(function(r){return '<dt>'+r[0]+'</dt><dd class="'+(r[2]?'reg':'')+'">'+(L.acted?r[1]:'<span style="color:var(--mute)">—</span>')+(r[2]?cp('S','FRONTIER MODEL OCCASIONAL / CONTINUOUS on the agent’s side · NO AI REQUIRED on BOW’s side'):'')+'</dd>'}).join('')+'</dl>';
+  }else if(t==='why'){
+    h=whyTab(id,L);
+  }else{
+    var es=S.log.filter(function(e){return e.lane===id});
+    h='<h3>Record for '+id+'</h3><p class="k">entry numbers run across the whole session · '+es.length+' entr'+(es.length===1?'y':'ies')+' · who · what · when in which clock · in which history</p>'+
+      '<p style="font-size:12.5px;margin:4px 0;color:var(--ink2)">Reality’s record: <b>unchanged</b>. No act made here can enter it.</p><ol class="log" reversed>'+
+      (es.length?es.slice().reverse().map(function(e){
+        var cls=e.k==='refusal'?'ref':e.k==='read'?'rd':e.k==='absence'?'ab':e.k==='draft'?'dft':e.k==='RECORDED'?'fk':'rd';
+        return '<li class="'+cls+'"><span class="m">#'+e.n+' · '+esc(e.who)+' · '+esc(e.world)+(e.mine?' · '+esc(e.mine):'')+'<br>'+esc(e.hist)+(e.stamp?' · '+esc(e.stamp):'')+'</span>'+(e.absence?'<span class="w">NO ACT</span> ':'')+(e.k==='draft'?'<span class="w">DRAFT · NOT FORKED</span> ':'')+esc(e.what)+'</li>';
+      }).join(''):'<li class="rd">Nothing yet. Reading the record leaves marks here only when you ask for something.</li>')+'</ol>';
+  }
+  return '<aside class="aside reg" aria-label="Lane panel">'+cp('P','NO AI REQUIRED · marks are computed by rules from lane state')+'<div class="tabs" role="group" aria-label="Panel">'+tabs.map(function(x){return '<button type="button" class="b" data-ui="tab" data-p="'+attr({tab:x[0]})+'" data-fk="tab-'+x[0]+'" aria-pressed="'+(t===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div class="pane">'+h+'</div></aside>';
+}
+function whyTab(id,L){
+  if(!L.acted)return '<h3>Why · what if</h3><p class="hold">Opens after the first act. Then: why the offer is on this desk, traced to recorded causes; what if nobody acts; and your branch beside the record.</p>';
+  var enterE=S.log.filter(function(e){return e.lane===id&&e.k==='RECORDED'})[0];
+  var actE={n:L.actN};
+  var hide=S.log.filter(function(e){return e.lane===id&&e.k==='read'&&/SINCE/.test(e.what)}).length;
+  var h='<h3>Why is the offer on this desk?</h3><p class="k">traced to causes, not prose</p><ul class="why">'+
+   '<li>You made it: entry #'+(actE?actE.n:'?')+' in your fork.<span class="r">RECORDED · your fork, not Reality</span></li>'+
+   '<li>It answers the owner’s matter: a plan for the projected tax.<span class="r">'+fact(au('AUTHORED matter · illustrative'))+'</span></li>'+
+   '<li>The figure it acts on: '+fact(TAX,'≈ '+M(TAX.v)+' projected')+'<span class="r">as-of '+TAX.asOf+' is after this cut ('+D0+') — [verify: first report of ≈$39.5M]</span></li>'+
+   '<li>Charged above the 2025–26 tax line '+fact(LINE,M(LINE.v))+'<span class="r">payroll at the cut: '+fact(CUT.state.find(function(s){return /payroll/.test(s.what)}).value)+'</span></li>'+
+   (enterE?'<li>You cannot see later events because entry #'+enterE.n+' put you in the seat at the cut'+(L.stamp?' — with the mark “'+esc(L.stamp)+'”, because you opened SINCE first (#'+S.log.filter(function(e){return e.lane===id&&/SINCE/.test(e.what)})[0].n+')':'')+'.<span class="r">RECORDED</span></li>':'')+'</ul>';
+  h+='<h3 style="margin-top:14px">What if nobody acts?</h3><p style="font-size:13px;margin:4px 0">Default (a rule, no model): '+fact({v:'the ≈ '+M(TAX.v)+' bill stands',k:'COMPUTED',src:'rule: tax is charged on tax salary above the line',asOf:null,verify:true,note:'counted after the last game'})+'. Beyond that the future is sealed: you find out by living it.</p>';
+  h+='<div class="pair"><div class="rec"><span class="k">The record · Reality</span><br>'+esc(D0)+'. Nothing of yours in it.'+
+     (L.asked&&!L.entered?'':(L.asked?'<div class="sealed" style="border-style:solid;color:var(--ink)">You read SINCE before entry: '+fact(CUT.sealed[0].value)+'</div>':'<div class="sealed">What Reality did next: SEALED to this seat. An observer who asks SINCE can read it.</div>'))+
+     '</div><div class="frk"><span class="k" style="color:var(--fork)">Your branch</span><br>1 act: the offer is out. Outcome: <div class="sealed" style="border-color:var(--fork)">SEALED — you find out by living it.</div>'+(L.stamp?'<div style="margin-top:6px">'+stampTxt(L)+'<br><span style="font-size:12px;color:var(--mute)">Compared only with forks that carry the same mark.</span></div>':'')+'</div></div>';
+  return h;
+}
+
+/* ---------------------------------------------------------------- views */
+function topbar(){
+  var v=S.ui.view;
+  return '<header class="top"><h1 class="brand">Enter tournament<small>one seat · seven ways across</small></h1><nav class="nav" aria-label="Views">'+
+    U('The board','go',{view:'board'},'sm','aria-pressed="'+(v==='board')+'"')+
+    (S.ui.lane?U('Lane '+S.ui.lane,'go',{view:'lane',lane:S.ui.lane},'sm','aria-pressed="'+(v==='lane')+'"'):'')+
+    U('Compare all seven','go',{view:'compare'},'sm','aria-pressed="'+(v==='compare')+'"')+
+    '<button type="button" class="b sm" data-ui="how" data-fk="how" aria-pressed="'+S.ui.how+'">How do we know?</button>'+
+    '<button type="button" class="b sm" data-ui="real" data-fk="real" aria-pressed="'+S.ui.real+'">What’s real?</button></nav></header>';
+}
+function statusbar(){
+  var id=S.ui.lane,L=id&&S.lanes[id];
+  var kinds=['OBSERVED','RECORDED','AUTHORED','COMPUTED','MODELED','GENERATED','UNKNOWN'];
+  return '<footer class="status reg">'+cp('R','the dated fact store')+'<span>PROTOTYPE · one seat, seven doors · data: shared fixture, dated, verify</span>'+
+    '<span class="legend" aria-label="Texture key">'+kinds.map(function(k){return '<span><i class="tx tx-'+k+'"></i>'+k.toLowerCase()+'</span>'}).join('')+'</span>'+
+    '<span class="clk">'+(L&&S.ui.view==='lane'?'Fork clock '+esc(wclock(L))+(L.entered?' · '+esc(mclock(L)):' · observer'):'Now: '+esc(fdate(NOW))+' · Reality')+'</span></footer>';
+}
+function board(){
+  var rows=LANES.map(function(l){var L=S.lanes[l.id],ms=l.marks(L);
+    return '<button type="button" class="ex" data-ui="go" data-p="'+attr({view:'lane',lane:l.id})+'" data-fk="open-'+l.id+'" aria-label="Open '+l.id+', '+esc(l.name)+'. '+esc(status(l.id))+'">'+
+      '<span class="tg">'+l.id+'</span>'+l.icon+'<span class="nm">'+esc(l.name)+(l.tag?' <small style="display:inline;color:var(--brass)">· '+l.tag+'</small>':'')+'<small>'+esc(l.blurb)+'</small></span><span class="st">'+esc(status(l.id))+'<br>'+esc(l.mat)+'</span>'+
+      (L.entered?strip(ms,'sm'):'<span class="st" style="border:1.5px dashed var(--dot);padding:6px 8px">marks appear when you enter</span>')+'</button>';}).join('');
+  var mt=MT.map(function(m){return '<li>'+m.line()+'</li>'}).join('');
+  return '<div class="bd"><section class="seatsheet reg" aria-label="The shared seat">'+cp('R','the dated fact store; the cut itself is PROPOSED')+
+    '<span class="k">The shared seat · identical in every lane</span><h2>Boston’s decision-maker, at a moment</h2>'+
+    '<p><b>The door is named by its question:</b> '+esc(CUTL)+' · the tax bill is the problem.</p>'+
+    '<p>A fork of that recorded moment. Reality cannot be acted on; your acts are written in the fork. Before ENTER you are an observer who may open <b>SINCE</b> — what happened later. Entering seals it.</p>'+
+    '<p class="k" style="margin-top:8px">After ENTER, the desk knows only what was knowable then. Three matters are open</p><ol>'+mt+'</ol>'+
+    '<div class="actline"><span class="k">The one act, at the end of every lane</span><br>'+'<i class="tx tx-AUTHORED" aria-hidden="true"></i>'+esc(ACT_TXT)+'<span class="fw">AUTHORED · this prototype — illustrative, never the real Simons move</span></div>'+
+    '<p class="k">Eight things that can change</p><p style="font-size:13.5px;margin:2px 0 0">'+DIMS.map(function(d){return d[0]}).join(' · ')+'</p></section>'+
+    '<section class="exidx reg" aria-label="The seven doors">'+cp('P','NO AI REQUIRED')+'<div class="exhead"><h2>Seven doors, one threshold</h2><span class="k">observer → participant</span></div>'+rows+
+    '<div class="exfoot">'+U('Compare all seven','go',{view:'compare'},'pri','data-primary')+'<span style="font-size:13px;color:var(--mute)">Play a lane first, or run every lane with defaults from the comparison view.</span></div></section></div>';
+}
+function compare(){
+  var col=S.ui.cmp;
+  var cols=[['gave','You gave up'],['leave','Leaving is'],['agent','An AI agent would enter by'],['survive','Survives voice? spatial? screen reader?'],['chem','In a chemistry lab'],['supply','In a supply chain']];
+  var head='<tr><th scope="col">Door</th><th scope="col"><span class="sr">Material</span></th>'+DIMS.map(function(d){return '<th scope="col" class="v"><span>'+d[0]+'</span></th>'}).join('')+'<th scope="col">'+esc(cols.filter(function(c){return c[0]===col})[0][1])+'</th></tr>';
+  var body=LANES.map(function(l){
+    var L=S.lanes[l.id],ms=l.marks(L),ok=L.entered;
+    return '<tr><th scope="row" class="ln"><button type="button" class="b sm" style="border:0;padding:0;min-height:44px;text-align:left;justify-content:flex-start;background:none;font:600 15px var(--serif)" data-ui="go" data-p="'+attr({view:'lane',lane:l.id})+'" data-fk="cmp-'+l.id+'">'+l.id+' · '+esc(l.name)+'</button><small>'+esc(status(l.id))+'</small></th><td class="ico" aria-hidden="true">'+l.icon+'</td>'+
+      ms.map(function(m,i){return '<td class="m">'+(ok?'<span class="mk mk'+m[0]+'" role="img" aria-label="'+DIMS[i][0]+': '+['not changed','partly','changed'][m[0]]+'"></span>':'<span class="mk mkU" role="img" aria-label="'+DIMS[i][0]+': not played yet"></span>')+'</td>'}).join('')+
+      '<td class="tx2">'+(L.acted?l.about[col]:'<div class="np">Not played to its first act yet. '+U('Open '+l.id,'go',{view:'lane',lane:l.id},'sm')+'</div>')+'</td></tr>';
+  }).join('');
+  return '<section class="cmp reg" aria-label="Comparison of the seven doors">'+cp('P','NO AI REQUIRED · every mark is computed from lane state')+'<div class="cmptop"><h2 style="margin-right:8px">Seven strips, aligned</h2><div class="key"><span><i class="mk mk2 sm"></i>changed</span><span><i class="mk mk1 sm"></i>partly</span><span><i class="mk mk0 sm"></i>not changed</span><span><i class="mk mkU sm"></i>not played</span></div>'+
+    '<div class="grp" role="group" aria-label="Text column" style="margin-left:auto">'+cols.map(function(c){return '<button type="button" class="b sm" data-ui="cmpcol" data-p="'+attr({col:c[0]})+'" data-fk="col-'+c[0]+'" aria-pressed="'+(col===c[0])+'">'+c[1]+'</button>'}).join('')+'</div></div>'+
+    '<table><thead>'+head+'</thead><tbody>'+body+'</tbody></table>'+
+    '<div class="cmptop" style="border-top:1.5px solid var(--ink);border-bottom:0">'+U('Play every unplayed lane with default choices','auto',null,'pri','data-primary')+U('Start over','reset',null,'')+'<span style="font-size:12.5px;color:var(--mute)">Default plays run the same act() path as your clicks and appear in each lane’s record.</span></div></section>';
+}
+function laneView(){
+  var id=S.ui.lane,LN=LANE[id],L=S.lanes[id],b=LN.bar(L),ret=L.left&&S.ui.rec;
+  if(L.left)b={say:b.say,btns:U(ret?'Back to your branch':'Return to the record','rec',{on:!ret},'pri','data-primary')+b.btns};
+  var ref=S.refusal&&S.refusal.lane===id?'<p class="refuse" role="status"><b>REFUSED</b>'+esc(S.refusal.text)+'</p>':'';
+  return '<section class="stage" data-lane="'+id+'" aria-label="Lane '+id+' '+esc(LN.name)+'">'+stepsRail(id,L)+obs(id,L,LN.obsOpt)+
+    '<div class="exh reg '+(L.entered&&!ret?'inFork':'')+'">'+cp('P','NO AI REQUIRED'+(LN.capNote?' · '+LN.capNote:''))+ftab(id,L)+'<div class="ex-body">'+(ret?returned(id,L):LN.stage(L))+'</div></div>'+
+    (L.acted?receipt(id,L):'')+'<div class="bar">'+ref+'<p class="say">'+b.say+'</p><div class="btns">'+b.btns+'</div></div></section>'+aside(id,L);
+}
+function view(){
+  var v=S.ui.view;
+  return topbar()+'<main class="'+v+'">'+(v==='board'?board():v==='compare'?compare():laneView())+'</main>'+statusbar();
+}
+function render(){
+  var app=$('#app'),ae=document.activeElement,fk=ae&&ae.dataset&&ae.dataset.fk;
+  document.body.className=(S.ui.how?'how ':'')+(S.ui.real?'real':'');
+  var keep=[];
+  app.querySelectorAll('.pane,.exh').forEach(function(e){keep.push([e.className,e.scrollTop])});
+  app.innerHTML=view();
+  var el=fk&&app.querySelector('[data-fk="'+fk+'"]');
+  if(!el)el=app.querySelector('[data-primary]');
+  if(el&&ae&&ae!==document.body)el.focus({preventScroll:true});
+}
+/* ---------------------------------------------------------------- events */
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act]'),u=e.target.closest('[data-ui]'),p;
+  if(b){p={};try{p=b.dataset.p?JSON.parse(b.dataset.p):{}}catch(x){}
+    if(b.dataset.read){var i=$(b.dataset.read);if(i)p.text=i.value}
+    act(b.dataset.act,p);return}
+  if(u){p={};try{p=u.dataset.p?JSON.parse(u.dataset.p):{}}catch(x){}ui(u.dataset.ui,p)}
+});
+document.addEventListener('input',function(e){
+  var t=e.target;
+  if(t.dataset&&t.dataset.field){var L=S.lanes[S.ui.lane];if(L)L[t.dataset.field]=t.value}
+  if(t.dataset&&t.dataset.range){LANE[S.ui.lane].onRange&&LANE[S.ui.lane].onRange(S.lanes[S.ui.lane],+t.value,false)}
+});
+document.addEventListener('change',function(e){
+  var t=e.target;
+  if(t.dataset&&t.dataset.range){LANE[S.ui.lane].onRange&&LANE[S.ui.lane].onRange(S.lanes[S.ui.lane],+t.value,true)}
+});
+function ui(k,p){
+  if(k==='go'){S.ui.rec=false;S.ui.view=p.view;if(p.lane)S.ui.lane=p.lane;S.ui.tab='changes';S.refusal=null;
+    if(p.view==='lane'){var L=S.lanes[S.ui.lane];if(L&&L.sinceOpen&&!L.entered&&LANE[S.ui.lane].obsOpt&&LANE[S.ui.lane].obsOpt.noSince){}}}
+  else if(k==='tab')S.ui.tab=p.tab;
+  else if(k==='rec'){S.ui.rec=!!p.on;say(p.on?'Returned to the record. Your branch stays beside it.':'Back in your branch.')}
+  else if(k==='how')S.ui.how=!S.ui.how;
+  else if(k==='real')S.ui.real=!S.ui.real;
+  else if(k==='cmpcol')S.ui.cmp=p.col;
+  else if(k==='reset'){reset();say('Everything reset.')}
+  else if(k==='auto'){LANES.forEach(function(l){if(!S.lanes[l.id].acted){S.ui.lane=l.id;(l.script||[]).forEach(function(s){act(s[0],s[1]||{})})}});S.ui.view='compare';say('Every lane played with default choices.')}
+  render();
+  if(k==='go'&&p.view!=='board'){var m=$('main');if(m)m.scrollTop=0}
+}
+
+/* ================================================================ E0 · THE HANDOVER (paper sheet) — the incumbent */
+(function(){
+var id='E0';
+var GAVE=['The outside view','SINCE — what happened later','The interim’s tray'];
+function canAct(L){return (L.took.m1==='took'&&!L.lapsed.m1)||(L.took.m3==='took'&&!L.lapsed.m3)}
+function nTook(L){return MT.filter(function(m){return L.took[m.id]==='took'}).length}
+function recordSheet(){
+  var rows=CUT.state.map(function(s){var lab=/Projected/.test(s.what)?'Projected luxury tax':/record/.test(s.what)?'Boston’s record at the cut':/payroll/.test(s.what)?'Boston’s payroll vs the 2025–26 lines':s.what;
+    return '<li class="line" style="grid-template-columns:minmax(0,1fr) minmax(0,1.5fr)"><span class="k" style="letter-spacing:.03em;text-transform:none;font-size:13px;color:var(--ink2)">'+esc(lab)+'</span><span>'+fact(s.value,typeof s.value.v==='number'?'≈ '+M(s.value.v):null)+'</span></li>'}).join('');
+  return '<div class="sheet"><span class="k">Boston · the record · read only</span><h3>What an observer can read at this moment</h3><ul class="lines">'+rows+'</ul>'+
+    '<p class="hold" style="margin:8px 0 0">The seat is vacant to you. Open matters exist; their names are on the handover sheet, and you have not asked for it.</p></div>';
+}
+function signSheet(L){
+  var lines=MT.map(function(m,i){var s=L.took[m.id];
+    return '<li class="line"><span class="n">'+(i+1)+'</span><span>'+m.line()+'<span class="due">due '+m.due+'</span></span><span class="tk">'+
+      B('Take','e0.take',{m:m.id},'sm','aria-pressed="'+(s==='took')+'" aria-label="Take line '+(i+1)+', '+m.short+'"')+
+      B('Hand back','e0.back',{m:m.id},'sm','aria-pressed="'+(s==='back')+'" aria-label="Hand back line '+(i+1)+', '+m.short+'"')+'</span></li>'}).join('');
+  var back=MT.filter(function(m){return L.took[m.id]==='back'}).map(function(m){return m.short});
+  var und=MT.filter(function(m){return !L.took[m.id]}).length;
+  return '<div class="sheet"><span class="k">Handover · unsigned</span><h3>Boston’s decision-maker · these matters are open</h3><ul class="lines">'+lines+'</ul>'+
+    '<div class="ledger"><div><span class="k">You will give up</span><br>'+GAVE.join(' · ')+(back.length?' · handed back: '+esc(back.join(', ')):'')+'</div>'+
+    '<div><span class="k">You will get</span><br>'+nTook(L)+' matter'+(nTook(L)===1?'':'s')+' in your ink · your own clock beside the World’s'+(und?' <br><span style="color:var(--stamp)">'+und+' line'+(und===1?'':'s')+' still blank</span>':'')+'</div></div></div>';
+}
+function seatSheet(L){
+  var lines=MT.map(function(m,i){var s=L.took[m.id],ans=L.acted&&s==='took'&&(m.id==='m1'||m.id==='m3'),lap=L.lapsed[m.id];
+    var right=s==='back'?'<span class="struck">handed back</span>':lap?'<span class="noact">NO ACT</span>':ans?'<span class="inkw">answered</span>':'<span class="inkw">'+esc(L.ini)+'</span>'+(!L.acted||m.id==='m2'?(L.left?'':' '+B('Let it lapse','e0.lapse',{m:m.id},'sm','aria-label="Let line '+(i+1)+' lapse, '+m.short+'"')):'');
+    return '<li class="line"><span class="n">'+(i+1)+'</span><span class="'+(s==='back'?'struck':'')+'">'+m.line()+'<span class="due">due '+m.due+(lap?' · passed with no act: an absence, not a choice':'')+'</span></span><span class="tk">'+right+'</span></li>'}).join('');
+  var gone=L.left?'<p class="hold" style="margin:8px 0 0"><b>'+(L.handover?'Handed over':'Vacated')+'.</b> '+(L.handover?'“'+esc(L.handover)+'”':'Lines still open lapsed as NO ACT.')+' Your branch stays beside the record.</p>':'';
+  return '<div class="sheet"><span class="k">Handover · signed '+esc(L.ini)+'</span><h3>Boston’s decision-maker · in your ink</h3>'+
+    '<div class="clocks"><span class="clk2">WORLD '+esc(wclock(L))+'</span><span class="clk2 mine">YOURS '+esc(mclock(L))+'</span></div><ul class="lines">'+lines+'</ul>'+
+    (L.acted?'<div class="actline" style="border-color:var(--fork)"><span class="k" style="color:var(--fork)">Act · in the fork only</span><br>'+esc(ACT_TXT)+'</div>':'')+gone+
+    '<div class="ledger set"><div><span class="k">Gave up</span><br>'+GAVE.join(' · ')+'</div><div><span class="k">Got</span><br>'+nTook(L)+' matters · a clock beside the World’s</div></div></div>';
+}
+var LN={id:id,name:'THE HANDOVER',tag:'incumbent',mat:'Paper sheet',blurb:'Sign for named open matters line by line. Your clock starts beside the World’s.',
+ steps:['Read the record','Sign line by line','Clocks start','First act'],
+ icon:'<svg viewBox="0 0 74 48" aria-hidden="true"><rect x="19" y="3" width="36" height="42" fill="#fff" stroke="#1E1C19" stroke-width="1.5"/><path d="M25 12h24M25 19h24M25 26h24M25 33h12" stroke="#62594D" stroke-width="1.5"/><path d="M40 40q4-6 9-3" stroke="#0D5B62" stroke-width="1.6" fill="none"/></svg>',
+ init:function(){var L=base();L.phase='observe';L.took={m1:null,m2:null,m3:null};L.lapsed={};L.ini='MK';L.handover=null;return L},
+ step:function(L){return L.acted?3:L.entered?2:L.phase==='sign'?1:0},
+ stage:function(L){return L.phase==='observe'?recordSheet():L.phase==='sign'?signSheet(L):seatSheet(L)},
+ bar:function(L){
+  if(L.phase==='observe')return {say:'You are reading the record. Nothing here is yours. To act, the seat has to be handed to you.',btns:B('Ask for the handover','e0.ask',null,'pri','data-primary')};
+  if(L.phase==='sign')return {say:'Take or hand back each line. Every line you take gets your initials. Signing starts your clock beside the World’s.',btns:'<label>Initials <input type="text" id="ini" maxlength="3" size="4" value="'+esc(L.ini)+'" data-field="ini" aria-label="Your initials, fictional names only"></label>'+B('Sign and start my clock','e0.sign',null,'pri fk','data-primary')};
+  if(L.left)return {say:'You left the seat. The fork stays; the record beside it is unchanged.',btns:U('Compare all seven','go',{view:'compare'},'pri','data-primary')+U('Back to the board','go',{view:'board'})};
+  if(!L.acted)return {say:'Your clock is running beside the World’s. Matters you hold can lapse into NO ACT. One act is available: '+ACT_TXT.toLowerCase()+'.',btns:B(ACT_TXT,'e0.offer',null,'pri fk','data-primary')};
+  return {say:'Recorded in your fork, not in Reality. Leaving is an act too: hand over in your own words, or vacate.',btns:'<label>Hand over <input type="text" id="ho" size="34" value="The tax plan is out as an offer; the agent and the club are still open." aria-label="Your handover, in your own words"></label>'+B('Hand over','e0.leave',{mode:'handover'},'','data-read="#ho"')+B('Vacate','e0.leave',{mode:'vacate'},'stampb')+U('Compare all seven','go',{view:'compare'},'pri','data-primary')};
+ },
+ reduce:function(k,p,L){
+  if(k==='e0.ask'){L.phase='sign';return {log:'Asked for the handover: the open matters are laid out. Nothing is signed.',say:'The handover sheet is laid out. Take or hand back each line.'}}
+  if(k==='e0.take'||k==='e0.back'){var v=k==='e0.take'?'took':'back';L.took[p.m]=L.took[p.m]===v?null:v;var m=MT.filter(function(x){return x.id===p.m})[0];return {draft:true,say:(L.took[p.m]?(v==='took'?'Take':'Hand back'):'Cleared')+': '+m.short+'. Not signed yet.'}}
+  if(k==='e0.sign'){
+    var und=MT.filter(function(m){return !L.took[m.id]});
+    if(und.length)return {refuse:'every line is taken or handed back. A blank line would be a choice nobody made ('+und.length+' still blank).'};
+    var ini=(L.ini||'').replace(/[^A-Za-z]/g,'').toUpperCase();
+    if(ini.length<2)return {refuse:'every line you take is initialed. Enter 2–3 letters, a fictional name only.'};
+    L.ini=ini;L.t+=5;L.phase='seat';enter(L,ini+' (fictional)');
+    var out=MT.map(function(m,i){return {log:(L.took[m.id]==='took'?'Took':'Handed back')+' line '+(i+1)+': '+m.plain()+(L.took[m.id]==='took'?' — initialed '+ini:'')+'.'}});
+    out.push({log:'Signed. Your clock started beside the World’s ('+wclock(L)+'). Gave up: '+GAVE.join(', ')+'.',say:'Signed. Your clock is running beside the World’s. SINCE is sealed.'});
+    return out;
+  }
+  if(k==='e0.lapse'){
+    if(L.took[p.m]!=='took')return {refuse:'you handed this line back at signing; a line you do not hold cannot lapse on you.'};
+    if(L.lapsed[p.m])return {refuse:'this line has already lapsed.'};
+    L.lapsed[p.m]=true;var m=MT.filter(function(x){return x.id===p.m})[0];
+    return {log:'NO ACT: '+m.plain()+' — due '+m.due+' passed without an act. Recorded as an absence, not as a choice.',absence:true,say:'No act recorded on '+m.short+': an absence, not a choice.'};
+  }
+  if(k==='e0.offer'){
+    if(L.acted)return {refuse:'one act is available in this lane and it is already out.'};
+    if(!canAct(L))return {refuse:'the offer lives on the owner’s plan or the club’s call. You handed both back or let them lapse. Rule: an act needs a matter you hold.'};
+    L.acted=true;L.t+=10;
+    return {log:ACT_TXT+'. Answers '+(L.took.m1==='took'?'the owner’s plan':'')+(L.took.m1==='took'&&L.took.m3==='took'?' and ':'')+(L.took.m3==='took'?'the club’s call':'')+'. Fork only; the outcome is sealed.',say:'Offer made in your fork. Reality is unchanged. The outcome is sealed.'};
+  }
+  if(k==='e0.leave'){
+    L.left=true;L.phase='left';L.t+=5;
+    var open=MT.filter(function(m){return L.took[m.id]==='took'&&!L.lapsed[m.id]&&!(L.acted&&(m.id==='m1'||m.id==='m3'))});
+    if(p.mode==='handover'){L.handover=(p.text||'').trim()||'(handed over without words)';return {log:'Handed over in own words: “'+L.handover+'” — '+open.length+' open matter'+(open.length===1?'':'s')+' go with it.',say:'Handed over. The record beside your fork is unchanged.'}}
+    var out=open.map(function(m){L.lapsed[m.id]=true;return {log:'NO ACT: '+m.plain()+' — the seat was vacated with this line open. An absence, not a choice.',absence:true}});
+    out.push({log:'Vacated the seat. '+open.length+' open matter'+(open.length===1?'':'s')+' lapsed.',say:'Vacated. Open matters were recorded as NO ACT.'});return out;
+  }
+  return {refuse:'unknown act '+k};
+ },
+ mstat:function(L){var ans=0,lap=0,back=0;MT.forEach(function(m){if(L.took[m.id]==='back')back++;else if(L.lapsed[m.id])lap++;else if(L.took[m.id]==='took'&&L.acted&&(m.id==='m1'||m.id==='m3'))ans++});return {ans:ans,lap:lap,back:back,open:Math.max(0,3-ans-lap-back)}},
+ marks:function(L){
+  var s=L.entered,n=s?nTook(L):0;
+  return [
+   s?[2,'Your initials ('+esc(L.ini)+') sit in ink beside each line you took.']:[0,'Not yet: you are still nobody on the sheet.'],
+   s?(n?[2,'Your role is the '+n+' matter'+(n===1?'':'s')+' you signed for.']:[1,'You signed but took nothing: a seat with no matters.']):[0,'—'],
+   s?[2,'Knowledge narrows. The ledger says what you gave up: the outside view, SINCE, and the interim’s tray.']:[0,'—'],
+   s?[1,'The sheet gives you the matters; nobody with authority is named as giving them.']:[0,'—'],
+   s?(n?[2,'Each line you took is owed by you. A lapse stamps NO ACT.']:[0,'You hold nothing: nothing is owed by you.']):[0,'—'],
+   s?[2,'Your clock starts beside the World’s.']:[0,'—'],
+   [0,s?'A sheet has no place: it reads the same anywhere. Nothing moved you.':'—'],
+   s?(canAct(L)||L.acted?[2,'The matters you hold define the acts: the offer, and Let it lapse.']:[1,'Only “let it lapse” remains: the offer lives on matters you gave back.']):[0,'—']];
+ },
+ about:{gave:'The outside view, SINCE, the interim’s tray — and every line you handed back.',
+  leave:'A handover in your own words, or vacating. A line left open when you vacate stamps NO ACT: an absence, never a choice.',
+  agent:'Signs the same sheet under a warrant the owner signed: the agent can take only the lines the warrant names.',
+  survive:'Voice: yes, line by line. Spatial: a sheet on a desk. Screen reader: yes, each line is a button.',
+  chem:'A lab lead hands over a run: the open steps, each initialed, before the shift.',
+  supply:'A dispatcher takes over open purchase orders at shift change, one signed line each.'}};
+LANES.push(LN);LANE[id]=LN;
+})();
+
+/* ================================================================ E1 · SIT, THEN SIGN (room section) */
+(function(){
+var id='E1';
+var GAVE1=['outside','clubs','league','owner'];
+function frostedIds(L){return PANES.filter(function(p){return L.frost[p.id]}).map(function(p){return p.id})}
+function roomSVG(L){
+  var f=L.frost,sat=L.posture==='sit',s='';
+  s+='<svg viewBox="0 0 900 400" role="img" aria-label="Section of the room. Left: the mezzanine rail. Back wall: four panes and two clocks. Right: the desk with its in-tray." preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block;font-family:IBM Plex Sans,system-ui,sans-serif">';
+  s+='<defs><pattern id="et-stip" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#F6F3EA"/><circle cx="1.5" cy="1.5" r=".9" fill="#1E1C19"/><circle cx="4.5" cy="4.5" r=".9" fill="#1E1C19"/></pattern></defs>';
+  s+='<rect x="0" y="340" width="900" height="60" fill="#E7E0CE"/><line x1="0" y1="340" x2="900" y2="340" stroke="#1E1C19" stroke-width="1.5"/>';
+  s+='<rect x="310" y="24" width="580" height="316" fill="#F6F2E7" stroke="#1E1C19" stroke-width="1.5"/>';
+  /* mezzanine + rail */
+  s+='<rect x="10" y="262" width="280" height="14" fill="#D9CDB3" stroke="#1E1C19" stroke-width="1.5"/>';
+  [40,150,260].forEach(function(x){s+='<line x1="'+x+'" y1="276" x2="'+x+'" y2="340" stroke="#1E1C19" stroke-width="2"/>'});
+  s+='<line x1="16" y1="196" x2="288" y2="196" stroke="#1E1C19" stroke-width="3.5"/>';
+  for(var i=0;i<11;i++){var x=22+i*26;s+='<line x1="'+x+'" y1="196" x2="'+x+'" y2="262" stroke="#1E1C19" stroke-width="1.4"/>'}
+  s+='<text x="16" y="366" font-size="13" font-weight="600" fill="#46423B" letter-spacing=".06em">THE RAIL · OBSERVERS STAND HERE</text>';
+  /* panes */
+  var X=[325,485,615,745],Wd=[150,120,120,120],Y=78,Hh=160;
+  var names=['OUTSIDE VIEW','OTHER CLUBS','LEAGUE OFFICE','OWNER’S NOTES'];
+  PANES.forEach(function(p,i){
+    var x=X[i],w=Wd[i],fr=f[p.id];
+    s+='<rect x="'+x+'" y="'+Y+'" width="'+w+'" height="'+Hh+'" fill="#FDFCF8" stroke="#1E1C19" stroke-width="2"/>';
+    if(!fr){
+      s+='<g stroke="#62594D" stroke-width="1.4" fill="none">';
+      if(i===0)s+='<path d="M'+(x+10)+' 205q11-8 22 0t22 0t22 0t22 0t22 0"/><path d="M'+(x+10)+' 220q11-8 22 0t22 0t22 0t22 0t22 0"/><rect x="'+(x+70)+'" y="140" width="56" height="48"/><path d="M'+(x+70)+' 140l28-16 28 16"/>';
+      if(i===1)s+='<rect x="'+(x+12)+'" y="140" width="34" height="9"/><rect x="'+(x+70)+'" y="140" width="34" height="9"/><rect x="'+(x+40)+'" y="190" width="34" height="9"/><path d="M'+(x+14)+' 149v22M'+(x+44)+' 149v22M'+(x+72)+' 149v22M'+(x+102)+' 149v22M'+(x+42)+' 199v22M'+(x+72)+' 199v22"/>';
+      if(i===2)s+='<rect x="'+(x+12)+'" y="180" width="96" height="10"/><rect x="'+(x+20)+'" y="138" width="22" height="30"/><rect x="'+(x+50)+'" y="138" width="22" height="30"/><rect x="'+(x+80)+'" y="138" width="22" height="30"/>';
+      if(i===3)s+='<rect x="'+(x+12)+'" y="110" width="96" height="120"/><path d="M'+(x+22)+' 130h76M'+(x+22)+' 148h76M'+(x+22)+' 166h50M'+(x+22)+' 190h76M'+(x+22)+' 208h60"/>';
+      s+='</g>';
+    }else if(i===0){
+      s+='<rect x="'+x+'" y="'+(Y+22)+'" width="'+w+'" height="'+(Hh-22)+'" fill="#D9C6A0" stroke="#1E1C19" stroke-width="2"/>';
+      for(var j=1;j<7;j++)s+='<line x1="'+x+'" y1="'+(Y+22+j*20)+'" x2="'+(x+w)+'" y2="'+(Y+22+j*20)+'" stroke="#8B7A55" stroke-width="1.5"/>';
+      s+='<rect x="'+(x+w/2-32)+'" y="152" width="64" height="24" fill="#FCFAF4" stroke="#1E1C19"/><text x="'+(x+w/2)+'" y="169" text-anchor="middle" font-size="13" font-weight="600">covered</text>';
+    }else{
+      s+='<rect x="'+x+'" y="'+(Y+22)+'" width="'+w+'" height="'+(Hh-22)+'" fill="url(#et-stip)" stroke="#1E1C19" stroke-width="2"/>';
+      s+='<rect x="'+(x+w/2-32)+'" y="152" width="64" height="24" fill="#FCFAF4" stroke="#1E1C19"/><text x="'+(x+w/2)+'" y="169" text-anchor="middle" font-size="13" font-weight="600">frosted</text>';
+    }
+    s+='<rect x="'+x+'" y="'+Y+'" width="'+w+'" height="22" fill="#FCFAF4" stroke="#1E1C19" stroke-width="2"/><text x="'+(x+w/2)+'" y="'+(Y+16)+'" text-anchor="middle" font-size="12" font-weight="600" fill="#1E1C19" letter-spacing=".05em">'+names[i]+'</text>';
+  });
+  /* clocks + plate */
+  s+='<rect x="325" y="36" width="150" height="26" fill="#fff" stroke="#1E1C19"/><text x="333" y="54" font-size="13" font-family="IBM Plex Mono,monospace">WORLD '+wclock(L).slice(-5)+'</text>';
+  if(L.signed)s+='<rect x="485" y="36" width="170" height="26" fill="#E3EFED" stroke="#0D5B62" stroke-width="1.5"/><text x="493" y="54" font-size="13" font-family="IBM Plex Mono,monospace" fill="#0D5B62">YOURS '+mclock(L).replace(' in the seat','')+'</text>';
+  else s+='<rect x="485" y="36" width="170" height="26" fill="none" stroke="#62594D" stroke-dasharray="5 4"/><text x="493" y="54" font-size="13" font-family="IBM Plex Mono,monospace" fill="#62594D">YOURS —</text>';
+  s+='<rect x="325" y="280" width="190" height="44" fill="#fff" stroke="#1E1C19" stroke-width="1.5"/><text x="333" y="297" font-size="11.5" font-weight="600" letter-spacing=".07em">BOSTON · DECISION-MAKER</text>';
+  s+=L.signed?'<text x="333" y="316" font-size="17" font-style="italic" font-weight="600" fill="#0D5B62" font-family="Fraunces,Georgia,serif">'+esc(L.plate)+'</text>':'<text x="333" y="316" font-size="14" fill="#62594D">— vacant —</text>';
+  /* desk */
+  s+='<rect x="560" y="296" width="300" height="13" fill="#C9B48F" stroke="#1E1C19" stroke-width="1.5"/><line x1="576" y1="309" x2="576" y2="340" stroke="#1E1C19" stroke-width="3"/><line x1="844" y1="309" x2="844" y2="340" stroke="#1E1C19" stroke-width="3"/>';
+  s+='<rect x="596" y="285" width="96" height="11" fill="#fff" stroke="#1E1C19"/>';
+  if(!L.signed&&sat)s+='<text x="600" y="279" font-size="11.5" font-weight="600" fill="#9A2A1C" letter-spacing=".05em">REHEARSAL · NOTHING SIGNED</text>';
+  s+='<path d="M712 292l26-10" stroke="#1E1C19" stroke-width="3"/><text x="700" y="278" font-size="11.5" fill="#46423B">pen</text>';
+  s+='<rect x="768" y="266" width="76" height="30" fill="#F6F2E7" stroke="#1E1C19" stroke-width="1.5"/>';
+  if(L.signed)[0,1,2].forEach(function(j){s+='<rect x="'+(772+j*24)+'" y="'+(258-j*2)+'" width="20" height="36" fill="#D9C6A0" stroke="#1E1C19"/>'});
+  s+='<text x="806" y="260" text-anchor="middle" font-size="11.5" fill="#46423B" '+(L.signed?'style="display:none"':'')+'>in-tray</text>';
+  /* chair */
+  var cx=sat?546:520;
+  s+='<g fill="#46423B" stroke="#46423B"><rect x="'+cx+'" y="302" width="34" height="7" '+(sat?'':'opacity=".6"')+'/><line x1="'+(cx+3)+'" y1="309" x2="'+(cx+3)+'" y2="338" stroke-width="3"/><line x1="'+(cx+31)+'" y1="309" x2="'+(cx+31)+'" y2="338" stroke-width="3"/><rect x="'+(sat?cx-6:cx-6)+'" y="262" width="7" height="46" '+(sat?'':'opacity=".6"')+'/></g>';
+  /* sightline */
+  var ex=sat?566:150,ey=sat?276:176;
+  var tg=sat?[[325,238],[865,238]]:[[325,88],[325,238]];
+  s+='<g stroke="#0D5B62" stroke-width="1.5" stroke-dasharray="6 5" fill="none">'+tg.map(function(t){return '<path d="M'+ex+' '+ey+'L'+t[0]+' '+t[1]+'"/>'}).join('')+'</g>';
+  s+='<circle cx="'+ex+'" cy="'+ey+'" r="9" fill="#FCFAF4" stroke="#0D5B62" stroke-width="2"/><circle cx="'+ex+'" cy="'+ey+'" r="3.5" fill="#0D5B62"/>';
+  s+='<text x="'+(sat?ex-16:ex-2)+'" y="'+(sat?ey-18:ey-16)+'" text-anchor="'+(sat?'end':'middle')+'" font-size="12" font-weight="600" fill="#0D5B62">your sightline</text>';
+  return s+'</svg>';
+}
+function low(L){
+  var frost=frostedIds(L),ok=frost.join()===GAVE1.join();
+  var blot;
+  if(L.posture!=='sit'&&!L.sat&&!L.signed)blot='<div class="hold" style="margin:0"><b>Blotter.</b> It lies on the desk, out of reach of the rail. Sit to read it: sitting is a free rehearsal.</div>';
+  else{
+    var names=PANES.map(function(p){return esc(p.name)});
+    blot='<div class="ledger '+(L.signed?'set':'')+'" style="margin:0"><div><span class="k">'+(L.signed?'Gave up':'You would give up')+'</span><ul style="margin:3px 0 0 16px;padding:0;font-size:12.5px">'+PANES.map(function(p){return '<li>'+esc(p.name)+'</li>'}).join('')+'</ul></div>'+
+      '<div><span class="k">'+(L.signed?'Got':'You would get')+'</span><br>3 folders in the tray · your clock beside the World’s · the plate takes your name'+
+      (L.signed?'<br><span class="k" style="text-transform:none;letter-spacing:0">Ledger check: gave-up list = frosted panes ('+GAVE1.length+' = '+frost.length+') '+(ok?'— they match':'— they differ')+'</span>':
+       '<br><span class="k" style="text-transform:none;letter-spacing:0">Plate name (fictional):</span> '+['Maya K.','Jo R.','Ade O.'].map(function(n){return B(n,'e1.plate',{name:n},'sm','aria-pressed="'+(L.plate===n)+'"')}).join(' '))+'</div></div>';
+  }
+  var tray=L.signed?'<ul style="list-style:none;margin:0;padding:0">'+MT.map(function(m){return '<li style="border:1.5px solid var(--ink);background:var(--kraft);padding:4px 8px;margin:0 0 4px;font-size:13px"><b>'+esc(m.who)+'</b> · '+esc(m.ask)+'</li>'}).join('')+'</ul>':'<div class="hold" style="margin:0"><b>In-tray.</b> Empty. Folders named by question arrive when you sign.</div>';
+  return '<div style="display:grid;grid-template-columns:1.25fr 1fr;gap:10px;flex:none;margin-top:8px"><section aria-label="Blotter">'+blot+'</section><section aria-label="In-tray">'+tray+'</section></div>';
+}
+var LN={id:id,name:'SIT, THEN SIGN',mat:'Room section',blurb:'Stand at the rail, sit to rehearse, sign with the pen. Panes frost; the ledger equals the frost.',
+ steps:['Stand at the rail','Sit: rehearsal','Sign with the pen','First act'],
+ icon:'<svg viewBox="0 0 74 48" aria-hidden="true"><rect x="27" y="4" width="43" height="36" fill="#F6F2E7" stroke="#1E1C19" stroke-width="1.5"/><rect x="31" y="9" width="10" height="17" fill="#fff" stroke="#1E1C19"/><rect x="44" y="9" width="10" height="17" fill="url(#et-stip)" stroke="#1E1C19"/><rect x="57" y="9" width="9" height="17" fill="url(#et-stip)" stroke="#1E1C19"/><rect x="3" y="26" width="22" height="3" fill="#D9CDB3" stroke="#1E1C19"/><path d="M5 20h20M8 20v6M14 20v6M20 20v6" stroke="#1E1C19"/><rect x="44" y="34" width="24" height="3" fill="#C9B48F" stroke="#1E1C19"/></svg>',
+ init:function(){var L=base();L.posture='stand';L.sat=false;L.signed=false;L.plate='Maya K.';L.frost={};return L},
+ step:function(L){return L.acted?3:L.signed?2:L.sat?1:0},
+ stage:function(L){
+  var sp='<button type="button" class="b sm spot" style="left:2%;top:26%" data-act="e1.stand" data-fk="e1.stand-s" aria-pressed="'+(L.posture==='stand')+'">Stand at the rail</button><button type="button" class="b sm spot" style="right:2%;bottom:4%" data-act="e1.sit" data-fk="e1.sit-s" aria-pressed="'+(L.posture==='sit')+'">Sit at the desk</button>';
+  return '<div class="room" style="position:relative;flex:1;min-height:0">'+roomSVG(L)+sp+'</div>'+low(L);
+ },
+ bar:function(L){
+  if(L.left)return {say:'You left the seat. Standing up restored nothing; the panes stay frosted in your branch.',btns:U('Compare all seven','go',{view:'compare'},'pri','data-primary')+U('Back to the board','go',{view:'board'})};
+  if(L.acted)return {say:'Recorded in your fork, not in Reality. Standing up restores nothing. Leaving is an act: hand over, or vacate.',btns:'<label>Hand over <input type="text" id="ho" size="34" value="The tax plan is out as an offer; the tray still holds two folders." aria-label="Your handover, in your own words"></label>'+B('Hand over','e1.leave',{mode:'handover'},'','data-read="#ho"')+B('Vacate','e1.leave',{mode:'vacate'},'stampb')+U('Compare all seven','go',{view:'compare'},'pri','data-primary')};
+  if(L.signed&&L.posture==='sit')return {say:'The panes have frosted, the outside view is covered, the tray has three folders. One act is on the desk.',btns:B(ACT_TXT,'e1.offer',null,'pri fk','data-primary')+B('Stand up (restores nothing)','e1.stand')};
+  if(L.signed)return {say:'You stood up. The panes stay frosted: standing restores nothing. The act is on the desk.',btns:B('Sit at the desk','e1.sit',null,'pri','data-primary')+B(ACT_TXT,'e1.offer',null,'','aria-disabled="true"')};
+  if(L.posture==='sit')return {say:'Sitting is a free rehearsal, not an act. The blotter shows what you would give up and get. The pen makes it real.',btns:B('Sign with the pen','e1.sign',null,'pri fk','data-primary')+B('Stand up','e1.stand')};
+  return {say:'You are standing at the rail. Every pane is clear and nothing here is yours. The pen is on the desk.',btns:B('Sit at the desk','e1.sit',null,'pri','data-primary')+B('Sign with the pen','e1.sign',null,'','aria-disabled="true"')};
+ },
+ reduce:function(k,p,L){
+  if(k==='e1.stand'){if(L.posture==='stand')return {say:'Already at the rail.'};L.posture='stand';return L.signed?{log:'Stood up from the desk. Nothing restored: the panes stay frosted and the ledger stands.',say:'Stood up. The panes stay frosted.'}:{log:'Walked back to the rail (rehearsal ends; nothing was signed).',say:'At the rail.'}}
+  if(k==='e1.sit'){if(L.posture==='sit')return {say:'Already at the desk.'};L.posture='sit';L.sat=true;return L.signed?{log:'Sat at the desk again.',say:'At the desk.'}:{log:'Sat at the desk: a free rehearsal. The blotter previews what would be given up and got. Nothing signed.',say:'At the desk. The blotter previews the ledger. Nothing is signed.'}}
+  if(k==='e1.plate'){L.plate=p.name;return {draft:true,say:'Plate name: '+p.name+'.'}}
+  if(k==='e1.sign'){
+    if(L.posture!=='sit')return {refuse:'the pen lives on the desk. Rule: you sign where the seat is — sit first.'};
+    if(L.signed)return {refuse:'already signed. Signing again would change nothing.'};
+    L.signed=true;L.t+=5;PANES.forEach(function(x){L.frost[x.id]=true});enter(L,L.plate+' (fictional)');
+    return {log:'Signed with the pen at the desk. '+PANES.length+' panes frosted, the outside view covered, the tray filled with 3 folders, the plate reads “'+L.plate+'”. Your clock started beside the World’s.',say:'Signed. Four panes frosted, the outside view covered, three folders in the tray.'};
+  }
+  if(k==='e1.offer'){
+    if(!L.signed)return {refuse:'nothing is signed. Rule: an act belongs to the seat, and the seat starts at the pen.'};
+    if(L.posture!=='sit')return {refuse:'the act is made at the desk. Sit first; standing up restored nothing, so you are still the seat holder.'};
+    if(L.acted)return {refuse:'one act is available in this lane and it is already out.'};
+    L.acted=true;L.t+=10;return {log:ACT_TXT+'. From the tray: the owner’s plan and the club’s call. Fork only; the outcome is sealed.',say:'Offer made in your fork. Reality is unchanged. The outcome is sealed.'};
+  }
+  if(k==='e1.leave'){
+    L.left=true;L.t+=5;L.posture='stand';
+    if(p.mode==='handover'){L.handover=(p.text||'').trim()||'(no words)';return {log:'Handed over in own words: “'+L.handover+'”. The panes stayed frosted; nothing restored.',say:'Handed over.'}}
+    return [{log:'NO ACT: the agent’s question — the seat was vacated with this folder open. An absence, not a choice.',absence:true},{log:'Vacated the seat. One folder lapsed.',say:'Vacated. The open folder was recorded as NO ACT.'}];
+  }
+  return {refuse:'unknown act '+k};
+ },
+ marks:function(L){
+  var s=L.signed,pl=L.sat||L.signed;
+  return [
+   s?[2,'The door plate takes your name: '+esc(L.plate)+' (fictional).']:[0,'The plate still says vacant.'],
+   s?[2,'You hold the desk, and the plate says so.']:L.sat?[1,'Sitting is a rehearsal: a role you can try but not yet hold.']:[0,'—'],
+   s?[2,PANES.length+' panes frost and the outside view is covered. The ledger’s gave-up list equals them.']:L.sat?[1,'The blotter previews what would be given up. Nothing is withheld yet.']:[0,'—'],
+   s?[1,'The pen makes it yours. Nobody offered it.']:[0,'—'],
+   s?[1,'Three folders are in the tray. Nothing is signed for line by line.']:[0,'—'],
+   s?[2,'Two clocks on the wall: the World’s and yours.']:[0,'—'],
+   pl?[2,'You crossed the room: from the rail to the desk changes what you can see.']:[0,'You stand where observers stand.'],
+   s?[1,'The desk holds the tray and one act. The rail had none.']:[0,'—']];
+ },
+ about:{gave:'What the frosted panes showed — the outside view, other clubs’ desks, the League’s desk, the owner’s private notes. The ledger list and the frosted list are the same four.',
+  leave:'Standing up restores nothing. Leaving is an act: hand over in your own words, or vacate (open folders stamp NO ACT).',
+  agent:'Sits where the owner seats it. The same frost applies to what it can read, and a lamp on the desk would show that it holds the lease.',
+  survive:'Voice: the blotter is read aloud, then “sign”. Spatial: the native case. Screen reader: the ledger list carries it; the room adds nothing the list lacks.',
+  chem:'The bench: sitting at the fume-hood console frosts the other labs’ instruments.',
+  supply:'A dispatcher’s desk over the tower cutaway: sitting there frosts other yards’ schedules.'}};
+LANES.push(LN);LANE[id]=LN;
+})();
+
+/* ================================================================ E2 · THE SEAL (sealed drawer) */
+(function(){
+var id='E2';
+function row(k,v){return '<div class="pr"><span class="pk">'+k+'</span><span>'+v+'</span></div>'}
+function booksHTML(){
+  var unk=[],h='';
+  CUT.state.forEach(function(s){
+    if(s.value.k==='UNKNOWN'){unk.push(fact(s.value))}
+    else h+=row(esc(/Projected/.test(s.what)?'Projected luxury tax':s.what),fact(s.value,typeof s.value.v==='number'?'≈ '+M(s.value.v):null));
+  });
+  return h+row('Record and payroll at the cut',unk.join(' '));
+}
+function deskHTML(L){
+  var labs={'That the deadline closes today':'Deadline closes Thursday','The 2025–26 tax line, aprons and brackets':'The 2025–26 lines','The projected tax if nothing changed':'Tax if nothing changes','Which other teams were calling, and about whom':'Which clubs are calling'};
+  var h=CUT.known.map(function(k){return row(esc(labs[k.what]||k.what),fact(k.value))}).join('');
+  if(L.entered)h+='<div class="pr" style="display:block;margin-top:6px"><span class="k">Open on this desk</span><ul style="margin:3px 0 0 16px;padding:0">'+MT.map(function(m){return '<li>'+m.line()+'</li>'}).join('')+'</ul></div>';
+  return h;
+}
+function drawer(L){
+  var open=L.sinceOpen&&!L.sealed,lock=L.sealed,s='';
+  s+='<svg viewBox="0 0 340 150" role="img" aria-label="A cabinet drawer labelled SINCE: '+(lock?'closed and locked':open?'open':'closed')+'." style="width:100%;height:auto;max-height:150px;display:block;font-family:IBM Plex Sans,system-ui,sans-serif"><rect x="20" y="6" width="300" height="140" fill="#CFCABB" stroke="#1E1C19" stroke-width="2"/>';
+  if(open){
+    s+='<rect x="36" y="16" width="268" height="44" fill="#8B8471" stroke="#1E1C19" stroke-width="1.5"/>';
+    for(var i=0;i<5;i++)s+='<rect x="'+(46+i*52)+'" y="'+(8+(i%2)*6)+'" width="46" height="46" fill="'+(i%2?'#E7D8B6':'#D9C6A0')+'" stroke="#1E1C19"/><text x="'+(69+i*52)+'" y="'+(36+(i%2)*6)+'" text-anchor="middle" font-size="11" font-weight="600">'+['5 Feb','6 Mar','later','later','1 Jul'][i]+'</text>';
+    s+='<rect x="36" y="60" width="268" height="60" fill="#E1DCCB" stroke="#1E1C19" stroke-width="2"/><rect x="58" y="76" width="100" height="26" fill="#FCFAF4" stroke="#1E1C19"/><text x="108" y="94" text-anchor="middle" font-size="14" font-weight="700" letter-spacing=".12em">SINCE</text><rect x="196" y="90" width="70" height="9" fill="#8B8471" stroke="#1E1C19"/>';
+  }else{
+    s+='<rect x="36" y="18" width="268" height="84" fill="#E1DCCB" stroke="#1E1C19" stroke-width="2"/><rect x="58" y="44" width="100" height="28" fill="#FCFAF4" stroke="#1E1C19"/><text x="108" y="64" text-anchor="middle" font-size="15" font-weight="700" letter-spacing=".12em">SINCE</text><rect x="198" y="72" width="70" height="9" fill="#8B8471" stroke="#1E1C19"/>';
+    if(lock)s+='<path d="M232 50v-10a14 14 0 0 1 28 0v10" fill="none" stroke="#1E1C19" stroke-width="5"/><rect x="224" y="48" width="44" height="34" fill="#1E1C19"/><circle cx="246" cy="62" r="5" fill="#FCFAF4"/><rect x="244" y="64" width="4" height="10" fill="#FCFAF4"/>';
+  }
+  s+='<text x="170" y="136" text-anchor="middle" font-size="11.5" fill="#46423B">other drawers: not part of this cut</text></svg>';
+  var cont='';
+  if(open)cont='<ul class="sl">'+CUT.sealed.map(function(x){return '<li><span class="d">'+(x.date?fdate(x.date):'later')+'</span> '+esc(x.what)+' '+fact(x.value)+'</li>'}).join('')+'</ul>';
+  else if(lock)cont='<p class="hold" style="margin:6px 0 0"><b>Locked.</b> Sealed at the cut. It does not reopen for this fork; to read it, leave and cut a new fork, which carries its own mark.</p>';
+  else cont='<p class="hold" style="margin:6px 0 0">Closed. An observer may open it. Opening it is remembered.</p>';
+  return s+cont;
+}
+var LN={id:id,name:'THE SEAL',mat:'Sealed drawer',blurb:'Surrender hindsight to take the seat. Opened SINCE first? The seat is stamped, and the stamp rides on every act.',
+ steps:['Observe the cut','Seal SINCE','Take the seat','First act'],obsOpt:{noSince:true},
+ icon:'<svg viewBox="0 0 74 48" aria-hidden="true"><rect x="12" y="4" width="50" height="40" fill="#CFCABB" stroke="#1E1C19" stroke-width="1.5"/><rect x="16" y="9" width="42" height="15" fill="#E1DCCB" stroke="#1E1C19"/><rect x="26" y="14" width="14" height="6" fill="#fff" stroke="#1E1C19"/><rect x="42" y="18" width="12" height="3" fill="#8B8471"/><rect x="16" y="28" width="42" height="12" fill="none" stroke="#1E1C19" stroke-dasharray="3 2"/></svg>',
+ init:function(){var L=base();L.sealed=false;L.taken=false;L.plate='Maya K.';return L},
+ step:function(L){return L.acted?3:L.taken?2:L.sealed?1:0},
+ stage:function(L){
+  var stamp=L.sealed&&!L.taken?'<p style="margin:6px 0 0;font-size:13px">If you take the seat now the plate reads: '+(L.asked?'<span class="hs">'+esc(HS)+'</span>':'<span class="hs" style="color:var(--fork);border-color:var(--fork)">sealed unread</span>')+'</p>':'';
+  var plate=L.taken?'<p style="margin:6px 0 0;font-size:13px"><b>Plate:</b> Boston · decision-maker · <span class="inkw" style="font-size:16px">'+esc(L.plate)+'</span> '+(L.stamp?'<span class="hs">'+esc(L.stamp)+'</span>':'<span class="hs" style="color:var(--fork);border-color:var(--fork)">sealed unread</span>')+'</p>':'';
+  var noty='<section class="plane '+(L.sealed?'dash':'rec')+'"><h3>Not yet <span class="k">'+(L.sealed?'sealed — you find out by living it':'ajar to an observer who asks')+'</span></h3>'+
+     row('Scheduled by the calendar',fact({v:'The deadline closes Thursday, '+DEAD.v,k:L.sealed?'UNKNOWN':'AUTHORED',src:'the League’s calendar (verify)',asOf:null,verify:true,note:null}))+
+     '<p style="margin:3px 0 0;font-size:12px;color:var(--mute)">Not a list of what will happen: a slot appears only if a dated source or the calendar raised it.</p></section>';
+  return '<div style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:12px;flex:1;min-height:0"><div style="display:flex;flex-direction:column;gap:8px;min-height:0;overflow:auto">'+
+   '<section class="plane rec"><h3>On the books <span class="k">what was true</span></h3>'+booksHTML()+'</section>'+
+   '<section class="plane rec"><h3>'+(L.entered?'Your desk':'On the desk')+' <span class="k">what this seat could know</span></h3>'+deskHTML(L)+'</section></div>'+
+   '<div style="display:flex;flex-direction:column;gap:8px;min-height:0;overflow:auto"><section class="plane rec"><h3>Since <span class="k">'+(L.sealed?'locked':'closed until you ask')+'</span></h3>'+drawer(L)+(L.taken?plate:stamp)+'</section>'+noty+'</div></div>';
+ },
+ bar:function(L){
+  if(L.left)return {say:'You left the seat. The stamp stays on the fork and on every act in it.',btns:U('Compare all seven','go',{view:'compare'},'pri','data-primary')+U('Back to the board','go',{view:'board'})};
+  if(L.acted)return {say:'Recorded in your fork'+(L.stamp?', stamped: '+L.stamp:', sealed unread')+'. Leaving is an act: hand over, or vacate.',btns:'<label>Hand over <input type="text" id="ho" size="34" value="The offer is out; the agent’s question and the club’s call are open." aria-label="Your handover, in your own words"></label>'+B('Hand over','e2.leave',{mode:'handover'},'','data-read="#ho"')+B('Vacate','e2.leave',{mode:'vacate'},'stampb')+U('Compare all seven','go',{view:'compare'},'pri','data-primary')};
+  if(L.taken)return {say:'You are in the seat'+(L.stamp?' with the hindsight mark on the plate':', sealed unread')+'. One act is available.',btns:B(ACT_TXT,'e2.offer',null,'pri fk','data-primary')};
+  if(L.sealed)return {say:'The drawer is closed and locked, and Not-yet is dashed. '+(L.asked?'You read SINCE first, so the seat will carry the mark.':'You never opened it, so the seat will be sealed unread.'),btns:B('Take the seat','e2.take',null,'pri fk','data-primary')+B('Open SINCE','since',null,'','aria-disabled="true"')};
+  return {say:'You are an observer. SINCE is a drawer you may open. To take the seat you must seal it: the drawer closes and locks.',btns:B(L.sinceOpen?'Close the SINCE drawer':'Open the SINCE drawer','since',null,'','aria-expanded="'+L.sinceOpen+'"')+B('Seal the drawer','e2.seal',null,'pri','data-primary')+B('Take the seat','e2.take',null,'','aria-disabled="true"')};
+ },
+ reduce:function(k,p,L){
+  if(k==='e2.seal'){if(L.sealed)return {refuse:'the drawer is already sealed. A seal is not repeated or reopened.'};L.sinceOpen=false;L.sealed=true;L.t+=1;return {log:'Sealed SINCE: the drawer closed and locked. Not-yet turned dashed. '+(L.asked?'SINCE had been opened before: the seat will carry the mark.':'SINCE was never opened: the seat will be sealed unread.'),say:'Sealed. Not-yet is dashed.'}}
+  if(k==='e2.take'){
+    if(!L.sealed)return {refuse:'SINCE is still ajar. Rule: to take a seat at a cut you seal what came after it first.'};
+    L.taken=true;L.t+=4;enter(L,L.plate+' (fictional)');
+    return {log:'Took the seat at the cut. Plate: '+L.plate+' (fictional), '+(L.stamp?'“'+L.stamp+'”':'sealed unread')+'. The stamp rides on every act and fork from here.',say:'In the seat'+(L.stamp?', stamped with hindsight.':', sealed unread.')};
+  }
+  if(k==='e2.offer'){
+    if(L.acted)return {refuse:'one act is available in this lane and it is already out.'};
+    L.acted=true;L.t+=10;return {log:ACT_TXT+'. Stamp on this act: '+(L.stamp||'sealed unread')+'. Fork only; the outcome is sealed.',say:'Offer made in your fork, carrying the stamp. Reality is unchanged.'};
+  }
+  if(k==='e2.leave'){
+    L.left=true;L.t+=5;
+    if(p.mode==='handover'){L.handover=(p.text||'').trim()||'(no words)';return {log:'Handed over in own words: “'+L.handover+'”. The stamp stays on the fork.',say:'Handed over.'}}
+    return [{log:'NO ACT: the agent’s question and the club’s call — the seat was vacated with them open. An absence, not a choice.',absence:true},{log:'Vacated the seat. The stamp stays on the fork.',say:'Vacated.'}];
+  }
+  return {refuse:'unknown act '+k};
+ },
+ marks:function(L){
+  var s=L.sealed,t=L.taken;
+  return [
+   s?[1,L.asked?'The plate is stamped “'+HS+'”.':'The plate is stamped “sealed unread”.']:[0,'—'],
+   t?[1,'You take the seat only after sealing.']:[0,s?'Not taken yet.':'—'],
+   s?[2,'SINCE locks and Not-yet turns dashed: your knowledge is cut at the moment.']:[0,'—'],
+   [0,s?'Nobody grants anything: the seal is a limit you put on yourself.':'—'],
+   t?[1,'The stamp rides on every act and fork you make: you answer for what you knew.']:[0,'—'],
+   s?[2,'Your horizon moves from '+fdate(NOW)+' back to '+D0+'.']:[0,'—'],
+   [0,s?'Nothing moves: same cabinet, same desk.':'—'],
+   t?[1,'The act appears only once the seal is on.']:[0,'—']];
+ },
+ about:{gave:'Hindsight. SINCE is locked and Not-yet is dashed. If you had read SINCE, the seat is stamped “'+HS+'” and stays comparable only with forks carrying the same stamp.',
+  leave:'Hand over or vacate as usual; the stamp stays on the fork and on every act. The seal never reopens for this fork: to read SINCE again, cut a new fork.',
+  agent:'An agent that has read later text cannot un-read it: its warrant would name a knowledge date, and the stamp rides on every act it makes.',
+  survive:'Voice: “seal it” is one sentence. Spatial: a drawer. Screen reader: yes; the stamp is text and the drawer is a button.',
+  chem:'Sealing the assay results: you predict the endpoint before the titration finishes; the stamp says whether you saw the curve.',
+  supply:'Deciding the reorder before the fab-fire report: the stamp says whether the buyer had already read it.'}};
+LANES.push(LN);LANE[id]=LN;
+})();
+
+/* ================================================================ E3 · THE OFFER (envelope + threshold) */
+(function(){
+var id='E3';
+var WHO='Mr. Levi (teacher, fictional)',PHRASE='north · ledger · pine';
+function envelope(L){
+  var open=L.offer!=='unread';
+  var s='<svg viewBox="0 -20 420 280" role="img" aria-label="An envelope. Front: Offer, the Boston seat at 2 Feb 2026, your own copy, until Friday, from Mr. Levi." style="width:100%;height:auto;max-height:100%;display:block;font-family:IBM Plex Sans,system-ui,sans-serif">';
+  if(open)s+='<rect x="70" y="10" width="280" height="140" fill="#fff" stroke="#1E1C19"/><path d="M90 40h240M90 60h240M90 80h180" stroke="#8D8574" stroke-width="1.5"/>';
+  s+='<rect x="30" y="50" width="360" height="190" fill="#D9C6A0" stroke="#1E1C19" stroke-width="2"/>';
+  s+=open?'<path d="M30 50L210 -12 390 50z" fill="#E7D8B6" stroke="#1E1C19" stroke-width="2"/>':'<path d="M30 50L210 158 390 50z" fill="#CDB88E" stroke="#1E1C19" stroke-width="2"/>';
+  if(!open)s+='<circle cx="210" cy="152" r="14" fill="#9A2A1C" stroke="#1E1C19"/><text x="210" y="157" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">BOW</text>';
+  s+='<rect x="60" y="'+(open?116:170)+'" width="300" height="'+(open?100:62)+'" fill="#FCFAF4" stroke="#1E1C19"/>';
+  s+='<text x="72" y="'+(open?138:190)+'" font-size="13" font-weight="700" letter-spacing=".1em">OFFER</text><text x="72" y="'+(open?158:208)+'" font-size="14" font-family="Fraunces,Georgia,serif" font-weight="600">the Boston seat at 2 Feb 2026</text><text x="72" y="'+(open?176:224)+'" font-size="13">your own copy · until Friday</text>';
+  if(open)s+='<text x="72" y="194" font-size="12" fill="#46423B">from '+WHO+'</text><text x="72" y="210" font-size="12" font-family="IBM Plex Mono,monospace">three words: '+PHRASE+'</text>';
+  return s+'</svg>';
+}
+function threshold(L){
+  var rows=[['Who offers',WHO+'. Not the seat itself.'],['Which seat','Boston’s decision-maker at '+CUTL+' — your own copy (a fork).'],['What you will see','Only what was knowable then: the tax bill, the deadline, three open matters.'],['What you give up','SINCE, the outside view, and other clubs’ desks.'],['What stays private','Your desk, from every other seat and from the board. Your teacher sees that you are in, not what you hold.'],['Until','Friday. After that the Offer lapses; your branch stays.']];
+  return '<div class="sheet" style="border:0;border-top:8px solid var(--ink);box-shadow:none;background:var(--paper2)"><span class="k">BOW threshold · drawn by the platform. The one who offers cannot restyle it.</span><ul class="lines rules">'+rows.map(function(r){return '<li><span class="k" style="padding-top:2px">'+r[0]+'</span><span>'+esc(r[1])+'</span></li>'}).join('')+'</ul>'+
+    '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px"><span class="k">Sign as (fictional)</span>'+['Maya K.','Jo R.','Ade O.'].map(function(n){return B(n,'e3.name',{name:n},'sm','aria-pressed="'+(L.name===n)+'"')}).join('')+'</div></div>';
+}
+function bound(L){
+  var devB=L.tried?'<div class="dev no"><span class="k">Device B · the hallway</span><p style="margin:6px 0 4px"><span class="noact" style="font-size:15px">NOT FOR YOU</span></p><p style="margin:0;font-size:12.5px">“'+PHRASE+'” was typed here. Rule: an Offer is redeemed once, in front of the person it was made to, and binds to that device.</p></div>':'<div class="dev"><span class="k">Device B · the hallway</span><p style="margin:8px 0 0;font-size:13px;color:var(--mute)">A friend copies the three words and types them here. Not tried yet.</p></div>';
+  return '<div class="reg" style="border:3px double var(--ink);padding:10px 14px 18px;background:#fff">'+cp('R','seats by lease and device-bound rejoin exist today')+'<span class="k">Receipt · signed in person</span><h3 style="margin:2px 0 6px;font-size:18px">The seat is bound to one device</h3><p style="margin:2px 0;font-size:14px">Granted by '+WHO+': the Boston seat at '+D0+', your own copy, until Friday. Signed '+esc(L.name)+', <span class="mono">'+esc(mclock(L))+'</span>.</p>'+
+   '<div class="devs"><div class="dev ok"><span class="k">Device A · this device</span><p style="margin:6px 0 0;font-size:13px"><b>Bound.</b> The seat lives here. The phrase is spent.</p></div>'+devB+'</div></div>';
+}
+var LN={id:id,name:'THE OFFER',mat:'Envelope and threshold',blurb:'Authority is given, then redeemed in person. You cannot appoint yourself; a copy of the phrase elsewhere gets “Not for you”.',
+ steps:['An Offer arrives','Read the threshold','Sign and bind','First act'],
+ icon:'<svg viewBox="0 0 74 48" aria-hidden="true"><rect x="10" y="10" width="54" height="32" fill="#D9C6A0" stroke="#1E1C19" stroke-width="1.5"/><path d="M10 10l27 18 27-18" fill="#CDB88E" stroke="#1E1C19" stroke-width="1.5"/><circle cx="37" cy="27" r="4" fill="#9A2A1C"/></svg>',
+ init:function(){var L=base();L.offer='unread';L.name='Maya K.';L.tried=false;L.refusedSelf=false;return L},
+ step:function(L){return L.acted?3:L.offer==='redeemed'?2:L.offer==='open'?1:0},
+ stage:function(L){
+  if(L.offer==='unread')return '<div style="display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:center;flex:1;min-height:0"><div style="min-height:0;max-height:100%">'+envelope(L)+'</div><div><span class="k">In your tray</span><h3 style="margin:2px 0 6px">An Offer has arrived</h3><p style="margin:4px 0;font-size:14px">It names a seat, a copy and a day. It grants nothing until you open it and redeem it in front of this screen.</p><p class="hold">Observers cannot take this seat themselves: the seat opens only to someone an Offer was made to.</p></div></div>';
+  if(L.offer==='open')return '<div style="display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.5fr);gap:18px;align-items:center;flex:1;min-height:0"><div>'+envelope(L)+'</div>'+threshold(L)+'</div>';
+  return '<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start;align-content:center;flex:1;min-height:0"><div>'+bound(L)+'</div><div class="sheet" style="margin:0;max-width:none"><span class="k">Your desk · what was knowable then</span><ul class="lines">'+MT.map(function(m,i){return '<li class="line" style="grid-template-columns:22px 1fr"><span class="n">'+(i+1)+'</span><span>'+m.line()+'<span class="due">due '+m.due+'</span></span></li>'}).join('')+'</ul></div></div>';
+ },
+ bar:function(L){
+  var self=B('Take the seat myself','e3.self',null,'','aria-disabled="true"');
+  if(L.left)return {say:'The copy is handed back. The record keeps who offered and who redeemed; your branch stays.',btns:U('Compare all seven','go',{view:'compare'},'pri','data-primary')+U('Back to the board','go',{view:'board'})};
+  if(L.acted)return {say:'Recorded in your fork, not in Reality. Leaving is an act: hand the copy back with a note, or let the Offer lapse on Friday.',btns:'<label>Hand back <input type="text" id="ho" size="34" value="The offer is out; two folders are still open." aria-label="A note handing the copy back"></label>'+B('Hand the copy back','e3.leave',{mode:'handover'},'','data-read="#ho"')+B('Let it lapse on Friday','e3.leave',{mode:'vacate'},'stampb')+U('Compare all seven','go',{view:'compare'},'pri','data-primary')};
+  if(L.offer==='redeemed')return {say:'The seat is bound to this device. One act is available.'+(L.tried?'':' You can test the hallway copy first.'),btns:B(ACT_TXT,'e3.offer',null,'pri fk','data-primary')+(L.tried?'':B('Try the phrase on the hallway device','e3.hall'))};
+  if(L.offer==='open')return {say:'Read what the seat shows, what it costs, and what stays private. Sign in person to redeem the Offer.',btns:B('Sign and redeem','e3.redeem',null,'pri fk','data-primary')+self};
+  return {say:'You are an observer. A seat cannot be self-appointed: it has to be offered to you.',btns:B('Open the Offer','e3.open',null,'pri','data-primary')+self};
+ },
+ reduce:function(k,p,L){
+  if(k==='e3.open'){L.offer='open';return {log:'Opened the Offer from '+WHO+': “the Boston seat at 2 Feb 2026 · your own copy · until Friday”. Nothing is granted yet.',say:'The Offer is open. The threshold lists what you will see and give up.'}}
+  if(k==='e3.self'){L.refusedSelf=true;return {refuse:'authority is given, not claimed. Rule: this seat opens only to someone an Offer was made to — ask '+WHO+' or the owner.'}}
+  if(k==='e3.name'){L.name=p.name;return {draft:true,say:'Signing as '+p.name+'.'}}
+  if(k==='e3.redeem'){
+    if(L.offer!=='open')return {refuse:'open the Offer first. Rule: an Offer is redeemed after its threshold has been read.'};
+    L.offer='redeemed';L.t+=5;enter(L,L.name+' (fictional)');
+    return [{log:'Redeemed the Offer in person, signed '+L.name+'. The seat is bound to this device (Device A).'},{log:'Granted by '+WHO+': the Boston seat at '+D0+', your own copy, until Friday. Gave up: SINCE, the outside view, other clubs’ desks.',say:'Redeemed. The seat is bound to this device.'}];
+  }
+  if(k==='e3.hall'){
+    if(L.offer!=='redeemed')return {refuse:'nothing to test: the Offer has not been redeemed.'};
+    L.tried=true;return {refuse:'Not for you. The phrase “'+PHRASE+'” was tried on Device B in the hallway. Rule: an Offer is redeemed once, in front of the person it was made to, and binds to that device.'};
+  }
+  if(k==='e3.offer'){
+    if(L.acted)return {refuse:'one act is available in this lane and it is already out.'};
+    L.acted=true;L.t+=10;return {log:ACT_TXT+'. Within the scope of the Offer. Fork only; the outcome is sealed.',say:'Offer made in your fork. Reality is unchanged.'};
+  }
+  if(k==='e3.leave'){
+    L.left=true;L.t+=5;
+    if(p.mode==='handover'){L.handover=(p.text||'').trim()||'(no note)';return {log:'Handed the copy back with a note: “'+L.handover+'”. The record keeps who offered and who redeemed.',say:'Copy handed back.'}}
+    return [{log:'NO ACT: the agent’s question and the club’s call — the Offer lapsed on Friday with them open. An absence, not a choice.',absence:true},{log:'The Offer lapsed. Your branch stays.',say:'Lapsed. Open matters were recorded as NO ACT.'}];
+  }
+  return {refuse:'unknown act '+k};
+ },
+ marks:function(L){
+  var r=L.offer==='redeemed';
+  return [
+   r?[2,'You sign in person: the seat binds to your name and this device.']:[0,'—'],
+   r?[2,'The Offer names the seat: Boston’s decision-maker at '+D0+'.']:[0,L.offer==='open'?'The Offer names it; not yet yours.':'—'],
+   r?[2,'BOW’s threshold listed what you will see, what you give up, and what stays private.']:[0,'—'],
+   r?[2,WHO+' grants it, with a scope, your own copy and an expiry. You could not have claimed it'+(L.refusedSelf?' (you tried; it was refused).':'.')]:L.refusedSelf?[1,'You tried to claim it and were refused.']:[0,'—'],
+   r?[1,'You accept the scope. Until Friday the seat is yours to answer for.']:[0,'—'],
+   r?[1,'The Offer has an expiry (Friday). The seat has no clock of its own.']:[0,'—'],
+   r?(L.tried?[2,'Bound to this device: the same phrase in the hallway got “Not for you”.']:[1,'The seat binds to this device. The hallway test is not run.']):[0,'—'],
+   r?[2,'The Offer lists what you may do; the act is one of them.']:[0,'—']];
+ },
+ about:{gave:'The right to just walk in. This seat exists only because someone offered it, for this copy, on this device, until Friday.',
+  leave:'Hand the copy back with a note, or let the Offer lapse on Friday. Open matters stamp NO ACT; the record keeps who offered and who redeemed.',
+  agent:'The owner signs a warrant: an Offer that names an agent as redeemer, with limits and an expiry. The agent redeems it in front of the owner’s console. BOW’s side needs no AI.',
+  survive:'Voice: three words said aloud redeem it only in front of a present person. Spatial: an envelope. Screen reader: yes, the threshold is a plain list.',
+  chem:'A supervisor hands each student a run of the same reaction: their own copy, until Friday.',
+  supply:'A VP hands each of twelve students one supplier’s seat, bound to their device.'}};
+LANES.push(LN);LANE[id]=LN;
+})();
+
+/* ================================================================ E4 · THE RING (phone and call card) */
+(function(){
+var id='E4';
+function phone(L){
+  var c=L.call,on=c==='on',ring=c==='ringing';
+  var s='<svg viewBox="0 -20 280 250" role="img" aria-label="A desk phone, '+(ring?'ringing':on?'handset lifted, on a call':'handset on the cradle')+'." style="width:100%;height:auto;max-height:100%;display:block"><path d="M28 206L252 206 234 146 46 146z" fill="#2B2724" stroke="#1E1C19" stroke-width="2"/>';
+  for(var r=0;r<3;r++)for(var q=0;q<3;q++)s+='<circle cx="'+(112+q*28)+'" cy="'+(162+r*14)+'" r="5" fill="#8D8574"/>';
+  s+='<rect x="70" y="128" width="20" height="20" fill="#1E1C19"/><rect x="190" y="128" width="20" height="20" fill="#1E1C19"/>';
+  s+='<g '+(on?'transform="translate(20,-70) rotate(-22 140 120)"':'')+'><path d="M52 130Q140 88 228 130L222 148Q140 114 58 148z" fill="#2B2724" stroke="#1E1C19" stroke-width="2" '+(ring?'class="shake"':'')+'/></g>';
+  if(ring)s+='<g fill="none" stroke="#9A2A1C" stroke-width="3" stroke-linecap="round" class="waves"><path d="M96 72q44-34 88 0"/><path d="M76 52q64-52 128 0"/><path d="M56 32q84-70 168 0"/></g>';
+  if(on)s+='<g fill="none" stroke="#0D5B62" stroke-width="3" stroke-dasharray="5 5"><path d="M228 60q22 20 0 40"/><path d="M244 50q32 30 0 60"/></g>';
+  return s+'</svg>';
+}
+function orders(L){
+  var opts=[['none','No standing order','The default runs and NO ACT is recorded.'],['decline','Answer for me: take no action','The bill stands. Stamped as answered by your order.'],['offer','Answer for me: make the offer I would make',ACT_TXT+'. Stamped as answered by your order.']];
+  return '<div style="border:1.5px dashed var(--fork);padding:8px;margin-top:8px"><span class="k" style="color:var(--fork)">Standing order · authority you write for when you are away</span>'+opts.map(function(o){return '<div style="margin-top:5px">'+B(o[1],'e4.order',{mode:o[0]},'sm','aria-pressed="'+((L.order||'none')===o[0])+'"')+' <span style="font-size:12.5px;color:var(--ink2)">'+esc(o[2])+'</span></div>'}).join('')+'</div>';
+}
+function card(L){
+  var c=L.call;
+  if(c==='ringing'||c==='rangout')return '<div class="card"><span class="k">Incoming</span><h3>Boston · 2 Feb 2026</h3><p style="margin:6px 0">From: the owner (fictional). To: the decision-maker’s desk.</p><p style="margin:6px 0;font-size:13.5px"><b>Why it rang:</b> a paper on this desk comes due Thursday, and the seat has no one on it.</p>'+(c==='rangout'?'<p class="refuse" style="margin-top:8px"><b>RANG OUT</b>The default stands: the ≈ '+M(TAX.v)+' bill stands. Nobody acted, so nothing was chosen.</p>':'<p class="hold" style="margin:8px 0 0">You are an observer of this moment. Picking up is entering, for the length of the call.</p>')+'</div>';
+  if(c==='away')return '<div class="card"><span class="k">Away · two hours pass (compressed)</span><h3>While you were away</h3><p style="margin:6px 0;font-size:14px">'+esc(L.res||'')+'</p></div>';
+  var last=L.acted?'the offer':'none';
+  return '<div class="card"><span class="k">Five-slot line, spoken first</span><p class="mono" style="margin:2px 0 8px;font-size:13px">Boston · 2 Feb 2026 · your branch · you: decision-maker · last act here: '+last+'</p>'+
+    (L.orderOpen?'<p class="hold" style="margin:0">Brief heard: the gauge, the deadline, the default, three matters on the line.</p>':'<div class="brief"><p style="margin:0 0 6px"><b>The owner:</b> '+fact(au('“We need a tax plan by Thursday, 3 p.m. If nobody acts, the ≈$39.5M bill stands.”'))+'</p>'+
+    '<div class="pr"><span class="pk">The gauge</span><span>'+TAXC()+' projected · line '+fact(LINE,M(LINE.v))+' · over the line: '+fact(CUT.state.filter(function(s){return /payroll/.test(s.what)})[0].value)+'</span></div>'+
+    '<div class="pr"><span class="pk">The deadline</span><span>Thursday '+fact(DEAD)+'</span></div>'+
+    '<div class="pr"><span class="pk">The default</span><span>'+fact({v:'If you say nothing: the ≈ '+M(TAX.v)+' bill stands.',k:'COMPUTED',src:'rule: nobody acts, the tax is counted after the last game',asOf:null,verify:true})+'</span></div>'+
+    '<div class="pr"><span class="pk">On the line</span><span>'+MT.map(function(m){return esc(m.short)}).join(' · ')+'</span></div>'+
+    '<div class="pr"><span class="pk">Given up, for the call</span><span>SINCE · the outside view · other clubs’ desks</span></div></div>'+
+    '<div style="margin-top:8px"><span class="k">Brief · 20 s (the line stays open until you hang up)</span><div class="meter" aria-hidden="true"><i></i></div></div>')+(L.orderOpen?orders(L):L.order&&L.order!=='none'?'<p style="margin:8px 0 0;font-size:13px"><span class="hs" style="color:var(--fork);border-color:var(--fork)">Standing order written: '+(L.order==='offer'?'make the offer':'take no action')+'</span></p>':'')+'</div>';
+}
+var LN={id:id,name:'THE RING',mat:'Phone and call card',blurb:'No navigation: the system calls the seat. Pick up to enter for the length of the call. Away, a standing order you wrote answers.',
+ steps:['It rings','Pick up: the brief','Answer or leave an order','First act'],
+ icon:'<svg viewBox="0 0 74 48" aria-hidden="true"><path d="M14 40L60 40 55 26 19 26z" fill="#2B2724" stroke="#1E1C19" stroke-width="1.5"/><path d="M16 24Q37 12 58 24L56 29Q37 20 18 29z" fill="#2B2724"/><path d="M28 10q9-8 18 0M22 4q15-12 30 0" stroke="#9A2A1C" stroke-width="1.6" fill="none"/></svg>',
+ init:function(){var L=base();L.call='ringing';L.picked=false;L.order=null;L.orderOpen=false;L.res='';L.byOrder=false;L.rings=1;return L},
+ step:function(L){return L.acted?3:L.call==='on'?(L.order||L.orderOpen?2:1):L.call==='away'?2:0},
+ stage:function(L){return '<div style="display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.3fr);gap:18px;align-items:center;flex:1;min-height:0"><div style="min-height:0;max-height:100%">'+phone(L)+'</div>'+card(L)+'</div>'},
+ bar:function(L){
+  var cmp=U('Compare all seven','go',{view:'compare'},'pri','data-primary');
+  if(L.left)return {say:'You hung up. '+(L.byOrder?'Your standing order made the act while you were away, and stamped it.':'Nothing has needed you since. Your branch stays.'),btns:cmp+U('Back to the board','go',{view:'board'})};
+  if(L.call==='ringing')return {say:'The phone is ringing. Nobody navigated here: the system called the seat. If no one answers, the default runs.',btns:B('Pick up','e4.pick',null,'pri','data-primary')+B('Let it ring','e4.rangout')};
+  if(L.call==='rangout')return {say:'It rang out and the default stood. NO ACT was recorded as an absence. It will ring again.',btns:B('Ring again','e4.again',null,'pri','data-primary')};
+  if(L.call==='away')return {say:'You are away. The seat rang again and was answered as above. You can pick up the next ring by hand.',btns:B('Ring again','e4.again',null,'pri','data-primary')};
+  return {say:L.acted?'Recorded in your fork. Hanging up is leaving; a standing order you wrote answers when you are away.':'You are in the seat for the length of this call. Answer now, write a standing order for when you are away, or hang up.',
+    btns:(L.acted?'':B(ACT_TXT,'e4.offer',null,'pri fk','data-primary'))+B(L.orderOpen?'Close standing order':'Write a standing order','e4.orderopen',null,'','aria-pressed="'+L.orderOpen+'"')+B('Hang up','e4.hangup',null,L.acted?'pri':'stampb',L.acted?'data-primary':'')};
+ },
+ reduce:function(k,p,L){
+  if(k==='e4.pick'){
+    if(L.call!=='ringing')return {refuse:'there is nothing ringing to pick up.'};
+    L.call='on';L.picked=true;L.t+=3;if(!L.entered)enter(L,'Maya K. (fictional)');else L.stamp=L.asked?HS:null;
+    return {log:'Picked up. Entered the seat for the length of the call. Brief heard: the gauge, the deadline, the default.',say:'On the call. Brief: the gauge, the deadline, the default. You are the seat until you hang up.'};
+  }
+  if(k==='e4.rangout'){L.call='rangout';L.t+=3;return {log:'NO ACT: the call rang out. The default stood: the ≈ '+M(TAX.v)+' bill stands. An absence, not a choice.',absence:true,say:'It rang out. No act recorded; the default stands.'}}
+  if(k==='e4.again'){L.call='ringing';L.rings++;L.t+=1;return {log:'The seat rang again (ring '+L.rings+'): the same paper, the same Thursday.',tag:L.entered?'RECORDED':'read',say:'The phone is ringing again.'}}
+  if(k==='e4.orderopen'){L.orderOpen=!L.orderOpen;return {draft:true,say:L.orderOpen?'Standing order form open.':'Standing order form closed.'}}
+  if(k==='e4.order'){
+    if(L.call!=='on')return {refuse:'a standing order is written while you hold the seat, on a call.'};
+    if((L.order||'none')===p.mode)return {say:'That order is already written.'};
+    L.order=p.mode==='none'?null:p.mode;
+    return {log:p.mode==='none'?'Withdrew the standing order: when you are away the default runs.':'Wrote a standing order: '+(p.mode==='offer'?'when I am away, make the offer I would make ('+ACT_TXT+')':'when I am away, take no action')+'. Authority you wrote; every covered act will be stamped.',say:'Standing order '+(L.order?'written.':'withdrawn.')};
+  }
+  if(k==='e4.offer'){
+    if(L.call!=='on')return {refuse:'you can act only while on the call. Pick up first.'};
+    if(L.acted)return {refuse:'one act is available in this lane and it is already out.'};
+    L.acted=true;L.t+=6;return {log:ACT_TXT+'. Answered by hand, on the call. Fork only; the outcome is sealed.',say:'Offer made in your fork, on the call. Reality is unchanged.'};
+  }
+  if(k==='e4.hangup'){
+    if(L.call!=='on')return {refuse:'there is no call to hang up.'};
+    L.call='away';L.orderOpen=false;L.t+=120;
+    var out=[{log:'Hung up. Left the seat; two hours pass (compressed).'}];
+    if(L.acted){L.left=true;L.res='Nothing has needed you since. Watching 1 line: the tax bill, ≈ '+M(TAX.v)+' projected.';out.push({log:'Away receipt: nothing has needed you since.',say:'Hung up. Nothing has needed you since.'})}
+    else if(L.order==='offer'){L.acted=true;L.byOrder=true;L.left=true;L.res='The owner rang again. Answered by your standing order (written by you): '+ACT_TXT+'. Stamped: by order, not by you.';out.push({log:'While away the owner rang again. Answered by your standing order: '+ACT_TXT+'. Stamp: by standing order, not by you.',who:'standing order (written by you)',say:'Hung up. Your standing order made the offer while you were away, and stamped it.'})}
+    else if(L.order==='decline'){L.res='The owner rang again. Answered by your standing order: take no action. Stamped: by order. The bill stands.';out.push({log:'While away the owner rang again. Answered by your standing order: take no action. Stamp: by standing order. The bill stands.',who:'standing order (written by you)',say:'Hung up. Your standing order answered: take no action.'})}
+    else{L.res='The owner rang again and nobody answered. The default ran: the bill stands. NO ACT.';out.push({log:'While away the owner rang again and nobody answered. NO ACT: the default ran and the bill stands. An absence, not a choice.',absence:true,say:'Hung up. No order: the default ran, NO ACT recorded.'})}
+    return out;
+  }
+  return {refuse:'unknown act '+k};
+ },
+ marks:function(L){
+  var p=L.picked;
+  return [
+   p?[1,'The call opens with a five-slot line that names you: “Boston · 2 Feb 2026 · your branch · you: decision-maker.”']:[0,'—'],
+   p?[1,'You are the seat for the length of the call, not longer.']:[0,'—'],
+   p?[1,'Only the 20-second brief: the gauge, the deadline, the default.']:[0,'—'],
+   L.order?[2,'Your standing order is authority you wrote for when you are away.']:p?[1,'The owner asks you; nothing is granted to you.']:[0,'—'],
+   p?[2,'The ring carries its default: if you say nothing, the ≈ '+M(TAX.v)+' bill stands.']:[0,L.call==='rangout'?'It rang out: NO ACT, an absence.':'—'],
+   p?[2,'The seat lasts as long as the call; the deadline is Thursday.']:[0,'—'],
+   [0,p?'You never moved. The system came to you.':'—'],
+   p?[1,'Answer, write an order, or hang up. Nothing else is offered.']:[0,'—']];
+ },
+ about:{gave:'The right to choose when to look. The system decides when the seat needs you, and its default runs if you do not answer.',
+  leave:'Hanging up is leaving. While you are away, the standing order you wrote answers, stamped as such; with no order, the default runs and NO ACT is recorded.',
+  agent:'Holds the seat under written limits and answers rings when you cannot, every covered act stamped. Standing orders are E4’s version of a warrant.',
+  survive:'Voice: native. Spatial: a lamp or a sound. Screen reader: yes; the ring and the five-slot line are announced in a live region.',
+  chem:'The reactor operator on call: the pressure alarm rings with its default, and the interlock is the standing order.',
+  supply:'A reorder rule as the standing order: below the safety-stock line, buy up to a limit, else ring the buyer.'}};
+LANES.push(LN);LANE[id]=LN;
+})();
+
+/* ================================================================ E5 · TAKE A FACE (a two-faced paper) */
+(function(){
+var id='E5';
+function dl(rows){return '<dl class="fdl">'+rows.map(function(r){return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>'}).join('')+'</dl>'}
+function leagueFace(L){
+  if(L.entered)return '<article class="page closedp"><span class="k">Face 1 · held by the League office</span><h3>Closed to you</h3><p style="margin:6px 0;font-size:13.5px">You hold the other face. You read only what the shared paper says:</p><p style="margin:6px 0;font-size:13.5px">“Luxury tax on salary above the line, projected '+TAXC()+', counted after the last game.”</p><p class="hold" style="margin:6px 0 0">The League’s clauses, its desk and its other papers are not yours to read.</p></article>';
+  return '<article class="page"><span class="k">Face 1 · held by the League office</span><h3>Luxury tax, owed to the League</h3><p style="margin:6px 0;font-size:13.5px">The League is owed tax on salary above the line, counted after the last game.</p>'+dl([['Amount so far','projected '+TAXC()],['The line',fact(LINE,M(LINE.v))+' (2025–26 tax line)'],['Clock','counted after the last game '+fact({v:'[verify: date]',k:'UNKNOWN',src:null,asOf:null,verify:true,note:'[verify: date of the last regular-season game]'})],['If nobody acts','the League collects.']])+'</article>';
+}
+function bostonFace(L){
+  var mine=L.entered;
+  return '<article class="page '+(mine?'mine':'')+'"><span class="k">Face 2 · '+(mine?'held by you':'open — nobody holds it')+'</span>'+(mine?'<span class="hs" style="float:right;color:var(--fork);border-color:var(--fork)">'+esc(L.who)+'</span>':'')+'<h3>Luxury tax, owed by Boston</h3><p style="margin:6px 0;font-size:13.5px">Boston owes the League tax on salary above the line — projected '+TAXC()+' — counted after the last game.</p>'+
+   dl([['Clock','counted after the last game'],['If nobody acts','pay it.']])+'<span class="k">Clauses on this face</span><ol style="margin:4px 0 0 18px;padding:0;font-size:13.5px"><li>Pay when counted. <span style="color:var(--mute)">The default; no act needed.</span></li><li>Shed: '+esc(ACT_TXT.toLowerCase())+'. <span style="color:'+(mine?'var(--fork)':'var(--mute)')+'">'+(mine&&!L.acted?'Available to you.':L.acted?'Made. Fork only.':'Available to whoever holds this face.')+'</span></li></ol></article>';
+}
+function stack(L){
+  var items=[['The owner: a plan for the projected tax','by Thursday','no plan reaches the owner'],['A bench player’s agent: his role','this week','the agent hears nothing'],['A club’s call: who it is, withheld','Thursday','the call goes unanswered']];
+  return '<aside class="stk reg" aria-label="Your stack of papers">'+cp('P','papers derived from the rulebook; the CBA engine is the REAL seed')+'<span class="k">Your stack · papers where Boston is a party</span><ul>'+items.map(function(x){return '<li><b>'+esc(x[0])+'</b><span class="mono">clock: '+x[1]+'</span><span>If nobody acts: '+x[2]+'.</span></li>'}).join('')+'<li><b>'+fact(FX.moments[2].sealed,'A 2031 second-round pick from the three-team deal that sent Porziņģis to Atlanta: Boston received it')+'</b><span class="mono">clock: 2031</span><span>Who owes it: '+fact({v:'[verify: who owes it, and to whom]',k:'UNKNOWN',src:null,asOf:null,verify:true,note:'[verify: who owes it, and to whom]'})+'</span></li></ul></aside>';
+}
+var LN={id:id,name:'TAKE A FACE',mat:'Two-faced paper',blurb:'The seat is an unheld face of a paper. Take Boston’s face and the League’s turns closed; your other papers land, each with its own clock.',
+ steps:['Find the paper','Read both faces','Take a face','First act'],
+ icon:'<svg viewBox="0 0 74 48" aria-hidden="true"><rect x="8" y="6" width="27" height="36" fill="#fff" stroke="#1E1C19" stroke-width="1.5"/><rect x="39" y="6" width="27" height="36" fill="#fff" stroke="#0D5B62" stroke-width="1.5"/><path d="M13 14h17M13 20h17M13 26h11M44 14h17M44 20h17M44 26h11" stroke="#62594D" stroke-width="1.4"/></svg>',
+ init:function(){var L=base();L.opened=false;L.face=null;return L},
+ step:function(L){return L.acted?3:L.entered?2:L.opened?1:0},
+ stage:function(L){
+  if(!L.opened)return '<div class="sheet" style="max-width:560px;margin-top:8px"><span class="k">Found in Reality’s record · a paper</span><h3 style="font-size:19px;margin:2px 0 6px">Boston owes the League luxury tax</h3><p style="margin:4px 0">Who owes what to whom, by when, and what happens if nobody acts. It has two faces. The League’s face is held. Boston’s face is <b>unheld</b>: that is how you find a seat.</p><p class="hold">Folded. Open it to read both faces before you hold either.</p></div>';
+  return '<div class="paper" style="grid-template-columns:'+(L.entered?'minmax(0,.8fr) minmax(0,1fr) 270px':'minmax(0,1fr) minmax(0,1fr)')+'"><div class="ph"><b style="font:600 16px var(--serif)">The paper</b><span class="k">two faces · one clock · what happens if nobody acts</span></div>'+leagueFace(L)+bostonFace(L)+(L.entered?stack(L):'')+'</div>';
+ },
+ bar:function(L){
+  var cmp=U('Compare all seven','go',{view:'compare'},'pri','data-primary');
+  if(L.left)return {say:L.handover?'You assigned your face. The paper stays, with its clocks; your branch stays beside the record.':'You waived it. The default ran on what was open.',btns:cmp+U('Back to the board','go',{view:'board'})};
+  if(L.acted)return {say:'Recorded on Boston’s face, in your fork. Leaving is an act: assign your face to someone, or waive it and let the default run.',btns:'<label>Assign to <input type="text" id="ho" size="30" value="A colleague at the desk (fictional)" aria-label="Who you assign your face to (fictional)"></label>'+B('Assign your face','e5.leave',{mode:'handover'},'','data-read="#ho"')+B('Waive: let the default run','e5.leave',{mode:'vacate'},'stampb')+cmp};
+  if(L.entered)return {say:'You hold Boston’s face. The League’s face is closed to you. Four papers where Boston is a party landed in your stack, each with its own clock.',btns:B(ACT_TXT,'e5.offer',null,'pri fk','data-primary')};
+  if(L.opened)return {say:'Both faces are readable. The League’s is held, Boston’s is open. Holding one narrows what you read to that face.',btns:B('Take Boston’s face','e5.take',null,'pri fk','data-primary')+B('Take the League’s face','e5.league',null,'','aria-disabled="true"')};
+  return {say:'You found a paper in Reality’s record. You are an observer; open it to read both faces.',btns:B('Open the paper','e5.open',null,'pri','data-primary')+B('Take Boston’s face','e5.take',null,'','aria-disabled="true"')};
+ },
+ reduce:function(k,p,L){
+  if(k==='e5.open'){L.opened=true;return {log:'Opened the paper: read both faces. The League’s face is held; Boston’s is open.',say:'The paper is open. Both faces are readable.'}}
+  if(k==='e5.league')return {refuse:'the League’s face is held by the League office. Rule: a held face is not taken; only an unheld face is a seat.'};
+  if(k==='e5.take'){
+    if(!L.opened)return {refuse:'a face is taken from an open paper. Rule: papers are read before they are held — open it first.'};
+    L.face='boston';L.t+=5;enter(L,'Maya K. (fictional), for Boston');
+    return [{log:'Took Boston’s face of the paper. Knowledge narrows to that face: the League’s face is closed to you.'},{log:'Four papers where Boston is a party landed in your stack, each with its own clock: the owner’s plan, the agent’s question, the club’s call, a 2031 second-round pick.',say:'You hold Boston’s face. The League’s face is closed. Four papers landed in your stack.'}];
+  }
+  if(k==='e5.offer'){
+    if(!L.entered)return {refuse:'an act belongs to a face. Take one first.'};
+    if(L.acted)return {refuse:'one act is available in this lane and it is already out.'};
+    L.acted=true;L.t+=10;return {log:'Shed, clause 2 of Boston’s face: '+ACT_TXT.toLowerCase()+'. The paper now reads offer out; the League’s face will show it only if signed. Fork only; outcome sealed.',say:'Clause 2 made in your fork. Reality is unchanged.'};
+  }
+  if(k==='e5.leave'){
+    L.left=true;L.t+=5;
+    if(p.mode==='handover'){L.handover=(p.text||'').trim()||'(no name)';return {log:'Assigned Boston’s face to: '+L.handover+'. The paper and its clocks stay with the face.',say:'Face assigned.'}}
+    return [{log:'NO ACT: three papers in the stack were open when the face was waived. An absence, not a choice. The default ran: pay it.',absence:true},{log:'Waived Boston’s face. The paper stays.',say:'Waived. The default ran.'}];
+  }
+  return {refuse:'unknown act '+k};
+ },
+ marks:function(L){
+  var f=L.entered;
+  return [
+   f?[1,'You are Boston, the party that owes — the party, not a name.']:[0,'—'],
+   f?[2,'A face of the paper is a role: the party that owes.']:[0,L.opened?'An unheld face is how you find a seat.':'—'],
+   f?[2,'Knowledge narrows to Boston’s face. The League’s face turns closed.']:[0,'—'],
+   f?[1,'Boston’s clauses say what the debtor may do. Nobody grants it.']:[0,'—'],
+   f?[2,'The paper prints its default: if nobody acts, pay it.']:[0,'—'],
+   f?[2,'Four papers land in your stack, each with its own clock (one runs to 2031).']:[0,'—'],
+   f?[1,'You read from Boston’s face; the paper’s edge names it.']:[0,'—'],
+   f?[2,'The act sits on Boston’s face as clause 2.']:[0,'—']];
+ },
+ about:{gave:'The other face. The League’s side turns closed; you see only what the shared paper says. No god view.',
+  leave:'Assign your face to a person or an agent, or waive it and let the default run. The paper stays either way, with its clocks.',
+  agent:'An agent may hold the League’s face or Boston’s; its edits are marked. The paper shows both sides’ clauses and gives neither a god view.',
+  survive:'Voice: read the face aloud. Spatial: paper on a table. Screen reader: yes; a paper is a definition list.',
+  chem:'Weakest fit: chemistry has no debtors. Conservation reads as a standing obligation only by metaphor, and the metaphor may mislead.',
+  supply:'Native: a purchase order has two faces, a lead time and a take-or-pay default.'}};
+LANES.push(LN);LANE[id]=LN;
+})();
+
+/* ================================================================ E6 · THE LEVER (an instrument dial) */
+(function(){
+var id='E6';
+var F0=.8,MAXV=70;
+function ang(f){var t=Math.PI*(1-f);return [220+150*Math.cos(t),215-150*Math.sin(t),t]}
+function ghost(L){
+  if(!L.entered||L.lever<=0)return '';
+  var g=F0-L.lever*.006,a=ang(F0),b=ang(g),e=ang(g);
+  var big=0;
+  return '<path d="M'+(220+170*Math.cos(a[2]))+' '+(215-170*Math.sin(a[2]))+'A170 170 0 '+big+' 0 '+(220+170*Math.cos(b[2]))+' '+(215-170*Math.sin(b[2]))+'" fill="none" stroke="#0D5B62" stroke-width="7" stroke-dasharray="3 6" stroke-linecap="butt"/>'+
+    '<line x1="220" y1="215" x2="'+b[0]+'" y2="'+b[1]+'" stroke="#0D5B62" stroke-width="3" stroke-dasharray="6 5"/><rect x="'+(220+186*Math.cos(b[2])-12)+'" y="'+(215-186*Math.sin(b[2])-11)+'" width="24" height="22" fill="#FCFAF4" stroke="#0D5B62" stroke-dasharray="3 2"/><text x="'+(220+186*Math.cos(b[2]))+'" y="'+(215-186*Math.sin(b[2])+5)+'" text-anchor="middle" font-size="15" font-weight="700" fill="#0D5B62">?</text>';
+}
+function dial(L){
+  var a=ang(F0),s='<svg viewBox="0 0 440 250" role="img" aria-label="A dial. The needle rests at the projected tax, about $39.5 million. '+(L.entered?'A dashed draft needle shows the direction of your drafted act; where it lands is sealed.':'It only reads.')+'" style="width:100%;height:auto;max-height:100%;display:block;font-family:IBM Plex Sans,system-ui,sans-serif">';
+  s+='<path d="M50 215A170 170 0 0 1 390 215" fill="#F6F2E7" stroke="#1E1C19" stroke-width="3"/><path d="M50 215A170 170 0 0 1 390 215L370 215A150 150 0 0 0 70 215z" fill="#E7E0CE" stroke="#1E1C19" stroke-width="1.5"/>';
+  for(var i=0;i<=8;i++){var t=Math.PI*(1-i/8);s+='<line x1="'+(220+150*Math.cos(t))+'" y1="'+(215-150*Math.sin(t))+'" x2="'+(220+134*Math.cos(t))+'" y2="'+(215-134*Math.sin(t))+'" stroke="#1E1C19" stroke-width="'+(i%4?1.4:2.4)+'"/>'}
+  s+='<text x="58" y="240" font-size="13" font-weight="600">$0 · no tax</text><text x="392" y="240" text-anchor="end" font-size="12.5" fill="#46423B">the dial has no numbers past this needle</text>';
+  s+='<g id="et-gh">'+ghost(L)+'</g>';
+  s+='<line x1="220" y1="215" x2="'+a[0]+'" y2="'+a[1]+'" stroke="#1E1C19" stroke-width="5"/><circle cx="220" cy="215" r="12" fill="#1E1C19"/>';
+  s+='<rect x="'+(a[0]-8)+'" y="'+(a[1]-46)+'" width="100" height="26" fill="#FCFAF4" stroke="#1E1C19"/><text x="'+(a[0]+42)+'" y="'+(a[1]-28)+'" text-anchor="middle" font-size="14" font-weight="700" font-family="IBM Plex Mono,monospace">≈ '+M(TAX.v)+'</text>';
+  return s+'</svg>';
+}
+function draftTxt(L){
+  if(!L.entered)return 'Reads only. There is no handle: you do not hold this seat, and nothing on this page can be moved.';
+  if(L.lever<=0)return 'At rest. No draft. If nobody acts: the ≈ '+M(TAX.v)+' bill stands.';
+  return 'Draft, not forked: '+ACT_TXT.toLowerCase()+'. The needle shows direction only; where it lands is sealed: you find out by living it.';
+}
+function probeBox(L){
+  var why=L.probe==='why',sw=L.probe==='sowhat',h='';
+  if(why)h='<ol class="pl"><li>'+TAXC()+' projected</li><li>charged on tax salary above the 2025–26 line '+fact(LINE,M(LINE.v))+'</li><li>tax salary at the cut: '+fact(CUT.state.filter(function(s){return /payroll/.test(s.what)})[0].value)+'</li></ol>';
+  if(sw)h='<p style="margin:4px 0;font-size:13px">If nothing changes: the bill stands. This figure touches <b>three open matters</b>'+(L.entered?':</p><ul style="margin:0 0 0 16px;padding:0;font-size:13px">'+MT.map(function(m){return '<li style="background:var(--forkbg)">'+esc(m.short)+'</li>'}).join('')+'</ul>':'; their names are not yours to read.</p>');
+  return '<div class="ins reg">'+cp('P','NO AI REQUIRED · readings are typed queries over the rulebook')+'<span class="k">Probe</span><div class="btns" style="display:flex;gap:6px;flex-wrap:wrap;margin:4px 0">'+B('Tail first: why','e6.probe',{mode:'why'},'sm','aria-pressed="'+why+'"')+B('Tip first: so what','e6.probe',{mode:'sowhat'},'sm','aria-pressed="'+sw+'"')+'</div>'+h+'</div>';
+}
+function clockBox(L){
+  var h=L.clockRead?(L.entered?'<p style="margin:4px 0;font-size:13px">Your clock started when you took the seat: <b class="mono">'+esc(mclock(L))+'</b>. Due Thursday '+fact(DEAD)+'. World: '+esc(wclock(L).slice(-5))+'.</p>':'<p style="margin:4px 0;font-size:13px">Due Thursday '+fact(DEAD)+'. World: '+esc(wclock(L).slice(-5))+'. It reads; it does not start anything.</p>'):'';
+  return '<div class="ins"><span class="k">Clock</span><div style="margin:4px 0">'+B('Read the clock','e6.clock',null,'sm')+'</div>'+h+'</div>';
+}
+var LN={id:id,name:'THE LEVER',mat:'Instrument dial',blurb:'The page does not change. The instrument does: the gauge becomes a lever, and nothing forks until you keep the draft.',
+ steps:['Read the gauge','Take the seat','Draft with the lever','Keep the draft'],
+ icon:'<svg viewBox="0 0 74 48" aria-hidden="true"><path d="M8 40A29 29 0 0 1 66 40z" fill="#F6F2E7" stroke="#1E1C19" stroke-width="1.5"/><line x1="37" y1="40" x2="56" y2="20" stroke="#1E1C19" stroke-width="2.5"/><line x1="37" y1="40" x2="22" y2="18" stroke="#0D5B62" stroke-width="2" stroke-dasharray="3 2"/><circle cx="37" cy="40" r="3.5" fill="#1E1C19"/></svg>',
+ init:function(){var L=base();L.lever=0;L.probe=null;L.probed=false;L.clockRead=false;L.kept=false;return L},
+ step:function(L){return L.acted?3:L.entered?(L.lever>0?2:1):0},
+ stage:function(L){
+  var lev=L.entered?'<label for="lev" class="k">Lever · drag to draft; release and nothing forks</label><input type="range" id="lev" min="0" max="100" step="1" value="'+L.lever+'" data-range="1" '+(L.acted?'disabled ':'')+'data-fk="lever" aria-label="Lever: draft the act. Release and nothing forks until you keep it" style="width:100%;height:36px;accent-color:#0D5B62" aria-valuetext="'+(L.lever>0?'drafting':'at rest')+'">':'<span class="k">Lever</span><div style="border:1.5px dashed var(--dot);height:36px;display:flex;align-items:center;padding:0 10px;color:var(--mute);font-size:13px">no handle</div>';
+  return '<div style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;flex:1;min-height:0"><div style="display:flex;flex-direction:column;min-height:0"><div class="reg" style="flex:1;min-height:0;display:flex;align-items:center">'+cp('P','NO AI REQUIRED')+dial(L)+'</div>'+
+   '<div class="reading"><p style="margin:2px 0;font-size:13.5px"><b>Reads:</b> '+TAXC()+' projected · 2025–26 tax line '+fact(LINE,M(LINE.v))+' · tax salary over the line: '+fact(CUT.state.filter(function(s){return /payroll/.test(s.what)})[0].value)+'. <b>Flips to $0</b> only if tax salary ends the season under the line (a rule; the gap is unknown without the payroll).</p></div>'+
+   '<div style="margin-top:6px">'+lev+'<p id="et-dt" style="margin:4px 0 0;font-size:13.5px;color:'+(L.entered&&L.lever>0?'var(--fork)':'var(--ink2)')+'">'+esc(draftTxt(L))+'</p></div></div>'+
+   '<div style="display:flex;flex-direction:column;gap:10px;min-height:0;overflow:auto">'+probeBox(L)+clockBox(L)+'</div></div>';
+ },
+ onRange:function(L,v,commit){
+  if(!L.entered||L.acted)return;
+  if(!commit)L.over=v>MAXV?v:0;
+  if(v>MAXV){v=MAXV;var r=$('#lev');if(r)r.value=MAXV}
+  L.lever=v;var g=$('#et-gh'),t=$('#et-dt');if(g)g.innerHTML=ghost(L);if(t){t.textContent=draftTxt(L);t.style.color=v>0?'var(--fork)':'var(--ink2)'}
+  if(commit){var o=L.over||v;L.over=0;act('e6.lever',{v:o})}
+ },
+ bar:function(L){
+  var cmp=U('Compare all seven','go',{view:'compare'},'pri','data-primary');
+  if(L.left)return {say:'You let go of the seat: the lever is a gauge again. The kept act stays in your fork.',btns:cmp+U('Back to the board','go',{view:'board'})};
+  if(L.acted)return {say:'Kept. It is now an act in your fork, and the ghost needle became a record. Letting go returns the lever to a gauge.',btns:'<label>Note <input type="text" id="ho" size="30" value="Offer is out; two matters open." aria-label="A note on letting go"></label>'+B('Let go of the seat','e6.leave',{mode:'handover'},'','data-read="#ho"')+B('Let go and let the rest lapse','e6.leave',{mode:'vacate'},'stampb')+cmp};
+  if(L.entered)return {say:L.lever>0?'Drafted, not forked. Keep it to fork it, or drop it: nothing has happened yet.':'You hold the seat. The page looks the same; the instruments changed. Drag the lever to draft the act.',btns:B('Keep this draft','e6.keep',null,L.lever>0?'pri fk':'',L.lever>0?'data-primary':'aria-disabled="true"')+B('Drop the draft','e6.drop')};
+  return {say:'The gauge reads. Nothing on this page can be moved. To move anything you have to hold the seat.',btns:B('Take the seat','e6.seat',null,'pri','data-primary')};
+ },
+ reduce:function(k,p,L){
+  if(k==='e6.seat'){if(L.entered)return {refuse:'you already hold the seat.'};L.t+=5;enter(L,'Maya K. (fictional)');return {log:'Took the seat. The page did not change; the instruments did: the gauge is a lever, the probe and the clock now belong to the seat.',say:'You hold the seat. The gauge is now a lever.'}}
+  if(k==='e6.lever'){
+    if(!L.entered)return {refuse:'the lever moves only for the seat’s holder. You are reading.'};
+    if(L.acted)return {refuse:'the draft was kept and is now an act in your fork. One act is available in this lane.'};
+    if(p.v>MAXV){L.lever=MAXV;return {refuse:'not on this desk. A deeper cut would need a first-round pick, and this seat’s scope excludes it (authored, illustrative).'}}
+    L.lever=Math.max(0,p.v);
+    return L.lever>0?{log:'Lever released at '+L.lever+': drafted “'+ACT_TXT+'”. Not forked: nothing forks until you keep it.',replace:true,tag:'draft',say:'Drafted, not forked.'}:{log:'Lever back at rest. Nothing drafted.',replace:true,tag:'draft',say:'Lever at rest.'};
+  }
+  if(k==='e6.drop'){var was=L.lever;L.lever=0;return was>0?{log:'Dropped the draft. Nothing forked.',replace:true,tag:'draft',say:'Draft dropped. Nothing forked.'}:{say:'Nothing to drop.'}}
+  if(k==='e6.keep'){
+    if(!L.entered)return {refuse:'only the seat’s holder can keep a draft.'};
+    if(L.lever<=0)return {refuse:'nothing to keep: the lever is at rest. Rule: releasing with nothing drafted forks nothing.'};
+    if(L.acted)return {refuse:'one act is available in this lane and it is already out.'};
+    L.acted=true;L.kept=true;L.t+=6;return {log:ACT_TXT+'. Kept from the lever: the draft became an act in your fork. The outcome is sealed.',say:'Kept. The draft is now an act in your fork. Reality is unchanged.'};
+  }
+  if(k==='e6.probe'){L.probe=L.probe===p.mode?null:p.mode;if(L.probe)L.probed=true;return {tag:'read',log:L.probe?'Pointed the probe '+(L.probe==='why'?'tail-first (why)':'tip-first (so what)')+' at the tax figure.':'Lifted the probe.',say:L.probe==='why'?'Probe, why: three links upstream.':L.probe==='sowhat'?'Probe, so what: three open matters touched.':'Probe lifted.'}}
+  if(k==='e6.clock'){L.clockRead=true;return {tag:'read',log:'Read the clock: due Thursday'+(L.entered?'; your clock started when you took the seat.':'.'),say:'Clock read.'}}
+  if(k==='e6.leave'){
+    L.left=true;L.t+=5;L.lever=0;
+    if(p.mode==='handover'){L.handover=(p.text||'').trim()||'(no note)';return {log:'Let go of the seat with a note: “'+L.handover+'”. The lever is a gauge again.',say:'Let go of the seat.'}}
+    return [{log:'NO ACT: the agent’s question and the club’s call — the seat was let go with them open. An absence, not a choice.',absence:true},{log:'Let go of the seat. The lever is a gauge again.',say:'Let go. Open matters were recorded as NO ACT.'}];
+  }
+  return {refuse:'unknown act '+k};
+ },
+ marks:function(L){
+  var s=L.entered;
+  return [
+   [0,s?'Nothing about who you are changes.':'—'],
+   s?[1,'You hold the seat, and the page looks the same.']:[0,'—'],
+   s?[1,'The gauge gains a ghost needle for your draft; the probe reads the seat’s own matters.']:[0,'—'],
+   s?[2,'The needle moves only for the seat’s holder.']:[0,'—'],
+   L.kept?[1,'A kept lever is your act. Released, nothing forked.']:[0,s?'Nothing forks until you keep it.':'—'],
+   s&&L.clockRead?[1,'The clock instrument now runs on your clock as well as the World’s.']:[0,'—'],
+   s&&L.probed?[1,'The probe lights what the tax figure touches: three open matters.']:[0,'—'],
+   s?[2,'The gauge became a lever; the probe and the clock changed the same way.']:[0,'—']];
+ },
+ about:{gave:'Nothing is walled off: the page is unchanged. You give up the excuse of only reading. The needle moves only for the holder, and nothing forks until you keep it.',
+  leave:'Let go of the seat and the lever goes back to a gauge. A kept act stays in the fork; drafts vanish; open matters lapse as NO ACT.',
+  agent:'Uses the same instruments through the same protocol. A lever draft is a request the seat’s holder can keep or drop.',
+  survive:'Voice: “push the tax down” drafts an act. Spatial: a dial in hand. Screen reader: the range input is the lever and every reading is text.',
+  chem:'The gauge is buffer capacity before pH leaves its band; the lever adds base.',
+  supply:'The gauge is safety stock before the line stops; the lever spot-buys.'}};
+LANES.push(LN);LANE[id]=LN;
+})();
+
+/* default plays for "Play every unplayed lane": the same act() path as clicks */
+var SCR={E0:[['e0.ask'],['e0.take',{m:'m1'}],['e0.take',{m:'m2'}],['e0.back',{m:'m3'}],['e0.sign'],['e0.offer']],
+ E1:[['e1.sit'],['e1.sign'],['e1.offer']],E2:[['e2.seal'],['e2.take'],['e2.offer']],
+ E3:[['e3.open'],['e3.redeem'],['e3.hall'],['e3.offer']],E4:[['e4.pick'],['e4.order',{mode:'decline'}],['e4.offer']],
+ E5:[['e5.open'],['e5.take'],['e5.offer']],E6:[['e6.seat'],['e6.lever',{v:40}],['e6.keep']]};
+LANES.forEach(function(l){l.script=SCR[l.id]});
+/*@@LANES*/
+
+/* ---------------------------------------------------------------- init */
+reset();render();
+window.__ET={S:S,act:act,LANES:LANES};
+})();
+</script>
+</body>
+</html>

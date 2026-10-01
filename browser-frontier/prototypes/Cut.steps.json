@@ -1,0 +1,291 @@
+[
+ {
+  "wait": 900
+ },
+ {
+  "shot": "s01-now-horizon-rail"
+ },
+ {
+  "click": "Door ahead: the 2026",
+  "after": 500
+ },
+ {
+  "expectText": "You cannot enter a scheduled day"
+ },
+ {
+  "shot": "s01b-scheduled-door-refused"
+ },
+ {
+  "click": "Door 12 May 2025",
+  "after": 500
+ },
+ {
+  "expectText": "This door is unlit"
+ },
+ {
+  "shot": "s01c-recorded-door-without-a-cut-is-unlit"
+ },
+ {
+  "click": "Arrive at last year"
+ },
+ {
+  "expectText": "This door offers cuts"
+ },
+ {
+  "shot": "s02-arrive-last-years-door"
+ },
+ {
+  "click": "5 Feb · deadline day"
+ },
+ {
+  "expectText": "Why this cut already knows"
+ },
+ {
+  "shot": "s02b-cut-0205-already-knows"
+ },
+ {
+  "click": "2 Feb · before the first report"
+ },
+ {
+  "click": "Stand at this cut"
+ },
+ {
+  "expectText": "Not yet"
+ },
+ {
+  "shot": "s03-the-cut-four-planes"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "shot": "s03b-how-do-we-know-layer"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "click": "What’s real?"
+ },
+ {
+  "shot": "s03c-whats-real-overlay"
+ },
+ {
+  "click": "What’s real?"
+ },
+ {
+  "click": "Later ▸"
+ },
+ {
+  "expectText": "Nobody at this desk could know what comes next"
+ },
+ {
+  "shot": "s04-seal-test-refused"
+ },
+ {
+  "click": "Take the seat at this cut"
+ },
+ {
+  "click": "Shed a bench salary"
+ },
+ {
+  "click": "Keep the branch",
+  "force": true
+ },
+ {
+  "expectText": "Keep is blocked while a seat the act touches is unset"
+ },
+ {
+  "shot": "s05a-what-if-council-keep-blocked"
+ },
+ {
+  "click": "Another club · Recorded"
+ },
+ {
+  "expectText": "Recorded needs a source dated on or before the cut"
+ },
+ {
+  "click": "Another club · Declare"
+ },
+ {
+  "click": "Another club declared: Accepts"
+ },
+ {
+  "click": "Tatum and his medical timeline · Model"
+ },
+ {
+  "expectText": "MODELED needs a named, versioned model"
+ },
+ {
+  "click": "Tatum and his medical timeline · Declare"
+ },
+ {
+  "click": "Tatum and his medical timeline declared: Back before"
+ },
+ {
+  "shot": "s05b-council-seats-set"
+ },
+ {
+  "click": "Keep the branch"
+ },
+ {
+  "expectText": "diverged 2 Feb 2026"
+ },
+ {
+  "shot": "s05c-branch-born-two-frames"
+ },
+ {
+  "click": "Advance one day"
+ },
+ {
+  "click": "Advance one day"
+ },
+ {
+  "shot": "s06-branch-advanced-numbers-recompute"
+ },
+ {
+  "click": "Why is the tax that?"
+ },
+ {
+  "expectText": "traced to causes"
+ },
+ {
+  "shot": "s06b-why-traced-to-recorded-acts"
+ },
+ {
+  "click": "Close"
+ },
+ {
+  "reload": true
+ },
+ {
+  "expectText": "Viewpoint: seat Boston, read only"
+ },
+ {
+  "shot": "s06c-reload-restores-the-branch-as-a-read-only-viewpoint"
+ },
+ {
+  "click": "Take the Boston seat"
+ },
+ {
+  "click": "Advance to Reality"
+ },
+ {
+  "expectText": "DIVERGED"
+ },
+ {
+  "shot": "s07a-reality-arrives-simons-diverged"
+ },
+ {
+  "click": "Advance to Reality"
+ },
+ {
+  "expectText": "HELD"
+ },
+ {
+  "shot": "s07b-reality-arrives-tatum-held"
+ },
+ {
+  "click": "Advance one week"
+ },
+ {
+  "shot": "s07c-advance-one-week-numbers-locked"
+ },
+ {
+  "click": "Ask as an observer"
+ },
+ {
+  "expectText": "Written to YOUR ledger"
+ },
+ {
+  "shot": "s08-hindsight-since-opened-ledger-mark"
+ },
+ {
+  "click": "Close"
+ },
+ {
+  "click": "Reality window"
+ },
+ {
+  "expectText": "Since you left"
+ },
+ {
+  "shot": "s09-return-to-now-branch-on-wall"
+ },
+ {
+  "click": "Backs"
+ },
+ {
+  "shot": "s10a-three-backs"
+ },
+ {
+  "click": "Amend: also shed"
+ },
+ {
+  "expectText": "Trades close at the deadline"
+ },
+ {
+  "shot": "s10b-backs-amend-refused"
+ },
+ {
+  "click": "Re-take: fork from before branch b1"
+ },
+ {
+  "expectText": "Not yet"
+ },
+ {
+  "click": "Take the seat at this cut"
+ },
+ {
+  "click": "Keep the roster"
+ },
+ {
+  "click": "Tatum and his medical timeline · Declare"
+ },
+ {
+  "click": "Tatum and his medical timeline declared: Out for the season"
+ },
+ {
+  "click": "Keep the branch"
+ },
+ {
+  "expectText": "through 29 Sep 2026"
+ },
+ {
+  "shot": "s10c-second-fork-stamped-hindsight"
+ },
+ {
+  "click": "Reality window"
+ },
+ {
+  "click": "Same trip with a scrubber",
+  "nth": 0
+ },
+ {
+  "expectText": "Leak counter"
+ },
+ {
+  "shot": "s11a-baseline-scrubber-leak-counter"
+ },
+ {
+  "range": [
+   "#scr",
+   63
+  ]
+ },
+ {
+  "shot": "s11b-baseline-scrubber-dragged"
+ },
+ {
+  "click": "Back to standing at a cut"
+ },
+ {
+  "click": "Open 1985"
+ },
+ {
+  "expectText": "No now"
+ },
+ {
+  "shot": "s12-no-now-1985-86"
+ }
+]

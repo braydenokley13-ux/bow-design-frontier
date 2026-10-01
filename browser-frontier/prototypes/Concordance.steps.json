@@ -1,0 +1,302 @@
+[
+ {
+  "wait": 2200
+ },
+ {
+  "shot": "01-newcomer-plan-room-plus-table-direct-one-line"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Desktop 3D"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Operator",
+  "exact": true
+ },
+ {
+  "shot": "02a-operator-plan-timeline-table-direct-open"
+ },
+ {
+  "press": "r"
+ },
+ {
+  "shot": "02b-operator-room-one-key-away"
+ },
+ {
+  "click": "Use Direct for screen readers and keyboard"
+ },
+ {
+  "shot": "02c-screen-reader-declared-direct-leads"
+ },
+ {
+  "click": "Use Direct for screen readers and keyboard"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Newcomer",
+  "exact": true
+ },
+ {
+  "click": "Why not the Timeline?"
+ },
+ {
+  "shot": "03a-override-why-not-the-timeline"
+ },
+ {
+  "click": "Pair the Timeline"
+ },
+ {
+  "click": "Pin on this device"
+ },
+ {
+  "click": "Open Direct"
+ },
+ {
+  "shot": "03b-override-paired-pinned-address-rewritten"
+ },
+ {
+  "click": "Sign the Call-up file as act 43, from the Room",
+  "after": 1300
+ },
+ {
+  "shot": "04-act-43-lands-in-every-open-view-same-frame"
+ },
+ {
+  "click": "Follow $25.2M over (payroll.vsLine) across views, from the Timeline",
+  "after": 1000
+ },
+ {
+  "shot": "05-follow-a-fact-across-views"
+ },
+ {
+  "click": "Why?"
+ },
+ {
+  "shot": "05b-why-traced-to-recorded-causes"
+ },
+ {
+  "click": "Stop following"
+ },
+ {
+  "click": "Do these agree?",
+  "nth": 0
+ },
+ {
+  "shot": "06-do-these-agree-computed"
+ },
+ {
+  "click": "Close",
+  "nth": 0
+ },
+ {
+  "click": "Direct has it."
+ },
+ {
+  "shot": "07-covers-and-the-offer-to-pair"
+ },
+ {
+  "click": "Not now"
+ },
+ {
+  "click": "Why not the Timeline?"
+ },
+ {
+  "click": "Pair the Voice"
+ },
+ {
+  "click": "Try the Denver file",
+  "after": 1300
+ },
+ {
+  "shot": "08-refusal-parity-room-timeline-voice-direct"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Inject a stale binding"
+ },
+ {
+  "shot": "09a-fail-closed-stale-timeline-becomes-a-cover"
+ },
+ {
+  "click": "Do these agree?",
+  "nth": 0
+ },
+ {
+  "shot": "09b-fail-closed-agreement-check-names-the-mismatch"
+ },
+ {
+  "click": "Rebind Timeline",
+  "nth": 0
+ },
+ {
+  "click": "Close",
+  "nth": 0
+ },
+ {
+  "click": "What if…"
+ },
+ {
+  "click": "Matters",
+  "exact": true
+ },
+ {
+  "click": "Decline the Denver file, from Direct",
+  "after": 1000
+ },
+ {
+  "shot": "10a-what-if-branch-from-the-current-act-in-its-own-ink"
+ },
+ {
+  "click": "Compare with the record"
+ },
+ {
+  "shot": "10-what-if-fork-compare-beside-the-record"
+ },
+ {
+  "click": "Return to the record",
+  "nth": 0
+ },
+ {
+  "shot": "10b-return-to-the-record"
+ },
+ {
+  "reload": true
+ },
+ {
+  "expectText": "Opened from an address"
+ },
+ {
+  "shot": "10c-reload-restores-act-43-and-its-hash-from-the-address"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Start over at act 42"
+ },
+ {
+  "click": "Sign the Call-up file as act 43, from the Table",
+  "after": 1200
+ },
+ {
+  "shot": "03c-router-offers-at-the-next-moment-never-mid-act"
+ },
+ {
+  "click": "Not now"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Start over at act 42"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Chromebook"
+ },
+ {
+  "shot": "11a-downshift-chromebook-room-2-5d"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Phone",
+  "exact": true
+ },
+ {
+  "shot": "11b-downshift-phone-table-plus-direct"
+ },
+ {
+  "click": "Sign the Call-up file as act 43, from the Table",
+  "after": 1100
+ },
+ {
+  "shot": "11b2-phone-act-lands-in-the-table-and-direct"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Start over at act 42"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Voice",
+  "exact": true
+ },
+ {
+  "shot": "11c-downshift-voice-spoken-direct"
+ },
+ {
+  "click": "Say “sign the call-up file”"
+ },
+ {
+  "shot": "11d-voice-read-back-before-signing"
+ },
+ {
+  "click": "Say “confirm”",
+  "after": 1000
+ },
+ {
+  "shot": "11e-voice-act-43-recorded-same-words"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Desktop 3D"
+ },
+ {
+  "shot": "11f-back-on-desktop-same-address-act-43"
+ },
+ {
+  "click": "Proof controls"
+ },
+ {
+  "click": "Harrow Medical"
+ },
+ {
+  "shot": "12a-compile-arrives-direct-and-ledger-at-once"
+ },
+ {
+  "click": "Step onto the floor"
+ },
+ {
+  "shot": "12b-compiled-room-what-the-compiler-decided"
+ },
+ {
+  "click": "1 shelf = 500"
+ },
+ {
+  "shot": "12c-one-mapping-edited"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "shot": "13a-words-on-request-how-do-we-know"
+ },
+ {
+  "click": "How do we know?"
+ },
+ {
+  "click": "real?"
+ },
+ {
+  "shot": "13b-whats-real-layer"
+ }
+]
